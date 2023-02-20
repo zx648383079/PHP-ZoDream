@@ -4,9 +4,6 @@ namespace Module\Blog\Service\Api;
 
 use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\BlogContentModel;
-use Module\Blog\Domain\Model\BlogMetaModel;
-use Module\Blog\Domain\Model\BlogModel;
-use Module\Blog\Domain\Model\BlogPageModel;
 use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\OptionRepository;
@@ -35,19 +32,26 @@ class HomeController extends Controller {
 
     public function detailAction(int $id) {
         try {
-            return $this->render(BlogRepository::detail($id));
+            return $this->render(BlogRepository::detail($id, request('open_key')));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
     public function contentAction(int $id) {
-        BlogRepository::addClick($id);
-        $blog = BlogContentModel::find($id);
-        if (empty($blog)) {
-            return $this->renderFailure('id 错误！');
+        try {
+            return $this->render(BlogRepository::detailBody($id, request('open_key')));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->render($blog);
+    }
+
+    public function openAction(int $id) {
+        try {
+            return $this->render(BlogRepository::detailOpen($id, request('open_key')));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage(), $ex->getCode());
+        }
     }
 
     public function recommendAction(int $id) {

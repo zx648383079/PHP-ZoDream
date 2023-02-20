@@ -13,6 +13,7 @@ use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Blog\Domain\Repositories\CategoryRepository;
 use Module\Blog\Domain\Repositories\CommentRepository;
+use Module\Blog\Domain\Repositories\PublishRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
 
 class HomeController extends Controller {
@@ -45,18 +46,19 @@ class HomeController extends Controller {
             'comment_list', 'new_list', 'term', 'tag', 'programming_language'));
     }
 
-    public function detailAction(int $id) {
-        if ($id < 1) {
+    public function detailAction(int $id, string $password = '') {
+        try {
+            if (empty($password)) {
+                $password = session('BLOG_PWD');
+            }
+            list($blog, $readRole) = BlogRepository::getWithRole($id, (string)$password);
+        } catch (\Exception) {
             return $this->redirect('./');
         }
-        $blog = BlogModel::find($id);
-        if (empty($blog)) {
+        if ($readRole < 1) {
             return $this->redirect('./');
         }
-        if ($blog->open_type == BlogModel::OPEN_DRAFT &&
-            (auth()->guest() || $blog->user_id != auth()->id())) {
-            return $this->redirect('./');
-        }
+        $blog->can_read = $readRole > 1;
         $blog->term = CategoryRepository::get($blog->term_id);
         $parent_id = $blog->parent_id > 0 ? $blog->parent_id : $blog->id;
         $languages = BlogModel::where('parent_id', $parent_id)->asArray()->get('id', 'language');
@@ -102,61 +104,23 @@ class HomeController extends Controller {
     }
 
     public function openAction(int $id) {
-        $model = BlogModel::find($id);
-        if (!$model) {
-            return $this->renderFailure('文章不存在');
-        }
-        if ($model->can_read) {
-            return $this->renderData([
-                'refresh' => true
-            ], '文章可正常阅读');
-        }
-        if ($model->open_type == BlogModel::OPEN_LOGIN) {
-            return $this->renderData([
-                'url' => url('auth', ['redirect_uri' => url()->previous()])
-            ], '请先登陆');
-        }
-        if ($model->open_type == BlogModel::OPEN_PASSWORD) {
-            $password = request()->get('password');
-            if ($password !== $model->open_rule) {
-                return $this->renderFailure('阅读密码错误');
-            }
-            session(['BLOG_PWD' => $password]);
-            if (!auth()->guest()) {
-                BlogLogModel::create([
-                    'user_id' => auth()->id(),
-                    'item_type' => BlogLogModel::TYPE_BLOG,
-                    'item_id' => $model->id,
-                    'action' => BlogLogModel::ACTION_REAL_RULE
-                ]);
+        try {
+            $key = request('password');
+            BlogRepository::detailOpen($id, $key);
+            if (!empty($key)) {
+                session(['BLOG_PWD' => $key]);
             }
             return $this->renderData([
                 'refresh' => true
-            ], '密码正确');
-        }
-        if ($model->open_type == BlogModel::OPEN_BUY) {
-            if (auth()->guest()) {
+            ]);
+        } catch (\Exception $ex) {
+            if ($ex->getCode() === 401) {
                 return $this->renderData([
                     'url' => url('auth', ['redirect_uri' => url()->previous()])
-                ], '请先登陆');
+                ], $ex->getMessage());
             }
-            $res = FundAccount::change(
-                auth()->id(), FundAccount::TYPE_BUY_BLOG,
-                $model->id, intval($model->open_rule), '购买文章阅读权限');
-            if (!$res) {
-                return $this->renderFailure('账户余额不足');
-            }
-            BlogLogModel::create([
-                'user_id' => auth()->id(),
-                'item_type' => BlogLogModel::TYPE_BLOG,
-                'item_id' => $model->id,
-                'action' => BlogLogModel::ACTION_REAL_RULE
-            ]);
-            return $this->renderData([
-                'refresh' => true
-            ], '购买成功');
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure('未知');
     }
 
 }

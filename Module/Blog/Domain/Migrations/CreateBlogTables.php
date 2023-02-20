@@ -10,6 +10,7 @@ use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Model\TermModel;
+use Module\Blog\Domain\Repositories\PublishRepository;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
@@ -32,17 +33,17 @@ class CreateBlogTables extends Migration {
             $table->enum('language', ['zh', 'en'])->default('zh')
                 ->comment('内容语言');
             $table->string('thumb')->default('');
-            $table->uint('edit_type', 1)->default(BlogModel::EDIT_HTML)->comment('编辑器类型');
+            $table->uint('edit_type', 1)->default(PublishRepository::EDIT_HTML)->comment('编辑器类型');
             $table->text('content');
             $table->uint('user_id');
             $table->uint('term_id');
-            $table->bool('type')->default(BlogModel::TYPE_ORIGINAL)->comment('原创或转载');
+            $table->bool('type')->default(PublishRepository::TYPE_ORIGINAL)->comment('原创或转载');
             $table->uint('recommend_count')->default(0);
             $table->uint('comment_count')->default(0);
             $table->uint('click_count')->default(0);
-            $table->uint('open_type', 1)->default(0)->comment('公开类型');
+            $table->uint('open_type', 1)->default(PublishRepository::OPEN_PUBLIC)->comment('公开类型');
             $table->string('open_rule', 20)->default('')->comment('类型匹配的值');
-            $table->softDeletes();
+            $table->uint('publish_status', 1)->default(PublishRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
             $table->timestamps();
         })->append(BlogMetaModel::tableName(), function(Table $table) {
             $table->id();

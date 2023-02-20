@@ -1,6 +1,8 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
+use Module\Blog\Domain\Repositories\BlogRepository;
+
 /**
 * Class BlogModel
  * @property integer $id
@@ -11,7 +13,7 @@ class BlogContentModel extends BlogModel {
     const SIMPLE_MODE = ['id', 'title', 'edit_type', 'content'];
 
     public function getContentAttribute() {
-        return $this->toHtml();
+        return BlogRepository::renderContent($this);
     }
 
     public static function query() {

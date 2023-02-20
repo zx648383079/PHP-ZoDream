@@ -24,23 +24,13 @@ use Domain\Entities\Entity;
  * @property integer $click_count
  * @property integer $open_type
  * @property string $open_rule
- * @property integer $deleted_at
+ * @property integer $publish_status
  * @property integer $created_at
  * @property integer $updated_at
  */
 class BlogEntity extends Entity {
 
-    const TYPE_ORIGINAL = 0; // 原创
-    const TYPE_REPRINT = 1; // 转载
 
-    const EDIT_HTML = 0;
-    const EDIT_MARKDOWN = 1; // markdown
-
-    const OPEN_PUBLIC = 0;
-    const OPEN_LOGIN = 1;
-    const OPEN_PASSWORD = 5;
-    const OPEN_BUY = 6;
-    const OPEN_DRAFT = 2;
 
     public static function tableName() {
         return 'blog';
@@ -65,7 +55,7 @@ class BlogEntity extends Entity {
             'click_count' => 'int',
             'open_type' => 'int:0,127',
             'open_rule' => 'string:0,20',
-            'deleted_at' => 'int',
+            'publish_status' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -96,7 +86,7 @@ class BlogEntity extends Entity {
             'comment_count' => '评论',
             'click_count' => '点击',
             'comment_status' => '评论状态',
-            'deleted_at' => '删除时间',
+            'publish_status' => '发布状态',
             'created_at' => '发布时间',
             'updated_at' => '更新时间',
         ];

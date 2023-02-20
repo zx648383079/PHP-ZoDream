@@ -5,7 +5,8 @@ namespace Module\Blog\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Exception;
 use Infrastructure\Bot;
-use Module\Blog\Domain\Events\BlogUpdate;
+use Infrastructure\HtmlExpand;
+use Module\Auth\Domain\FundAccount;
 use Module\Blog\Domain\Helpers\Html;
 use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
@@ -51,17 +52,6 @@ class BlogRepository {
         return $page->setPage($items);
     }
 
-    public static function getSelfList(string $keywords = '', int $category = 0, int $type = 0) {
-        return BlogPageModel::with('term')
-            ->where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'title');
-            })->when($category > 0, function ($query) use ($category) {
-                $query->where('term_id', $category);
-            })->when($type > 0, function ($query) use ($type) {
-                $query->where('type', $type - 1);
-            })->orderBy('id', 'desc')->page();
-    }
 
     public static function getSimpleList(string|array $sort = 'new', int $category = 0, string $keywords = '',
                                    int $user = 0, string $language = '', string $programming_language = '',
@@ -90,7 +80,7 @@ class BlogRepository {
                                       int $user = 0, string $language = '',
                                       string $programming_language = '',
                                       string $tag = '') {
-        return $query->where('open_type', '<>', BlogModel::OPEN_DRAFT)
+        return $query->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', $category);
             })
@@ -196,7 +186,8 @@ class BlogRepository {
         if (empty($ids)) {
             return [];
         }
-        $args = $query->whereIn('parent_id', $ids)->where('language', 'en')->get();
+        $args = $query->whereIn('parent_id', $ids)
+            ->where('language', 'en')->get();
         $data = [];
         foreach ($args as $item) {
             $data[$item['parent_id']] = $item;
@@ -239,38 +230,193 @@ class BlogRepository {
             ->getOrSet(sprintf('blog_%d_%d_%d_content', $blog->id, $imgLazy, $useDeeplink), $cb, 3600);
     }
 
-    public static function sourceBlog(int $id, string $language = '') {
-        $model = BlogModel::getOrNew($id, $language);
-        if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
-            throw new Exception('博客不存在');
-        }
-        $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
-        $data = $model->toArray();
-        $data['tags'] = $tags;
-        $data['open_rule'] = $model->open_rule;
-        $data['languages'] = BlogRepository::languageAll($model->parent_id > 0 ? $model->parent_id : $model->id);
-        return array_merge($data, BlogMetaModel::getOrDefault($id));
-    }
-
     /**
      * 显示在前台
      * @param int $id
      * @return array
      * @throws Exception
      */
-    public static function detail(int $id) {
+    public static function detail(int $id, string $open_key = '') {
         static::addClick($id);
-        $blog = BlogModel::find($id);
-        if (empty($blog) || $blog->open_type == BlogModel::OPEN_DRAFT) {
-            throw new Exception('id 错误！');
-        }
-        $data = $blog->toArray();
-        $data['content'] = BlogRepository::renderContent($blog);
+        list($blog, $readRole) = self::getWithRole($id, $open_key);
+        $data = self::formatBody($blog, $readRole > 1);
         $data = array_merge($data, static::renderAsset(BlogMetaModel::getOrDefault($id)));
-        $data['previous'] = $blog->previous;
-        $data['next'] = $blog->next;
+        $data['previous'] = self::previous($blog->id, $blog->language);
+        $data['next'] = self::next($blog->id, $blog->language);
         $data['languages'] = BlogRepository::languageList($blog->parent_id > 0 ? $blog->parent_id : $blog->id);
         return $data;
+    }
+
+    /**
+     * 获取主题内容
+     * @param int $id
+     * @param string $openKey
+     * @return array
+     * @throws Exception
+     */
+    public static function detailBody(int $id, string $openKey = ''): array {
+        list($blog, $readRole) = self::getWithRole($id, $openKey);
+        return self::formatBody($blog, $readRole > 1);
+    }
+
+    private static function formatBody(BlogModel $blog, bool $canRead) {
+        $data = $blog->toArray();
+        $data['can_read'] = $canRead;
+        if ($blog->open_type === PublishRepository::OPEN_BUY) {
+            $data['open_rule'] = intval($blog->open_rule);
+        }
+        if ($canRead) {
+            $data['content'] = BlogRepository::renderContent($blog);
+        } else {
+            $data['content'] = HtmlExpand::substr(BlogRepository::renderContent($blog), 50);
+        }
+        return $data;
+    }
+
+    /**
+     * 获取内容并获取对应权限
+     * @param int $id
+     * @param string $openKey
+     * @return array{BlogModel, int}
+     * @throws Exception
+     */
+    public static function getWithRole(int $id, string $openKey = ''): array {
+        /** @var BlogModel $blog */
+        $blog = BlogModel::where('id', $id)
+            ->first();
+        if (empty($blog)) {
+            throw new Exception(__('blog is not exist'));
+        }
+        $readRole = self::readRole($blog, $openKey);
+        if ($readRole < 1) {
+            throw new Exception(__('blog is not exist'));
+        }
+        return [$blog, $readRole];
+    }
+
+    /**
+     * 确认操作并查看全部内容
+     * @param int $id
+     * @param string $openKey
+     * @return array
+     * @throws Exception
+     */
+    public static function detailOpen(int $id, string $openKey = ''): array {
+        /** @var BlogModel $blog */
+        $blog = BlogModel::where('id', $id)
+            ->first();
+        if (empty($blog)) {
+            throw new Exception(__('blog is not exist'));
+        }
+        if (!auth()->guest() && $blog->user_id === auth()->id()) {
+            return self::formatBody($blog, true);
+        }
+        if ($blog->publish_status !== PublishRepository::PUBLISH_STATUS_POSTED) {
+            throw new Exception(__('blog is not exist'));
+        }
+        if ($blog->open_type < 1) {
+            return self::formatBody($blog, true);
+        }
+        if ($blog->open_type === PublishRepository::OPEN_LOGIN) {
+            if (auth()->guest()) {
+                throw new Exception(__('Please Login User!'), 401);
+            }
+            return self::formatBody($blog, true);
+        }
+        if ($blog->open_type === PublishRepository::OPEN_PASSWORD) {
+            if ($openKey !== $blog->open_rule) {
+                throw new Exception(__('password is error'));
+            }
+            if (!auth()->guest()) {
+                LogRepository::logOnly(BlogLogModel::TYPE_BLOG,
+                    BlogLogModel::ACTION_REAL_RULE, $blog->id);
+            }
+            return self::formatBody($blog, true);
+        }
+        if ($blog->open_type === PublishRepository::OPEN_BUY) {
+            if (auth()->guest()) {
+                throw new Exception(__('Please Login User!'), 401);
+            }
+            if (LogRepository::has(auth()->id(), BlogLogModel::TYPE_BLOG,
+                BlogLogModel::ACTION_REAL_RULE, $blog->id)) {
+                return self::formatBody($blog, true);
+            }
+            $res = FundAccount::change(
+                auth()->id(), FundAccount::TYPE_BUY_BLOG,
+                $blog->id, intval($blog->open_rule), '购买文章阅读权限');
+            if (!$res) {
+                throw new Exception(__('Low account balance'));
+            }
+            BlogLogModel::create([
+                'user_id' => auth()->id(),
+                'item_type' => BlogLogModel::TYPE_BLOG,
+                'item_id' => $blog->id,
+                'action' => BlogLogModel::ACTION_REAL_RULE
+            ]);
+            return self::formatBody($blog, true);
+        }
+        throw new Exception(__('unknown'));
+    }
+
+    public static function previous(int $id, string $language) {
+        return BlogSimpleModel::where('id', '<', $id)
+            ->where('language', $language)
+            ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
+            ->orderBy('id', 'desc')
+            ->first();
+    }
+
+    public static function next(int $id, string $language) {
+        return BlogSimpleModel::where('id', '>', $id)
+            ->where('language', $language)
+            ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
+            ->orderBy('id', 'asc')
+            ->first();
+    }
+
+    /**
+     * 是否能够阅读详细内容
+     * @param BlogModel $model
+     * @param string $openKey
+     * @return int // 0 不显示  // 1 不完全显示，需要购买或登录 // 2完全显示
+     * @throws Exception
+     */
+    public static function readRole(BlogModel $model, string $openKey = ''): int {
+        if (!auth()->guest() && $model->user_id === auth()->id()) {
+            return 2;
+        }
+        if ($model->publish_status !== PublishRepository::PUBLISH_STATUS_POSTED) {
+            return 0;
+        }
+        if ($model->open_type < 1) {
+            return 2;
+        }
+        if ($model->open_type === PublishRepository::OPEN_LOGIN) {
+            return auth()->guest() ? 1 : 2;
+        }
+        if ($model->open_type === PublishRepository::OPEN_PASSWORD) {
+            if (auth()->guest()) {
+                return $model->open_rule === $openKey ? 2 : 1;
+            }
+            return BlogLogModel::where([
+                    'user_id' => auth()->id(),
+                    'item_type' => BlogLogModel::TYPE_BLOG,
+                    'item_id' => $model->id,
+                    'action' => BlogLogModel::ACTION_REAL_RULE
+                ])->count() > 1 ? 2 : 1;
+        }
+        if ($model->open_type === PublishRepository::OPEN_BUY) {
+            if (auth()->guest()) {
+                return 1;
+            }
+            return BlogLogModel::where([
+                    'user_id' => auth()->id(),
+                    'item_type' => BlogLogModel::TYPE_BLOG,
+                    'item_id' => $model->id,
+                    'action' => BlogLogModel::ACTION_REAL_RULE
+                ])->count() > 0 ? 2 : 1;
+        }
+        return 1;
     }
 
     protected static function renderAsset(array $data): array {
@@ -283,81 +429,6 @@ class BlogRepository {
             }
         }
         return $data;
-    }
-
-    public static function save(array $data, int $id = 0) {
-        unset($data['id']);
-        $model = BlogModel::findOrNew($id);
-        $isNew = $model->isNewRecord;
-        if (!$model->load($data, ['user_id'])) {
-            throw new Exception('数据有误');
-        }
-        // 需要同步的字段
-        $async_column = [
-            'user_id',
-            'term_id',
-            'programming_language',
-            'type',
-            'thumb',
-            'open_type',
-            'open_rule',];
-        $model->user_id = auth()->id();
-        if ($model->parent_id > 0) {
-            $parent = BlogModel::find($model->parent_id);
-            if (empty($model->language) || $model->language == 'zh') {
-                $model->language = 'en';
-            }
-            foreach ($async_column as $key) {
-                $model->{$key} = $parent->{$key};
-            }
-        }
-        $model->parent_id = intval($model->parent_id);
-        if (!$model->saveIgnoreUpdate()) {
-            throw new Exception($model->getFirstError());
-        }
-        if ($model->parent_id < 1) {
-            TagRepository::addTag($model->id,
-                isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : []);
-            $asyncData = [];
-            foreach ($async_column as $key) {
-                $asyncData[$key] = $model->getAttributeSource($key);
-            }
-            BlogModel::where('parent_id', $model->id)->update($asyncData);
-        }
-        BlogMetaModel::saveBatch($model->id, $data);
-        event(new BlogUpdate($model->id, $isNew ? 0 : 1, time()));
-        return $model;
-    }
-
-    public static function remove(int $id) {
-        $model = BlogModel::where('id', $id)->where('user_id', auth()->id())
-            ->first();
-        if (empty($model)) {
-            throw new Exception('文章不存在');
-        }
-        $model->delete();
-        if ($model->parent_id < 1) {
-            BlogModel::where('parent_id', $id)->delete();
-        }
-        BlogMetaModel::deleteBatch($id);
-        event(new BlogUpdate($model->id, 2, time()));
-    }
-
-    /**
-     * 管理员删除
-     * @param int $id
-     */
-    public static function manageRemove(int $id) {
-        $model = BlogModel::where('id', $id)
-            ->first();
-        if (empty($model)) {
-            throw new Exception('文章不存在');
-        }
-        $model->delete();
-        if ($model->parent_id < 1) {
-            BlogModel::where('parent_id', $id)->delete();
-        }
-        BlogMetaModel::deleteBatch($id);
     }
 
     public static function isSelf(int $id): bool {
@@ -384,32 +455,11 @@ class BlogRepository {
             $item['label'] = static::LANGUAGE_MAP[$item['language']] ?? strtoupper($item['language']);
             return $item;
         }, array_merge([
-            ['id' => $id, 'language' => 'zh']
+            ['id' => $id, 'language' => key(static::LANGUAGE_MAP)]
         ], $languages));
     }
 
-    /**
-     * 获取所有的支持语言列表，显示在后台
-     * @param int $id
-     * @param bool $auto
-     * @return array
-     */
-    public static function languageAll(int $id, bool $auto = false) {
-        $items = array_column(static::languageList($id, $auto), null, 'language');
-        $data = [];
-        foreach (static::LANGUAGE_MAP as $language => $label) {
-            if (isset($items[$language])) {
-                $data[] = $items[$language];
-                continue;
-            }
-            $data[] = [
-                'language' => $language,
-                'label' => $label,
-                'id' => 0
-            ];
-        }
-        return $data;
-    }
+
 
     public static function addClick(int $blogId, int $amount = 1) {
         BlogModel::where('id', $blogId)->updateIncrement('click_count', $amount);
@@ -429,10 +479,28 @@ class BlogRepository {
     }
 
     public static function recommend(int $id) {
-        $model = BlogModel::findOrNew($id, 'id 错误');
+        $model = BlogModel::findOrThrow($id, __('blog is not exist'));
         $res = LogRepository::toggleLog(BlogLogModel::TYPE_BLOG, BlogLogModel::ACTION_RECOMMEND, $id);
         $model->recommend_count += $res > 0 ? 1 : -1;
         $model->save();
         return $model;
+    }
+
+    public static function canComment(int $id): bool {
+        return BlogMetaModel::where('name', 'comment_status')
+            ->where('blog_id', $id)->value('content') > 0;
+    }
+
+    /**
+     * 是否能推荐
+     * @param int $id
+     * @return bool
+     * @throws Exception
+     */
+    public static function hasLog(int $id, int $action): bool {
+        if (auth()->guest()) {
+            return false;
+        }
+        return !LogRepository::has(auth()->id(), BlogLogModel::TYPE_BLOG, $action, $id);
     }
 }

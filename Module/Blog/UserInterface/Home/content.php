@@ -3,8 +3,9 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Infrastructure\HtmlExpand;
 use Infrastructure\Player;
+use Module\Blog\Domain\Repositories\BlogRepository;
 /** @var $this View */
-$html = $blog->toHtml();
+$html = BlogRepository::renderContent($blog);
 ?>
 <?php if($blog->can_read):?>
     <?php if(isset($metaItems['audio_url']) && !empty($metaItems['audio_url'])):?>

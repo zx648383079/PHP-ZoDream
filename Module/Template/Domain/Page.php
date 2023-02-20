@@ -4,7 +4,6 @@ namespace Module\Template\Domain;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Module;
-use phpDocumentor\Reflection\Types\Self_;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Concerns\Attributes;
@@ -21,7 +20,7 @@ class Page {
     /**
      * @var PageWeightModel[]
      */
-    protected $weights = [];
+    protected array $weights = [];
 
     /**
      * @var PageModel
@@ -42,9 +41,9 @@ class Page {
      * 是否是编辑模式
      * @var bool
      */
-    protected $isEditMode = false;
+    protected bool $isEditMode = false;
 
-    protected $booted = false;
+    protected bool $booted = false;
 
     public function __construct($page, $isEditMode = false) {
         $this->page = $page instanceof PageModel
@@ -69,7 +68,7 @@ class Page {
      * @param bool $isEditMode
      * @return Page
      */
-    public function setIsEditMode($isEditMode) {
+    public function setIsEditMode(bool $isEditMode) {
         $this->isEditMode = $isEditMode;
         return $this;
     }
@@ -127,11 +126,12 @@ class Page {
     }
 
     /**
-     * @param $parent_id
+     * 根据父id 获取组件，排序方式
+     * @param int $parent_id
      * @param null $ext
      * @return PageWeightModel[]
      */
-    public function getWeightList($parent_id, $ext = null) {
+    public function getWeightList(int $parent_id, $ext = null) {
         $this->boot();
         $data = [];
         foreach ($this->weights as $weight) {
@@ -143,10 +143,17 @@ class Page {
             }
             $data[] = $weight;
         }
+        // 排序，公共组件在前，同等排序小的在前
+        usort($data, function (PageWeightModel $a, PageWeightModel $b) {
+            if ($a->is_share === $b->is_share) {
+                return $a->position > $b->position ? 1 : -1;
+            }
+            return $a->is_share ? -1 : 1;
+        });
         return $data;
     }
 
-    public function weight($parent_id, $ext = null) {
+    public function weight(int $parent_id, $ext = null) {
         $args = [];
         foreach ($this->getWeightList($parent_id, $ext) as $weight) {
             $args[] = $this->renderWeight($weight);

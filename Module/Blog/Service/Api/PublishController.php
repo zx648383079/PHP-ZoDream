@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Blog\Service\Api;
 
 use Domain\Repositories\FileRepository;
-use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Blog\Domain\Repositories\PublishRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PublishController extends Controller {
@@ -26,16 +26,25 @@ class PublishController extends Controller {
 
     public function indexAction(Request $request, int $id = 0) {
         try {
-            $model = BlogRepository::save($request->get(), $id);
+            $model = PublishRepository::save($request->get(), $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
     }
 
-    public function detailAction(int $id, string $language = '') {
+    public function saveDraftAction(Request $request, int $id = 0) {
         try {
-            $model = BlogRepository::sourceBlog($id, $language);
+            $model = PublishRepository::saveDraft($request->get(), $id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
+    }
+
+    public function detailAction(int $id = 0, string $language = '') {
+        try {
+            $model = PublishRepository::get($id, $language);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -53,7 +62,7 @@ class PublishController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            BlogRepository::remove($id);
+            PublishRepository::remove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

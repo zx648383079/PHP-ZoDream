@@ -127,6 +127,9 @@ return [
     'Too many failures' => '失败次数过多，请24小时之后再试',
     'captcha error' => '请输入正确的验证码',
     'Please Login User!' => '请先登录！',
+    'blog is not exist' => '文章不存在',
+    'password is error' => '密码错误',
+    'Low account balance' => '账户余额不足',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

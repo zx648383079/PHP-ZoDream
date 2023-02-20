@@ -11,7 +11,7 @@ final class LogRepository {
      * @param int $action
      * @param int $id
      * @param array|int|null $searchAction
-     * @return int {0: 取消，1: 更新为，2：新增}
+     * @return int // {0: 取消，1: 更新为，2：新增}
      * @throws \Exception
      */
     public static function toggleLog(int $type, int $action, int $id, array|int|null $searchAction = null): int {
@@ -44,5 +44,32 @@ final class LogRepository {
             'user_id' => auth()->id()
         ]);
         return 2;
+    }
+
+    /**
+     * 只保存一条记录
+     * @param int $type
+     * @param int $action
+     * @param int $id
+     * @return void
+     */
+    public static function logOnly(int $type, int $action, int $id) {
+        $userId = auth()->id();
+        if (static::has($userId, $type, $action, $id)) {
+            return;
+        }
+        BlogLogModel::createOrThrow([
+            'item_type' => $type,
+            'item_id' => $id,
+            'action' => $action,
+            'user_id' => auth()->id()
+        ]);
+    }
+
+    public static function has(int $userId, int $type, int $action, int $id): bool {
+        return BlogLogModel::where('user_id', $userId)
+            ->where('item_type', $type)
+            ->where('action', $action)
+            ->where('item_id', $id)->count() > 0;
     }
 }

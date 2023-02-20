@@ -41,7 +41,7 @@ class CommentRepository {
     }
 
     public static function create(array $data) {
-        if (!BlogModel::canComment($data['blog_id'])) {
+        if (!BlogRepository::canComment(intval($data['blog_id']))) {
             throw new Exception('不允许评论！');
         }
         if (!auth()->guest()) {

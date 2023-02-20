@@ -1,17 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Admin;
 
 use Module\Blog\Domain\Model\BlogMetaModel;
-use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
-use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Blog\Domain\Repositories\PublishRepository;
 use Module\Blog\Domain\Repositories\TagRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class BlogController extends Controller {
 
     public function indexAction(string $keywords = '', int $term_id = 0, int $type = 0) {
-        $blog_list = BlogRepository::getSelfList($keywords, $term_id, $type);
+        $blog_list = PublishRepository::getList($keywords, $term_id, 0, $type);
         $term_list = TermModel::select('id', 'name')->all();
         return $this->show(compact('blog_list', 'term_list', 'keywords', 'term_id', 'type'));
     }
@@ -20,10 +20,11 @@ class BlogController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction(int $id, string $language = '') {
-        $model = BlogModel::getOrNew($id, $language);
-        if (empty($model) || (!$model->isNewRecord && $model->user_id != auth()->id())) {
-            return $this->redirectWithMessage($this->getUrl('blog'), '博客不存在！');
+    public function editAction(int $id = 0, string $language = '') {
+        try {
+            $model = PublishRepository::getOrNew($id, $language);
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage($this->getUrl('blog'), $ex->getMessage());
         }
         $term_list = TermModel::select('id', 'name')->all();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
@@ -36,7 +37,7 @@ class BlogController extends Controller {
             $data = $request->get();
             $data['tags'] = $request->get('tag', []);
             $data = array_merge($request->get('meta', []), $data);
-            BlogRepository::save($data, $id);
+            PublishRepository::save($data, $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -47,7 +48,7 @@ class BlogController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            BlogRepository::remove($id);
+            PublishRepository::remove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

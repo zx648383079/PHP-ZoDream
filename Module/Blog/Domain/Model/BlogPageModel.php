@@ -21,7 +21,7 @@ namespace Module\Blog\Domain\Model;
  * @property integer $recommend_count
  * @property integer $comment_count
  * @property integer $click_count
- * @property integer $deleted_at
+ * @property integer $publish_status
  * @property integer $created_at
  * @property integer $updated_at
 */
