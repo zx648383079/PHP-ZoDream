@@ -28,7 +28,7 @@ $(function() {
     $(document).on('click', '.catalog-box .tree-parent>.name', function() {
         $(this).closest('.tree-parent').toggleClass('open');
     });
-    $('.frame-resize a').click(function(e) {
+    $('.frame-resize a').on('click',function(e) {
         let $this = $(this);
         if ($this.attr('target')) {
             return;

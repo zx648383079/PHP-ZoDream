@@ -11,7 +11,7 @@ function formData(item: JQuery): string {
 }
 
 function bindBlogPage() {
-    $('.book-nav').click(function () {
+    $('.book-nav').on('click',function () {
         $(this).toggleClass('hover');
     });
     $('.book-search').focus(function () {
@@ -19,7 +19,7 @@ function bindBlogPage() {
     }).blur(function () {
         $(this).removeClass('focus');
     });
-    $('.book-search .fa-search').click(function () {
+    $('.book-search .fa-search').on('click',function () {
         let form = $('.book-search');
         if (form.hasClass('focus')) {
             $('.book-search form').submit();
@@ -27,7 +27,7 @@ function bindBlogPage() {
         }
         form.addClass('focus');
     });
-    $('.book-navicon').click(function () {
+    $('.book-navicon').on('click',function () {
         $('.book-skin').toggleClass('book-collapsed');
     });
     $('.book-search [name=keywords]').keypress(function () {
@@ -89,13 +89,13 @@ function bindBlog(id: number, type: number, langs = {}) {
             commentBox.html(html);
         });
     }
-    $('.book-body .toggle-open').click(function() {
+    $('.book-body .toggle-open').on('click',function() {
         $(this).closest('.book-body').toggleClass('open');
         checkSize();
     }).on('click', 'a', function(e) {
         e.stopPropagation();
     });
-    $('.rule-box button').click(function() {
+    $('.rule-box button').on('click',function() {
         let $this = $(this);
         $.post($this.data('url'), formData($this.closest('.rule-box')), res => {
             if (res.code != 200) {
@@ -114,7 +114,7 @@ function bindBlog(id: number, type: number, langs = {}) {
             }, 500);
         }, 'json');
     });
-    $('.recommend-blog').click(function () {
+    $('.recommend-blog').on('click',function () {
         let that = $(this).find('b');
         $.getJSON(BASE_URI + 'recommend', {
             id
@@ -127,7 +127,7 @@ function bindBlog(id: number, type: number, langs = {}) {
         })
     });
     let bookSkin = $('.book-skin');
-    $('.book-navicon').click(function () {
+    $('.book-navicon').on('click',function () {
         bookSkin.toggleClass('book-collapsed');
     });
     
@@ -245,7 +245,7 @@ function bindBlogComment(id: number, langs = {}) {
                 }
             });
     }
-    $('.comment-item .expand').click(function() {
+    $('.comment-item .expand').on('click',function() {
         $(this).parent().parent().toggleClass('active');
     });
     let all_box = $('.book-comments').on('click', '*[data-type=reply]', function() {
@@ -296,7 +296,7 @@ function bindBlogComment(id: number, langs = {}) {
             $this.find('b').text(data.data);
         });
     });
-    $('.book-comment-form .btn-cancel').click(function() {
+    $('.book-comment-form .btn-cancel').on('click',function() {
         let form_box = $(this).closest('.book-comment-form'),
             hot_box = $('.hot-comments');
         if (hot_box.length > 0) {

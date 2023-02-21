@@ -25,7 +25,7 @@ class Module extends BaseModule {
      * @param null $path
      * @return bool|Directory|File
      */
-    public static function templateFolder($path = null) {
+    public static function templateFolder(string $path = '') {
         $folder = new Directory(__DIR__.'/UserInterface/templates');
         if (empty($path)) {
             return $folder;

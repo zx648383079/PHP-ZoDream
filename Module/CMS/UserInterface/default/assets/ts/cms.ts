@@ -141,7 +141,7 @@ class Search {
         }).on('click', '.search-tips li', function() {
             that.tapSearch($(this).text().replace(/^\d+/, ''));
         });
-        $(document).click(function() {
+        $(document).on('click',function() {
             that.box.find('.search-tips').hide();
             engineBox.hide();
         });

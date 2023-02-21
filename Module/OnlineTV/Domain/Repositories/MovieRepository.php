@@ -12,6 +12,7 @@ use Module\OnlineTV\Domain\Models\MovieModel;
 use Module\OnlineTV\Domain\Models\MovieScoreModel;
 use Module\OnlineTV\Domain\Models\MovieSeriesModel;
 use Zodream\Database\Contracts\SqlBuilder;
+use Zodream\Validate\Validator;
 
 final class MovieRepository extends CRUDRepository {
 
@@ -49,6 +50,20 @@ final class MovieRepository extends CRUDRepository {
             ->where('series_id', $series)
             ->orderBy('id', 'asc')
             ->page();
+    }
+
+    protected static function afterSave(int $id, array $data) {
+        if (isset($data['files'])) {
+            foreach ($data['files'] as $item) {
+                $item = Validator::filter($item, [
+                    'id' => 'int',
+                    'file_type' => 'int:0,127',
+                    'file' => 'required|string:0,255',
+                ]);
+                $item['music_id'] = $id;
+                static::fileSave($item);
+            }
+        }
     }
 
     public static function fileSave(array $data) {

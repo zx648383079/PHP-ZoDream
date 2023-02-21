@@ -156,7 +156,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         }
     });
     share.getUsers();
-    $(".zd_role_tree li").click(function (event) {
+    $(".zd_role_tree li").on('click',function (event) {
         $(".zd_role_tree li").removeClass("active");
         $(this).addClass("active");
         share.role = $(this).attr("data-id");
@@ -564,7 +564,7 @@ function require_disk(baseUrl: string, md5Url: string) {
     vue.load(window.location.hash);
     $(vue.$el).show();
 
-    $(".navbar a").click(function () {
+    $(".navbar a").on('click',function () {
         vue.load($(this).attr("href"));
     });
 
@@ -572,7 +572,7 @@ function require_disk(baseUrl: string, md5Url: string) {
     // 模态框事件
     /* ------------------------------------------------*/
     // 新建文件夹
-    $("[data-type=create]").click(function () {
+    $("[data-type=create]").on('click',function () {
         let is_loading = false;
         let box = Dialog.form({
             name: '名称'
@@ -861,7 +861,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         }
     });
 
-    $(".uploadFile").click(function () {
+    $(".uploadFile").on('click',function () {
         let element = $(".uploadFiles");
         if (element.length < 1) {
             element = document.createElement("input");
@@ -877,7 +877,7 @@ function require_disk(baseUrl: string, md5Url: string) {
         element.click();
         upload.mode = 2;
     });
-    $(".uploadFolder").click(function() {
+    $(".uploadFolder").on('click',function() {
         let element = $(".uploadFolders");
         if (element.length < 1) {
             element = document.createElement("input");

@@ -11,7 +11,7 @@ function bindEditService() {
 }
 
 function bindOrder() {
-    $('*[data-action=comment]').click(function(e) {
+    $('*[data-action=comment]').on('click',function(e) {
         e.preventDefault();
         const rank = prompt('请输入您对本次服务的评分(1-10)', '10');
         postJson($(this).attr('href'), {

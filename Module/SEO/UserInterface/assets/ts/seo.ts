@@ -4,7 +4,7 @@ function bindSetting() {
         $(this).closest('.input-group').next('.group-property').toggle($(this).val() != 'group');
     }).trigger('change');
     let dialog = $('.option-dialog').dialog();
-    $('.option-box .input-group .fa-edit').click(function() {
+    $('.option-box .input-group .fa-edit').on('click',function() {
         $.getJSON(BASE_URI + 'setting/info', {id: $(this).data('id')}, function(data) {
             if (data.code !== 200) {
                 return;
@@ -19,12 +19,12 @@ function bindSetting() {
     dialog.on('done', function() {
         ajaxForm(BASE_URI + 'setting/update', dialog.find('form').serialize());
     });
-    dialog.find('.dialog-del').click(function() {
+    dialog.find('.dialog-del').on('click',function() {
         postJson(BASE_URI + 'setting/delete', {id: dialog.find('[name=id]').val()}, function(data) {
             parseAjax(data);
         });
     });
-    $('[data-action="edit"]').click(function() {
+    $('[data-action="edit"]').on('click',function() {
         $(this).closest('form').toggleClass('edit-mode');
     });
 }

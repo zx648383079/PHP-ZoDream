@@ -32,6 +32,15 @@ $sizes: (320: 568,
     margin: 0;
 }
 
+.full-edit-mode {
+    header {
+        display: none;
+    }
+    .app-wrapper {
+        margin: 0 auto;
+    }
+}
+
 .navbar {
     font-size: 1.5rem;
 
@@ -109,7 +118,7 @@ $sizes: (320: 568,
 .top-nav {
     background: #767766;
     color: #fff;
-
+    margin: -8px -8px 0 0;
     .navbar {
         font-size: 1.5rem;
     }
@@ -119,58 +128,7 @@ $sizes: (320: 568,
     position: relative;
 }
 
-.rule-box {
-    .top-rule {
-        top: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        height: 20px;
-        width: 100%;
-        background-color: #ccc;
-    }
-    .left-rule {
-        width: 20px;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        position: absolute;
-        height: 100%;
-        background-color: #ccc;
-    }
-    .rule-tools {
-        position: fixed;
-        bottom: 0;
-        line-height: 50px;
-        font-size: 30px;
-        background: #fff;
-        border: 1px solid #ccc;
-        left: 50%;
-        margin-left: -90px;
-        i {
-            cursor: pointer;
-        }
-    }
-    .rule-lines {
-        .h-line,
-        .v-line {
-            border-top: 1px dotted #47f;
-            border-right: 1px dotted #47f;
-            position: absolute;
-        }
-        .h-line {
-            cursor: n-resize;
-            width: 100%;
-            height: 1px;
-        }
-        .v-line {
-            cursor: ew-resize;
-            width: 1px;
-            top: 0;
-            bottom: 0;
-        }
-    }
-}
+
 
 #mainMobile {
     border: 1px solid #767676;
@@ -262,154 +220,7 @@ $sizes: (320: 568,
 
 }
 
-.panel-group {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 15rem;
-    bottom: 0;
-    z-index: 99;
-    .panel-item {
-        background: #fff;
-        border: 1px solid #7e8;
-        position: absolute;
-        top: 0;
-        left: 1rem;
-        width: 14rem;
-        bottom: 0;
-        z-index: 100;
 
-        .panel-header {
-            background: #7e8;
-            color: #fff;
-            font-size: 1.5rem;
-            line-height: 2rem;
-
-            .fa-close {
-                float: right;
-            }
-        }
-
-        .panel-body {
-            //position: relative;
-            overflow-y: auto;
-
-            .grid {
-                z-index: 100;
-            }
-        }
-        &.min {
-            position: static;
-            width: 1rem;
-            margin-bottom: 5px;
-            .panel-header {
-                position: static;
-                font-size: 12px;
-                .fa-close {
-                    display: none;
-                }
-            }
-            .panel-body {
-                display: none;
-            }
-        }
-    }
-
-    .weight-edit-grid {
-        cursor: pointer;
-        display: inline-block;
-        text-align: center;
-        margin: 1px 3px;
-
-        &:hover {
-            border: 1px solid #6a4;
-            color: #7e8;
-        }
-
-        .weight-preview {
-            .thumb {
-                width: 3rem;
-                height: 3rem;
-                line-height: 3rem;
-                text-align: center;
-                .fa {
-                    font-size: 3rem;
-                }
-            }
-        }
-
-        .weight-action,
-        .weight-view {
-            display: none;
-        }
-    }
-    .tab-box {
-        .tab-header {
-            background: #efefef;
-            .tab-item {
-                width: 4.5rem;
-            }
-        }
-        .tab-body {
-            overflow-y: auto;
-            @include scrollbar();
-        }
-    }
-    .style-item {
-        line-height: 60px;
-        border: 1px dotted red;
-        text-align: center;
-        color: #999;
-        font-weight: bold;
-        font-size: 20px;
-        img {
-            width: 100%;
-        }
-        &.active {
-            border: 1px dotted green;
-        }
-        &:hover {
-            border-style: solid;
-        }
-    }
-    .form-table {
-        .input-group {
-            >label {
-                font-size: 12px;
-                padding: 0;
-            }
-            input[type="text"],
-            select {
-                min-width: 40px;
-            }
-        }
-    }
-    .side-input {
-        position: relative;
-        height: 100px;
-        >input,
-        >.check-label {
-            position: absolute;
-            text-align: center;
-            &:nth-of-type(1) {
-                top: 0;
-                left: 30px;
-            }
-            &:nth-of-type(2) {
-                top: 30px;
-                left: 60px;
-            }
-            &:nth-of-type(3) {
-                top: 60px;
-                left: 30px;
-            }
-            &:nth-of-type(4) {
-                top: 30px;
-                left: 0px;
-            }
-        }
-    }
-}
 
 .expand-box {
     .expand-header {

@@ -14,7 +14,7 @@ function bindNewNote(baseUri: string) {
             this.focus();
         }
     });
-    $(".new-item .item-action .fa-check").click(function() {
+    $(".new-item .item-action .fa-check").on('click',function() {
         let box = $(this).closest('.new-item').find('textarea'),
             content = box.val();
         if (content.length < 1) {

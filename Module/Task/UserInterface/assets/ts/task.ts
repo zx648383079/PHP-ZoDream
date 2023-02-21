@@ -135,7 +135,7 @@ function bindTask(baseUri: string) {
         $this.text(Timer.format(new Date().getTime() - new Date(time).getTime(), 'i分s秒') + '前');
     });
     let box = $('.dialog-panel');
-    $('[data-action=add]').click(function(e) {
+    $('[data-action=add]').on('click',function(e) {
         e.preventDefault();
         box.show();
     });

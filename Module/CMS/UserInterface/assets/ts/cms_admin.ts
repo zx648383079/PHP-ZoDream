@@ -11,7 +11,7 @@ function bindField(baseUri: string) {
             $(".option-box").html(html);
         });
     }).trigger('change');
-    $('.add-box button').click(function() {
+    $('.add-box button').on('click',function() {
         let input = $(this).prev(),
             val = input.val().toString().trim();
         if (val.length < 1) {
@@ -78,11 +78,11 @@ function bindEditModel() {
     $('#name').blur(function() {
         pinyinIfEmpty(table, $(this).val());
     });
-    let type0 = $("#type0").click(function() {
+    let type0 = $("#type0").on('click',function() {
         $(".content-box").hide();
         $(".form-box").show();
     });
-    let type1 = $("#type1").click(function() {
+    let type1 = $("#type1").on('click',function() {
         $(".content-box").show();
         $(".form-box").hide();
     });

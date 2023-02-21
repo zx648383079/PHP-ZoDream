@@ -26,7 +26,7 @@ function bindAuth(id: number) {
             timeout: 60 * 1000,
         },
     };
-    $('.register-webauth').click(function() {
+    $('.register-webauth').on('click',function() {
         if (!navigator.credentials) {
             return;
         }

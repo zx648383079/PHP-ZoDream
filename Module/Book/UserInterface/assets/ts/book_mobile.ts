@@ -26,7 +26,7 @@ $(function() {
     $(window).resize(function() {
         resize();
     });
-    $(document).click(function (e) {
+    $(document).on('click',function (e) {
         if (!box.hasClass('min-mode')) {
             return;
         }
@@ -52,22 +52,22 @@ $(function() {
     settingBox.click(function(e) {
         e.stopPropagation();
     });
-    settingBox.find('.dialog-close,.dialog-yes').click(function() {
+    settingBox.find('.dialog-close,.dialog-yes').on('click',function() {
         box.removeClass('expanded');
     });
-    settingBox.find('.theme-box span').click(function() {
+    settingBox.find('.theme-box span').on('click',function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
         let newClass = $(this).index();
         $('body').removeClass(oldClass);
         setTheme(newClass);
     });
-    settingBox.find('.font-box span').click(function() {
+    settingBox.find('.font-box span').on('click',function() {
         let oldClass = $(this).parent().find('.active').removeClass('active').index();
         let newClass = $(this).index();
         $(".chapte-box").removeClass('font-' + oldClass);
         setFont(newClass);
     });
-    settingBox.find('.size-box .fa').click(function() {
+    settingBox.find('.size-box .fa').on('click',function() {
         let $this = $(this);
         let ele = $this.parent().find('.lang');
         let val = parseInt(ele.text()) || 18;

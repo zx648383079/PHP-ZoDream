@@ -691,24 +691,112 @@ class Page {
 
 
 function bindPage(pageId: number) {
-    let page = new Page(pageId);
-    $(".mobile-size li").click(function() {
-        $(".mobile-size").parent().removeClass("open");
-        let size = $(this).attr("data-size").split("*");
-        page.element.removeClass().removeAttr('style').addClass('mobile-' + size[0]);
-        page.resize();
+    const editor = new VisualEditor($('#page-box'));
+    editor.on(EditorEventGetWeights, function(sucess, failure) {
+        $.getJSON(BASE_URI + 'weight?id=' + pageId, data => {
+            if (data.code == 200) {
+                sucess(data.data);
+                return;
+            }
+            failure(data.message);
+        });
+    }).on(EditorEventGetPage, function(sucess, failure) {
+        $.getJSON(BASE_URI + 'page/detail?id=' + pageId, data => {
+            if (data.code == 200) {
+                sucess(data.data);
+                return;
+            }
+            failure(data.message);
+        });
+    }).on(EditorEventGetWeightProperty, function(weightId: number, sucess, failure) {
+        $.getJSON(BASE_URI + 'weight/setting?id=' + weightId, data => {
+            if (data.code == 200) {
+                sucess(data.data);
+                return;
+            }
+            failure(data.message);
+        });
+    }).on(EditorEventWeightForm, function(weightId: number, sucess, failure) {
+        $.getJSON(BASE_URI + 'weight/form?id=' + weightId, data => {
+            if (data.code == 200) {
+                sucess(data.data);
+                return;
+            }
+            failure(data.message);
+        });
+    }).on(EditorEventSaveWeightProperty, function(weightId: number, data: any, sucess, failure) {
+        postJson(BASE_URI + 'weight/save', typeof data !== 'object' ? data : {
+            id: weightId,
+            ...data
+        }, res => {
+            if (res.code == 200) {
+                sucess(res.data);
+                return;
+            }
+            failure(res.message);
+        });
+    }).on(EditorEventRefreshWeight, function(weightId: number, sucess, failure) {
+        $.getJSON(BASE_URI + 'weight/refresh?id=' + weightId, data => {
+            if (data.code == 200) {
+                sucess(data.data);
+                return;
+            }
+            failure(data.message);
+        });
+    }).on(EditorEventAddWeight, function(data: any, sucess, failure) {
+        postJson(BASE_URI + 'weight/create', {
+            page_id: pageId,
+            ...data
+        }, res => {
+            if (res.code == 200) {
+                sucess(res.data);
+                return;
+            }
+            failure(res.message);
+        });
+    }).on(EditorEventRemoveWeight, function(weightId: number, sucess, failure) {
+        postJson(BASE_URI + 'weight/destroy', {
+            id: weightId
+        }, res => {
+            if (res.code == 200) {
+                sucess(res.data);
+                return;
+            }
+            failure(res.message);
+        });
+    }).on(EditorEventSavePage, function(weights: any[], sucess, failure) {
+        postJson(BASE_URI + 'weight/batch_save', {
+            id: pageId,
+            weights
+        }, res => {
+            if (res.code == 200) {
+                sucess(res.data);
+                return;
+            }
+            failure(res.message);
+        });
     });
-    $(".navbar>li>div").click(function() {
+    editor.run();
+    $('body').addClass('full-edit-mode');
+    $(".mobile-size li").on('click',function() {
+        const $this = $(this);
+        $this.addClass("active").siblings().removeClass("active");
+        $this.closest(".mobile-size").parent().removeClass("open");
+        let size = $this.attr("data-size").split("*");
+        if (size.length < 2 || !size[0] || !size[1]) {
+            editor.normal();
+            return;
+        }
+        editor.mobile(parseInt(size[0]), parseInt(size[1]));
+    });
+    $(".navbar>li>div").on('click',function() {
         $(this).parent().toggleClass("open");
     });
-    $(".mobile-size li").click(function() {
-        $(this).addClass("active").siblings().removeClass("active");
-    });
 
-    $(".mobile-rotate").click(function() {
-        page.element.toggleClass('rotate');
+    $(".mobile-rotate").on('click',function() {
+        editor.rotate(90);
     });
-    $(".expand>.head").click(function() {
+    $(".expand>.head").on('click',function() {
         $(this).parent().toggleClass("open");
     });
     if ($(window).width() > 769) {
@@ -828,7 +916,7 @@ class SearchDailog {
 
 function bindNewTheme() {
     let box = new SearchDailog('.theme-dialog');
-    $('*[data-type="add"]').click(function() {
+    $('*[data-type="add"]').on('click',function() {
         box.show();
     });
     box.on('done', (selected: number[]) => {

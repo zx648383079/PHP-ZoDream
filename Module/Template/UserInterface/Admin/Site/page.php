@@ -75,27 +75,3 @@ $this->title = $site->title;
         </div>
     </div>
 </div>
-<div id="page-dialog" class="dialog dialog-box" data-type="dialog">
-    <div class="dialog-header">
-        <div class="dialog-title">新增页面</div>
-        <i class="fa fa-close dialog-close"></i>
-    </div>
-    <div class="dialog-body">
-        <div class="page-select">
-            <?php foreach($template_list as $item):?>
-            <div class="page-item" data-id="<?=$item->id?>">
-                <div class="thumb">
-                    <img src="<?=$this->url('./@admin/theme/asset',
-                        ['file' => $item['thumb']], false)?>" alt="">
-                </div>
-                <div class="name"><?=$item['name']?></div>
-            </div>
-            <?php endforeach;?>
-        </div>
-    </div>
-    <div class="dialog-footer">
-        <button type="button" class="dialog-yes">确认</button>
-        <button type="button"
-            class="dialog-close">取消</button>
-    </div>
-</div>

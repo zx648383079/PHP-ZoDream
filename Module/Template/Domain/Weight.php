@@ -4,7 +4,6 @@ namespace Module\Template\Domain;
 
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
-use Module\Template\Domain\Model\WeightModel;
 use Module\Template\Module;
 use Module\Template\Service\BaseWeight;
 use Zodream\Helpers\Str;

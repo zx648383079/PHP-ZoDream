@@ -77,18 +77,18 @@ function search(keywords: string) {
     window.location.href = $(".header-search").data('url') + '?keywords='+ keywords;
 }
 $(function() {
-    $('.back-to-top').click(function() {
+    $('.back-to-top').on('click',function() {
         $('body,html').animate({
             scrollTop: 0
         }, 100);
     });
-    $(".check-box").click(function() {
+    $(".check-box").on('click',function() {
         $(this).toggleClass('active').trigger(CHECKED_CHANGE);
     });
-    $(".toggle-box").click(function() {
+    $(".toggle-box").on('click',function() {
         $(this).toggleClass('active').trigger('change');
     });
-    $('.number-box .fa-minus').click(function() {
+    $('.number-box .fa-minus').on('click',function() {
         let input = $(this).closest('.number-box').find('input'),
             min = input.attr('min') || 0,
             amount = Number(input.val()) || 0;
@@ -97,7 +97,7 @@ $(function() {
         }
         input.val(amount).trigger('change');
     });
-    $('.number-box .fa-plus').click(function() {
+    $('.number-box .fa-plus').on('click',function() {
         let input = $(this).closest('.number-box').find('input'),
             max = input.attr('max') || 999,
             amount = Number(input.val()) || 0;
@@ -106,7 +106,7 @@ $(function() {
         }
         input.val(amount).trigger('change');
     });
-    $(".cart-footer .btn").click(function(e) {
+    $(".cart-footer .btn").on('click',function(e) {
         e.preventDefault();
         let ids = [];
         mapCheckedItem(function(item) {
@@ -148,7 +148,7 @@ $(function() {
         $(".header-nav .nav-dropdown").hide();
         $(this).find('.nav-dropdown').show();
     });
-    $(".scroll-nav .nav-arrow").click(function() {
+    $(".scroll-nav .nav-arrow").on('click',function() {
         $(this).closest('.scroll-nav').toggleClass('unfold');
     });
     $(".header-nav").mouseleave(function() {
@@ -209,7 +209,7 @@ $(function() {
             search($(this).val() as string);
         }
     });
-    $(".header-search .fa-search").click(function() {
+    $(".header-search .fa-search").on('click',function() {
         search(searchInput.val() as string);
     });
     $(window).scroll(function() {
@@ -230,7 +230,7 @@ function bindCart() {
             parseAjax(data);
         });
     });
-    $('.cart-item .fa-trash').click(function() {
+    $('.cart-item .fa-trash').on('click',function() {
         let _this = $(this),
             box = _this.closest('.cart-item'),
             id = box.attr('data-id');
@@ -311,7 +311,7 @@ function bindStore() {
 }
 
 function bindCategory() {
-    $(".category-menu .menu-item").click(function() {
+    $(".category-menu .menu-item").on('click',function() {
         let $this = $(this);
         $this.addClass('active').siblings().removeClass('active');
         let box = $(".category-main .item").eq($this.index());
@@ -387,7 +387,7 @@ function bindCartDialog(goodsId: number) {
         refreshProduct();
     }).on('change', '.number-box .number-input', function() {
         refreshProduct();
-    }).click(function(e) {
+    }).on('click',function(e) {
         if (e.pageY < cartDialog.find('.dialog-body').offset().top) {
             cartDialog.hide();
         }
@@ -430,7 +430,7 @@ function bindMobileCashier() {
 }
 
 function bindComment() {
-    $('.comment-star i').click(function() {
+    $('.comment-star i').on('click',function() {
         let $this = $(this),
             star = $this.index() + 1,
             box = $this.closest('.comment-star');
@@ -476,7 +476,7 @@ function bindMemberCenter() {
 
 function bindPay() {
     let paymentInput = $('input[name=payment]'),
-        payments = $('.payment-item').click(function() {
+        payments = $('.payment-item').on('click',function() {
         let $this = $(this);
         payments.removeClass('active');
         $this.addClass('active');
@@ -508,7 +508,7 @@ function bindAddress() {
         this.close();
         postJson(BASE_URI + 'address/save', formData(dialog), parseResponse);
     });
-    $('.add-btn').click(function() {
+    $('.add-btn').on('click',function() {
         fillForm();
         dialog.show();
     });
@@ -656,7 +656,7 @@ function bindOrder() {
     let replaceUrl = function(url: string, title: string = '订单') {
         partialLoad(box, url, title);
     };
-    $('.order-tab a').click(function(e) {
+    $('.order-tab a').on('click',function(e) {
         e.preventDefault();
         let $this = $(this);
         $this.addClass('active').siblings().removeClass('active');

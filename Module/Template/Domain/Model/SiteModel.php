@@ -15,6 +15,8 @@ use Domain\Model\Model;
  * @property string $description
  * @property string $domain
  * @property integer $theme_id
+ * @property integer $default_page_id
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -33,6 +35,8 @@ class SiteModel extends Model {
             'description' => 'string:0,255',
             'domain' => 'string:0,50',
             'theme_id' => 'required|int',
+            'default_page_id' => 'int',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

@@ -416,7 +416,7 @@ function bindGoods(goodsId: number) {
     $("#attribute_group_id").change(function() {
         attr.refreshByGroup(parseInt($(this).val() + ''));
     }).trigger('change');
-    $(".btn-save").click(function() {
+    $(".btn-save").on('click',function() {
         $("input[name=product]").val(JSON.stringify(attr.productList));
         $(this).closest('form').submit();
     });
@@ -865,7 +865,7 @@ class Delivery {
      */
     public initCreateRegion() {
         let _this = this;
-        _this.element.find('.add-region').click(function () {
+        _this.element.find('.add-region').on('click',function () {
             // 渲染地域
             let str = '';
             $(_this.element).find('input[type=hidden]').each(function (index, item) {
@@ -1160,7 +1160,7 @@ function bindSecKill(actId, timeId) {
         box.selected = selected;
     };
     let box = new GoodsDailog('#goods-dialog');
-    $('*[data-type="goods"]').click(function() {
+    $('*[data-type="goods"]').on('click',function() {
         box.show();
     });
     box.on('done', (selected: number[]) => {
@@ -1221,7 +1221,7 @@ function bindEditAd() {
 }
 
 function bindOperate() {
-    $('button[data-operate]').click(function() {
+    $('button[data-operate]').on('click',function() {
         if (!$('*[name="remark"]').val()) {
             Dialog.tip('备注必填');
             return;
@@ -1255,7 +1255,7 @@ function bindDatePicker(start: string = 'start_at', end: string = 'end_at', form
 }
 
 function bindGoodsCard() {
-    $('.page-search a').click(function(e) {
+    $('.page-search a').on('click',function(e) {
         let url = $(this).attr('href');
         if (url.indexOf('export_card') > 0) {
             return;
@@ -1375,14 +1375,14 @@ function bindLottery() {
 function bindPresale() {
     bindDatePicker(); 
     bindDatePicker('configure[final_start_at]', 'configure[final_end_at]'); 
-    $('a[data-action="add"]').click(function() {
+    $('a[data-action="add"]').on('click',function() {
         let $this = $(this);
         $this.before($this.prev('.step-item').clone());
     });
-    $('input[name="configure[deposit_scale]"]').click(function(this: HTMLInputElement) {
+    $('input[name="configure[deposit_scale]"]').on('click',function(this: HTMLInputElement) {
         $('input[name="configure[deposit_scale_other]"]').toggle(this.value == '99');
     });
-    $('input[name="configure[price_type]"]').click(function(this: HTMLInputElement) {
+    $('input[name="configure[price_type]"]').on('click',function(this: HTMLInputElement) {
         $('.price_type_0, .price_type_1').hide();
         $('.price_type_' + this.value).show();
     });
@@ -1390,14 +1390,14 @@ function bindPresale() {
 
 function bindDiscount() {
     bindDatePicker();
-    $('input[name="configure[type]"]').click(function(this: HTMLInputElement) {
+    $('input[name="configure[type]"]').on('click',function(this: HTMLInputElement) {
         $('.unit').text(toInt(this.value) > 0 ? '件' : '元');
     });
 }
 
 function bindGroupBuy() {
     bindDatePicker();
-    $('a[data-action="add"]').click(function() {
+    $('a[data-action="add"]').on('click',function() {
         let $this = $(this);
         $this.before($this.prev('.step-item').clone());
     });

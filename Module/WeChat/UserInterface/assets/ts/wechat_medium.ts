@@ -117,7 +117,7 @@ function bindEditor(tag: string) {
                 tplBox.append(html);
             });
         };
-    $(".template-menu li").click(function() {
+    $(".template-menu li").on('click',function() {
         $(this).addClass('active').siblings().removeClass('active');
         tplPage = 1;
         tplURI = $(this).attr('data-url');

@@ -2,7 +2,7 @@
 function bindWork() {
     let dialog = $('.area-dialog').dialog();
     let url = '';
-    $('a[data-type="work"]').click(function(e) {
+    $('a[data-type="work"]').on('click',function(e) {
         e.preventDefault();
         url = $(this).attr('href');
         dialog.show();

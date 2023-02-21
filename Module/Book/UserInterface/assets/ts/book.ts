@@ -43,22 +43,22 @@ $(function() {
             }
             window.location.href = url;
         });
-        $(".chapter-sidebar .do-setting").click(function() {
+        $(".chapter-sidebar .do-setting").on('click',function() {
             settingBox.toggle();
         });
-        settingBox.find('.theme-box span').click(function() {
+        settingBox.find('.theme-box span').on('click',function() {
             let oldClass = $(this).parent().find('.active').removeClass('active').attr('class');
             let newClass = $(this).index();
             $('body').removeClass(oldClass);
             setTheme(newClass);
         });
-        settingBox.find('.font-box span').click(function() {
+        settingBox.find('.font-box span').on('click',function() {
             let oldClass = $(this).parent().find('.active').removeClass('active').index();
             let newClass = $(this).index();
             $(".chapte-box").removeClass('font-' + oldClass);
             setFont(newClass);
         });
-        settingBox.find('.size-box .fa').click(function() {
+        settingBox.find('.size-box .fa').on('click',function() {
             let $this = $(this);
             let ele = $this.parent().find('.lang');
             let val = parseInt(ele.text()) || 18;
@@ -73,7 +73,7 @@ $(function() {
             }
             setSize(val);
         });
-        settingBox.find('.width-box .fa').click(function() {
+        settingBox.find('.width-box .fa').on('click',function() {
             let list = [
                 640,
                 800,
@@ -94,17 +94,17 @@ $(function() {
     }
 
     
-    $(".tab-switch .item").click(function () { 
+    $(".tab-switch .item").on('click',function () { 
         $(this).addClass('active').siblings().removeClass('active');
         $(this).closest('.rank-switch').find('.bd .list').eq($(this).index()).show().siblings().hide();
     });
-    $(".chapter-sidebar .go-top").click(function() {
+    $(".chapter-sidebar .go-top").on('click',function() {
         $("html,body").animate({scrollTop:0}, 500);
     });
     $(window).scroll(function() {
         $(".chapter-sidebar .go-top").toggle($(this).scrollTop() > 100);
     });
-    $(".n_p_box input").click(function(){
+    $(".n_p_box input").on('click',function(){
         $(".n_p_box input").removeClass("active");
         $(this).addClass("active");
         $(".con_box .box").toggle();

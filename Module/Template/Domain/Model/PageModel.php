@@ -18,16 +18,14 @@ use Zodream\Helpers\Json;
  * @property string $settings
  * @property integer $position
  * @property integer $theme_page_id
- * @property integer $deleted_at
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property SiteModel $site
  */
 class PageModel extends Model {
 
-    const TYPE_NONE = 0;
 
-    const TYPE_WAP = 1;
 
     public static function tableName() {
         return 'tpl_page';
@@ -45,6 +43,7 @@ class PageModel extends Model {
             'settings' => '',
             'theme_page_id' => 'required|int',
             'position' => 'int:0,127',
+            'status' => 'int:0,127',
             'deleted_at' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

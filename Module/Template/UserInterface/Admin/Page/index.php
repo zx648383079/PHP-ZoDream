@@ -15,6 +15,9 @@ JS;
 $this->registerJsFile([
     'ueditor/ueditor.config.js',
     'ueditor/ueditor.all.js',
+    '@visual_editor.min.js'
+])->registerCssFile([
+    '@visual_editor.css'
 ])->registerJs($js, View::JQUERY_READY);
 ?>
 
@@ -151,16 +154,16 @@ $this->registerJsFile([
             
         </iframe>
         <canvas class="top-rule"></canvas>
-            <canvas class="left-rule"></canvas>
-            <!-- <div class="rule-tools">
-                <i class="fa fa-plus-circle"></i>
-                <i class="fa fa-minus-circle"></i>
-                <i class="fa fa-expand-arrows-alt"></i>
-                <i class="fa fa-expand"></i>
-                <i class="fa fa-undo"></i>
-            </div>
-            <div class="rule-lines">
-            </div> -->
+        <canvas class="left-rule"></canvas>
+        <!-- <div class="rule-tools">
+            <i class="fa fa-plus-circle"></i>
+            <i class="fa fa-minus-circle"></i>
+            <i class="fa fa-expand-arrows-alt"></i>
+            <i class="fa fa-expand"></i>
+            <i class="fa fa-undo"></i>
+        </div>
+        <div class="rule-lines">
+        </div> -->
     </div>
 </div>
 
@@ -169,7 +172,7 @@ $this->registerJsFile([
         <div class="dialog-title">编辑</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
-    <form class="dialog-body form-table custom-config-view" action="<?=$this->url('./@admin/weight/save')?>" method="post">
+    <form class="dialog-body form-table custom-config-view">
         
     </form>
     <div class="dialog-footer">

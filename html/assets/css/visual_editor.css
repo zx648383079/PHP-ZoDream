@@ -1,0 +1,288 @@
+.visual-editor {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  background-color: #fff;
+}
+.visual-editor .editor-container {
+  flex: 1;
+  position: relative;
+  background-color: #f4f4f4;
+  overflow: hidden;
+}
+.visual-editor .work-container {
+  position: relative;
+  display: block;
+  background-color: #fff;
+  margin: 1rem 0.5rem 0.5rem 1rem;
+}
+.visual-editor .panel-tool-bar {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  width: 13rem;
+  left: 50%;
+  margin-left: -100px;
+  height: 3rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 20px 0px #333;
+  font-size: 1.5rem;
+  border-radius: 1.5rem;
+}
+.visual-editor .panel-tool-bar i {
+  flex: 1;
+  text-align: center;
+  line-height: 3rem;
+  color: #666;
+}
+.visual-editor .panel-tool-bar i:hover {
+  color: #000;
+}
+.visual-editor .panel-tool-bar .scale-text {
+  font-size: 0.8rem;
+  font-style: normal;
+}
+.visual-editor .v-scroll-bar,
+.visual-editor .h-scroll-bar {
+  background-color: #fff;
+  z-index: 999;
+  position: absolute;
+}
+.visual-editor .v-scroll-bar .inner-bar,
+.visual-editor .h-scroll-bar .inner-bar {
+  position: absolute;
+  cursor: pointer;
+  background-color: gray;
+  transition: background 0.3s ease-in-out;
+}
+.visual-editor .v-scroll-bar {
+  border-left: 1px solid gray;
+  width: 0.5rem;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.visual-editor .v-scroll-bar .inner-bar {
+  width: 0.5rem;
+  height: 5rem;
+}
+.visual-editor .h-scroll-bar {
+  border-top: 1px solid gray;
+  height: 0.5rem;
+  left: 1rem;
+  bottom: 0;
+  right: 0.5rem;
+}
+.visual-editor .h-scroll-bar .inner-bar {
+  height: 0.5rem;
+  width: 5rem;
+}
+.visual-editor .panel-main {
+  border: none;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #fff;
+}
+.visual-editor .h-rule-bar,
+.visual-editor .v-rule-bar {
+  background-color: gray;
+  position: absolute;
+}
+.visual-editor .h-rule-bar {
+  left: 1rem;
+  top: 0;
+  right: 0.5rem;
+  height: 1rem;
+}
+.visual-editor .v-rule-bar {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1rem;
+}
+.visual-editor .rule-line-bar .h-line,
+.visual-editor .rule-line-bar .v-line {
+  border-top: 1px dotted #47f;
+  border-right: 1px dotted #47f;
+  position: absolute;
+}
+.visual-editor .rule-line-bar .h-line {
+  cursor: n-resize;
+  width: 100%;
+  height: 1px;
+}
+.visual-editor .rule-line-bar .v-line {
+  cursor: ew-resize;
+  width: 1px;
+  top: 0;
+  bottom: 0;
+}
+.visual-editor .panel-group {
+  width: 15rem;
+  z-index: 99;
+}
+.visual-editor .panel-group.min {
+  width: 1rem;
+}
+.visual-editor .panel-group .panel-item {
+  background: #fff;
+  border: 1px solid #7e8;
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  width: 14rem;
+  bottom: 0;
+  z-index: 100;
+}
+.visual-editor .panel-group .panel-item .panel-header {
+  background: #7e8;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.visual-editor .panel-group .panel-item .panel-header .fa-close {
+  float: right;
+}
+.visual-editor .panel-group .panel-item .panel-body {
+  overflow-y: auto;
+}
+.visual-editor .panel-group .panel-item .panel-body .grid {
+  z-index: 100;
+}
+.visual-editor .panel-group .panel-item.min {
+  position: static;
+  width: 1rem;
+  margin-bottom: 5px;
+}
+.visual-editor .panel-group .panel-item.min .panel-header {
+  position: static;
+  font-size: 12px;
+}
+.visual-editor .panel-group .panel-item.min .panel-header .fa-close {
+  display: none;
+}
+.visual-editor .panel-group .panel-item.min .panel-body {
+  display: none;
+}
+.visual-editor .panel-group .weight-edit-grid {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  margin: 1px 3px;
+}
+.visual-editor .panel-group .weight-edit-grid:hover {
+  border: 1px solid #6a4;
+  color: #7e8;
+}
+.visual-editor .panel-group .weight-edit-grid .weight-preview .thumb {
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+}
+.visual-editor .panel-group .weight-edit-grid .weight-preview .thumb .fa {
+  font-size: 3rem;
+}
+.visual-editor .panel-group .weight-edit-grid .weight-action,
+.visual-editor .panel-group .weight-edit-grid .weight-view {
+  display: none;
+}
+.visual-editor .panel-group .tab-box .tab-header {
+  background: #efefef;
+}
+.visual-editor .panel-group .tab-box .tab-header .tab-item {
+  width: 4.5rem;
+}
+.visual-editor .panel-group .tab-box .tab-body {
+  overflow-y: auto;
+}
+.visual-editor .panel-group .style-item {
+  line-height: 60px;
+  border: 1px dotted red;
+  text-align: center;
+  color: #999;
+  font-weight: bold;
+  font-size: 20px;
+}
+.visual-editor .panel-group .style-item img {
+  width: 100%;
+}
+.visual-editor .panel-group .style-item.active {
+  border: 1px dotted green;
+}
+.visual-editor .panel-group .style-item:hover {
+  border-style: solid;
+}
+.visual-editor .panel-group .form-table .input-group > label {
+  font-size: 12px;
+  padding: 0;
+}
+.visual-editor .panel-group .form-table .input-group input[type=text],
+.visual-editor .panel-group .form-table .input-group select {
+  min-width: 40px;
+}
+.visual-editor .panel-group .side-input {
+  position: relative;
+  height: 100px;
+}
+.visual-editor .panel-group .side-input > input,
+.visual-editor .panel-group .side-input > .check-label {
+  position: absolute;
+  text-align: center;
+}
+.visual-editor .panel-group .side-input > input:nth-of-type(1),
+.visual-editor .panel-group .side-input > .check-label:nth-of-type(1) {
+  top: 0;
+  left: 30px;
+}
+.visual-editor .panel-group .side-input > input:nth-of-type(2),
+.visual-editor .panel-group .side-input > .check-label:nth-of-type(2) {
+  top: 30px;
+  left: 60px;
+}
+.visual-editor .panel-group .side-input > input:nth-of-type(3),
+.visual-editor .panel-group .side-input > .check-label:nth-of-type(3) {
+  top: 60px;
+  left: 30px;
+}
+.visual-editor .panel-group .side-input > input:nth-of-type(4),
+.visual-editor .panel-group .side-input > .check-label:nth-of-type(4) {
+  top: 30px;
+  left: 0px;
+}
+.visual-editor .shell-box {
+  display: none;
+  background-color: #333;
+  bottom: -1rem;
+  position: absolute;
+  left: -1rem;
+  top: -4rem;
+  right: -1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 20px 0px #999;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: -1;
+  padding: 2.5rem 1rem 1rem;
+}
+.visual-editor .shell-box .shell-bar {
+  display: flex;
+  justify-content: space-between;
+  height: 1.5rem;
+  font-size: 0.8rem;
+  align-items: center;
+  padding: 0 0.3rem;
+  color: #fff;
+  background-color: #666;
+}
+.visual-editor.mobile-style .shell-box {
+  display: block;
+}
+/*# sourceMappingURL=visual_editor.css.map */

@@ -5,7 +5,6 @@ namespace Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Zodream\Database\Contracts\SqlBuilder;
-use Zodream\Validate\Validator;
 
 abstract class CRUDRepository {
 
@@ -33,27 +32,32 @@ abstract class CRUDRepository {
         unset($data['id']);
         $model = $id > 0 ? static::query()->where('id', $id)->first() : static::createNew();
         if (empty($model)) {
-            throw new \Exception('数据有误');
+            throw new \Exception(__('id is error'));
         }
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if (isset($data['files'])) {
-            foreach ($data['files'] as $item) {
-                $item = Validator::filter($item, [
-                    'id' => 'int',
-                    'file_type' => 'int:0,127',
-                    'file' => 'required|string:0,255',
-                ]);
-                $item['music_id'] = $model->id;
-                static::fileSave($item);
-            }
-        }
+        static::afterSave($model->id, $data);
         return $model;
     }
 
+    protected static function afterSave(int $id, array $data) {
+
+    }
+
     public static function remove(int $id) {
-        static::query()->where('id', $id)->delete();
+        $model = static::query()->where('id', $id)->first();
+        if (empty($model)) {
+            throw new \Exception(__('delete is error'));
+        }
+        if (!static::removeWith($id)) {
+            throw new \Exception(__('delete is error'));
+        }
+        $model->delete();
+    }
+
+    protected static function removeWith(int $id): bool {
+        return true;
     }
 }

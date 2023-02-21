@@ -18,7 +18,7 @@ function toThousands(num: number|string): string {
 $(function() {
     let dialog = $('#invest-dialog').dialog();
     let url = '', min = 0;
-    $('.product-box .item').click(function(e) {
+    $('.product-box .item').on('click',function(e) {
         e.preventDefault();
         url = $(this).attr('href');
         min = $(this).data('min');

@@ -8,7 +8,7 @@ $(function() {
     if (!$.cookie('c_t')) {
         $('.dialog-cookie-tip').show();
     }
-    $('.dialog-cookie-tip .btn').click(function() {
+    $('.dialog-cookie-tip .btn').on('click',function() {
         $.cookie('c_t', 1);
         $(this).closest('.dialog-cookie-tip').hide();
     });
@@ -50,7 +50,7 @@ $(function() {
                 ul.html(html).show();
             });
         };
-    $('.nav-bar .search-icon').click(function() {
+    $('.nav-bar .search-icon').on('click',function() {
         searchDialog.show();
         searchDialog.find('form input').focus();
     });

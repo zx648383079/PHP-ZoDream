@@ -301,6 +301,7 @@ i {
 
 .form-table {
     .input-group {
+        display: flex;
         input[type="text"],
         input[type="email"],
         input[type="tel"],
@@ -320,15 +321,13 @@ i {
         }
         >label:first-child {
             width: 25%;
-            float: left;
             display: block;
             text-align: right;
             line-height: $lineHeight;
             padding: 0 10px;
         }        
         >div {
-            width: 70%;
-            float: left;
+            flex: 1;
             textarea {
                 width: 100%;
                 resize: vertical;

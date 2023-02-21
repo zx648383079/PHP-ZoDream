@@ -13,6 +13,7 @@ return [
     'System Info' => '系统信息',
     'Execute Info' => '运行信息',
     'go to' => '立即跳转',
+    'Sign in' => '登录',
     'Sorry, the page you are looking for could not be found.' => '抱歉，页面走丢了！',
     'site keywords' => 'zodream,个人日记,typescript,vue.js教程,php开发,php框架,uwp,angular,编程入门',
     'site description' => '简单的个人编程日记',

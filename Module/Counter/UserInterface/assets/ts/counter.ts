@@ -12,7 +12,7 @@ $(function() {
 });
 
 function bindHome() {
-    $('.tab-header a').click(function(e) {
+    $('.tab-header a').on('click',function(e) {
         e.preventDefault();
         let $this = $(this);
         let type = $this.data('type');

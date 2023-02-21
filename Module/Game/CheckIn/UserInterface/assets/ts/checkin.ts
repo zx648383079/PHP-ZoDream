@@ -19,7 +19,7 @@ function bindCheckIn() {
     });
 }
 $(function() {
-    $('.check-btn').click(function(e) {
+    $('.check-btn').on('click',function(e) {
         e.preventDefault();
         let $this = $(this);
         let box = $this.closest('.check-box');

@@ -110,7 +110,7 @@ function bindEditProject() {
 }
 
 function bindProject(project: number) {
-    $('.version-bar .btn').click(function() {
+    $('.version-bar .btn').on('click',function() {
         const name = prompt('请输入新版本号：');
         if (!name || name.trim().length < 1) {
             return;
@@ -184,13 +184,13 @@ $(function() {
     $("#debug-box table").on('click', '.fa-trash-o', function() {
         $(this).parents('tr').remove();
     });
-    $("#debug-box .js_addHeaderBtn").click(function() {
+    $("#debug-box .js_addHeaderBtn").on('click',function() {
         $(this).parents('.panel').find('tbody:last').append('<tr><td style="width:40%"> <input name="header[key][]" class="form-control" placeholder="key"/> </td><td style="width:55%"> <input name="header[value][]" class="form-control" placeholder="value"/> </td><td style="width:5%"><a href="javascript:void(0);" class="fa fa-trash-o" title="删除header参数"></a> </td></tr>');
     });
-    $("#debug-box .js_addRequestBtn").click(function() {
+    $("#debug-box .js_addRequestBtn").on('click',function() {
         $(this).parents('.panel').find('tbody:last').append('<tr><td style="width:40%"> <input name="request[key][]" class="form-control" placeholder="key"/> </td><td style="width:55%"> <input name="request[value][]" class="form-control" placeholder="value"/> </td><td style="width:5%"><a href="javascript:void(0);" class="fa fa-trash-o" title="删除request参数"></a> </td></tr>');
     });
-    $("#debug-box .js_submit").click(function() {
+    $("#debug-box .js_submit").on('click',function() {
         let form = $("#debug-box form");
         $.post(form.attr('action'), form.serialize(), function(html) {
             $("#debug-box .js_responseBox").html(html);
@@ -215,7 +215,7 @@ $(function() {
             });
             return false;
         });
-        $('a[data-action="code"]').click(function() {
+        $('a[data-action="code"]').on('click',function() {
             coder.show();
         });
     }

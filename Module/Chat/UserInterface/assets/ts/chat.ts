@@ -1135,7 +1135,7 @@ class ChatUserBox extends ChatBaseBox {
 
     public bindEvent() {
         let _this = this;
-        $(document).click(function() {
+        $(document).on('click',function() {
             _this.menu && _this.menu.hide();
         });
         this.box.click(function() {
@@ -1428,7 +1428,7 @@ function registerChat() {
     room.target.on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
     });
-    $('#toggle-btn').click(function() {
+    $('#toggle-btn').on('click',function() {
         room.toggleMode();
     });
     let handle;
@@ -1515,7 +1515,7 @@ function registerWsChat(baseUri: string) {
     $('.dialog-box').on('click', '.dialog-header .fa-close', function() {
         $(this).closest('.dialog-box').hide();
     });
-    $('#toggle-btn').click(function() {
+    $('#toggle-btn').on('click',function() {
         room.toggleMode();
     });
 }

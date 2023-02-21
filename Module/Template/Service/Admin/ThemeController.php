@@ -1,38 +1,32 @@
 <?php
 namespace Module\Template\Service\Admin;
 
-use Domain\Model\SearchModel;
-use Module\Template\Domain\Model\ThemeModel;
+use Module\Template\Domain\Repositories\ThemeRepository;
 use Module\Template\Module;
 use Zodream\Image\Image;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
 class ThemeController extends Controller {
 
-    public function indexAction($keywords = null) {
-        $model_list = ThemeModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, ['name']);
-        })->orderBy('id', 'desc')
-            ->page();
+    public function indexAction(string $keywords = '') {
+        $model_list = ThemeRepository::getList($keywords);
         return $this->show(compact('model_list', 'keywords'));
     }
 
     public function refreshAction() {
-
         return $this->show();
     }
 
     public function installAction() {
-        $data = ThemeModel::findTheme();
-        foreach ($data as $item) {
-            ThemeModel::install($item);
-        }
+        try {
+            ThemeRepository::installAllThemes();
+        } catch (\Exception) {}
         return $this->renderData([
             'refresh' => true
         ]);
     }
 
-    public function assetAction(Output $response, $file, $folder = null) {
+    public function assetAction(Output $response, string $file, string $folder = '') {
         $dir = Module::templateFolder($folder);
         $file = $dir->isFile() ? $dir : $dir->file($file);
         if ($file->getExtension() === 'css' || $file->getExtension() === 'js') {

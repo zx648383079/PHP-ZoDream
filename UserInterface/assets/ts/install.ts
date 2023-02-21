@@ -10,7 +10,7 @@ function bindDB() {
             parseAjax(res);
         });
     });
-    $('.page-footer .btn').click(function() {
+    $('.page-footer .btn').on('click',function() {
         let form = $('form');
         ajaxForm(form.attr('action'), form.serialize(), res => {
             parseAjax(res);
@@ -19,7 +19,7 @@ function bindDB() {
 }
 
 function bindModule() {
-    $('.module-box input[type="checkbox"]').click(function(this: HTMLInputElement) {
+    $('.module-box input[type="checkbox"]').on('click',function(this: HTMLInputElement) {
         let next = $(this).next('input');
         if (!this.checked) {
             next.val('');
@@ -30,7 +30,7 @@ function bindModule() {
         }
         next.val(this.value.toString().toLowerCase().replace('\\', '/'));
     });
-    $('.page-footer .btn').click(function() {
+    $('.page-footer .btn').on('click',function() {
         let form = $('form');
         ajaxForm(form.attr('action'), form.serialize(), res => {
             parseAjax(res);

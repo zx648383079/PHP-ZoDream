@@ -8,6 +8,7 @@ use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
+use Module\Template\Domain\Repositories\PageRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -57,12 +58,14 @@ class CreateTemplateTables extends Migration {
             $table->id();
             $table->string('name', 100);
             $table->uint('user_id');
-            $table->string('title', 200)->default('New Page');
+            $table->string('title', 200)->default('New Site');
             $table->string('keywords')->default('');
             $table->string('thumb')->default('');
             $table->string('description')->default('');
             $table->string('domain', 50)->default('');
             $table->uint('theme_id');
+            $table->uint('default_page_id')->default(0)->comment('默认首页');
+            $table->uint('status', 1)->default(PageRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
             $table->timestamps();
         })->append(PageModel::tableName(), function(Table $table) {
             $table->comment('自定义站点页面');
@@ -77,7 +80,7 @@ class CreateTemplateTables extends Migration {
             $table->uint('theme_page_id');
             $table->text('settings')->nullable();
             $table->uint('position', 2)->default(10);
-            $table->softDeletes();
+            $table->uint('status', 1)->default(PageRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
             $table->timestamps();
         })->append(PageWeightModel::tableName(), function(Table $table) {
             $table->comment('自定义页面组件及设置');

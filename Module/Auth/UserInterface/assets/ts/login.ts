@@ -105,17 +105,17 @@ function bindLogin() {
                 check_qr(check_loop);
             }, 3000);
         };
-    $(".login-form .other-box .fa-qrcode").click(function() {
+    $(".login-form .other-box .fa-qrcode").on('click',function() {
         $(".login-box").addClass('slided');
         if (!is_init) {
             is_init = true;
             refreshQr();
         }
     });
-    qr_box.find(".fa-sync").click(function() {
+    qr_box.find(".fa-sync").on('click',function() {
         refreshQr();
     });
-    qr_box.find(".btn").click(function() {
+    qr_box.find(".btn").on('click',function() {
         $(".login-box").removeClass('slided');
     });
     let credentialCreationOptionsLogin = {
@@ -126,7 +126,7 @@ function bindLogin() {
             timeout: 60 * 1000,
         },
     };
-    $('.login-webauth').click(function() {
+    $('.login-webauth').on('click',function() {
         if (!navigator.credentials) {
             return;
         }

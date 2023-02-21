@@ -11,33 +11,35 @@ use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\Page;
+use Module\Template\Domain\Repositories\PageRepository;
+use Module\Template\Domain\Repositories\SiteRepository;
+use Module\Template\Domain\Repositories\ThemeRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class PageController extends Controller {
 
-    public function indexAction($id = 0, $site_id = 0, $type = 0) {
-        $model = PageModel::findOrDefault($id, ['site_id' => $site_id, 'type' => $type, 'template' => 'index']);
+    public function indexAction(int $id) {
+        $model = PageModel::findOrThrow($id);
         $site = SiteModel::findWithAuth($model->site_id);
+        $model->is_default = $site->default_page_id == $model->id;
         $theme = ThemeModel::find($site->theme_id);
-        $weight_list = ThemeWeightModel::groupByType($site->theme_id);
-        $style_list = ThemeStyleModel::where('theme_id', $site->theme_id)->get();
+        $weight_list = ThemeRepository::weightGroups($site->theme_id);
+        $style_list = ThemeRepository::styleList($site->theme_id);
         return $this->show(compact('model', 'style_list', 'weight_list', 'theme'));
     }
 
-    public function templateAction($id = 0, $edit = false) {
+    public function templateAction(int $id, bool $edit = false) {
         $this->layout = false;
         $model = PageModel::find($id);
-        $page = new Page($model, !empty($edit) && $edit !== 'false');
+        $page = new Page($model, $edit);
         app('debugger')->setShowBar(false);
         return $this->show(compact('model', 'page'));
     }
 
-    public function createAction($site_id, $page_id = 0, $type = 0, $keywords = null) {
-        $site = SiteModel::find($site_id);
+    public function createAction(int $site_id, int $page_id = 0, int $type = 0, string $keywords = '') {
+        $site = SiteModel::findWithAuth($site_id);
         if ($page_id < 1) {
-            $model_list = ThemePageModel::when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, ['name']);
-            })->where('theme_id', $site->theme_id)->orderBy('id', 'desc')
-                ->page();
+            $model_list = ThemeRepository::pageList($site->theme_id, $keywords);
             return $this->show('theme', compact('model_list', 'keywords', 'site_id', 'type'));
         }
         $theme = ThemePageModel::find($page_id);
@@ -53,7 +55,7 @@ class PageController extends Controller {
         return $this->show(compact('model', 'theme'));
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = PageModel::find($id);
         if (empty($model)) {
             return $this->redirectWithMessage($this->getUrl('site'), '');
@@ -62,26 +64,49 @@ class PageController extends Controller {
         return $this->show('create', compact('model', 'theme'));
     }
 
-    public function saveAction() {
-        $model = new PageModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'site_id' => 'required|int',
+                'type' => 'int:0,9',
+                'name' => 'required|string:0,100',
+                'title' => 'string:0,200',
+                'keywords' => 'string:0,255',
+                'thumb' => 'string:0,255',
+                'description' => 'string:0,255',
+                'settings' => '',
+                'theme_page_id' => 'required|int',
+                'position' => 'int:0,127',
+                'status' => 'int:0,127',
+            ]);
+            $model = PageRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'url' => $this->getUrl('site/page', ['id' => $model->site_id])
         ]);
     }
 
-    public function deleteAction($id) {
-        $model = PageModel::find($id);
-        if (empty($model)) {
-            return $this->renderFailure('页面不存在');
+    public function deleteAction(int $id) {
+        try {
+            $siteId = PageRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        PageWeightModel::where('page_id', $id)->delete();
-        $model->delete();
         return $this->renderData([
-            'url' => $this->getUrl('site/page', ['id' => $model->site_id])
+            'url' => $this->getUrl('site/page', ['id' => $siteId])
         ]);
+    }
+
+    public function detailAction(int $id) {
+        try {
+            $data = PageRepository::getInfo($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
     }
 
 }

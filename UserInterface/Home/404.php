@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = __('error page');
 ?>
 
-<div class="container page-not-found">
+<div class="page-not-found">
 	<div class="content">
 		<div class="error-tag">
 			<span class="tag-cover"></span>
@@ -13,6 +13,9 @@ $this->title = __('error page');
 		</div>
 		<p><?=__($message ?? 'error page')?></p>
 		<p class="text-center">
+			<?php if($code === 401):?>
+			<a class="btn btn-show" href="<?=$this->url(config('auth.home'), ['redirect_uri' => request()->url()])?>"><?=__('Sign in')?></a>
+			<?php endif;?>
 			<a class="btn btn-show" href="<?=$this->url('/')?>"><?=__('back home')?></a>
 		</p>
 	</div>

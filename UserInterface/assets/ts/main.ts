@@ -213,14 +213,14 @@ $(function() {
     .on('click', ".page-tip .toggle", function() {
         $(this).closest('.page-tip').toggleClass('min');
     });
-    $('.sidebar-container .sidebar-container-toggle').click(function() {
+    $('.sidebar-container .sidebar-container-toggle').on('click',function() {
         let box = $(this).closest('.app-wrapper').toggleClass('wrapper-min');
         if (box.find('ul').height() < $(window).height() - 100) {
             box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
         }
         $(window).trigger('resize');
     });
-    $('.sidebar-container li a').click(function() {
+    $('.sidebar-container li a').on('click',function() {
         let $this = $(this),
             box = $this.closest('li');
         if (box.find('ul').length > 0) {

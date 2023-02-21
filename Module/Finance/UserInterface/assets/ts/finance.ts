@@ -9,7 +9,7 @@ function bindLog() {
             return false;
         }
     });
-    $('[name="edit"]').click(function() {
+    $('[name="edit"]').on('click',function() {
         $('#log-table').toggleClass('edit-mode', $(this).is(':checked'));
     });
 }
