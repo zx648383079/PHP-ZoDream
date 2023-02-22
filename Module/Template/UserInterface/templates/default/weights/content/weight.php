@@ -1,7 +1,7 @@
 <?php
 
-use Module\Template\Service\BaseWeight;
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\VisualEditor\BaseWeight;
 
 class ContentWeight extends BaseWeight {
 
@@ -11,7 +11,7 @@ class ContentWeight extends BaseWeight {
      * @return mixed
      * @throws Exception
      */
-    public function render(PageWeightModel $model){
-        return $this->show('view', compact('model'));
+    public function render(PageWeightModel $model): string {
+        return $this->show('view');
     }
 }

@@ -221,35 +221,6 @@ $sizes: (320: 568,
 }
 
 
-
-.expand-box {
-    .expand-header {
-        background: #efefef;
-        font-size: 1.3rem;
-        line-height: 30px;
-
-        .fa {
-            float: right;
-        }
-    }
-
-    .expand-body {
-        display: none;
-    }
-
-    &.open {
-        .expand-header {
-            .fa {
-                transform: rotate(180deg);
-            }
-        }
-
-        .expand-body {
-            display: block;
-        }
-    }
-}
-
 .card {
     width: 150px;
     height: 200px;

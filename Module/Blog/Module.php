@@ -3,10 +3,11 @@ namespace Module\Blog;
 
 use Module\Blog\Domain\Helpers\RouterHelper;
 use Module\Blog\Domain\Migrations\CreateBlogTables;
+use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateBlogTables();

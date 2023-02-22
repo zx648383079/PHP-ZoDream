@@ -1,8 +1,8 @@
 <?php
 
-use Module\Template\Service\BaseWeight;
-use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\PageModel;
+use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\VisualEditor\BaseWeight;
 
 class NavbarWeight extends BaseWeight {
 

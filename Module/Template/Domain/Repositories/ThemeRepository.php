@@ -7,7 +7,7 @@ use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
-use Module\Template\Module;
+use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Disk\Directory;
 use Zodream\Disk\FileObject;
 use Zodream\Helpers\Json;
@@ -29,7 +29,7 @@ final class ThemeRepository {
     }
 
     public static function styleList(int $theme) {
-        return ThemeStyleModel::where('theme_id', $theme)->get();;
+        return ThemeStyleModel::where('theme_id', $theme)->get();
     }
 
     public static function themeIsInstalled(string $name) {
@@ -55,11 +55,15 @@ final class ThemeRepository {
      */
     public static function weightGroups(int $theme_id) {
         $data = ThemeWeightModel::where('theme_id', $theme_id)->get();
-        $args = [];
+        $args = [
+            ['name' => '基本', 'items' => []],
+            ['name' => '高级', 'items' => []]
+        ];
         foreach ($data as $item) {
-            $args[$item->type][] = $item;
+            $item['thumb'] = url('./admin/theme/asset', ['folder' => $item->path, 'file' => $item->thumb]);
+            $args[$item->type]['items'][] = $item;
         }
-        return $args;
+        return array_values($args);
     }
 
 
@@ -111,7 +115,7 @@ final class ThemeRepository {
      * @return array[]
      */
     public static function loadThemes(): array {
-        return static::mapFolder(Module::templateFolder(), function ($item) {
+        return static::mapFolder(VisualPage::templateFolder(), function ($item) {
             if ($item->hasFile('theme.json')) {
                 return [static::createTheme($item)];
             }
@@ -148,7 +152,7 @@ final class ThemeRepository {
      */
     public static function createTheme(Directory $folder): array {
         $data = Json::decode($folder->childFile('theme.json')->read());
-        $data['path'] = $folder->getRelative(Module::templateFolder());
+        $data['path'] = $folder->getRelative(VisualPage::templateFolder());
         $data['pages'] = array_map(function ($item) use ($data) {
             $item['path'] = $data['path'].'/'.ltrim($item['path'], '/');
             return $item;
@@ -183,7 +187,7 @@ final class ThemeRepository {
                 return false;
             }
             $args = Json::decode($item->childFile('weight.json')->read());
-            $args['path'] = $item->getRelative(Module::templateFolder());
+            $args['path'] = $item->getRelative(VisualPage::templateFolder());
             return [$args];
         });
     }

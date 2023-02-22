@@ -2,6 +2,7 @@
 namespace Module\Template\Service\Admin;
 
 use Module\Template\Domain\Repositories\ThemeRepository;
+use Module\Template\Domain\VisualEditor\VisualPage;
 use Module\Template\Module;
 use Zodream\Image\Image;
 use Zodream\Infrastructure\Contracts\Http\Output;
@@ -27,7 +28,7 @@ class ThemeController extends Controller {
     }
 
     public function assetAction(Output $response, string $file, string $folder = '') {
-        $dir = Module::templateFolder($folder);
+        $dir = VisualPage::templateFolder($folder);
         $file = $dir->isFile() ? $dir : $dir->file($file);
         if ($file->getExtension() === 'css' || $file->getExtension() === 'js') {
             return $response->custom($file->exist() ? $file->read() : '', $file->getExtension());

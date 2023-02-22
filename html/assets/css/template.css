@@ -226,24 +226,6 @@
   display: block;
 }
 
-.expand-box .expand-header {
-  background: #efefef;
-  font-size: 1.3rem;
-  line-height: 30px;
-}
-.expand-box .expand-header .fa {
-  float: right;
-}
-.expand-box .expand-body {
-  display: none;
-}
-.expand-box.open .expand-header .fa {
-  transform: rotate(180deg);
-}
-.expand-box.open .expand-body {
-  display: block;
-}
-
 .card {
   width: 150px;
   height: 200px;

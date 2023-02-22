@@ -1,19 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Service\Admin;
 
 
-use Domain\Model\SearchModel;
 use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
-use Module\Template\Domain\Model\ThemeStyleModel;
-use Module\Template\Domain\Model\ThemeWeightModel;
-use Module\Template\Domain\Page;
 use Module\Template\Domain\Repositories\PageRepository;
-use Module\Template\Domain\Repositories\SiteRepository;
 use Module\Template\Domain\Repositories\ThemeRepository;
+use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class PageController extends Controller {
@@ -29,10 +25,10 @@ class PageController extends Controller {
     }
 
     public function templateAction(int $id, bool $edit = false) {
-        $this->layout = false;
-        $model = PageModel::find($id);
-        $page = new Page($model, $edit);
+        $this->layout = '';
         app('debugger')->setShowBar(false);
+        $model = PageModel::find($id);
+        $page = new VisualPage($model->site, $model, $edit);
         return $this->show(compact('model', 'page'));
     }
 

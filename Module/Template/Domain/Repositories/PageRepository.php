@@ -5,8 +5,7 @@ namespace Module\Template\Domain\Repositories;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
-use Module\Template\Domain\Page;
-use Module\Template\Domain\Weight;
+use Module\Template\Domain\VisualEditor\VisualWeight;
 
 final class PageRepository {
 
@@ -87,32 +86,88 @@ final class PageRepository {
         return PageWeightModel::findOrThrow($id);
     }
 
-    public static function weightAdd(int $page_id, int $weight_id, int $parent_id, int $position = 0): array {
+    public static function weightAdd(int $page_id, int $weight_id, int $parent_id, int $parent_index = 0, int $position = 0): array {
         $pageModel = PageModel::find($page_id);
+        $position = self::refreshPosition($parent_id, $parent_index, -1, $position);
         $model = PageWeightModel::createOrThrow([
             'page_id' => $pageModel->id,
             'theme_weight_id' => $weight_id,
             'parent_id' => $parent_id,
+            'parent_index' => $parent_index,
             'site_id' => $pageModel->site_id,
             'position' => $position
         ]);
-        PageWeightModel::query()->where('page_id', $pageModel->id)
-            ->where('parent_id', $parent_id)
-            ->where('id', '<>', $model->id)
-            ->where('position', '>=', $position)
-            ->updateIncrement('position');
         $data = $model->toArray();
-        $data['html'] = (new Page($pageModel, true))
-            ->renderWeight($model);
+        $data['html'] = self::renderWeight($model);
         return $data;
+    }
+
+    /**
+     * 重排顺序
+     * @param int $parent_id
+     * @param int $parent_index
+     * @param int $currenId 为0 表示不插入此队列
+     * @param int $currentPos
+     * @return int
+     */
+    private static function refreshPosition(int $parent_id, int $parent_index,
+                                            int $currenId = 0, int $currentPos = 0): int {
+        if ($currenId === 0) {
+            $currentPos = 0;
+        }
+        // 重排一下位置
+        $items = PageWeightModel::query()
+            ->where('parent_id', $parent_id)
+            ->where('parent_index', $parent_index)
+            ->where('id', '<>', $currenId)->orderBy('position', 'asc')
+            ->asArray()->get('id', 'position');
+        $maxPos = count($items) + 1;
+        if ($currentPos < 1 || $currentPos > $maxPos) {
+            $currentPos = $maxPos;
+        }
+        foreach ($items as $i => $item) {
+            $pos = $i + 1;
+            if ($pos >= $currentPos) {
+                $pos ++;
+            }
+            if ($pos === intval($item['position'])) {
+                continue;
+            }
+            PageWeightModel::query()->where('id', $item['id'])
+                ->update([
+                    'position' => $pos
+                ]);
+        }
+        return $currentPos;
+    }
+
+    private static function renderWeight(PageWeightModel $model): string {
+        return (new VisualWeight($model))->render(true);
     }
 
     public static function weightRefresh(int $id) {
         $model = PageWeightModel::findOrThrow($id);
         $data = $model->toArray();
-        $data['html'] = (new Page(PageModel::findOrThrow($model->page_id), true))
-            ->renderWeight($model);
+        $data['html'] = self::renderWeight($model);
         return $data;
+    }
+
+    public static function weightMove(int $id, int $parent_id, int $parent_index = 0, int $position = 0) {
+        $model = PageWeightModel::findOrThrow($id);
+        if ($model->parent_id === $parent_id
+            && $model->parent_index === $parent_index) {
+            if ($model->position === $position) {
+                return;
+            }
+            $position = self::refreshPosition($parent_id, $parent_index, $id, $position);
+        } else {
+            self::refreshPosition($model->parent_id, $model->parent_index, $model->id, 0);
+            $position = self::refreshPosition($parent_id, $parent_index, $id, $position);
+        }
+        $model->position = $position;
+        $model->parent_id = $parent_id;
+        $model->parent_index = $parent_index;
+        $model->save();
     }
 
     public static function weightSave(int $id) {
@@ -120,7 +175,7 @@ final class PageRepository {
         $disable = ['id', 'page_id', 'theme_weight_id'];
         $maps = ['parent_id', 'theme_style_id',
             'position', 'title', 'content', 'is_share', 'settings'];
-        $data = (new Weight($model))->newWeight()->parseConfigs();
+        $data = (new VisualWeight($model))->newWeight()->parseForm();
         $args = [
             'settings' => $model->getSettingsAttribute()
         ];
@@ -141,8 +196,7 @@ final class PageRepository {
         $model->set($args);
         $model->save();
         $data = $model->toArray();
-        $data['html'] = (new Page(PageModel::find($model->page_id), true))
-            ->renderWeight($model);
+        $data['html'] = self::renderWeight($model);
         return $data;
     }
 
@@ -150,6 +204,7 @@ final class PageRepository {
         if ($id < 1) {
             return true;
         }
+        $model = PageWeightModel::findOrThrow($id);
         $data = [$id];
         $parents = $data;
         while (true) {
@@ -160,12 +215,13 @@ final class PageRepository {
             }
             $data = array_merge($data, $parents);
         }
-        return PageWeightModel::whereIn('id', $data)->delete();
+        PageWeightModel::whereIn('id', $data)->delete();
+        self::refreshPosition($model->parent_id, $model->parent_index);
     }
 
     public static function weightForm(int $id) {
         $model = PageWeightModel::find($id);
-        $html = (new Weight($model))->newWeight()->renderConfig($model);
+        $html = (new VisualWeight($model))->newWeight()->renderForm($model);
         $data = $model->toArray();
         $data['html'] = $html;
         return $data;
@@ -182,7 +238,7 @@ final class PageRepository {
         if (!SiteRepository::isUser($pageModel->site_id)) {
             throw new \Exception('page is error');
         }
-        $maps = ['position', 'parent_id'];
+        $maps = ['position', 'parent_id', 'parent_index'];
         foreach ($weights as $weight) {
             if (isset($weight['id'])) {
                 continue;

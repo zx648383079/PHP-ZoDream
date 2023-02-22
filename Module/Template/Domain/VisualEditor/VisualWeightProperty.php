@@ -1,32 +1,33 @@
 <?php
-namespace Module\Template\Domain;
+declare(strict_types=1);
+namespace Module\Template\Domain\VisualEditor;
 
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
-use Module\Template\Module;
 use Zodream\Helpers\Arr;
+use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 
-class WeightProperty {
-    public $classes = [];
+class VisualWeightProperty {
+    public array $classes = [];
 
-    public $styles = [];
+    public array $styles = [];
 
-    public $data = [];
+    public array $data = [];
 
-    public $id = 0;
+    public int $id = 0;
 
-    private $sideMap = ['top', 'right', 'bottom', 'left'];
+    private array $sideMap = ['top', 'right', 'bottom', 'left'];
 
-    public function formatClass() {
+    public function formatClass(): string {
         return implode(' ', $this->classes);
     }
 
-    public function weightId() {
+    public function weightId(): string {
         return 'weight-'.$this->id;
     }
 
-    public function formatStyle(array $data) {
+    public function formatStyle(array $data): string {
         $items = [];
         foreach ($data as $key => $val) {
             if ($key === 'title' || $key === 'content') {
@@ -55,32 +56,32 @@ class WeightProperty {
         return implode('', $items);
     }
 
-    public function weightStyle() {
+    public function weightStyle(): string {
         return $this->formatTagAttr('style', $this->weightCss());
     }
 
-    public function titleStyle() {
+    public function titleStyle(): string {
         return $this->formatTagAttr('style', $this->titleCss());
     }
 
-    public function contentStyle() {
+    public function contentStyle(): string {
         return $this->formatTagAttr('style', $this->contentCss());
     }
 
-    private function formatTagAttr($key, $value) {
+    private function formatTagAttr(mixed $key, string $value): string {
         return empty(trim($value)) ? '' : sprintf(' %s="%s"', $key, $value);
     }
 
-    public function weightCss() {
+    public function weightCss(): string {
         return $this->formatStyle($this->styles);
     }
 
-    public function titleCss() {
+    public function titleCss(): string {
         return isset($this->styles['title'])
             ? $this->formatStyle($this->styles['title']) : '';
     }
 
-    public function contentCss() {
+    public function contentCss(): string {
         return isset($this->styles['content'])
             ? $this->formatStyle($this->styles['content']) : '';
     }
@@ -106,7 +107,7 @@ class WeightProperty {
     }
 
     public function get($key, $default = null) {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
+        return $this->data[$key] ?? $default;
     }
 
     public function __isset($name) {
@@ -117,11 +118,11 @@ class WeightProperty {
         return $this->get($name);
     }
 
-    private function formatPixel($val) {
+    private function formatPixel($val): string {
         return is_numeric($val) ? $val. 'px' : $val;
     }
 
-    private function formatCss($key, $val) {
+    private function formatCss($key, $val): string {
         return sprintf('%s: %s;', $key, $val);
     }
 
@@ -188,7 +189,7 @@ class WeightProperty {
     }
 
     private function formatStyleBorder($val) {
-        if (!isset($val['side']) || empty($val['side']) || empty($val['value'][0])) {
+        if (empty($val['side']) || empty($val['value'][0])) {
             return;
         }
         if (is_numeric($val['value'][0])) {
@@ -237,7 +238,7 @@ class WeightProperty {
             ->set('content', $model->content);
         if ($model->theme_style_id > 0) {
             $style = ThemeStyleModel::find($model->theme_style_id);
-            $path = (string)Module::templateFolder($style->path);
+            $path = (string)VisualPage::templateFolder($style->path);
             if (file_exists($path)) {
                 include_once $path;
                 $name = Str::studly($style->name).'Style';
@@ -245,6 +246,11 @@ class WeightProperty {
             }
         }
         $settings = $model->settings;
+        if (empty($settings)) {
+            $settings = [];
+        } elseif (!is_array($settings)) {
+            $settings = Json::decode($settings);
+        }
         if (isset($settings['style'])) {
             $instance->appendStyle($settings['style']);
         }

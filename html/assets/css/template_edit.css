@@ -24,6 +24,9 @@
 .weight-row .weight-edit-grid .weight-action a {
   cursor: pointer;
 }
+.weight-row .weight-edit-grid .weight-action .drag {
+  cursor: move;
+}
 .weight-row .weight-edit-grid .weight-action .del {
   color: #f00;
 }

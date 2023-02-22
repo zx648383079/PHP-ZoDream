@@ -1,51 +1,59 @@
 <?php
-namespace Module\Template\Service;
+declare(strict_types=1);
+namespace Module\Template\Domain\VisualEditor;
 
-use Module\Template\Domain\Model\PageWeightModel;
-use Module\Template\Domain\Page;
-use Zodream\Disk\Directory;
 use Exception;
+use Module\Template\Domain\Model\PageWeightModel;
+use Zodream\Disk\Directory;
 use Zodream\Html\Dark\Theme;
+use Zodream\Template\ViewFactory;
 
-
+/**
+ *
+ * @method string weight(int $index)
+ */
 abstract class BaseWeight {
     /**
-     * @var Page
+     * @var IVisualEngine
      */
-    protected $page;
+    protected mixed $engine;
 
     /**
      * @var Directory
      */
-    protected $directory;
+    protected mixed $directory;
 
     /**
-     * @param Page $page
+     * @param VisualWeight $engine
      * @return BaseWeight
      */
-    public function setPage($page) {
-        $this->page = $page;
+    public function setEngine(VisualWeight $engine) {
+        $this->engine = $engine;
         return $this;
     }
 
-    public function setDirectory($path) {
+    public function setDirectory(mixed $path) {
         $this->directory = new Directory($path);
         return $this;
+    }
+
+    public function renderer(): ViewFactory {
+        return $this->engine->renderer();
     }
 
     /**
      * 获取生成的部件视图
      * @param PageWeightModel $model
-     * @return mixed
+     * @return string
      */
-    abstract public function render(PageWeightModel $model);
+    abstract public function render(PageWeightModel $model): string;
 
     /**
      * 获取生成的配置视图
      * @param PageWeightModel $model
      * @return mixed
      */
-    public function renderConfig(PageWeightModel $model) {
+    public function renderForm(PageWeightModel $model): string {
         $html = Theme::text('title', $model->title, '标题');
         return <<<HTML
 {$html}
@@ -57,7 +65,7 @@ UE.getEditor('editor-container');
 HTML;
     }
 
-    public function parseConfigs() {
+    public function parseForm(): array {
         return request()->get();
     }
 
@@ -69,8 +77,8 @@ HTML;
      * @return static
      * @throws \Exception
      */
-    public function send($key, $value = null) {
-        $this->page->getFactory()->set($key, $value);
+    public function send(mixed $key, mixed $value = null) {
+        $this->renderer()->set($key, $value);
         return $this;
     }
 
@@ -82,23 +90,20 @@ HTML;
      * @return string
      * @throws \Exception
      */
-    public function show($name = null, $data = []) {
-        $data['page'] = $this->page;
-        if (!empty($this->page)) {
-            return $this->page->renderWithNewRoot($this->directory, $name, $data);
-        }
-        return Page::newViewFactory()->setDirectory($this->directory)
+    public function show(mixed $name = null, array $data = []) {
+        return $this->renderer()
+            ->setDirectory($this->directory)
             ->render($name, $data);
     }
 
-    public function __call($name, $arguments) {
-        if (empty($this->page) || !method_exists($this->page, $name)) {
+    public function __call(string $name, array $arguments) {
+        if (empty($this->engine) || !method_exists($this->engine, $name)) {
             throw new Exception(
                 __('{method} not found!', [
                     'method' => $name
                 ])
             );
         }
-        return $this->page->{$name}(...$arguments);
+        return $this->engine->{$name}(...$arguments);
     }
 }

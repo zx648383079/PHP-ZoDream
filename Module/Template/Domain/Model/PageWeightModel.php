@@ -2,8 +2,8 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Domain\VisualEditor\WeightProperty;
 use Module\Template\Domain\Weight;
-use Module\Template\Domain\WeightProperty;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 
@@ -17,6 +17,7 @@ use Zodream\Helpers\Json;
  * @property integer $theme_weight_id 部件名
  * @property integer $theme_style_id 部件名
  * @property integer $parent_id
+ * @property integer $parent_index
  * @property integer $position
  * @property string $title
  * @property string $content
@@ -25,8 +26,6 @@ use Zodream\Helpers\Json;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property ThemeWeightModel $weight
- * @property WeightProperty $properties
  */
 class PageWeightModel extends Model {
 
@@ -41,6 +40,7 @@ class PageWeightModel extends Model {
             'theme_weight_id' => 'required|int',
             'theme_style_id' => 'int',
             'parent_id' => 'int',
+            'parent_index' => 'int',
             'position' => 'int',
             'title' => 'string:0,200',
             'content' => '',
@@ -81,14 +81,6 @@ class PageWeightModel extends Model {
 
     public function setSettingsAttribute($value) {
         $this->__attributes['settings'] = is_array($value) ? Json::encode($value) : $value;
-    }
-
-    public function getPropertiesAttribute() {
-        return WeightProperty::create($this);
-    }
-
-    public function hasExtInfo($ext) {
-        return false;
     }
 
     public function setting($key, $default = null) {

@@ -8,13 +8,15 @@ use Module\OpenPlatform\Domain\Migrations\CreateOpenPlatformTables;
 use Module\OpenPlatform\Domain\Platform;
 use Zodream\Disk\File;
 use Zodream\Domain\Access\JWTAuth;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Response\JsonResponse;
+use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 use Zodream\Route\Response\Rest;
 use Zodream\Route\Response\RestResponse;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ICustomRouteModule {
 
     private static bool $isBooted = false;
 
@@ -22,15 +24,15 @@ class Module extends BaseModule {
         return new CreateOpenPlatformTables();
     }
 
-    public function invokeRoute($path, HttpContext $context) {
+    public function invokeRoute($path, HttpContext $context): null|string|Output {
         if (self::$isBooted) {
-            return;
+            return null;
         }
         self::$isBooted = true;
         config()->set('route.rewrite', false); // 禁用重写
         $path = trim($path, '/');
         if (empty($path)) {
-            return;
+            return null;
         }
         $version = app()->version().'/';
         // 去除API版本号
@@ -43,7 +45,7 @@ class Module extends BaseModule {
         }
         list($nextPath, $modulePath, $module) = $context->make('route')->tryMatchModule($path);
         if (empty($module)) {
-            return;
+            return null;
         }
         $context['module_path'] = $modulePath;
         return $this->invokeWithPlatform($module, $nextPath, $path, $context);

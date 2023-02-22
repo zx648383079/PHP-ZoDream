@@ -3,6 +3,8 @@ $scrollBarColor: gray;
 $ruleBarSize: 1rem;
 $ruleBarColor: gray;
 
+@import 'scrollbar';
+
 .visual-editor {
     display: flex;
     position: relative;
@@ -88,6 +90,24 @@ $ruleBarColor: gray;
         height: 100%;
         overflow: auto;
         background-color: #fff;
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            //background-color:#eee;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
+        }
     }
     .h-rule-bar,
     .v-rule-bar {
@@ -125,6 +145,33 @@ $ruleBarColor: gray;
             bottom: 0;
         }
     }
+    .expand-box {
+        .expand-header {
+            background: #efefef;
+            font-size: 1.3rem;
+            line-height: 30px;
+    
+            .fa {
+                float: right;
+            }
+        }
+    
+        .expand-body {
+            display: none;
+        }
+    
+        &.open {
+            .expand-header {
+                .fa {
+                    transform: rotate(180deg);
+                }
+            }
+    
+            .expand-body {
+                display: block;
+            }
+        }
+    }
     .panel-group {
         width: 15rem;
         z-index: 99;
@@ -155,7 +202,7 @@ $ruleBarColor: gray;
             .panel-body {
                 //position: relative;
                 overflow-y: auto;
-    
+                @include scrollbar();
                 .grid {
                     z-index: 100;
                 }
@@ -176,99 +223,105 @@ $ruleBarColor: gray;
                 }
             }
         }
-    
-        .weight-edit-grid {
-            cursor: pointer;
-            display: inline-block;
-            text-align: center;
-            margin: 1px 3px;
-    
-            &:hover {
-                border: 1px solid #6a4;
-                color: #7e8;
-            }
-    
-            .weight-preview {
-                .thumb {
+    }
+
+    .weight-edit-grid {
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        &:hover {
+            color: green;
+            background-color: gray;
+        }
+        .weight-preview {
+            width: 5rem;
+            padding-top: .8rem;
+            .thumb {
+                text-align: center;
+                overflow: hidden;
+                height: 3rem;
+                .fa {
+                    font-size: 3rem;
+                }
+                img {
                     width: 3rem;
                     height: 3rem;
-                    line-height: 3rem;
-                    text-align: center;
-                    .fa {
-                        font-size: 3rem;
-                    }
                 }
             }
-    
-            .weight-action,
-            .weight-view {
-                display: none;
+            .title {
+                height: 2rem;
+                overflow: hidden;
             }
         }
-        .tab-box {
-            .tab-header {
-                background: #efefef;
-                .tab-item {
-                    width: 4.5rem;
-                }
-            }
-            .tab-body {
-                overflow-y: auto;
-                
+
+        .weight-action,
+        .weight-view {
+            display: none;
+        }
+    }
+    .tab-box {
+        .tab-header {
+            background: #efefef;
+            .tab-item {
+                width: 4.5rem;
             }
         }
-        .style-item {
-            line-height: 60px;
-            border: 1px dotted red;
+        .tab-body {
+            overflow-y: auto;
+            
+        }
+    }
+    .style-item {
+        line-height: 60px;
+        border: 1px dotted red;
+        text-align: center;
+        color: #999;
+        font-weight: bold;
+        font-size: 20px;
+        img {
+            width: 100%;
+        }
+        &.active {
+            border: 1px dotted green;
+        }
+        &:hover {
+            border-style: solid;
+        }
+    }
+    .form-table {
+        .input-group {
+            >label {
+                font-size: 12px;
+                padding: 0;
+            }
+            input[type="text"],
+            select {
+                min-width: 40px;
+            }
+        }
+    }
+    .side-input {
+        position: relative;
+        height: 100px;
+        >input,
+        >.check-label {
+            position: absolute;
             text-align: center;
-            color: #999;
-            font-weight: bold;
-            font-size: 20px;
-            img {
-                width: 100%;
+            &:nth-of-type(1) {
+                top: 0;
+                left: 30px;
             }
-            &.active {
-                border: 1px dotted green;
+            &:nth-of-type(2) {
+                top: 30px;
+                left: 60px;
             }
-            &:hover {
-                border-style: solid;
+            &:nth-of-type(3) {
+                top: 60px;
+                left: 30px;
             }
-        }
-        .form-table {
-            .input-group {
-                >label {
-                    font-size: 12px;
-                    padding: 0;
-                }
-                input[type="text"],
-                select {
-                    min-width: 40px;
-                }
-            }
-        }
-        .side-input {
-            position: relative;
-            height: 100px;
-            >input,
-            >.check-label {
-                position: absolute;
-                text-align: center;
-                &:nth-of-type(1) {
-                    top: 0;
-                    left: 30px;
-                }
-                &:nth-of-type(2) {
-                    top: 30px;
-                    left: 60px;
-                }
-                &:nth-of-type(3) {
-                    top: 60px;
-                    left: 30px;
-                }
-                &:nth-of-type(4) {
-                    top: 30px;
-                    left: 0px;
-                }
+            &:nth-of-type(4) {
+                top: 30px;
+                left: 0px;
             }
         }
     }

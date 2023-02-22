@@ -94,17 +94,5 @@ class PageModel extends Model {
         return isset($this->settings[$key]) ? $this->settings[$key] : $default;
     }
 
-    /**
-     * @param $id
-     * @param int $site
-     * @return PageModel
-     * @throws \Exception
-     */
-    public static function findByIdOrSite($id, $site = 0) {
-        if ($id > 0) {
-            return self::find($id);
-        }
-        return self::where('site_id', $site)->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->first();
-    }
+
 }

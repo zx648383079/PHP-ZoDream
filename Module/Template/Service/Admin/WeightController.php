@@ -46,6 +46,15 @@ class WeightController extends Controller {
         }
     }
 
+    public function moveAction(int $id, int $parent_id, int $parent_index = 0, int $position = 0) {
+        try {
+            PageRepository::weightMove($id, $parent_id, $parent_index, $position);
+            return $this->renderData(true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function destroyAction(int $id) {
         try {
             PageRepository::weightRemove($id);
@@ -74,7 +83,4 @@ class WeightController extends Controller {
         }
     }
 
-    public function thumbAction(int $id) {
-        PageWeightModel::find($id);
-    }
 }

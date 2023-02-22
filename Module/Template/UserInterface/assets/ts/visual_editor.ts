@@ -3,6 +3,7 @@ const EditorEventGetWeightProperty = 'editor_get_wegiht_property';
 const EditorEventSaveWeightProperty = 'editor_save_wegiht_property';
 const EditorEventRefreshWeight = 'editor_refresh_weight';
 const EditorEventAddWeight = 'editor_add_weight';
+const EditorEventMoveWeight = 'editor_move_weight';
 const EditorEventWeightForm = 'editor_weight_form';
 const EditorEventRemoveWeight = 'editor_remove_weight';
 const EditorEventSavePage = 'editor_save_page';
@@ -71,7 +72,7 @@ class VisualEditor {
     };
     private hScrollBar = new EditorScrollBar(this, true);
     private vScrollBar = new EditorScrollBar(this, false);
-    private toolBar: JQuery<HTMLDivElement>;
+    private toolBar = new EditorToolBar(this);
     private hRuleBar = new EditorRuler(this, true);
     private vRuleBar = new EditorRuler(this, false);
     private ruleLinePanel: JQuery<HTMLDivElement>;
@@ -211,6 +212,20 @@ class VisualEditor {
     }
 
     /**
+     * 重置滚动和缩放比例
+     */
+    public reset() {
+        this.browser.reset();
+    }
+
+    /**
+     * 获取页面布局
+     */
+    public serialize() {
+        return this.browser.serialize();
+    }
+
+    /**
      * 反转browser的高和宽
      */
     public rotate() {
@@ -252,7 +267,12 @@ class VisualEditor {
             this.emit(EditorEventResize, this.innerWidth, this.innerHeight);
         });
         $(document).on('keydown', e => {
-
+            if (e.ctrlKey) {
+                if (e.code == 'KeyS') {
+                    e.preventDefault();
+                    this.emit(EditorEventSavePage, this.serialize());
+                }
+            }
         }).on('paste', (e: any) => {
             if (e.clipboardData || e.originalEvent) {
                 const clipboardData = (e.clipboardData || (window as any).clipboardData);
@@ -337,12 +357,12 @@ class VisualEditor {
                 <div class="inner-bar"></div>
             </div>
             <div class="panel-tool-bar">
-                <i class="fa fa-minus-circle"></i>
+                <i class="fa fa-minus-circle" title="缩小"></i>
                 <i class="scale-text">100%</i>
-                <i class="fa fa-plus-circle"></i>
-                <i class="fa fa-expand-arrows-alt"></i>
-                <i class="fa fa-expand"></i>
-                <i class="fa fa-undo"></i>
+                <i class="fa fa-plus-circle" title="放大"></i>
+                <i class="fa fa-expand-arrows-alt" title="重置"></i>
+                <i class="fa fa-expand" title="全屏"></i>
+                <i class="fa fa-undo" title="翻转"></i>
             </div>
         </div>
         <div class="dialog dialog-box editor-dialog" data-type="dialog" >
@@ -361,7 +381,6 @@ class VisualEditor {
         `);
         this.emit(EditorEventViewInit);
         this.workspace = this.find<HTMLDivElement>('.editor-container');
-        this.toolBar = this.find<HTMLDivElement>('.panel-tool-bar');
         this.ruleLinePanel = this.find<HTMLDivElement>('.rule-line-bar');
         this.shellTimeBar = this.find<HTMLDivElement>('.shell-bar .time');
         this.viewInited = true;
@@ -369,6 +388,44 @@ class VisualEditor {
     }
 }
 
+class EditorToolBar {
+
+    private scaleBar: JQuery<HTMLSpanElement>;
+    private scaleValue = 100;
+
+    constructor(
+        private editor: VisualEditor
+    ) {
+        this.editor.on(EditorEventViewInit, () => {
+            const box = this.editor.find<HTMLDivElement>('.panel-tool-bar');
+            this.scaleBar = box.find<HTMLSpanElement>('.scale-text');
+            this.bindEvent(box);
+        }).on(EditorEventPositionChange, (left: number, top: number, scale: number) => {
+            this.scaleValue = scale;
+            this.scaleBar.text(scale + '%');
+        });
+    }
+
+    private bindEvent(box: JQuery<HTMLDivElement>) {
+        box.on('click', '.fa-minus-circle', () => {
+            if (this.scaleValue < 30) {
+                return;
+            }
+            this.editor.scale(this.scaleValue - 10);
+        }).on('click', '.fa-plus-circle', () => {
+            if (this.scaleValue > 300) {
+                return;
+            }
+            this.editor.scale(this.scaleValue + 10);
+        }).on('click', '.fa-undo', () => {
+            this.editor.rotate();
+        }).on('click', '.fa-expand', () => {
+            this.editor.normal();
+        }).on('click', '.fa-expand-arrows-alt', () => {
+            this.editor.reset();
+        });
+    }
+}
 
 class EditorPanelGroup {
 
@@ -393,6 +450,11 @@ class EditorPanelGroup {
             }
         }).on(EditorEventAfterViewInit, () => {
             this.bindEvent();
+        }).on(EditorEventResize, () => {
+            const maxHeight = this.editor.outerHeight;
+            for (const item of this.renderedChildren) {
+                item.target.find('.panel-body').height(maxHeight - 36);
+            }
         });
     }
 
@@ -420,6 +482,8 @@ class EditorPanelGroup {
                 }
             }
             that.toggle(true);
+        }).on('click', '.expand-box .expand-header', function() {
+            $(this).closest('.expand-box').toggleClass('open');
         });
     }
 
@@ -599,7 +663,7 @@ class EditorWeightPanel implements IEditorPanel {
                 this.box.find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
                     e.originalEvent.dataTransfer.setData("Text", e.target.id);
                     that.emit(EditorEventDragStart, $(this));
-                })
+                });
             });
         });
     }
@@ -618,13 +682,16 @@ class EditorWeightPanel implements IEditorPanel {
     }
 
     public renderWeight(data: any) {
-        const html = EditorHtmlHelper.mapJoinHtml(data, (items, key) => {
-            const text = EditorHtmlHelper.mapJoinHtml(items, item => {
+        const html = EditorHtmlHelper.mapJoinHtml(data, group => {
+            const text = EditorHtmlHelper.mapJoinHtml(group.items, item => {
+                if (!item) {
+                    return '';
+                } 
                 const editable = item.editable ? '<a class="edit">编辑</a>' : '';
                 return `<div class="weight-edit-grid" data-type="weight" data-weight="${item.id}">
                 <div class="weight-preview">
                     <div class="thumb">
-                        <span class="fa fa-user"></span>
+                        <img src="${item.thumb}" alt="${item.name}" title="${item.description}">
                     </div>
                     <p class="title">${item.name}</p>
                 </div>
@@ -644,7 +711,7 @@ class EditorWeightPanel implements IEditorPanel {
             <ul class="menu">
                 <li class="expand-box open">
                     <div class="expand-header">
-                        布局
+                        ${group.name}
                         <span class="fa fa-chevron-down"></span>
                     </div>
                     <div class="expand-body list-view">
@@ -753,11 +820,41 @@ class EditorBrowser {
         }).on('drop', '.weight-row', function(e) {
             e.stopPropagation();
             e.preventDefault();
-            if (!that.dragWeight) {
+            const row = $(this);
+            if (that.dragWeight) {
+                that.selectedWeight = new EditorWeight(that.editor, that.dragWeight.clone());
+                that.selectedWeight.appendTo(row);
                 return;
             }
-            that.selectedWeight = new EditorWeight(that.editor, that.dragWeight.clone());
-            that.selectedWeight.appendTo($(this));
+            if (that.selectedWeight) {
+                that.selectedWeight.moveTo(row);
+            }
+        }).on('dragover', '.weight-edit-grid', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+        }).on('drop', '.weight-edit-grid', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const row = $(this);
+            if (that.dragWeight) {
+                that.selectedWeight = new EditorWeight(that.editor, that.dragWeight.clone());
+                that.selectedWeight.appendTo(row.closest('.weight-row'), row);
+                return;
+            }
+            if (that.selectedWeight) {
+                that.selectedWeight.moveTo(row.closest('.weight-row'), row);
+            }
+        }).on('dragstart', '.weight-edit-grid', function(e) {
+            e.originalEvent.dataTransfer.setData("Text", e.target.id);
+            that.selectedWeight = new EditorWeight(that.editor, $(this));
+        }).on('dragend', '.weight-edit-grid', function() {
+            $(this).attr('draggable', 'false');
+        }).on('mousedown', '.weight-action .drag', function(e: any) {
+            e.stopPropagation();
+            that.dragWeight = undefined;
+            const weight = $(this).closest('.weight-edit-grid');
+            that.selectedWeight = new EditorWeight(that.editor, weight);
+            $(this).attr('draggable', 'true');
         }).on('click', '.weight-action .del', function(e) {
             e.stopPropagation();
             that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.weight-edit-grid'));
@@ -797,7 +894,9 @@ class EditorBrowser {
     }
 
     public resize(width: number, height: number);
-    public resize(left: number, top: number, width?: number, height?: number) {
+    public resize(left: number, top: number, width: number, height: number);
+    public resize(left: number, top: number, width: number, height: number, scale: number)
+    public resize(left: number, top: number, width?: number, height?: number, scale?: number) {
         const maxWidth = this.editor.innerWidth;
         const maxHeight = this.editor.innerHeight;
         if (!width && !height) {
@@ -817,8 +916,19 @@ class EditorBrowser {
             height,
             width,
         };
+        if (scale) {
+            this.frameScale = scale;
+            this.shell.css('transform', 'scale(' + (scale / 100) +')');
+        }
         this.editor.emit(EditorEventBrowserResize, left, top, width, height, maxWidth, maxHeight);
         this.editor.emit(EditorEventPositionChange, left, top, this.frameScale);
+    }
+
+    /**
+     * 重置滚动和缩放比例
+     */
+    public reset() {
+        this.resize(this.bound.width, this.bound.height, 0, 0, 100);
     }
 
     public navigate(url: string) {
@@ -828,6 +938,33 @@ class EditorBrowser {
     public navigateString(html: string) {
 
     }
+
+    /**
+     * 获取所有的数据
+     * @returns 
+     */
+    public serialize() {
+        if (!this.frameBody) {
+            return [];
+        }
+        const data = [];
+        this.frameBody.find<HTMLDivElement>('.weight-row').each(function() {
+            const row = $(this);
+            const parent_id = row.attr('data-id');
+            const parent_index = row.attr('data-index');
+            row.children('.weight-edit-grid').each(function(index) {
+                const item = $(this);
+                data.push({
+                    id: item.attr('data-id'),
+                    parent_id,
+                    parent_index,
+                    position: index + 1
+                });
+            });
+        });
+        return data;
+    }
+
 }
 
 class EditorWeight {
@@ -897,21 +1034,47 @@ class EditorWeight {
         });
     }
 
-    public appendTo(parent: JQuery) {
-        const pos = parent.children.length;
-        parent.append(this.box);
+    public moveTo(parent: JQuery, replace?: JQuery) {
+        const pos = this.appendToPosition(parent, replace);
+        this.editor.emit(EditorEventMoveWeight, {
+            id: this.weightId(),
+            parent_id: parent.attr('data-id'),
+            parent_index: parent.attr('data-index'),
+            position: pos
+        }, () => {
+
+        });
+    }
+
+    public appendTo(parent: JQuery, replace?: JQuery) {
+        const pos = this.appendToPosition(parent, replace);
         this.box.width('auto');
         this.toggleLoading(true);
         this.editor.emit(EditorEventAddWeight, {
             weight_id: this.weightId(),
             parent_id: parent.attr('data-id'),
-            position: pos + 1
+            parent_index: parent.attr('data-index'),
+            position: pos
         }, data => {
             this.toggleLoading(false);
             this.html(data.html);
         }, () => {
             this.toggleLoading(false);
         });
+    }
+
+    private appendToPosition(parent: JQuery, replace?: JQuery): number {
+        if (!replace) {
+            parent.append(this.box);
+            return parent.children().length;
+        }
+        const i = parent.children().index(replace);
+        if (i < 0) {
+            parent.append(this.box);
+            return parent.children().length;
+        }
+        this.box.insertBefore(replace);
+        return i + 1;
     }
 
     private remove() {
@@ -1052,7 +1215,7 @@ class EditorRuler {
         }).on(EditorEventResize, (width: number, height: number) => {
             this.refresh();
             this.onAfterViewInit();
-        }).on(EditorEventPositionChange, (left: number, top: number, scale) => {
+        }).on(EditorEventPositionChange, (left: number, top: number, scale: number) => {
             this.offset = this.horizontal ? left : top;
             this.scale = scale / 100;
             this.onRender(this.element[0].getContext('2d'));

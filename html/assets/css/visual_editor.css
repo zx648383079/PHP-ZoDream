@@ -84,6 +84,17 @@
   overflow: auto;
   background-color: #fff;
 }
+.visual-editor .panel-main::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.visual-editor .panel-main::-webkit-scrollbar-track {
+  border-radius: 2em;
+}
+.visual-editor .panel-main::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 2em;
+}
 .visual-editor .h-rule-bar,
 .visual-editor .v-rule-bar {
   background-color: gray;
@@ -118,6 +129,23 @@
   top: 0;
   bottom: 0;
 }
+.visual-editor .expand-box .expand-header {
+  background: #efefef;
+  font-size: 1.3rem;
+  line-height: 30px;
+}
+.visual-editor .expand-box .expand-header .fa {
+  float: right;
+}
+.visual-editor .expand-box .expand-body {
+  display: none;
+}
+.visual-editor .expand-box.open .expand-header .fa {
+  transform: rotate(180deg);
+}
+.visual-editor .expand-box.open .expand-body {
+  display: block;
+}
 .visual-editor .panel-group {
   width: 15rem;
   z-index: 99;
@@ -151,6 +179,31 @@
 .visual-editor .panel-group .panel-item .panel-body {
   overflow-y: auto;
 }
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+  margin-right: 5px;
+  background: #f5f5f5;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  border-radius: 0px;
+}
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar-track {
+  border-radius: 0px;
+}
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.8);
+}
+.visual-editor .panel-group .panel-item .panel-body::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.4);
+}
 .visual-editor .panel-group .panel-item .panel-body .grid {
   z-index: 100;
 }
@@ -169,39 +222,49 @@
 .visual-editor .panel-group .panel-item.min .panel-body {
   display: none;
 }
-.visual-editor .panel-group .weight-edit-grid {
+.visual-editor .weight-edit-grid {
   cursor: pointer;
   display: inline-block;
   text-align: center;
-  margin: 1px 3px;
 }
-.visual-editor .panel-group .weight-edit-grid:hover {
-  border: 1px solid #6a4;
-  color: #7e8;
+.visual-editor .weight-edit-grid:hover {
+  color: green;
+  background-color: gray;
 }
-.visual-editor .panel-group .weight-edit-grid .weight-preview .thumb {
-  width: 3rem;
-  height: 3rem;
-  line-height: 3rem;
+.visual-editor .weight-edit-grid .weight-preview {
+  width: 5rem;
+  padding-top: 0.8rem;
+}
+.visual-editor .weight-edit-grid .weight-preview .thumb {
   text-align: center;
+  overflow: hidden;
+  height: 3rem;
 }
-.visual-editor .panel-group .weight-edit-grid .weight-preview .thumb .fa {
+.visual-editor .weight-edit-grid .weight-preview .thumb .fa {
   font-size: 3rem;
 }
-.visual-editor .panel-group .weight-edit-grid .weight-action,
-.visual-editor .panel-group .weight-edit-grid .weight-view {
+.visual-editor .weight-edit-grid .weight-preview .thumb img {
+  width: 3rem;
+  height: 3rem;
+}
+.visual-editor .weight-edit-grid .weight-preview .title {
+  height: 2rem;
+  overflow: hidden;
+}
+.visual-editor .weight-edit-grid .weight-action,
+.visual-editor .weight-edit-grid .weight-view {
   display: none;
 }
-.visual-editor .panel-group .tab-box .tab-header {
+.visual-editor .tab-box .tab-header {
   background: #efefef;
 }
-.visual-editor .panel-group .tab-box .tab-header .tab-item {
+.visual-editor .tab-box .tab-header .tab-item {
   width: 4.5rem;
 }
-.visual-editor .panel-group .tab-box .tab-body {
+.visual-editor .tab-box .tab-body {
   overflow-y: auto;
 }
-.visual-editor .panel-group .style-item {
+.visual-editor .style-item {
   line-height: 60px;
   border: 1px dotted red;
   text-align: center;
@@ -209,49 +272,49 @@
   font-weight: bold;
   font-size: 20px;
 }
-.visual-editor .panel-group .style-item img {
+.visual-editor .style-item img {
   width: 100%;
 }
-.visual-editor .panel-group .style-item.active {
+.visual-editor .style-item.active {
   border: 1px dotted green;
 }
-.visual-editor .panel-group .style-item:hover {
+.visual-editor .style-item:hover {
   border-style: solid;
 }
-.visual-editor .panel-group .form-table .input-group > label {
+.visual-editor .form-table .input-group > label {
   font-size: 12px;
   padding: 0;
 }
-.visual-editor .panel-group .form-table .input-group input[type=text],
-.visual-editor .panel-group .form-table .input-group select {
+.visual-editor .form-table .input-group input[type=text],
+.visual-editor .form-table .input-group select {
   min-width: 40px;
 }
-.visual-editor .panel-group .side-input {
+.visual-editor .side-input {
   position: relative;
   height: 100px;
 }
-.visual-editor .panel-group .side-input > input,
-.visual-editor .panel-group .side-input > .check-label {
+.visual-editor .side-input > input,
+.visual-editor .side-input > .check-label {
   position: absolute;
   text-align: center;
 }
-.visual-editor .panel-group .side-input > input:nth-of-type(1),
-.visual-editor .panel-group .side-input > .check-label:nth-of-type(1) {
+.visual-editor .side-input > input:nth-of-type(1),
+.visual-editor .side-input > .check-label:nth-of-type(1) {
   top: 0;
   left: 30px;
 }
-.visual-editor .panel-group .side-input > input:nth-of-type(2),
-.visual-editor .panel-group .side-input > .check-label:nth-of-type(2) {
+.visual-editor .side-input > input:nth-of-type(2),
+.visual-editor .side-input > .check-label:nth-of-type(2) {
   top: 30px;
   left: 60px;
 }
-.visual-editor .panel-group .side-input > input:nth-of-type(3),
-.visual-editor .panel-group .side-input > .check-label:nth-of-type(3) {
+.visual-editor .side-input > input:nth-of-type(3),
+.visual-editor .side-input > .check-label:nth-of-type(3) {
   top: 60px;
   left: 30px;
 }
-.visual-editor .panel-group .side-input > input:nth-of-type(4),
-.visual-editor .panel-group .side-input > .check-label:nth-of-type(4) {
+.visual-editor .side-input > input:nth-of-type(4),
+.visual-editor .side-input > .check-label:nth-of-type(4) {
   top: 30px;
   left: 0px;
 }

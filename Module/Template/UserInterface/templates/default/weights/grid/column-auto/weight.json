@@ -1,0 +1,12 @@
+{
+  "name": "column-auto",
+  "thumb": "./thumb.png",
+  "keywords": "",
+  "description": "自定义分栏，指定数字按比例分栏",
+  "author": "zz",
+  "since": "2017-12-12",
+  "version": "v1.0",
+  "copyright": "@zz",
+  "email": "123@12.com",
+  "editable": false
+}

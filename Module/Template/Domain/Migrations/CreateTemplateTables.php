@@ -84,11 +84,13 @@ class CreateTemplateTables extends Migration {
             $table->timestamps();
         })->append(PageWeightModel::tableName(), function(Table $table) {
             $table->comment('自定义页面组件及设置');
-            $table->id()->ai(1000);  // 预留id给页面预留不同入口
+            $table->id();
             $table->uint('page_id');
             $table->uint('site_id');
             $table->uint('theme_weight_id');
-            $table->uint('parent_id');
+            $table->uint('parent_id')->default(0);
+            $table->uint('parent_index', 2)
+                ->default(0)->comment('在父元素那个位置上');
             $table->uint('position', 5)->default(99);
             $table->string('title', 200)->default('');
             $table->text('content')->nullable();

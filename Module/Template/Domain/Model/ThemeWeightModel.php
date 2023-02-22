@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Domain\VisualEditor\VisualPage;
 use Module\Template\Module;
 use Zodream\Disk\Directory;
 
@@ -63,7 +64,7 @@ class ThemeWeightModel extends Model {
             return new Directory(is_dir($this->path)
                 ? $this->path : dirname($this->path));
         }
-        return Module::templateFolder($this->path);
+        return VisualPage::templateFolder($this->path);
     }
 
 }

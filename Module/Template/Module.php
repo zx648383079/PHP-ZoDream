@@ -1,35 +1,34 @@
 <?php
-/*
- * @Author: zodream
- * @Date: 2019-12-29 14:18:54
- * @LastEditors: zodream
- * @LastEditTime: 2020-09-08 22:33:59
- */
+declare(strict_types=1);
 namespace Module\Template;
 
 use Module\Template\Domain\Migrations\CreateTemplateTables;
-use Zodream\Disk\Directory;
-use Zodream\Disk\File;
+use Module\Template\Domain\VisualEditor\VisualPage;
+use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 
 /**
  * TODO 可视化开发
  */
-class Module extends BaseModule {
+class Module extends BaseModule implements ICustomRouteModule {
 
     public function getMigration() {
         return new CreateTemplateTables();
     }
 
-    /**
-     * @param null $path
-     * @return bool|Directory|File
-     */
-    public static function templateFolder(string $path = '') {
-        $folder = new Directory(__DIR__.'/UserInterface/templates');
-        if (empty($path)) {
-            return $folder;
+
+    public function invokeRoute(string $path, HttpContext $context): null|string|Output {
+        $path = trim($path, '/');
+        if (str_starts_with($path, 'admin') || str_starts_with($path, 'lazy')) {
+            return null;
         }
-        return $folder->child($path);
+        try {
+            $renderer = VisualPage::entryRewrite($context['request']->host(), $path);
+        } catch (\Exception) {
+            return null;
+        }
+        return $context['response']->html($renderer->render());
     }
 }
