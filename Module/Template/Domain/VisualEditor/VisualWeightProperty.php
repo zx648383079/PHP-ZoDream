@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
@@ -232,13 +233,13 @@ class VisualWeightProperty {
         return $this->formatCss('color', $val['value']);
     }
 
-    public static function create(PageWeightModel $model) {
+    public static function create(SiteWeightModel $model) {
         $instance = new static();
         $model->set('title', $model->title)
             ->set('content', $model->content);
         if ($model->theme_style_id > 0) {
             $style = ThemeStyleModel::find($model->theme_style_id);
-            $path = (string)VisualPage::templateFolder($style->path);
+            $path = (string)VisualFactory::templateFolder($style->path);
             if (file_exists($path)) {
                 include_once $path;
                 $name = Str::studly($style->name).'Style';

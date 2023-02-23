@@ -24,6 +24,8 @@ interface IVisualEngine {
      */
     public function rowId(): int;
 
+    public function pageId(): int;
+
     /**
      * 获取当前位置的组件
      * @param int $index

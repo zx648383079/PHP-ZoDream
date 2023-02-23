@@ -27,7 +27,7 @@ class PageController extends Controller {
     public function templateAction(int $id, bool $edit = false) {
         $this->layout = '';
         app('debugger')->setShowBar(false);
-        $model = PageModel::find($id);
+        $model = PageModel::findOrThrow($id);
         $page = new VisualPage($model->site, $model, $edit);
         return $this->show(compact('model', 'page'));
     }

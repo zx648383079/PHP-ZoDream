@@ -5,13 +5,12 @@ namespace Module\Template\Domain\VisualEditor;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemePageModel;
-use Module\Template\Domain\Repositories\PageRepository;
+use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
-use Zodream\Disk\FileObject;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Concerns\Attributes;
-use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
 
 class VisualPage implements IVisualEngine {
@@ -45,8 +44,13 @@ class VisualPage implements IVisualEngine {
         protected SiteModel $site,
         protected PageModel $page,
         protected bool $editable = false) {
-        $this->themePage = ThemePageModel::where('id', $this->page->theme_page_id)->first();
-        $this->directory = static::templateFolder();
+        VisualFactory::unlock();
+        VisualFactory::set(SiteModel::class, $this->site->id, $this->site);
+        VisualFactory::set(PageModel::class, $this->page->id, $this->page);
+        $this->themePage = VisualFactory::getOrSet(ThemePageModel::class, $this->page->theme_page_id, function () {
+            return ThemePageModel::where('id', $this->page->theme_page_id)->first();
+        });
+        $this->directory = VisualFactory::templateFolder();
     }
 
     public function boot() {
@@ -59,6 +63,10 @@ class VisualPage implements IVisualEngine {
 
     public function rowId(): int {
         return 0;
+    }
+
+    public function pageId(): int {
+        return $this->page->id;
     }
 
     /**
@@ -113,11 +121,11 @@ class VisualPage implements IVisualEngine {
     }
 
     protected function initFactory() {
-        $this->factory = static::newViewFactory()
+        $this->factory = VisualFactory::newViewFactory()
             ->setDirectory($this->directory);
     }
 
-    public function addWeight($weight) {
+    public function addWeight(PageWeightModel|array $weight) {
         if (!is_array($weight)) {
             $weight = func_get_args();
         }
@@ -126,14 +134,12 @@ class VisualPage implements IVisualEngine {
     }
 
     protected function loadWeights() {
-        // 加载公共模块
-        $this->addWeight(PageWeightModel::where('is_share', 1)
-            ->where('site_id', $this->page->site_id)->get());
-        // 加载页面模块
-
-        $this->addWeight(
-            PageWeightModel::where('page_id', $this->page->id)->get()
-        );
+        $items = PageWeightModel::where('page_id', $this->page->id)->get();
+        if (empty($items)) {
+            return;
+        }
+        static::cacheAnyWeight($items);
+        $this->addWeight($items);
     }
 
     /**
@@ -158,6 +164,7 @@ class VisualPage implements IVisualEngine {
     }
 
     public function renderRow(int $parent_id, int $index = 0): string {
+        VisualFactory::lock($parent_id, $index);
         return static::renderAnyWeight($this, $this->getWeightList($parent_id, $index), $index);
     }
 
@@ -187,13 +194,34 @@ class VisualPage implements IVisualEngine {
         return $this->render();
     }
 
-    public static function renderAnyWeight(IVisualEngine $engine, array $items, int $index = 0): string {
-        // 排序，公共组件在前，同等排序小的在前
-        usort($items, function (PageWeightModel $a, PageWeightModel $b) {
-            if ($a->is_share === $b->is_share) {
-                return $a->position > $b->position ? 1 : -1;
+
+    public static function cacheAnyWeight(array $items) {
+        VisualFactory::setAny(PageWeightModel::class, $items);
+        $weightItems = VisualFactory::getAutoSet(
+            Relation::columns($items, 'weight_id'),
+            SiteWeightModel::class,
+            function (array $idItems) {
+                return SiteWeightModel::whereIn('id', $idItems)
+                    ->get();
             }
-            return $a->is_share ? -1 : 1;
+        );
+        VisualFactory::getAutoSet(
+            Relation::columns($weightItems, 'weight_id'),
+            SiteWeightModel::class,
+            function (array $idItems) {
+                return SiteWeightModel::whereIn('id', $idItems)
+                    ->get();
+            }
+        );
+    }
+
+    public static function renderAnyWeight(IVisualEngine $engine, array $items, int $index = 0): string {
+        // 排序
+        usort($items, function (PageWeightModel $a, PageWeightModel $b) {
+            if ($a->position === $b->position) {
+                return 0;
+            }
+            return $a->position > $b->position ? 1 : -1;
         });
         $args = [];
         foreach ($items as $weight) {
@@ -213,96 +241,4 @@ HTML;
         return $html;
     }
 
-    public static function newViewFactory() {
-        $factory = new ViewFactory();
-        $factory->setEngine(ParserCompiler::class)
-            ->setConfigs([
-                'suffix' => self::EXT
-            ])
-            ->getEngine()
-            ->registerFunc('weight', '<?=$'.self::ENGINE_KEY.'->weight(%s)?>');
-        return $factory;
-    }
-
-    /**
-     * 获取模板路径
-     * @param string $path
-     * @return bool|FileObject
-     */
-    public static function templateFolder(string $path = ''): mixed {
-        $folder = new Directory(dirname(dirname(__DIR__)).'/UserInterface/templates');
-        if (empty($path)) {
-            return $folder;
-        }
-        return $folder->child($path);
-    }
-
-    /**
-     * 根据id进入页面
-     * @param int $site
-     * @param int $id
-     * @return VisualPage
-     * @throws \Exception
-     */
-    public static function entry(int $site, int $id = 0): VisualPage {
-        $siteModel = SiteModel::findOrThrow($site);
-        if ($siteModel->status !== PageRepository::PUBLISH_STATUS_POSTED) {
-            throw new \Exception('site not publish');
-        }
-        if ($id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('id', $id)->first();
-        } else if ($siteModel->default_page_id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('id', $siteModel->default_page_id)->first();
-        } else {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')->first();
-        }
-        if (empty($pageModel)) {
-            throw new \Exception('page not found');
-        }
-        if ($pageModel->status !== PageRepository::PUBLISH_STATUS_POSTED) {
-            throw new \Exception('page not publish');
-        }
-        return new static($siteModel, $pageModel, false);
-    }
-
-    /**
-     * 根据域名路径进入页面
-     * @param string $domain
-     * @param string $path
-     * @return VisualPage
-     * @throws \Exception
-     */
-    public static function entryRewrite(string $domain, string $path = ''): VisualPage {
-        $siteModel = SiteModel::where('domain', $domain)->first();
-        if (empty($siteModel)) {
-            throw new \Exception('page not found');
-        }
-        if ($siteModel->status !== PageRepository::PUBLISH_STATUS_POSTED) {
-            throw new \Exception('site not publish');
-        }
-        if (!empty($path)) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('name', $path)->first();
-        } else if ($siteModel->default_page_id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('id', $siteModel->default_page_id)->first();
-        } else {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
-                ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')->first();
-        }
-        if (empty($pageModel)) {
-            throw new \Exception('page not found');
-        }
-        if ($pageModel->status !== PageRepository::PUBLISH_STATUS_POSTED) {
-            throw new \Exception('page not publish');
-        }
-        return new static($siteModel, $pageModel, false);
-    }
 }

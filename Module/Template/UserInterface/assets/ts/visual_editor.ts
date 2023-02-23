@@ -218,6 +218,10 @@ class VisualEditor {
         this.browser.reset();
     }
 
+    public reload() {
+        this.browser.reload();
+    }
+
     /**
      * 获取页面布局
      */
@@ -688,7 +692,7 @@ class EditorWeightPanel implements IEditorPanel {
                     return '';
                 } 
                 const editable = item.editable ? '<a class="edit">编辑</a>' : '';
-                return `<div class="weight-edit-grid" data-type="weight" data-weight="${item.id}">
+                return `<div class="weight-edit-grid" data-type="weight" data-weight="${item.id}" data-group="${group.id}">
                 <div class="weight-preview">
                     <div class="thumb">
                         <img src="${item.thumb}" alt="${item.name}" title="${item.description}">
@@ -935,8 +939,12 @@ class EditorBrowser {
         this.frame.attr('src', url);
     }
 
-    public navigateString(html: string) {
+    public reload() {
+        this.frame[0].contentWindow.location.reload();
+    }
 
+    public navigateString(html: string) {
+        this.frame.attr('src', 'data:text/html;charset=utf-8,' + encodeURI(html));
     }
 
     /**
@@ -1037,7 +1045,7 @@ class EditorWeight {
     public moveTo(parent: JQuery, replace?: JQuery) {
         const pos = this.appendToPosition(parent, replace);
         this.editor.emit(EditorEventMoveWeight, {
-            id: this.weightId(),
+            id: this.id(),
             parent_id: parent.attr('data-id'),
             parent_index: parent.attr('data-index'),
             position: pos
@@ -1052,6 +1060,7 @@ class EditorWeight {
         this.toggleLoading(true);
         this.editor.emit(EditorEventAddWeight, {
             weight_id: this.weightId(),
+            weight_group: this.box.attr('data-group'),
             parent_id: parent.attr('data-id'),
             parent_index: parent.attr('data-index'),
             position: pos

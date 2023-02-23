@@ -7,7 +7,7 @@ use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
-use Module\Template\Domain\VisualEditor\VisualPage;
+use Module\Template\Domain\VisualEditor\VisualFactory;
 use Zodream\Disk\Directory;
 use Zodream\Disk\FileObject;
 use Zodream\Helpers\Json;
@@ -56,8 +56,8 @@ final class ThemeRepository {
     public static function weightGroups(int $theme_id) {
         $data = ThemeWeightModel::where('theme_id', $theme_id)->get();
         $args = [
-            ['name' => '基本', 'items' => []],
-            ['name' => '高级', 'items' => []]
+            ['id' => 1, 'name' => '基本', 'items' => []],
+            ['id' => 2, 'name' => '高级', 'items' => []],
         ];
         foreach ($data as $item) {
             $item['thumb'] = url('./admin/theme/asset', ['folder' => $item->path, 'file' => $item->thumb]);
@@ -89,33 +89,34 @@ final class ThemeRepository {
             $model->save();
         }
         foreach ($data['pages'] as $page) {
-            if (ThemePageModel::isInstalled($page['name'], $model->id)) {
+            if (self::pageIsInstalled($page['name'], $model->id)) {
                 continue;
             }
             $page['theme_id'] = $model->id;
             ThemePageModel::create($page);
         }
         foreach ($data['weights'] as $weight) {
-            if (ThemeWeightModel::isInstalled($weight['name'], $model->id)) {
+            if (self::weightIsInstalled($weight['name'], $model->id)) {
                 continue;
             }
             $weight['theme_id'] = $model->id;
             ThemeWeightModel::create($weight);
         }
         foreach ($data['styles'] as $style) {
-            if (ThemeStyleModel::isInstalled($style['name'], $model->id)) {
+            if (self::styleIsInstalled($style['name'], $model->id)) {
                 continue;
             }
             $style['theme_id'] = $model->id;
             ThemeStyleModel::create($style);
         }
+        // TODO 处理js、css文件
     }
 
     /**
      * @return array[]
      */
     public static function loadThemes(): array {
-        return static::mapFolder(VisualPage::templateFolder(), function ($item) {
+        return static::mapFolder(VisualFactory::templateFolder(), function ($item) {
             if ($item->hasFile('theme.json')) {
                 return [static::createTheme($item)];
             }
@@ -152,7 +153,7 @@ final class ThemeRepository {
      */
     public static function createTheme(Directory $folder): array {
         $data = Json::decode($folder->childFile('theme.json')->read());
-        $data['path'] = $folder->getRelative(VisualPage::templateFolder());
+        $data['path'] = $folder->getRelative(VisualFactory::templateFolder());
         $data['pages'] = array_map(function ($item) use ($data) {
             $item['path'] = $data['path'].'/'.ltrim($item['path'], '/');
             return $item;
@@ -187,7 +188,7 @@ final class ThemeRepository {
                 return false;
             }
             $args = Json::decode($item->childFile('weight.json')->read());
-            $args['path'] = $item->getRelative(VisualPage::templateFolder());
+            $args['path'] = $item->getRelative(VisualFactory::templateFolder());
             return [$args];
         });
     }

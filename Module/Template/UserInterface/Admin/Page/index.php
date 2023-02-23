@@ -1,10 +1,10 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Template\View;
-use Module\Template\Domain\Page;
-use Zodream\Html\Dark\Theme;
 /** @var $this View */
-/** @var $page Page */
+/** @var $page VisualPage */
 
 $this->title = $model->title;
 

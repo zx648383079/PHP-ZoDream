@@ -6,6 +6,7 @@ use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Repositories\PageRepository;
+use Module\Template\Domain\Repositories\SiteRepository;
 use Module\Template\Domain\Repositories\ThemeRepository;
 
 class WeightController extends Controller {
@@ -13,7 +14,7 @@ class WeightController extends Controller {
     public function indexAction(int $id) {
         $siteId = PageModel::where('id', $id)->value('site_id');
         $themeId = SiteModel::where('id', $siteId)->value('theme_id');
-        $weights = ThemeRepository::weightGroups($themeId);
+        $weights = SiteRepository::weightGroups($themeId, $siteId);
         $styles = ThemeRepository::styleList($themeId);
         return $this->renderData(compact('weights', 'styles'));
     }
@@ -22,9 +23,10 @@ class WeightController extends Controller {
         return $this->renderData(PageRepository::weight($id));
     }
 
-    public function createAction(int $page_id, int $weight_id, int $parent_id, int $position = 0) {
+    public function createAction(int $page_id, int $weight_id,
+                                 int $parent_id, int $position = 0, int $group = 0) {
         try {
-            return $this->renderData(PageRepository::weightAdd($page_id, $weight_id, $parent_id, $position));
+            return $this->renderData(PageRepository::weightAdd($page_id, $weight_id, $parent_id, $position, $group));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

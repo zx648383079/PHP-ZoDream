@@ -8,10 +8,11 @@ use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
+use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ISiteMapModule {
 
     public function boot() {
         app()->scoped(SceneInterface::class, MultiScene::class);

@@ -74,4 +74,10 @@
   margin: 0;
   text-overflow: ellipsis;
 }
+.weight-row {
+  display: flex;
+}
+.weight-row .col-1 {
+  flex: 1;
+}
 /*# sourceMappingURL=weight.css.map */

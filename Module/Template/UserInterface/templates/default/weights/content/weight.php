@@ -1,17 +1,17 @@
 <?php
 
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
 
 class ContentWeight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
-     * @param PageWeightModel $model
+     * @param SiteWeightModel $model
      * @return mixed
      * @throws Exception
      */
-    public function render(PageWeightModel $model): string {
+    public function render(SiteWeightModel $model): string {
         return $this->show('view');
     }
 }

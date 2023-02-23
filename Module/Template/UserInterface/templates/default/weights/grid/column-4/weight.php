@@ -1,31 +1,16 @@
 <?php
 
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
 
 class Column4Weight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
-     * @param PageWeightModel $model
+     * @param SiteWeightModel $model
      * @return mixed
      */
-    public function render(PageWeightModel $model): string {
-        return <<<HTML
-<div data-type="weight" data-weight="column-4">
-    <div>
-    {$this->weight(1)}
-    </div>
-    <div>
-    {$this->weight(2)}
-    </div>
-    <div>
-    {$this->weight(3)}
-    </div>
-    <div>
-    {$this->weight(3)}
-    </div>
-</div>
-HTML;
+    public function render(SiteWeightModel $model): string {
+        return $this->show('view');
     }
 }

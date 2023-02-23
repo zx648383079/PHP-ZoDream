@@ -5,6 +5,7 @@ namespace Module\Template\Domain\VisualEditor;
 
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Zodream\Helpers\Str;
 use Zodream\Template\ViewFactory;
@@ -23,6 +24,8 @@ class VisualWeight implements IVisualEngine {
      */
     protected ThemeWeightModel $weight;
 
+    protected SiteWeightModel $model;
+
     protected bool $editable = false;
 
     protected bool $asyncable = true;
@@ -30,10 +33,24 @@ class VisualWeight implements IVisualEngine {
     protected VisualWeightProperty $property;
 
     public function __construct(
-        protected PageWeightModel $model,
+        protected PageWeightModel $pageWeight,
         protected ?IVisualEngine $engine = null) {
-        $this->weight = ThemeWeightModel::where('id', $this->model->theme_weight_id)->first();
-        $this->property = VisualWeightProperty::create($this->model);
+        $this->model = VisualFactory::getOrSet(ThemeWeightModel::class,
+            $this->pageWeight->weight_id, function () {
+                return SiteWeightModel::where('id', $this->pageWeight->weight_id);
+            });
+        $this->weight = VisualFactory::getOrSet(ThemeWeightModel::class,
+            $this->model->theme_weight_id, function () {
+                return ThemeWeightModel::where('id', $this->model->theme_weight_id);
+            });
+        $this->property = VisualFactory::getOrSet(VisualWeightProperty::class,
+            $this->model->id, function () {
+                return VisualWeightProperty::create($this->model);
+            });
+    }
+
+    public function pageId(): int {
+        return $this->pageWeight->page_id;
     }
 
     public function editable(): bool {
@@ -55,7 +72,7 @@ class VisualWeight implements IVisualEngine {
     }
 
     public function rowId(): int {
-        return $this->model->id;
+        return $this->pageWeight->id;
     }
 
     public function renderer(): ViewFactory {
@@ -63,7 +80,7 @@ class VisualWeight implements IVisualEngine {
             $renderer = $this->engine->renderer();
         } else {
             if (!$this->factory) {
-                $this->factory = VisualPage::newViewFactory();
+                $this->factory = VisualFactory::newViewFactory();
             }
             $renderer = $this->factory;
         }
@@ -84,8 +101,9 @@ class VisualWeight implements IVisualEngine {
         if ($this->engine) {
             return $this->engine->renderRow($parent_id, $index);
         }
+        VisualFactory::lock($parent_id, $index);
         $items = PageWeightModel::where('parent_id', $parent_id)
-            ->where('page_id', $this->model->page_id)
+            ->where('page_id', $this->pageId())
             ->where('parent_index', $index)->get();
         return VisualPage::renderAnyWeight($this, $items, $index);
     }
@@ -99,7 +117,7 @@ class VisualWeight implements IVisualEngine {
             return new $path;
         }
         if (!file_exists($path)) {
-            $path = (string)VisualPage::templateFolder($path);
+            $path = (string)VisualFactory::templateFolder($path);
         }
         if (is_dir($path)) {
             $path .= '/weight.php';
@@ -115,6 +133,14 @@ class VisualWeight implements IVisualEngine {
     public function createWeight() {
         return $this->newWeight()
             ->setEngine($this);
+    }
+
+    public function renderForm() {
+        return $this->createWeight()->renderForm($this->model);
+    }
+
+    public function parseForm() {
+        return $this->createWeight()->parseForm();
     }
 
     public function render(bool $editable = false, bool $asyncable = true): string {
@@ -190,7 +216,7 @@ HTML;
     private function renderEdit(string $html) {
         $editHtml = $this->weight->editable ? '<a class="edit">编辑</a>' : '';
         return <<<HTML
-<div class="weight-edit-grid" data-type="weight" data-id="{$this->model->id}" data-pos="{$this->model->position}">
+<div class="weight-edit-grid" data-type="weight" data-id="{$this->rowId()}">
     <div class="weight-action">
         <a class="refresh">刷新</a>
         {$editHtml}

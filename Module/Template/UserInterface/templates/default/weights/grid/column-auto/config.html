@@ -1,0 +1,18 @@
+<div class="input-group">
+    <label for="split_mode">启用平均分栏</label>
+    <div>
+        <input type="checkbox" id="split_mode" class="form-control" name="settings[split_mode]" value="1"{if $split_mode}checked{/if}>
+    </div>
+</div>
+<div class="input-group">
+    <label for="split_count">分栏数</label>
+    <div>
+        <input type="number" id="split_count" class="form-control" name="settings[split_count]" value="{split_count}">
+    </div>
+</div>
+<div class="input-group">
+    <label for="split_items">分栏段数</label>
+    <div>
+        <input type="text" id="split_items" class="form-control" name="settings[split_items]" value="{split_items}" placeholder="每段用,分割">
+    </div>
+</div>

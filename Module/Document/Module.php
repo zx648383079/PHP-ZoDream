@@ -5,10 +5,11 @@ use Module\Document\Domain\Migrations\CreateDocumentTables;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
+use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateDocumentTables();

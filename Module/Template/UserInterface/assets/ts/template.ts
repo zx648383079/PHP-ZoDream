@@ -184,7 +184,7 @@ class SearchDailog {
         return this.dialog.find(tag);
     }
 
-    public on(event: string, tag: string | Function, cb?: (event: JQueryEventObject) => void) {
+    public on(event: string, tag: string | Function, cb?: (event: JQuery.Event) => void) {
         if (event === 'done') {
             this._doneCallback = tag as Function;
             return this;

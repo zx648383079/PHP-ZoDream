@@ -4,10 +4,11 @@ namespace Module\Forum;
 use Module\Forum\Domain\Migrations\CreateForumTables;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
+use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateForumTables();

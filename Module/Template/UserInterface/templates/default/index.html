@@ -1,21 +1,20 @@
+{@weight.css}
+{@jquery.min.js}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{=$this->title}</title>
-    <meta name="keywords" content="{=$this->keywords}">
-    <meta name="description" content="{=$this->description}">
-    {link href="@style.css"}
+    <title>{this.title}</title>
+    <meta name="keywords" content="{this.keywords}">
+    <meta name="description" content="{this.description}">
     {header:}
 </head>
 <body>
     <div>
         {weight:1}
     </div>
-
-    {script src="@jquery.min.js"}
     {footer:}
 </body>
 </html>

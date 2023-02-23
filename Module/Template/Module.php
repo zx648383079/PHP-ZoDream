@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Template;
 
 use Module\Template\Domain\Migrations\CreateTemplateTables;
-use Module\Template\Domain\VisualEditor\VisualPage;
+use Module\Template\Domain\VisualEditor\VisualFactory;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Route\Controller\ICustomRouteModule;
@@ -25,7 +25,7 @@ class Module extends BaseModule implements ICustomRouteModule {
             return null;
         }
         try {
-            $renderer = VisualPage::entryRewrite($context['request']->host(), $path);
+            $renderer = VisualFactory::entryRewrite($context['request']->host(), $path);
         } catch (\Exception) {
             return null;
         }

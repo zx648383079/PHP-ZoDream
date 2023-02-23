@@ -4,6 +4,7 @@ namespace Module\Template\Domain\Migrations;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
@@ -67,6 +68,17 @@ class CreateTemplateTables extends Migration {
             $table->uint('default_page_id')->default(0)->comment('默认首页');
             $table->uint('status', 1)->default(PageRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
             $table->timestamps();
+        })->append(SiteWeightModel::tableName(), function(Table $table) {
+            $table->comment('站点的所有自定义组件及设置');
+            $table->id();
+            $table->uint('site_id');
+            $table->uint('theme_weight_id');
+            $table->string('title', 200)->default('');
+            $table->text('content')->nullable();
+            $table->text('settings')->nullable();
+            $table->uint('theme_style_id')->default(0);
+            $table->bool('is_share')->default(0);
+            $table->timestamps();
         })->append(PageModel::tableName(), function(Table $table) {
             $table->comment('自定义站点页面');
             $table->id();
@@ -87,17 +99,11 @@ class CreateTemplateTables extends Migration {
             $table->id();
             $table->uint('page_id');
             $table->uint('site_id');
-            $table->uint('theme_weight_id');
+            $table->uint('weight_id');
             $table->uint('parent_id')->default(0);
             $table->uint('parent_index', 2)
                 ->default(0)->comment('在父元素那个位置上');
             $table->uint('position', 5)->default(99);
-            $table->string('title', 200)->default('');
-            $table->text('content')->nullable();
-            $table->text('settings')->nullable();
-            $table->uint('theme_style_id')->default(0);
-            $table->bool('is_share')->default(0);
-            $table->timestamps();
         })->autoUp();
     }
 

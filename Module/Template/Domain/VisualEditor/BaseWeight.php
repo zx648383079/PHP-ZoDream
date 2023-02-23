@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
 use Exception;
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteWeightModel;
 use Zodream\Disk\Directory;
 use Zodream\Html\Dark\Theme;
 use Zodream\Template\ViewFactory;
@@ -11,6 +11,8 @@ use Zodream\Template\ViewFactory;
 /**
  *
  * @method string weight(int $index)
+ * @method int pageId()
+ * @method int rowId()
  */
 abstract class BaseWeight {
     /**
@@ -43,17 +45,17 @@ abstract class BaseWeight {
 
     /**
      * 获取生成的部件视图
-     * @param PageWeightModel $model
+     * @param SiteWeightModel $model
      * @return string
      */
-    abstract public function render(PageWeightModel $model): string;
+    abstract public function render(SiteWeightModel $model): string;
 
     /**
      * 获取生成的配置视图
-     * @param PageWeightModel $model
+     * @param SiteWeightModel $model
      * @return mixed
      */
-    public function renderForm(PageWeightModel $model): string {
+    public function renderForm(SiteWeightModel $model): string {
         $html = Theme::text('title', $model->title, '标题');
         return <<<HTML
 {$html}
