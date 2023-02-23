@@ -92,7 +92,9 @@ final class PageRepository {
     }
 
     public static function weight(int $id) {
-        return PageWeightModel::findOrThrow($id);
+        $pageModel = PageWeightModel::findOrThrow($id);
+        $model = SiteWeightModel::findOrThrow($pageModel->weight_id);
+        return array_merge($model->toArray(), $pageModel->toArray());
     }
 
     public static function weightAdd(int $page_id, int $weight_id, int $parent_id,
@@ -120,7 +122,7 @@ final class PageRepository {
             'site_id' => $pageModel->site_id,
             'position' => $position
         ]);
-        $data = $model->toArray();
+        $data = $pageModel->toArray();
         $data['html'] = self::renderWeight($model);
         return $data;
     }
@@ -223,7 +225,7 @@ final class PageRepository {
         }
         $model->set($args);
         $model->save();
-        $data = $model->toArray();
+        $data = $pageModel->toArray();
         $data['html'] = self::renderWeight($pageModel);
         return $data;
     }

@@ -1,5 +1,5 @@
 <div class="weight-row">
-    {if $split_mode}
+    {if:$split_mode}
     {for:$i=1;$i<=$split_count;$i++}
     <div class="col-1">
         {weight:$i}
@@ -7,7 +7,7 @@
     {/for}
     {else}
     {for:$split_items,$key=>$item}
-    <div style="flex:{item};">
+    <div style="flex:{=$item};">
         {weight:$key+1}
     </div>
     {/for}

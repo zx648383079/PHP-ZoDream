@@ -165,7 +165,7 @@ class VisualPage implements IVisualEngine {
 
     public function renderRow(int $parent_id, int $index = 0): string {
         VisualFactory::lock($parent_id, $index);
-        return static::renderAnyWeight($this, $this->getWeightList($parent_id, $index), $index);
+        return static::renderAnyWeight($this, $this->getWeightList($parent_id, $index), $parent_id, $index);
     }
 
     /**
@@ -215,7 +215,7 @@ class VisualPage implements IVisualEngine {
         );
     }
 
-    public static function renderAnyWeight(IVisualEngine $engine, array $items, int $index = 0): string {
+    public static function renderAnyWeight(IVisualEngine $engine, array $items, int $rowId = 0, int $index = 0): string {
         // 排序
         usort($items, function (PageWeightModel $a, PageWeightModel $b) {
             if ($a->position === $b->position) {
@@ -233,7 +233,7 @@ class VisualPage implements IVisualEngine {
         $html = implode(PHP_EOL, $args);
         if ($engine->editable()) {
             return <<<HTML
-<div class="weight-row" data-id="{$engine->rowId()}" data-index="{$index}">
+<div class="weight-row" data-id="{$rowId}" data-index="{$index}">
 {$html}
 </div>
 HTML;

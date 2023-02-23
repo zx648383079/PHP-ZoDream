@@ -46,7 +46,7 @@ $this->registerJsFile([
             </div>
         </li>
         <li>
-            <a data-type="ajax" href="<?=$this->url('./@admin/weight/install')?>">
+            <a data-type="ajax" href="<?=$this->url('./@admin/theme/install')?>">
                 <i class="fa fa-sync"></i>
                 <span>刷新</span>
             </a>

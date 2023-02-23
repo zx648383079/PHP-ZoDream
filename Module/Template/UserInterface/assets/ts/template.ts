@@ -31,7 +31,7 @@ function bindPage(pageId: number) {
             id: weightId,
             ...data
         }, res => {
-            postCallback(data, success, failure);
+            postCallback(res, success, failure);
         });
     }).on(EditorEventRefreshWeight, function(weightId: number, success, failure) {
         $.getJSON(BASE_URI + 'weight/refresh?id=' + weightId, data => {

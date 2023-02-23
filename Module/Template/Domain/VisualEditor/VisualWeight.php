@@ -37,11 +37,11 @@ class VisualWeight implements IVisualEngine {
         protected ?IVisualEngine $engine = null) {
         $this->model = VisualFactory::getOrSet(ThemeWeightModel::class,
             $this->pageWeight->weight_id, function () {
-                return SiteWeightModel::where('id', $this->pageWeight->weight_id);
+                return SiteWeightModel::where('id', $this->pageWeight->weight_id)->first();
             });
         $this->weight = VisualFactory::getOrSet(ThemeWeightModel::class,
             $this->model->theme_weight_id, function () {
-                return ThemeWeightModel::where('id', $this->model->theme_weight_id);
+                return ThemeWeightModel::where('id', $this->model->theme_weight_id)->first();
             });
         $this->property = VisualFactory::getOrSet(VisualWeightProperty::class,
             $this->model->id, function () {
@@ -105,7 +105,7 @@ class VisualWeight implements IVisualEngine {
         $items = PageWeightModel::where('parent_id', $parent_id)
             ->where('page_id', $this->pageId())
             ->where('parent_index', $index)->get();
-        return VisualPage::renderAnyWeight($this, $items, $index);
+        return VisualPage::renderAnyWeight($this, $items, $parent_id, $index);
     }
 
     /**

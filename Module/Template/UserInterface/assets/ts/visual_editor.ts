@@ -21,6 +21,7 @@ const EditorEventDragStart = 'editor_drag_start';
 const EditorEventBrowserReady = 'editor_browser_ready';
 const EditorEventOpenEditDialog = 'editor_open_edit_dialog';
 const EditorEventOpenProperty = 'editor_open_property';
+const EditorEventTimeLoop = 'editor_time_loop';
 const EditorMobileStyle = 'mobile-style';
 
 type FailureCallbackFunc = (message: string, code?: number) => void;
@@ -75,10 +76,9 @@ class VisualEditor {
     private toolBar = new EditorToolBar(this);
     private hRuleBar = new EditorRuler(this, true);
     private vRuleBar = new EditorRuler(this, false);
-    private ruleLinePanel: JQuery<HTMLDivElement>;
+    // private ruleLinePanel: JQuery<HTMLDivElement>;
     private browser = new EditorBrowser(this);
     private workspace: JQuery<HTMLDivElement>;
-    private shellTimeBar: JQuery<HTMLDivElement>;
     private panelGroup = new EditorPanelGroup(this);
     private dialog = new EditorDialog(this);
 
@@ -177,7 +177,7 @@ class VisualEditor {
      */
     public mobile(width: number, height: number) {
         this.browserAdaptive = false;
-        this.box.addClass(EditorMobileStyle);
+        this.browser.toggleShell(true);
         this.resize(width, height);
     }
 
@@ -192,7 +192,7 @@ class VisualEditor {
      */
     public normal(width: number, height: number);
     public normal(width?: number, height?: number) {
-        this.box.removeClass(EditorMobileStyle);
+        this.browser.toggleShell(false);
         if (width && height) {
             this.browserAdaptive = false;
             this.resize(width, height);
@@ -315,7 +315,7 @@ class VisualEditor {
         const space = 500;
         const checkFunc = () => {
             const now = new Date();
-            this.shellTimeBar.text([now.getHours(), now.getMinutes()].map(EditorHelper.twoPad).join(':'));
+            this.emit(EditorEventTimeLoop, now);
             const w = this.box.width();
             if (lastBoxWidth !== w) {
                 lastBoxWidth = w;
@@ -385,8 +385,7 @@ class VisualEditor {
         `);
         this.emit(EditorEventViewInit);
         this.workspace = this.find<HTMLDivElement>('.editor-container');
-        this.ruleLinePanel = this.find<HTMLDivElement>('.rule-line-bar');
-        this.shellTimeBar = this.find<HTMLDivElement>('.shell-bar .time');
+        // this.ruleLinePanel = this.find<HTMLDivElement>('.rule-line-bar');
         this.viewInited = true;
         this.emit(EditorEventAfterViewInit);
     }
@@ -534,20 +533,79 @@ class EditorPropertyPanel implements IEditorPanel {
 
     private box: JQuery<HTMLDivElement>;
     private target: EditorWeight;
+    private lastAt: number = 0;
+    private isAsync = false;
 
     constructor(
         private editor: VisualEditor
     ) {
-        this.editor.on(EditorEventGetStyleSuccess, data => {
+        this.editor.on(EditorEventAfterViewInit, () => {
+            this.bindEvent();
+        }).on(EditorEventGetStyleSuccess, data => {
             this.renderStyle(data);
         }).on(EditorEventOpenProperty, (weight: EditorWeight) => {
+            this.saveSync();
             this.box.find<HTMLDivElement>('.panel-header').trigger('click');
             this.target = weight;
             this.editor.emit(EditorEventGetWeightProperty, weight.id(), data => {
+                this.lastAt = new Date().getTime();
                 this.applyForm(data);
             });
+        }).on(EditorEventTimeLoop, (now: Date) => {
+            if (!this.isAsync) {
+                return;
+            }
+            const space = 20000;
+            const nowTime = now.getTime();
+            if (nowTime - this.lastAt > space) {
+                this.saveSync();
+                this.lastAt = nowTime;
+            }
         });
-        // const EditorEventOpenProperty = 'editor_open_property';
+    }
+
+    private bindEvent() {
+        if (!this.box) {
+            return;
+        }
+        const that = this;
+        this.box.on('change', '.position-input select', function() {
+            const $this = $(this);
+            $this.next().html(EditorHtmlHelper.positionSide($this.val() as string));
+        }).on('click', '.background-input input[type="radio"]', function() {
+            const $this = $(this);
+            $this.closest('.background-input').find('.value-input').html(EditorHtmlHelper.backgroundValue($this.attr('name').replace('[type]', ''), $this.val() as number));
+        }).on('click', '.switch-input', function() {
+            const $this = $(this);
+            const checked = !$this.hasClass('checked');
+            $this.toggleClass('checked', checked);
+            $this.find('.switch-label').text(checked ? $this.data('on') : $this.data('off'));
+            $this.find('input').val(checked ? 1 : 0).trigger('change');
+        }).on('change', 'input,textarea', function() {
+            that.autoSave();
+        }).on('click', '.style-item', function() {
+            $(this).addClass('active').siblings().removeClass('active');
+            that.autoSave();
+        }).on('click', '.reset-btn', () => {
+            this.applyForm({});
+            this.autoSave();
+        });
+    }
+
+    private saveSync() {
+        this.isAsync = false;
+        if (!this.target) {
+            return;
+        }
+        const data = formData(this.box.find('.form-table')) + '&theme_style_id=' + EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id')) + '&id=' + this.target.id();
+        this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), data, data => {
+            this.target.html(data.html);
+        });
+    }
+
+    private autoSave() {
+        this.isAsync = true;
+        this.lastAt = new Date().getTime();
     }
 
     public render(): JQuery {
@@ -620,7 +678,10 @@ class EditorPropertyPanel implements IEditorPanel {
     private applyForm(data: any) {
         const styles = data.settings?.style;
         let items = this.box.find('.form-table .tab-item');
-        items[0].innerHTML = EditorHtmlHelper.title(data.title) + EditorHtmlHelper.lazy(data.settings?.lazy);
+        items[0].innerHTML = EditorHtmlHelper.title(data.title) 
+                        + EditorHtmlHelper.lazy(data.settings?.lazy) 
+                        + EditorHtmlHelper.share(data.is_share)
+                        + EditorHtmlHelper.button('重置', 'reset-btn');
         let boxes = $(items[1]).find('.expand-body');
         boxes[0].innerHTML = EditorHtmlHelper.margin(styles?.margin)
                         + EditorHtmlHelper.position(styles?.position)
@@ -758,7 +819,7 @@ class EditorDialog {
                 }
             });
             this.box.on('done', () => {
-                this.editor.emit(EditorEventSaveWeightProperty, target.find('.dialog-body').serialize(), data => {
+                this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), target.find('.dialog-body').serialize(), data => {
                     that.editor.emit(EditorEventOpenProperty, that.target);
                     that.target.html(data.html);
                 });
@@ -774,19 +835,23 @@ class EditorDialog {
     }
 }
 
+
 class EditorBrowser {
     private shell: JQuery<HTMLDivElement>;
+    private shellTimeBar: JQuery<HTMLSpanElement>;
     private frame: JQuery<HTMLIFrameElement>;
     private frameBody: JQuery<HTMLBodyElement>;
     private dragWeight: JQuery<HTMLDivElement>;
     private selectedWeight: EditorWeight;
     private bound: IBound;
     private frameScale = 100;
+    private shellVisbile = false;
 
     constructor(
         private editor: VisualEditor,
     ) {
         this.editor.on(EditorEventViewInit, () => {
+            this.shellTimeBar = this.editor.find<HTMLDivElement>('.shell-bar .time');
             this.shell = this.editor.find<HTMLDivElement>('.work-container');
             this.frame = this.editor.find<HTMLIFrameElement>('.panel-main');
             this.bindEvent();
@@ -805,6 +870,11 @@ class EditorBrowser {
             this.resize(this.bound.width, this.bound.height);
         }).on(EditorEventDragStart, (weight: JQuery<HTMLDivElement>) => {
             this.dragWeight = weight;
+        }).on(EditorEventTimeLoop, (now: Date) => {
+            if (!this.shellVisbile) {
+                return;
+            }
+            this.shellTimeBar.text([now.getHours(), now.getMinutes()].map(EditorHelper.twoPad).join(':'));
         });
     }
 
@@ -878,6 +948,11 @@ class EditorBrowser {
         }).on('click', 'a', function(e) {
             e.preventDefault();
         });
+    }
+
+    public toggleShell(visible: boolean) {
+        this.shellVisbile = visible;
+        this.shell.toggleClass(EditorMobileStyle, visible);
     }
 
     /**
@@ -1425,6 +1500,20 @@ class EditorHtmlHelper {
         return EditorHtmlHelper._guid ++;
     }
 
+    public static value(val: any, def: any = ''): string {
+        if (typeof val === 'undefined') {
+            return def;
+        }
+        if (val === null) {
+            return def;
+        }
+        return val;
+    }
+
+    public static join(...items: any[]): string {
+        return items.map(val => EditorHtmlHelper.value(val)).join('');
+    }
+
     public static mapJoinHtml(data: object, cb: (val: any, key?: string|number) => string): string {
         let html = '';
         EditorHelper.eachObject(data, (val, key) => {
@@ -1440,10 +1529,13 @@ class EditorHtmlHelper {
 
     public static lazy(val: number) {
         const id = 'settings_lazy_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '懒加载', EditorHtmlHelper.radio(id, 'settings[lazy]', ['关闭', '开启'], !val ? 0 : val));
+        return EditorHtmlHelper.input(id, '懒加载', EditorHtmlHelper.switch(id, 'settings[lazy]', val));
     }
 
-    
+    public static share(val: number) {
+        const id = 'is_share_' + EditorHtmlHelper.guid();
+        return EditorHtmlHelper.input(id, '共享', EditorHtmlHelper.switch(id, 'is_share', val));
+    }
 
     public static margin(vals: string[] = []) {
         return EditorHtmlHelper.sideInput('settings[style][margin]', '外边距', vals);
@@ -1473,25 +1565,23 @@ class EditorHtmlHelper {
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
         let html = EditorHtmlHelper.checkbox(id, name + '[side][]', ['上', '右', '下', '左'], data?.side)
         const option = EditorHtmlHelper.option(['实线', '虚线'], data && data.value && data.value[1] == 1 ? 1 : 0)
-        return EditorHtmlHelper.input(id, '边框', `<input type="text" class="form-control" name="${name}[value][]" value="${data?.value[0]}" placeholder="粗细" size="4"><select name="${name}[value][]">${option}</select><input type="color" name="${name}[value][]" value="${data?.value[2]}"><div class="side-input">${html}</div>
-        `);
+        return EditorHtmlHelper.input(id, '边框', EditorHtmlHelper.join('<input type="text" class="form-control" name="', name, '[value][]" value="', data?.value[0], '" placeholder="粗细" size="4"><select name="', name, '[value][]">',option, '</select><input type="color" name="', name, '[value][]" value="', data?.value[2], '"><div class="side-input">', html, '</div>'));
     }
 
     public static radius(name?: string, data?: string[]) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border-radius]';
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '圆角', `<input type="text" id="${id}_0" class="form-control " name="${name}[]" value="" size="4" placeholder="左上">
-        <input type="text" id="${id}_1" class="form-control " name="${name}[]" value="" size="4" placeholder="右上">
-        <br/>
-        <input type="text" id="${id}_2" class="form-control " name="${name}[]" value="" size="4" placeholder="左下">
-        <input type="text" id="${id}_3" class="form-control " name="${name}[]" value="" size="4" placeholder="右下">`);
+        if (!data) {
+            data = [];
+        }
+        return EditorHtmlHelper.input(id, '圆角', EditorHtmlHelper.join('<input type="text" id="', id, '_0" class="form-control" name="',name, '[]" value="', data[0],'" size="4" placeholder="左上"><input type="text" id="',id,'_1" class="form-control" name="',name,'[]" value="', data[1],'" size="4" placeholder="右上"><br/><input type="text" id="',id,'_2" class="form-control" name="',name,'[]" value="', data[2],'" size="4" placeholder="左下"><input type="text" id="',id,'_3" class="form-control " name="',name,'[]" value="', data[3],'" size="4" placeholder="右下">'));
     }
 
 
     public static color(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[color]';
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '字体颜色', EditorHtmlHelper.radio(id, name + '[type]', ['无', '有'], data?.type) + `<input type="color" name="${name}[value]" value="${data?.value}">`);
+        return EditorHtmlHelper.input(id, '字体颜色', EditorHtmlHelper.join(EditorHtmlHelper.radio(id, name + '[type]', ['无', '有'], data?.type),  '<input type="color" name="', name,'[value]" value="',data?.value,'">'));
     }
 
     public static background(name?: string, data?: any) {
@@ -1518,7 +1608,7 @@ class EditorHtmlHelper {
         name = 'settings[style]['+ name +'][visibility]';
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
         
-        return EditorHtmlHelper.input(id, '可见', EditorHtmlHelper.radio(id, name, ['显示', '隐藏'], val));
+        return EditorHtmlHelper.input(id, '可见', EditorHtmlHelper.switch(id, name, val, '显示', '隐藏'));
     }
 
     public static fontSize(name: string, val?: string) {
@@ -1567,6 +1657,11 @@ class EditorHtmlHelper {
         return html;
     }
 
+    public static switch(id: string, name: string, val: string|number|boolean, onLabel = '开启', offLabel = '关闭') {
+        val = EditorHelper.parseNumber(val);
+        return EditorHtmlHelper.join('<div id="', id,'" class="switch-input" data-on="',onLabel,'" data-off="', offLabel ,'"><span class="switch-control"></span><span class="switch-label">', val > 0 ? onLabel : offLabel ,'</span><input type="hidden" name="', name,'" value="', val, '"/></div>');
+    }
+
     private static radio(id: string, name: string, items: any, selected: string| number) {
         let html = '';
         let j = 0;
@@ -1591,14 +1686,16 @@ class EditorHtmlHelper {
 
     private static text(id: string, name: string, val: string = '', size?: number) {
         const option = size ? ` size="${size}"` : '';
-        if (!val) {
-            val = '';
-        }
+        val = EditorHtmlHelper.value(val);
         return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}"${option}>`;
     }
 
     private static input(id: string, name: string, content: string, cls: string = ''): string {
         return `<div class="input-group"><label for="${id}">${name}</label><div class="${cls}">${content}</div></div>`;
+    }
+
+    public static button(text: string, cls: string) {
+        return `<button type="button" class="btn ${cls}">${text}</button>`;
     }
 
     private static nameToId(name: string) {

@@ -149,8 +149,8 @@ $ruleBarColor: gray;
         .expand-header {
             background: #efefef;
             font-size: 1.3rem;
-            line-height: 30px;
-    
+            line-height: 1.875rem;
+            user-select: none;
             .fa {
                 float: right;
             }
@@ -251,6 +251,7 @@ $ruleBarColor: gray;
             .title {
                 height: 2rem;
                 overflow: hidden;
+                font-size: .6rem;
             }
         }
 
@@ -262,13 +263,12 @@ $ruleBarColor: gray;
     .tab-box {
         .tab-header {
             background: #efefef;
+            user-select: none;
             .tab-item {
                 width: 4.5rem;
             }
         }
         .tab-body {
-            overflow-y: auto;
-            
         }
     }
     .style-item {
@@ -278,6 +278,7 @@ $ruleBarColor: gray;
         color: #999;
         font-weight: bold;
         font-size: 20px;
+        user-select: none;
         img {
             width: 100%;
         }
@@ -290,19 +291,21 @@ $ruleBarColor: gray;
     }
     .form-table {
         .input-group {
-            >label {
-                font-size: 12px;
-                padding: 0;
+            >label,
+            >label:first-child {
+                font-size: .8rem;
+                padding: 0 .5rem 0 0;
+                word-break: keep-all;
             }
             input[type="text"],
             select {
-                min-width: 40px;
+                min-width: 2.5rem;
             }
         }
     }
     .side-input {
         position: relative;
-        height: 100px;
+        height: 6.25rem;
         >input,
         >.check-label {
             position: absolute;
@@ -322,6 +325,59 @@ $ruleBarColor: gray;
             &:nth-of-type(4) {
                 top: 30px;
                 left: 0px;
+            }
+        }
+    }
+    .switch-input {
+        line-height: 2rem;
+        .switch-control {
+            cursor: pointer;
+            vertical-align: middle;
+            background-color: #fafbfa;
+            border-radius: 50px;
+            display: inline-block;
+            position: relative;
+            margin-right: .8rem;
+            transition: all 0.1s ease-in;
+            width: 40px;
+            height: 22px;
+            &::before,
+            &::after {
+                content: ' ';
+                position: absolute;
+                border-radius: 100px;
+            }
+            &::before {
+                background: white;
+                top: 1px;
+                left: 1px;
+                z-index: 1;
+                width: 20px;
+                transition: all 0.1s ease-in;
+                height: 20px;
+                box-shadow: 0 3px 1px rgba(0,0,0,0.05), 0 0px 1px rgba(0,0,0,0.3);
+            }
+            &::after {
+                top: 0;
+                transition: box-shadow 0.1s ease-in;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                box-shadow: inset 0 0 0 0 #eee, 0 0 1px rgba(0,0,0,0.4);
+            }
+        }
+        .switch-label {
+            font-size: .8rem;
+        }
+        &.checked {
+            .switch-control {
+                &::before {
+                    left: 20px;
+                }
+                &::after {
+                    background: #4cda60;
+                    box-shadow: 0 0 1px #4cda60;
+                }
             }
         }
     }
@@ -349,7 +405,7 @@ $ruleBarColor: gray;
             background-color: #666;
         }
     }
-    &.mobile-style {
+    .mobile-style {
         .shell-box {
             display: block;
         }
