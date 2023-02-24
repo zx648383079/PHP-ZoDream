@@ -3,11 +3,8 @@ namespace Module\WeChat\Domain\Editors;
 
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\EditorModel;
-use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Html\Dark\Theme;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\ThirdParty\WeChat\MenuItem;
-use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class Location implements InputInterface {
     public function form(EditorModel $model) {
@@ -19,15 +16,4 @@ class Location implements InputInterface {
         return;
     }
 
-    public function render(EditorModel $model, MessageResponse $response) {
-        $name = $model->content;
-        /** @var SceneInterface $instance */
-        $instance = new $name();
-        return $instance->enter();
-    }
-
-
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $menu->setType(MenuItem::LOCATION);
-    }
 }

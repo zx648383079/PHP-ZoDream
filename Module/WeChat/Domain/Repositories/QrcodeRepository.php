@@ -51,13 +51,9 @@ class QrcodeRepository {
     }
 
     public static function async(QrcodeModel $model) {
-        /** @var Account $api */
-        $api = WeChatModel::findOrThrow($model->wid, '公众号不存在')
-            ->sdk(Account::class);
-        $res = $api->qrCode($model->scene_type < 1 ? $model->scene_str : intval($model->scene_id),
-            $model->type > 0 ? false : intval($model->expire_time));
-        $model->qr_url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($res['ticket']);
-        $model->url = $res['url'];
+        $data = PlatformRepository::entry($model->wid)
+            ->pushQr($model);
+        $model->set($data);
         $model->save();
     }
 }

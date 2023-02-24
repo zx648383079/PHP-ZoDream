@@ -1,13 +1,9 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
-use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;
-use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Repositories\MenuRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\ThirdParty\WeChat\Menu;
-use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuController extends Controller {
 
@@ -18,7 +14,7 @@ class MenuController extends Controller {
     }
 
     public function indexAction() {
-        $menu_list = MenuRepository::getList($this->weChatId());
+        $menu_list = MenuRepository::getManageList($this->weChatId());
         return $this->show(compact('menu_list'));
     }
 

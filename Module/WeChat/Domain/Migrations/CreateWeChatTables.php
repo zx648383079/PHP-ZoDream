@@ -13,6 +13,7 @@ use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\WeChatModel;
+use Module\WeChat\Domain\Repositories\PlatformRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -103,6 +104,8 @@ class CreateWeChatTables extends Migration {
         $this->append(WeChatModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
+            $table->uint('platform_type', 1)
+                ->default(PlatformRepository::PLATFORM_TYPE_WX)->comment('公众号平台类型');
             $table->string('name', 40)->comment('公众号名称');
             $table->string('token', 32)->comment('微信服务访问验证token');
             $table->string('access_token')->default('')->comment('访问微信服务验证token');

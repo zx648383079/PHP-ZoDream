@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Repositories\MenuRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -11,7 +10,7 @@ class MenuController extends Controller {
     public function indexAction() {
         try {
             return $this->renderData(
-                MenuRepository::getList($this->weChatId())
+                MenuRepository::getManageList($this->weChatId())
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

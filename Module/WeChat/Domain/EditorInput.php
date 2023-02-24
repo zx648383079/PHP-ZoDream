@@ -34,13 +34,19 @@ class EditorInput {
     const TYPE_MINI = 6;
     const TYPE_SCENE = 7;
 
-    public static $scene_list = [
+    const TYPE_SCAN = 20;
+
+    const TYPE_PICTURE = 21;
+    const TYPE_PHOTO = 22;
+    const TYPE_LOCATION = 23;
+
+    public static array $scene_list = [
         BindingScene::class => '账号绑定',
         CheckInScene::class => '每日签到',
         ZaJinHuaScene::class => '炸金花',
     ];
 
-    public static $type_list = [
+    public static array $type_list = [
         self::TYPE_TEXT => '文本',
         self::TYPE_MEDIA => '媒体素材',
         self::TYPE_NEWS => '图文',
@@ -51,7 +57,7 @@ class EditorInput {
         self::TYPE_SCENE => '场景'
     ];
 
-    public static $type_class = [
+    public static array $type_class = [
         self::TYPE_TEXT => Text::class,
         self::TYPE_MEDIA => Media::class,
         self::TYPE_NEWS => News::class,
@@ -60,10 +66,10 @@ class EditorInput {
         self::TYPE_URL => Url::class,
         self::TYPE_MINI => Mini::class,
         self::TYPE_SCENE => Scene::class,
-        20 => Scan::class,
-        21 => Picture::class,
-        22 => Photo::class,
-        23 => Location::class,
+        self::TYPE_SCAN => Scan::class,
+        self::TYPE_PICTURE => Picture::class,
+        self::TYPE_PHOTO => Photo::class,
+        self::TYPE_LOCATION => Location::class,
         99 => None::class
     ];
 
@@ -96,14 +102,6 @@ class EditorInput {
 
     public static function save(EditorModel $model, Request|array $request) {
         return static::instance($model->type)->save($model, $request);
-    }
-
-    public static function render(EditorModel $model, MessageResponse $response) {
-        return static::instance($model->type)->render($model, $response);
-    }
-
-    public static function renderMenu(MenuModel $model, MenuItem $menu) {
-        return static::instance($model->type)->renderMenu($model, $menu);
     }
 
     public static function invoke($type, $action, Request $request, $controller) {

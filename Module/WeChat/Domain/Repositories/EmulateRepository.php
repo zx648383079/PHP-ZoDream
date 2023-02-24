@@ -3,23 +3,22 @@ declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\WeChat\Domain\EmulateResponse;
+use Module\WeChat\Domain\Adapters\EmulateAdapter;
 use Module\WeChat\Domain\Model\MediaModel;
-use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Model\WeChatSimpleModel;
-use Module\WeChat\Module;
 
 class EmulateRepository {
 
     public static function getList(string $keywords = '') {
         return WeChatSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name', 'account']);
-        })->page();
+        })->where('status', '>', WeChatModel::STATUS_DELETED)->page();
     }
 
     public static function get(int $id) {
-        $model = WeChatSimpleModel::find($id);
+        $model = WeChatSimpleModel::where('id', $id)->where('status', '>', WeChatModel::STATUS_DELETED)
+            ->first();
         if (empty($model)) {
             throw new \Exception('公众号不存在');
         }
@@ -31,16 +30,14 @@ class EmulateRepository {
         return $model;
     }
 
-    public static function reply(int $id, string $content, string $type = '') {
-        $model = WeChatModel::find($id);
-        $reply = Module::reply()->setModel($model);
-        $reply->setResponse(new EmulateResponse());
-        if ($type === 'menu') {
-            $reply->replyMenu($content);
-        } else {
-            $reply->replyMessage($content);
+    public static function reply(int $id) {
+        $model = WeChatModel::findOrThrow($id);
+        if ($model->status !== WeChatModel::STATUS_ACTIVE &&
+                $model->status !== WeChatModel::STATUS_INACTIVE) {
+            throw new \Exception('error platform');
         }
-        return $reply->getResponse();
+        $adapter = new EmulateAdapter($model);
+        return $adapter->listenWithBack();
     }
 
     public static function media(int $id) {

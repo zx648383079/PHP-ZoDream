@@ -14,9 +14,9 @@ class EmulateController extends Controller {
         }
     }
 
-    public function replyAction(int $id, string $content, string $type = '') {
+    public function replyAction(int $id) {
         try {
-            return $this->renderData(EmulateRepository::reply($id, $content, $type));
+            return $this->renderData(EmulateRepository::reply($id));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

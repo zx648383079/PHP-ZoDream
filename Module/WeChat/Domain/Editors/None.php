@@ -1,6 +1,7 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\ThirdParty\WeChat\MenuItem;
@@ -15,11 +16,9 @@ class None implements InputInterface {
         return;
     }
 
-    public function render(EditorModel $model, MessageResponse $response) {
-        return $response;
+    public function render(EditorModel $model, MessageReply $response) {
+        return [];
     }
 
 
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-    }
 }

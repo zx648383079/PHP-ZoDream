@@ -6,8 +6,6 @@ use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\ThirdParty\WeChat\User;
 
 class FollowRepository {
 
@@ -24,26 +22,38 @@ class FollowRepository {
             ->orderBy('subscribe_at', 'desc')->page();
     }
 
+    public static function add(int $wid, string $openid, array $info = []) {
+        $model = UserModel::where('openid', $openid)
+            ->where('wid', $wid)->first();
+        if (empty($model)) {
+            $model = new UserModel([
+                'openid' => $openid,
+                'wid' => $wid,
+            ]);
+        }
+        if (!empty($info)) {
+            $model->set($info);
+        } else {
+            $model->status = UserModel::STATUS_SUBSCRIBED;
+            $model->subscribe_at = time();
+        }
+        $model->save();
+    }
+
+    public static function delete(int $wid, string $openid) {
+        UserModel::where('openid', $openid)
+            ->where('wid', $wid)->update([
+                'status' => UserModel::STATUS_UNSUBSCRIBED,
+                'updated_at' => time()
+            ]);
+    }
+
     public static function async(int $wid) {
         AccountRepository::isSelf($wid);
-        $next_openid = null;
-        /** @var User $api */
-        $api = WeChatModel::findOrThrow($wid, '公众号错误')
-            ->sdk(User::class);
-        while (true) {
-            $openid_list = $api->userList($next_openid);
-            if (empty($openid_list['data']['openid'])) {
-                break;
-            }
-            $data = $api->usersInfo($openid_list['data']['openid']);
-            foreach ($data['user_info_list'] as $item) {
-                WxRepository::saveUser($item, $wid);
-            }
-            if (empty($openid_list['next_openid'])) {
-                break;
-            }
-            $next_openid = $openid_list['next_openid'];
-        }
+        PlatformRepository::entry($wid)
+            ->pullUsers(function (array $data) use ($wid) {
+                FollowRepository::add($wid, $data['openid'], $data);
+            });
     }
 
     public static function searchFans(int $wid, string $keywords = '') {
@@ -91,7 +101,7 @@ class FollowRepository {
             })->page();
     }
 
-    public static function groupSave(int $wid, $data) {
+    public static function groupSave(int $wid, array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id'], $data['wid']);
         if ($id > 0) {
@@ -119,5 +129,4 @@ class FollowRepository {
         }
         $model->delete();
     }
-
 }

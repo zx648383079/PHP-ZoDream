@@ -3,19 +3,25 @@ declare(strict_types=1);
 namespace Module\WeChat\Domain\Repositories;
 
 use Domain\Model\ModelHelper;
+use Module\WeChat\Domain\Adapters\AdapterEvent;
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Model\TemplateModel;
 use Module\WeChat\Domain\Model\UserGroupModel;
 use Module\WeChat\Domain\Model\UserModel;
-use Module\WeChat\Domain\Model\WeChatModel;
-use Zodream\Database\Model\Model;
-use Zodream\Infrastructure\Contracts\Http\Input;
-use Zodream\ThirdParty\WeChat\EventEnum;
-use Zodream\ThirdParty\WeChat\Mass;
-use Zodream\ThirdParty\WeChat\Template;
 
 class ReplyRepository {
+
+    const EVENT_DEFAULT = 'default';
+
+    public static function eventItems(): array {
+        return  [
+            self::EVENT_DEFAULT => '默认回复',
+            AdapterEvent::Message->getEventName() => '消息',
+            AdapterEvent::Subscribe->getEventName() => '关注',
+            AdapterEvent::MenuClick->getEventName() => '菜单事件',
+        ];
+    }
 
     public static function getList(int $wid, string $event = '') {
         AccountRepository::isSelf($wid);
@@ -61,7 +67,7 @@ class ReplyRepository {
             AccountRepository::isSelf($model->wid);
         }
         $model->load($input);
-        if ($model->event != EventEnum::Message) {
+        if ($model->event !== AdapterEvent::Message->getEventName()) {
             $model->keywords = '';
         }
         EditorInput::save($model, $input);
@@ -82,28 +88,28 @@ class ReplyRepository {
 
     public static function send(int $wid, int $toType, array|int $to, array $data = []) {
         if ($data['type'] == 3) {
-            return static::sendTemplate($wid, is_array($to) ? reset($to) : $to, $data);
+            static::sendTemplate($wid, is_array($to) ? reset($to) : $to, $data);
+            return;
         }
         AccountRepository::isSelf($wid);
         $content = '';
-        $type = Mass::TEXT;
         if ($data['type'] < 1) {
             $content = $data['text'];
         }
-        /** @var Mass $api */
-        $api = WeChatModel::find($wid)
-            ->sdk(Mass::class);
+        $adapter = PlatformRepository::entry($wid);
         if ($toType < 1) {
-            return $api->sendAll($content, $type);
+            $adapter->sendUsers($content);
+            return;
         }
         if ($toType == 1) {
             $groupId = UserGroupModel::whereIn('id', (array)$to)
                 ->whereNot('tag_id', '')
                 ->value('tag_id');
-            return $api->sendAll($content, $type, $groupId);
+            $adapter->sendGroup($groupId, $content);
+            return;
         }
         $openId = UserModel::whereIn('id', (array)$to)->pluck('openid');
-        return $api->send($openId, $content, $type);
+        $adapter->sendAnyUsers($openId, $content);
     }
 
     public static function sendTemplate(int $wid, int $userId, array $data) {
@@ -115,20 +121,9 @@ class ReplyRepository {
         if (empty($openid)) {
             throw new \Exception('用户未关注公众号');
         }
-        /** @var Template $api */
-        $api = WeChatModel::find($wid)
-            ->sdk(Template::class);
-        $res = $api->send($openid, $data['template_id'],
-            isset($data['template_url']) && !empty($data['template_url']) ? url($data['template_url']) : '',
-            TemplateModel::strToArr($data['template_data']),
-            isset($data['appid']) && !empty($data['appid']) ? [
-                'appid' => $data['appid'],
-                'pagepath' => $data['path']
-            ] : []);
-        if (!$res) {
-            throw new \Exception('发送失败');
-        }
-        return $res;
+        $data['template_data'] = TemplateModel::strToArr($data['template_data']);
+        PlatformRepository::entry($wid)
+            ->sendTemplate($openid, $data);
     }
 
     public static function templateList(int $wid) {
@@ -138,23 +133,20 @@ class ReplyRepository {
 
     public static function asyncTemplate(int $wid) {
         AccountRepository::isSelf($wid);
-        /** @var Template $api */
-        $api = WeChatModel::find($wid)
-            ->sdk(Template::class);
-        $data = $api->allTemplate();
-        if (!isset($data['template_list'])) {
-            throw new \Exception('同步失败');
-        }
-        TemplateModel::where('wid', $wid)->delete();
-        foreach ($data['template_list'] as $item) {
-            TemplateModel::create([
-                'wid' => $wid,
-                'template_id' => $item['template_id'],
-                'title' => $item['title'],
-                'content' => $item['content'],
-                'example' => $item['example'],
-            ]);
-        }
+        PlatformRepository::entry($wid)
+            ->pullTemplate(function (array $item) use ($wid) {
+                $model = TemplateModel::where('wid', $wid)
+                    ->where('template_id', $item['template_id'])->first();
+                if (empty($model)) {
+                    $model = new TemplateModel();
+                }
+                $model->set(['wid' => $wid,
+                    'template_id' => $item['template_id'],
+                    'title' => $item['title'],
+                    'content' => $item['content'],
+                    'example' => $item['example'],]);
+                $model->save();
+            });
     }
 
     public static function template(string $id) {
@@ -207,4 +199,74 @@ class ReplyRepository {
         AccountRepository::isSelf($model->wid);
         $model->delete();
     }
+
+
+    public static function getMessageReply(int $wid) {
+        $data = ReplyModel::where('event', AdapterEvent::Message->getEventName())
+            ->where('wid', $wid)
+            ->where('status', 1)
+            ->orderBy('`match`', 'asc')
+            ->orderBy('updated_at', 'asc')
+            ->get('id', 'keywords', '`match`');
+        $args = [];
+        foreach ($data as $item) {
+            foreach (explode(',', $item->keywords) as $val) {
+                $val = trim($val);
+                if (!empty($val)){
+                    $args[$val] = [
+                        'id' => $item->id,
+                        'match' => $item->match
+                    ];
+                }
+            }
+        }
+        return $args;
+    }
+
+    public static function cacheReply(int $wid, bool $refresh = false) {
+        $key = 'wx_reply_'. $wid;
+        if ($refresh) {
+            cache()->set($key, static::getMessageReply($wid));
+        }
+        return  cache()->getOrSet($key, function () use ($wid) {
+            return static::getMessageReply($wid);
+        });
+    }
+
+    /**
+     * @param $wid
+     * @param $content
+     * @return int
+     */
+    public static function findIdWithCache(int $wid, string $content) {
+        $data = self::cacheReply($wid);
+        if (isset($data[$content])) {
+            return $data[$content]['id'];
+        }
+        foreach ($data as $key => $item) {
+            if ($item['match'] > 0) {
+                continue;
+            }
+            if (str_contains($content, $key . '')) {
+                return $item['id'];
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * @param int $wid
+     * @param string $content
+     * @return ReplyModel|null
+     */
+    public static function findWithCache(int $wid, string $content) {
+        $id = self::findIdWithCache($wid, $content);
+        return $id > 0 ? ReplyModel::where('wid', $wid)->where('id', $id)->first() : null;
+    }
+
+    public static function findWithEvent(string $event, int $wid): ReplyModel {
+        return ReplyModel::where('event', $event)
+            ->where('wid', $wid)->where('status', 1)->first();
+    }
+
 }

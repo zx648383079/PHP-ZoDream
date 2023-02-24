@@ -1,13 +1,10 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
-use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 use Zodream\Infrastructure\Support\Html;
-use Zodream\ThirdParty\WeChat\MenuItem;
-use Zodream\ThirdParty\WeChat\MessageResponse;
 
 class Media implements InputInterface {
     public function form(EditorModel $model) {
@@ -42,27 +39,5 @@ HTML;
         return;
     }
 
-    public function render(EditorModel $reply, MessageResponse $response) {
-        $model = MediaModel::find($reply->content);
-        if ($response instanceof EmulateResponse) {
-            return $response->setMedia($model);
-        }
-        if (!$model->media_id) {
-            return $response->setText('内容有误');
-        }
-        if ($model->type === MediaModel::TYPE_IMAGE) {
-            return $response->setImage($model->media_id);
-        }
-        if ($model->type === MediaModel::TYPE_VIDEO) {
-            return $response->setVideo($model->media_id, $model->title);
-        }
-        if ($model->type === MediaModel::TYPE_VOICE) {
-            return $response->setVoice($model->media_id);
-        }
-        return $response->setText('内容有误');
-    }
 
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $menu->setKey('menu_'.$model->id);
-    }
 }

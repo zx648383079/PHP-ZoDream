@@ -4,15 +4,16 @@ namespace Module\WeChat\Domain\Repositories;
 
 use Module\WeChat\Domain\EditorInput;
 use Module\WeChat\Domain\Model\MenuModel;
-use Module\WeChat\Domain\Model\WeChatModel;
 use Zodream\Html\Tree;
-use Zodream\Infrastructure\Contracts\Http\Input;
-use Zodream\ThirdParty\WeChat\Menu;
-use Zodream\ThirdParty\WeChat\MenuItem;
 
 class MenuRepository {
 
     public static function getList(int $wid) {
+        return (new Tree(MenuModel::where('wid', $wid)->orderBy('parent_id', 'asc')->get()))
+            ->makeTree();
+    }
+
+    public static function getManageList(int $wid) {
         AccountRepository::isSelf($wid);
         return (new Tree(MenuModel::where('wid', $wid)->orderBy('parent_id', 'asc')->get()))
             ->makeTree();
@@ -73,31 +74,8 @@ class MenuRepository {
 
     public static function async(int $wid) {
         AccountRepository::isSelf($wid);
-        $menu_list = static::getList($wid);
-        /** @var Menu $api */
-        $api = WeChatModel::find($wid)
-            ->sdk(Menu::class);
-        if (count($menu_list) < 1) {
-            $api->deleteMenu();
-            return;
-        }
-        $api->create(MenuItem::menu(array_map(function ($menu) {
-                return static::renderMenu($menu);
-            }, $menu_list)));
-    }
-
-    private static function renderMenu($data) {
-        if (is_array($data)) {
-            $data = new MenuModel($data);
-        }
-        $menu = MenuItem::name($data->name);
-        $children = $data->children;
-        if (!empty($children)) {
-            return $menu->setMenu(array_map(function ($model) {
-                return static::renderMenu($model);
-            }, $children));
-        }
-        EditorInput::renderMenu($data, $menu);
-        return $menu;
+        PlatformRepository::entry($wid)->pushMenu(
+            self::getList($wid)
+        );
     }
 }

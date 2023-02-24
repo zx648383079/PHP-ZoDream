@@ -1,7 +1,9 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\Adapters\ReplyType;
 use Module\WeChat\Domain\EmulateResponse;
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\EditorModel;
 use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -34,16 +36,4 @@ HTML;
         return;
     }
 
-    public function render(EditorModel $model, MessageResponse $response) {
-        if ($response instanceof EmulateResponse) {
-            $editor = Json::decode($model->getAttributeSource('content'));
-            return $response->setUrl($editor['url']);
-        }
-        return $response;
-    }
-
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $editor = Json::decode($model->getAttributeSource('content'));
-        $menu->setMini($editor['appid'], $editor['path'], $editor['url']);
-    }
 }

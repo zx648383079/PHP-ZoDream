@@ -3,6 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('error page');
+$this->registerJs(<<<JS
+$.pjax.disable();
+JS
+);
 ?>
 
 <div class="page-not-found">

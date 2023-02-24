@@ -7,6 +7,7 @@ use Domain\Entities\Entity;
  * Class WeChatEntity
  * @package Module\WeChat\Domain\Entities
  * @property integer $id
+ * @property integer $platform_type
  * @property string $name
  * @property string $token
  * @property string $access_token

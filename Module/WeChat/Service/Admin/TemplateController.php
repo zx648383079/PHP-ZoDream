@@ -1,8 +1,7 @@
 <?php
 namespace Module\WeChat\Service\Admin;
 
-
-use Module\WeChat\Domain\Model\MediaTemplateModel;
+use Module\WeChat\Domain\Model\EditorTemplateModel;
 use Module\WeChat\Domain\Repositories\TemplateRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
@@ -19,8 +18,8 @@ class TemplateController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
-        $model = MediaTemplateModel::findOrNew($id);
+    public function editAction(int $id) {
+        $model = EditorTemplateModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
 

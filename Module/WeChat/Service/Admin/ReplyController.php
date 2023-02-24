@@ -7,16 +7,9 @@ use Module\WeChat\Domain\Repositories\FollowRepository;
 use Module\WeChat\Domain\Repositories\ReplyRepository;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\ThirdParty\WeChat\EventEnum;
 
 class ReplyController extends Controller {
 
-    protected $event_list = [
-        'default' => '默认回复',
-        EventEnum::Message => '消息',
-        EventEnum::Subscribe => '关注',
-        EventEnum::Click => '菜单事件',
-    ];
 
     public function rules() {
         return [
@@ -26,7 +19,7 @@ class ReplyController extends Controller {
 
     public function indexAction(string $event = '') {
         $reply_list = ReplyRepository::getList($this->weChatId(), $event);
-        $event_list = $this->event_list;
+        $event_list = ReplyRepository::eventItems();
         return $this->show(compact('reply_list', 'event_list'));
     }
 
@@ -42,7 +35,7 @@ class ReplyController extends Controller {
             $model->type = $request->get('type');
             return $this->show('/Admin/layouts/editor', compact('model'));
         }
-        $event_list = $this->event_list;
+        $event_list = ReplyRepository::eventItems();
         return $this->show('edit', compact('model', 'event_list'));
     }
 

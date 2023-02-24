@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Editors;
 
 use Module\WeChat\Domain\EditorInput;
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
 use Zodream\Html\Dark\Theme;
@@ -19,15 +20,4 @@ class Picture implements InputInterface {
         return;
     }
 
-    public function render(EditorModel $model, MessageResponse $response) {
-        $name = $model->content;
-        /** @var SceneInterface $instance */
-        $instance = new $name();
-        return $instance->enter();
-    }
-
-
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $menu->setType(MenuItem::SYSTEM_PHOTO_ALBUM);
-    }
 }

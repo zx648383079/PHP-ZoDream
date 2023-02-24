@@ -1,24 +1,24 @@
 <?php
 namespace Module\WeChat;
 
+use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
-use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Migrations\CreateWeChatTables;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Service\PlatformController;
+use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+class Module extends BaseModule implements ISiteMapModule, ICustomRouteModule {
 
-    public function boot() {
-        app()->scoped(MessageReply::class);
-    }
 
     public function getMigration() {
         return new CreateWeChatTables();
     }
 
-    public function invokeRoute($path) {
+    public function invokeRoute(string $path, HttpContext $context): null|string|Output {
         if (preg_match('#^/?platform/([^/]*)/message#', $path, $match)) {
             return $this->invokeController(
                 PlatformController::class,
@@ -26,14 +26,7 @@ class Module extends BaseModule {
                     'openid' => $match[1]
                 ]);
         }
-    }
-
-    /**
-     * @return MessageReply
-     * @throws \Exception
-     */
-    public static function reply() {
-        return app(MessageReply::class);
+        return null;
     }
 
     public function openLinks(SiteMap $map) {

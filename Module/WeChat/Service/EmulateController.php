@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\WeChat\Service;
 
-use Module\WeChat\Domain\EmulateResponse;
 use Module\WeChat\Domain\Model\MediaModel;
 use Module\WeChat\Domain\Model\MenuModel;
 use Module\WeChat\Domain\Model\WeChatModel;
-use Module\WeChat\Module;
+use Module\WeChat\Domain\Repositories\EmulateRepository;
 
 class EmulateController extends Controller {
 
@@ -22,16 +22,12 @@ class EmulateController extends Controller {
         return $this->show(compact('wx', 'menu_list', 'news_list'));
     }
 
-    public function replyAction(int $id, string $content, string $type = '') {
-        $model = WeChatModel::find($id);
-        $reply = Module::reply()->setModel($model);
-        $reply->setResponse(new EmulateResponse());
-        if ($type === 'menu') {
-            $reply->replyMenu($content);
-        } else {
-            $reply->replyMessage($content);
+    public function replyAction(int $id) {
+        try {
+            return $this->renderData(EmulateRepository::reply($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($reply->getResponse());
     }
 
     public function mediaAction(int $id) {

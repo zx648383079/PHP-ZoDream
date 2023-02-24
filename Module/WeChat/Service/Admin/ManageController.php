@@ -5,7 +5,6 @@ use Module\WeChat\Domain\Model\WeChatModel;
 use Module\WeChat\Domain\Repositories\AccountRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-
 class ManageController extends Controller {
 
     public function rules() {

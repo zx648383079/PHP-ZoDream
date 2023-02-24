@@ -1,7 +1,9 @@
 <?php
 namespace Module\WeChat\Domain\Editors;
 
+use Module\WeChat\Domain\Adapters\ReplyType;
 use Module\WeChat\Domain\EmulateResponse;
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\MediaModel;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -37,24 +39,22 @@ HTML;
         return;
     }
 
-    public function render(EditorModel $reply, MessageResponse $response) {
-        if ($response instanceof EmulateResponse) {
-            return $response->setMedia(MediaModel::find($reply->content));
-        }
+    public function render(EditorModel $reply, MessageReply $response) {
+        $items = [];
         $model_list = MediaModel::where('id', $reply->content)
             ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
         foreach ($model_list as $item) {
             /** @var $item MediaModel */
-            $picUrl = empty($this->message) ? $item->thumb : MediaModel::where('type', MediaModel::TYPE_IMAGE)
+            $picUrl = MediaModel::where('type', MediaModel::TYPE_IMAGE)
                 ->where('content', $item->thumb)->value('url');
-            $response->addNews($item->title, $item->title,
-                $picUrl
-            );
+            $items[] = [
+                'id' => $item->id,
+                'title' => $item->title,
+                'thumb' => $item->thumb,
+                'thumb_url' => $picUrl
+            ];
         }
-        return $response;
+        return $response->renderData(ReplyType::News, compact('items'));
     }
 
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $menu->setKey('menu_'.$model->id);
-    }
 }

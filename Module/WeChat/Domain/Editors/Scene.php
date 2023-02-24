@@ -2,6 +2,7 @@
 namespace Module\WeChat\Domain\Editors;
 
 use Module\WeChat\Domain\EditorInput;
+use Module\WeChat\Domain\MessageReply;
 use Module\WeChat\Domain\Model\EditorModel;
 use Module\WeChat\Domain\Model\ReplyModel;
 use Module\WeChat\Domain\Scene\SceneInterface;
@@ -20,19 +21,4 @@ class Scene implements InputInterface {
         return;
     }
 
-    /**
-     * @param EditorModel $model
-     * @param MessageResponse $response
-     * @return ReplyModel
-     */
-    public function render(EditorModel $model, MessageResponse $response) {
-        $name = $model->content;
-        /** @var SceneInterface $instance */
-        $instance = new $name();
-        return $instance->enter();
-    }
-
-    public function renderMenu(EditorModel $model, MenuItem $menu) {
-        $menu->setKey('menu_'.$model->id);
-    }
 }
