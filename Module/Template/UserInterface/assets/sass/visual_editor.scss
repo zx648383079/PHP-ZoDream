@@ -53,7 +53,7 @@ $ruleBarColor: gray;
     .v-scroll-bar,
     .h-scroll-bar {
         background-color: #fff;
-        z-index: 999;
+        z-index: 120;
         position: absolute;
         .inner-bar {
             position: absolute;
@@ -178,62 +178,65 @@ $ruleBarColor: gray;
         &.min {
             width: 1rem;
         }
-        .panel-item {
-            background: #fff;
-            border: 1px solid #7e8;
-            position: absolute;
-            top: 0;
-            left: 1rem;
-            width: 14rem;
-            bottom: 0;
-            z-index: 100;
-    
+        .visual-edit-control {
+            &:hover {
+                color: green;
+                background-color: gray;
+            }
+        }
+    }
+    .panel-item {
+        background: #fff;
+        border: 1px solid #7e8;
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        width: 14rem;
+        bottom: 0;
+        z-index: 100;
+
+        .panel-header {
+            background: #7e8;
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            user-select: none;
+            .fa-close {
+                float: right;
+            }
+        }
+
+        .panel-body {
+            //position: relative;
+            overflow-y: auto;
+            @include scrollbar();
+            .grid {
+                z-index: 100;
+            }
+        }
+        &.min {
+            position: static;
+            width: 1rem;
+            margin-bottom: 5px;
             .panel-header {
-                background: #7e8;
-                color: #fff;
-                font-size: 1.5rem;
-                line-height: 2rem;
-                user-select: none;
-                .fa-close {
-                    float: right;
-                }
-            }
-    
-            .panel-body {
-                //position: relative;
-                overflow-y: auto;
-                @include scrollbar();
-                .grid {
-                    z-index: 100;
-                }
-            }
-            &.min {
                 position: static;
-                width: 1rem;
-                margin-bottom: 5px;
-                .panel-header {
-                    position: static;
-                    font-size: 12px;
-                    .fa-close {
-                        display: none;
-                    }
-                }
-                .panel-body {
+                font-size: 12px;
+                .fa-close {
                     display: none;
                 }
+            }
+            .panel-body {
+                display: none;
             }
         }
     }
 
-    .weight-edit-grid {
+    .visual-edit-control {
         cursor: pointer;
         display: inline-block;
         text-align: center;
-        &:hover {
-            color: green;
-            background-color: gray;
-        }
-        .weight-preview {
+        user-select: none;
+        .visual-preview {
             width: 5rem;
             padding-top: .8rem;
             .thumb {
@@ -255,8 +258,8 @@ $ruleBarColor: gray;
             }
         }
 
-        .weight-action,
-        .weight-view {
+        .visual-action,
+        .visual-view {
             display: none;
         }
     }
@@ -405,9 +408,51 @@ $ruleBarColor: gray;
             background-color: #666;
         }
     }
+    .await-widget-box {
+        position: fixed;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+        z-index: 133;
+        opacity: .6;
+        background-color: rgba($color: #7e8, $alpha: .2);
+        user-select: none;
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .visual-preview,
+        .visual-action {
+            display: none;
+            
+        }
+        .visual-view {
+            display: block;
+        }
+    }
     .mobile-style {
         .shell-box {
             display: block;
+        }
+    }
+    &.visual-mobile-editor {
+        flex-direction: column;
+        .panel-group {
+            order: 1;
+            height: 15rem;
+            width: 100%;
+            position: relative;
+        }
+        .panel-item {
+            width: auto;
+            right: 0;
+            left: 1.6rem;
+            &.min {
+                width: 1.6rem;
+                .panel-header {
+                    padding: 0 .3rem;
+                }
+            }
         }
     }
 }

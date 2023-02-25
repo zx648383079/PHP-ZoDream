@@ -1,17 +1,18 @@
-.weight-row {
-  min-height: 100px;
+.visual-edit-row {
+  min-height: 6.25rem;
+  padding-bottom: 4rem;
 }
-.weight-row .weight-edit-grid {
+.visual-edit-row .visual-edit-control {
   width: 100%;
-  min-height: 50px;
+  min-height: 3.125rem;
   background: #fff;
   box-sizing: border-box;
   border: 1px dotted #7e8;
 }
-.weight-row .weight-edit-grid .weight-preview {
+.visual-edit-row .visual-edit-control .visual-preview {
   display: none;
 }
-.weight-row .weight-edit-grid .weight-action {
+.visual-edit-row .visual-edit-control .visual-action {
   position: absolute;
   right: 0;
   font-size: 0.7rem;
@@ -20,27 +21,31 @@
   background: #6a4;
   padding: 2px;
   display: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
-.weight-row .weight-edit-grid .weight-action a {
+.visual-edit-row .visual-edit-control .visual-action a {
   cursor: pointer;
 }
-.weight-row .weight-edit-grid .weight-action .drag {
+.visual-edit-row .visual-edit-control .visual-action .drag {
   cursor: move;
 }
-.weight-row .weight-edit-grid .weight-action .del {
+.visual-edit-row .visual-edit-control .visual-action .del {
   color: #f00;
 }
-.weight-row .weight-edit-grid:hover, .weight-row .weight-edit-grid.weight-edit-mode {
+.visual-edit-row .visual-edit-control:hover, .visual-edit-row .visual-edit-control.visual-edit-mode {
   border: 1px solid rgb(180, 24, 58);
 }
-.weight-row .weight-edit-grid:hover .weight-action, .weight-row .weight-edit-grid.weight-edit-mode .weight-action {
+.visual-edit-row .visual-edit-control:hover .visual-action, .visual-edit-row .visual-edit-control.visual-edit-mode .visual-action {
   display: block;
 }
-.weight-row .weight-edit-grid.weight-loading .weight-view {
+.visual-edit-row .visual-edit-control.visual-loading .visual-view {
   text-align: center;
   background: rgba(0, 0, 0, 0.1);
 }
-.weight-row .weight-edit-grid.weight-loading .weight-view img {
-  height: 80px;
+.visual-edit-row .visual-edit-control.visual-loading .visual-view img {
+  height: 5rem;
 }
 /*# sourceMappingURL=template_edit.css.map */

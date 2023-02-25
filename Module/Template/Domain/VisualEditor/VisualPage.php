@@ -233,7 +233,7 @@ class VisualPage implements IVisualEngine {
         $html = implode(PHP_EOL, $args);
         if ($engine->editable()) {
             return <<<HTML
-<div class="weight-row" data-id="{$rowId}" data-index="{$index}">
+<div class="visual-edit-row" data-id="{$rowId}" data-index="{$index}">
 {$html}
 </div>
 HTML;

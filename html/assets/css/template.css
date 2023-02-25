@@ -9,6 +9,9 @@
 .full-edit-mode .app-wrapper {
   margin: 0 auto;
 }
+.full-edit-mode .app-wrapper.wrapper-min.sidebar-fixed .sidebar-container {
+  top: 0;
+}
 
 .navbar {
   font-size: 1.5rem;
@@ -72,158 +75,6 @@
 }
 .top-nav .navbar {
   font-size: 1.5rem;
-}
-
-#page-box {
-  position: relative;
-}
-
-#mainMobile {
-  border: 1px solid #767676;
-  margin: 0 auto;
-  position: relative;
-  bottom: 0;
-  top: 0;
-  min-height: 500px;
-  background-color: #fcc;
-  padding: 20px 0 0 20px;
-}
-#mainMobile .top-rule {
-  top: 0;
-  left: 0;
-  right: 0;
-  position: absolute;
-  height: 20px;
-  width: 100%;
-  background-color: #ccc;
-}
-#mainMobile .left-rule {
-  width: 20px;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  position: absolute;
-  height: 100%;
-  background-color: #ccc;
-}
-#mainMobile .rule-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-#mainMobile #mainGrid {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background: #fff;
-}
-#mainMobile #mainGrid.preview .row {
-  min-height: auto;
-}
-#mainMobile #mainGrid.preview .weight-edit-grid .weight-action {
-  display: none;
-}
-#mainMobile #mainGrid::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-#mainMobile #mainGrid::-webkit-scrollbar-track {
-  border-radius: 2em;
-}
-#mainMobile #mainGrid::-webkit-scrollbar-thumb {
-  background-color: #aaa;
-  border-radius: 2em;
-}
-#mainMobile.mobile-320 {
-  width: 330px;
-  height: 648px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-320.rotate {
-  height: 330px;
-  width: 648px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-360 {
-  width: 370px;
-  height: 720px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-360.rotate {
-  height: 370px;
-  width: 720px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-370 {
-  width: 380px;
-  height: 720px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-370.rotate {
-  height: 380px;
-  width: 720px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-375 {
-  width: 385px;
-  height: 892px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-375.rotate {
-  height: 385px;
-  width: 892px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-412 {
-  width: 422px;
-  height: 812px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-412.rotate {
-  height: 422px;
-  width: 812px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-414 {
-  width: 424px;
-  height: 816px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-414.rotate {
-  height: 424px;
-  width: 816px;
-  padding: 5px 40px;
-}
-#mainMobile.mobile-768 {
-  width: 778px;
-  height: 1104px;
-  padding: 40px 5px;
-  background: #47f;
-  border-radius: 20px;
-}
-#mainMobile.mobile-768.rotate {
-  height: 778px;
-  width: 1104px;
-  padding: 5px 40px;
-}
-
-.ui-draggable-dragging .action,
-.ui-draggable-dragging .view {
-  display: block;
 }
 
 .card {

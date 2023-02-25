@@ -67,6 +67,7 @@ gulp CMS-default //build default theme resources under CMS  Module/CMS/UserInter
 |       [Feedback](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Contact)       |  Including link management, feedback management, subscription management  | Completed 1.0 | [demo](https://zodream.cn/)                        |
 | [Online service](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OnlineService) |  Only provide api, interface and management background see [Angular-ZoDream](https://github.com/zx648383079/Angular-ZoDream) | Completed 1.0   | not online                        |
 |  [Open Platform](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/OpenPlatform)  | Application management of application (including client and interface) appid | Completed 1.0 | [demo](https://zodream.cn/)                        |
+|  [Visual Editor](https://github.com/zx648383079/PHP-ZoDream/tree/master/Module/Template)  | Online combination of good-looking web pages, cell phones can also be operated Oh | Completed 1.0 | [demo](https://zodream.cn/)                        |
 
 
 # Live

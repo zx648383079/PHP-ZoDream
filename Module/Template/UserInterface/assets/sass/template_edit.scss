@@ -1,17 +1,17 @@
-.weight-row {
-    min-height: 100px;
-    .weight-edit-grid {
+.visual-edit-row {
+    min-height: 6.25rem;
+    padding-bottom: 4rem;
+    .visual-edit-control {
         width: 100%;
-        min-height: 50px;
+        min-height: 3.125rem;
         background: #fff;
         box-sizing: border-box;
         border: 1px dotted #7e8;
 
-        .weight-preview {
+        .visual-preview {
             display: none;
         }
-
-        .weight-action {
+        .visual-action {
             position: absolute;
             right: 0;
             font-size: 0.7rem;
@@ -20,7 +20,7 @@
             background: #6a4;
             padding: 2px;
             display: none;
-
+            user-select: none;
             a {
                 cursor: pointer;
             }
@@ -34,21 +34,20 @@
         }
 
         &:hover,
-        &.weight-edit-mode {
+        &.visual-edit-mode {
             border: 1px solid rgb(180, 24, 58);
 
-            .weight-action {
+            .visual-action {
                 display: block;
             }
         }
 
-        &.weight-loading {
-            .weight-view {
+        &.visual-loading {
+            .visual-view {
                 text-align: center;
                 background: rgba(0, 0, 0, .1);
-
                 img {
-                    height: 80px;
+                    height: 5rem;
                 }
             }
         }

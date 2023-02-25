@@ -216,15 +216,15 @@ HTML;
     private function renderEdit(string $html) {
         $editHtml = $this->weight->editable ? '<a class="edit">编辑</a>' : '';
         return <<<HTML
-<div class="weight-edit-grid" data-type="weight" data-id="{$this->rowId()}">
-    <div class="weight-action">
+<div class="visual-edit-control" data-type="weight" data-id="{$this->rowId()}">
+    <div class="visual-action">
         <a class="refresh">刷新</a>
         {$editHtml}
         <a class="property">属性</a>
         <a class="drag">拖拽</a>
         <a class="del">删除</a>
     </div>
-    <div class="weight-view">
+    <div class="visual-view">
         {$html}
     </div>
 </div>

@@ -9,6 +9,7 @@ const EditorEventRemoveWeight = 'editor_remove_weight';
 const EditorEventSavePage = 'editor_save_page';
 const EditorEventGetPage = 'editor_get_page';
 
+const EditorEventWindowResize = 'editor_Window_resize';
 const EditorEventResize = 'editor_resize';
 const EditorEventOuterWidthChange = 'editor_outer_width_change'; // 外部
 const EditorEventViewInit = 'editor_view_init'; // 只能获取所需的元素，请不要获取其他尺寸信息
@@ -21,6 +22,11 @@ const EditorEventDragStart = 'editor_drag_start';
 const EditorEventBrowserReady = 'editor_browser_ready';
 const EditorEventOpenEditDialog = 'editor_open_edit_dialog';
 const EditorEventOpenProperty = 'editor_open_property';
+const EditorEventDrag = 'editor_drag'; // 拖拽开始
+const EditorEventDrog = 'editor_drog'; // 拖拽放下
+const EditorEventOperateWeight = 'editor_operate_weight';
+const EditorEventMouseMove = 'editor_mouse_move';
+const EditorEventMouseUp = 'editor_mouse_up';
 const EditorEventTimeLoop = 'editor_time_loop';
 const EditorMobileStyle = 'mobile-style';
 
@@ -77,9 +83,10 @@ class VisualEditor {
     private hRuleBar = new EditorRuler(this, true);
     private vRuleBar = new EditorRuler(this, false);
     // private ruleLinePanel: JQuery<HTMLDivElement>;
-    private browser = new EditorBrowser(this);
+    public browser = new EditorBrowser(this);
     private workspace: JQuery<HTMLDivElement>;
     private panelGroup = new EditorPanelGroup(this);
+    private weightSoul = new EditorWeightSoul(this);
     private dialog = new EditorDialog(this);
 
     private viewInited = false; // 页面是否加载完成
@@ -262,35 +269,35 @@ class VisualEditor {
     private bindEvent() {
         const $window = $(window);
         $window.on('resize', () => {
-            const top = this.box.offset().top;
-            const height = $window.height() - top - 20;
-            this.outerHeight = height;
-            if (!this.viewInited) {
-                return;
-            }
-            this.emit(EditorEventResize, this.innerWidth, this.innerHeight);
+            this.emit(EditorEventWindowResize, $window.width(), $window.height());
         });
-        $(document).on('keydown', e => {
-            if (e.ctrlKey) {
-                if (e.code == 'KeyS') {
-                    e.preventDefault();
-                    this.emit(EditorEventSavePage, this.serialize());
+        const bindDocEvent = (doc: JQuery<Document>, isBrowser = false) => {
+            doc.on('keydown', e => {
+                if (e.ctrlKey) {
+                    if (e.code == 'KeyS') {
+                        e.preventDefault();
+                        this.emit(EditorEventSavePage, this.serialize());
+                    }
                 }
-            }
-        }).on('paste', (e: any) => {
-            if (e.clipboardData || e.originalEvent) {
-                const clipboardData = (e.clipboardData || (window as any).clipboardData);
-                const val = clipboardData.getData('text');
-            }
-        }).on('mousemove', e => {
-            if (this.mouseListener.move) {
-                this.mouseListener.move({x: e.clientX, y: e.clientY});
-            }
-        }).on('mouseup', e => {
-            if (this.mouseListener.finish) {
-                this.mouseListener.finish({x: e.clientX, y: e.clientY});
-            }
-        });
+            }).on('paste', (e: any) => {
+                if (e.clipboardData || e.originalEvent) {
+                    const clipboardData = (e.clipboardData || (window as any).clipboardData);
+                    const val = clipboardData.getData('text');
+                }
+            }).on('mousemove', e => {
+                const p = {x: e.clientX, y: e.clientY};
+                this.emit(EditorEventMouseMove, isBrowser ? this.browser.globePosition(p) : p);
+            }).on('mouseup', e => {
+                const p = {x: e.clientX, y: e.clientY};
+                this.emit(EditorEventMouseUp, isBrowser ? this.browser.globePosition(p) : p);
+            }).on('touchmove', e => {
+                const p = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+                this.emit(EditorEventMouseMove, isBrowser ? this.browser.globePosition(p) : p);
+            }).on('touchend', e => {
+                const p = {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY};
+                this.emit(EditorEventMouseUp, isBrowser ? this.browser.globePosition(p) : p);
+            });
+        };
         this.on(EditorEventResize, (width: number, height: number) => {
             if (this.browserAdaptive) {
                 this.resize(width, height);
@@ -303,7 +310,28 @@ class VisualEditor {
         }).on(EditorEventAfterViewInit, () => {
             this.emit(EditorEventResize, this.innerWidth, this.innerHeight);
             this.normal();
+        }).on(EditorEventWindowResize, (ww: number, wh: number) => {
+            const top = this.box.offset().top;
+            const height = wh - top - 20;
+            this.box.toggleClass('visual-mobile-editor', ww < 780 && ww < wh);
+            this.outerHeight = height;
+            if (!this.viewInited) {
+                return;
+            }
+            this.emit(EditorEventResize, this.innerWidth, this.innerHeight);
+        }).on(EditorEventMouseMove, p => {
+            if (this.mouseListener.move) {
+                this.mouseListener.move(p);
+            }
+        }).on(EditorEventMouseUp, p => {
+            if (this.mouseListener.finish) {
+                this.mouseListener.finish(p);
+            }
+        }).on(EditorEventBrowserReady, (doc: JQuery<Document>) => {
+            bindDocEvent(doc, true);
         });
+        bindDocEvent($(document));
+        this.emit(EditorEventWindowResize, $window.width(), $window.height());
         this.loopCheckBox();
     }
 
@@ -369,6 +397,8 @@ class VisualEditor {
                 <i class="fa fa-undo" title="翻转"></i>
             </div>
         </div>
+        <div class="await-widget-box">
+        </div>
         <div class="dialog dialog-box editor-dialog" data-type="dialog" >
             <div class="dialog-header">
                 <div class="dialog-title">编辑</div>
@@ -430,6 +460,71 @@ class EditorToolBar {
     }
 }
 
+class EditorWeightSoul {
+    private box: JQuery<HTMLDivElement>;
+    private target: JQuery<HTMLDivElement>;
+    private isNew = false;
+
+    constructor(
+        private editor: VisualEditor
+    ) {
+        this.editor.on(EditorEventViewInit, () => {
+            this.box = this.editor.find<HTMLDivElement>('.await-widget-box');
+        }).on(EditorEventDrag, (element: JQuery<HTMLDivElement>, isNew: boolean, mousePos: IPoint) => {
+            const offset = element.offset();
+            const mouseInPos = {
+                x: mousePos.x - offset.left,
+                y: mousePos.y - offset.top
+            };
+            const width = element.width();
+            const height = element.height();
+            this.target = element;
+            this.isNew = isNew;
+            this.box.html(element.prop('outerHTML'));
+            this.editor.onMouse(p => {
+                if (!this.target) {
+                    return;
+                }
+                this.setBound(p.x - mouseInPos.x, p.y - mouseInPos.y, width, height);
+            }, p => {
+                if (!this.target) {
+                    return;
+                }
+                const items = this.editor.browser.getElementByPoint(p);
+                if (!items[0]) {
+                    this.reset();
+                    return;
+                }
+                // 在手机端 touchend 事件出现问题无法被部件捕捉到
+                this.editor.emit(EditorEventDrog, ...items);
+            });
+        }).on(EditorEventDrog, (row: JQuery<HTMLDivElement>, replace?: JQuery<HTMLDivElement>) => {
+            if (!this.target) {
+                return;
+            }
+            this.editor.emit(EditorEventOperateWeight, this.isNew, this.target, row, replace);
+            this.reset();
+        });
+    }
+
+    private setBound(x: number, y: number, width: number, height: number) {
+        this.box.css({
+            width: width + 'px',
+            height: height + 'px',
+            left: x + 'px',
+            top: y + 'px'
+        });
+    }
+
+    private reset() {
+        if (!this.target) {
+            return;
+        }
+        this.target = undefined;
+        this.setBound(0, 0, 0, 0);
+    }
+}
+
 class EditorPanelGroup {
 
     private children: IEditorPanel[] = [
@@ -454,7 +549,7 @@ class EditorPanelGroup {
         }).on(EditorEventAfterViewInit, () => {
             this.bindEvent();
         }).on(EditorEventResize, () => {
-            const maxHeight = this.editor.outerHeight;
+            const maxHeight = this.box.height();
             for (const item of this.renderedChildren) {
                 item.target.find('.panel-body').height(maxHeight - 36);
             }
@@ -720,16 +815,41 @@ class EditorWeightPanel implements IEditorPanel {
     constructor(
         private editor: VisualEditor
     ) {
-        const that = this.editor;
         this.editor.on(EditorEventAfterViewInit, () => {
             this.editor.emit(EditorEventGetWeights, data => {
                 this.renderWeight(data.weights);
                 this.editor.emit(EditorEventGetStyleSuccess, data.styles);
-                this.box.find('.weight-edit-grid').attr('draggable', 'true').on('dragstart', function(e) {
-                    e.originalEvent.dataTransfer.setData("Text", e.target.id);
-                    that.emit(EditorEventDragStart, $(this));
-                });
+                // this.box.find('.visual-edit-control').attr('draggable', 'true');
             });
+            this.bindEvent();
+        });
+    }
+
+    private bindEvent() {
+        const that = this.editor;
+        this.box
+        .on('mousedown', '.visual-edit-control', function(e) {
+            const $this = $(this);
+            if ($this.attr('draggable') === 'true') {
+                return;
+            }
+            e.stopPropagation();
+            e.preventDefault();
+            that.emit(EditorEventDrag, $this, true, {
+                x: e.clientX,
+                y: e.clientY,
+            });
+        }).on('touchstart', '.visual-edit-control', function(e) {
+            const $this = $(this);
+            e.stopPropagation();
+            e.preventDefault();
+            that.emit(EditorEventDrag, $this, true, {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+            });
+        }).on('dragstart', '.visual-edit-control', function(e) {
+            e.originalEvent.dataTransfer.setData("Text", e.target.id);
+            that.emit(EditorEventDragStart, $(this));
         });
     }
 
@@ -753,21 +873,21 @@ class EditorWeightPanel implements IEditorPanel {
                     return '';
                 } 
                 const editable = item.editable ? '<a class="edit">编辑</a>' : '';
-                return `<div class="weight-edit-grid" data-type="weight" data-weight="${item.id}" data-group="${group.id}">
-                <div class="weight-preview">
+                return `<div class="visual-edit-control" data-type="weight" data-weight="${item.id}" data-group="${group.id}">
+                <div class="visual-preview">
                     <div class="thumb">
                         <img src="${item.thumb}" alt="${item.name}" title="${item.description}">
                     </div>
                     <p class="title">${item.name}</p>
                 </div>
-                <div class="weight-action">
+                <div class="visual-action">
                     <a class="refresh">刷新</a>
                     ${editable}
                     <a class="property">属性</a>
                     <a class="drag">拖拽</a>
                     <a class="del">删除</a>
                 </div>
-                <div class="weight-view">
+                <div class="visual-view">
                     <img src="/assets/images/ajax.gif" alt="">
                 </div>
             </div>`;
@@ -875,79 +995,180 @@ class EditorBrowser {
                 return;
             }
             this.shellTimeBar.text([now.getHours(), now.getMinutes()].map(EditorHelper.twoPad).join(':'));
+        }).on(EditorEventOperateWeight, (isNew: boolean, weight: JQuery<HTMLDivElement>, row: JQuery<HTMLDivElement>, replace?: JQuery<HTMLDivElement>) => {
+            this.dragWeight = undefined;
+            if (isNew) {
+                this.selectedWeight = new EditorWeight(this.editor, weight.clone());
+                this.selectedWeight.appendTo(row, replace);
+                return;
+            }
+            this.selectedWeight = new EditorWeight(this.editor, weight);
+            this.selectedWeight.moveTo(row, replace);
         });
     }
 
     private bindEvent() {
         this.frame.on('load', () => {
-            this.frameBody = this.frame.contents().find<HTMLBodyElement>('body');
-            this.editor.emit(EditorEventBrowserReady);
+            const $doc = this.frame.contents();
+            this.frameBody = $doc.find<HTMLBodyElement>('body');
+            this.editor.emit(EditorEventBrowserReady, $doc);
             this.bindFrameEvent();
         });
     }
 
     private bindFrameEvent() {
         const that = this;
-        this.frameBody.on('dragover', '.weight-row', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-        }).on('drop', '.weight-row', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            const row = $(this);
+        const drogFunc = (row: JQuery<HTMLDivElement>, replace?: JQuery<HTMLDivElement>) => {
             if (that.dragWeight) {
                 that.selectedWeight = new EditorWeight(that.editor, that.dragWeight.clone());
-                that.selectedWeight.appendTo(row);
+                that.selectedWeight.appendTo(row, replace);
                 return;
             }
             if (that.selectedWeight) {
-                that.selectedWeight.moveTo(row);
+                that.selectedWeight.moveTo(row, replace);
             }
-        }).on('dragover', '.weight-edit-grid', (e) => {
+        };
+        this.frameBody.on('dragover', '.visual-edit-row', (e) => {
             e.stopPropagation();
             e.preventDefault();
-        }).on('drop', '.weight-edit-grid', function(e) {
+        }).on('drop', '.visual-edit-row', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            drogFunc($(this));
+        }).on('mouseup', '.visual-edit-row', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            that.editor.emit(EditorEventDrog, $(this));
+        }).on('mouseup', '.visual-edit-control', function(e) {
             e.stopPropagation();
             e.preventDefault();
             const row = $(this);
-            if (that.dragWeight) {
-                that.selectedWeight = new EditorWeight(that.editor, that.dragWeight.clone());
-                that.selectedWeight.appendTo(row.closest('.weight-row'), row);
-                return;
-            }
-            if (that.selectedWeight) {
-                that.selectedWeight.moveTo(row.closest('.weight-row'), row);
-            }
-        }).on('dragstart', '.weight-edit-grid', function(e) {
+            that.editor.emit(EditorEventDrog, row.closest('.visual-edit-row'), row);
+        }).on('touchend', '.visual-edit-row', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            that.editor.emit(EditorEventDrog, $(this));
+        }).on('touchend', '.visual-edit-control', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const row = $(this);
+            that.editor.emit(EditorEventDrog, row.closest('.visual-edit-row'), row);
+        }).on('dragover', '.visual-edit-control', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+        }).on('drop', '.visual-edit-control', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const row = $(this);
+            drogFunc(row.closest('.visual-edit-row'), row);
+        }).on('dragstart', '.visual-edit-control', function(e) {
             e.originalEvent.dataTransfer.setData("Text", e.target.id);
             that.selectedWeight = new EditorWeight(that.editor, $(this));
-        }).on('dragend', '.weight-edit-grid', function() {
+        }).on('dragend', '.visual-edit-control', function() {
             $(this).attr('draggable', 'false');
-        }).on('mousedown', '.weight-action .drag', function(e: any) {
+        }).on('mousedown', '.visual-action .drag', function(e) {
             e.stopPropagation();
             that.dragWeight = undefined;
-            const weight = $(this).closest('.weight-edit-grid');
-            that.selectedWeight = new EditorWeight(that.editor, weight);
-            $(this).attr('draggable', 'true');
-        }).on('click', '.weight-action .del', function(e) {
+            const weight = $(this).closest('.visual-edit-control');
+            that.editor.emit(EditorEventDrag, weight, false, {
+                x: e.clientX,
+                y: e.clientY
+            });
+            // that.selectedWeight = new EditorWeight(that.editor, weight);
+            // $(this).attr('draggable', 'true');
+        }).on('touchstart', '.visual-action .drag', function(e) {
             e.stopPropagation();
-            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.weight-edit-grid'));
+            e.preventDefault();
+            that.dragWeight = undefined;
+            const weight = $(this).closest('.visual-edit-control');
+            that.editor.emit(EditorEventDrag, weight, false, {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            });
+        }).on('click', '.visual-action .del', function(e) {
+            e.stopPropagation();
+            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.visual-edit-control'));
             that.selectedWeight.tapRemove();
-        }).on('click', '.weight-action .edit', function(e) {
+        }).on('click', '.visual-action .edit', function(e) {
             e.stopPropagation();
-            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.weight-edit-grid'));
+            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.visual-edit-control'));
             that.selectedWeight.tapEdit();
-        }).on('click', '.weight-action .refresh', function(e) {
+        }).on('click', '.visual-action .refresh', function(e) {
             e.stopPropagation();
-            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.weight-edit-grid'));
+            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.visual-edit-control'));
             that.selectedWeight.tapRefresh();
-        }).on('click', '.weight-action .property', function(e) {
+        }).on('click', '.visual-action .property', function(e) {
             e.stopPropagation();
-            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.weight-edit-grid'));
+            that.selectedWeight = new EditorWeight(that.editor, $(this).closest('.visual-edit-control'));
             that.selectedWeight.tapProperty();
         }).on('click', 'a', function(e) {
             e.preventDefault();
         });
+    }
+
+    public globePosition(p: IPoint): IPoint {
+        const offset = this.frame.offset();
+        return {
+            x: p.x + offset.left,
+            y: p.y + offset.top
+        }
+    }
+
+    public framePosition(p: IPoint): IPoint {
+        const offset = this.frame.offset();
+        return {
+            x: p.x - offset.left,
+            y: p.y - offset.top
+        }
+    }
+
+    public getElementByPoint(p: IPoint): JQuery<HTMLDivElement>[] {
+        const pos = this.framePosition(p);
+        if (pos.x < 0 
+            || pos.y < 0 
+            || pos.x > this.frame.width() 
+            || pos.y > this.frame.height()) {
+            return;
+        }
+        const inBound = (ele: JQuery<HTMLElement>) => {
+            const offset = ele.offset();
+            if (offset.left > pos.x || offset.top > pos.y) {
+                return false;
+            }
+            if (offset.left + ele.width() > pos.x && offset.top + ele.height() > pos.y) {
+                return true;
+            }
+            return false;
+        };
+        let lastRow = undefined;
+        let parent: JQuery<HTMLElement> = this.frameBody;
+        do {
+            let found = false;
+            parent.find('.visual-edit-row').each(function() {
+                const $this = $(this);
+                 if (inBound($this)) {
+                    lastRow = $this;
+                    parent = $this;
+                    found = true;
+                    return false;
+                 }
+            });
+            if (!found) {
+                break;
+            }
+        } while (true);
+        if (!lastRow) {
+            return [undefined, undefined];
+        }
+        let lastWeight = undefined;
+        lastRow.find('.visual-edit-control').each(function() {
+            const $this = $(this);
+             if (inBound($this)) {
+                lastWeight = $this;
+                return false;
+             }
+        });
+        return [lastRow, lastWeight];
     }
 
     public toggleShell(visible: boolean) {
@@ -1031,11 +1252,11 @@ class EditorBrowser {
             return [];
         }
         const data = [];
-        this.frameBody.find<HTMLDivElement>('.weight-row').each(function() {
+        this.frameBody.find<HTMLDivElement>('.visual-edit-row').each(function() {
             const row = $(this);
             const parent_id = row.attr('data-id');
             const parent_index = row.attr('data-index');
-            row.children('.weight-edit-grid').each(function(index) {
+            row.children('.visual-edit-control').each(function(index) {
                 const item = $(this);
                 data.push({
                     id: item.attr('data-id'),
@@ -1059,12 +1280,12 @@ class EditorWeight {
     }
 
     public toggle(state?: boolean) {
-        this.box.toggleClass('weight-edit-mode', state);
+        this.box.toggleClass('visual-edit-mode', state);
         return this;
     }
 
     public toggleLoading(state?: boolean) {
-        this.box.toggleClass('weight-loading', state);
+        this.box.toggleClass('visual-loading', state);
         return this;
     }
 

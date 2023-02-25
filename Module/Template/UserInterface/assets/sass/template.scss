@@ -38,6 +38,9 @@ $sizes: (320: 568,
     }
     .app-wrapper {
         margin: 0 auto;
+        &.wrapper-min.sidebar-fixed .sidebar-container {
+            top: 0;
+        }
     }
 }
 
@@ -123,103 +126,6 @@ $sizes: (320: 568,
         font-size: 1.5rem;
     }
 }
-
-#page-box {
-    position: relative;
-}
-
-
-
-#mainMobile {
-    border: 1px solid #767676;
-    margin: 0 auto;
-    position: relative;
-    bottom: 0;
-    top: 0;
-    min-height: 500px;
-    background-color: #fcc;
-    padding: 20px 0 0 20px;
-    .top-rule {
-        top: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        height: 20px;
-        width: 100%;
-        background-color: #ccc;
-    }
-    .left-rule {
-        width: 20px;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        position: absolute;
-        height: 100%;
-        background-color: #ccc;
-    }
-    .rule-box {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    #mainGrid {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background: #fff;
-
-        &.preview {
-            .row {
-                min-height: auto;
-            }
-
-            .weight-edit-grid {
-                .weight-action {
-                    display: none;
-                }
-            }
-        }
-
-        &::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        &::-webkit-scrollbar-track {
-            //background-color:#eee;
-            -webkit-border-radius: 2em;
-            -moz-border-radius: 2em;
-            border-radius: 2em;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: #aaa;
-            -webkit-border-radius: 2em;
-            -moz-border-radius: 2em;
-            border-radius: 2em;
-        }
-    }
-
-    @each $width,
-    $height in $sizes {
-        @include size($width, $height)
-    }
-}
-
-
-
-.ui-draggable-dragging {
-
-    .action,
-    .view {
-        display: block;
-    }
-
-}
-
 
 .card {
     width: 150px;
