@@ -40,7 +40,7 @@ class LogModel extends Model {
             'browser_version' => 'string:0,20',
             'os' => 'string:0,20',
             'os_version' => 'string:0,20',
-            'url' => 'string',
+            'url' => 'string|string:0,255',
             'referrer' => 'string',
             'user_agent' => 'string',
             'country' => 'string:0,45',

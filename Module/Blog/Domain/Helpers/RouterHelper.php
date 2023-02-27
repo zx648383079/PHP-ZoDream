@@ -6,6 +6,7 @@ use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TermModel;
+use Module\Blog\Domain\Repositories\PublishRepository;
 use Module\SEO\Domain\SiteMap;
 
 class RouterHelper {
@@ -58,7 +59,7 @@ class RouterHelper {
         $map->add(url('./tag'), time());
         $map->add(url('./category'), time());
         $map->add(url('./archives'), time());
-        $items = BlogModel::where('open_type', '<>', BlogModel::OPEN_DRAFT)
+        $items = BlogModel::where('publish_status', PublishRepository::PUBLISH_STATUS_DRAFT)
             ->orderBy('id', 'desc')
             ->get('id', 'updated_at');
         foreach ($items as $item) {
