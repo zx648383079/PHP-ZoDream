@@ -2,18 +2,17 @@
   "name": "default",
   "keywords": "",
   "description": "说明",
-  "author": "zz",
-  "since": "2017-12-12",
+  "author": "zodream",
+  "since": "2023-03-12",
   "version": "v1.0",
-  "copyright": "@zz",
-  "email": "123@12.com",
-  "url": "http://",
-  "thumb": "images/screenshot.png",
-  "style": [
-    "css/style.css"
-  ],
-  "script": [
-    "js/script.js"
+  "copyright": "@zodream.cn",
+  "email": "648383079@qq.com",
+  "url": "https://zodream.cn",
+  "thumb": "images/screenshot.webp",
+  "assets": [
+    "images",
+    "js",
+    "css"
   ],
   "pages": [
     {

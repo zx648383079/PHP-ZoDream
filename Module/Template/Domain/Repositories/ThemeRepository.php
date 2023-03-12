@@ -109,16 +109,27 @@ final class ThemeRepository {
             $style['theme_id'] = $model->id;
             ThemeStyleModel::create($style);
         }
+        /** @var Directory $root */
+        $root = VisualFactory::templateFolder($data['path']);
+        $themeAsset = public_path()->directory(sprintf('assets/themes/%s', $data['name']));
+        $themeAsset->create();
         // TODO 处理js、css文件
+        foreach ((array)$data['assets'] as $fileName) {
+            if (empty($fileName)) {
+                continue;
+            }
+            $file = $root->child($fileName);
+            $file->copy($themeAsset->child($fileName));
+        }
     }
 
     /**
      * @return array[]
      */
     public static function loadThemes(): array {
-        return static::mapFolder(VisualFactory::templateFolder(), function ($item) {
+        return self::mapFolder(VisualFactory::templateFolder(), function ($item) {
             if ($item->hasFile('theme.json')) {
-                return [static::createTheme($item)];
+                return [self::createTheme($item)];
             }
             return false;
         });
@@ -140,7 +151,7 @@ final class ThemeRepository {
             if (!($file instanceof Directory)) {
                 return;
             }
-            $items = array_merge($items, static::mapFolder($file, $cb));
+            $items = array_merge($items, self::mapFolder($file, $cb));
         });
         return $items;
     }
@@ -183,7 +194,7 @@ final class ThemeRepository {
                 return $item;
             }, $data['weights']);
         }
-        return static::mapFolder($folder->directory($data['weights']), function (Directory $item) {
+        return self::mapFolder($folder->directory($data['weights']), function (Directory $item) {
             if (!$item->hasFile('weight.json')) {
                 return false;
             }

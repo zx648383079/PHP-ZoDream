@@ -1,0 +1,12 @@
+{
+  "name": "shortcut",
+  "thumb": "./thumb.png",
+  "keywords": "",
+  "description": "快捷键",
+  "author": "zodream",
+  "since": "2023-03-12",
+  "version": "v1.0",
+  "copyright": "@zodream",
+  "email": "123@12.com",
+  "editable": true
+}

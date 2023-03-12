@@ -1,15 +1,23 @@
-<div class="weight-row">
-    {if:$split_mode}
-    {for:$i=1;$i<=$split_count;$i++}
-    <div class="col-1">
-        {weight:$i}
+<div class="grid-column-weight {=$property->formatClass()}"{=$property->weightStyle()}>
+    {if:$model->title}
+    <div class="title"{=$property->titleStyle()}>
+        {=$model->title}
     </div>
-    {/for}
-    {else}
-    {for:$split_items,$key=>$item}
-    <div style="flex:{=$item};">
-        {weight:$key+1}
-    </div>
-    {/for}
     {/if}
+  
+    <div class="weight-row">
+        {if:$split_mode}
+        {for:$i=1;$i<=$split_count;$i++}
+        <div class="col-1">
+            {weight:$i}
+        </div>
+        {/for}
+        {else}
+        {for:$split_items,$key=>$item}
+        <div style="flex:{=$item};">
+            {weight:$key+1}
+        </div>
+        {/for}
+        {/if}
+    </div>
 </div>

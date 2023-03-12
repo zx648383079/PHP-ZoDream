@@ -14,7 +14,7 @@ use Zodream\Template\ViewFactory;
  * @method int pageId()
  * @method int rowId()
  */
-abstract class BaseWeight {
+abstract class BaseWeight implements IVisualWeight {
     /**
      * @var IVisualEngine
      */

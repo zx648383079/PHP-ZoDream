@@ -11,18 +11,6 @@ class Column3Weight extends BaseWeight {
      * @return mixed
      */
     public function render(SiteWeightModel $model): string {
-        return <<<HTML
-<div class="weight-row" data-type="weight" data-weight="column-3">
-    <div class="col-1">
-    {$this->weight(1)}
-    </div>
-    <div class="col-1">
-    {$this->weight(2)}
-    </div>
-    <div class="col-1">
-    {$this->weight(3)}
-    </div>
-</div>
-HTML;
+        return $this->show('view');
     }
 }

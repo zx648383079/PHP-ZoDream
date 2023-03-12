@@ -89,3 +89,16 @@ $pre: 'weight-';
         flex: 1;
     }
 }
+
+.#{$pre}shortcut {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 36px;
+    font-size: 14px;
+    line-height: 36px;
+    border-bottom: 1px solid #ddd;
+    .key {
+        color: #aaa;
+    }
+}

@@ -1,0 +1,22 @@
+<div class="shortcut-weight {=$property->formatClass()}"{=$property->weightStyle()}>
+    {if:$model->title}
+    <div class="title"{=$property->titleStyle()}>
+        {=$model->title}
+    </div>
+    {/if}
+    {for:$key_items,$group}
+    <div class="wegiht-shortcut">
+        <div class="name">{=$group.name}</div>
+        <div class="key">
+            {for:$group.items,$item}
+            {if:$item.key}
+            <kbd>{=$item.key}</kbd>
+            {else}
+            {=$item.sep}
+            {/if}
+            {/for}
+        </div>
+    </div>
+    {/for}
+
+</div>

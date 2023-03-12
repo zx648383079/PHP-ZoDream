@@ -6,6 +6,7 @@ use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\SiteWeightModel;
+use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
@@ -37,6 +38,7 @@ class VisualPage implements IVisualEngine {
     protected Directory $directory;
 
     protected ThemePageModel $themePage;
+    protected ThemeModel $theme;
 
     protected bool $booted = false;
 
@@ -47,6 +49,9 @@ class VisualPage implements IVisualEngine {
         VisualFactory::unlock();
         VisualFactory::set(SiteModel::class, $this->site->id, $this->site);
         VisualFactory::set(PageModel::class, $this->page->id, $this->page);
+        $this->theme = VisualFactory::getOrSet(ThemeModel::class, $this->site->theme_id, function () {
+            return ThemeModel::where('id', $this->site->theme_id)->first();
+        });
         $this->themePage = VisualFactory::getOrSet(ThemePageModel::class, $this->page->theme_page_id, function () {
             return ThemePageModel::where('id', $this->page->theme_page_id)->first();
         });
@@ -67,6 +72,14 @@ class VisualPage implements IVisualEngine {
 
     public function pageId(): int {
         return $this->page->id;
+    }
+
+    /**
+     * 获取缓存时间
+     * @return int
+     */
+    public function cacheTime(): int {
+        return intval($this->page->setting('cache_time'));
     }
 
     /**
@@ -122,7 +135,8 @@ class VisualPage implements IVisualEngine {
 
     protected function initFactory() {
         $this->factory = VisualFactory::newViewFactory()
-            ->setDirectory($this->directory);
+            ->setDirectory($this->directory)
+            ->registerFunc('asset', '/assets/themes/'.$this->theme->name.'/%s');
     }
 
     public function addWeight(PageWeightModel|array $weight) {

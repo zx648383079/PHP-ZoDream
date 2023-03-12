@@ -7,6 +7,7 @@ use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Repositories\PageRepository;
 use Zodream\Disk\Directory;
 use Zodream\Disk\FileObject;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
 
@@ -194,4 +195,31 @@ class VisualFactory {
         return new VisualPage($siteModel, $pageModel, false);
     }
 
+    /**
+     * 缓存或输出
+     * @param string $key
+     * @param callable $cb function(): VisualPage
+     * @return Output
+     */
+    public static function cachePage(string $key, callable $cb): Output {
+        $request = request();
+        $response = response();
+        if ($request->method() !== 'GET') {
+            $renderer = call_user_func($cb);
+            return $response->html($renderer->render());
+        }
+        $cacheKey = sprintf('%s?%s', $key, $_SERVER['QUERY_STRING']??'');
+        $cacheDriver = cache()->store('pages');
+        if (($page = $cacheDriver->get($cacheKey)) !== false) {
+            return $response->html($page);
+        }
+        /** @var VisualPage $renderer */
+        $renderer = call_user_func($cb);
+        $page = $renderer->render();
+        $cacheTime = $renderer->cacheTime();
+        if ($cacheTime > 0) {
+            $cacheDriver->set($key, $page, $cacheTime);
+        }
+        return $response->html($page);
+    }
 }
