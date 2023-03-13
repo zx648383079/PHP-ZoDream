@@ -120,12 +120,12 @@ class OrderModel extends Model {
     }
 
     public function getRemarkAttribute() {
-        $setting = $this->getAttributeValue('remark');
+        $setting = $this->getAttributeSource('remark');
         return empty($setting) ? [] : Json::decode($setting);
     }
 
     public function setRemarkAttribute($value) {
-        $this->__attributes['remark'] = is_array($value) ?
-            Json::encode($value) : $value;
+        $this->setAttributeSource('remark', is_array($value) ?
+            Json::encode($value) : $value);
     }
 }

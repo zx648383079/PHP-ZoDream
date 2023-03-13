@@ -20,13 +20,13 @@ class Module extends BaseModule implements ISiteMapModule {
             ->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./forum', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
         }
         $items = ThreadModel::orderBy('id', 'desc')
             ->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./thread', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
         }
     }
 }

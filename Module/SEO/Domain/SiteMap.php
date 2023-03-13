@@ -15,16 +15,16 @@ class SiteMap implements IteratorAggregate {
     const CHANGE_FREQUENCY_YEARLY = 'yearly';
     const CHANGE_FREQUENCY_NEVER = 'never';
 
-    protected $data = [];
+    protected array $data = [];
 
     /**
      *
      * @param $url
-     * @param $lastModificationDate
+     * @param string|int|null $lastModificationDate
      * @param string $changeFrequency always ，hourly ，daily ，weekly ，monthly ，yearly ，never
      * @param float $priority
      */
-    public function add($url, $lastModificationDate = null, $changeFrequency = self::CHANGE_FREQUENCY_DAILY, $priority = 0.5) {
+    public function add($url, string|int|null $lastModificationDate = null, string $changeFrequency = self::CHANGE_FREQUENCY_DAILY, float $priority = 0.5) {
         $this->data[] = compact('url', 'lastModificationDate', 'changeFrequency', 'priority');
     }
 
@@ -57,10 +57,10 @@ class SiteMap implements IteratorAggregate {
     }
 
     /**
-     * @param $data
-     * @return array
+     * @param array $data
+     * @return string
      */
-    private function formatXml($data) {
+    private function formatXml(array $data) {
         $xml = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
@@ -69,10 +69,10 @@ class SiteMap implements IteratorAggregate {
             $xml[] = $this->urlItem($item);
         }
         $xml[] = '</urlset>';
-        return  implode(PHP_EOL, $xml);
+        return implode(PHP_EOL, $xml);
     }
 
-    public function getIterator() {
+    public function getIterator(): \Traversable {
         return new ArrayIterator($this->data);
     }
 }

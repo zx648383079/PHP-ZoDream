@@ -8,11 +8,11 @@ trait ExtraRule {
     protected string $extraRuleKey = 'extra_rule';
 
     public function getExtraRuleAttribute() {
-        $value = $this->getAttributeValue($this->extraRuleKey);
+        $value = $this->getAttributeSource($this->extraRuleKey);
         return empty($value) ? [] : Json::decode($value);
     }
 
     public function setExtraRuleAttribute($value) {
-        $this->__attributes[$this->extraRuleKey] = is_array($value) ? Json::encode($value) : $value;
+        $this->setAttributeSource($this->extraRuleKey, is_array($value) ? Json::encode($value) : $value);
     }
 }

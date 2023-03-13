@@ -30,7 +30,7 @@ class AddressModel extends AddressEntity {
     }
 
     public function getHideTelAttribute() {
-        return Helpers::hideTel($this->getAttributeValue('tel'));
+        return Helpers::hideTel($this->getAttributeSource('tel'));
     }
 
     public static function defaultId($val = 0) {

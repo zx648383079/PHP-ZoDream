@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $items = [];
 foreach($log_list as $item) {
-    $w = date('w', $item->getAttributeValue('created_at'));
+    $w = date('w', $item->getAttributeSource('created_at'));
     $items[] = [
         'day' => $w < 1 ? 7 : intval($w),
         'length' => $item->time,

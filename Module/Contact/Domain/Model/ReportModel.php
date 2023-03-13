@@ -67,11 +67,11 @@ class ReportModel extends Model {
     }
 
     public function getFilesAttribute() {
-        $value = $this->getAttributeValue('files');
+        $value = $this->getAttributeSource('files');
         return empty($value) ? [] : Json::decode($value);
     }
 
     public function setFilesAttribute($value) {
-        $this->__attributes['files'] = is_array($value) ? Json::encode($value) : $value;
+        $this->setAttributeSource('files', is_array($value) ? Json::encode($value) : $value);
     }
 }

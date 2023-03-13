@@ -1,0 +1,14 @@
+<div class="copyright-weight">
+    <p>Copyright ©{=$company}, All Rights Reserved.</p>
+    {if:$icp_beian}
+    <a href="https://beian.miit.gov.cn/" target="_blank">{=$icp_beian}</a>
+    {/if}
+    {if:$is_beian}
+    <p>
+        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={=$is_beian_code}">
+            <img src="{url:/assets/images/beian.png}" alt="备案图标">
+            {=$is_beian}
+        </a>
+    </p>
+    {/if}
+</div>

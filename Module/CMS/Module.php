@@ -27,14 +27,14 @@ class Module extends BaseModule implements ISiteMapModule {
         $items = CategoryModel::query()->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./category', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
         }
         $items = ContentModel::query()->where('cat_id', '>', 0)
             ->get('id', 'cat_id', 'model_id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./content',
                 ['id' => $item->id, 'category' => $item->cat_id, 'model' => $item->model_id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
         }
     }
 }

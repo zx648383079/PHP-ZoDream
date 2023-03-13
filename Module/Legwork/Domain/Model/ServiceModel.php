@@ -76,7 +76,7 @@ class ServiceModel extends Model {
     }
 
     public function getFormAttribute() {
-        $setting = $this->getAttributeValue('form');
+        $setting = $this->getAttributeSource('form');
         return empty($setting) ? [] : Json::decode($setting);
     }
 
@@ -94,6 +94,6 @@ class ServiceModel extends Model {
             }
             $value = Json::encode($items);
         }
-        $this->__attributes['form'] = $value;
+        $this->setAttributeSource('form', $value);
     }
 }

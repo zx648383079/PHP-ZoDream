@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $items = [];
 foreach($log_list as $item) {
     $items[] = [
-        'start' => date('H:i', $item->getAttributeValue('created_at')),
+        'start' => date('H:i', $item->getAttributeSource('created_at')),
         'length' => $item->time,
         'name' => $item->task->name
     ];

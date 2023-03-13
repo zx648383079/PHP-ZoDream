@@ -45,7 +45,7 @@ class CategoryModel extends CategoryEntity {
     }
 
     public function getCategoryTemplateAttribute() {
-        $tpl = $this->getAttributeValue('category_template');
+        $tpl = $this->getAttributeSource('category_template');
         if (!empty($tpl)) {
             return $tpl;
         }
@@ -56,7 +56,7 @@ class CategoryModel extends CategoryEntity {
     }
 
     public function getListTemplateAttribute() {
-        $tpl = $this->getAttributeValue('list_template');
+        $tpl = $this->getAttributeSource('list_template');
         if (!empty($tpl)) {
             return $tpl;
         }
@@ -67,7 +67,7 @@ class CategoryModel extends CategoryEntity {
     }
 
     public function getShowTemplateAttribute() {
-        $tpl = $this->getAttributeValue('show_template');
+        $tpl = $this->getAttributeSource('show_template');
         if (!empty($tpl)) {
             return $tpl;
         }

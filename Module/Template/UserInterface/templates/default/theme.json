@@ -18,6 +18,10 @@
     {
       "name": "index",
       "path": "index.html"
+    },
+    {
+      "name": "article",
+      "path": "artcle.html"
     }
   ],
   "weights": "weights"

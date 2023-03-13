@@ -2,6 +2,7 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Template\Domain\VisualEditor\VisualFactory;
 use Module\Template\Domain\VisualEditor\VisualPage;
 use Module\Template\Module;
 use Zodream\Disk\Directory;
@@ -18,6 +19,7 @@ use Zodream\Disk\Directory;
  * @property string $path
  * @property integer $editable
  * @property integer $theme_id
+ * @property string $dependencies
  */
 class ThemeWeightModel extends Model {
 
@@ -43,6 +45,7 @@ class ThemeWeightModel extends Model {
             'editable' => '',
             'theme_id' => 'required|int',
             'path' => 'string:0,200',
+            'dependencies' => 'string'
         ];
     }
 
@@ -64,7 +67,14 @@ class ThemeWeightModel extends Model {
             return new Directory(is_dir($this->path)
                 ? $this->path : dirname($this->path));
         }
-        return VisualPage::templateFolder($this->path);
+        return VisualFactory::templateFolder($this->path);
     }
 
+    public function getDependenciesAttribute() {
+        return explode(',', $this->getAttributeSource('dependencies'));
+    }
+
+    public function setDependenciesAttribute($value) {
+        $this->setAttributeSource('dependencies', $value);
+    }
 }

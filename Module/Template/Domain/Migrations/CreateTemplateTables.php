@@ -54,6 +54,7 @@ class CreateTemplateTables extends Migration {
             $table->bool('editable')->default(1);
             $table->uint('theme_id');
             $table->string('path', 200);
+            $table->string('dependencies')->default('依赖的脚本和css文件');
         })->append(SiteModel::tableName(), function(Table $table) {
             $table->comment('自定义站点');
             $table->id();

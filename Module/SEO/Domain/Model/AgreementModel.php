@@ -48,11 +48,11 @@ class AgreementModel extends Model {
     }
 
     public function getContentAttribute() {
-        $value = $this->getAttributeValue('content');
+        $value = $this->getAttributeSource('content');
         return empty($value) ? [] : Json::decode($value);
     }
 
     public function setContentAttribute($value) {
-        $this->__attributes['content'] = is_array($value) ? Json::encode($value) : $value;
+        $this->setAttributeSource('content', is_array($value) ? Json::encode($value) : $value);
     }
 }

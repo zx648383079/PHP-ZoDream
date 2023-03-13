@@ -8,6 +8,8 @@ use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeModel;
 use Module\Template\Domain\Model\ThemePageModel;
+use Module\Template\Domain\Model\ThemeStyleModel;
+use Module\Template\Domain\Model\ThemeWeightModel;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Str;
@@ -148,6 +150,23 @@ class VisualPage implements IVisualEngine {
         }
         $this->boot();
         $this->weights = array_merge($this->weights, $weight);
+        $renderer = $this->renderer();
+        foreach ($weight as $item) {
+            $siteWeight = VisualFactory::getOrSet(SiteWeightModel::class, $item['weight_id'], function () use ($item) {
+                return SiteWeightModel::find($item['weight_id']);
+            });
+            $themeWeight = VisualFactory::getOrSet(ThemeWeightModel::class,
+                $siteWeight['theme_weight_id'], function () use ($siteWeight) {
+                return ThemeWeightModel::find($siteWeight['theme_weight_id']);
+            });
+            foreach ($themeWeight->dependencies as $file) {
+                if (str_ends_with($file, '.js')) {
+                    $renderer->registerJsFile($file);
+                } elseif(str_ends_with($file, '.css')) {
+                    $renderer->registerCssFile($file);
+                }
+            }
+        }
     }
 
     protected function loadWeights() {
@@ -223,10 +242,18 @@ class VisualPage implements IVisualEngine {
             }
         );
         VisualFactory::getAutoSet(
-            Relation::columns($weightItems, 'weight_id'),
-            SiteWeightModel::class,
+            Relation::columns($weightItems, 'theme_weight_id'),
+            ThemeWeightModel::class,
             function (array $idItems) {
-                return SiteWeightModel::whereIn('id', $idItems)
+                return ThemeWeightModel::whereIn('id', $idItems)
+                    ->get();
+            }
+        );
+        VisualFactory::getAutoSet(
+            Relation::columns($weightItems, 'theme_style_id'),
+            ThemeStyleModel::class,
+            function (array $idItems) {
+                return ThemeStyleModel::whereIn('id', $idItems)
                     ->get();
             }
         );

@@ -8,7 +8,7 @@ $offset = $w < 1 ? 7 : $w;
 $max = intval(date('d', $end_at));
 $items = [];
 foreach($log_list as $item) {
-    $d = intval(date('d', $item->getAttributeValue('created_at')));
+    $d = intval(date('d', $item->getAttributeSource('created_at')));
     $items[$d][] = [
         'day' => $d,
         'length' => $item->time,

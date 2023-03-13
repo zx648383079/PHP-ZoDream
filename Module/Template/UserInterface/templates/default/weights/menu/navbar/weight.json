@@ -8,5 +8,9 @@
   "version": "v1.0",
   "copyright": "@zz",
   "email": "123@12.com",
-  "editable": true
+  "editable": true,
+  "dependencies": [
+    "@jquery.min.js",
+    "@home.min.css"
+  ]
 }

@@ -222,7 +222,7 @@ class BlogRepository {
      */
     public static function renderLazyContent(BlogModel $blog, bool $imgLazy = false, bool $useDeeplink = false) {
         $cb = function () use ($blog, $imgLazy, $useDeeplink) {
-            return Html::render($blog->getAttributeValue('content'),
+            return Html::render($blog->getAttributeSource('content'),
                 TagRepository::getTags($blog->id), $blog->edit_type == 1, $imgLazy, $useDeeplink);
         };
         if (app()->isDebug()) {

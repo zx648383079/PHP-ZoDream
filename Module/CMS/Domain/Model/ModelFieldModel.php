@@ -108,12 +108,12 @@ class ModelFieldModel extends BaseModel {
     }
 
     public function getSettingAttribute() {
-        $setting = $this->getAttributeValue('setting');
+        $setting = $this->getAttributeSource('setting');
         return empty($setting) ? [] : Json::decode($setting);
     }
 
     public function setSettingAttribute($value) {
-        $this->__attributes['setting'] = is_array($value) ? Json::encode($value) : '';
+        $this->setAttributeSource('setting', is_array($value) ? Json::encode($value) : '');
     }
 
     public function setting(...$keys) {
