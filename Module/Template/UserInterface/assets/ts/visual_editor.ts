@@ -282,7 +282,7 @@ class VisualEditor {
             }).on('paste', (e: any) => {
                 if (e.clipboardData || e.originalEvent) {
                     const clipboardData = (e.clipboardData || (window as any).clipboardData);
-                    const val = clipboardData.getData('text');
+                    const val = clipboardData?.getData('text');
                 }
             }).on('mousemove', e => {
                 const p = {x: e.clientX, y: e.clientY};

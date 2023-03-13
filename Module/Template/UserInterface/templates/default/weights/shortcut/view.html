@@ -5,14 +5,14 @@
     </div>
     {/if}
     {for:$key_items,$group}
-    <div class="wegiht-shortcut">
-        <div class="name">{=$group.name}</div>
+    <div class="weight-shortcut">
+        <div class="name">{$group.name}</div>
         <div class="key">
             {for:$group.items,$item}
             {if:$item.key}
-            <kbd>{=$item.key}</kbd>
+            <kbd>{$item.key}</kbd>
             {else}
-            {=$item.sep}
+            {$item.sep}
             {/if}
             {/for}
         </div>

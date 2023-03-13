@@ -143,7 +143,7 @@ class HtmlExpand {
                 $n = $n - 1;
                 $isCode = false;
                 $tag = explode(' ', $tag, 2)[0];
-                if (substr($tag, 0, 1) === '/') {
+                if (str_starts_with($tag, '/')) {
                     // 判断是否时结束标签， 倒序找到邻近开始标签，进行移除
                     for ($j = count($unClosedTags) - 1; $j >= 0; $j --) {
                         if ($tag === $unClosedTags[$j]) {
@@ -154,7 +154,7 @@ class HtmlExpand {
                     $tag = '';
                 }
                 if (!empty($tag) &&
-                    substr($tag, strlen($tag) - 1, 1) !== '/'
+                    !str_ends_with($tag, '/')
                     && !in_array(strtolower($tag), $notClosedTags)) {
                     // 不是结束标签且不是自闭合且不是无需闭合把标签加入
                     $unClosedTags[] = $tag;

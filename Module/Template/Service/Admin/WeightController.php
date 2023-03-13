@@ -24,9 +24,9 @@ class WeightController extends Controller {
     }
 
     public function createAction(int $page_id, int $weight_id,
-                                 int $parent_id, int $position = 0, int $group = 0) {
+                                 int $parent_id, int $parent_index = 0, int $position = 0, int $group = 0) {
         try {
-            return $this->renderData(PageRepository::weightAdd($page_id, $weight_id, $parent_id, $position, $group));
+            return $this->renderData(PageRepository::weightAdd($page_id, $weight_id, $parent_id, $parent_index, $position, $group));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

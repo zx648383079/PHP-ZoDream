@@ -135,8 +135,11 @@ class VisualPage implements IVisualEngine {
 
     protected function initFactory() {
         $this->factory = VisualFactory::newViewFactory()
-            ->setDirectory($this->directory)
-            ->registerFunc('asset', '/assets/themes/'.$this->theme->name.'/%s');
+            ->setDirectory($this->directory);
+        $this->factory->getEngine()
+            ->registerFunc('asset', function (string $val) {
+                return sprintf('/assets/themes/%s/%s', $this->theme->name, trim($val, '\''));
+            });
     }
 
     public function addWeight(PageWeightModel|array $weight) {

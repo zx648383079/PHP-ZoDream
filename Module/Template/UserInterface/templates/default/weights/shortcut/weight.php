@@ -13,7 +13,10 @@ class ShortcutWeight extends BaseWeight {
     public function render(SiteWeightModel $model): string {
         $content = $model->content;
         $key_items = [];
-        foreach (explode('\n', $content) as $line) {
+        foreach (explode("\n", $content) as $line) {
+            if (empty($line)) {
+                continue;
+            }
             $args = explode(' ', $line, 2);
             $key_items[] = [
                 'name' => $args[0],
@@ -29,23 +32,28 @@ class ShortcutWeight extends BaseWeight {
         return $this->show('config', compact('content', 'title'));
     }
 
-    private function splitKeys(string $line): array {
+    private function splitKeys(?string $line): array {
+        if (empty($line)) {
+            return [];
+        }
         $items = [];
         $pos = 0;
         while (true) {
             $i = strpos($line, '/', $pos);
             $j = strpos($line, '+', $pos);
-            if (!$i) {
+            if (!$i && !$j) {
                 $items[] = [
                     'key' => substr($line, $pos),
                 ];
                 break;
             }
-            $min = $i;
-            $sep = '/';
-            if ($j > 0 && $j < $i) {
+
+            if (!$i || ($j > 0 && $j < $i)) {
                 $min = $j;
                 $sep = '+';
+            } else {
+                $min = $i;
+                $sep = '/';
             }
             $items[] = [
                 'key' => substr($line, $pos, $min - $pos),

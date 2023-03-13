@@ -12,7 +12,7 @@ class Player {
         if ($type === 'video' && static::isFrame($src)) {
             $type = 'iframe';
         }
-        $html = Bot::isSpider() ? static::playerHtml($src, $type) : '';
+        $html = '';//Bot::isSpider() ? static::playerHtml($src, $type) : '';
         $data = Json::encode(compact('src', 'type'));
         $id = ++ $guid;
         $js = <<<JS

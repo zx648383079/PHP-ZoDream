@@ -207,7 +207,9 @@ class BlogRepository {
      */
     public static function renderContent(BlogModel $blog) {
         $isPlatform = Platform::isPlatform();
-        return static::renderLazyContent($blog, !$isPlatform && Bot::isSpider(), $isPlatform);
+        return static::renderLazyContent($blog, !$isPlatform
+            // && Bot::isSpider()
+            , $isPlatform);
     }
 
     /**

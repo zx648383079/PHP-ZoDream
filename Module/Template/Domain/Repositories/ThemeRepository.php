@@ -119,7 +119,13 @@ final class ThemeRepository {
                 continue;
             }
             $file = $root->child($fileName);
-            $file->copy($themeAsset->child($fileName));
+            if ($file instanceof Directory) {
+                $distFile = $themeAsset->childDirectory($fileName);
+                $distFile->create();
+            } else {
+                $distFile = $themeAsset->childFile($fileName);
+            }
+            $file->copy($distFile);
         }
     }
 
