@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Navigation\Domain\Models;
 
 use Domain\Model\Model;
+use Domain\Repositories\FileRepository;
 
 /**
  * @property integer $id
@@ -30,5 +31,9 @@ class CategoryModel extends Model {
             'icon' => 'Icon',
             'parent_id' => 'Parent Id',
         ];
+    }
+
+    public function getIconAttribute() {
+        return FileRepository::formatImage($this->getAttributeSource('icon'));
     }
 }

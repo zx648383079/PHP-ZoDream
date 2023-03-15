@@ -9,6 +9,7 @@ use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\VisualEditor\VisualFactory;
 use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
 use Zodream\Helpers\Json;
 
@@ -22,10 +23,25 @@ final class ThemeRepository {
     }
 
     public static function pageList(int $theme, string $keywords = '') {
-        return ThemeModel::when(!empty($keywords), function ($query) {
+        return ThemePageModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
         })->where('theme_id', $theme)->orderBy('id', 'desc')
             ->page();
+    }
+
+    public static function assetFile(string $folder, string $file): File {
+        $dir = VisualFactory::templateFolder($folder);
+        if (is_bool($dir)) {
+            throw new \Exception('not found');
+        }
+        if ($dir->isFile() && $dir->getExtension() === 'html') {
+            $dir = $dir->getDirectory();
+        }
+        $file = $dir->isFile() ? $dir : $dir->file($file);
+        if (!$file->exist()) {
+            throw new \Exception('not found');
+        }
+        return $file;
     }
 
     public static function styleList(int $theme) {

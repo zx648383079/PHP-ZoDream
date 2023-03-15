@@ -75,6 +75,6 @@ class ThemeWeightModel extends Model {
     }
 
     public function setDependenciesAttribute($value) {
-        $this->setAttributeSource('dependencies', $value);
+        $this->setAttributeSource('dependencies', implode(',', (array)$value));
     }
 }

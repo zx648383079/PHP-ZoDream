@@ -52,7 +52,7 @@ $(function() {
         };
     $('.nav-bar .search-icon').on('click',function() {
         searchDialog.show();
-        searchDialog.find('form input').focus();
+        searchDialog.find('form input').trigger('focus');
     });
     searchDialog.on('click', '.dialog-close', function() {
         searchDialog.hide();
@@ -61,7 +61,7 @@ $(function() {
         const keywords = $this.val() as string;
         searchDialog.toggleClass('inputting', keywords.length > 0);
         if (e.key === 'Enter') {
-            $this.closest('form').submit();
+            $this.closest('form').trigger('submit');
             return;
         }
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
@@ -100,6 +100,6 @@ $(function() {
         }
         $this.addClass('active').siblings().removeClass('active');
         searchDialog.find('form input').val($this.text().replace(/^\d+/, '').trim());
-        searchDialog.find('form').submit();
+        searchDialog.find('form').trigger('submit');
     });
 });

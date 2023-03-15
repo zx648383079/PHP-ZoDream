@@ -35,7 +35,7 @@ final class PageRepository {
             throw new \Exception(__('id is error'));
         }
         $model->load($data);
-        if (!SiteRepository::isUser($model->site_id)) {
+        if (!SiteRepository::isUser(intval($model->site_id))) {
             throw new \Exception(__('page is error'));
         }
         if (!$model->save()) {

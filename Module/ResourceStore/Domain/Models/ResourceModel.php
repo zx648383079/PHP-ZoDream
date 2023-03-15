@@ -4,7 +4,7 @@ namespace Module\ResourceStore\Domain\Models;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Zodream\Helpers\Time;
+use Domain\Repositories\FileRepository;
 
 /**
  * Class PostModel
@@ -76,8 +76,7 @@ class ResourceModel extends Model {
     }
 
     public function getThumbAttribute() {
-        $thumb = $this->getAttributeSource('thumb');
-        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
+        return FileRepository::formatImage($this->getAttributeSource('thumb'));
     }
 
     public function category() {

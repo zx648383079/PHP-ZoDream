@@ -4,61 +4,64 @@ use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
+use Zodream\Helpers\Json;
+use Module\Template\Domain\VisualEditor\VisualHelper;
 
 class NavbarWeight extends BaseWeight {
 
-    /**
-     * 获取生成的部件视图
-     * @param SiteWeightModel $model
-     * @return string
-     * @throws Exception
-     */
     public function render(SiteWeightModel $model): string {
-        $items = $model->setting('items', []);
-        foreach($items as &$item) {
-            $item['url'] = $this->converterUrl($item['url']);
-        }
-        unset($item);
-        return $this->show('view', compact('model', 'items'));
+        $data = VisualHelper::formatFormData($model->content, $this->defaultData());
+        $data['title'] = $model->title;
+        $data['nav_items'] = VisualHelper::formatUrlTree($data['nav_items']);
+        return $this->show('view', $data);
     }
 
     public function renderForm(SiteWeightModel $model): string {
+        $data = VisualHelper::formatFormData($model->content, $this->defaultData());
         $weightId = PageWeightModel::where('page_id', $this->pageId())
             ->where('weight_id', '<>', $model->id)->pluck('weight_id');
-        $weight_list = empty($weightId) ? [] : SiteWeightModel::whereIn('id', $weightId)->get('id', 'title');
-        $page_list = PageModel::where('site_id', $model->site_id)
+        $data['weight_list'] = empty($weightId) ? [] : SiteWeightModel::whereIn('id', $weightId)->get('id', 'title');
+        $data['page_list'] = PageModel::where('site_id', $model->site_id)
             ->where('id', '<>', $this->pageId())->get('id', 'title');
-        return $this->show('config', compact('model', 'weight_list', 'page_list'));
+        $data['nav_items'] = htmlspecialchars(Json::encode($data['nav_items']));
+        return $this->show('config', $data);
     }
 
     public function parseForm(): array {
-        $data = parent::parseForm();
-        if (!isset($data['settings']) || !isset($data['settings']['items'])) {
-            return $data;
+        $request = request();
+        $data = [];
+        foreach($this->defaultData() as $key => $def) {
+            $value = $request->get($key, $def);
+            $data[$key] = is_array($def) && is_string($value) ? Json::decode($value) : $value;
         }
-        $args = $data['settings']['items'];
-        $items = [];
-        foreach ($args['title'] as $i => $title) {
-            if (empty($title)) {
+        return [
+            'title' => $request->get('title'),
+            'content' => Json::encode($data),
+        ];
+    }
+
+    private function formatData($content) {
+        $items = empty($content) ? [] : Json::decode($content);
+        $data = [];
+        foreach($this->defaultData() as $key => $value) {
+            if (!isset($items[$key])) {
+                $data[$key] = $value;
                 continue;
             }
-            $icon = $args['icon'][$i];
-            $url = [
-                'type' => $args['url']['type'][$i]
-            ];
-            if ($url['type'] === 'target') {
-                $url['uri'] = $args['url']['target']['uri'][$i];
-                $url['target'] = $args['url']['target']['target'][$i];
-            } elseif ($url['type'] === 'url') {
-                $url['uri'] = $args['url']['url']['uri'][$i];
-                $url['target'] = $args['url']['url']['target'][$i];
+            if (is_int($value)) {
+                $data[$key] = intval($items[$key]);
             } else {
-                $url['id'] = $args['url']['page']['id'][$i];
-                $url['target'] = $args['url']['page']['target'][$i];
+                $data[$key] = $items[$key];
             }
-            $items[] = compact('title', 'icon', 'url');
         }
-        $data['settings']['items'] = $items;
         return $data;
+    }
+    
+    private function defaultData(): array {
+        return [
+            'un_selected_color' => '',
+            'selected_color' => '',
+            'nav_items' => [],
+        ];
     }
 }

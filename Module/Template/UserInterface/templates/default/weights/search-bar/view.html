@@ -1,0 +1,29 @@
+<div class="search-bar-weight {=$property->formatClass()}"{=$property->weightStyle()}>
+    <div class="weight-search-bar">
+        <div class="search-input">
+            <button class="search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+            <input type="text" name="keywords" placeholder="{=$placeholder}" autocomplete="off">
+            <div class="clear-btn">
+                <i class="fa fa-close"></i>
+            </div>
+        </div>
+        <div class="suggest-body">
+            <ul>
+            </ul>
+        </div>
+        <div class="history-body">
+            <ul>
+            </ul>
+            <div class="clear-line">Clear</div>
+        </div>
+    </div>
+</div>
+{if:!$IS_DEV}
+<script>
+    $(':host').on('ready', function () {
+        new WeightSearchBar(this, {$option});
+    });
+</script>
+{/if}

@@ -2,10 +2,10 @@
 
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
-use Module\Template\Domain\VisualEditor\VisualHelper;
 use Zodream\Helpers\Json;
+use Module\Template\Domain\VisualEditor\VisualHelper;
 
-class ColumnAutoWeight extends BaseWeight {
+class SearchBarWeight extends BaseWeight {
 
     /**
      * 获取生成的部件视图
@@ -14,12 +14,17 @@ class ColumnAutoWeight extends BaseWeight {
      */
     public function render(SiteWeightModel $model): string {
         $data = VisualHelper::formatFormData($model->content, $this->defaultData());
-        return $this->show('view', $data);
+        if ($data['search_type'] === 1) {
+            $data['search_weight_id'] = VisualHelper::weightId($data['search_weight'], true);
+        }
+        $option = Json::encode($data);
+        $placeholder = $model->title;
+        return $this->show('view', compact('placeholder', 'option'));
     }
 
     public function renderForm(SiteWeightModel $model): string {
         $data = VisualHelper::formatFormData($model->content, $this->defaultData());
-        $data['split_items'] = implode(',', $data['split_items']);
+        $data['placeholder'] = $model->title;
         return $this->show('config', $data);
     }
 
@@ -30,15 +35,20 @@ class ColumnAutoWeight extends BaseWeight {
             $data[$key] = $request->get($key, $value);
         }
         return [
+            'title' => $request->get('placeholder'),
             'content' => Json::encode($data),
         ];
     }
     
     private function defaultData(): array {
         return [
-            'split_mode' => 0,
-            'split_count' => 2,
-            'split_items' => [],
+            'search_type' => 0,
+            'open_history' => 0,
+            'search_url' => '',
+            'search_suggest_url' => '',
+            'search_weight' => 0,
+            'search_tag' => '',
+            'search_tag_text' => '',
         ];
     }
 }

@@ -1,0 +1,101 @@
+<div class="input-group">
+    <label for="title">网址</label>
+    <div class="multiple-box">
+        {for:$nav_items,$item}
+        <div class="item uri-item">
+            <div class="multiple-del-btn">
+                <i class="fa fa-times"></i>
+            </div>
+            链接类型：<select class="url-type" name="nav_items[url][type][]" data-tab=".url-tab-" data-panel=".uri-item" {this.swi:$item.url.type,'selected'}>
+                <option value="target"{this.cas:'target'}>刷新部件</option>
+                <option value="url"{this.cas:'url'}>网址</option>
+                <option value="page"{this.cas:'page'}>页面</option>
+            </select>
+            <div class="target-box url-tab-0 {if:$item.url.type!='target'}hidden{/if}">
+                部件传值：<input type="url" name="nav_items[url][target][uri][]" class="form-control" placeholder="部件传值" value="{$item.url.uri}"><br/>
+                部件id：<select name="nav_items[url][target][target][]">
+                    {for:$weight_list,$it}
+                    <option value="{$it.id}"{if:$item.url.target == $it.id} selected{/if}>{$it.title}</option>
+                    {/for}
+                </select>
+            </div>
+            <div class="url-box url-tab-1 {if:$item.url.type!='url'}hidden{/if}">
+                网址：<input type="url" name="nav_items[url][url][uri][]" class="form-control" placeholder="链接" value="{$item.url.uri}"><br/>
+                跳转方式：<select name="nav_items[url][url][target][]">
+                    <option value="_self"{if:$item.url.target == '_self'} selected{/if}>当前</option>
+                    <option value="_blank"{if:$item.url.target == '_blank'} selected{/if}>新标签</option>
+                </select>
+            </div>
+            <div class="page-box url-tab-2 {if:$item.url.type!='page'}hidden{/if}">
+                跳转页面：<select name="nav_items[url][page][id][]">
+                    {for:$page_list,$it}
+                    <option value="{$it.id}"{if:$item.url.id == $it.id} selected{/if}>{$it.title}</option>
+                    {/for}
+                </select><br/>
+                跳转方式：<select name="nav_items[url][page][target][]">
+                    <option value="_self"{if:$item.url.target == '_self'} selected{/if}>当前</option>
+                    <option value="_blank"{if:$item.url.target == '_blank'} selected{/if}>新标签</option>
+                </select>
+            </div>
+            
+            图标:<input type="text" name="nav_items[icon][]" class="form-control" placeholder="图标" size="4" value="{$item.icon}"><br/>
+            标题：<input type="text" name="nav_items[title][]" class="form-control" placeholder="标题" value="{$item.title}">
+            
+        </div>
+        {/for}
+        <div class="item uri-item">
+            <div class="multiple-del-btn">
+                <i class="fa fa-times"></i>
+            </div>
+            链接类型：<select class="url-type" name="nav_items[url][type][]" data-tab=".url-tab-" data-panel=".uri-item">
+                <option value="target" selected>刷新部件</option>
+                <option value="url">网址</option>
+                <option value="page">页面</option>
+            </select>
+            <div class="target-box url-tab-0">
+                部件传值：<input type="url" name="nav_items[url][target][uri][]" class="form-control" placeholder="部件传值"><br/>
+                部件id：<select name="nav_items[url][target][target][]">
+                    {for:$weight_list,$item}
+                    <option value="{$item.id}">{$item.title}</option>
+                    {/for}
+                </select>
+            </div>
+            <div class="url-box url-tab-1 hidden">
+                网址：<input type="url" name="nav_items[url][url][uri][]" class="form-control" placeholder="链接"><br/>
+                跳转方式：<select name="nav_items[url][url][target][]">
+                    <option value="_self">当前</option>
+                    <option value="_blank">新标签</option>
+                </select>
+            </div>
+            <div class="page-box url-tab-2 hidden">
+                跳转页面：<select name="nav_items[url][page][id][]">
+                    {for:$page_list,$item}
+                    <option value="{$item.id}">{$item.title}</option>
+                    {/for}
+                </select><br/>
+                跳转方式：<select name="nav_items[url][page][target][]">
+                    <option value="_self">当前</option>
+                    <option value="_blank">新标签</option>
+                </select>
+            </div>
+            
+            图标:<input type="text" name="nav_items[icon][]" class="form-control" placeholder="图标" size="4"><br/>
+            标题：<input type="text" name="nav_items[title][]" class="form-control" placeholder="标题">
+        </div>
+        <div class="multiple-add-btn">
+            <i class="fa fa-plus"></i>
+        </div>
+    </div>
+</div>
+<div class="input-group">
+    <label>未选中颜色</label>
+    <div>
+        <input type="color" name="un_selected_color" value="{=$un_selected_color}">
+    </div>
+</div>
+<div class="input-group">
+    <label>选中颜色</label>
+    <div>
+        <input type="color" name="selected_color" value="{=$selected_color}">
+    </div>
+</div>

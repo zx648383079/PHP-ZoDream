@@ -17,7 +17,7 @@ final class SiteRepository {
             $query->where('user_id', $user);
         })->when(!empty($domain), function ($query) use ($domain) {
             $query->whereLike('`domain`', $domain);
-        })->page();
+        })->orderBy('id', 'desc')->page();
     }
 
     public static function get(int $id) {
@@ -37,7 +37,7 @@ final class SiteRepository {
             throw new \Exception('站点已存在！');
         }
         if (!$model->save() && !$model->isNotChangedError()) {
-            throw new \Exception($model->getFirstError());
+            throw new \Exception($model->getFirstError() ?? '数据无更新');
         }
         BaseSite::tag()->bindTag($model->id,
             isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : []);
@@ -61,6 +61,10 @@ final class SiteRepository {
         return SiteModel::where('`schema`', $model->schema)
             ->where('`domain`', $model->domain)
             ->where('id', '<>', $model->id)->count() > 0;
+    }
+
+    public static function check(string $domain, int $id = 0): ?SiteModel {
+        return SiteModel::where('`domain`', $domain)->where('id', '<>', $id)->first();
     }
 
     public static function remove(int $id) {
@@ -96,4 +100,6 @@ final class SiteRepository {
             ->orderBy('created_at', 'desc')
             ->page();
     }
+
+
 }

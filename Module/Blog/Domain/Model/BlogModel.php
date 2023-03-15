@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
+use Domain\Repositories\FileRepository;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Entities\BlogEntity;
 use Module\Blog\Domain\Repositories\BlogRepository;
@@ -49,8 +50,7 @@ class BlogModel extends BlogEntity {
     }
 
     public function getThumbAttribute() {
-        $thumb = $this->getAttributeSource('thumb');
-        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
+        return FileRepository::formatImage($this->getAttributeSource('thumb'));
     }
 
 	public function getUrlAttribute() {

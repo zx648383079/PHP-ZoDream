@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Navigation\Domain\Models;
 
 use Domain\Model\Model;
+use Domain\Repositories\FileRepository;
 use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
@@ -62,5 +63,9 @@ class PageModel extends Model {
     public function keywords() {
         return $this->belongsToMany(KeywordModel::class, PageKeywordModel::class,
             'page_id', 'word_id');
+    }
+
+    public function getThumbAttribute() {
+        return FileRepository::formatImage($this->getAttributeSource('thumb'));
     }
 }

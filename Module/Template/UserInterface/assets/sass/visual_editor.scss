@@ -435,6 +435,9 @@ $ruleBarColor: gray;
             display: block;
         }
     }
+    .hidden {
+        display: none;
+    }
     &.visual-mobile-editor {
         flex-direction: column;
         .panel-group {
@@ -454,5 +457,30 @@ $ruleBarColor: gray;
                 }
             }
         }
+    }
+}
+
+.tree-input {
+    position: relative;
+    border-radius: .25rem;
+    padding: .8rem;
+    border: 1px solid gray;
+    max-height: 10rem;
+    overflow: auto;
+    .tree-item {
+        position: relative;
+    }
+    .tree-item-line {
+        display: flex;
+        line-height: 2rem;
+        span {
+            flex: 1;
+        }
+    }
+    .tree-children {
+        margin-left: 2rem;
+    }
+    .tree-item-action {
+        user-select: none;
     }
 }

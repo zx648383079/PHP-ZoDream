@@ -6,6 +6,7 @@ use Domain\Model\Model;
 use Domain\Model\ModelHelper;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
+use Domain\Repositories\FileRepository;
 
 /**
  * Class ProjectModel
@@ -98,8 +99,7 @@ class ProjectModel extends Model {
     }
 
     public function getCoverAttribute() {
-        $thumb = $this->getAttributeSource('cover');
-        return url()->asset(empty($thumb) ? '/assets/images/thumb.jpg' : $thumb);
+        return FileRepository::formatImage($this->getAttributeSource('cover'));
     }
 
     public function canRead() {

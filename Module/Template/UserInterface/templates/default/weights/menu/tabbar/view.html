@@ -1,0 +1,8 @@
+<div class="weight-tab-bar">
+    {for:$nav_items,$item}
+    <a {=$item.active?'class="active"':''} href="{=$item.uri}" target="{=$item.target}">
+        <i class="fa {=$item.icon}" aria-hidden="true"></i>
+        {=$item.title}
+    </a>
+    {/for}
+</div>

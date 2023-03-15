@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Module\Navigation\Domain\Models;
 
 use Domain\Model\Model;
+use Domain\Repositories\FileRepository;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Navigation\Domain\Repositories\SiteRepository;
 
 /**
  * @property integer $id
@@ -65,7 +67,10 @@ class SiteModel extends Model {
     }
 
     public function tags() {
-        return $this->belongsToMany(TagModel::class, SiteTagModel::class,
-            'site_id', 'tag_id');
+        return SiteRepository::tag()->bindRelation('id');
+    }
+
+    public function getLogoAttribute() {
+        return FileRepository::formatImage($this->getAttributeSource('logo'));
     }
 }

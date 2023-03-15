@@ -65,4 +65,12 @@ final class SiteController extends Controller {
     public function scoreLogAction(int $site) {
         return $this->renderPage(SiteRepository::getScoreLog($site));
     }
+
+    public function checkAction(string $domain, int $id = 0) {
+        try {
+            return $this->renderData(SiteRepository::check($domain, $id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

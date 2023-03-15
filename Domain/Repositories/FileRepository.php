@@ -19,10 +19,20 @@ use Zodream\Image\WaterMark;
 
 class FileRepository {
 
+    const DEFAULT_IMAGE = '/assets/images/thumb.jpg';
     private static array $configs = [];
 
     public static function storage() {
         return StorageProvider::publicStore();
+    }
+
+    /**
+     * 获取图片网址，为空时获取默认图片
+     * @param mixed|null $url
+     * @return string
+     */
+    public static function formatImage(mixed $url = null): string {
+        return url()->asset(empty($url) ? static::DEFAULT_IMAGE : $url);
     }
 
     public static function config(string $key = '', $default = null) {
@@ -136,7 +146,7 @@ class FileRepository {
     }
 
     protected static function loadThumb(array $res, string $file, BaseUpload $upload): string {
-        $thumb = url()->asset('assets/images/thumb.jpg');
+        $thumb = static::formatImage();
         if (in_array($res['extension'], static::config('imageAllowFiles'))) {
             $thumb = $file;
         } elseif (in_array($res['extension'], static::config('videoAllowFiles'))) {

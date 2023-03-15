@@ -16,7 +16,7 @@ final class PageRepository {
             $query->where('site_id', $site);
         })->when(!empty($domain), function ($query) use ($domain) {
             $query->whereLike('link', '%'. $domain .'%');
-        })->page();
+        })->orderBy('id', 'desc')->page();
     }
 
     public static function get(int $id) {
@@ -40,7 +40,7 @@ final class PageRepository {
         }
 
         if (!$model->save() && !$model->isNotChangedError()) {
-            throw new \Exception($model->getFirstError());
+            throw new \Exception($model->getFirstError()??'数据无更新');
         }
         if (!isset($data['keywords'])) {
             $data['keywords'] = [];
@@ -61,6 +61,10 @@ final class PageRepository {
     public static function exist(PageModel $model): bool {
         return PageModel::where('link', $model->link)
                 ->where('id', '<>', $model->id)->count() > 0;
+    }
+
+    public static function check(string $link, int $id = 0): ?PageModel {
+        return PageModel::where('link', $link)->where('id', '<>', $id)->first();
     }
 
     public static function remove(int $id) {

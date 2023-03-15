@@ -149,7 +149,7 @@ class VisualWeight implements IVisualEngine {
         if ($this->isAsync()) {
             return $this->renderAsync();
         }
-        $this->renderer()->set('is_dev', $editable);
+        $this->renderer()->set('IS_DEV', $editable);
         $html = $this->createWeight()
             ->render($this->model);
         if (!$editable) {
@@ -158,30 +158,7 @@ class VisualWeight implements IVisualEngine {
         return $this->renderEdit($html);
     }
 
-    public function converterUrl($item) {
-        if ($item['type'] === 'url') {
-            return [
-                'uri' => url($item['uri']),
-                'target' => $item['target']
-            ];
-        }
-        if ($item['type'] === 'target') {
-            return [
-                'uri' => sprintf('javascript:ajaxWeight(%d, \'%s\');', $item['target'], $item['uri']),
-                'target' => '',
-            ];
-        }
-        if ($item['type'] === 'page') {
-            return [
-                'uri' => url('./page', ['name' => PageModel::where('id', $item['id'])->value('name')]),
-                'target' => $item['target']
-            ];
-        }
-        return [
-            'uri' => 'javascript:;',
-            'target' => '',
-        ];
-    }
+
 
     private function renderHtml(string $html) {
         $id = $this->property->weightId();
@@ -232,11 +209,11 @@ HTML;
     }
 
     private function renderAsync() {
+        $id = $this->property->weightId();
         $url = url('./lazy', ['id' => $this->rowId()]);
         return <<<HTML
-<div class="template-lazy" data-url="{$url}">
+<div id="{$id}" class="template-lazy" data-url="{$url}">
 </div>
 HTML;
-
     }
 }

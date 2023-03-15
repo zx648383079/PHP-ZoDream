@@ -1,25 +1,68 @@
 <style>
-{if:$model->setting('un_selected_color')}
-:host .contnet a {
-    color: {=$model->setting('un_selected_color')};
+{if:$un_selected_color}
+:host .nav-bar a {
+    color: {=$un_selected_color};
 }
 {/if}
-{if:$model->setting('selected_color')}
-:host .contnet a.active {
-    color: {=$model->setting('selected_color')};
+{if:$selected_color}
+:host .nav-bar a.active {
+    color: {=$selected_color};
 }
 {/if}
 </style>
 <div class="navbar-weight {=$property->formatClass()}"{=$property->weightStyle()}>
-    <div class="title"{=$model->properties->titleStyle()}>
+    <span class="nav-bar-toggle"></span>
+    <div class="brand"{=$property->titleStyle()}>
         {=$model->title}
     </div>
-    <div class="contnet"{=$property->contentStyle()}>
-        {for:$items,$item}
-        <a href="{$item.url.uri}" target="{$item.url.target}">
-            <i class="fa fa-{$item.icon}" aria-hidden="true"></i>
-            {$item.title}
-        </a>
-        {/for}
+    <div class="nav-bar"{=$property->contentStyle()}>
+        <ul>
+            {for:$items,$item}
+                <li>
+                    <a href="{$item.uri}" target="{$item.target}">
+                        {if:$item.icon}
+                        <i class="fa fa-{$item.icon}" aria-hidden="true"></i>
+                        {/if}
+                        {$item.title}
+                        {if:$item.children}
+                        <i class="fa fa-caret-down"></i>
+                        {/if}
+                    </a>
+                    {if:$item.children}
+                    <div class="sub-nav">
+                        <ul>
+                            {for:$item.children,$it}
+                                <li>
+                                    <a href="{$it.uri}" target="{$it.target}">
+                                        {if:$it.icon}
+                                        <i class="fa fa-{$it.icon}" aria-hidden="true"></i>
+                                        {/if}
+                                        {$it.title}
+                                        {if:$it.children}
+                                        <i class="fa fa-caret-down"></i>
+                                        {/if}
+                                    </a>
+                                    {if:$it.children}
+                                    <div class="sub-nav">
+                                        {for:$it.children,$next}
+                                            <li>
+                                                <a href="{$next.uri}" target="{$next.target}">
+                                                    {if:$next.icon}
+                                                    <i class="fa fa-{$next.icon}" aria-hidden="true"></i>
+                                                    {/if}
+                                                    {$next.title}
+                                                </a>
+                                            </li>
+                                        {/for}
+                                    </div>
+                                    {/if}
+                                </li>
+                            {/for}
+                        </ul>
+                    </div>
+                    {/if}
+                </li>
+            {/for}
+        </ul>
     </div>
 </div>

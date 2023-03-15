@@ -69,7 +69,7 @@ class Lazy {
        let $window = $(window);
        let instance = this;
        this._init();
-       $window.scroll(function () {
+       $window.on('scroll', function () {
            instance.scrollInvote();
        });
        // 首次执行
@@ -164,7 +164,7 @@ class Lazy {
 Lazy.addMethod('img', function (imgEle: JQuery) {
    let img = imgEle.attr('data-src');
    $("<img />")
-       .bind("load", function () {
+       .on("load", function () {
            if (imgEle.is('img') || imgEle.is('video')) {
                imgEle.attr('src', img);
                return;

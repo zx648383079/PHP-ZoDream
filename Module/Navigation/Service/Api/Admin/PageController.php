@@ -45,4 +45,12 @@ final class PageController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function checkAction(string $link, int $id = 0) {
+        try {
+            return $this->renderData(PageRepository::check($link, $id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

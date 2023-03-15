@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Template\Service\Admin;
 
-
+use Domain\Repositories\FileRepository;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\ThemeModel;
@@ -45,7 +45,7 @@ class PageController extends Controller {
             'name' => 'new_page',
             'title' => 'New Page',
             'theme_page_id' => $page_id,
-            'thumb' => '/assets/images/thumb.jpg',
+            'thumb' => FileRepository::formatImage(),
             'position' => 99
         ]);
         return $this->show(compact('model', 'theme'));

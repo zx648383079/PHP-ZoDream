@@ -1,0 +1,14 @@
+{
+  "name": "search-bar",
+  "thumb": "./thumb.png",
+  "keywords": "",
+  "description": "搜索框",
+  "author": "zodream",
+  "since": "2023-03-14",
+  "version": "v1.0",
+  "editable": true,
+  "dependencies": [
+    "@jquery.min.js",
+    "@weight.min.js"
+  ]
+}

@@ -25,7 +25,7 @@ class VisualWeightProperty {
     }
 
     public function weightId(): string {
-        return 'weight-'.$this->id;
+        return VisualHelper::weightId($this->id);
     }
 
     public function formatStyle(array $data): string {

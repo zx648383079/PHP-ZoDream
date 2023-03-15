@@ -2,6 +2,7 @@
 namespace Module\Template\Service\Admin;
 
 use Domain\Model\SearchModel;
+use Domain\Repositories\FileRepository;
 use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
@@ -40,7 +41,7 @@ class SiteController extends Controller {
         $model = new SiteModel([
             'name' => 'new_site',
             'title' => 'New Site',
-            'thumb' => '/assets/images/thumb.jpg',
+            'thumb' => FileRepository::formatImage(),
             'user_id' => auth()->id(),
             'theme_id' => $theme->id
         ]);
