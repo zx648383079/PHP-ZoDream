@@ -11,6 +11,7 @@ class HomeController extends Controller {
             'name' => 'PHP-ZoDream',
             'version' => '5.0',
             'logo' => url()->asset('assets/images/favicon.png'),
+            'today_wallpaper' => 'https://api.dujin.org/bing/1920.php'
         ], OptionRepository::getOpenList()));
     }
 

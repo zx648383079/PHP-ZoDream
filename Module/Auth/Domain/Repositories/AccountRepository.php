@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Domain\Constants;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\FundAccount;
@@ -33,7 +34,7 @@ class AccountRepository {
         }
         event(new ManageAction('user_recharge',
             sprintf('充值金额：%d', $money)
-            , 6, $user_id));
+            , Constants::TYPE_USER_RECHARGE, $user_id));
     }
 
     public static function cancel(UserModel $user, string $reason) {

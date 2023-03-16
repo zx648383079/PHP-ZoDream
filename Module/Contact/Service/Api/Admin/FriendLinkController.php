@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Contact\Service\Api\Admin;
 
 use Module\Contact\Domain\Repositories\FriendLinkRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class FriendLinkController extends Controller {
 
@@ -12,9 +13,9 @@ class FriendLinkController extends Controller {
         );
 	}
 
-	public function toggleAction(int $id) {
+	public function toggleAction(int $id, string $remark = '') {
         try {
-            return $this->render(FriendLinkRepository::toggle($id));
+            return $this->render(FriendLinkRepository::toggle($id, $remark));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -27,6 +28,22 @@ class FriendLinkController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'url' => 'required|string:0,50',
+                'logo' => 'string:0,200',
+                'brief' => 'string:0,255',
+                'email' => 'string:0,100',
+            ]);
+            return $this->render(FriendLinkRepository::save($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
 }

@@ -5,6 +5,7 @@ namespace Domain;
 final class Constants {
     const TYPE_USER = 1;
 
+    const TYPE_USER_RECHARGE = 6; // 给账户充值
     const TYPE_BLOG = 10;
     const TYPE_BLOG_COMMENT = 11;
 
@@ -37,5 +38,7 @@ final class Constants {
     const TYPE_APP_STORE = 50;
     const TYPE_RESOURCE_STORE = 55;
 
-
+    const TYPE_SYSTEM = 80;
+    const TYPE_SYSTEM_FRIEND_LINK = 84;
+    const TYPE_SYSTEM_FEEDBACK = 85;
 }
