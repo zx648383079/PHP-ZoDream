@@ -38,8 +38,7 @@ class SettingController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function saveOptionAction(Request $request) {
-        $id = intval($request->get('id'));
+    public function saveOptionAction(Request $request, int $id = 0) {
         if ($id > 0) {
             return $this->updateAction($id);
         }

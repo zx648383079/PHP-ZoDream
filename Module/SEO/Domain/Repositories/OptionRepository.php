@@ -29,7 +29,7 @@ class OptionRepository {
         return $data;
     }
 
-    public static function saveNewOption($data) {
+    public static function saveNewOption(array $data) {
         if (empty($data) || !is_array($data) || !isset($data['name'])) {
             throw new Exception('名称不能为空');
         }

@@ -56,11 +56,25 @@ class SEORepository {
     }
 
     public static function clearCache(array $store = []) {
-        if (empty($store)) {
-            cache()->flush();
+        static::flushCache(empty($store) ? array_column(static::storeItems(), 'value') : $store);
+    }
+
+    public static function clearExcludeCache(array $exclude = []) {
+        $items = [];
+        foreach (static::storeItems() as $item) {
+            if (in_array($item['value'], $exclude)) {
+                continue;
+            }
+            $items[] = $item['value'];
+        }
+        static::flushCache($items);
+    }
+
+    protected static function flushCache(array $storeItems) {
+        if (empty($storeItems)) {
             return;
         }
-        foreach ($store as $item) {
+        foreach ($storeItems as $item) {
             if (empty($item)) {
                 continue;
             }
