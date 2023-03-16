@@ -24,6 +24,7 @@ final class ClientRepository {
             'ping_url' => $data['ping_url'],
         ], $data['server_url']);
         cache()->set(self::SERVER_KEY, $data['server_url']);
+        return $data;
     }
 
     private static function sendServer(array $data, string $serverUrl = '') {

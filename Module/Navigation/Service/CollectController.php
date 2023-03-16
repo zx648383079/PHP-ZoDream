@@ -19,9 +19,21 @@ final class CollectController extends Controller {
     public function saveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'link' => 'required|string:0,255',
+                'group_id' => 'int',
+                'position' => 'int:0,127',
             ]);
             return $this->render(CollectRepository::save($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function batchSaveAction(array $data) {
+        try {
+            return $this->renderData(CollectRepository::batchSave($data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -56,7 +68,9 @@ final class CollectController extends Controller {
     public function groupSaveAction(Input $input) {
         try {
             $data = $input->validate([
-
+                'id' => 'int',
+                'name' => 'required|string:0,20',
+                'position' => 'int:0,127',
             ]);
             return $this->render(CollectRepository::groupSave($data));
         } catch (\Exception $ex) {

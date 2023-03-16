@@ -43,7 +43,7 @@ final class CollectRepository {
     }
 
     private static function check(CollectModel $model) {
-        return static::where('link', $model->link)
+        return CollectModel::where('link', $model->link)
             ->where('user_id', $model->user_id)->where('id', '<>', intval($model->id))
             ->count() < 1;
     }
@@ -100,5 +100,65 @@ final class CollectRepository {
         return CollectModel::where('link', $link)->where('user_id', auth()->id())->count() > 0;
     }
 
-
+    public static function batchSave(array $data) {
+        $userId = auth()->id();
+        $groupItems = CollectGroupModel::where('user_id', $userId)->pluck('id');
+        $items = CollectModel::where('user_id', $userId)->pluck('id');
+        $groupIndex = -1;
+        $groupMax = count($groupItems) - 1;
+        $itemMax = count($items) - 1;
+        $itemIndex = -1;
+        $now = time();
+        foreach ($data as $group) {
+            $groupIndex ++;
+            $groupId = 0;
+            if ($groupIndex > $groupMax) {
+                $groupId = CollectGroupModel::query()->insert([
+                    'name' => $group['name'],
+                    'user_id' => $userId,
+                    'position' => $groupIndex + 1,
+                ]);
+            } else {
+                $groupId = $groupItems[$groupIndex];
+                CollectGroupModel::where('id', $groupId)->update([
+                    'name' => $group['name'],
+                    'position' => $groupIndex + 1,
+                ]);
+            }
+            if (empty($groupId)) {
+                throw new \Exception('保存失败');
+            }
+            foreach ($group['items'] as $item) {
+                $itemIndex ++;
+                if ($itemIndex > $itemMax) {
+                    CollectModel::query()->insert([
+                        'name' => $item['name'],
+                        'link' => $item['link'],
+                        'group_id' => $groupId,
+                        'user_id' => $userId,
+                        'position' => $itemIndex + 1,
+                        'updated_at' => $now,
+                        'created_at' => $now,
+                    ]);
+                } else {
+                    CollectModel::where('id', $items[$itemIndex])->update([
+                        'name' => $item['name'],
+                        'link' => $item['link'],
+                        'group_id' => $groupId,
+                        'position' => $itemIndex + 1,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+        }
+        if ($groupIndex < $groupMax) {
+            $del = array_splice($groupItems, $groupIndex + 1, $groupMax - $groupIndex);
+            CollectGroupModel::where('user_id', $userId)->whereIn('id', $del)->delete();
+        }
+        if ($itemIndex < $itemMax) {
+            $del = array_splice($items, $itemIndex + 1, $itemMax - $itemIndex);
+            CollectModel::where('user_id', $userId)->whereIn('id', $del)->delete();
+        }
+        return static::all();
+    }
 }
