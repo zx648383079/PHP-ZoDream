@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Domain\Constants;
 use Exception;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
@@ -19,7 +20,7 @@ class RoleRepository {
      * @throws Exception
      */
     public static function saveRole(array $data, array $permission = []) {
-        if (!isset($data['name']) || empty($data['name'])) {
+        if (empty($data['name'])) {
             throw new Exception('请输入角色名');
         }
         $id = isset($data['id']) ? intval($data['id']) : 0;
@@ -139,7 +140,7 @@ class RoleRepository {
     }
 
     public static function savePermission(array $data) {
-        if (!isset($data['name']) || empty($data['name'])) {
+        if (empty($data['name'])) {
             throw new Exception('请输入权限名');
         }
         $id = isset($data['id']) ? intval($data['id']) : 0;
@@ -152,7 +153,7 @@ class RoleRepository {
         if (!$model->load($data) || !$model->autoIsNew()->save()) {
             throw new Exception($model->getFirstError());
         }
-        event(new ManageAction('permission_edit', $model->name, 12, $model->id));
+        event(new ManageAction('permission_edit', $model->name, Constants::TYPE_ROLE_PERMISSION, $model->id));
         return $model;
     }
 
@@ -164,6 +165,6 @@ class RoleRepository {
         $model->delete();
         UserRoleModel::where('role_id', $id)->delete();
         RolePermissionModel::where('role_id', $id)->delete();
-        event(new ManageAction('role_remove', $model->name, 11, $model->id));
+        event(new ManageAction('role_remove', $model->name, Constants::TYPE_ROLE, $model->id));
     }
 }

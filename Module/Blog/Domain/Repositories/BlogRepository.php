@@ -171,7 +171,7 @@ class BlogRepository {
         return array_values($data);
     }
 
-    public static function formatLanguage($items, Query $query) {
+    public static function formatLanguage($items, SqlBuilder $query) {
         if (empty($items)) {
             return [];
         }
@@ -480,6 +480,11 @@ class BlogRepository {
             ->updateIncrement('click_count', $amount);
     }
 
+    public static function getStatistics(int $blog): array {
+        return BlogModel::query()->where('id', $blog)->asArray()
+            ->first('click_count', 'recommend_count', 'comment_count');
+    }
+
     public static function recommend(int $id) {
         $model = BlogModel::findOrThrow($id, __('blog is not exist'));
         $res = LogRepository::toggleLog(BlogLogModel::TYPE_BLOG, BlogLogModel::ACTION_RECOMMEND, $id);
@@ -491,6 +496,14 @@ class BlogRepository {
     public static function canComment(int $id): bool {
         return BlogMetaModel::where('name', 'comment_status')
             ->where('blog_id', $id)->value('content') > 0;
+    }
+
+    public static function getLogList(int $blog) {
+        return BlogLogModel::with('user', 'blog')
+            ->where('item_id', $blog)
+            ->where('item_type', BlogLogModel::TYPE_BLOG)
+            ->orderBy('created_at desc')
+            ->page();
     }
 
     /**

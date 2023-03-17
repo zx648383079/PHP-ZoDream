@@ -105,7 +105,7 @@ class CreateBlogTables extends Migration {
         RoleRepository::newPermission([
             'blog_term_edit' => '博客分类管理'
         ]);
-        Option::group('高级', function () {
+        Option::group('博客设置', function () {
             return [
                 [
                     'name' => '博客列表显示',
@@ -121,6 +121,14 @@ class CreateBlogTables extends Migration {
                     'type' => 'select',
                     'value' => 0,
                     'default_value' => "关闭\n开启\n仅登录",
+                    'visibility' => 2,
+                ],
+                [
+                    'name' => '博客评论审核',
+                    'code' => 'comment_approved',
+                    'type' => 'switch',
+                    'value' => 0,
+                    'default_value' => "关闭\n开启",
                     'visibility' => 2,
                 ],
             ];

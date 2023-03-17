@@ -72,18 +72,13 @@ class HomeController extends Controller {
 
     public function logAction(int $blog) {
         $this->layout = '';
-        $log_list = BlogLogModel::with('user', 'blog')
-            ->where('item_id', $blog)
-            ->where('item_type', BlogLogModel::TYPE_BLOG)
-            ->orderBy('created_at desc')
-            ->page();
+        $log_list = BlogRepository::getLogList($blog);
         return $this->show(compact('log_list'));
     }
 
     public function counterAction(int $blog) {
         BlogRepository::addClick($blog);
-        $model = BlogModel::query()->where('id', $blog)->asArray()
-            ->first('click_count', 'recommend_count', 'comment_count');
+        $model = BlogRepository::getStatistics($blog);
         return $this->renderData($model);
     }
 

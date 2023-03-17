@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
@@ -174,7 +175,7 @@ class UserRepository {
             throw new Exception($model->getFirstError());
         }
         static::saveRoles($model->id, $roles);
-        event(new ManageAction('user_edit', $model->name, 5, $model->id));
+        event(new ManageAction('user_edit', $model->name, Constants::TYPE_USER_UPDATE, $model->id));
         return $model;
     }
 

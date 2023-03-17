@@ -6,6 +6,9 @@ use Module\Blog\Domain\Helpers\RouterHelper;
 use Zodream\Http\Uri;
 use Zodream\Route\Rewrite\URLEncoder;
 
+/**
+ * 增加优雅链接支持
+ */
 class BlogSeoEncoder implements URLEncoder {
 
     public function decode(Uri $url, callable $next): Uri {

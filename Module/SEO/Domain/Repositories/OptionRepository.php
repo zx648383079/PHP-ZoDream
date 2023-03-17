@@ -6,6 +6,7 @@ use Exception;
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Option;
 use Zodream\Html\Tree;
+use Zodream\ThirdParty\API\Microsoft;
 
 
 class OptionRepository {
@@ -66,5 +67,23 @@ class OptionRepository {
     public static function remove(int $id) {
         OptionModel::where('id', $id)->delete();
         OptionModel::where('parent_id', $id)->delete();
+    }
+
+    public static function todayWallpager() {
+        $cache = cache();
+        $cacheKey = __FUNCTION__;
+        $data = $cache->get($cacheKey);
+        if ($data !== false) {
+            return $data;
+        }
+        $end = strtotime(date('Y-m-d').' 23:59:59') + 10;
+        $diff = max($end - time(), 4 * 3600);
+        $api = new Microsoft();
+        $data = $api->wallpager(1);
+        if (empty($data)) {
+            return [];
+        }
+        $cache->set($cacheKey, $data, $diff);
+        return $data;
     }
 }

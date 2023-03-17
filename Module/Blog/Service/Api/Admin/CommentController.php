@@ -12,6 +12,16 @@ class CommentController extends Controller {
         );
     }
 
+    public function toggleAction(int $id) {
+        try {
+            return $this->render(
+                CommentRepository::manageToggle($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function deleteAction(int $id) {
         CommentRepository::remove($id);
         return $this->renderData(true);

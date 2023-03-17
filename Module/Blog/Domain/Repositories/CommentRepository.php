@@ -12,6 +12,7 @@ use Module\Blog\Domain\Model\CommentFullModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Model\CommentPageModel;
 use Module\Contact\Domain\Repositories\ReportRepository;
+use Module\SEO\Domain\Option;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 use Zodream\Html\Page;
 use Exception;
@@ -36,7 +37,8 @@ class CommentRepository {
                 'parent_id' => $parent_id
             ])->when($is_hot, function ($query) {
                 $query->where('agree_count', '>', 0)->orderBy('agree_count desc');
-            })->orderBy($sort, $order)
+            })->where('approved', 1)
+            ->orderBy($sort, $order)
             ->page($per_page);
     }
 
@@ -61,6 +63,7 @@ class CommentRepository {
             ->orderBy('position desc')->first();
         $data['parent_id'] = $parentId;
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
+        $data['approved'] = Option::value('comment_approved', false) ? 0 : 1;
         $comment = CommentModel::createOrThrow($data);
         BlogModel::where('id', $data['blog_id'])->updateIncrement('comment_count');
         $extraRules = array_merge([
@@ -237,6 +240,13 @@ class CommentRepository {
             $model->agree_count ++;
             $model->agree_type = 1;
         }
+        $model->save();
+        return $model;
+    }
+
+    public static function manageToggle(int $id) {
+        $model = CommentModel::findOrThrow($id);
+        $model->approved = $model->approved !== 1 ? 1 : 0;
         $model->save();
         return $model;
     }
