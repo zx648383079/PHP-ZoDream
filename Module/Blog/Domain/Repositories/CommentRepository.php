@@ -6,7 +6,9 @@ use Domain\Model\SearchModel;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Module\Blog\Domain\Entities\BlogEntity;
 use Module\Blog\Domain\Model\BlogLogModel;
+use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentFullModel;
 use Module\Blog\Domain\Model\CommentModel;
@@ -249,5 +251,18 @@ class CommentRepository {
         $model->approved = $model->approved !== 1 ? 1 : 0;
         $model->save();
         return $model;
+    }
+
+    public static function commentStatus($status): int {
+        if (empty($status) || $status < 1) {
+            return 0;
+        }
+        $val = Option::value('blog_comment', 0);
+        return is_int($val) ? $val : intval($val);
+    }
+
+    public static function blogCommentStatus(int $id): int {
+        $val = BlogMetaModel::where('blog_id', $id)->where('name', 'comment_status')->value('content');
+        return static::commentStatus($val);
     }
 }

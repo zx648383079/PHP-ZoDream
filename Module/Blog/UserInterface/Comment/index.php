@@ -45,34 +45,42 @@ $lang = Json::encode($lang);
     <?php endforeach;?>
 </div>
 <?php endif;?>
-<div class="book-comment-form">
-    <div class="title">
-        <?=__('Leave A Comment')?>
-    </div>
-    <form id="comment-form" method="post" action="<?=$this->url('./comment/save', false)?>">
-        <input type="hidden" name="blog_id" value="<?=$blog_id?>">
-        <input type="hidden" name="parent_id">
-        <?php if (auth()->guest()):?>
-        <div class="form-table">
-            <div class="form-group">
-                <label><?=__('Nick Name')?></label>
-                <input type="text" name="name" placeholder="<?=__('Please input your nick name')?>">
-            </div>
-            <div class="form-group">
-                <label><?=__('Email')?></label>
-                <input type="email" name="email" placeholder="<?=__('Please input your email')?>">
-            </div>
-            <div class="form-group">
-                <label><?=__('URL')?></label>
-                <input type="url" name="url" placeholder="<?=__('Please input your URL')?>">
-            </div>
+<?php if ($comment_status === 1 || ($comment_status === 2 && !auth()->guest())):?>
+    <div class="book-comment-form">
+        <div class="title">
+            <?=__('Leave A Comment')?>
         </div>
-        <?php endif; ?>
-        <textarea name="content" placeholder="<?=__('Please input the content')?>"></textarea>
-        <button class="btn-submit"><?=__('Comment')?></button>
-        <button type="button" class="btn-cancel"><?=__('Cancel')?></button>
-    </form>
+        <form id="comment-form" method="post" action="<?=$this->url('./comment/save', false)?>">
+            <input type="hidden" name="blog_id" value="<?=$blog_id?>">
+            <input type="hidden" name="parent_id">
+            <?php if (auth()->guest()):?>
+                <div class="form-table">
+                    <div class="form-group">
+                        <label><?=__('Nick Name')?></label>
+                        <input type="text" name="name" placeholder="<?=__('Please input your nick name')?>">
+                    </div>
+                    <div class="form-group">
+                        <label><?=__('Email')?></label>
+                        <input type="email" name="email" placeholder="<?=__('Please input your email')?>">
+                    </div>
+                    <div class="form-group">
+                        <label><?=__('URL')?></label>
+                        <input type="url" name="url" placeholder="<?=__('Please input your URL')?>">
+                    </div>
+                </div>
+            <?php endif; ?>
+            <textarea name="content" placeholder="<?=__('Please input the content')?>"></textarea>
+            <button class="btn-submit"><?=__('Comment')?></button>
+            <button type="button" class="btn-cancel"><?=__('Cancel')?></button>
+        </form>
+    </div>
+<?php elseif ($comment_status === 2):?>
+<div class="comment-tip">
+    请先
+    <a href="<?=$this->url('/auth', ['redirect_uri' => $this->url()])?>">登录</a>
+    才能评论
 </div>
+<?php endif;?>
 <div class="book-comments">
     <div class="title">
         <?=__('All Comments')?>

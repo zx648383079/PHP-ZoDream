@@ -5,7 +5,7 @@ namespace Module\SEO\Service\Api\Admin;
 use Module\SEO\Domain\Model\OptionModel;
 use Module\SEO\Domain\Events\OptionUpdated;
 use Module\SEO\Domain\Repositories\OptionRepository;
-use Zodream\Infrastructure\Contracts\Http\Input as Request;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class SettingController extends Controller {
 
@@ -13,11 +13,11 @@ class SettingController extends Controller {
         return $this->renderData(OptionRepository::getEditList());
     }
 
-    public function saveAction(Request $request) {
+    public function saveAction(array $option = [], array $field = []) {
         try {
-            OptionRepository::saveNewOption($request->get('field'));
+            OptionRepository::saveNewOption($field);
         } catch (\Exception $ex) {}
-        OptionRepository::saveOption($request->get('option'));
+        OptionRepository::saveOption($option);
         event(new OptionUpdated());
         return $this->renderData(true);
     }
@@ -26,21 +26,18 @@ class SettingController extends Controller {
         return $this->render(OptionModel::find($id));
     }
 
-    public function updateAction(int $id) {
-        $model = OptionModel::find($id);
-        $model->load();
-        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
-            return $this->renderFailure('名称重复');
+    public function updateAction(Input $input, int $id) {
+        try {
+            $model = OptionRepository::update($id, $input->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($model->save()) {
-            return $this->render($model);
-        }
-        return $this->renderFailure($model->getFirstError());
+        return $this->render($model);
     }
 
-    public function saveOptionAction(Request $request, int $id = 0) {
+    public function saveOptionAction(Input $request, int $id = 0) {
         if ($id > 0) {
-            return $this->updateAction($id);
+            return $this->updateAction($request, $id);
         }
         try {
             $model = OptionRepository::saveNewOption($request->get());

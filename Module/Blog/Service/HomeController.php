@@ -67,6 +67,7 @@ class HomeController extends Controller {
         $tags = TagRepository::getTags($blog->id);
         $relation_list = TagRepository::getRelationBlogs($blog->id);
         $metaItems = BlogMetaModel::getOrDefault($id);
+        $metaItems['comment_status'] = CommentRepository::commentStatus($metaItems['comment_status']);
         return $this->show('detail', compact('blog', 'cat_list', 'languages', 'tags', 'relation_list', 'metaItems'));
     }
 

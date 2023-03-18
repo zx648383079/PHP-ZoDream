@@ -30,18 +30,15 @@ class SettingController extends Controller {
         return $this->renderData(OptionModel::find($id));
     }
 
-    public function updateAction(int $id) {
-        $model = OptionModel::find($id);
-        $model->load();
-        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
-            return $this->renderFailure('名称重复');
+    public function updateAction(Request $request, int $id) {
+        try {
+            OptionRepository::update($id, $request->get());
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        if ($model->save()) {
-            return $this->renderData([
-                'refresh' => true
-            ]);
-        }
-        return $this->renderFailure($model->getFirstError());
+        return $this->renderData([
+            'refresh' => true
+        ]);
     }
 
     public function deleteAction(int $id) {

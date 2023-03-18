@@ -124,7 +124,7 @@ class CreateBlogTables extends Migration {
                     'visibility' => 2,
                 ],
                 [
-                    'name' => '博客评论审核',
+                    'name' => '评论审核',
                     'code' => 'comment_approved',
                     'type' => 'switch',
                     'value' => 0,

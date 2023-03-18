@@ -31,7 +31,7 @@ class OptionRepository {
     }
 
     public static function saveNewOption(array $data) {
-        if (empty($data) || !is_array($data) || !isset($data['name'])) {
+        if (empty($data) || !isset($data['name'])) {
             throw new Exception('名称不能为空');
         }
         if (empty($data['name'])) {
@@ -62,6 +62,29 @@ class OptionRepository {
         foreach ($data as $id => $value) {
             OptionModel::where('id', $id)->update(compact('value'));
         }
+    }
+
+    public static function update(int $id, array $data) {
+        $model = OptionModel::findOrThrow($id);
+        if ($model->type === 'group' && $data['type'] !== $model->type) {
+            throw new  Exception('分组不能改成项');
+        }
+        $model->load($data);
+        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
+            throw new Exception('名称重复');
+        }
+        if ($model->type !== 'group') {
+            if (!$model->code || $model->parent_id < 1) {
+                throw new Exception('别名不能为空');
+            }
+            if (OptionModel::where('code', $model->code)->where('id', '<>', $id)->count() > 0) {
+                throw new Exception('别名已存在');
+            }
+        }
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
     }
 
     public static function remove(int $id) {

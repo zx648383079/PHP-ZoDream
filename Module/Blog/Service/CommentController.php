@@ -21,6 +21,7 @@ class CommentController extends ModuleController {
 
     public function indexAction(int $blog_id) {
         $hot_comments = CommentRepository::getHot($blog_id, 4);
+        $comment_status = CommentRepository::blogCommentStatus($blog_id);
         return $this->show(compact('hot_comments', 'blog_id'));
     }
 

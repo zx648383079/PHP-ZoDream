@@ -243,6 +243,7 @@ class BlogRepository {
         list($blog, $readRole) = self::getWithRole($id, $open_key);
         $data = self::formatBody($blog, $readRole > 1);
         $data = array_merge($data, static::renderAsset(BlogMetaModel::getOrDefault($id)));
+        $data['comment_status'] = CommentRepository::commentStatus($data['comment_status']);
         $data['previous'] = self::previous($blog->id, $blog->language);
         $data['next'] = self::next($blog->id, $blog->language);
         $data['languages'] = BlogRepository::languageList($blog->parent_id > 0 ? $blog->parent_id : $blog->id);
@@ -494,8 +495,11 @@ class BlogRepository {
     }
 
     public static function canComment(int $id): bool {
-        return BlogMetaModel::where('name', 'comment_status')
-            ->where('blog_id', $id)->value('content') > 0;
+        $val = CommentRepository::blogCommentStatus($id);
+        if ($val === 2 && auth()->guest()) {
+            return false;
+        }
+        return $val > 0;
     }
 
     public static function getLogList(int $blog) {
