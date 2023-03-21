@@ -564,7 +564,7 @@ class AuthRepository {
                 'nickname' => '',
                 'vendor' => $type,
                 'identity' => $openid,
-                'unionid' => $unionId.'',
+                'unionid' => $unionId,
                 'data' => $data,
                 'platform_id' => $platform_id,
             ]);
@@ -574,7 +574,7 @@ class AuthRepository {
             'nickname' => $model->nickname,
             'vendor' => $type,
             'identity' => $openid,
-            'unionid' => $unionId.'',
+            'unionid' => $unionId,
             'data' => $data,
             'platform_id' => $platform_id,
         ]);
@@ -638,7 +638,49 @@ class AuthRepository {
         }
         $user->{$data['name']} = $data['value'];
         $user->save();
-        return $user;
+        return $user->toArray();
     }
 
+    /**
+     * 生成一次性凭证
+     * @param int $duration 有效期 0 表示一次性
+     * @return string
+     */
+    public static function ticket(int $duration = 0): string {
+        if (auth()->guest()) {
+            return '';
+        }
+        $userId = auth()->id();
+        $ticket = md5(sprintf('%s_%d', $userId, Time::millisecond()));
+        $store = cache()->store('auth');
+        $store->set($ticket, [
+            'user' => $userId,
+            'duration' => $duration
+        ], $duration <= 600 ? 8 * 3600 : $duration);
+        return $ticket;
+    }
+
+    /**
+     * 验证一次凭证
+     * @param string $ticket
+     * @param bool $autoLogin 是否进行登录
+     * @return int 返回用户id
+     * @throws Exception
+     */
+    public static function verifyTicket(string $ticket, bool $autoLogin = false): int {
+        $store = cache()->store('auth');
+        $data = $store->get($ticket);
+        if (empty($data)) {
+            return 0;
+        }
+        $userId = intval($data['user']);
+        if ($data['duration'] <= 0) {
+            $store->delete($ticket);
+        }
+        if ($userId <= 0 || !$autoLogin) {
+            return $userId;
+        }
+        static::loginUser(UserModel::findIdentity($userId));
+        return $userId;
+    }
 }

@@ -1,25 +1,34 @@
 <?php
 namespace Module\Template\Domain\Model;
 
-use Domain\Model\Model;
-use Module\Template\Domain\Entities\SiteWeightEntity;
-use Zodream\Helpers\Arr;
+use Module\Template\Domain\Entities\SitePageEntity;
 use Zodream\Helpers\Json;
 
 /**
- *
+ * Class PageModel
+ * @package Module\Template
  * @property integer $id
  * @property integer $site_id
- * @property integer $theme_weight_id 部件名
- * @property integer $theme_style_id 部件名
+ * @property integer $type
+ * @property string $name
  * @property string $title
- * @property string $content
+ * @property string $keywords
+ * @property string $thumb
+ * @property string $description
  * @property string $settings
- * @property boolean $is_share 是否通用
+ * @property integer $position
+ * @property integer $theme_page_id
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property SiteModel $site
  */
-class SiteWeightModel extends SiteWeightEntity {
+class SitePageModel extends SitePageEntity {
+
+
+    public function site() {
+        return $this->hasOne(SiteModel::class, 'id', 'site_id');
+    }
 
     public function getSettingsAttribute() {
         $val = $this->getAttributeSource('settings');
@@ -31,6 +40,6 @@ class SiteWeightModel extends SiteWeightEntity {
     }
 
     public function setting($key, $default = null) {
-        return Arr::get($this->settings, $key, $default);
+        return isset($this->settings[$key]) ? $this->settings[$key] : $default;
     }
 }

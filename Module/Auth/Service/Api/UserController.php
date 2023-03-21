@@ -107,4 +107,12 @@ class UserController extends Controller {
         }
     }
 
+    public function ticketAction() {
+        try {
+            $ticket = AuthRepository::ticket();
+            return $this->renderData($ticket);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

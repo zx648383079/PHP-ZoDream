@@ -2,6 +2,8 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Template\Domain\Entities\ThemeComponentEntity;
 use Module\Template\Domain\VisualEditor\VisualFactory;
 use Module\Template\Domain\VisualEditor\VisualPage;
 use Module\Template\Module;
@@ -21,46 +23,16 @@ use Zodream\Disk\Directory;
  * @property integer $theme_id
  * @property string $dependencies
  */
-class ThemeWeightModel extends Model {
+class ThemeComponentModel extends ThemeComponentEntity {
 
-    const TYPE_BASIC = 0;
-    const TYPE_ADVANCE = 1;
 
-    const ADAPT_ALL = 0; // 自适应
-    const ADAPT_PC = 1;  // 适应PC
-    const ADAPT_MOBILE = 2; // 适应手机
-
-    public static function tableName() {
-        return 'tpl_theme_weight';
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,30',
-            'description' => 'string:0,200',
-            'thumb' => 'string:0,100',
-            'type' => 'int:0,127',
-            'adapt_to' => 'int:0,9',
-            'editable' => '',
-            'theme_id' => 'required|int',
-            'path' => 'string:0,200',
-            'dependencies' => 'string'
-        ];
+    public function category() {
+        return $this->hasOne(ThemeCategoryModel::class, 'id', 'cat_id');
     }
-
-    protected function labels() {
-        return [
-            'name' => 'Name',
-            'description' => 'Description',
-            'thumb' => 'Thumb',
-            'type' => 'Type',
-            'editable' => 'Editable',
-            'theme_id' => 'Theme Id',
-            'path' => 'Path',
-        ];
-    }
-
 
     public function getDirectoryAttribute() {
         if (file_exists($this->path)) {

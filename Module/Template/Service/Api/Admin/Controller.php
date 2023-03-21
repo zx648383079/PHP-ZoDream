@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\OnlineTV\Service\Api\Admin;
+namespace Module\Template\Service\Api\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Template\Service\Api\Controller as BaseController;

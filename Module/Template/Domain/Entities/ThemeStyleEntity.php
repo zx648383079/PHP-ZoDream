@@ -1,29 +1,29 @@
 <?php
-namespace Module\Template\Domain\Model;
+declare(strict_types=1);
+namespace Module\Template\Domain\Entities;
 
-use Domain\Model\Model;
+use Domain\Entities\Entity;
 
 /**
- * Class ThemePageModel
- * @package Module\Template\Domain\Model
+ *
  * @property integer $id
+ * @property integer $component_id
  * @property string $name
  * @property string $description
  * @property string $thumb
- * @property integer $theme_id
  * @property string $path
  */
-class ThemePageModel extends Model {
+class ThemeStyleEntity extends Entity {
     public static function tableName() {
-        return 'tpl_theme_page';
+        return 'tpl_theme_style';
     }
 
     protected function rules() {
         return [
+            'component_id' => 'required|int',
             'name' => 'required|string:0,30',
             'description' => 'string:0,200',
             'thumb' => 'string:0,100',
-            'theme_id' => 'required|int',
             'path' => 'required|string:0,200',
         ];
     }
@@ -31,13 +31,11 @@ class ThemePageModel extends Model {
     protected function labels() {
         return [
             'id' => 'Id',
+            'component_id' => 'Component Id',
             'name' => 'Name',
             'description' => 'Description',
             'thumb' => 'Thumb',
-            'theme_id' => 'Theme Id',
             'path' => 'Path',
         ];
     }
-
-
 }

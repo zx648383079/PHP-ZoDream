@@ -2,6 +2,8 @@
 namespace Module\Template\Domain\Model;
 
 use Domain\Model\Model;
+use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Template\Domain\Entities\SiteEntity;
 
 /**
  * Class SiteModel
@@ -20,41 +22,10 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class SiteModel extends Model {
-    public static function tableName() {
-        return 'tpl_site';
+class SiteModel extends SiteEntity {
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-    protected function rules() {
-        return [
-            'name' => 'required|string:0,100',
-            'user_id' => 'required|int',
-            'title' => 'string:0,200',
-            'keywords' => 'string:0,255',
-            'thumb' => 'string:0,255',
-            'description' => 'string:0,255',
-            'domain' => 'string:0,50',
-            'theme_id' => 'required|int',
-            'default_page_id' => 'int',
-            'status' => 'int:0,127',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'name' => '站点别名',
-            'user_id' => 'User Id',
-            'title' => '站点名',
-            'keywords' => '关键字',
-            'thumb' => '预览图',
-            'description' => '简介',
-            'domain' => '域名',
-            'theme_id' => 'Theme Id',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
 }

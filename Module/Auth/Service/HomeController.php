@@ -19,12 +19,18 @@ class HomeController extends Controller {
     }
 
     public function indexAction(Request $request) {
+        $redirect_uri = $request->string('redirect_uri', '/');
+        if ($request->isGet() && $request->has('ticket')) {
+            if (AuthRepository::verifyTicket($request->get('ticket'), true) > 0) {
+                return $this->redirect($redirect_uri);
+            }
+        }
         try {
             AuthRepository::login(
                 $request->string('email'),
                 $request->string('password'),
                 $request->has('rememberMe'));
-            return $this->redirect($request->string('redirect_uri', '/'));
+            return $this->redirect($redirect_uri);
         } catch (\Exception $ex) {}
         if ($request->isAjax() && $request->isGet()) {
             return $this->render([
@@ -42,7 +48,6 @@ class HomeController extends Controller {
             session()->set('level', $count);
             $isCaptcha = true;
         }
-        $redirect_uri = $request->string('redirect_uri');
         $title = '用户登录';
         return $this->show(compact('redirect_uri', 'title', 'isCaptcha'));
     }

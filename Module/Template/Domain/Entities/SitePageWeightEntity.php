@@ -1,12 +1,11 @@
 <?php
-namespace Module\Template\Domain\Model;
+declare(strict_types=1);
+namespace Module\Template\Domain\Entities;
 
-use Domain\Model\Model;
-
+use Domain\Entities\Entity;
 
 /**
- * Class PageWeightModel
- * @package Module\Template
+ *
  * @property integer $id
  * @property integer $page_id
  * @property integer $site_id
@@ -14,21 +13,18 @@ use Domain\Model\Model;
  * @property integer $parent_id
  * @property integer $parent_index
  * @property integer $position
- *
  */
-class PageWeightModel extends Model {
-
+class SitePageWeightEntity extends Entity {
     public static function tableName() {
-        return 'tpl_page_weight';
+        return 'tpl_site_page_weight';
     }
-
     protected function rules() {
         return [
             'page_id' => 'required|int',
             'site_id' => 'required|int',
             'weight_id' => 'required|int',
             'parent_id' => 'int',
-            'parent_index' => 'int',
+            'parent_index' => 'int:0,127',
             'position' => 'int',
         ];
     }
@@ -40,9 +36,8 @@ class PageWeightModel extends Model {
             'site_id' => 'Site Id',
             'weight_id' => 'Weight Id',
             'parent_id' => 'Parent Id',
-            'parent_index' => 'Parent index',
+            'parent_index' => 'Parent Index',
             'position' => 'Position',
         ];
     }
-
 }

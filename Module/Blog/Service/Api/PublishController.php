@@ -33,6 +33,12 @@ class PublishController extends Controller {
         return $this->render($model);
     }
 
+    public function pageAction(string $keywords = '', int $term = 0, int $status = 0, int $type = 0, string $language = '') {
+        return $this->renderPage(
+            PublishRepository::getList($keywords, $term, $status, $type, $language)
+        );
+    }
+
     public function saveDraftAction(Request $request, int $id = 0) {
         try {
             $model = PublishRepository::saveDraft($request->get(), $id);
