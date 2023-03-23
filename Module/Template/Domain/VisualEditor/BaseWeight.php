@@ -26,10 +26,10 @@ abstract class BaseWeight implements IVisualWeight {
     protected mixed $directory;
 
     /**
-     * @param VisualWeight $engine
+     * @param IVisualEngine $engine
      * @return BaseWeight
      */
-    public function setEngine(VisualWeight $engine) {
+    public function setEngine(IVisualEngine $engine) {
         $this->engine = $engine;
         return $this;
     }

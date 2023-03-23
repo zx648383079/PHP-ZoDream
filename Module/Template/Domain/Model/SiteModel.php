@@ -1,7 +1,6 @@
 <?php
 namespace Module\Template\Domain\Model;
 
-use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Template\Domain\Entities\SiteEntity;
 
@@ -16,7 +15,6 @@ use Module\Template\Domain\Entities\SiteEntity;
  * @property string $thumb
  * @property string $description
  * @property string $domain
- * @property integer $theme_id
  * @property integer $default_page_id
  * @property integer $status
  * @property integer $created_at

@@ -40,7 +40,7 @@ class ListRepository {
     }
 
     public static function save(array $data) {
-        if (!isset($data['items']) || empty($data['items'])) {
+        if (empty($data['items'])) {
             throw new \Exception('请选择书籍');
         }
         $id = $data['id'] ?? 0;

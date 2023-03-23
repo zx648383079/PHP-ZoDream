@@ -21,7 +21,7 @@ class SiteController extends Controller {
                 'title' => 'string:0,200',
                 'keywords' => 'string:0,255',
                 'thumb' => 'string:0,255',
-                'page' => 'string:0,255',
+                'logo' => 'string:0,255',
                 'description' => 'string:0,255',
                 'domain' => 'string:0,50',
                 'default_page_id' => 'int',
@@ -30,6 +30,24 @@ class SiteController extends Controller {
             ]);
             return $this->render(
                 SiteRepository::selfSave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function cloneAction(Input $input, int $source) {
+        try {
+            $data = $input->validate([
+                'name' => 'required|string:0,100',
+                'title' => 'string:0,200',
+                'keywords' => 'string:0,255',
+                'logo' => 'string:0,255',
+                'description' => 'string:0,255',
+                'domain' => 'string:0,50',
+            ]);
+            return $this->render(
+                SiteRepository::selfClone($data, $source)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -94,7 +112,7 @@ class SiteController extends Controller {
         }
     }
 
-    public function componentAddAction(int $site, array|int $id) {
+    public function componentAddAction(array|int $site, array|int $id) {
         try {
             SiteRepository::selfAddComponent($site, $id);
         } catch (\Exception $ex) {

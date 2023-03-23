@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteComponentModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SitePageModel;
+use Module\Template\Domain\Model\SitePageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
-use Module\Template\Domain\Model\ThemeModel;
-use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
-use Module\Template\Domain\Model\ThemeWeightModel;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Str;
@@ -25,7 +23,7 @@ class VisualPage implements IVisualEngine {
     const EXT = '.html';
 
     /**
-     * @var PageWeightModel[]
+     * @var SitePageWeightModel[]
      */
     protected array $weights = [];
 
@@ -39,23 +37,22 @@ class VisualPage implements IVisualEngine {
      */
     protected Directory $directory;
 
-    protected ThemePageModel $themePage;
-    protected ThemeModel $theme;
+    protected SiteComponentModel $themePage;
 
     protected bool $booted = false;
 
     public function __construct(
         protected SiteModel $site,
-        protected PageModel $page,
+        protected SitePageModel $page,
         protected bool $editable = false) {
         VisualFactory::unlock();
         VisualFactory::set(SiteModel::class, $this->site->id, $this->site);
-        VisualFactory::set(PageModel::class, $this->page->id, $this->page);
-        $this->theme = VisualFactory::getOrSet(ThemeModel::class, $this->site->theme_id, function () {
-            return ThemeModel::where('id', $this->site->theme_id)->first();
-        });
-        $this->themePage = VisualFactory::getOrSet(ThemePageModel::class, $this->page->theme_page_id, function () {
-            return ThemePageModel::where('id', $this->page->theme_page_id)->first();
+        VisualFactory::set(SitePageModel::class, $this->page->id, $this->page);
+        $this->themePage = VisualFactory::getOrSet(SiteComponentModel::class,
+            $this->page->component_id, function () {
+            return SiteComponentModel::where('component_id', $this->page->component_id)
+                ->where('site_id', $this->page->site_id)
+                ->where('type', 0)->first();
         });
         $this->directory = VisualFactory::templateFolder();
     }
@@ -114,7 +111,7 @@ class VisualPage implements IVisualEngine {
     /**
      * 获取页面数据
      * @param string $key
-     * @return PageModel|mixed
+     * @return SitePageModel|mixed
      */
     public function getPage(string $key = ''): mixed {
         if (empty($key)) {
@@ -140,11 +137,11 @@ class VisualPage implements IVisualEngine {
             ->setDirectory($this->directory);
         $this->factory->getEngine()
             ->registerFunc('asset', function (string $val) {
-                return sprintf('/assets/themes/%s/%s', $this->theme->name, trim($val, '\''));
+                return sprintf('/assets/themes/%s', trim($val, '\''));
             });
     }
 
-    public function addWeight(PageWeightModel|array $weight) {
+    public function addWeight(SitePageWeightModel|array $weight) {
         if (!is_array($weight)) {
             $weight = func_get_args();
         }
@@ -155,9 +152,10 @@ class VisualPage implements IVisualEngine {
             $siteWeight = VisualFactory::getOrSet(SiteWeightModel::class, $item['weight_id'], function () use ($item) {
                 return SiteWeightModel::find($item['weight_id']);
             });
-            $themeWeight = VisualFactory::getOrSet(ThemeWeightModel::class,
-                $siteWeight['theme_weight_id'], function () use ($siteWeight) {
-                return ThemeWeightModel::find($siteWeight['theme_weight_id']);
+            $themeWeight = VisualFactory::getOrSet(SiteComponentModel::class,
+                $siteWeight['component_id'], function () use ($siteWeight) {
+                return SiteComponentModel::where('component_id', $siteWeight['component_id'])
+                    ->where('site_id', $siteWeight['site_id'])->first();
             });
             foreach ($themeWeight->dependencies as $file) {
                 if (str_ends_with($file, '.js')) {
@@ -170,7 +168,7 @@ class VisualPage implements IVisualEngine {
     }
 
     protected function loadWeights() {
-        $items = PageWeightModel::where('page_id', $this->page->id)->get();
+        $items = SitePageWeightModel::where('page_id', $this->page->id)->get();
         if (empty($items)) {
             return;
         }
@@ -182,7 +180,7 @@ class VisualPage implements IVisualEngine {
      * 根据父id 获取组件，排序方式
      * @param int $parent_id
      * @param int $index
-     * @return PageWeightModel[]
+     * @return SitePageWeightModel[]
      */
     public function getWeightList(int $parent_id = 0, int $index = 0): array {
         $this->boot();
@@ -217,7 +215,7 @@ class VisualPage implements IVisualEngine {
         $this->boot();
         $renderer = $this->renderer();
         if ($this->editable) {
-            $renderer->registerCssFile('@template.css');
+            $renderer->registerCssFile('@template_edit.css');
         }
         return $renderer->render(Str::lastReplace($this->themePage->path, self::EXT), [
             'title' => $this->page->title,
@@ -232,25 +230,32 @@ class VisualPage implements IVisualEngine {
 
 
     public static function cacheAnyWeight(array $items) {
-        VisualFactory::setAny(PageWeightModel::class, $items);
+        if (empty($items)) {
+            return;
+        }
+        $siteId = $items[0]['site_id'];
+        VisualFactory::setAny(SitePageWeightModel::class, $items);
         $weightItems = VisualFactory::getAutoSet(
             Relation::columns($items, 'weight_id'),
             SiteWeightModel::class,
-            function (array $idItems) {
+            function (array $idItems) use ($siteId) {
                 return SiteWeightModel::whereIn('id', $idItems)
+                    ->where('site_id', $siteId)
                     ->get();
             }
         );
         VisualFactory::getAutoSet(
-            Relation::columns($weightItems, 'theme_weight_id'),
-            ThemeWeightModel::class,
-            function (array $idItems) {
-                return ThemeWeightModel::whereIn('id', $idItems)
+            Relation::columns($weightItems, 'component_id'),
+            SiteComponentModel::class,
+            function (array $idItems) use ($siteId) {
+                return SiteComponentModel::whereIn('component_id', $idItems)
+                    ->where('site_id', $siteId)
+                    ->where('type', 1)
                     ->get();
             }
         );
         VisualFactory::getAutoSet(
-            Relation::columns($weightItems, 'theme_style_id'),
+            Relation::columns($weightItems, 'style_id'),
             ThemeStyleModel::class,
             function (array $idItems) {
                 return ThemeStyleModel::whereIn('id', $idItems)
@@ -261,7 +266,7 @@ class VisualPage implements IVisualEngine {
 
     public static function renderAnyWeight(IVisualEngine $engine, array $items, int $rowId = 0, int $index = 0): string {
         // 排序
-        usort($items, function (PageWeightModel $a, PageWeightModel $b) {
+        usort($items, function (SitePageWeightModel $a, SitePageWeightModel $b) {
             if ($a->position === $b->position) {
                 return 0;
             }
@@ -275,7 +280,19 @@ class VisualPage implements IVisualEngine {
         // 修正当前的文件夹
         $engine->resetRenderer();
         $html = implode(PHP_EOL, $args);
-        if ($engine->editable()) {
+        return static::renderRowHtml($engine->editable(), $rowId, $index, $html);
+    }
+
+    /**
+     * 是否生成编辑模式下的内容
+     * @param bool $editable
+     * @param int $rowId
+     * @param int $index
+     * @param string $html
+     * @return string
+     */
+    public static function renderRowHtml(bool $editable, int $rowId, int $index, string $html) {
+        if ($editable) {
             return <<<HTML
 <div class="visual-edit-row" data-id="{$rowId}" data-index="{$index}">
 {$html}
@@ -284,5 +301,4 @@ HTML;
         }
         return $html;
     }
-
 }

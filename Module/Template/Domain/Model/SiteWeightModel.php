@@ -10,12 +10,12 @@ use Zodream\Helpers\Json;
  *
  * @property integer $id
  * @property integer $site_id
- * @property integer $theme_weight_id 部件名
- * @property integer $theme_style_id 部件名
+ * @property integer $component_id
  * @property string $title
  * @property string $content
  * @property string $settings
  * @property boolean $is_share 是否通用
+ * @property integer $style_id
  * @property integer $created_at
  * @property integer $updated_at
  */

@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\Repositories;
 
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Entities\ThemeStyleEntity;
+use Module\Template\Domain\Model\SiteComponentModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SitePageModel;
+use Module\Template\Domain\Model\SitePageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
-use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\VisualEditor\VisualFactory;
 use Module\Template\Domain\VisualEditor\VisualWeight;
 
@@ -20,22 +21,22 @@ final class PageRepository {
     const PUBLISH_STATUS_TRASH = 9; // 垃圾箱
 
     public static function getList(int $site) {
-        if (!SiteRepository::isUser($site)) {
+        if (!SiteRepository::isSelf($site)) {
             throw new \Exception('site is error');
         }
-        return PageModel::where('site_id', $site)->orderBy('position', 'asc')
+        return SitePageModel::where('site_id', $site)->orderBy('position', 'asc')
             ->orderBy('id', 'asc')->page();
     }
 
     public static function save(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $model = $id > 0 ? PageModel::query()->where('id', $id)->first() : new PageModel();
+        $model = $id > 0 ? SitePageModel::query()->where('id', $id)->first() : new SitePageModel();
         if (empty($model)) {
             throw new \Exception(__('id is error'));
         }
         $model->load($data);
-        if (!SiteRepository::isUser(intval($model->site_id))) {
+        if (!SiteRepository::isSelf(intval($model->site_id))) {
             throw new \Exception(__('page is error'));
         }
         if (!$model->save()) {
@@ -56,15 +57,15 @@ final class PageRepository {
      * @throws \Exception
      */
     public static function remove(int $id): int {
-        $model = PageModel::find($id);
+        $model = SitePageModel::find($id);
         if (empty($model)) {
             throw new \Exception('page not found');
         }
-        if (!SiteRepository::isUser($model->site_id)) {
+        if (!SiteRepository::isSelf($model->site_id)) {
             throw new \Exception('page not found');
         }
-        $weightId = PageWeightModel::where('page_id', $id)->pluck('weight_id');
-        PageWeightModel::where('page_id', $id)->delete();
+        $weightId = SitePageWeightModel::where('page_id', $id)->pluck('weight_id');
+        SitePageWeightModel::where('page_id', $id)->delete();
         if (!empty($weightId)) {
             SiteWeightModel::where('site_id', $model->site_id)
                 ->whereIn('id', $weightId)
@@ -78,28 +79,31 @@ final class PageRepository {
     }
 
     public static function getInfo(int $id): array {
-        $model = PageModel::find($id);
+        $model = SitePageModel::find($id);
         if (empty($model)) {
             throw new \Exception('page not found');
         }
-        if (!SiteRepository::isUser($model->site_id)) {
+        if (!SiteRepository::isSelf($model->site_id)) {
             throw new \Exception('page not found');
         }
         $data = $model->toArray();
-        $data['edit_url'] = url('./@admin/page/template', ['id' => $model->id, 'edit' => true]);
-        $data['preview_url'] = url('./page', ['name' => $model->name]);
+        $data['edit_url'] = url('./@admin/visual', ['id' => $model->id, 'site' => $model->site_id]);
+        $data['editable_url'] = url('./@admin/visual/template', ['id' => $model->id, 'site' => $model->site_id]);
+        $data['preview_url'] = url('./@admin/visual/preview', ['id' => $model->id, 'site' => $model->site_id]);
         return $data;
     }
 
     public static function weight(int $id) {
-        $pageModel = PageWeightModel::findOrThrow($id);
+        $pageModel = SitePageWeightModel::findOrThrow($id);
         $model = SiteWeightModel::findOrThrow($pageModel->weight_id);
-        return array_merge($model->toArray(), $pageModel->toArray());
+        $data = array_merge($model->toArray(), $pageModel->toArray());
+        $data['styles'] = ThemeStyleEntity::where('component_id', $model->component_id)->get();
+        return $data;
     }
 
     public static function weightAdd(int $page_id, int $weight_id, int $parent_id,
                                      int $parent_index = 0, int $position = 0, int $group = 0): array {
-        $pageModel = PageModel::find($page_id);
+        $pageModel = SitePageModel::find($page_id);
         $position = self::refreshPosition($parent_id, $parent_index, -1, $position);
         if ($group === 99) {
             $weightModel = SiteWeightModel::where('site_id', $pageModel->site_id)
@@ -107,14 +111,14 @@ final class PageRepository {
                 ->where('is_share', 1)->first();
         } else {
             $weightModel = SiteWeightModel::createOrThrow([
-                'theme_weight_id' => $weight_id,
+                'component_id' => $weight_id,
                 'site_id' => $pageModel->site_id,
             ]);
         }
         if (empty($weightModel)) {
             throw new \Exception('weight is error');
         }
-        $model = PageWeightModel::createOrThrow([
+        $model = SitePageWeightModel::createOrThrow([
             'page_id' => $pageModel->id,
             'weight_id' => $weightModel->id,
             'parent_id' => $parent_id,
@@ -141,7 +145,7 @@ final class PageRepository {
             $currentPos = 0;
         }
         // 重排一下位置
-        $items = PageWeightModel::query()
+        $items = SitePageWeightModel::query()
             ->where('parent_id', $parent_id)
             ->where('parent_index', $parent_index)
             ->where('id', '<>', $currenId)->orderBy('position', 'asc')
@@ -158,7 +162,7 @@ final class PageRepository {
             if ($pos === intval($item['position'])) {
                 continue;
             }
-            PageWeightModel::query()->where('id', $item['id'])
+            SitePageWeightModel::query()->where('id', $item['id'])
                 ->update([
                     'position' => $pos
                 ]);
@@ -166,19 +170,19 @@ final class PageRepository {
         return $currentPos;
     }
 
-    private static function renderWeight(PageWeightModel $model): string {
+    private static function renderWeight(SitePageWeightModel $model): string {
         return (new VisualWeight($model))->render(true);
     }
 
     public static function weightRefresh(int $id) {
-        $model = PageWeightModel::findOrThrow($id);
+        $model = SitePageWeightModel::findOrThrow($id);
         $data = $model->toArray();
         $data['html'] = self::renderWeight($model);
         return $data;
     }
 
     public static function weightMove(int $id, int $parent_id, int $parent_index = 0, int $position = 0) {
-        $model = PageWeightModel::findOrThrow($id);
+        $model = SitePageWeightModel::findOrThrow($id);
         if ($model->parent_id === $parent_id
             && $model->parent_index === $parent_index) {
             if ($model->position === $position) {
@@ -196,13 +200,13 @@ final class PageRepository {
     }
 
     public static function weightSave(int $id) {
-        $pageModel = PageWeightModel::findOrThrow($id);
+        $pageModel = SitePageWeightModel::findOrThrow($id);
         // $pageMap = ['parent_id', 'parent_index', 'position'];
-        $disable = ['id', 'page_id', 'weight_id', 'theme_weight_id',
+        $disable = ['id', 'page_id', 'weight_id', 'component_id',
             'parent_id', 'parent_index', 'position'];
-        $maps = ['theme_style_id', 'title', 'content', 'is_share', 'settings'];
+        $maps = ['style_id', 'title', 'content', 'is_share', 'settings'];
         $data = (new VisualWeight($pageModel))->parseForm();
-        $model = VisualFactory::getOrSet(ThemeWeightModel::class,
+        $model = VisualFactory::getOrSet(SiteWeightModel::class,
             $pageModel->weight_id, function () use ($pageModel) {
                 return SiteWeightModel::where('id', $pageModel->weight_id);
             });
@@ -234,25 +238,25 @@ final class PageRepository {
         if ($id < 1) {
             return true;
         }
-        $model = PageWeightModel::findOrThrow($id);
+        $model = SitePageWeightModel::findOrThrow($id);
         $data = [$id];
         $parents = $data;
         while (true) {
-            $parents = PageWeightModel::whereIn('parent_id', $parents)
+            $parents = SitePageWeightModel::whereIn('parent_id', $parents)
                 ->pluck('id');
             if (empty($parents)) {
                 break;
             }
             $data = array_merge($data, $parents);
         }
-        PageWeightModel::whereIn('id', $data)->delete();
+        SitePageWeightModel::whereIn('id', $data)->delete();
         SiteWeightModel::whereIn('id', $data)->where('is_share', 0)->delete();
         self::refreshPosition($model->parent_id, $model->parent_index);
         return true;
     }
 
     public static function weightForm(int $id) {
-        $model = PageWeightModel::find($id);
+        $model = SitePageWeightModel::find($id);
         $html = (new VisualWeight($model))->renderForm();
         $data = $model->toArray();
         $data['html'] = $html;
@@ -266,8 +270,8 @@ final class PageRepository {
      * @return void
      */
     public static function batchSave(int $id, array $weights) {
-        $pageModel = PageModel::findOrThrow($id);
-        if (!SiteRepository::isUser($pageModel->site_id)) {
+        $pageModel = SitePageModel::findOrThrow($id);
+        if (!SiteRepository::isSelf($pageModel->site_id)) {
             throw new \Exception('page is error');
         }
         $maps = ['position', 'parent_id', 'parent_index'];
@@ -284,7 +288,7 @@ final class PageRepository {
             if (empty($data)) {
                 continue;
             }
-            PageWeightModel::where('page_id', $pageModel->id)
+            SitePageWeightModel::where('page_id', $pageModel->id)
                 ->where('id', $weight['id'])
                 ->update($data);
         }

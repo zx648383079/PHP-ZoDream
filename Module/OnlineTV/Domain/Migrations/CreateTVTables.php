@@ -11,6 +11,8 @@ use Module\OnlineTV\Domain\Models\MovieModel;
 use Module\OnlineTV\Domain\Models\MovieScoreModel;
 use Module\OnlineTV\Domain\Models\MovieSeriesModel;
 use Module\OnlineTV\Domain\Models\MusicFileModel;
+use Module\OnlineTV\Domain\Models\MusicListItemModel;
+use Module\OnlineTV\Domain\Models\MusicListModel;
 use Module\OnlineTV\Domain\Models\MusicModel;
 use Module\OnlineTV\Domain\Repositories\TVRepository;
 use Zodream\Database\Migrations\Migration;
@@ -39,6 +41,20 @@ class CreateTVTables extends Migration {
             $table->string('source');
             $table->bool('status')->default(1);
             $table->timestamps();
+        })->append(MusicListModel::tableName(), function(Table $table) {
+            $table->comment('音乐歌单');
+            $table->id();
+            $table->string('title')->comment('歌单名');
+            $table->uint('user_id');
+            $table->string('cover')->default('')->comment('封面');
+            $table->string('description')->default('')->comment('介绍');
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(MusicListItemModel::tableName(), function(Table $table) {
+            $table->comment('音乐歌单关联数据');
+            $table->id();
+            $table->uint('list_id');
+            $table->uint('music_id');
         })->append(MusicModel::tableName(), function(Table $table) {
             $table->comment('音乐');
             $table->id();

@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
-
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
+use Module\Template\Domain\Model\SiteComponentModel;
+use Module\Template\Domain\Model\SitePageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
-use Module\Template\Domain\Model\ThemeWeightModel;
-use Zodream\Helpers\Str;
+use Module\Template\Domain\Repositories\ComponentRepository;
 use Zodream\Template\ViewFactory;
 
 class VisualWeight implements IVisualEngine {
@@ -20,9 +18,9 @@ class VisualWeight implements IVisualEngine {
      */
     protected mixed $factory = null;
     /**
-     * @var ThemeWeightModel
+     * @var SiteComponentModel
      */
-    protected ThemeWeightModel $weight;
+    protected SiteComponentModel $weight;
 
     protected SiteWeightModel $model;
 
@@ -33,15 +31,17 @@ class VisualWeight implements IVisualEngine {
     protected VisualWeightProperty $property;
 
     public function __construct(
-        protected PageWeightModel $pageWeight,
+        protected SitePageWeightModel $pageWeight,
         protected ?IVisualEngine $engine = null) {
-        $this->model = VisualFactory::getOrSet(ThemeWeightModel::class,
+        $this->model = VisualFactory::getOrSet(SiteWeightModel::class,
             $this->pageWeight->weight_id, function () {
                 return SiteWeightModel::where('id', $this->pageWeight->weight_id)->first();
             });
-        $this->weight = VisualFactory::getOrSet(ThemeWeightModel::class,
-            $this->model->theme_weight_id, function () {
-                return ThemeWeightModel::where('id', $this->model->theme_weight_id)->first();
+        $this->weight = VisualFactory::getOrSet(SiteComponentModel::class,
+            $this->model->component_id_id, function () {
+                return SiteComponentModel::where('id', $this->model->component_id)
+                    ->where('site_id', $this->model->site_id)
+                    ->where('type', 1)->first();
             });
         $this->property = VisualFactory::getOrSet(VisualWeightProperty::class,
             $this->model->id, function () {
@@ -102,36 +102,20 @@ class VisualWeight implements IVisualEngine {
             return $this->engine->renderRow($parent_id, $index);
         }
         VisualFactory::lock($parent_id, $index);
-        $items = PageWeightModel::where('parent_id', $parent_id)
+        $items = SitePageWeightModel::where('parent_id', $parent_id)
             ->where('page_id', $this->pageId())
             ->where('parent_index', $index)->get();
         return VisualPage::renderAnyWeight($this, $items, $parent_id, $index);
     }
 
-    /**
-     * @return BaseWeight
-     */
-    public function newWeight(): mixed {
-        $path = $this->weight->path;
-        if (class_exists($path)) {
-            return new $path;
-        }
-        if (!file_exists($path)) {
-            $path = (string)VisualFactory::templateFolder($path);
-        }
-        if (is_dir($path)) {
-            $path .= '/weight.php';
-        }
-        include_once $path;
-        $name = Str::studly($this->weight->name).'Weight';
-        return (new $name)->setDirectory(dirname($path));
-    }
+
 
     /**
      * @return BaseWeight
      */
     public function createWeight() {
-        return $this->newWeight()
+        return VisualFactory::newWeight($this->weight->alias_name,
+            (string)ComponentRepository::root()->file($this->weight->path))
             ->setEngine($this);
     }
 
@@ -147,21 +131,25 @@ class VisualWeight implements IVisualEngine {
         $this->editable = $editable;
         $this->asyncable = $asyncable;
         if ($this->isAsync()) {
-            return $this->renderAsync();
+            return $this->renderAsync($this->property->weightId(), $this->rowId());
         }
         $this->renderer()->set('IS_DEV', $editable);
-        $html = $this->createWeight()
-            ->render($this->model);
+        $file = ComponentRepository::root()->file($this->weight->path);
+        $html = $this->weight->alias_name ? $this->createWeight()
+            ->render($this->model) : $file->read();
         if (!$editable) {
-            return $this->renderHtml($html);
+            return static::renderHtml($this->property->weightId(), $html);
         }
-        return $this->renderEdit($html);
+        return $this->renderEditHtml(!!$this->weight->editable, $this->rowId(), $html);
     }
 
-
-
-    private function renderHtml(string $html) {
-        $id = $this->property->weightId();
+    /**
+     * 替换处理对当前控件的引用
+     * @param string $id
+     * @param string $html
+     * @return string
+     */
+    public static function renderHtml(string $id, string $html) {
         $styleTag = '#'.$id;
         $nameTag = str_replace('-', '_', $id);
         $html = preg_replace_callback('#<style[\s\S]+?</style>#', function ($match) use($styleTag) {
@@ -190,10 +178,17 @@ HTML;
 
     }
 
-    private function renderEdit(string $html) {
-        $editHtml = $this->weight->editable ? '<a class="edit">编辑</a>' : '';
+    /**
+     * 编辑模式下
+     * @param bool $editable
+     * @param int $rowId
+     * @param string $html
+     * @return string
+     */
+    public static function renderEditHtml(bool $editable, int $rowId, string $html) {
+        $editHtml = $editable ? '<a class="edit">编辑</a>' : '';
         return <<<HTML
-<div class="visual-edit-control" data-type="weight" data-id="{$this->rowId()}">
+<div class="visual-edit-control" data-type="weight" data-id="{$rowId}">
     <div class="visual-action">
         <a class="refresh">刷新</a>
         {$editHtml}
@@ -208,9 +203,15 @@ HTML;
 HTML;
     }
 
-    private function renderAsync() {
-        $id = $this->property->weightId();
-        $url = url('./lazy', ['id' => $this->rowId()]);
+    /**
+     * 延迟加载模式下
+     * @param string $id
+     * @param int $rowId
+     * @return string
+     * @throws \Exception
+     */
+    public static function renderAsync(string $id, int $rowId) {
+        $url = url('./lazy', ['id' => $rowId]);
         return <<<HTML
 <div id="{$id}" class="template-lazy" data-url="{$url}">
 </div>

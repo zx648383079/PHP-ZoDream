@@ -7,8 +7,6 @@ use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
 use Module\Template\Domain\Entities\SiteEntity;
 use Module\Template\Domain\Entities\SitePageEntity;
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteComponentModel;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\SitePageModel;
@@ -36,28 +34,31 @@ final class SiteRepository extends CRUDRepository {
         return true;
     }
 
-    public static function isUser(int $site): bool {
-        return SiteModel::where('user_id', auth()->id())->where('id', $site)->count() > 0;
-    }
 
-    public static function weightGroups(int $themeId, int $siteId) {
-        $data = ThemeRepository::weightGroups($themeId);
+    public static function weightGroups(int $siteId) {
+        $data = SiteComponentModel::with('category')->where('type', 1)->where('site_id', $siteId)->get();
         $weightItems = SiteWeightModel::where('site_id', $siteId)->where('is_share', 1)
-            ->get('id', 'theme_weight_id', 'title');
+            ->get('id', 'component_id', 'title');
         $sourceItems = [];
-        foreach ($data as $i => $group) {
-            foreach ($group['items'] as $j => $item) {
-                $temp = $item->toArray();
-                $data[$i]['items'][$j] = $temp;
-                $sourceItems[$temp['id']] = $temp;
+        $groupItems = [];
+        foreach ($data as $item) {
+            $temp = $item->toArray();
+            if (!isset($groupItems[$item->cat_id])) {
+                $groupItems[$item->cat_id] = [
+                    'id' => 0,
+                    'name' => $item->category->name,
+                    'items' => []
+                ];
             }
+            $groupItems[$item->cat_id]['items'][] = $temp;
+            $sourceItems[$temp['id']] = $temp;
         }
         $items = [];
         foreach ($weightItems as $item) {
-            if (!isset($sourceItems[$item['theme_weight_id']])) {
+            if (!isset($sourceItems[$item['component_id']])) {
                 continue;
             }
-            $temp = $sourceItems[$item['theme_weight_id']];
+            $temp = $sourceItems[$item['component_id']];
             $items[] = [
                 'id' => $item['id'],
                 'name' => $item['title'] ?: $temp['name'],
@@ -66,8 +67,8 @@ final class SiteRepository extends CRUDRepository {
                 'editable' => $temp['editable']
             ];
         }
-        $data[] = ['id' => 99, 'name' => '共享组件', 'items' => $items];
-        return $data;
+        $groupItems[] = ['id' => 99, 'name' => '共享组件', 'items' => $items];
+        return array_values($groupItems);
     }
 
 
@@ -136,14 +137,93 @@ final class SiteRepository extends CRUDRepository {
         return $model;
     }
 
+    public static function selfClone(array $data, int $sourceSite)
+    {
+        $sourceModel = SiteModel::findOrThrow($sourceSite);
+        if ($sourceModel->is_share < 1) {
+            throw new \Exception('克隆失败');
+        }
+        $userId = auth()->id();
+        $model = new SiteEntity();
+        $model->thumb = $sourceModel->thumb;
+        $model->default_page_id = $sourceModel->default_page_id;
+        $model->load($data, ['user_id']);
+        $model->user_id = $userId;
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        $items = SiteComponentModel::where('site_id', $sourceModel->id)->asArray()->get();
+        $now = time();
+        $replace = [
+            'site_id' => $model->id,
+            'updated_at' => $now,
+            'created_at' => $now,
+        ];
+        foreach ($items as $item) {
+            $clone = [];
+            foreach ($item as $k => $v) {
+                if ($k === 'id') {
+                    continue;
+                }
+                $clone[$k] = $replace[$k] ?? $v;
+            }
+            SiteComponentModel::query()->insert($clone);
+        }
+        $items = SitePageModel::where('site_id', $sourceModel->id)->get();
+        $pageMap = [];
+        foreach ($items as $item) {
+            $clone = [];
+            foreach ($item as $k => $v) {
+                if ($k === 'id') {
+                    continue;
+                }
+                $clone[$k] = $replace[$k] ?? $v;
+            }
+            $pageMap[$item['id']] = SitePageModel::query()->insert($clone);
+        }
+        $items = SiteWeightModel::where('site_id', $sourceModel->id)->get();
+        $weightMap = [];
+        foreach ($items as $item) {
+            $clone = [];
+            foreach ($item as $k => $v) {
+                if ($k === 'id') {
+                    continue;
+                }
+                $clone[$k] = $replace[$k] ?? $v;
+            }
+            $weightMap[$item['id']] = SiteWeightModel::query()->insert($clone);
+        }
+        $items = SitePageWeightModel::where('site_id', $sourceModel->id)->get();
+        foreach ($items as $item) {
+            $clone = [];
+            foreach ($item as $k => $v) {
+                if ($k === 'id') {
+                    continue;
+                }
+                $clone[$k] = $v;
+            }
+            $clone['page_id'] = $pageMap[$item['page_id']];
+            $clone['weight_id'] = $weightMap[$item['weight_id']];
+            $clone['site_id'] = $replace['site_id'];
+            SitePageWeightModel::query()->insert($clone);
+        }
+        if ($model->default_page_id > 0) {
+            $model->default_page_id = $pageMap[$model->default_page_id];
+            $model->save();
+        }
+        return $model;
+    }
+
     public static function selfRemove(int $id)
     {
         $model = SiteEntity::findWithAuth($id);
         if (empty($model)) {
             return;
         }
+        SiteComponentModel::where('site_id', $id)->delete();
         SitePageWeightModel::where('site_id', $id)->delete();
         SitePageModel::where('site_id', $id)->delete();
+        SiteWeightModel::where('site_id', $id)->delete();
         $model->delete();
     }
 
@@ -198,29 +278,35 @@ final class SiteRepository extends CRUDRepository {
         })->where('type', $type)->where('site_id', $site)->orderBy('id', 'desc')->page();
     }
 
-    public static function selfAddComponent(int $site, array|int $id)
+    public static function selfAddComponent(array|int $site, array|int $id)
     {
-        if (!self::isSelf($site)) {
-            throw new \Exception('数据有误');
-        }
+
         $success = 0;
-        foreach ((array)$id as $item) {
-            if (SiteComponentModel::where('site_id', $site)
-                    ->where('component_id', $item)->count() > 0) {
-                continue;
+        foreach ((array)$id as $itemId) {
+            $model = ThemeComponentModel::findOrThrow($itemId);
+            foreach ((array)$site as $siteId) {
+                $siteId = intval($siteId);
+                if (!self::isSelf($siteId)) {
+                    throw new \Exception('数据有误');
+                }
+                if (SiteComponentModel::where('site_id', $siteId)
+                        ->where('component_id', $itemId)->count() > 0) {
+                    continue;
+                }
+                SiteComponentModel::createOrThrow([
+                    'component_id' => $itemId,
+                    'site_id' => $siteId,
+                    'cat_id' => $model->cat_id,
+                    'name' => $model->name,
+                    'description' => $model->description,
+                    'thumb' => $model->thumb,
+                    'type' => $model->type,
+                    'author' => $model->author,
+                    'version' => $model->version,
+                    'path' => $model->path,
+                    'alias_name' => $model->alias_name
+                ]);
             }
-            $model = ThemeComponentModel::findOrThrow($id);
-            SiteComponentModel::createOrThrow([
-                'component_id' => $id,
-                'site_id' => $site,
-                'name' => $model->name,
-                'description' => $model->description,
-                'thumb' => $model->thumb,
-                'type' => $model->type,
-                'author' => $model->author,
-                'version' => $model->version,
-                'path' => $model->path,
-            ]);
             $success ++;
         }
         if ($success < 1) {
@@ -245,5 +331,17 @@ final class SiteRepository extends CRUDRepository {
     public static function isSelf(int $site): bool {
         return SiteModel::where('user_id', auth()->id())
             ->where('id', $site)->count() > 0;
+    }
+
+    public static function getShareList(string $keywords = '', int $user = 0,
+                                        string $sort = 'created_at',
+                                        string|int|bool $order = 'desc') {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['id', 'share_price', 'created_at']);
+        return SiteModel::with('user')
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['name', 'title'], true, '', $keywords);
+            })->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })->where('is_share', 1)->orderBy($sort, $order)->page();
     }
 }

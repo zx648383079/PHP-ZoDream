@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
-use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
 use Zodream\Helpers\Arr;
@@ -191,7 +190,7 @@ class VisualWeightProperty {
 
     private function formatStyleBorder($val) {
         if (empty($val['side']) || empty($val['value'][0])) {
-            return;
+            return '';
         }
         if (is_numeric($val['value'][0])) {
             $val['value'][0] = $this->formatPixel($val['value'][0]);

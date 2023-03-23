@@ -16,21 +16,6 @@ $this->registerJs($js);
     <?=Form::text('domain')?>
     <?=Form::file('thumb')?>
     <?=Form::textarea('description')?>
-    <div class="input-group">
-        <label for="description">主题</label>
-        <div class="theme-select">
-            <?php foreach([$theme] as $item):?>
-                <div class="theme-item<?=$item->id == $model->theme_id ? ' active' : ''?>" data-id="<?=$item->id?>">
-                    <div class="thumb">
-                        <img src="<?=$this->url('./@admin/theme/asset', ['folder' => $item->path, 'file' => $item->thumb], false)?>" alt="">
-                    </div>
-                    <div class="name"><?=$item['name']?></div>
-                    <div class="desc"><?=$item['description']?></div>
-                </div>
-            <?php endforeach;?>
-            <input type="hidden" name="theme_id" value="<?=$model->theme_id?>">
-        </div>
-    </div>
     
     <button class="btn">保存</button>
 <?= Form::close('id') ?>

@@ -5,12 +5,19 @@ namespace Module\Template\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Domain\Providers\StorageProvider;
 use Module\Template\Domain\Entities\ThemeComponentEntity;
+use Module\Template\Domain\Model\SiteComponentModel;
 use Module\Template\Domain\Model\ThemeComponentModel;
+use Zodream\Disk\Directory;
+use Zodream\Disk\ZipStream;
+use Zodream\Helpers\Json;
 
 final class ComponentRepository {
 
     public static function storage(): StorageProvider {
         return StorageProvider::privateStore();
+    }
+    public static function root(): Directory {
+        return app_path('data')->directory('visual');
     }
 
     public static function getManageList(string $keywords = '', int $user = 0, int $category = 0)
@@ -77,8 +84,7 @@ final class ComponentRepository {
         return $model;
     }
 
-    public static function selfSave(array $data)
-    {
+    public static function selfSave(array $data) {
         $userId = auth()->id();
         $id = $data['id'] ?? 0;
         unset($data['id']);
@@ -92,14 +98,76 @@ final class ComponentRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        self::unpackFile($model);
         return $model;
     }
 
-    public static function selfRemove(int $id)
-    {
+    protected static function unpackFile(ThemeComponentEntity $model) {
+        try {
+            $file = self::storage()->getFile($model->path, true);
+        } catch (\Exception) {
+            return;
+        }
+        $folder = self::root()->directory((string)$model->id);
+        $folder->create();
+        if (str_starts_with($file->getExtension(), 'htm')) {
+            $distFile = $folder->file(sprintf('weight.%s', $file->getExtension()));
+            $file->copy($distFile);
+            $folder->addFile('weight.json', Json::encode([
+                'entry' => $distFile->getName()
+            ]));
+            $model->alias_name = '';
+            $model->editable = false;
+            $model->path = $distFile->getRelative(self::root());
+            $model->save();
+            return;
+        }
+        (new ZipStream($file))->extractTo($folder);
+        $jsonFile = $folder->file('weight.json');
+        $entryFile = $folder->file('index.html');
+        if (!$entryFile->exist()) {
+            $entryFile = $folder->file('weight.php');
+        }
+        if (!$jsonFile->exist()) {
+            if (!$entryFile->exist()) {
+                throw new \Exception('not found entry');
+            }
+            $model->editable = false;
+            $model->alias_name = '';
+            $model->path = $entryFile->getRelative(self::root());
+            $model->save();
+            return;
+        }
+        $data = Json::decode($jsonFile->read());
+        $model->editable = isset($data['editable']) && $data['editable'];
+        $model->alias_name = $data['name'] ?? '';
+        if (isset($data['entry'])) {
+            $entryFile = $folder->file($data['entry']);
+            if (!$entryFile->exist())  {
+                throw new \Exception('not found entry');
+            }
+            $model->path = $entryFile->getRelative(self::root());
+        } else {
+            $model->path = $entryFile->getRelative(self::root());
+        }
+        $model->save();
+    }
+
+    public static function selfRemove(int $id) {
         $model = self::selfGet($id);
         $model->delete();
+        self::removeFile($model);
     }
+
+    protected static function removeFile(ThemeComponentEntity $model) {
+        $exist = SiteComponentModel::where('component_id', $model->id)
+            ->where('path', $model->path)->count() > 0;
+        if ($exist) {
+            return;
+        }
+        self::root()->directory($model->path)->delete();
+    }
+
 
     public static function selfUpload(array $file)
     {
@@ -117,7 +185,7 @@ final class ComponentRepository {
         })->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
         })->when($category > 0, function ($query) use ($category) {
-            $query->where('cat_id', $category);
+            $query->where('cat_id', CategoryRepository::getAllChildrenId($category));
         })->orderBy($sort, $order)->page();
     }
 
@@ -142,5 +210,10 @@ final class ComponentRepository {
             })->where('type', $type)->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
             })->page();
+    }
+
+    public static function recommend(int $type) {
+        return ThemeComponentModel::with('category')->where('type', $type)
+            ->limit(10)->get();
     }
 }

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
-use Module\Template\Domain\Model\PageModel;
+use Module\Template\Domain\Model\SitePageModel;
 use Zodream\Helpers\Json;
 
 class VisualHelper {
@@ -27,7 +27,7 @@ class VisualHelper {
         }
         if ($item['type'] === 'page') {
             return [
-                'uri' => url('./', ['site' => PageModel::where('id', $item['id'])->value('site_id'), 'id' => $item['id']]),
+                'uri' => url('./', ['site' => SitePageModel::where('id', $item['id'])->value('site_id'), 'id' => $item['id']]),
                 'target' => $item['target']
             ];
         }

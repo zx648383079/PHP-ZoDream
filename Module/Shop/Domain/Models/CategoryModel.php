@@ -111,12 +111,12 @@ class CategoryModel extends CategoryEntity {
      * @param bool $data
      * @return array
      */
-    public static function getChildrenItem($id, $data = true) {
+    public static function getChildrenItem($id, mixed $data = true) {
         if ($data === true) {
             $data = self::cacheTree();
         }
         if (isset($data[$id])) {
-            return isset($data[$id]['children']) ? $data[$id]['children'] : [];
+            return $data[$id]['children'] ?? [];
         }
         foreach ($data as $item) {
             if (!isset($item['children'])) {

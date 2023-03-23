@@ -2,21 +2,16 @@
 declare(strict_types=1);
 namespace Module\Template\Service\Admin;
 
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
-use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\Repositories\PageRepository;
 use Module\Template\Domain\Repositories\SiteRepository;
-use Module\Template\Domain\Repositories\ThemeRepository;
 
 class WeightController extends Controller {
 
     public function indexAction(int $id) {
-        $siteId = PageModel::where('id', $id)->value('site_id');
-        $themeId = SiteModel::where('id', $siteId)->value('theme_id');
-        $weights = SiteRepository::weightGroups($themeId, $siteId);
-        $styles = ThemeRepository::styleList($themeId);
-        return $this->renderData(compact('weights', 'styles'));
+        $siteId = SitePageModel::where('id', $id)->value('site_id');
+        $weights = SiteRepository::weightGroups($siteId);
+        return $this->renderData(compact('weights'));
     }
 
     public function settingAction(int $id) {

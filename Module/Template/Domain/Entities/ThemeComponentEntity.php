@@ -17,7 +17,9 @@ use Domain\Entities\Entity;
  * @property string $author
  * @property string $version
  * @property integer $status
+ * @property integer $editable
  * @property string $path
+ * @property string $alias_name
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -38,6 +40,7 @@ class ThemeComponentEntity extends Entity {
             'author' => 'string:0,20',
             'version' => 'string:0,10',
             'status' => 'int:0,127',
+            'editable' => 'int:0,127',
             'path' => 'required|string:0,200',
             'updated_at' => 'int',
             'created_at' => 'int',

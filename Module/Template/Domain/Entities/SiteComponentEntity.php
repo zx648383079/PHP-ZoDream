@@ -9,13 +9,16 @@ use Domain\Entities\Entity;
  * @property integer $id
  * @property integer $component_id
  * @property integer $site_id
+ * @property integer $cat_id
  * @property string $name
  * @property string $description
  * @property string $thumb
  * @property integer $type
  * @property string $author
  * @property string $version
+ * @property integer $editable
  * @property string $path
+ * @property string $alias_name
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -28,12 +31,14 @@ class SiteComponentEntity extends Entity {
         return [
             'component_id' => 'required|int',
             'site_id' => 'required|int',
+            'cat_id' => 'required|int',
             'name' => 'required|string:0,30',
             'description' => 'string:0,200',
             'thumb' => 'string:0,100',
             'type' => 'int:0,127',
             'author' => 'string:0,20',
             'version' => 'string:0,10',
+            'editable' => 'int:0,127',
             'path' => 'required|string:0,200',
             'updated_at' => 'int',
             'created_at' => 'int',

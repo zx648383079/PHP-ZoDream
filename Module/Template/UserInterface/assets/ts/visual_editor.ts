@@ -65,6 +65,7 @@ interface IPageModel {
     name: string;
     title: string;
     edit_url: string;
+    editable_url: string;
     preview_url: string;
 }
 
@@ -260,7 +261,7 @@ class VisualEditor {
         this.bindEvent();
         this.viewInit();
         this.emit(EditorEventGetPage, (data: IPageModel) => {
-            this.browser.navigate(data.edit_url);
+            this.browser.navigate(data.editable_url);
         }, message => {
 
         });
@@ -643,6 +644,7 @@ class EditorPropertyPanel implements IEditorPanel {
             this.box.find<HTMLDivElement>('.panel-header').trigger('click');
             this.target = weight;
             this.editor.emit(EditorEventGetWeightProperty, weight.id(), data => {
+                this.editor.emit(EditorEventGetStyleSuccess, data.styles);
                 this.lastAt = new Date().getTime();
                 this.applyForm(data);
             });
@@ -692,7 +694,7 @@ class EditorPropertyPanel implements IEditorPanel {
         if (!this.target) {
             return;
         }
-        const data = formData(this.box.find('.form-table')) + '&theme_style_id=' + EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id')) + '&id=' + this.target.id();
+        const data = formData(this.box.find('.form-table')) + '&style_id=' + EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id')) + '&id=' + this.target.id();
         this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), data, data => {
             this.target.html(data.html);
         });
@@ -804,7 +806,7 @@ class EditorPropertyPanel implements IEditorPanel {
                         + EditorHtmlHelper.background('content', styles?.content?.background);
         this.box.find('.style-item').each(function() {
             let $this = $(this);
-            $this.toggleClass('active', $this.attr('data-id') == data.theme_style_id);
+            $this.toggleClass('active', $this.attr('data-id') == data.style_id);
         });
     }
 }
@@ -818,7 +820,7 @@ class EditorWeightPanel implements IEditorPanel {
         this.editor.on(EditorEventAfterViewInit, () => {
             this.editor.emit(EditorEventGetWeights, data => {
                 this.renderWeight(data.weights);
-                this.editor.emit(EditorEventGetStyleSuccess, data.styles);
+                // this.editor.emit(EditorEventGetStyleSuccess, data.styles);
                 // this.box.find('.visual-edit-control').attr('draggable', 'true');
             });
             this.bindEvent();

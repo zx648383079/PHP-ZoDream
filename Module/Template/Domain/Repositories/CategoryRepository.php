@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\Repositories;
 
-
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
@@ -31,6 +30,9 @@ final class CategoryRepository extends CRUDRepository {
         $model = static::get($id);
         $data = $model->toArray();
         $data['children'] = static::getChildren($id);
+        foreach ($data['children'] as $item) {
+            $item['children'] = self::getChildren($item['id']);
+        }
         return $data;
     }
 

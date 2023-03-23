@@ -211,8 +211,21 @@ class StorageProvider {
         return $file->setName($model['name']);
     }
 
-    public function output(Output $output, string $url): Output {
-        $output->file($this->getFile($url));
+    /**
+     * 输出文件
+     * @param Output $output
+     * @param string $url
+     * @param bool $notSplit 是否不启用分块下载，对于流媒体播放不要启用
+     * @return Output
+     * @throws \Exception
+     */
+    public function output(Output $output, string $url, bool $notSplit = false): Output {
+        $file = $this->getFile($url);
+        if ($notSplit) {
+            $output->file($file, 0);
+        } else {
+            $output->file($file);
+        }
         return $output;
     }
 }

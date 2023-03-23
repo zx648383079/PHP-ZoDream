@@ -19,7 +19,7 @@ $this->title = '所有主题页面';
     <?php foreach($model_list as $item):?>
     <div class="card">
         <div class="card-logo">
-            <a href="<?=$this->url('./@admin/page/create', ['page_id' => $item->id, 'site_id' => $site_id, 'type' => $type])?>">
+            <a href="<?=$this->url('./@admin/page/create', ['page_id' => $item->component_id, 'site_id' => $site_id, 'type' => $type])?>">
                 <img src="<?=$this->url('./@admin/theme/asset', ['folder' => $item->path, 'file' => $item->thumb], false)?>" alt="">
             </a>
         </div>

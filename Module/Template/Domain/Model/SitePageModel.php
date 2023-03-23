@@ -9,6 +9,7 @@ use Zodream\Helpers\Json;
  * @package Module\Template
  * @property integer $id
  * @property integer $site_id
+ * @property integer $component_id
  * @property integer $type
  * @property string $name
  * @property string $title
@@ -17,7 +18,7 @@ use Zodream\Helpers\Json;
  * @property string $description
  * @property string $settings
  * @property integer $position
- * @property integer $theme_page_id
+ * @property string $dependencies
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at

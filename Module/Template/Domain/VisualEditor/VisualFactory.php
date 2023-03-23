@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
-use Module\Template\Domain\Model\PageModel;
 use Module\Template\Domain\Model\SiteModel;
+use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\Repositories\PageRepository;
 use Zodream\Disk\Directory;
 use Zodream\Disk\FileObject;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
@@ -114,6 +115,24 @@ class VisualFactory {
     }
 
     /**
+     * @return BaseWeight
+     */
+    public static function newWeight(string $name, string $fileName): mixed {
+        if (class_exists($fileName)) {
+            return new $fileName;
+        }
+        if (!file_exists($fileName)) {
+            $fileName = (string)VisualFactory::templateFolder($fileName);
+        }
+        if (is_dir($fileName)) {
+            $fileName .= '/weight.php';
+        }
+        include_once $fileName;
+        $name = Str::studly($name).'Weight';
+        return (new $name)->setDirectory(dirname($fileName));
+    }
+
+    /**
      * 获取模板路径
      * @param string $path
      * @return bool|FileObject
@@ -139,13 +158,13 @@ class VisualFactory {
             throw new \Exception('site not publish');
         }
         if ($id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('id', $id)->first();
         } else if ($siteModel->default_page_id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('id', $siteModel->default_page_id)->first();
         } else {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
                 ->orderBy('position', 'asc')
                 ->orderBy('id', 'asc')->first();
@@ -175,13 +194,13 @@ class VisualFactory {
             throw new \Exception('site not publish');
         }
         if (!empty($path)) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('name', $path)->first();
         } else if ($siteModel->default_page_id > 0) {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('id', $siteModel->default_page_id)->first();
         } else {
-            $pageModel = PageModel::where('site_id', $siteModel->id)
+            $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
                 ->orderBy('position', 'asc')
                 ->orderBy('id', 'asc')->first();

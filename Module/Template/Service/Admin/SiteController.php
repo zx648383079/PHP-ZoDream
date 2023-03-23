@@ -1,13 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Service\Admin;
 
-use Domain\Model\SearchModel;
 use Domain\Repositories\FileRepository;
-use Module\Template\Domain\Model\PageModel;
-use Module\Template\Domain\Model\PageWeightModel;
 use Module\Template\Domain\Model\SiteModel;
-use Module\Template\Domain\Model\ThemeModel;
-use Module\Template\Domain\Model\ThemePageModel;
 use Module\Template\Domain\Repositories\PageRepository;
 use Module\Template\Domain\Repositories\SiteRepository;
 use Module\Template\Domain\Repositories\ThemeRepository;
@@ -32,20 +28,14 @@ class SiteController extends Controller {
         return $this->show(compact('site', 'page_list'));
     }
 
-    public function createAction(int $theme_id = 0, string $keywords = '') {
-        if ($theme_id < 1) {
-            $model_list = ThemeRepository::getList($keywords);
-            return $this->show('theme', compact('model_list', 'keywords'));
-        }
-        $theme = ThemeModel::find($theme_id);
+    public function createAction() {
         $model = new SiteModel([
             'name' => 'new_site',
             'title' => 'New Site',
             'thumb' => FileRepository::formatImage(),
             'user_id' => auth()->id(),
-            'theme_id' => $theme->id
         ]);
-        return $this->show(compact('model', 'theme'));
+        return $this->show(compact('model'));
     }
 
     public function editAction(int $id) {
@@ -53,8 +43,7 @@ class SiteController extends Controller {
         if (empty($model)) {
             return $this->redirectWithMessage('./', '');
         }
-        $theme = ThemeModel::find($model->theme_id);
-        return $this->show('create', compact('model', 'theme'));
+        return $this->show('create', compact('model'));
     }
 
     public function saveAction(Input $input) {
@@ -68,7 +57,6 @@ class SiteController extends Controller {
                 'thumb' => 'string:0,255',
                 'description' => 'string:0,255',
                 'domain' => 'string:0,50',
-                'theme_id' => 'required|int',
                 'status' => 'int:0,127',
             ]);
             $data['user_id'] = auth()->id();

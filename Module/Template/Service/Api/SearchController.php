@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Service\Api;
 
 use Module\Template\Domain\Repositories\ComponentRepository;
+use Module\Template\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
 class SearchController extends Controller {
@@ -12,6 +13,14 @@ class SearchController extends Controller {
                                 string|int|bool $order = 'desc') {
         return $this->renderPage(
             ComponentRepository::getList($keywords, $category, $user, $sort, $order)
+        );
+    }
+
+    public function siteAction(string $keywords = '', int $user = 0,
+                                string $sort = 'created_at',
+                                string|int|bool $order = 'desc') {
+        return $this->renderPage(
+            SiteRepository::getShareList($keywords, $user, $sort, $order)
         );
     }
 

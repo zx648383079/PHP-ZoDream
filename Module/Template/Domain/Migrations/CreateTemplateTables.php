@@ -42,7 +42,9 @@ class CreateTemplateTables extends Migration {
             $table->string('author', 20)->default('');
             $table->string('version', 10)->default('');
             $table->uint('status', 1)->default(0)->comment('需要审核');
+            $table->uint('editable', 1)->default(0)->comment('是否有编辑表单');
             $table->string('path', 200);
+            $table->string('alias_name', 20)->default('');
             $table->timestamps();
         })->append(ThemeStyleEntity::tableName(), function(Table $table) {
             $table->comment('页面和组件提供的样式');
@@ -57,13 +59,16 @@ class CreateTemplateTables extends Migration {
             $table->id();
             $table->uint('component_id');
             $table->uint('site_id');
+            $table->uint('cat_id');
             $table->string('name', 30);
             $table->string('description', 200)->default('');
             $table->string('thumb', 100)->default('');
             $table->uint('type', 1)->default(0)->comment('部件类型');
             $table->string('author', 20)->default('');
             $table->string('version', 10)->default('');
+            $table->uint('editable', 1)->default(0)->comment('是否有编辑表单');
             $table->string('path', 200);
+            $table->string('alias_name', 20)->default('');
             $table->timestamps();
         })->append(SiteEntity::tableName(), function(Table $table) {
             $table->comment('自定义站点');
