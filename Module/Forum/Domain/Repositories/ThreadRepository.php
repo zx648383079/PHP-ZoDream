@@ -103,6 +103,18 @@ class ThreadRepository {
         return $data;
     }
 
+    public static function selfList(string $keywords = '', string $sort = '', string $order = '') {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+            'updated_at', 'created_at', 'post_count', 'top_type'
+        ]);
+        return ThreadModel::with('classify', 'forum')
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, 'title');
+            })
+            ->where('user_id', auth()->id())
+            ->orderBy($sort, $order)->page();
+    }
+
     public static function topList(int $forum) {
         $data = ThreadModel::with('user', 'classify')
             ->where('forum_id', $forum)
@@ -179,6 +191,17 @@ class ThreadRepository {
             return 0;
         });
         return $items->setPage($data);
+    }
+
+    public static function selfPostList(string $keywords = '') {
+        /** @var Page<ThreadPostModel> $items */
+        return ThreadPostModel::with('thread')
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['content'], false, '', $keywords);
+            })
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'asc')
+            ->page();
     }
 
     /**

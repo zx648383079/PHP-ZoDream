@@ -97,7 +97,9 @@ class VisualLocalPage implements IVisualEngine {
         if (empty($this->factory)) {
             $this->initFactory();
         }
-        $this->factory->set(VisualPage::ENGINE_KEY, $this);
+        $this->factory->set(VisualPage::ENGINE_KEY, $this)
+            ->set(VisualWeight::DATA_KEY, new SiteWeightModel())
+            ->set(VisualWeight::PROPERTY_KEY, new VisualWeightProperty());
         return $this->factory;
     }
 
@@ -123,7 +125,17 @@ class VisualLocalPage implements IVisualEngine {
     {
         VisualFactory::lock($parent_id, $index);
         $args = [];
+        $renderer = $this->renderer();
         foreach ($this->weightItems as $weight) {
+            if (isset($weight['dependencies']) && is_array($weight['dependencies'])) {
+                foreach ($weight['dependencies'] as $dependency) {
+                    if (str_ends_with($dependency, '.js')) {
+                        $renderer->registerJsFile($dependency);
+                    } else {
+                        $renderer->registerCssFile($dependency);
+                    }
+                }
+            }
             $args[] = $this->renderWeight($weight);
         }
         // 修正当前的文件夹

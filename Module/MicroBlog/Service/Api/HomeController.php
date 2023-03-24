@@ -5,13 +5,12 @@ namespace Module\MicroBlog\Service\Api;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Module\MicroBlog\Domain\Repositories\MicroRepository;
 use Module\MicroBlog\Domain\Repositories\TopicRepository;
-use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends Controller {
     public function rules() {
         return [
             'recommend' => '@',
-            'create' => '@',
+            'collect' => '@',
             'forward' => '@',
             '*' => '*'
         ];
@@ -22,18 +21,6 @@ class HomeController extends Controller {
                                 int $id = 0, int $user = 0, int $topic = 0) {
         $items = MicroRepository::getList($sort, $keywords, $id, $user, $topic);
         return $this->renderPage($items);
-    }
-
-    public function createAction(Request $request) {
-        if (!MicroRepository::canPublish()) {
-            return $this->renderFailure('发送过于频繁！');
-        }
-        try {
-            $model = MicroRepository::create($request->get('content'), $request->get('file', []));
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->render($model);
     }
 
     public function recommendAction(int $id) {
@@ -68,15 +55,6 @@ class HomeController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->render($model);
-    }
-
-    public function deleteAction(int $id) {
-        try {
-            MicroRepository::removeSelf($id);
-        }catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->renderData(true);
     }
 
     public function suggestAction(string $keywords = '') {

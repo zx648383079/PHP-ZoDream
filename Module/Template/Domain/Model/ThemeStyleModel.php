@@ -10,7 +10,7 @@ use Module\Template\Domain\Entities\ThemeStyleEntity;
  * @property string $name
  * @property string $description
  * @property string $thumb
- * @property integer $theme_id
+ * @property integer $component_id
  * @property string $path
  */
 class ThemeStyleModel extends ThemeStyleEntity {

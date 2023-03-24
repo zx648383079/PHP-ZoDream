@@ -313,7 +313,7 @@ class VisualEditor {
             this.normal();
         }).on(EditorEventWindowResize, (ww: number, wh: number) => {
             const top = this.box.offset().top;
-            const height = wh - top - 20;
+            const height = wh - top - (this.box.closest('.only-editor').length > 0 ? 2 : 20);
             this.box.toggleClass('visual-mobile-editor', ww < 780 && ww < wh);
             this.outerHeight = height;
             if (!this.viewInited) {
@@ -762,7 +762,7 @@ class EditorPropertyPanel implements IEditorPanel {
             <img src="${item.thumb}" alt="${item.name}">
         </div>`;
         });
-        this.box.find('.style-panel').append(html);
+        this.box.find('.style-panel').html(`<div class="style-item" data-id="0">无</div>${html}`);
     }
 
     public show() {

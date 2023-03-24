@@ -13,11 +13,14 @@ use Zodream\Helpers\Json;
 
 final class ComponentRepository {
 
+    const STATUS_NONE = 0;
+    const STATUS_APPROVED = 1;
+
     public static function storage(): StorageProvider {
         return StorageProvider::privateStore();
     }
     public static function root(): Directory {
-        return app_path('data')->directory('visual');
+        return app_path()->directory('data/visual');
     }
 
     public static function getManageList(string $keywords = '', int $user = 0, int $category = 0)
@@ -44,12 +47,31 @@ final class ComponentRepository {
         if (empty($model)) {
             throw new \Exception('数据有误');
         }
+        $oldStatus = intval($model->status);
         $model->load($data, ['user_id']);
         if ($model->isNewRecord) {
             $model->user_id = auth()->id();
         }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        self::unpackFile($model);
+        if ($oldStatus !== intval($model->status) && $oldStatus !== self::STATUS_APPROVED) {
+            self::root()->directory(sprintf('%d_0', $model->id))
+                ->copy(self::root()->directory(sprintf('%d_1', $model->id)));
+            SiteComponentModel::where('component_id')
+                ->update([
+                    'cat_id' => $model->cat_id,
+                    'name' => $model->name,
+                    'description' => $model->description,
+                    'thumb' => $model->thumb,
+                    'type' => $model->type,
+                    'author' => $model->author,
+                    'version' => $model->version,
+                    'path' => $model->path,
+                    'editable' => $model->editable,
+                    'alias_name' => $model->alias_name
+                ]);
         }
         return $model;
     }
@@ -93,8 +115,12 @@ final class ComponentRepository {
         if (empty($model)) {
             throw new \Exception('数据有误');
         }
+        $oldPath = $model->path;
         $model->load($data, ['user_id']);
         $model->user_id = $userId;
+        if ($oldPath !== $model->path) {
+            $model->status = self::STATUS_NONE;
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
@@ -108,7 +134,7 @@ final class ComponentRepository {
         } catch (\Exception) {
             return;
         }
-        $folder = self::root()->directory((string)$model->id);
+        $folder = self::root()->directory(sprintf('%d_%d', $model->id, $model->status));
         $folder->create();
         if (str_starts_with($file->getExtension(), 'htm')) {
             $distFile = $folder->file(sprintf('weight.%s', $file->getExtension()));
@@ -186,13 +212,13 @@ final class ComponentRepository {
             $query->where('user_id', $user);
         })->when($category > 0, function ($query) use ($category) {
             $query->where('cat_id', CategoryRepository::getAllChildrenId($category));
-        })->orderBy($sort, $order)->page();
+        })->where('status', self::STATUS_APPROVED)->orderBy($sort, $order)->page();
     }
 
     public static function suggestion(string $keywords = '') {
         return ThemeComponentModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->limit(4)->get();
+        })->where('status', self::STATUS_APPROVED)->limit(4)->get();
     }
 
     public static function dialogList(string $keywords = '', int $category = 0,
@@ -214,6 +240,7 @@ final class ComponentRepository {
 
     public static function recommend(int $type) {
         return ThemeComponentModel::with('category')->where('type', $type)
+            ->where('status', self::STATUS_APPROVED)
             ->limit(10)->get();
     }
 }

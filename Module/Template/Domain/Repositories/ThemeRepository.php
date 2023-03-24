@@ -3,29 +3,25 @@ declare(strict_types=1);
 namespace Module\Template\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Template\Domain\Model\ThemeModel;
-use Module\Template\Domain\Model\ThemePageModel;
+use Module\Template\Domain\Model\ThemeComponentModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
-use Module\Template\Domain\Model\ThemeWeightModel;
 use Module\Template\Domain\VisualEditor\VisualFactory;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
 use Zodream\Helpers\Json;
+use Zodream\Html\Page;
 
 final class ThemeRepository {
 
     public static function getList(string $keywords = '') {
-        return ThemeModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, ['name']);
-        })->orderBy('id', 'desc')
-            ->page();
+        return new Page(0);
     }
 
     public static function pageList(int $theme, string $keywords = '') {
-        return ThemePageModel::when(!empty($keywords), function ($query) {
+        return ThemeComponentModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('theme_id', $theme)->orderBy('id', 'desc')
+        })->where('type', 0)->orderBy('id', 'desc')
             ->page();
     }
 
@@ -49,19 +45,19 @@ final class ThemeRepository {
     }
 
     public static function themeIsInstalled(string $name) {
-        return ThemeModel::where('name', $name)->count() > 0;
+        return false;
     }
 
     public static function pageIsInstalled(string $name, int $theme_id) {
-        return ThemePageModel::where('name', $name)->where('theme_id', $theme_id)->count() > 0;
+        return ThemeComponentModel::where('name', $name)->where('type', 0)->count() > 0;
     }
 
     public static function styleIsInstalled(string $name, int $theme_id) {
-        return ThemeStyleModel::where('name', $name)->where('theme_id', $theme_id)->count() > 0;
+        return ThemeStyleModel::where('name', $name)->count() > 0;
     }
 
     public static function weightIsInstalled(string $name, int $theme_id) {
-        return ThemeWeightModel::where('name', $name)->where('theme_id', $theme_id)->count() > 0;
+        return ThemeComponentModel::where('name', $name)->where('type', 1)->count() > 0;
     }
 
     /**
@@ -70,16 +66,20 @@ final class ThemeRepository {
      * @return array
      */
     public static function weightGroups(int $theme_id) {
-        $data = ThemeWeightModel::where('theme_id', $theme_id)->get();
-        $args = [
-            ['id' => 1, 'name' => '基本', 'items' => []],
-            ['id' => 2, 'name' => '高级', 'items' => []],
-        ];
+        $data = ThemeComponentModel::with('category')->where('type', 1)->get();
+        $groupItems = [];
         foreach ($data as $item) {
-            $item['thumb'] = url('./admin/theme/asset', ['folder' => $item->path, 'file' => $item->thumb]);
-            $args[$item->type]['items'][] = $item;
+            $temp = $item->toArray();
+            if (!isset($groupItems[$item->cat_id])) {
+                $groupItems[$item->cat_id] = [
+                    'id' => 0,
+                    'name' => $item->category->name,
+                    'items' => []
+                ];
+            }
+            $groupItems[$item->cat_id]['items'][] = $temp;
         }
-        return array_values($args);
+        return array_values($groupItems);
     }
 
 
@@ -96,33 +96,33 @@ final class ThemeRepository {
      * @return void
      */
     public static function installTheme(array $data) {
-        $model = new ThemeModel($data);
-        $id = ThemeModel::where('name', $data['name'])->value('id');
-        if ($id > 0) {
-            $model->id = $id;
-            $model->isNewRecord = false;
-        } else{
-            $model->save();
-        }
         foreach ($data['pages'] as $page) {
-            if (self::pageIsInstalled($page['name'], $model->id)) {
+            if (self::pageIsInstalled($page['name'], 0)) {
                 continue;
             }
-            $page['theme_id'] = $model->id;
-            ThemePageModel::create($page);
+            $page['cat_id'] = 1;
+            $page['type'] = 0;
+            $page['user_id'] = auth()->id();
+            ThemeComponentModel::create($page);
         }
+        $weightId = 0;
         foreach ($data['weights'] as $weight) {
-            if (self::weightIsInstalled($weight['name'], $model->id)) {
+            if (self::weightIsInstalled($weight['name'], 0)) {
                 continue;
             }
-            $weight['theme_id'] = $model->id;
-            ThemeWeightModel::create($weight);
+            $weight['cat_id'] = 2;
+            $weight['type'] = 1;
+            $weight['user_id'] = auth()->id();
+            $m = ThemeComponentModel::create($weight);
+            if (!empty($m)) {
+                $weightId = $m->id;
+            }
         }
         foreach ($data['styles'] as $style) {
-            if (self::styleIsInstalled($style['name'], $model->id)) {
+            if (self::styleIsInstalled($style['name'], 0)) {
                 continue;
             }
-            $style['theme_id'] = $model->id;
+            $style['component_id'] = $weightId;
             ThemeStyleModel::create($style);
         }
         /** @var Directory $root */

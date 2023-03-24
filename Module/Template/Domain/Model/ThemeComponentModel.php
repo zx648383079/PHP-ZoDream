@@ -17,11 +17,18 @@ use Zodream\Disk\Directory;
  * @property string $name
  * @property string $description
  * @property string $thumb
+ * @property integer $cat_id
+ * @property integer $user_id
+ * @property integer $price
  * @property integer $type
- * @property string $path
+ * @property string $author
+ * @property string $version
+ * @property integer $status
  * @property integer $editable
- * @property integer $theme_id
- * @property string $dependencies
+ * @property string $path
+ * @property string $alias_name
+ * @property integer $updated_at
+ * @property integer $created_at
  */
 class ThemeComponentModel extends ThemeComponentEntity {
 

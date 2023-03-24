@@ -118,6 +118,7 @@ $sizes: (320: 568,
     }
 }
 
+
 .top-nav {
     background: #767766;
     color: #fff;
@@ -297,4 +298,10 @@ $sizes: (320: 568,
 
 .custom-config-view {
     max-height: 80vh;
+}
+
+.only-editor {
+    .top-nav {
+        margin: 0;
+    }
 }

@@ -8,6 +8,7 @@ use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\Model\SitePageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\Model\ThemeStyleModel;
+use Module\Template\Domain\Repositories\ComponentRepository;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Str;
@@ -54,7 +55,7 @@ class VisualPage implements IVisualEngine {
                 ->where('site_id', $this->page->site_id)
                 ->where('type', 0)->first();
         });
-        $this->directory = VisualFactory::templateFolder();
+        $this->directory = ComponentRepository::root();// VisualFactory::templateFolder();
     }
 
     public function boot() {

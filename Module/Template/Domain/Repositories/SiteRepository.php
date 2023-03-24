@@ -304,6 +304,7 @@ final class SiteRepository extends CRUDRepository {
                     'author' => $model->author,
                     'version' => $model->version,
                     'path' => $model->path,
+                    'editable' => $model->editable,
                     'alias_name' => $model->alias_name
                 ]);
             }

@@ -120,7 +120,12 @@ class StorageProvider {
         $md5 = $file->md5();
         try {
             $model = $this->addMd5($md5);
-            $file->delete();
+            $distFile = $this->toFile($model['url']);
+            if (!$distFile->exist()) {
+                $file->move($distFile);
+            } else {
+                $file->delete();
+            }
             return $model;
         } catch (\Exception $ex) {
         }
@@ -186,13 +191,11 @@ class StorageProvider {
         if (empty($url)) {
             return;
         }
-        $id = $this->query()->where('folder', $this->tag)->where('path', $url)->value('id');
-        if ($id < 1) {
-            throw new \Exception('not found file');
-        }
-        $this->quoteQuery()->where('file_id', $id)->delete();
-        $this->logQuery()->where('file_id', $id)->delete();
-        $this->query()->where('id', $id)->delete();
+        $model = $this->get($url);
+        $this->quoteQuery()->where('file_id', $model['id'])->delete();
+        $this->logQuery()->where('file_id', $model['id'])->delete();
+        $this->query()->where('id', $model['id'])->delete();
+        $this->toFile($model)->delete();
     }
 
     /***
@@ -204,11 +207,21 @@ class StorageProvider {
      */
     public function getFile(string $url, bool $useOriginalName = true): File {
         $model = $this->get($url);
-        $file = $this->root->file($model['path']);
+        $file = $this->toFile($model['path']);
         if (!$useOriginalName) {
             return $file;
         }
         return $file->setName($model['name']);
+    }
+
+    protected function toFile(string|array $path): File {
+        if (is_array($path)) {
+            $path = $path['path'] ?? '';
+        }
+        if (empty($path)) {
+            throw new \Exception('path is empty');
+        }
+        return $this->root->file($path);
     }
 
     /**
