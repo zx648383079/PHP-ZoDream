@@ -258,6 +258,29 @@ footer {
             border-bottom: 1px solid #ccc;
         }
     }
+    .card-list-item {
+        margin-bottom: .8rem;
+        .item-thumb {
+            display: block;
+            overflow: hidden;
+            height: 10rem;
+            img {
+                width: 100%;
+            }
+        }
+        .item-body {
+            padding: .5rem;
+        }
+        .item-meta,
+        .item-time {
+            color: #767676;
+            font-size: .8rem;
+            padding-top: .5rem;
+        }
+        &:hover {
+            box-shadow: $shadow 0 0 .8rem;  
+        }
+    }
 }
 
 

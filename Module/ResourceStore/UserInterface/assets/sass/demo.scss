@@ -201,3 +201,38 @@
         }
     }
 }
+
+.package-box {
+    margin-top: 2rem;
+    background-color: white;
+    .file-item {
+        display: flex;
+        .item-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .item-tag {
+            display: flex;
+            a {
+                display: inline-flex;
+                user-select: none;
+                justify-content: center;
+                align-items: center;
+                min-width: 3rem;
+                background-color: #5cb85c;
+                color: #FFF;
+                font-size: 13px;    
+                padding: .2em .2ex;
+                border-radius: .25rem;
+                margin-right: .4rem;
+            }
+        }
+        &:hover {
+            background-color: #f4f4f4;
+        }
+        &:not(:last-of-type) {
+            border-bottom: 1px solid #f4f4f4;
+        }
+    }
+}

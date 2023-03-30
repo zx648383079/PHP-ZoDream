@@ -13,6 +13,7 @@ use Exception;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceMetaModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
+use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Helpers\Json;
 use Zodream\Validate\Validator;
 
@@ -60,6 +61,13 @@ class ResourceRepository {
                                    int $user = 0, string $tag = '',
                                    string|array $sort = 'created_at',
                                    string|int|bool $order = 'desc') {
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->page();
+    }
+
+    public static function getListQuery(string $keywords = '', int $category = 0,
+                                   int $user = 0, string $tag = '',
+                                   string|array $sort = 'created_at',
+                                   string|int|bool $order = 'desc'): SqlBuilder {
         return ResourceModel::with('user', 'category')
             ->when($category > 0, function ($query) use ($category) {
                 $query->whereIn('cat_id', CategoryRepository::getAllChildrenId($category));
@@ -102,7 +110,14 @@ class ResourceRepository {
                     return;
                 }
                 $query->whereIn('id', $ids);
-            })->select(self::RES_PAGE_FILED)->page();
+            })->select(self::RES_PAGE_FILED);
+    }
+
+    public static function getLimitList(int $count, string $keywords = '', int $category = 0,
+                                   int $user = 0, string $tag = '',
+                                   string|array $sort = 'created_at',
+                                   string|int|bool $order = 'desc') {
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->limit($count)->get();
     }
 
     public static function get(int $id): ResourceModel {

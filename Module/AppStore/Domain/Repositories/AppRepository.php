@@ -12,6 +12,7 @@ use Exception;
 use Module\AppStore\Domain\Models\AppFileModel;
 use Module\AppStore\Domain\Models\AppModel;
 use Module\AppStore\Domain\Models\AppVersionModel;
+use Zodream\Database\Contracts\SqlBuilder;
 
 final class AppRepository {
 
@@ -60,7 +61,40 @@ final class AppRepository {
 
     public static function getList(
         string $keywords = '',
-        int $category = 0) {
+        int $category = 0,
+        string|array $sort = 'created_at',
+        string|int|bool $order = 'desc') {
+        $page = self::getListQuery($keywords, $category, $sort, $order)
+            ->page();
+        foreach ($page as $item) {
+            $item['size'] = AppFileModel::where('app_id', $item['id'])
+                ->orderBy('version_id', 'desc')->orderBy('created_at', 'desc')
+                ->value('size');
+        }
+        return $page;
+    }
+
+    public static function getLimitList(
+        int $count,
+        string $keywords = '',
+        int $category = 0,
+        string|array $sort = 'created_at',
+        string|int|bool $order = 'desc') {
+        $items = self::getListQuery($keywords, $category, $sort, $order)
+            ->limit($count)->get();
+        foreach ($items as $item) {
+            $item['size'] = AppFileModel::where('app_id', $item['id'])
+                ->orderBy('version_id', 'desc')->orderBy('created_at', 'desc')
+                ->value('size');
+        }
+        return $items;
+    }
+
+    private static function getListQuery(
+        string $keywords = '',
+        int $category = 0,
+        string|array $sort = 'created_at',
+        string|int|bool $order = 'desc'): SqlBuilder {
         return AppModel::with('category')
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name', 'package_name'], true, '', $keywords);
@@ -68,8 +102,25 @@ final class AppRepository {
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
             })->orderBy('id', 'desc')
-            ->select(self::SOFTWARE_PAGE_FILED)
-            ->page();
+            ->when(!empty($sort), function ($query) use ($sort, $order) {
+                if ($sort === 'new') {
+                    $query->orderBy('created_at', 'desc');
+                    return;
+                }
+                if ($sort === 'free') {
+                    $query->where('is_free', 1);
+                    return;
+                }
+                if ($sort === 'hot') {
+                    $query->orderBy('download_count', 'desc');
+                    return;
+                }
+                list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
+                    'id', 'created_at', 'download_count', 'view_count', 'comment_count'
+                ]);
+                $query->orderBy($sort, $order);
+            })
+            ->select(self::SOFTWARE_PAGE_FILED);
     }
 
     public static function get(int $id) {
@@ -189,7 +240,7 @@ final class AppRepository {
         AppFileModel::where('id', $id)->delete();
     }
 
-    public static function getFull(int $id, int $version) {
+    public static function getFull(int $id, int $version = 0) {
         $model = AppModel::findOrThrow($id, '应用不存在');
         $data = $model->toArray();
         $data['category'] = $model->category;
@@ -204,6 +255,7 @@ final class AppRepository {
         }
         $data['packages'] = AppFileModel::where('app_id', $id)
             ->where('version_id', $data['version']->id)->get();
+        $data['size'] = empty($data['packages']) ? 0 : $data['packages'][0]['size'];
         return $data;
     }
 

@@ -177,6 +177,24 @@ $demo_list = [
 
     <div class="panel">
         <div class="panel-header">
+            <a href="<?=$this->url('./app')?>"><?=__('App')?></a>
+        </div>
+        <div class="panel-body">
+            <?=$this->node('app-panel', ['limit' => 6])?>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <a href="<?=$this->url('./res')?>"><?=__('Resource')?></a>
+        </div>
+        <div class="panel-body">
+            <?=$this->node('res-panel', ['limit' => 6])?>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
             <?=__('Demo')?>
             <small><?= __('Demo Tip') ?></small>
         </div>
