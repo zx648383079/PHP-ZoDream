@@ -12,6 +12,7 @@ use Zodream\Infrastructure\Support\Html;
  * @property integer $id
  * @property string $content
  * @property integer $user_id
+ * @property integer $is_notice
  * @property integer $created_at
  */
 class NoteModel extends Model {
@@ -26,6 +27,7 @@ class NoteModel extends Model {
 		return [
             'content' => 'string:0,255',
             'user_id' => 'required|int',
+            'is_notice' => 'int:0,9',
             'created_at' => 'int',
         ];
 	}

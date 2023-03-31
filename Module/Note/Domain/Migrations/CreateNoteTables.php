@@ -15,6 +15,7 @@ class CreateNoteTables extends Migration {
             $table->id();
             $table->string('content')->comment('内容');
             $table->uint('user_id');
+            $table->bool('is_notice')->default(0)->comment('是否时站点公告');
             $table->timestamp('created_at');
         })->autoUp();
     }

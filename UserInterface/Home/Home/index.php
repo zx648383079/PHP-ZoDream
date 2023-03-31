@@ -99,11 +99,10 @@ $demo_list = [
         <div class="col-md-4">
             <div class="panel">
                 <div class="panel-header">
-                    <a href="<?=$this->url('./note')?>"><?=__('Latest Note')?></a>
+                    <a href="<?=$this->url('./note')?>"><?=__('Latest Notices')?></a>
                 </div>
                 <div class="panel-body scoll-box">
                     <?=$this->node('note-panel', ['limit' => 12])?>
-                    <a href="<?=$this->url('./note')?>" class="more"><?=__('View More...')?></a>
                 </div>
             </div>
         </div>

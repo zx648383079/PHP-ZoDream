@@ -24,6 +24,14 @@ class HomeController extends Controller {
         }
     }
 
+    public function changeAction(int $id, array $data) {
+        try {
+            return $this->render(NoteRepository::change($id, $data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function deleteAction(int $id) {
         try {
             NoteRepository::remove($id);

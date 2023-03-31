@@ -23,7 +23,7 @@ final class NoteRepository {
 
     public static function getList(
         string $keywords = '',
-        int $user = 0, int $id = 0, int $perPage = 20) {
+        int $user = 0, int $id = 0, bool $notice = false, int $perPage = 20) {
         return NoteModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['content']);
@@ -31,9 +31,12 @@ final class NoteRepository {
             ->when($id > 0, function($query) use ($id) {
                 $query->where('id', $id);
             })
+            ->when($notice, function ($query) {
+                $query->where('is_notice', 1);
+            })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('created_at', 'desc')
             ->page($perPage);
     }
 
@@ -89,6 +92,26 @@ final class NoteRepository {
     }
 
     public static function getNewList(int $limit) {
-        return NoteModel::with('user')->orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
+        return NoteModel::with('user')->where('is_notice', 1)
+            ->orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
+    }
+
+    public static function change(int $id, array $data) {
+        $model = NoteModel::findOrThrow($id);
+        $maps = ['is_notice'];
+        foreach ($data as $action => $val) {
+            if (is_int($action)) {
+                if (empty($val)) {
+                    continue;
+                }
+                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
+            }
+            if (empty($action) || !in_array($action, $maps)) {
+                continue;
+            }
+            $model->{$action} = intval($val);
+        }
+        $model->save();
+        return $model;
     }
 }
