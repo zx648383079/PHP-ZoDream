@@ -13,7 +13,7 @@ class NotePanel extends Node {
         return $this->cache()->getOrSet(self::KEY, function () {
             $data = NoteRepository::getNewList(intval($this->attr('limit')));
             return implode('', array_map(function (NoteModel $item) {
-                return sprintf('<div class="note-item"><p>%s</p><div class="item-time">%s</div></div>',
+                return sprintf('<div class="note-item"><div class="item-body">%s</div><div class="item-time">%s</div></div>',
                     $item->html, $item->date);
             }, $data));
         });

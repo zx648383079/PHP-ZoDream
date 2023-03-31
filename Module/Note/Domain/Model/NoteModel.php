@@ -16,7 +16,7 @@ use Zodream\Infrastructure\Support\Html;
  */
 class NoteModel extends Model {
 
-    protected array $append = ['editable'];
+    protected array $append = ['editable', 'html'];
 
 	public static function tableName() {
         return 'note';

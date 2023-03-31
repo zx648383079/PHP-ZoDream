@@ -11,9 +11,9 @@ class HomeController extends Controller {
     public function indexAction(string $keywords = '', int $user = 0, int $category = 0,
                                 string $tag = '',
                                 string $sort = 'created_at',
-                                string|int|bool $order = 'desc') {
+                                string|int|bool $order = 'desc', int $per_page = 20) {
         return $this->renderPage(
-            ResourceRepository::getList($keywords, $category, $user, $tag, $sort, $order)
+            ResourceRepository::getList($keywords, $category, $user, $tag, $sort, $order, $per_page)
         );
     }
 

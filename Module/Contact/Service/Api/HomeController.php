@@ -3,9 +3,16 @@ declare(strict_types=1);
 namespace Module\Contact\Service\Api;
 
 use Module\Contact\Domain\Repositories\ContactRepository;
+use Module\Contact\Domain\Repositories\FeedbackRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class HomeController extends Controller {
+
+    public function indexAction(int $per_page = 20) {
+        return $this->renderPage(
+            FeedbackRepository::getList('', $per_page)
+        );
+    }
 
     public function feedbackAction(Request $request) {
         try {

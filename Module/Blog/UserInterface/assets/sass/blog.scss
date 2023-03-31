@@ -34,7 +34,8 @@ $acolor: $fg;
         color: $acolor;
     }
     .book-title {
-        line-height: 100px;
+        // line-height: 100px;
+        padding: 2rem 0;
         text-align: center;
         .book-nav {
             >li {

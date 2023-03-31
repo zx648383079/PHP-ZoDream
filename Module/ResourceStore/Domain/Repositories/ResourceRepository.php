@@ -60,8 +60,8 @@ class ResourceRepository {
     public static function getList(string $keywords = '', int $category = 0,
                                    int $user = 0, string $tag = '',
                                    string|array $sort = 'created_at',
-                                   string|int|bool $order = 'desc') {
-        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->page();
+                                   string|int|bool $order = 'desc', int $perPage = 20) {
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->page($perPage);
     }
 
     public static function getListQuery(string $keywords = '', int $category = 0,

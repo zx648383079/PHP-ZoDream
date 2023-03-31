@@ -9,7 +9,7 @@ class FeedbackController extends Controller {
 
 	function indexAction(string $keywords = '') {
         return $this->renderPage(
-            FeedbackRepository::getList($keywords)
+            FeedbackRepository::manageList($keywords)
         );
 	}
 
@@ -17,9 +17,9 @@ class FeedbackController extends Controller {
 	    return $this->render(FeedbackRepository::get($id));
     }
 
-    public function changeAction(int $id, int $status) {
+    public function changeAction(int $id, array $data) {
         try {
-            return $this->render(FeedbackRepository::change($id, $status));
+            return $this->render(FeedbackRepository::change($id, $data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

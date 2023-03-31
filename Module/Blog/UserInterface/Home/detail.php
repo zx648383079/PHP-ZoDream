@@ -49,19 +49,7 @@ $this->set([
     ->registerJs($js, View::JQUERY_READY);
 ?>
 <div class="book-title book-mobile-inline">
-    <ul class="book-nav">
-        <li class="book-navicon">
-            <i class="fa fa-bars"></i>
-        </li>
-        <li class="book-back"><a href="<?=$this->url('blog')?>"><?=__('Back')?></a></li>
-        <?php if ($blog->previous):?>
-        <li><a href="<?=$blog->previous->url?>"><?=$this->text($blog->previous->title)?></a></li>
-        <?php endif;?>
-        <li class="active"><?=$this->text($blog->title)?></li>
-        <?php if ($blog->next):?>
-        <li><a href="<?=$blog->next->url?>"><?=$this->text($blog->next->title)?></a></li>
-        <?php endif;?>
-    </ul>
+    <h1><?=$this->text($blog->title)?></h1>
 </div>
 
 <div class="book-sidebar">

@@ -23,7 +23,7 @@ final class NoteRepository {
 
     public static function getList(
         string $keywords = '',
-        int $user = 0, int $id = 0) {
+        int $user = 0, int $id = 0, int $perPage = 20) {
         return NoteModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['content']);
@@ -34,7 +34,7 @@ final class NoteRepository {
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })->orderBy('id', 'desc')
-            ->page();
+            ->page($perPage);
     }
 
     public static function get(int $id) {

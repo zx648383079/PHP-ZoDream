@@ -9,7 +9,7 @@ class Helpers {
      * @return string
      */
     public static function hideName(string $name) {
-        return static::hideText($name, 1, 1, 1);
+        return static::hideText($name, 1, 100, 1);
     }
 
     /**

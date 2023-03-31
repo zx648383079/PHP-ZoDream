@@ -20,6 +20,7 @@ class CreateContactTables extends Migration {
             $table->string('phone', 30)->default('');
             $table->string('content')->default('');
             $table->bool('status')->default(0);
+            $table->bool('open_status')->default(0)->comment('是否前台可见');
             $table->uint('user_id')->default(0);
             $table->timestamps();
         })->append(FriendLinkModel::tableName(), function (Table $table) {

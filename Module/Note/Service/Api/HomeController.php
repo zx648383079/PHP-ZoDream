@@ -8,9 +8,9 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class HomeController extends Controller {
 
-    public function indexAction(string $keywords = '', int $user = 0, int $id = 0) {
+    public function indexAction(string $keywords = '', int $user = 0, int $id = 0, int $per_page = 20) {
         return $this->renderPage(
-            NoteRepository::getList($keywords, $user, $id)
+            NoteRepository::getList($keywords, $user, $id, $per_page)
         );
     }
 

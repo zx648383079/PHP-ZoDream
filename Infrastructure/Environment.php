@@ -154,14 +154,13 @@ class Environment {
 	 * @param array $files
 	 * @return array
 	 */
-	public static function getFiles($path, $allowFiles = '.*', &$files = array()) {
+	public static function getFiles(string $path, string $allowFiles = '.*', array &$files = array()) {
 	    if (!is_dir($path)) {
 			return [];
 		}
-	    if(substr($path, strlen($path) - 1) != '/') {
+	    if(!str_ends_with($path, '/')) {
 			$path .= '/';
 		}
-
 	    $handle = opendir($path);
 	    while (false !== ($file = readdir($handle))) {
 	        if ($file == '.' || $file == '..') {
@@ -174,7 +173,8 @@ class Environment {
 				if (preg_match('/\.('.$allowFiles.')$/i', $file)) {
 					$files[] = array(
 						'url'=> substr($path2, strlen(public_path())),
-						'mtime'=> filemtime($path2)
+						'mtime'=> filemtime($path2),
+                        'title' => $file,
 					);
 				}
 			}

@@ -32,7 +32,7 @@ class HomeController extends Controller {
 
     public function detailAction(int $id) {
         try {
-            return $this->render(BlogRepository::detail($id, request('open_key')));
+            return $this->render(BlogRepository::detail($id, request('open_key', '')));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -40,7 +40,7 @@ class HomeController extends Controller {
 
     public function contentAction(int $id) {
         try {
-            return $this->render(BlogRepository::detailBody($id, request('open_key')));
+            return $this->render(BlogRepository::detailBody($id, request('open_key', '')));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -48,7 +48,7 @@ class HomeController extends Controller {
 
     public function openAction(int $id) {
         try {
-            return $this->render(BlogRepository::detailOpen($id, request('open_key')));
+            return $this->render(BlogRepository::detailOpen($id, request('open_key', '')));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage(), $ex->getCode());
         }
