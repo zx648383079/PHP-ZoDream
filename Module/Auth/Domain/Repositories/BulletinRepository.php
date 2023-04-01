@@ -18,8 +18,8 @@ class BulletinRepository {
     const TYPE_OTHER = 99;
 
     const SYSTEM_USER = [
-        'name' => '[系统通知]',
-        'icon' => '系',
+        'name' => '[System]',
+        'icon' => 'S',
         'avatar' => '/assets/images/favicon.png',
         'id' => 0
     ];

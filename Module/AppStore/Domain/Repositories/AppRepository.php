@@ -9,6 +9,7 @@ use Domain\Providers\CommentProvider;
 use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
+use Infrastructure\HtmlExpand;
 use Module\AppStore\Domain\Models\AppFileModel;
 use Module\AppStore\Domain\Models\AppModel;
 use Module\AppStore\Domain\Models\AppVersionModel;
@@ -243,6 +244,7 @@ final class AppRepository {
     public static function getFull(int $id, int $version = 0) {
         $model = AppModel::findOrThrow($id, '应用不存在');
         $data = $model->toArray();
+        $data['content'] = HtmlExpand::toHtml($model->content, true, false);
         $data['category'] = $model->category;
         $data['user'] = $model->user;
         $data['version'] = AppVersionModel::when($version > 0, function ($query) use ($version) {

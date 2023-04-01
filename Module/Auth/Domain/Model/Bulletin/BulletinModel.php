@@ -66,7 +66,7 @@ class BulletinModel extends Model {
 	    if ($this->user) {
             return $this->user->name;
         }
-        return '[用户已删除]';
+        return __('[User Deleted]');
     }
 
     public function getIconAttribute() {

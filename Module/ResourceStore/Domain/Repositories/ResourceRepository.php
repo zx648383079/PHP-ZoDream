@@ -10,6 +10,7 @@ use Domain\Providers\ScoreProvider;
 use Domain\Providers\StorageProvider;
 use Domain\Providers\TagProvider;
 use Exception;
+use Infrastructure\HtmlExpand;
 use Module\ResourceStore\Domain\Models\ResourceFileModel;
 use Module\ResourceStore\Domain\Models\ResourceMetaModel;
 use Module\ResourceStore\Domain\Models\ResourceModel;
@@ -136,6 +137,7 @@ class ResourceRepository {
         $model = static::get($id);
         ResourceModel::query()->where('id', $id)->updateIncrement('view_count');
         $data = $model->toArray();
+        $data['content'] = HtmlExpand::toHtml($model->content, true, false);
         $data['user'] = $model->user;
         $data['category'] = $model->category;
         $data['is_gradable'] = static::isGradable($id);

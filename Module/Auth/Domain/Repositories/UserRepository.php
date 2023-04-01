@@ -6,6 +6,7 @@ use Domain\Constants;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
+use Infrastructure\Ip;
 use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
@@ -53,6 +54,7 @@ class UserRepository {
         /** @var UserModel $user */
         $user = auth()->user();
         $data = static::format($user);
+        $data['country'] = Ip::country(request()->ip());
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
         $extraWords = explode(',', $extra);
         foreach ([

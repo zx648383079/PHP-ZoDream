@@ -4,7 +4,10 @@ use Zodream\Template\View;
 use Zodream\Helpers\Disk;
 /** @var $this View */
 $this->title = $post['title'];
-$this->registerCssFile('@demo.css')
+$this->registerCssFile([
+    '@blog.css',
+    '@demo.css',
+])
     ->registerJsFile([
         '@jquery.lazyload.min.js',
         '@demo.min.js'
@@ -81,7 +84,7 @@ $this->registerCssFile('@demo.css')
     </div>
 
     <div class="detail-body">
-        <article id="content">
+        <article id="content" class="style-type-1">
             <?=$post['content']?>
         </article>
 

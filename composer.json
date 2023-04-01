@@ -29,16 +29,15 @@
     "psr/log": "^3.0.0",
     "monolog/monolog": "^3.2.0",
     "firebase/php-jwt": "^v6.3.2",
-
+    "maxmind-db/reader": "~1.0",
     "mobiledetect/mobiledetectlib": "^3.74.0",
-    "phpoffice/phpspreadsheet": "^1.26.0",
+    "phpoffice/phpspreadsheet": "^1.27.0",
     "phpmailer/phpmailer": "^v6.7.1",
-    "nesbot/carbon": "^2.65.0",
+    "nesbot/carbon": "^2.66.0",
     "dragonmantank/cron-expression": "^v3.3.2",
-    "zhuzhichao/ip-location-zh": "^v2.4.4",
     "khanamiryan/qrcode-detector-decoder": "^2.0.2",
     "bacon/bacon-qr-code": "^2.0.8",
-    "symfony/var-dumper": "^v6.2.3"
+    "symfony/var-dumper": "^v6.2.5"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5"
