@@ -135,6 +135,13 @@ return [
     'password is error' => '密码错误',
     'Low account balance' => '账户余额不足',
     'Service agreement does not exist' => '服务协议不存在',
+    'Is Public' => '公开',
+    'Need Login' => '仅登录',
+    'Need Password' => '密码访问',
+    'Need Buy' => '付费访问',
+    'As a draft' => '放入草稿箱',
+    'As a publish' => '发布',
+    'As a trash' => '放入回收站',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

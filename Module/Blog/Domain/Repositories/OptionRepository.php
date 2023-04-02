@@ -31,6 +31,23 @@ class OptionRepository {
         }, CCLicenses::getList());
     }
 
+    public static function openItems() {
+        return [
+            ['name' => __('Is Public'), 'value' => PublishRepository::OPEN_PUBLIC],
+            ['name' => __('Need Login'), 'value' => PublishRepository::OPEN_LOGIN],
+            ['name' => __('Need Password'), 'value' => PublishRepository::OPEN_PASSWORD],
+            ['name' => __('Need Buy'), 'value' => PublishRepository::OPEN_BUY],
+        ];
+    }
+
+    public static function publishItems() {
+        return [
+            ['name' => __('As a draft'), 'value' => PublishRepository::PUBLISH_STATUS_DRAFT],
+            ['name' => __('As a publish'), 'value' => PublishRepository::PUBLISH_STATUS_POSTED],
+            ['name' => __('As a trash'), 'value' => PublishRepository::PUBLISH_STATUS_TRASH],
+        ];
+    }
+
     public static function all(): array {
         return [
             'languages' => static::languages(),
@@ -38,6 +55,8 @@ class OptionRepository {
             'licenses' => static::licenses(),
             'tags' => TagRepository::get(),
             'categories' => CategoryRepository::all(),
+            'open_types' => static::openItems(),
+            'publish_status' => static::publishItems()
         ];
     }
 }
