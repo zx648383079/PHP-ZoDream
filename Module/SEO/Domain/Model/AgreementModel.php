@@ -11,6 +11,7 @@ use Zodream\Helpers\Json;
  * @property integer $id
  * @property string $name
  * @property string $title
+ * @property string $language
  * @property string $description
  * @property string $content
  * @property integer $status
@@ -25,8 +26,9 @@ class AgreementModel extends Model {
     protected function rules() {
         return [
             'name' => 'required|string:0,20',
+            'language' => '',
             'title' => 'required|string:0,100',
-            'description' => 'string:0,200',
+            'description' => 'string',
             'content' => 'required',
             'status' => 'int:0,127',
             'updated_at' => 'int',

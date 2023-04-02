@@ -16,7 +16,7 @@ class AgreementController extends Controller {
     public function detailAction(int $id) {
         try {
             return $this->render(
-                AgreementRepository::get($id)
+                AgreementRepository::detail($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -28,8 +28,9 @@ class AgreementController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'name' => 'required|string:0,20',
+                'language' => '',
                 'title' => 'required|string:0,100',
-                'description' => 'string:0,200',
+                'description' => 'string',
                 'content' => 'required',
                 'status' => 'int:0,127',
             ]);

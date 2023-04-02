@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Repositories\LocalizeRepository;
 use Exception;
 use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Model\BlogMetaModel;
@@ -75,7 +76,7 @@ final class PublishRepository {
             ->first();
         if (empty($model)) {
             $data = new BlogModel();
-            $data->language = key(BlogRepository::LANGUAGE_MAP);
+            $data->language = LocalizeRepository::firstLanguage();
             return $data;
         }
         if (empty($language) || $model->language === $language) {
@@ -96,16 +97,9 @@ final class PublishRepository {
         $items = BlogModel::query()
             ->where('parent_id', $id)
             ->orWhere('id', $id)
-            ->pluck('id', 'language');
-        $data = [];
-        foreach (BlogRepository::LANGUAGE_MAP as $language => $label) {
-            $data[] = [
-                'language' => $language,
-                'label' => $label,
-                'id' => isset($items[$language]) ? intval($items[$language]) : 0
-            ];
-        }
-        return $data;
+            ->asArray()
+            ->get('id', 'language');
+        return LocalizeRepository::formatLanguageList($items, false);
     }
 
     private static function getBlog(int $id = 0, string $language = ''): BlogModel {

@@ -134,6 +134,7 @@ return [
     'blog is not exist' => '文章不存在',
     'password is error' => '密码错误',
     'Low account balance' => '账户余额不足',
+    'Service agreement does not exist' => '服务协议不存在',
     'zh' => '中',
     'en' => 'EN',
     'account_type' => [

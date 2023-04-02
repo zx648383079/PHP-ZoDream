@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Migrations;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
@@ -30,8 +31,7 @@ class CreateBlogTables extends Migration {
             $table->uint('parent_id')->default(0);
             $table->string('programming_language', 20)
                 ->default('')->comment('编程语言');
-            $table->enum('language', ['zh', 'en'])->default('zh')
-                ->comment('内容语言');
+            LocalizeRepository::addTableColumn($table);
             $table->string('thumb')->default('');
             $table->uint('edit_type', 1)->default(PublishRepository::EDIT_HTML)->comment('编辑器类型');
             $table->text('content');

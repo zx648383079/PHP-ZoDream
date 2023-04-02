@@ -2,6 +2,7 @@
 namespace Module\SEO\Domain\Migrations;
 
 use Domain\Providers\StorageProvider;
+use Domain\Repositories\LocalizeRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Model\AgreementModel;
 use Module\SEO\Domain\Model\BlackWordModel;
@@ -49,7 +50,8 @@ class CreateSEOTables extends Migration {
             $table->id();
             $table->string('name', 20);
             $table->string('title', 100);
-            $table->string('description', 200)->default('');
+            LocalizeRepository::addTableColumn($table);
+            $table->string('description', 500)->default('');
             $table->column('content')->mediumText();
             $table->uint('status', 1)->default(0);
             $table->timestamps();

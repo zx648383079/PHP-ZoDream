@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Repositories\LocalizeRepository;
 use Exception;
-use Infrastructure\Bot;
 use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\FundAccount;
 use Module\Blog\Domain\Helpers\Html;
@@ -17,16 +17,10 @@ use Module\Blog\Domain\Model\BlogSimpleModel;
 use Module\Blog\Domain\Model\TagModel;
 use Module\OpenPlatform\Domain\Platform;
 use Zodream\Database\Contracts\SqlBuilder;
-use Zodream\Database\Model\Query;
 use Zodream\Helpers\Time;
 use Zodream\Html\Page;
 
 class BlogRepository {
-
-    const LANGUAGE_MAP = [
-        'zh' => '中',
-        'en' => 'EN',
-    ];
 
     /**
      * @param string|array $sort
@@ -48,7 +42,7 @@ class BlogRepository {
             $sort, $category, $keywords,
             $user, $language, $programming_language,
             $tag)->page($per_page);
-        $items = self::formatLanguage($page, BlogPageModel::with('term', 'user'));
+        $items = LocalizeRepository::formatList($page, BlogPageModel::with('term', 'user'));
         return $page->setPage($items);
     }
 
@@ -61,7 +55,7 @@ class BlogRepository {
             $user, $language, $programming_language,
             $tag)
             ->limit($limit ?? 5)->all();
-        return self::formatLanguage($page, BlogSimpleModel::query());
+        return LocalizeRepository::formatList($page, BlogSimpleModel::query());
     }
 
     /**
@@ -150,7 +144,7 @@ class BlogRepository {
 
     public static function getArchives() {
         $data = [];
-        $items = self::formatLanguage(
+        $items = LocalizeRepository::formatList(
             BlogModel::query()->where('parent_id', 0)
                 ->orderBy('created_at', 'desc')
                 ->asArray()->get('id', 'title', 'parent_id', 'created_at'),
@@ -169,34 +163,6 @@ class BlogRepository {
             $data[$year]['children'][] = $item;
         }
         return array_values($data);
-    }
-
-    public static function formatLanguage($items, SqlBuilder $query) {
-        if (empty($items)) {
-            return [];
-        }
-        $lang = trans()->getLanguage();
-        if (stripos($lang, 'zh') !== false) {
-            return is_array($items) ? $items : $items->getIterator();
-        }
-        $ids = [];
-        foreach ($items as $item) {
-            $ids[] = $item['id'];
-        }
-        if (empty($ids)) {
-            return [];
-        }
-        $args = $query->whereIn('parent_id', $ids)
-            ->where('language', 'en')->get();
-        $data = [];
-        foreach ($args as $item) {
-            $data[$item['parent_id']] = $item;
-        }
-        $args = [];
-        foreach ($items as $item) {
-            $args[] = $data[$item['id']] ?? $item;
-        }
-        return $args;
     }
 
     /**
@@ -453,13 +419,11 @@ class BlogRepository {
             }
         }
         $languages = BlogModel::where('parent_id', $id)->asArray()->get('id', 'language');
-        return array_map(function (array $item) {
-            $item['id'] = intval($item['id']);
-            $item['label'] = static::LANGUAGE_MAP[$item['language']] ?? strtoupper($item['language']);
-            return $item;
-        }, array_merge([
-            ['id' => $id, 'language' => key(static::LANGUAGE_MAP)]
-        ], $languages));
+        $languages[] = [
+            'id' => $id,
+            'language' => LocalizeRepository::firstLanguage()
+        ];
+        return LocalizeRepository::formatLanguageList($languages, true);
     }
 
 
