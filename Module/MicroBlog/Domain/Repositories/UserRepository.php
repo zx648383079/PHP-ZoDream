@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Repositories;
 
-use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\MicroBlog\Domain\Model\MicroBlogModel;
+use Module\Auth\Domain\Repositories\UserRepository as Auth;
 
 class UserRepository {
 
@@ -13,10 +13,14 @@ class UserRepository {
         if ($micro_count < 1) {
             throw new \Exception('用户还没有内容');
         }
-        $user = UserSimpleModel::where('id', $id)->first();
+        $user = Auth::getPublicProfile($id, 'following_count,follower_count,follow_status');
         if (empty($user)) {
             throw new \Exception('用户已注销');
         }
-        return array_merge($user->toArray(), compact('micro_count'));
+        return array_merge($user, compact('micro_count'));
+    }
+
+    public static function report(int $id) {
+        Auth::report($id);
     }
 }

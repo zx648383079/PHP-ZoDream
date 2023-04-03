@@ -1,6 +1,7 @@
 <?php
 namespace Module\Auth\Domain\Migrations;
 
+use Module\Auth\Domain\Entities\UserRelationshipEntity;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
@@ -66,6 +67,12 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->string('name', 100);
             $table->text('content');
+        })->append(UserRelationshipEntity::tableName(), function(Table $table) {
+            $table->comment('用户关系表');
+            $table->uint('user_id');
+            $table->uint('link_id')->comment('被联系的人');
+            $table->uint('type', 1)->default(0)->comment('具体关系');
+            $table->timestamp('created_at');
         })->append(BanAccountModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id')->default(0);

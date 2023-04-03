@@ -486,4 +486,8 @@ class BlogRepository {
         }
         return !LogRepository::has(auth()->id(), BlogLogModel::TYPE_BLOG, $action, $id);
     }
+
+    public static function getPostCount(int $user): int {
+        return BlogModel::where('user_id', $user)->count();
+    }
 }

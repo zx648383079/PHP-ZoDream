@@ -115,4 +115,14 @@ class UserController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
     }
+
+    public function followAction(int $user) {
+        try {
+            return $this->renderData(
+                UserRepository::toggleFollow($user)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

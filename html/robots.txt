@@ -3,6 +3,7 @@ Allow:/blog
 Allow:/tool
 Disallow: /admin.php
 Disallow: /open
+Disallow: /to
 Disallow: /auth
 Disallow: /demo/preview
 Disallow: /*/admin

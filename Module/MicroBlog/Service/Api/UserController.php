@@ -14,11 +14,12 @@ class UserController extends Controller {
         }
     }
 
-    public function followAction(int $id) {
-
-    }
-
     public function reportAction(int $id) {
-
+        try {
+            UserRepository::report($id);
+            return $this->renderData(true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

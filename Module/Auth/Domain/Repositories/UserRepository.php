@@ -11,11 +11,14 @@ use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Helpers;
+use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\Scene\User;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Blog\Domain\Repositories\BlogRepository;
+use Module\Contact\Domain\Repositories\ReportRepository;
 use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
@@ -40,11 +43,15 @@ class UserRepository {
         return !empty($user) && $user['status'] >= UserModel::STATUS_ACTIVE;
     }
 
-    public static function getPublicProfile(int $id): array {
-        $user = UserModel::findOrThrow($id, 'User error');
+    public static function getPublicProfile(int $id, string $extra = ''): array {
+        $user = UserModel::where('id', $id)
+            ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'created_at']);
+        if (empty($user)) {
+            throw new Exception(__('Not found user'));
+        }
         $data = static::format($user, true);
-        $data['card_items'] = CardRepository::getUserCard($id);
-        return $data;
+        unset($data['status']);
+        return self::appendExtraData($data, $extra);
     }
 
     public static function getCurrentProfile(string $extra = ''): ?array {
@@ -56,10 +63,23 @@ class UserRepository {
         $data = static::format($user);
         $data['country'] = Ip::country(request()->ip());
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
+        return self::appendExtraData($data, $extra);
+    }
+
+    private static function appendExtraData(array $data, string $extra = '') {
+        if (empty($extra)) {
+            return $data;
+        }
+        $userId = intval($data['id']);
         $extraWords = explode(',', $extra);
         foreach ([
-            'bulletin_count',
-            'today_checkin'
+            'card_items',
+             'bulletin_count',
+             'today_checkin',
+             'post_count',
+             'following_count',
+             'follower_count',
+            'follow_status'
                  ] as $word) {
             if (!in_array($word, $extraWords)) {
                 continue;
@@ -69,17 +89,40 @@ class UserRepository {
             if (!is_callable($func)) {
                 continue;
             }
-            $data[$word] = call_user_func($func, $user);
+            $data[$word] = call_user_func($func, $userId);
         }
         return $data;
     }
 
-    public static function getBulletinCount(UserModel $user) {
-        return $user->bulletin_count;
+    public static function getFollowStatus(int $user) {
+        if (auth()->id() === $user) {
+            return 0;
+        }
+        return RelationshipRepository::typeStatus($user, RelationshipRepository::TYPE_FOLLOWING);
     }
 
-    public static function getTodayCheckin(UserModel $user) {
-        return CheckinRepository::todayIsChecked($user->id);
+    public static function getCardItems(int $user) {
+        return CardRepository::getUserCard($user);
+    }
+
+    public static function getBulletinCount(int $user) {
+        return BulletinUserModel::where('user_id', $user)->where('status', 0)->count();
+    }
+
+    public static function getPostCount(int $user) {
+        return BlogRepository::getPostCount($user);
+    }
+
+    public static function getFollowingCount(int $user) {
+        return RelationshipRepository::followingCount($user);
+    }
+
+    public static function getFollowerCount(int $user) {
+        return RelationshipRepository::followerCount($user);
+    }
+
+    public static function getTodayCheckin(int $user) {
+        return CheckinRepository::todayIsChecked($user);
     }
 
     public static function format(UserEntity|UserModel|array $user, bool $hide = true): array {
@@ -246,5 +289,27 @@ class UserRepository {
             $query->whereIn('id', $userId);
         }
         return $query->pluck('id');
+    }
+
+    public static function toggleFollow(int $user)
+    {
+        if (auth()->guest()) {
+            return 0;
+        }
+        $status = RelationshipRepository::toggle($user, RelationshipRepository::TYPE_FOLLOWING);
+        if ($status < 1) {
+            return 0;
+        }
+        return RelationshipRepository::userAlsoIs(auth()->id(), $user, RelationshipRepository::TYPE_FOLLOWING)
+            ? 2 : 1;
+    }
+
+    public static function report(int $userId) {
+        if (auth()->guest()) {
+            throw new Exception(__('Please log in first'));
+        }
+        $user = UserModel::findOrThrow($userId, 'user is error');
+        ReportRepository::quickCreate(Constants::TYPE_USER,
+            $userId, sprintf('举报【%s】', $user->name), '举报用户');
     }
 }

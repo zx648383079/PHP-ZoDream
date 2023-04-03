@@ -40,7 +40,7 @@ class ActionLogProvider {
      * @param int $action
      * @param int $id
      * @param array|int|null $searchAction
-     * @return int {0: 取消，1: 更新为，2：新增}
+     * @return int // {0: 取消，1: 更新为，2：新增}
      * @throws \Exception
      */
     public function toggleLog(int $type, int $action,

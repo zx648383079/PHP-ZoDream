@@ -588,7 +588,7 @@ class ThreadRepository {
      * @return array
      */
     public static function getUser(int $id): array {
-        $user = UserRepository::getPublicProfile($id);
+        $user = UserRepository::getPublicProfile($id, 'card_items');
         $user['count_items'] = [
             ['name' => '主题', 'count' => ThreadModel::where('user_id', $id)->count()],
             ['name' => '帖子', 'count' => ThreadPostModel::where('user_id', $id)->count()],
