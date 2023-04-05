@@ -103,9 +103,9 @@ class VisualFactory {
         static::$lockData[$parentId][$index] = 1;
     }
 
-    public static function newViewFactory() {
+    public static function newViewFactory(?bool $cacheable = null) {
         $factory = new ViewFactory();
-        $factory->setEngine(ParserCompiler::class)
+        $factory->setEngine(ParserCompiler::class, $cacheable)
             ->setConfigs([
                 'suffix' => VisualPage::EXT
             ])
@@ -130,6 +130,27 @@ class VisualFactory {
         include_once $fileName;
         $name = Str::studly($name).'Weight';
         return (new $name)->setDirectory(dirname($fileName));
+    }
+
+    /**
+     *
+     * @param string $name
+     * @param string $fileName
+     * @return IVisualStyle
+     */
+    public static function newStyle(string $name, string $fileName): mixed {
+        if (class_exists($fileName)) {
+            return new $fileName;
+        }
+        if (!file_exists($fileName)) {
+            $fileName = (string)VisualFactory::templateFolder($fileName);
+        }
+        if (is_dir($fileName)) {
+            $fileName .= '/style.php';
+        }
+        include_once $fileName;
+        $name = Str::studly($name).'Style';
+        return new $name;
     }
 
     /**

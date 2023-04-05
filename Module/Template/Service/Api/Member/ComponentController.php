@@ -55,9 +55,10 @@ class ComponentController extends Controller {
         return $this->renderData(true);
     }
 
-    public function uploadAction(Input $input) {
+    public function importAction(Input $input) {
         try {
-            return $this->render(ComponentRepository::selfUpload($input->file('file')));
+            ComponentRepository::selfImport($input->file('file'));
+            return $this->renderData(true);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

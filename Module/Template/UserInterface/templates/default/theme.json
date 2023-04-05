@@ -17,11 +17,11 @@
   "pages": [
     {
       "name": "index",
-      "path": "index.html"
+      "entry": "index.html"
     },
     {
       "name": "article",
-      "path": "article.html"
+      "entry": "article.html"
     }
   ],
   "weights": "weights"

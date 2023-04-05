@@ -46,9 +46,18 @@ class ComponentController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(array|int $id) {
         try {
             ComponentRepository::manageRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function reviewAction(array|int $id, array $data) {
+        try {
+            ComponentRepository::manageReview($id, $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

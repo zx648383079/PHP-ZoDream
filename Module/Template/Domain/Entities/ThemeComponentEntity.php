@@ -42,6 +42,8 @@ class ThemeComponentEntity extends Entity {
             'status' => 'int:0,127',
             'editable' => 'int:0,127',
             'path' => 'required|string:0,200',
+            'alias_name' => 'required|string:0,30',
+            'dependencies' => 'string:0,255',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];

@@ -11,6 +11,7 @@ use Module\Template\Domain\Model\ThemeStyleModel;
 use Module\Template\Domain\Repositories\ComponentRepository;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Concerns\Attributes;
 use Zodream\Template\ViewFactory;
@@ -40,6 +41,8 @@ class VisualPage implements IVisualEngine {
 
     protected SiteComponentModel $themePage;
 
+    protected File $pageFileName;
+
     protected bool $booted = false;
 
     public function __construct(
@@ -55,7 +58,8 @@ class VisualPage implements IVisualEngine {
                 ->where('site_id', $this->page->site_id)
                 ->where('type', 0)->first();
         });
-        $this->directory = ComponentRepository::root();// VisualFactory::templateFolder();
+        $this->pageFileName = ComponentRepository::root()->file($this->themePage->path);// VisualFactory::templateFolder();
+        $this->directory = $this->pageFileName->getDirectory();
     }
 
     public function boot() {
@@ -138,7 +142,9 @@ class VisualPage implements IVisualEngine {
             ->setDirectory($this->directory);
         $this->factory->getEngine()
             ->registerFunc('asset', function (string $val) {
-                return sprintf('/assets/themes/%s', trim($val, '\''));
+                $path = trim($val, '\'');
+                $file = $this->factory->getDirectory()->file($path);
+                return sprintf('/assets/themes/%s', $file->getRelative(ComponentRepository::root()));
             });
     }
 
@@ -218,7 +224,7 @@ class VisualPage implements IVisualEngine {
         if ($this->editable) {
             $renderer->registerCssFile('@template_edit.css');
         }
-        return $renderer->render(Str::lastReplace($this->themePage->path, self::EXT), [
+        return $renderer->render($this->pageFileName, [
             'title' => $this->page->title,
             'keywords' => $this->page->keywords,
             'description' => $this->page->description,

@@ -38,8 +38,8 @@ class VisualWeight implements IVisualEngine {
                 return SiteWeightModel::where('id', $this->pageWeight->weight_id)->first();
             });
         $this->weight = VisualFactory::getOrSet(SiteComponentModel::class,
-            $this->model->component_id_id, function () {
-                return SiteComponentModel::where('id', $this->model->component_id)
+            $this->model->component_id, function () {
+                return SiteComponentModel::where('component_id', $this->model->component_id)
                     ->where('site_id', $this->model->site_id)
                     ->where('type', 1)->first();
             });

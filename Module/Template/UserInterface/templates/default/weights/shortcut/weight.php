@@ -14,6 +14,7 @@ class ShortcutWeight extends BaseWeight {
         $content = $model->content;
         $key_items = [];
         foreach (explode("\n", $content) as $line) {
+            $line = trim($line);
             if (empty($line)) {
                 continue;
             }

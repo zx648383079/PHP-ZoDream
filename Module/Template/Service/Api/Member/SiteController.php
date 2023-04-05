@@ -76,7 +76,8 @@ class SiteController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'site_id' => 'required|int',
-                'component_id' => 'required|int',
+                'component_id' => 'int',
+                'site_component_id' => 'int',
                 'type' => 'int:0,127',
                 'name' => 'required|string:0,100',
                 'title' => 'string:0,200',
@@ -86,6 +87,7 @@ class SiteController extends Controller {
                 'settings' => '',
                 'position' => 'int:0,127',
                 'dependencies' => 'string:0,255',
+                'is_default' => ''
             ]);
             return $this->render(
                 SiteRepository::selfSavePage($data)
@@ -95,7 +97,7 @@ class SiteController extends Controller {
         }
     }
 
-    public function pageRemoveAction(int $id) {
+    public function pageDeleteAction(int $id) {
         try {
             SiteRepository::selfRemovePage($id);
         } catch (\Exception $ex) {
@@ -121,7 +123,7 @@ class SiteController extends Controller {
         return $this->renderData(true);
     }
 
-    public function componentRemoveAction(int $id) {
+    public function componentDeleteAction(int $id) {
         try {
             SiteRepository::selfRemoveComponent($id);
         } catch (\Exception $ex) {

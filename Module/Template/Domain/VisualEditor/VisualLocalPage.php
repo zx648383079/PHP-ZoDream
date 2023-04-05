@@ -6,6 +6,7 @@ use Module\Template\Domain\Model\SiteWeightModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Helpers\Json;
+use Zodream\Http\MIME;
 use Zodream\Template\ViewFactory;
 
 /***
@@ -22,6 +23,8 @@ class VisualLocalPage implements IVisualEngine {
      * @var Directory
      */
     protected Directory $directory;
+    protected Directory $pageDirectory;
+    protected Directory $baseDirectory;
 
     protected array $pageData;
     protected array $weightItems = [];
@@ -30,13 +33,14 @@ class VisualLocalPage implements IVisualEngine {
         string $pagePath,
         string $weightPath,
         protected bool $editable = false) {
-        $this->directory = VisualFactory::templateFolder();
+        $this->baseDirectory = VisualFactory::templateFolder();
         $this->pageData = $this->loadWeight($pagePath);
+        $this->pageDirectory = $this->directory = (new File($this->pageData['entry']))->getDirectory();
         $this->weightItems[] = $this->loadWeight($weightPath);
     }
 
     protected function loadWeight(string $path): array {
-        $folder = $this->directory->child($path);
+        $folder = $this->baseDirectory->child($path);
         if ($folder === false) {
             throw new \Exception('page file error');
         }
@@ -67,7 +71,7 @@ class VisualLocalPage implements IVisualEngine {
             if (!$entryFile->exist())  {
                 throw new \Exception('not found entry');
             }
-            $data['entry'] = $entryFile;
+            $data['entry'] = $entryFile->getFullName();
         } else {
             $data['entry'] = $entryFile->getFullName();
         }
@@ -97,22 +101,29 @@ class VisualLocalPage implements IVisualEngine {
         if (empty($this->factory)) {
             $this->initFactory();
         }
-        $this->factory->set(VisualPage::ENGINE_KEY, $this)
-            ->set(VisualWeight::DATA_KEY, new SiteWeightModel())
-            ->set(VisualWeight::PROPERTY_KEY, new VisualWeightProperty());
+        $this->factory->set(VisualPage::ENGINE_KEY, $this);
         return $this->factory;
     }
 
     public function resetRenderer() {
+        $this->directory = $this->pageDirectory;
         $this->renderer()->setDirectory($this->directory);
     }
 
     protected function initFactory() {
-        $this->factory = VisualFactory::newViewFactory()
+        $this->factory = VisualFactory::newViewFactory(false)
             ->setDirectory($this->directory);
         $this->factory->getEngine()
             ->registerFunc('asset', function (string $val) {
-                return sprintf('/assets/themes/%s', trim($val, '\''));
+                $file = $this->directory->file(trim($val, '\''));
+                if (!$file->exist()) {
+                    return $file->getFullName();
+                }
+
+                if ($file->size() === 0) {
+                    return '';
+                }
+                return sprintf('data:%s;base64,%s', MIME::get($file->getExtension()), base64_encode($file->read()));
             });
     }
 
@@ -136,6 +147,7 @@ class VisualLocalPage implements IVisualEngine {
                     }
                 }
             }
+            $this->directory = (new File($weight['entry']))->getDirectory();
             $args[] = $this->renderWeight($weight);
         }
         // 修正当前的文件夹
@@ -145,10 +157,23 @@ class VisualLocalPage implements IVisualEngine {
     }
 
     protected function renderWeight(array $data): string {
+        $def = $data['default'] ?? [];
+        $model = new SiteWeightModel($def);
+        $model->id = $this->rowId();
+        $property = VisualWeightProperty::create($model);
+        if (array_key_exists('style_id', $def) && isset($data['styles'][$def['style_id']])) {
+            $styleData = $data['styles'][$def['style_id']];
+            VisualFactory::newStyle($styleData['name'],
+                (string)$this->directory->file($styleData['entry']))
+            ->render($property);
+        }
+        $renderer = $this->renderer();
+        $renderer->set(VisualWeight::DATA_KEY, $model)
+            ->set(VisualWeight::PROPERTY_KEY, $property);
         $html = empty($data['name']) ? file_get_contents($data['entry'])
             : VisualFactory::newWeight($data['name'], $data['entry'])
             ->setEngine($this)
-            ->render(new SiteWeightModel());
+            ->render($model);
         if (!$this->editable) {
             return VisualWeight::renderHtml('weight-1', $html);
         }

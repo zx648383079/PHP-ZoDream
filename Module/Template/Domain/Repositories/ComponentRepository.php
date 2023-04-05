@@ -8,8 +8,6 @@ use Module\Template\Domain\Entities\ThemeComponentEntity;
 use Module\Template\Domain\Model\SiteComponentModel;
 use Module\Template\Domain\Model\ThemeComponentModel;
 use Zodream\Disk\Directory;
-use Zodream\Disk\ZipStream;
-use Zodream\Helpers\Json;
 
 final class ComponentRepository {
 
@@ -21,6 +19,10 @@ final class ComponentRepository {
     }
     public static function root(): Directory {
         return app_path()->directory('data/visual');
+    }
+
+    public static function assetRoot(): Directory {
+        return public_path()->directory('assets/themes');
     }
 
     public static function getManageList(string $keywords = '', int $user = 0, int $category = 0)
@@ -57,8 +59,6 @@ final class ComponentRepository {
         }
         self::unpackFile($model);
         if ($oldStatus !== intval($model->status) && $oldStatus !== self::STATUS_APPROVED) {
-            self::root()->directory(sprintf('%d_0', $model->id))
-                ->copy(self::root()->directory(sprintf('%d_1', $model->id)));
             SiteComponentModel::where('component_id')
                 ->update([
                     'cat_id' => $model->cat_id,
@@ -76,10 +76,30 @@ final class ComponentRepository {
         return $model;
     }
 
-    public static function manageRemove(int $id)
+    public static function manageRemove(array|int $id)
     {
-        $model = ThemeComponentEntity::findOrThrow($id);
-        $model->delete();
+        ThemeComponentEntity::whereIn('id', (array)$id)->delete();
+    }
+
+    public static function manageReview(array|int $id, array $items)
+    {
+        $data = [];
+        $maps = ['status'];
+        foreach ($items as $key => $val) {
+            $action = is_int($key) ? $val : $key;
+            if (!in_array($action, $maps)) {
+                continue;
+            }
+            if (!is_int($key)) {
+                $data[$action] = $val;
+                continue;
+            }
+            $data[] = sprintf('`%s` = CASE WHEN `%s` = 1 THEN 0 ELSE 1 END', $action, $action);
+        }
+        if (empty($data)) {
+            return;
+        }
+        ThemeComponentEntity::query()->whereIn('id', (array)$id)->update($data);
     }
 
     public static function manageUpload(array $file)
@@ -124,7 +144,7 @@ final class ComponentRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        self::unpackFile($model);
+        // self::unpackFile($model);
         return $model;
     }
 
@@ -134,49 +154,20 @@ final class ComponentRepository {
         } catch (\Exception) {
             return;
         }
-        $folder = self::root()->directory(sprintf('%d_%d', $model->id, $model->status));
-        $folder->create();
-        if (str_starts_with($file->getExtension(), 'htm')) {
-            $distFile = $folder->file(sprintf('weight.%s', $file->getExtension()));
-            $file->copy($distFile);
-            $folder->addFile('weight.json', Json::encode([
-                'entry' => $distFile->getName()
-            ]));
-            $model->alias_name = '';
-            $model->editable = false;
-            $model->path = $distFile->getRelative(self::root());
+        $data = ThemeRepository::load($file->getName(), $file,
+            self::root()->directory(sprintf('%d_%d', $model->user_id,  $model->id)));
+        foreach ($data as $item) {
+            $model->type = $item['type'];
+            $model->alias_name = $item['name'];
+            $model->editable = $item['editable'] === true;
+            $model->path = $item['entry'];
+            if (isset($item['version'])) {
+                $model->version = $item['version'];
+            }
+            $model->dependencies = $item['dependencies'] ?? [];
             $model->save();
             return;
         }
-        (new ZipStream($file))->extractTo($folder);
-        $jsonFile = $folder->file('weight.json');
-        $entryFile = $folder->file('index.html');
-        if (!$entryFile->exist()) {
-            $entryFile = $folder->file('weight.php');
-        }
-        if (!$jsonFile->exist()) {
-            if (!$entryFile->exist()) {
-                throw new \Exception('not found entry');
-            }
-            $model->editable = false;
-            $model->alias_name = '';
-            $model->path = $entryFile->getRelative(self::root());
-            $model->save();
-            return;
-        }
-        $data = Json::decode($jsonFile->read());
-        $model->editable = isset($data['editable']) && $data['editable'];
-        $model->alias_name = $data['name'] ?? '';
-        if (isset($data['entry'])) {
-            $entryFile = $folder->file($data['entry']);
-            if (!$entryFile->exist())  {
-                throw new \Exception('not found entry');
-            }
-            $model->path = $entryFile->getRelative(self::root());
-        } else {
-            $model->path = $entryFile->getRelative(self::root());
-        }
-        $model->save();
     }
 
     public static function selfRemove(int $id) {
@@ -195,10 +186,7 @@ final class ComponentRepository {
     }
 
 
-    public static function selfUpload(array $file)
-    {
-        return self::storage()->addFile($file);
-    }
+
 
     public static function getList(string $keywords = '', int $user = 0, int $category = 0,
                                    string $sort = 'created_at',
@@ -235,12 +223,21 @@ final class ComponentRepository {
                 SearchModel::searchWhere($query, ['name'], true, '', $keywords);
             })->where('type', $type)->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
-            })->page();
+            })->where(function ($query) {
+                $query->where('status', self::STATUS_APPROVED)
+                    ->orWhere('user_id', auth()->id());
+            })->orderBy('status', 'desc')->orderBy('created_at', 'desc')->page();
     }
 
     public static function recommend(int $type) {
         return ThemeComponentModel::with('category')->where('type', $type)
             ->where('status', self::STATUS_APPROVED)
             ->limit(10)->get();
+    }
+
+    public static function selfImport(array $file)
+    {
+        $data = self::storage()->insertFile($file, true);
+        ThemeRepository::importFileLog($data);
     }
 }

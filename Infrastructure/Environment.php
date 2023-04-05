@@ -105,7 +105,7 @@ class Environment {
 	 * @param string $dir
 	 * @return boolean
 	 */
-	public static function getWriteAble($dir) {
+	public static function getWriteAble(string $dir) {
 		if (!is_dir($dir)) {
 			return false;
 		}

@@ -275,6 +275,10 @@ $sizes: (320: 568,
 }
 
 .custom-config-view {
+    max-height: 80vh;
+    textarea {
+        padding: .4rem;
+    }
     .multiple-box {
         .item {
             border:  1px dotted #ccc;
@@ -294,10 +298,6 @@ $sizes: (320: 568,
             }
         }
     }
-}
-
-.custom-config-view {
-    max-height: 80vh;
 }
 
 .only-editor {

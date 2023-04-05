@@ -231,3 +231,87 @@
 其中样式中的 `:host` 代替当前组件的动态 `id`
 
 其中脚本中的 `$host` 代替当前组件的标签样式类型 `HtmlDivElement`
+
+## 模板组件配置
+
+版权信息，可空，附加到页面或组件或主题的json中
+
+```json
+{
+    "author": "<作者名>",
+    "since": "<更新时间>",
+    "version": "<版本号>",
+    "copyright": "<版权信息>",
+    "email": "<联系邮箱>",
+    "url": "<项目官网>",
+}
+```
+
+### 页面
+
+`weight.json`
+
+```json
+{
+    "name": "<英文名称>",
+    "entry": "<具体文件支持 html 文件>",
+    "description": "<说明>",
+    "thumb": "<预览图>", // 可空
+    "assets": [ // 会复制到可用路径
+        "<文件夹名/文件名>"
+    ]
+}
+```
+
+### 组件
+
+`weight.json`
+
+```json
+{
+    "name": "<英文名称>",
+    "entry": "<具体文件支持 继承自 BaseWeight 的 php 文件>",
+    "description": "<说明>",
+    "thumb": "<预览图>", // 可空
+    "editable": true, //是否支持编辑内容
+    "styles": [ // 附加样式选项
+        {
+            "name": "<英文名称>",
+            "entry": "<具体文件支持 继承自 IVisualStyle 的 php 文件>",
+            "thumb": "<预览图>",
+        }
+    ],
+    "dependencies": [
+        "<支持js和css文件>"
+    ],
+    "default": { // 本地调试的默认值
+        "style_id": 0, // styles第几个样式
+        "title": "<>",
+        "content": "<>"
+    }
+}
+```
+
+### 主题
+
+批量导入页面和组件
+
+`theme.json`
+
+```json
+{
+    "name": "<英文名称>",
+    "description": "<说明>",
+    "thumb": "<预览图>", // 可空
+    "assets": [ // 会复制到可用路径
+        "<文件夹名/文件名>"
+    ],
+    "pages": [ // 非数组为文件名，自动选择下面的组件，数组则为 页面json的内容
+        {
+            "name": "index",
+            "entry": "index.html"
+        },
+    ],
+    "weights": "weights" // 非数组为文件名，自动选择下面的组件，数组则为 组件json的内容
+}
+```

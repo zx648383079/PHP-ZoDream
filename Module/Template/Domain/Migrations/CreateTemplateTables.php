@@ -45,6 +45,7 @@ class CreateTemplateTables extends Migration {
             $table->uint('editable', 1)->default(0)->comment('是否有编辑表单');
             $table->string('path', 200);
             $table->string('alias_name', 20)->default('');
+            $table->string('dependencies', 500)->default('依赖的脚本和css文件');
             $table->timestamps();
         })->append(ThemeStyleEntity::tableName(), function(Table $table) {
             $table->comment('页面和组件提供的样式');
@@ -69,6 +70,7 @@ class CreateTemplateTables extends Migration {
             $table->uint('editable', 1)->default(0)->comment('是否有编辑表单');
             $table->string('path', 200);
             $table->string('alias_name', 20)->default('');
+            $table->string('dependencies', 500)->default('依赖的脚本和css文件');
             $table->timestamps();
         })->append(SiteEntity::tableName(), function(Table $table) {
             $table->comment('自定义站点');
@@ -110,7 +112,6 @@ class CreateTemplateTables extends Migration {
             $table->string('description')->default('');
             $table->text('settings')->nullable();
             $table->uint('position', 2)->default(10);
-            $table->string('dependencies')->default('依赖的脚本和css文件');
             $table->uint('status', 1)->default(PageRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
             $table->timestamps();
         })->append(SitePageWeightEntity::tableName(), function(Table $table) {

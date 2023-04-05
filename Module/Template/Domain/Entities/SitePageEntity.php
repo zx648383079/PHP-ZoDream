@@ -17,7 +17,6 @@ use Domain\Entities\Entity;
  * @property string $description
  * @property string $settings
  * @property integer $position
- * @property string $dependencies
  * @property integer $status
  * @property integer $updated_at
  * @property integer $created_at
@@ -39,7 +38,6 @@ class SitePageEntity extends Entity {
             'description' => 'string:0,255',
             'settings' => '',
             'position' => 'int:0,127',
-            'dependencies' => 'string:0,255',
             'status' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',

@@ -541,7 +541,8 @@ class ThreadRepository {
 
     private static function toggleLike(ThreadModel $thread)
     {
-        return LogRepository::changeAction($thread->id, ThreadLogModel::TYPE_THREAD, ThreadLogModel::ACTION_AGREE, [
+        return LogRepository::toggleLog(ThreadLogModel::TYPE_THREAD,
+            ThreadLogModel::ACTION_AGREE, $thread->id, [
             ThreadLogModel::ACTION_AGREE, ThreadLogModel::ACTION_DISAGREE
         ]);
     }

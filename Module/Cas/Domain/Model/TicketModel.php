@@ -73,7 +73,7 @@ class TicketModel extends Model {
         if ($this->id) {
             return;
         }
-        $this->__attributes['proxies'] = Json::decode($value);
+        $this->setAttributeSource('proxies', Json::decode($value));
     }
 
     public function generateTicket() {

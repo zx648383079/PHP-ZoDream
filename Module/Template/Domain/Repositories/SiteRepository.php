@@ -5,6 +5,7 @@ namespace Module\Template\Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
+use Domain\Repositories\FileRepository;
 use Module\Template\Domain\Entities\SiteEntity;
 use Module\Template\Domain\Entities\SitePageEntity;
 use Module\Template\Domain\Model\SiteComponentModel;
@@ -43,6 +44,8 @@ final class SiteRepository extends CRUDRepository {
         $groupItems = [];
         foreach ($data as $item) {
             $temp = $item->toArray();
+            $temp['thumb'] = url()->asset(empty($temp['thumb']) ? FileRepository::DEFAULT_IMAGE : $temp['thumb']);
+            $temp['id'] = $temp['component_id'];
             if (!isset($groupItems[$item->cat_id])) {
                 $groupItems[$item->cat_id] = [
                     'id' => 0,
@@ -229,12 +232,17 @@ final class SiteRepository extends CRUDRepository {
 
     public static function selfGetPage(int $site, string $keywords = '')
     {
-        if (!self::isSelf($site)) {
+        $siteModel = SiteModel::findWithAuth($site);
+        if (empty($siteModel)) {
             return new Page();
         }
-        return SitePageModel::when(!empty($keywords), function ($query) use ($keywords) {
+        $page = SitePageModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['title', 'name'], true, '', $keywords);
         })->where('site_id', $site)->orderBy('id', 'desc')->page();
+        foreach ($page as $item) {
+            $item->is_default = $item->id === $siteModel->default_page_id;
+        }
+        return $page;
     }
 
     public static function selfSavePage(array $data)
@@ -252,8 +260,20 @@ final class SiteRepository extends CRUDRepository {
         }
         $model->load($data);
         $model->site_id = $site;
+        if (isset($data['site_component_id']) && $data['site_component_id'] > 0) {
+            $model->component_id = SiteComponentModel::where('site_id', $site)
+                ->where('id', intval($data['site_component_id']))->value('component_id');
+        }
+        if ($model->component_id < 1) {
+            throw new \Exception('Component is error');
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        if (isset($data['is_default']) && $data['is_default']) {
+            SiteModel::where('site_id', $model->site_id)->update([
+               'default_page_id' => $model->id
+            ]);
         }
         return $model;
     }
@@ -305,7 +325,8 @@ final class SiteRepository extends CRUDRepository {
                     'version' => $model->version,
                     'path' => $model->path,
                     'editable' => $model->editable,
-                    'alias_name' => $model->alias_name
+                    'alias_name' => $model->alias_name,
+                    'dependencies' => $model->dependencies
                 ]);
             }
             $success ++;

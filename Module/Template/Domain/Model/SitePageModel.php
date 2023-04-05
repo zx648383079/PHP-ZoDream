@@ -18,7 +18,6 @@ use Zodream\Helpers\Json;
  * @property string $description
  * @property string $settings
  * @property integer $position
- * @property string $dependencies
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -37,8 +36,9 @@ class SitePageModel extends SitePageEntity {
     }
 
     public function setSettingsAttribute($value) {
-        $this->__attributes['settings'] = is_array($value) ? Json::encode($value) : $value;
+        $this->setAttributeSource('settings', is_array($value) ? Json::encode($value) : $value);
     }
+
 
     public function setting($key, $default = null) {
         return isset($this->settings[$key]) ? $this->settings[$key] : $default;

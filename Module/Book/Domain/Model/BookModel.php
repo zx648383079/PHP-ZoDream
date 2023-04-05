@@ -125,14 +125,14 @@ class BookModel extends BookEntity {
     }
 
     public function getLastAtAttribute() {
-        return Time::format($this->__attributes['updated_at'], 'm-d H:i');
+        return Time::format($this->getAttributeSource('updated_at'), 'm-d H:i');
     }
 
     public function getFormatSizeAttribute() {
-        if ($this->__attributes['size'] > 10000) {
-            return sprintf('%.2f万字', $this->__attributes['size'] / 10000);
+        if ($this->getAttributeSource('size') > 10000) {
+            return sprintf('%.2f万字', $this->getAttributeSource('size') / 10000);
         }
-        return sprintf('%s字', $this->__attributes['size']);
+        return sprintf('%s字', $this->getAttributeSource('size'));
     }
 
     public function getMonthClickAttribute() {

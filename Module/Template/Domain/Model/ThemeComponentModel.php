@@ -27,6 +27,7 @@ use Zodream\Disk\Directory;
  * @property integer $editable
  * @property string $path
  * @property string $alias_name
+ * @property string $dependencies
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -50,10 +51,11 @@ class ThemeComponentModel extends ThemeComponentEntity {
     }
 
     public function getDependenciesAttribute() {
-        return explode(',', $this->getAttributeSource('dependencies'));
+        $val = $this->getAttributeSource('dependencies');
+        return empty($val) ? [] : explode("\n", $val);
     }
 
     public function setDependenciesAttribute($value) {
-        $this->setAttributeSource('dependencies', implode(',', (array)$value));
+        $this->setAttributeSource('dependencies', is_array($value) ? implode("\n", $value) : $value);
     }
 }

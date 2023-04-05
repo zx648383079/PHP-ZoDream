@@ -8,6 +8,7 @@ use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
+use Zodream\Disk\FileObject;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\UploadFile;
 use Zodream\Infrastructure\Contracts\Http\Output;
@@ -82,13 +83,7 @@ class StorageProvider {
      * @throws \Exception
      */
     public function addMd5(string $md5): array {
-        if (empty($md5)) {
-            throw new \Exception('not found');
-        }
-        $model = static::query()->where('md5', $md5)->first();
-        if (empty($model)) {
-            throw new \Exception('not found');
-        }
+        $model = $this->getByMd5($md5);
         return [
             'url' => $model['path'],
             'title' => $model['name'],
@@ -97,13 +92,36 @@ class StorageProvider {
         ];
     }
 
+    protected function getByMd5(string $md5): array {
+        if (empty($md5)) {
+            throw new \Exception('not found');
+        }
+        $model = static::query()->where('md5', $md5)->first();
+        if (empty($model)) {
+            throw new \Exception('not found');
+        }
+        return $model;
+    }
+
     /**
-     *
+     * 插入数据
      * @param BaseUpload|array $upload
      * @return array{url: string, title: string, extension: string, size: int}
      * @throws \Exception
      */
     public function addFile(BaseUpload|array $upload): array {
+        $model = $this->insertFile($upload);
+        return $this->formatLog($model);
+    }
+
+    /**
+     * 插入数据
+     * @param BaseUpload|array $upload
+     * @param bool $backFile 是否需要返回文件路径
+     * @return array{id: int,name: string,extension: string,path:string,size: int,md5: string,folder: string, file: File} 返回 log 数据
+     * @throws \Exception
+     */
+    public function insertFile(BaseUpload|array $upload, bool $backFile = false): array {
         if (is_array($upload)) {
             $upload = new UploadFile($upload);
         }
@@ -117,21 +135,44 @@ class StorageProvider {
             // 保存文件位置可能不在目录下
             throw new \Exception('add file error');
         }
+        return $this->insertFileLog($file, [
+            'name' => $upload->getName(),
+            'type' => $upload->getType(),
+        ], $backFile);
+    }
+
+    /**
+     * 添加log 记录
+     * @param File $file
+     * @param array $rawData
+     * @param bool $backFile
+     * @return array{id: int,name: string,extension: string,path:string,size: int,md5: string,folder: string, file: File} 返回的log数据
+     * @throws \Exception
+     */
+    protected function insertFileLog(File $file, array $rawData = [], bool $backFile = false): array {
+        $path = $file->getRelative($this->root);
+        if (empty($path)) {
+            // 保存文件位置可能不在目录下
+            throw new \Exception('add file error');
+        }
         $md5 = $file->md5();
         try {
-            $model = $this->addMd5($md5);
-            $distFile = $this->toFile($model['url']);
+            $model = $this->getByMd5($md5);
+            $distFile = $this->toFile($model['path']);
             if (!$distFile->exist()) {
                 $file->move($distFile);
             } else {
                 $file->delete();
             }
+            if ($backFile) {
+                $model['file'] = $distFile;
+            }
             return $model;
         } catch (\Exception $ex) {
         }
         $model = [
-            'name' => $upload->getName(),
-            'extension' => $upload->getType(),
+            'name' => $rawData['name'] ?? $file->getName(),
+            'extension' => $rawData['type'] ?? $file->getExtension(),
             'path' => $path,
             'size' => $file->size(),
             'md5' => $md5,
@@ -144,12 +185,41 @@ class StorageProvider {
             $file->delete();
             throw new \Exception('add file error');
         }
+        if ($backFile) {
+            $model['file'] = $file;
+        }
+        return $model;
+    }
+
+    /**
+     * 格式化成前台输出的数据
+     * @param array{id: int,name: string,extension: string,path:string,size: int,md5: string,folder: string} $log
+     * @return array{url: string, title: string, extension: string, size: int}
+     */
+    public function formatLog(array $log): array {
         return [
-            'url' => $model['path'],
-            'title' => $model['name'],
-            'extension' => !empty($model['extension']) ? '.'.$model['extension'] : '',
-            'size' => $model['size'],
+            'url' => $log['path'],
+            'title' => $log['name'],
+            'extension' => !empty($log['extension']) ? '.'.$log['extension'] : '',
+            'size' => $log['size'],
         ];
+    }
+
+    /**
+     * 复制文件到这里
+     * @param File $sourceFile
+     * @param array $rawData
+     * @param bool $backFile
+     * @return array{id: int,name: string,extension: string,path:string,size: int,md5: string,folder: string, file: File} 返回 log 数据
+     * @throws \Exception
+     */
+    public function copyFile(File $sourceFile, array $rawData = [], bool $backFile = false): array {
+        if ($sourceFile->isChild($this->root)) {
+            $file = $sourceFile;
+        } else {
+            $file = $this->root->file(sprintf('%s_%s', time(), $sourceFile->getName()));
+        }
+        return $this->insertFileLog($file, $rawData, $backFile);
     }
 
     public function get(string $url): array {
@@ -212,6 +282,44 @@ class StorageProvider {
             return $file;
         }
         return $file->setName($model['name']);
+    }
+
+    /***
+     * 确认一下文件
+     * @return void
+     */
+    public function reload() {
+        $this->root->mapDeep(function (FileObject $file) {
+            if ($file instanceof Directory) {
+                return;
+            }
+            $md5 = $file->md5();
+            if (static::query()->where('md5', $md5)->count() > 0) {
+                return;
+            }
+            $path = $file->getRelative($this->root);
+            $model = static::query()->where('path', $path)->where('folder', $this->tag)->first();
+            if (empty($model)) {
+                $this->query()->insert([
+                    'name' => $file->getName(),
+                    'extension' => $file->getExtension(),
+                    'path' => $path,
+                    'size' => $file->size(),
+                    'md5' => $md5,
+                    'folder' => $this->tag,
+                    'created_at' => time(),
+                    'updated_at' => time(),
+                ]);
+                return;
+            }
+            if ($model['md5'] !== $md5) {
+                static::query()->where('id', $model['id'])
+                    ->update([
+                        'md5' => $md5
+                    ]);
+            }
+
+        });
     }
 
     protected function toFile(string|array $path): File {

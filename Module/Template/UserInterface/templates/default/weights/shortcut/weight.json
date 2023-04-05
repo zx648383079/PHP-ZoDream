@@ -1,12 +1,27 @@
 {
   "name": "shortcut",
   "thumb": "./thumb.png",
-  "keywords": "",
+  "entry": "weight.php",
   "description": "快捷键",
   "author": "zodream",
   "since": "2023-03-12",
   "version": "v1.0",
   "copyright": "@zodream",
   "email": "123@12.com",
-  "editable": true
+  "editable": true,
+  "styles": [
+    {
+      "name": "none",
+      "entry": "none.php",
+      "thumb": "./thumb.png"
+    }
+  ],
+  "dependencies": [
+    "../../css/style.css"
+  ],
+  "default": {
+    "style_id": 0,
+    "title": "键",
+    "content": "保存 S+J"
+  }
 }

@@ -39,6 +39,8 @@ class SiteComponentEntity extends Entity {
             'author' => 'string:0,20',
             'version' => 'string:0,10',
             'editable' => 'int:0,127',
+            'dependencies' => 'string:0,255',
+            'alias_name' => 'required|string:0,30',
             'path' => 'required|string:0,200',
             'updated_at' => 'int',
             'created_at' => 'int',

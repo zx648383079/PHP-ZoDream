@@ -56,7 +56,7 @@ class PGTicketModel extends BaseModel {
     }
 
     public function getProxiesAttribute() {
-        return json_decode($this->__attributes['proxies'], true);
+        return json_decode($this->getAttributeSource('proxies'), true);
     }
 
     public function setProxiesAttribute($value) {
@@ -64,7 +64,7 @@ class PGTicketModel extends BaseModel {
         if ($this->id) {
             return;
         }
-        $this->__attributes['proxies'] = json_encode($value);
+        $this->setAttributeSource('proxies', json_encode($value));
     }
 
     public static function getByTicket($ticket, $checkExpired = true) {
