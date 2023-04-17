@@ -32,6 +32,8 @@ return [
     'friend link' => '友情链接',
     'about' => '关于',
     'cookie tip' => '访问本站，表示您已同意使用Cookies，本站不会主动泄露您的隐私信息。',
+    'This URL is suspicious, maybe multiple jumps' => '这个链接很可疑，也许会多次跳转',
+    'Suspicious URL' => '可疑链接',
     'READ MORE' => '了解更多',
     'Apply' => '申请',
     'Cancel' => '取消',

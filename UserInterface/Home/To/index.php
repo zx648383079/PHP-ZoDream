@@ -4,27 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="refresh" content="0.1;url=<?=$this->text($url)?>">
+    <?php if($autoJump):?>
+        <meta http-equiv="refresh" content="0.1;url=<?=$url?>">
+    <?php endif;?>
     <title><?=__('loading...')?></title>
     <style>
     body {
         overflow: hidden;
-        background: #f1f1f1
+        background: #f1f1f1;
+        padding: 0;
+        margin: 0;
     }
-
-    .container {
+    .flex-center {
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        flex-direction: column;
+    }
+
+    .jump-tip {
+        display: flex;
+        width: 100%;
+        max-width: 30rem;
+        position: relative;
+    }
+    .jump-tip span {
+        flex: 1;
+        display: inline-block;
+        word-break: break-all;
+        background-color: #ccc;
+        border-radius: .25rem 0 0 .25rem;
+        padding: .8rem;
+    }
+    .jump-tag {
+        position: absolute;
+        left: 0;
+        bottom: -2rem;
+        color: white;
+        padding: .4rem 1rem;
+        opacity: .5;
+        user-select: none;
+    }
+
+    .jump-btn {
+        display: flex;
+        align-items: center;
+        background-color: #ee8c68;        
+        color: white;
+        padding: .4rem;
+        border-radius: 0 .25rem .25rem 0;
+        word-break: keep-all;
+        text-decoration: none;
+    }
+    .jump-btn-danger,
+    .jump-tag {
+        background-color: rgb(222, 53, 69);
+    }
+
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 16rem;
+        height: 6rem;
         overflow: hidden;
-        animation-delay: 1s
+        animation-delay: 1s;
     }
 
     .item-1 {
         width: 20px;
         height: 20px;
-        background: #f583a1;
         border-radius: 50%;
         background-color: #eed968;
         margin: 7px;
@@ -65,7 +115,6 @@
     .item-2 {
         width: 20px;
         height: 20px;
-        background: #f583a1;
         border-radius: 50%;
         background-color: #eece68;
         margin: 7px;
@@ -106,7 +155,6 @@
     .item-3 {
         width: 20px;
         height: 20px;
-        background: #f583a1;
         border-radius: 50%;
         background-color: #eec368;
         margin: 7px;
@@ -147,7 +195,6 @@
     .item-4 {
         width: 20px;
         height: 20px;
-        background: #f583a1;
         border-radius: 50%;
         background-color: #eead68;
         margin: 7px;
@@ -188,7 +235,6 @@
     .item-5 {
         width: 20px;
         height: 20px;
-        background: #f583a1;
         border-radius: 50%;
         background-color: #ee8c68;
         margin: 7px;
@@ -228,12 +274,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="item-1"></div>
-        <div class="item-2"></div>
-        <div class="item-3"></div>
-        <div class="item-4"></div>
-        <div class="item-5"></div>
+    <div class="flex-center">
+        <div class="jump-tip">
+            <span><?=$url?></span>
+            <?php if($autoJump):?>
+            <a class="jump-btn" href="<?=$url?>" rel="noopener nofollow">GO</a>
+            <?php else:?>
+            <a class="jump-btn jump-btn-danger" href="<?=$url?>" rel="noopener nofollow" title="<?=__('This URL is suspicious, maybe multiple jumps')?>">GO</a>
+            <div class="jump-tag" title="<?=__('This URL is suspicious, maybe multiple jumps')?>"><?=__('Suspicious URL')?></div>
+            <?php endif;?>
+        </div>
+        <div class="loading-container">
+            <div class="item-1"></div>
+            <div class="item-2"></div>
+            <div class="item-3"></div>
+            <div class="item-4"></div>
+            <div class="item-5"></div>
+        </div>
     </div>
 </body>
 </html>

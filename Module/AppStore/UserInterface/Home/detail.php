@@ -30,10 +30,39 @@ $this->registerCssFile([
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <div class="detail-header">
-                <div class="title"><?=$this->text($model['name'])?></div>
-                <div class="thumb">
-                    <img src="<?=$model['icon']?>" alt="">
+            <div class="app-detail-header">
+                <div class="app-title-bar">
+                    <div class="thumb">
+                        <img src="<?=$model['icon']?>" alt="">
+                    </div>
+                    <div class="app-title-body">
+                        <div class="title"><?=$this->text($model['name'])?></div>
+                    </div>
+                </div>
+                
+                
+                <div class="package-box">
+                    <?php foreach($model['packages'] as $item):?>
+                    <div class="file-item">
+                        <div class="item-tag">
+                            <a><?= $item['os'] ?></a>
+                            <a><?= $item['framework'] ?></a>
+                            <a><?= Disk::size($item['size']) ?></a>
+                        </div>
+                        <div class="item-body">
+                        <?= $item['name'] ?>
+                        </div>
+                        <div class="item-action">
+                            <?php if($item['url_type'] < 1):?>
+                            <a class="btn btn-info" href="<?=$this->url('./download', ['id' => $item['id']])?>" target="_blank">下载</a>
+                            <?php elseif ($item['url_type'] > 0 && $item['url_type'] < 3):?>
+                            <a class="btn btn-info" href="<?=$this->url($item['url'])?>" target="_blank">Open</a>
+                            <?php else:?>
+                            <a class="btn btn-info">Copy</a>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                    <?php endforeach;?>
                 </div>
             </div>
         </div>
@@ -78,29 +107,5 @@ $this->registerCssFile([
         <article id="content" class="style-type-1">
             <?=$model['content']?>
         </article>
-
-        <div class="package-box">
-            <?php foreach($model['packages'] as $item):?>
-            <div class="file-item">
-                <div class="item-tag">
-                    <a><?= $item['os'] ?></a>
-                    <a><?= $item['framework'] ?></a>
-                    <a><?= Disk::size($item['size']) ?></a>
-                </div>
-                <div class="item-body">
-                <?= $item['name'] ?>
-                </div>
-                <div class="item-action">
-                    <?php if($item['url_type'] < 1):?>
-                    <a class="btn btn-info" href="<?=$this->url('./download', ['id' => $item['id']])?>" target="_blank">下载</a>
-                    <?php elseif ($item['url_type'] > 0 && $item['url_type'] < 3):?>
-                    <a class="btn btn-info" href="<?=$this->url($item['url'])?>" target="_blank">Open</a>
-                    <?php else:?>
-                    <a class="btn btn-info">Copy</a>
-                    <?php endif;?>
-                </div>
-            </div>
-            <?php endforeach;?>
-        </div>
     </div>
 </div>
