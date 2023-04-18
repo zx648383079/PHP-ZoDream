@@ -53,7 +53,7 @@ vendor/
 
 # tool
 .idea/
-
+.phpunit.cache
 
 composer.lock
 

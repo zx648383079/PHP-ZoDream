@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Service\Home;
 
+use Infrastructure\JumpTo;
 use Module\Counter\Domain\Events\JumpOut;
 use Zodream\Disk\File;
 use Zodream\Helpers\Html;
@@ -18,35 +19,18 @@ class ToController extends Controller {
      */
     public function indexAction(string $url = '') {
         $autoJump = true;
+        $isValid = true;
         if (!empty($url)) {
-            $url = base64_decode($url.'=');
-            $autoJump = $this->checkUrl($url);
+            $url = JumpTo::decode($url);
+            $autoJump = $isValid = JumpTo::isValid($url);
             event(JumpOut::create($url));
         }
         if (empty($url)) {
             $url = url('/');
         }
-        $url = Html::text($url);
-        return $this->show(compact('url', 'autoJump'));
-    }
-
-    private function checkUrl(string $url): bool {
-        $query = parse_url($url, PHP_URL_QUERY);
-        if (empty($query)) {
-            return true;
-        }
-        $data = [];
-        parse_str($query, $data);
-        foreach ($data as $key => $_) {
-            $key = strtolower($key);
-            if (str_contains($key, 'url') || str_contains($key, 'uri')) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static function to(string $url) {
-        return url('/to', ['url' => rtrim(base64_encode($url), '=')]);
+        $encodeUrl = Html::text($url);
+        $url = Html::text(urldecode($url));
+        response()->header('X-Robots-Tag', 'noindex');
+        return $this->show(compact('url', 'encodeUrl', 'autoJump', 'isValid'));
     }
 }

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Infrastructure;
 
-use Service\Home\ToController;
 use Zodream\Helpers\Str;
 use Zodream\Html\MarkDown;
 
@@ -15,7 +14,7 @@ class HtmlExpand {
         if (str_contains($url, request()->host())) {
             return $url;
         }
-        return ToController::to($url);
+        return JumpTo::encode($url);
     }
 
 

@@ -1,11 +1,18 @@
+<?php
+defined('APP_DIR') or exit();
+use Zodream\Template\View;
+/** @var $this View */
+
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?=trans()->getLanguage()?>">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php if($autoJump):?>
-        <meta http-equiv="refresh" content="0.1;url=<?=$url?>">
+        <meta http-equiv="refresh" content="0.1;url=<?=$encodeUrl?>">
     <?php endif;?>
     <title><?=__('loading...')?></title>
     <style>
@@ -277,10 +284,10 @@
     <div class="flex-center">
         <div class="jump-tip">
             <span><?=$url?></span>
-            <?php if($autoJump):?>
-            <a class="jump-btn" href="<?=$url?>" rel="noopener nofollow">GO</a>
+            <?php if($isValid):?>
+            <a class="jump-btn" href="<?=$encodeUrl?>" rel="noopener nofollow">GO</a>
             <?php else:?>
-            <a class="jump-btn jump-btn-danger" href="<?=$url?>" rel="noopener nofollow" title="<?=__('This URL is suspicious, maybe multiple jumps')?>">GO</a>
+            <a class="jump-btn jump-btn-danger" href="<?=$encodeUrl?>" rel="noopener nofollow" title="<?=__('This URL is suspicious, maybe multiple jumps')?>">GO</a>
             <div class="jump-tag" title="<?=__('This URL is suspicious, maybe multiple jumps')?>"><?=__('Suspicious URL')?></div>
             <?php endif;?>
         </div>
