@@ -15,15 +15,19 @@ class JumpTo {
         if (empty($url)) {
             return true;
         }
+        $data = parse_url($url);
+        if ($data['host'] === request()->host()) {
+            return !isset($data['path']) || !str_starts_with($data['path'], '/to');
+        }
         $disallowItems = config('disallow');
         foreach ((array)$disallowItems as $item) {
             if (str_contains($url, (string)$item)) {
                 return false;
             }
         }
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = $data['query'] ?? '';
         if (empty($query)) {
-            return true;
+            return static::IsValidReferrer();
         }
         $data = [];
         parse_str($query, $data);
@@ -35,6 +39,19 @@ class JumpTo {
             if (is_array($val) || stripos((string)$val, 'http') === 0) {
                 return false;
             }
+        }
+        return static::IsValidReferrer();
+    }
+
+    protected static function IsValidReferrer(): bool {
+        $request = request();
+        $uri = $request->referrer();
+        if (empty($uri)) {
+            return false;
+        }
+        $host = parse_url($uri, PHP_URL_HOST);
+        if (empty($host) || !str_ends_with($host, $request->host())) {
+            return false;
         }
         return true;
     }

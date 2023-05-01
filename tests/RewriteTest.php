@@ -15,8 +15,8 @@ final class RewriteTest extends TestCase {
             ['/', [], '', []],
             ['blog', [], 'blog.html', []],
             ['blog', ['id' => '1'], 'blog/id/1.html', []],
-            ['blog', ['tag' => 'name'], 'blog/0/tag/name.html', []],
-            ['blog', ['tag' => 'name', 'url' => 'u/a'], 'blog/0/tag/name.html', ['url' => 'u/a']],
+            ['blog', ['tag' => 'name'], 'blog/0_0/tag/name.html', []],
+            ['blog', ['tag' => 'name', 'url' => 'u/a'], 'blog/0_0/tag/name.html', ['url' => 'u/a']],
         ];
     }
 
