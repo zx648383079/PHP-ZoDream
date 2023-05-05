@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Infrastructure;
 
 /**
@@ -16,13 +17,22 @@ class JumpTo {
             return true;
         }
         $data = parse_url($url);
+        if (empty($data['host'])) {
+            return true;
+        }
         if ($data['host'] === request()->host()) {
             return !isset($data['path']) || !str_starts_with($data['path'], '/to');
         }
-        $disallowItems = config('disallow');
-        foreach ((array)$disallowItems as $item) {
-            if (str_contains($url, (string)$item)) {
-                return false;
+        $siteItems = config('SiteList', []);
+        foreach ((array)$siteItems as $key => $items) {
+            $res = $key === 'allow';
+            foreach ((array)$items as $item) {
+                if (empty($item)) {
+                    continue;
+                }
+                if (str_ends_with($data['host'], (string)$item)) {
+                    return $res;
+                }
             }
         }
         $query = $data['query'] ?? '';

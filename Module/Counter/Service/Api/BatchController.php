@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Contact\Service\Api;
+namespace Module\Counter\Service\Api;
 
-use Module\Contact\Domain\Repositories\ContactRepository;
+use Module\Counter\Domain\Repositories\StatisticsRepository;
 use Zodream\Route\Controller\Concerns\BatchAction;
 
 class BatchController extends Controller {
@@ -16,7 +16,7 @@ class BatchController extends Controller {
 
     public function indexAction() {
         return $this->render($this->invokeBatch([
-            'friend_link' => sprintf('%s::%s', ContactRepository::class, 'friendLink'),
+            'today' => sprintf('%s::%s', StatisticsRepository::class, 'today'),
         ]));
     }
 }

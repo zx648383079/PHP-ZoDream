@@ -18,7 +18,7 @@ class RssRepository {
             ->setLink(url('/'))
             ->setImage(url()->asset('assets/images/favicon.png'), url('/'));
         $model_list = BlogModel::query()->with('term')
-            ->where('open_type', BlogModel::OPEN_PUBLIC)
+            ->where('open_type', PublishRepository::OPEN_PUBLIC)
             ->orderBy('id', 'desc')
             ->get('id', 'term_id', 'title', 'edit_type', 'content', 'programming_language', 'created_at');
         $metaItems = static::getMeta();

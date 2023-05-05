@@ -1,13 +1,35 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Domain\Repositories;
 
 use Module\Counter\Domain\Model\JumpLogModel;
 use Module\Counter\Domain\Model\LogModel;
 use Module\Counter\Domain\Model\StayTimeLogModel;
-use Zodream\Helpers\Str;
 use Zodream\Html\Page;
+use Zodream\Infrastructure\Support\UserAgent;
 
 class StateRepository {
+
+    public static function getTimeInput(): array {
+        $request = request();
+        $start_at = $request->get('start_at', 'today');
+        $end_at = $request->get('end_at');
+        $time = strtotime(date('Y-m-d 00:00:00'));
+        if ($start_at === 'today') {
+            return [$time, $time + 86400];
+        }
+        if ($start_at === 'yesterday') {
+            return [$time - 86400, $time];
+        }
+        if ($start_at === 'week') {
+            return [$time - 6 * 85400, $time + 86400];
+        }
+        if ($start_at === 'month') {
+            return [$time - 29 * 85400, $time + 86400];
+        }
+        return [is_numeric($start_at) ? $start_at : strtotime($start_at),
+            is_numeric($end_at) ? $end_at : strtotime($end_at)];
+    }
 
     public static function statisticsByTime(int $start_at, int $end_at): array {
         $pv = StayTimeLogModel::where('enter_at',  '>=', $start_at)
@@ -24,12 +46,15 @@ class StateRepository {
             ->where('enter_at',  '<', $end_at)
             ->where('leave_at', '>', 0)
             ->avg('leave_at - enter_at');
-
         return compact('pv', 'uv', 'ip', 'jump', 'stay');
     }
 
     public static function currentStay() {
-        return StayTimeLogModel::query()->orderBy('id', 'desc')->page();
+        $items = StayTimeLogModel::query()->orderBy('id', 'desc')->page();
+        $items->map(function ($item) {
+           return static::formatAgent($item);
+        });
+        return $items;
     }
 
     public static function allUrl(int $start_at, int $end_at) {
@@ -72,14 +97,14 @@ class StateRepository {
             if (empty($host)) {
                 return;
             }
-            if (substr($host, 0, 4) === 'www.') {
+            if (str_starts_with($host, 'www.')) {
                 return substr($host, 4);
             }
             return $host;
         }, 'host', null, 'url');
     }
 
-    private static function isSearch($url) {
+    private static function isSearch(string $url): string|false {
         if (preg_match('/[\?&](q|wd|p|query|qkw|search|qr|string|keyword)\=([^&]*)/', $url, $match)) {
             return $match[2];
         }
@@ -109,7 +134,7 @@ class StateRepository {
                 return;
             }
             $host = parse_url($url, PHP_URL_HOST);
-            if (substr($host, 0, 4) === 'www.') {
+            if (str_starts_with($host, 'www.')) {
                 return substr($host, 4);
             }
             return $host;
@@ -125,7 +150,7 @@ class StateRepository {
             if (empty($host)) {
                 return;
             }
-            if (substr($host, 0, 4) === 'www.') {
+            if (str_starts_with($host, 'www.')) {
                 return substr($host, 4);
             }
             return $host;
@@ -141,7 +166,7 @@ class StateRepository {
             if (empty($host)) {
                 return '直接访问';
             }
-            if (substr($host, 0, 4) === 'www.') {
+            if (str_starts_with($host, 'www.')) {
                 return substr($host, 4);
             }
             return $host;
@@ -205,5 +230,31 @@ class StateRepository {
             return $a['pv'] === $b['pv'] ? 0 : 1;
         });
         return $data;
+    }
+
+    public static function jump(int $start_at, int $end_at) {
+        $items = JumpLogModel::query()
+//            ->where('created_at', '>=', $start_at)
+//            ->where('created_at', '<', $end_at)
+            ->orderBy('created_at', 'desc')
+            ->page();
+        $items->map(function ($item) {
+            return static::formatAgent($item);
+        });
+        return $items;
+    }
+
+    public static function formatAgent(mixed $item): mixed {
+        if (!isset($item['user_agent'])) {
+            return $item;
+        }
+        $agent = $item['user_agent'];
+        if (empty($agent)) {
+            return $item;
+        }
+        $item['device'] = UserAgent::device($agent);
+        $item['os'] = UserAgent::os($agent);
+        $item['browser'] = UserAgent::browser($agent);
+        return $item;
     }
 }

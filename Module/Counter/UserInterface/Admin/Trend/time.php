@@ -63,7 +63,7 @@ $this->title = '趋势分析';
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="6"><$items->getLink()?></td>
+        <td colspan="6"><?=$items->getLink()?></td>
     </tr>
 </tfoot>
 </table>

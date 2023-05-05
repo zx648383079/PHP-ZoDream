@@ -5,22 +5,22 @@ use Module\Counter\Domain\Repositories\StateRepository;
 
 class SourceController extends Controller {
     public function indexAction($start_at = null, $end_at = null) {
-        $items = StateRepository::allSource(...$this->getTimeInput());
+        $items = StateRepository::allSource(...StateRepository::getTimeInput());
         return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
     public function engineAction($start_at = null, $end_at = null) {
-        $items = StateRepository::searchEngine(...$this->getTimeInput());
+        $items = StateRepository::searchEngine(...StateRepository::getTimeInput());
         return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
     public function searchWordAction($start_at = null, $end_at = null) {
-        $items = StateRepository::searchKeywords(...$this->getTimeInput());
+        $items = StateRepository::searchKeywords(...StateRepository::getTimeInput());
         return $this->show(compact('items', 'start_at', 'end_at'));
     }
 
     public function linkAction($start_at = null, $end_at = null) {
-        $items = StateRepository::host(...$this->getTimeInput());
+        $items = StateRepository::host(...StateRepository::getTimeInput());
         return $this->show(compact('items', 'start_at', 'end_at'));
     }
 }
