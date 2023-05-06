@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Helpers\Time;
 /** @var $this View */
-$maps = ['pv', 'uv', 'ip', 'jump', 'stay'];
+$maps = ['pv', 'uv', 'ip_count', 'jump_count', 'stay_time'];
 ?>
 <div class="panel">
     <div class="panel-header">今日流量</div>
@@ -23,7 +23,7 @@ $maps = ['pv', 'uv', 'ip', 'jump', 'stay'];
                 <tr class="highlight">
                     <td class="normal">今日</td>
                     <?php foreach($maps as $k):?>
-                    <td class=""><?= $k === 'stay' ? Time::hoursFormat($today[$k]) : $today[$k] ?></td>
+                    <td class=""><?= $k === 'stay_time' ? Time::hoursFormat($today[$k]) : $today[$k] ?></td>
                     <?php endforeach;?>
                     <td class="">--</td>
                     <td class="empty-tr0"></td>
@@ -31,7 +31,7 @@ $maps = ['pv', 'uv', 'ip', 'jump', 'stay'];
                 <tr>
                     <td class="normal">昨日</td>
                     <?php foreach($maps as $k):?>
-                    <td class=""><?= $k === 'stay' ? Time::hoursFormat($yesterday[$k]) : $yesterday[$k] ?></td>
+                    <td class=""><?= $k === 'stay_time' ? Time::hoursFormat($yesterday[$k]) : $yesterday[$k] ?></td>
                     <?php endforeach;?>
                     <td class="">--</td>
                     <td class="empty-tr0"></td>
@@ -45,7 +45,7 @@ $maps = ['pv', 'uv', 'ip', 'jump', 'stay'];
                     <?php else:?>
                     <td class="">
                     <?php endif;?>
-                    <?= $k === 'stay' ? Time::hoursFormat($expectToday[$k]) : $expectToday[$k]?></td>
+                    <?= $k === 'stay_time' ? Time::hoursFormat($expectToday[$k]) : $expectToday[$k]?></td>
                     <?php endforeach;?>
                     <td class="">--</td>
                     <td class="empty-tr0"></td>
@@ -57,7 +57,7 @@ $maps = ['pv', 'uv', 'ip', 'jump', 'stay'];
                 <tr class="fade toggleable-hidden">
                     <td class="normal">昨日此时</td>
                     <?php foreach($maps as $k):?>
-                    <td class=""><?= $k === 'stay' ? Time::hoursFormat($yesterdayHour[$k]) : $yesterdayHour[$k] ?></td>
+                    <td class=""><?= $k === 'stay_time' ? Time::hoursFormat($yesterdayHour[$k]) : $yesterdayHour[$k] ?></td>
                     <?php endforeach;?>
                     <td class="">--</td>
                     <td class="empty-tr0"></td>

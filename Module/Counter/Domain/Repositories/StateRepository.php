@@ -14,21 +14,28 @@ class StateRepository {
         $request = request();
         $start_at = $request->get('start_at', 'today');
         $end_at = $request->get('end_at');
-        $time = strtotime(date('Y-m-d 00:00:00'));
-        if ($start_at === 'today') {
-            return [$time, $time + 86400];
-        }
-        if ($start_at === 'yesterday') {
-            return [$time - 86400, $time];
-        }
-        if ($start_at === 'week') {
-            return [$time - 6 * 85400, $time + 86400];
-        }
-        if ($start_at === 'month') {
-            return [$time - 29 * 85400, $time + 86400];
+        if ($start_at === 'today' || $start_at === 'yesterday' || $start_at === 'week' || $start_at === 'month') {
+            return static::getTimeRange($start_at);
         }
         return [is_numeric($start_at) ? $start_at : strtotime($start_at),
             is_numeric($end_at) ? $end_at : strtotime($end_at)];
+    }
+
+    public static function getTimeRange(string $type): array {
+        $time = strtotime(date('Y-m-d 00:00:00'));
+        if ($type === 'today') {
+            return [$time, $time + 86400];
+        }
+        if ($type === 'yesterday') {
+            return [$time - 86400, $time];
+        }
+        if ($type === 'week') {
+            return [$time - 6 * 85400, $time + 86400];
+        }
+        if ($type === 'month') {
+            return [$time - 29 * 85400, $time + 86400];
+        }
+        return [0, 0];
     }
 
     public static function statisticsByTime(int $start_at, int $end_at): array {
@@ -37,16 +44,16 @@ class StateRepository {
         $uv = StayTimeLogModel::where('enter_at',  '>=', $start_at)
             ->where('enter_at',  '<', $end_at)
             ->groupBy('session_id')->count();
-        $ip = StayTimeLogModel::where('enter_at',  '>=', $start_at)
+        $ip_count = StayTimeLogModel::where('enter_at',  '>=', $start_at)
             ->where('enter_at',  '<', $end_at)
             ->groupBy('ip')->count();
-        $jump = JumpLogModel::where('created_at',  '>=', $start_at)
+        $jump_count = JumpLogModel::where('created_at',  '>=', $start_at)
             ->where('created_at',  '<', $end_at)->count();
-        $stay = (int)StayTimeLogModel::query()->where('enter_at',  '>=', $start_at)
+        $stay_time = (int)StayTimeLogModel::query()->where('enter_at',  '>=', $start_at)
             ->where('enter_at',  '<', $end_at)
             ->where('leave_at', '>', 0)
             ->avg('leave_at - enter_at');
-        return compact('pv', 'uv', 'ip', 'jump', 'stay');
+        return compact('pv', 'uv', 'ip_count', 'jump_count', 'stay_time');
     }
 
     public static function currentStay() {
@@ -173,6 +180,39 @@ class StateRepository {
         }, 'host', LogModel::query());
     }
 
+    public static function getJumpCount(string $url): int {
+        if (empty($url)) {
+            return 0;
+        }
+        return JumpLogModel::query()->where('referrer', $url)
+            ->count();
+    }
+
+    public static function getJumpScale(string $url, int $count): string {
+        if (empty($url) || $count < 1) {
+            return '0%';
+        }
+        $total = JumpLogModel::query()->whereNotNull('referrer')
+            ->count();
+        return empty($total) ? '100%' : (round($count * 100 / $total, 2) . '%');
+    }
+
+    public static function getNextCount(string $url): int {
+        if (empty($url)) {
+            return 0;
+        }
+        return LogModel::where('referrer', $url)->count();
+    }
+
+    public static function getStayTime(string $url) {
+        if (empty($url)) {
+            return 0;
+        }
+        return StayTimeLogModel::query()->where('url', $url)
+            ->where('leave_at', '>', 'enter_at')
+            ->avg('leave_at - enter_at');
+    }
+
     public static function mapGroups(int $start_at, int $end_at,
                                      callable $cb, $primary, $query = null, $key = 'referrer') {
         $items = [];
@@ -217,7 +257,7 @@ class StateRepository {
         foreach ($items as $host => $item) {
             $data[] = [
                 $primary => $host,
-                'ip' => count($item[1]),
+                'ip_count' => count($item[1]),
                 'pv' => $item[0],
                 'uv' => count($item[2]),
                 'scale' => round($item[0] * 100 / $pv_total, 2) . '%'
@@ -234,8 +274,8 @@ class StateRepository {
 
     public static function jump(int $start_at, int $end_at) {
         $items = JumpLogModel::query()
-//            ->where('created_at', '>=', $start_at)
-//            ->where('created_at', '<', $end_at)
+            ->where('created_at', '>=', $start_at)
+            ->where('created_at', '<', $end_at)
             ->orderBy('created_at', 'desc')
             ->page();
         $items->map(function ($item) {
