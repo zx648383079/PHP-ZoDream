@@ -53,7 +53,12 @@ class StateRepository {
             ->where('enter_at',  '<', $end_at)
             ->where('leave_at', '>', 0)
             ->avg('leave_at - enter_at');
-        return compact('pv', 'uv', 'ip_count', 'jump_count', 'stay_time');
+        $request = request();
+        $host = sprintf('%s://%s', $request->isSSL() ? 'https' : 'http', $request->host());
+        $next_time = LogModel::query()->where('created_at',  '>=', $start_at)
+            ->where('created_at',  '<', $end_at)
+            ->where('referrer', 'like', $host. '%')->count();
+        return compact('pv', 'uv', 'ip_count', 'jump_count', 'stay_time', 'next_time');
     }
 
     public static function currentStay() {
