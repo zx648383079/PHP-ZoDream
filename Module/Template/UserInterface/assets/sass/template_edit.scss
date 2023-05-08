@@ -1,13 +1,7 @@
 .visual-edit-row {
-    min-height: 6.25rem;
-    padding-bottom: 4rem;
     .visual-edit-control {
         width: 100%;
-        min-height: 3.125rem;
-        background: #fff;
         box-sizing: border-box;
-        border: 1px dotted #7e8;
-
         .visual-preview {
             display: none;
         }
@@ -32,16 +26,6 @@
                 color: #f00;
             }
         }
-
-        &:hover,
-        &.visual-edit-mode {
-            border: 1px solid rgb(180, 24, 58);
-
-            .visual-action {
-                display: block;
-            }
-        }
-
         &.visual-loading {
             .visual-view {
                 text-align: center;
@@ -49,6 +33,26 @@
                 img {
                     height: 5rem;
                 }
+            }
+        }
+    }
+}
+
+.visual-editor-editable {
+    .visual-edit-row {
+        min-height: 6.25rem;
+        padding-bottom: 4rem;
+        .visual-edit-control {
+            width: 100%;
+            min-height: 3.125rem;
+            // background: #fff;
+            border: 1px dotted #7e8;
+        }
+        &:hover,
+        &.visual-edit-mode {
+            border: 1px solid rgb(180, 24, 58);
+            .visual-action {
+                display: block;
             }
         }
     }

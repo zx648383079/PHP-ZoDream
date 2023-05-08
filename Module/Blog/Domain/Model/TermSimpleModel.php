@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\Entities\TermEntity;
 
 
@@ -11,9 +12,8 @@ use Module\Blog\Domain\Entities\TermEntity;
  * @property string $styles
  */
 class TermSimpleModel extends TermEntity {
-    const SIMPLE_MODE = ['id', 'name', 'styles'];
 
     public static function query() {
-        return parent::query()->select(self::SIMPLE_MODE);
+        return parent::query()->select(['id', 'styles', ...LocalizeRepository::languageColumnsWidthPrefix('name')]);
     }
 }

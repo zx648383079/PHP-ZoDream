@@ -29,6 +29,7 @@ class TermEntity extends Entity {
             'parent_id' => 'int',
             'thumb' => '',
             'styles' => '',
+            'en_name' => 'string:0,40',
         ];
 	}
 

@@ -19,7 +19,7 @@ class BatchController extends Controller {
 
     public function indexAction() {
         return $this->render($this->invokeBatch([
-            'categories' => sprintf('%s::%s', CategoryRepository::class, 'get'),
+            'categories' => sprintf('%s::%s', CategoryRepository::class, 'localizeGet'),
             'tags' => sprintf('%s::%s', TagRepository::class, 'get'),
             'detail' => sprintf('%s::%s', BlogRepository::class, 'detail'),
             'relation' => sprintf('%s::%s', TagRepository::class, 'getRelationBlogs'),

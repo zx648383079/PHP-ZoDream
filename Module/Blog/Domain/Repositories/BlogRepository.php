@@ -43,6 +43,9 @@ class BlogRepository {
             $user, $language, $programming_language,
             $tag)->page($per_page);
         $items = LocalizeRepository::formatList($page, BlogPageModel::with('term', 'user'));
+        foreach ($items as $item) {
+            $item['term']['name'] = LocalizeRepository::formatValueWidthPrefix($item['term'], 'name');
+        }
         return $page->setPage($items);
     }
 

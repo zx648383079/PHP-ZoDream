@@ -32,6 +32,38 @@ const EditorMobileStyle = 'mobile-style';
 
 type FailureCallbackFunc = (message: string, code?: number) => void;
 
+interface EditorListeners {
+    [EditorEventGetWeights]: (success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventGetPage]: (success: (data: IPageModel) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventWindowResize]: (width: number, height: number) => void;
+    [EditorEventResize]: (width: number, height: number) => void;
+    [EditorEventSavePage]: (data: any[], success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventMouseMove]: (p: IPoint) => void;
+    [EditorEventMouseUp]: (p: IPoint) => void;
+    [EditorEventTimeLoop]: (now: Date) => void;
+    [EditorEventOuterWidthChange]: (width: number) => void;
+    [EditorEventViewInit]: () => void;
+    [EditorEventAfterViewInit]: () => void;
+    [EditorEventDrog]: (...items: JQuery<HTMLDivElement>[]) => void;
+    [EditorEventOperateWeight]: (isNew: boolean, target: JQuery<HTMLDivElement>, row: JQuery<HTMLDivElement>, replace?: JQuery<HTMLDivElement>) => void;
+    [EditorEventGetWeightProperty]: (id: number, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventGetStyleSuccess]: (data: any) => void;
+    [EditorEventSaveWeightProperty]: (id: number, data: string, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventDrag]: (ele: JQuery<HTMLDivElement>, isNew: boolean, p: IPoint) => void;
+    [EditorEventDragStart]: (ele: JQuery<HTMLDivElement>) => void;
+    [EditorEventOpenProperty]: (target: EditorWeight) => void;
+    [EditorEventWeightForm]: (id: number, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventPositionChange]: (left: number, top: number, scale: number) => void;
+    [EditorEventBrowserReady]: (doc: JQuery<Document>) => void;
+    [EditorEventBrowserResize]: (left: number, top: number, width: number, height: number, maxWidth: number, maxHeight: number) => void;
+    [EditorEventRefreshWeight]: (id: number, success: (data: any) => void, failure: FailureCallbackFunc) => void;
+    [EditorEventOpenEditDialog]: (target: EditorWeight) => void;
+    [EditorEventRemoveWeight]: (id: number, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventMoveWeight]: (data: any, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventAddWeight]: (data: any, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventScroll]: (offset: number, horizontal: boolean) => void;
+}
+
 interface IRuleLine {
     value: number;
     label: string|number;
@@ -56,8 +88,8 @@ interface IBound extends ISize {
 
 interface IEditorPanel {
     render(): JQuery;
-    show();
-    hide(); 
+    show(): void;
+    hide(): void; 
 }
 
 interface IPageModel {
@@ -131,9 +163,7 @@ class VisualEditor {
         return this.workspace.height() - this.hRuleBar.barSize - this.hScrollBar.barSize;
     }
 
-    public on(event: string, cb?: Function);
-    public on(event: string, cb?: (success: Function, failure: FailureCallbackFunc) => void);
-    public on(event: string, cb?: (data: any, success: Function, failure: FailureCallbackFunc) => void);
+    public on<E extends keyof EditorListeners>(event: E, listener: EditorListeners[E]): this;
     public on(event: string, cb?: Function) {
         if (!Object.prototype.hasOwnProperty.call(this.listeners, event)) {
             this.listeners[event] = [];
@@ -142,6 +172,7 @@ class VisualEditor {
         return this;
     }
 
+    public emit<E extends keyof EditorListeners>(event: E, ...eventObject: Parameters<EditorListeners[E]>): this;
     public emit(event: string, ...items: any[]) {
         if (!Object.prototype.hasOwnProperty.call(this.listeners, event)) {
             return this;
@@ -277,7 +308,7 @@ class VisualEditor {
                 if (e.ctrlKey) {
                     if (e.code == 'KeyS') {
                         e.preventDefault();
-                        this.emit(EditorEventSavePage, this.serialize());
+                        this.emit(EditorEventSavePage, this.serialize(), () => {});
                     }
                 }
             }).on('paste', (e: any) => {
@@ -329,6 +360,7 @@ class VisualEditor {
                 this.mouseListener.finish(p);
             }
         }).on(EditorEventBrowserReady, (doc: JQuery<Document>) => {
+            doc.find('body').addClass('visual-editor-editable');
             bindDocEvent(doc, true);
         });
         bindDocEvent($(document));
@@ -1023,7 +1055,7 @@ class EditorBrowser {
             } else {
                 this.bound.top = -offset;
             }
-            this.shell.css('transform', `translate(${this.bound.left}px, ${this.bound.top}px)`);
+            this.renderTransform();
             this.editor.emit(EditorEventPositionChange, this.bound.left, this.bound.top, this.frameScale);
         }).on(EditorEventResize, () => {
             if (!this.bound) {
@@ -1053,7 +1085,7 @@ class EditorBrowser {
         this.frame.on('load', () => {
             const $doc = this.frame.contents();
             this.frameBody = $doc.find<HTMLBodyElement>('body');
-            this.editor.emit(EditorEventBrowserReady, $doc);
+            this.editor.emit(EditorEventBrowserReady, $doc as any);
             this.bindFrameEvent();
         });
     }
@@ -1231,8 +1263,20 @@ class EditorBrowser {
     */
     public scale(val: number) {
         this.frameScale = val;
-        this.shell.css('transform', 'scale(' + (val / 100) +')');
+        this.renderTransform();
+        this.emitRealSize();
         this.editor.emit(EditorEventPositionChange, this.bound.left, this.bound.top, this.frameScale);
+    }
+
+    private renderTransform() {
+        const items = [];
+        if (this.frameScale !== 100) {
+            items.push('scale(' + (this.frameScale / 100) +')');
+        }
+        if (this.bound.left !== 0 || this.bound.top !== 0) {
+            items.push(`translate(${this.bound.left}px, ${this.bound.top}px)`);
+        }
+        this.shell.css('transform', items.join(' '));
     }
 
     public resize(width: number, height: number);
@@ -1260,10 +1304,17 @@ class EditorBrowser {
         };
         if (scale) {
             this.frameScale = scale;
-            this.shell.css('transform', 'scale(' + (scale / 100) +')');
+            this.renderTransform();
         }
-        this.editor.emit(EditorEventBrowserResize, left, top, width, height, maxWidth, maxHeight);
+        this.emitRealSize();
         this.editor.emit(EditorEventPositionChange, left, top, this.frameScale);
+    }
+
+    private emitRealSize() {
+        const maxWidth = this.editor.innerWidth;
+        const maxHeight = this.editor.innerHeight;
+        const scale = this.frameScale / 100;
+        this.editor.emit(EditorEventBrowserResize, this.bound.left * scale, this.bound.top * scale, this.bound.width * scale, this.bound.height * scale, maxWidth, maxHeight);
     }
 
     /**
@@ -1581,7 +1632,7 @@ class EditorRuler {
      * 刷新尺寸
      */
     private refresh() {
-        this.baseWidth = this.horizontal ? this.editor.innerWidth : (this.editor.innerHeight + this.barSize);
+        this.baseWidth = this.horizontal ? this.editor.innerWidth : this.editor.innerHeight;
     }
 
     private onAfterViewInit() {

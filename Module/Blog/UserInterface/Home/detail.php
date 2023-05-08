@@ -5,12 +5,13 @@ use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Helpers\Json;
 use Infrastructure\HtmlExpand;
 use Module\Blog\Domain\CCLicenses;
+use Domain\Repositories\LocalizeRepository;
 /** @var $this View */
 /** @var $blog BlogModel */
 
 function getSEOValue(string $key, array $metaItems, BlogModel $blog) {
     $seoKey = 'seo_'.$key;
-    if (isset($metaItems[$seoKey]) && !empty($metaItems[$seoKey])) {
+    if (!empty($metaItems[$seoKey])) {
         return $metaItems[$seoKey];
     }
     return $blog->{$key};
@@ -57,7 +58,7 @@ $this->set([
         <ul>
             <?php foreach ($cat_list as $item): ?>
                 <li <?=$blog->term_id == $item->id ? 'class="active"' : '' ?>>
-                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=__($item->name)?>"><?=__($item->name)?></a>
+                    <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=LocalizeRepository::formatValueWidthPrefix($item, 'name')?>"><?=LocalizeRepository::formatValueWidthPrefix($item, 'name')?></a>
                     <?php if($item['blog_count'] > 0):?>
                     <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
                     <?php endif;?>
@@ -88,7 +89,7 @@ $this->set([
         <a class="author" href="<?=$this->url('./', ['user' => $blog->user_id])?>" title="<?=__('Author')?>"><i class="fa fa-edit"></i><b><?=$this->text($blog->user->name)?></b></a>
         <?php endif;?>
         <?php if($blog->term):?>
-        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>" title="<?=__('Category')?>"><i class="fa fa-bookmark"></i><b><?=__($blog->term->name)?></b></a>
+        <a class="category" href="<?=$this->url('./', ['category' => $blog->term_id])?>" title="<?=__('Category')?>"><i class="fa fa-bookmark"></i><b><?=LocalizeRepository::formatValueWidthPrefix($blog['term'], 'name')?></b></a>
         <?php endif;?>
         <?php if(!empty($blog->programming_language)):?>
         <a class="language" href="<?=$this->url('./', ['programming_language' => $blog->programming_language], false)?>" title="<?=__('Programming Language')?>"><i class="fa fa-code"></i><b><?=$blog->programming_language?></b></a>

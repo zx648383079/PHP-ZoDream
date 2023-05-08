@@ -18,12 +18,76 @@ class LocalizeRepository {
         'zh' => '中',
         'en' => 'EN',
     ];
+    private static string $firstLang = '';
+    private static string $browserLang = '';
 
     public static function firstLanguage(): string {
+        if (!empty(static::$firstLang)) {
+            return static::$firstLang;
+        }
         foreach (static::LANGUAGE_MAP as $key => $_) {
-            return $key;
+            return static::$firstLang = $key;
         }
         return '';
+    }
+
+    /**
+     * 把语言作为前缀
+     * @return array
+     */
+    public static function languageAsColumnPrefix(): array {
+        $items = [];
+        $i = 0;
+        foreach (static::LANGUAGE_MAP as $key => $_) {
+            $i ++;
+            if ($i < 2) {
+                $items[] = '';
+                continue;
+            }
+            $items[] = $key.'_';
+        }
+        return $items;
+    }
+
+    /**
+     * 根据当前语言添加前缀
+     * @param string $key
+     * @return string
+     */
+    public static function formatKeyWidthPrefix(string $key): string {
+        $lang = static::browserLanguage();
+        if (static::firstLanguage() == $lang) {
+            return $key;
+        }
+        return sprintf('%s_%s', $lang, $key);
+    }
+
+    /**
+     * 自动根据语言获取值，值为空时回退
+     * @param mixed $data
+     * @param string $key
+     * @return string
+     */
+    public static function formatValueWidthPrefix(mixed $data, string $key): mixed {
+        $formatKey = static::formatKeyWidthPrefix($key);
+        $value = $data[$formatKey] ?? null;
+        if (!empty($value) || $key === $formatKey) {
+            return $data[$formatKey];
+        }
+        return $data[$key];
+    }
+
+    /**
+     * 获取查询的键
+     * @param string $key
+     * @return string[]
+     */
+    public static function languageColumnsWidthPrefix(string $key): array {
+        $formatKey = static::formatKeyWidthPrefix($key);
+        if ($formatKey == $key) {
+            return [$key];
+        }
+        return [$key, $formatKey];
     }
 
     /**
@@ -31,13 +95,16 @@ class LocalizeRepository {
      * @return string
      */
     public static function browserLanguage(): string {
+        if (!empty(static::$browserLang)) {
+            return static::$browserLang;
+        }
         $lang = strtolower((string)trans()->getLanguage());
         $hasEn = false;
         $enLang = static::BROWSER_DEFAULT_LANGUAGE;
         $firstLang = '';
         foreach (static::LANGUAGE_MAP as $key => $_) {
             if (str_contains($lang, $key)) {
-                return $key;
+                return static::$browserLang = $key;
             }
             if (empty($firstLang)) {
                 $firstLang = $key;
@@ -46,7 +113,7 @@ class LocalizeRepository {
                 $hasEn = true;
             }
         }
-        return $hasEn ? $enLang : $firstLang;
+        return static::$browserLang = $hasEn ? $enLang : $firstLang;
     }
 
     public static function languageOptionItems(): array {

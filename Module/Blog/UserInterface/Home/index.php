@@ -3,6 +3,7 @@ defined('APP_DIR') or exit();
 
 use Module\SEO\Domain\Option;
 use Zodream\Template\View;
+use Domain\Repositories\LocalizeRepository;
 /** @var $this View */
 $sort_list = ['recommend' => __('Best'), 'new' => __('New'), 'hot' => __('Hot')];
 $tags = [__('blog')];
@@ -59,7 +60,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
         <ul>
             <?php foreach ($cat_list as $item): ?>
             <li <?=$category == $item->id ? 'class="active"' : '' ?>>
-                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=__($item->name)?>"><?=__($item->name)?></a>
+                <i class="fa fa-bookmark"></i><a href="<?=$item->url?>" title="<?=LocalizeRepository::formatValueWidthPrefix($item, 'name')?>"><?=LocalizeRepository::formatValueWidthPrefix($item, 'name')?></a>
                 <?php if($item['blog_count'] > 0):?>
                 <span class="count"><?=$item['blog_count'] > 99 ? '99+' : $item['blog_count']?></span>
                 <?php endif;?>
@@ -107,8 +108,8 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
     <?php if (!empty($term)):?>
     <div class="book-term">
         <div class="term-info">
-            <img src="<?=$term->thumb?>" alt="<?=$term->name?>">
-            <h3><?=__($term->name)?></h3>
+            <img src="<?=$term->thumb?>" alt="<?=LocalizeRepository::formatValueWidthPrefix($term, 'name')?>">
+            <h3><?=LocalizeRepository::formatValueWidthPrefix($term, 'name')?></h3>
         </div>
         <div class="term-desc"><?=$term->description?></div>
     </div>
@@ -135,7 +136,7 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
                 <p><?=$this->text($item->description)?></p>
                 <a class="author" href="<?=$this->url('./', ['user' => $item->user_id])?>"><i class="fa fa-edit"></i><b><?=$this->text($item->user->name)?></b></a>
                 <?php if($item->term):?>
-                <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=__($item->term->name)?></b></a>
+                <a class="category" href="<?=$this->url('./', ['category' => $item->term_id])?>"><i class="fa fa-bookmark"></i><b><?=LocalizeRepository::formatValueWidthPrefix($item['term'], 'name')?></b></a>
                 <?php endif;?>
                 <?php if(!empty($item->programming_language)):?>
                 <a class="language" href="<?=$this->url('./', ['programming_language' => $item->programming_language])?>"><i class="fa fa-code"></i><b><?=$item->programming_language?></b></a>

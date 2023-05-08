@@ -59,7 +59,7 @@ class RouterHelper {
         $map->add(url('./tag'), time());
         $map->add(url('./category'), time());
         $map->add(url('./archives'), time());
-        $items = BlogModel::where('publish_status', PublishRepository::PUBLISH_STATUS_DRAFT)
+        $items = BlogModel::where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
             ->orderBy('id', 'desc')
             ->get('id', 'updated_at');
         foreach ($items as $item) {

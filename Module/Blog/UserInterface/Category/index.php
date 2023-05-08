@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Domain\Repositories\LocalizeRepository;
 /** @var $this View */
 $this->title = __('Categories');
 $this->set([
@@ -27,7 +28,7 @@ $this->set([
         <?php if($item['level'] > 0):?>
         <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?></span>
         <?php endif;?>
-        <a href="<?=$this->url('./', ['category' => $item['id']])?>"><?=__($item['name'])?></a>
+        <a href="<?=$this->url('./', ['category' => $item['id']])?>"><?=LocalizeRepository::formatValueWidthPrefix($item, 'name')?></a>
         <span class="count">(<?=$item['blog_count']?>)</span>
     </div>
     <?php endforeach;?>

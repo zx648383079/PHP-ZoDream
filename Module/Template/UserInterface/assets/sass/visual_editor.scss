@@ -22,6 +22,7 @@ $ruleBarColor: gray;
         display: block;
         background-color: #fff;
         margin: $ruleBarSize $scrollBarSize $scrollBarSize $ruleBarSize;
+        transform-origin: 0 0;
     }
     .panel-tool-bar {
         position: absolute;
@@ -122,8 +123,8 @@ $ruleBarColor: gray;
     }
     .v-rule-bar {
         left: 0;
-        top: 0;
-        bottom: 0;
+        top: $ruleBarSize;
+        bottom: $scrollBarSize;
         width: $ruleBarSize;
     }
     .rule-line-bar {

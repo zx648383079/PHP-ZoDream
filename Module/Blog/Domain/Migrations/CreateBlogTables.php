@@ -52,12 +52,15 @@ class CreateBlogTables extends Migration {
             $table->text('content');
         })->append(TermModel::tableName(), function(Table $table) {
             $table->id();
-            $table->string('name', 40);
+            foreach (LocalizeRepository::languageAsColumnPrefix() as $lang) {
+                $table->string($lang.'name', 40)->nullable(!empty($lang));
+            }
             $table->uint('parent_id');
             $table->string('keywords')->default('');
             $table->string('description')->default('');
             $table->string('thumb')->default('');
             $table->string('styles')->default('')->comment('独立引入样式');
+
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('content');

@@ -17,7 +17,7 @@ class CategoryController extends Controller {
     }
 
     public function indexAction() {
-        return $this->renderData(CategoryRepository::get());
+        return $this->renderData(CategoryRepository::localizeGet());
     }
 
     public function detailAction(int $id) {

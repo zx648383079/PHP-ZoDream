@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TermModel;
 use Zodream\Html\Tree;
@@ -43,6 +44,21 @@ class CategoryRepository {
             return null;
         }
         return static::$caches[$id];
+    }
+
+    public static function localizeGet(int $id = -1) {
+        $data = static::get($id);
+        if (empty($data)) {
+            return $data;
+        }
+        if ($id >= 0) {
+            $data['name'] = LocalizeRepository::formatValueWidthPrefix($data, 'name');
+            return $data;
+        }
+        foreach ($data as $item) {
+            $item['name'] = LocalizeRepository::formatValueWidthPrefix($item, 'name');
+        }
+        return $data;
     }
 
     /**

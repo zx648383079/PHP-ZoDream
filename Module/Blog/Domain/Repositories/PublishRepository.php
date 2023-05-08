@@ -29,7 +29,7 @@ final class PublishRepository {
 
     public static function getList(string $keywords = '', int $category = 0,
                                    int $status = 0, int $type = 0, string $language = '') {
-        return BlogPageModel::with('term')
+        $items = BlogPageModel::with('term')
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
@@ -42,6 +42,15 @@ final class PublishRepository {
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
             })->orderBy('id', 'desc')->page();
+        $items->map(function ($item) {
+            $isLocal = $item['parent_id'] > 0;
+            if (!$isLocal) {
+                $isLocal = BlogModel::where('parent_id', $item['id'])->count() > 0;
+            }
+            $item['is_localization'] = $isLocal;
+            return $item;
+        });
+        return $items;
     }
 
     public static function get(int $id = 0, string $language = '') {
