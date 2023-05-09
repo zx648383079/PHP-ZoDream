@@ -283,7 +283,7 @@ final class ThemeRepository {
                 if (str_starts_with($item, '@')) {
                     return $item;
                 }
-                return $folder->file($item)->getRelative($baseRoot);
+                return '/assets/themes/'.$folder->combine($item)->getRelative($baseRoot);
             }, $data['dependencies']);
         }
         if (isset($data['styles'])) {
