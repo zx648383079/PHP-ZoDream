@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Model\SearchModel;
+use Domain\Providers\StorageProvider;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\BankCardModel;
@@ -10,9 +12,8 @@ use Module\Shop\Domain\Models\CouponLogModel;
 
 class AccountRepository {
 
-    public static function logList() {
-        return AccountLogModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
+    public static function storage() {
+        return StorageProvider::privateStore();
     }
 
     public static function bankCardList() {
@@ -42,6 +43,9 @@ class AccountRepository {
     }
 
     public static function subtotal() {
+        if (auth()->guest()) {
+            return [];
+        }
         /** @var UserModel $user */
         $user = auth()->user();
         return [
@@ -49,7 +53,7 @@ class AccountRepository {
             'integral' => $user->credits,
             'bonus' => 0,
             'coupon' => CouponLogModel::where('user_id', $user->id)
-                ->where('use_at', 0)->count(),
+                ->where('used_at', 0)->count(),
         ];
     }
 }

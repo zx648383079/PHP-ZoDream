@@ -16,12 +16,13 @@ class AccountController extends Controller {
     }
 
     public function indexAction() {
+
     }
 
-    public function logAction() {
-        $log_list = AccountLogModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
-        return $this->renderPage($log_list);
+    public function logAction(string $keywords = '', string $type = '') {
+        return $this->renderPage(
+            AccountRepository::logList($keywords, $type)
+        );
     }
 
 

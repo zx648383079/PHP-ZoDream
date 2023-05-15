@@ -20,19 +20,11 @@ use Domain\Model\Model;
  */
 class AccountLogModel extends Model {
 
-    const TYPE_SYSTEM = 1; // 系统自动
-    const TYPE_ADMIN = 9; // 管理员充值
-    const TYPE_AFFILIATE = 15; // 分销
-    const TYPE_BUY_BLOG = 21;
-    const TYPE_FORUM_BUY = 25;
-    const TYPE_DEFAULT = 99;
-    const TYPE_CHECK_IN = 30;
-    const TYPE_BANK = 31;
-    const TYPE_GAME = 40;
-    const TYPE_SHOPPING = 60;
     const STATUS_WAITING_PAY = 0;
     const STATUS_PAID = 1;
     const STATUS_REFUND = 9;
+
+    protected array $append = ['type_label', 'status_label'];
 
     public static function tableName() {
         return 'user_account_log';
@@ -69,6 +61,16 @@ class AccountLogModel extends Model {
 
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function getTypeLabelAttribute() {
+        $type = $this->getAttributeSource('type');
+        return trans('account_type.'.$type);
+    }
+
+    public function getStatusLabelAttribute() {
+        $type = $this->getAttributeSource('status');
+        return trans('account_status.'.$type);
     }
 
     /**

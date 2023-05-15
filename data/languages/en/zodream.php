@@ -28,4 +28,21 @@ return [
     '帮助文档' => 'Help',
     '算法' => 'Algorithm',
     'feedback_tip' => 'This site and its framework accept any friendly suggestions, and any friendly friends are welcome to leave comments here.',
+    'account_type' => [
+        1 => 'System',
+        6 => 'Recharge',
+        9 => 'Admin',
+        21 => 'Blog',
+        25 => 'Forum',
+        30 => 'Checkin',
+        31 => 'Bank',
+        40 => 'Game',
+        66 => 'Shop',
+        99 => 'Other'
+    ],
+    'account_status' => [
+        0 => 'Waiting',
+        1 => 'Done',
+        9 => 'Refund',
+    ],
 ];

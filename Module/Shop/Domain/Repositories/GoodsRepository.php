@@ -20,7 +20,7 @@ class GoodsRepository {
                                   int $category = 0,
                                   int $brand = 0,
                                   string $keywords = '',
-                                  int $per_page = 20, $sort = null, $order = null): Page {
+                                  int $per_page = 20, $sort = null, $order = null, string $price = ''): Page {
         return GoodsSimpleModel::sortBy($sort, $order)
             ->when(!empty($id), function ($query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
@@ -28,9 +28,11 @@ class GoodsRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->when($category > 0, function ($query) use ($category) {
-                $query->where('cat_id', intval($category));
+                $query->where('cat_id', $category);
             })->when($brand > 0, function ($query) use ($brand) {
-                $query->where('brand_id', intval($brand));
+                $query->where('brand_id', $brand);
+            })->when(!empty($price), function ($query) use ($price) {
+                SearchRepository::filterPrice($query, $price);
             })->page($per_page);
     }
 

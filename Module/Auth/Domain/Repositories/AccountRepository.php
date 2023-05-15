@@ -3,14 +3,28 @@ declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Domain\Constants;
+use Domain\Model\ModelHelper;
+use Domain\Model\SearchModel;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\FundAccount;
+use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Exception;
 
-class AccountRepository {
+final class AccountRepository {
+
+    public static function logList(string $keywords = '', string $type = '') {
+        $items = ModelHelper::parseArrInt($type);
+        return AccountLogModel::where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'remark');
+            })->when(!empty($items), function ($query) use ($items) {
+                $query->whereIn('type', $items);
+            })
+            ->orderBy('created_at', 'desc')->page();
+    }
 
     /**
      * 充值账户

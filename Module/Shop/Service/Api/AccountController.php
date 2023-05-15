@@ -2,12 +2,8 @@
 namespace Module\Shop\Service\Api;
 
 
-use Domain\Repositories\FileRepository;
-use Infrastructure\Uploader;
 use Module\Auth\Domain\Repositories\AccountRepository;
 use Module\Shop\Domain\Repositories\AccountRepository as ShopAccount;
-use Module\Shop\Domain\Models\BankCardModel;
-use Module\Shop\Domain\Models\CertificationModel;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AccountController extends Controller {
@@ -21,9 +17,9 @@ class AccountController extends Controller {
     public function indexAction() {
     }
 
-    public function logAction() {
+    public function logAction(string $keywords = '', int $type = 0) {
         return $this->renderPage(
-            ShopAccount::logList()
+            AccountRepository::logList($keywords, $type)
         );
     }
 
@@ -44,15 +40,11 @@ class AccountController extends Controller {
         return $this->renderData(ShopAccount::certification());
     }
 
-    public function uploadCertificationAction() {
-        $upload = new Uploader('file', [
-            'pathFormat' => '/assets/upload/cert/{yyyy}{mm}{dd}/{time}{rand:6}',
-            'maxSize' => 2048000,
-            'allowFiles' => ['.png', '.jpg', '.jpeg', '.gif', '.bmp']
-        ]);
-        $data = $upload->getFileInfo();
-        if ($data['state'] !== 'SUCCESS') {
-            return $this->renderFailure($data['state']);
+    public function uploadCertificationAction(Input $input) {
+        try {
+            $data = ShopAccount::storage()->addFile($input->file('file'));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData($data['url']);
     }
@@ -79,11 +71,6 @@ class AccountController extends Controller {
     }
 
     public function subtotalAction() {
-        return $this->render([
-           'money' => 0,
-           'integral' => 0,
-           'bonus' => 0,
-           'coupon' => 0
-        ]);
+        return $this->render(ShopAccount::subtotal());
     }
 }

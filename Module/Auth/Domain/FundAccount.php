@@ -11,6 +11,7 @@ use Module\Auth\Domain\Model\UserModel;
  */
 final class FundAccount {
     const TYPE_SYSTEM = 1; // 系统自动
+    const TYPE_RECHARGE = 6; // 用户充值
     const TYPE_ADMIN = 9; // 管理员充值
     const TYPE_AFFILIATE = 15; // 分销
     const TYPE_BUY_BLOG = 21;
@@ -20,6 +21,8 @@ final class FundAccount {
     const TYPE_BANK = 31;
     const TYPE_GAME = 40;
     const TYPE_SHOPPING = 60;
+
+
 
     /**
      * 创建一条记录

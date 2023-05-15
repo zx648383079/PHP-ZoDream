@@ -13,15 +13,17 @@ class GoodsController extends Controller {
                                 int $category = 0,
                                 int $brand = 0,
                                 string $keywords = '',
+                                string $price = '',
                                 int $per_page = 20, string $sort = '', string $order = '', bool $filter = false) {
 
         if (is_numeric($id) && $id > 0) {
             return $this->infoAction(intval($id));
         }
-        $page = GoodsRepository::search(ModelHelper::parseArrInt($id), $category, $brand, $keywords, $per_page, $sort, $order);
+        $page = GoodsRepository::search(ModelHelper::parseArrInt($id), $category,
+            $brand, $keywords, $per_page, $sort, $order, $price);
         $data = $page->toArray();
         if ($filter) {
-            $data['filter'] = SearchRepository::filterItems([]);
+            $data['filter'] = SearchRepository::filterItems($keywords, $category, $brand);
         }
         return $this->render($data);
     }
