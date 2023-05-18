@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'UrlEncode编码/UrlDecode解码';
+$this->title = 'Passsword Hash';
 ?>
 
 <div class="converter-box">

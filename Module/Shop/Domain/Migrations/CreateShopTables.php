@@ -608,6 +608,10 @@ class CreateShopTables extends Migration {
             $table->uint('goods_id');
             $table->string('question');
             $table->string('answer')->default('');
+            $table->uint('ask_id');
+            $table->uint('answer_id')->default(0);
+            $table->uint('status', 1)->default(0)->comment('问题状态，待解决，已关闭，已删除，已置顶');
+            $table->timestamps();
         })->append(GoodsGalleryModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('goods_id');
