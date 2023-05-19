@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
-use Domain\Model\SearchModel;
 use Domain\Providers\StorageProvider;
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\BankCardModel;
 use Module\Shop\Domain\Models\CertificationModel;

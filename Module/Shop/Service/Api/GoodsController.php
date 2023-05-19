@@ -5,6 +5,7 @@ namespace Module\Shop\Service\Api;
 use Domain\Model\ModelHelper;
 use Module\ModuleController;
 use Module\Shop\Domain\Repositories\GoodsRepository;
+use Module\Shop\Domain\Repositories\IssueRepository;
 use Module\Shop\Domain\Repositories\SearchRepository;
 
 class GoodsController extends Controller {
@@ -63,6 +64,18 @@ class GoodsController extends Controller {
     public function homeAction() {
         return $this->render(
             GoodsRepository::homeRecommend()
+        );
+    }
+
+    public function issueAction(int $item_id, string $keywords = '') {
+        return $this->renderPage(
+            IssueRepository::getList($item_id, $keywords)
+        );
+    }
+
+    public function issueCreateAction(int $item_id, string $content) {
+        return $this->renderPage(
+            IssueRepository::create($item_id, $content)
         );
     }
 }

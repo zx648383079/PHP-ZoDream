@@ -145,7 +145,7 @@ class GoodsRepository {
      * @param null $properties
      * @return float
      */
-    public static function finalPrice($goods, int $amount = 1, $properties = null) {
+    public static function finalPrice(GoodsModel|int $goods, int $amount = 1, $properties = null) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');
@@ -160,7 +160,7 @@ class GoodsRepository {
         return $box['product']->price + $box['properties_price'];
     }
 
-    public static function getRecommendQuery($tag): Query {
+    public static function getRecommendQuery(string $tag): Query {
         return GoodsSimpleModel::where($tag, 1);
     }
 
@@ -174,10 +174,10 @@ class GoodsRepository {
      * @return Page
      * @throws \Exception
      */
-    public static function appendSearch(Query $query, $category = 0,
-                                  $brand = 0,
-                                  $keywords = null,
-                                  $per_page = 20, array $id = []): Page {
+    public static function appendSearch(Query $query, int $category = 0,
+                                  int $brand = 0,
+                                  string $keywords = '',
+                                  int $per_page = 20, array $id = []): Page {
         return $query->when(!empty($id), function (Query $query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
             })
