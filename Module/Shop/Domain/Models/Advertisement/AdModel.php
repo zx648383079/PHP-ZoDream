@@ -72,14 +72,14 @@ class AdModel extends Model {
         if (!is_numeric($value)) {
             $value = strtotime($value);
         }
-        $this->__attributes['start_at'] = $value;
+        $this->setAttributeToSource('start_at', $value < 0 ? 0 : $value);
     }
 
     public function setEndAtAttribute($value) {
         if (!is_numeric($value)) {
             $value = strtotime($value);
         }
-        $this->__attributes['end_at'] = $value;
+        $this->setAttributeToSource('end_at', $value < 0 ? 0 : $value);
     }
 
     public function getStartAtAttribute() {

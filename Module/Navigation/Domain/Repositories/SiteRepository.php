@@ -45,4 +45,40 @@ final class SiteRepository {
         return SiteModel::where('cat_id', $category)->where('top_type', '>', 0)
             ->orderBy('top_type', 'desc')->orderBy('id', 'asc')->get();
     }
+
+    public static function recommendGroup(int $category = 0): array {
+        $catItems = CategoryModel::where('id', $category)
+            ->orWhere('parent_id', $category)
+            ->orderBy('parent_id', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+        if (empty($catItems)) {
+            return [];
+        }
+        $catId = [];
+        foreach ($catItems as $item) {
+            $catId[] = $item['id'];
+        }
+        $items = SiteModel::whereIn('cat_id', $catId)->where('top_type', '>', 0)
+            ->orderBy('top_type', 'desc')->orderBy('id', 'asc')->get();
+        if (empty($items)) {
+            return [];
+        }
+        $data = [];
+        foreach ($catItems as $cat) {
+            $children = [];
+            foreach ($items as $item) {
+                if ($item['cat_id'] === $cat['id']) {
+                    $children[] = $item;
+                }
+            }
+            if (empty($children)) {
+                continue;
+            }
+            $itemData = $cat->toArray();
+            $itemData['items'] = $children;
+            $data[] = $itemData;
+        }
+        return $data;
+    }
 }

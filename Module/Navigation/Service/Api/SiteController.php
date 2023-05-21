@@ -25,4 +25,8 @@ final class SiteController extends Controller {
     public function categoryAction() {
         return $this->renderData(SiteRepository::categories());
     }
+
+    public function categoryRecommendAction(int $category = 0) {
+        return $this->renderData(SiteRepository::recommendGroup($category));
+    }
 }

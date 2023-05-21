@@ -458,6 +458,7 @@ class BlogRepository {
         $res = LogRepository::toggleLog(BlogLogModel::TYPE_BLOG, BlogLogModel::ACTION_RECOMMEND, $id);
         $model->recommend_count += $res > 0 ? 1 : -1;
         $model->save();
+        $model->is_recommended = $res > 0;
         return $model;
     }
 
@@ -487,7 +488,7 @@ class BlogRepository {
         if (auth()->guest()) {
             return false;
         }
-        return !LogRepository::has(auth()->id(), BlogLogModel::TYPE_BLOG, $action, $id);
+        return LogRepository::has(auth()->id(), BlogLogModel::TYPE_BLOG, $action, $id);
     }
 
     public static function getPostCount(int $user): int {
