@@ -19,6 +19,12 @@ class MenuRepository {
             ->makeTree();
     }
 
+    public static function manageList(int $wid = 0) {
+        return MenuModel::when($wid > 0, function ($query) use ($wid) {
+            $query->where('wid', $wid);
+        })->page();
+    }
+
     public static function get(int $id) {
         return MenuModel::findOrThrow($id, '菜单项错误');
     }

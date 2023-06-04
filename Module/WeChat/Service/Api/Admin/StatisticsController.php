@@ -8,7 +8,7 @@ final class StatisticsController extends Controller {
 
     public function indexAction() {
         try {
-            return $this->render(StatisticsRepository::subtotal($this->weChatId()));
+            return $this->render(StatisticsRepository::manageSubtotal());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

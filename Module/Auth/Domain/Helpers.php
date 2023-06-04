@@ -33,7 +33,7 @@ class Helpers {
         }
         $first = min(4, ceil($index / 2));
         $middle = min(3, floor($index / 2));
-        return sprintf('%s%s%s', substr($email, 0, $first), str_repeat('*', $middle),
+        return sprintf('%s%s%s', substr($email, 0, (int)$first), str_repeat('*', (int)$middle),
             substr($email, $index));
     }
 

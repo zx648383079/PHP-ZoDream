@@ -7,31 +7,14 @@ use Module\WeChat\Domain\Repositories\LogRepository;
 class LogController extends Controller {
 
 
-    public function indexAction(bool $mark = false) {
+    public function indexAction(int $wid = 0, bool $mark = false) {
         try {
             return $this->renderPage(
-                LogRepository::getList($this->weChatId(), $mark)
+                LogRepository::manageList($wid, $mark)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
-    public function markAction(int $id) {
-        try {
-            LogRepository::mark($id);
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->renderData(true);
-    }
-
-    public function deleteAction(int $id) {
-        try {
-            LogRepository::remove($id);
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->renderData(true);
-    }
 }

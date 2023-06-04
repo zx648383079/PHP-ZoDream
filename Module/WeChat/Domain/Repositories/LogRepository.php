@@ -15,6 +15,16 @@ class LogRepository {
             ->page();
     }
 
+    public static function manageList(int $wid = 0, bool $mark = false) {
+        return MessageHistoryModel::with('to_user', 'from_user')
+            ->when($wid > 0, function ($query) use ($wid) {
+                $query->where('wid', $wid);
+            })
+            ->when($mark !== false, function ($query) use ($mark) {
+                $query->where('mark', intval($mark));
+            })->orderBy('id', 'desc')
+            ->page();
+    }
     public static function mark(int $id) {
         $log = MessageHistoryModel::findOrThrow($id, '记录不存在');
         AccountRepository::isSelf($log->wid);

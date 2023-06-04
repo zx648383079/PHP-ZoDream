@@ -31,6 +31,15 @@ class ReplyRepository {
             })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
     }
 
+    public static function manageList(int $wid = 0, string $event = '') {
+        return ReplyModel::when($wid > 0, function ($query) use ($wid) {
+                $query->where('wid', $wid);
+            })
+            ->when(!empty($event), function ($query) use ($event) {
+                $query->where('event', $event);
+            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
+    }
+
     public static function get(int $id) {
         return ReplyModel::findOrThrow($id, '数据有误');
     }

@@ -42,6 +42,7 @@ class UserController extends Controller {
                 'avatar' => 'string',
                 'birthday' => 'string',
                 'password' => 'string',
+                'confirm_password' => 'string',
             ]), $request->get('roles', []));
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

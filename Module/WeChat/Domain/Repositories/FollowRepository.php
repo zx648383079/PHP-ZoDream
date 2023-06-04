@@ -22,6 +22,20 @@ class FollowRepository {
             ->orderBy('subscribe_at', 'desc')->page();
     }
 
+    public static function manageList(int $wid = 0, string $keywords = '', int $group = 0, bool $blacklist = false) {
+        return UserModel::when($wid > 0, function ($query) use ($wid) {
+                $query->where('wid', $wid);
+            })
+            ->when(!empty($blacklist), function ($query) {
+                $query->where('is_black', 1);
+            })->when($group > 0, function ($query) use ($group) {
+                $query->where('group_id', $group);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['note_name', 'nickname']);
+            })->orderBy('status', 'desc')->orderBy('is_black', 'asc')
+            ->orderBy('subscribe_at', 'desc')->page();
+    }
+
     public static function add(int $wid, string $openid, array $info = []) {
         $model = UserModel::where('openid', $openid)
             ->where('wid', $wid)->first();

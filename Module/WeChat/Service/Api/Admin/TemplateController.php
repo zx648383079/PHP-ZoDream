@@ -2,13 +2,10 @@
 declare(strict_types=1);
 namespace Module\WeChat\Service\Api\Admin;
 
-use Module\Auth\Domain\Concerns\AdminRole;
 use Module\WeChat\Domain\Repositories\TemplateRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class TemplateController extends Controller {
-
-    use AdminRole;
 
     public function indexAction(string $keywords = '', int $type = 0, int $category = 0) {
         return $this->renderPage(

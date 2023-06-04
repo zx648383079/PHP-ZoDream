@@ -12,6 +12,12 @@ class AccountRepository {
         })->page();
     }
 
+    public static function manageList(string $keywords = '') {
+        return WeChatModel::when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, ['name', 'account']);
+        })->page();
+    }
+
     public static function selfList(string $keywords = '') {
         return WeChatModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name', 'account']);

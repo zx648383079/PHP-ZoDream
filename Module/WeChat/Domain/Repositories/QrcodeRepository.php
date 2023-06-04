@@ -15,6 +15,14 @@ class QrcodeRepository {
         })->page();
     }
 
+    public static function manageList(int $wid = 0, string $keywords = '') {
+        return QrcodeModel::when($wid > 0, function ($query) use ($wid) {
+            $query->where('wid', $wid);
+        })->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, ['name']);
+        })->page();
+    }
+
     public static function get(int $id) {
         return QrcodeModel::findOrThrow($id, '数据有误');
     }

@@ -18,6 +18,18 @@ class MediaRepository {
             ->orderBy('id', 'desc')->page();
     }
 
+    public static function manageList(int $wid = 0, string $keywords = '', string $type = '') {
+        return MediaModel::when($wid > 0, function ($query) use ($wid) {
+                $query->where('wid', $wid);
+            })
+            ->when(!empty($type), function ($query) use ($type) {
+                $query->where('type', $type);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'title');
+            })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')
+            ->orderBy('id', 'desc')->page();
+    }
+
     public static function get(int $id) {
         return MediaModel::findOrThrow($id, '资源不存在');
     }

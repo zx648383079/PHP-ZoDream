@@ -9,15 +9,4 @@ abstract class Controller extends BaseController {
 
     use AdminRole;
 
-    public function weChatId(int $id = -1) {
-        static $wid = 0;
-        if ($id > 0) {
-            return $wid = $id;
-        }
-        if ($wid < 1) {
-            $wid = intval(request('wid'));
-        }
-        return $wid;
-    }
-
 }
