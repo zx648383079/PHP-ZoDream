@@ -8,13 +8,12 @@ use Domain\Entities\Entity;
 /**
  * @property integer $id
  * @property integer $project_id
- * @property integer $map_id
  * @property string $name
- * @property string $description
- * @property integer $south_id
- * @property integer $east_id
- * @property integer $north_id
- * @property integer $west_id
+ * @property integer $parent_id
+ * @property integer $x
+ * @property integer $y
+ * @property integer $width
+ * @property integer $height
  */
 class MapAreaEntity extends Entity {
     public static function tableName() {
@@ -24,13 +23,12 @@ class MapAreaEntity extends Entity {
     protected function rules() {
         return [
             'project_id' => 'required|int',
-            'map_id' => 'required|int',
             'name' => 'required|string:0,255',
-            'description' => 'required|string:0,255',
-            'south_id' => 'int',
-            'east_id' => 'int',
-            'north_id' => 'int',
-            'west_id' => 'int',
+            'parent_id' => 'required|int',
+            'x' => 'int',
+            'y' => 'int',
+            'width' => 'int',
+            'height' => 'int',
         ];
     }
 
@@ -38,13 +36,12 @@ class MapAreaEntity extends Entity {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',
-            'map_id' => 'Map Id',
             'name' => 'Name',
-            'description' => 'Description',
-            'south_id' => 'South Id',
-            'east_id' => 'East Id',
-            'north_id' => 'North Id',
-            'west_id' => 'West Id',
+            'parent_id' => 'Parent Id',
+            'x' => 'X',
+            'y' => 'Y',
+            'width' => 'Width',
+            'height' => 'Height',
         ];
     }
 }

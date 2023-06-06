@@ -14,8 +14,9 @@ use Module\Game\GameMaker\Domain\Entities\HouseEntity;
 use Module\Game\GameMaker\Domain\Entities\IndigenousEntity;
 use Module\Game\GameMaker\Domain\Entities\ItemEntity;
 use Module\Game\GameMaker\Domain\Entities\MapAreaEntity;
-use Module\Game\GameMaker\Domain\Entities\MapAreaItemEntity;
 use Module\Game\GameMaker\Domain\Entities\MapEntity;
+use Module\Game\GameMaker\Domain\Entities\MapIndigenousEntity;
+use Module\Game\GameMaker\Domain\Entities\MapItemEntity;
 use Module\Game\GameMaker\Domain\Entities\MessageEntity;
 use Module\Game\GameMaker\Domain\Entities\MineEntity;
 use Module\Game\GameMaker\Domain\Entities\MinerEntity;
@@ -36,6 +37,7 @@ use Module\Game\GameMaker\Domain\Entities\TaskItemEntity;
 use Module\Game\GameMaker\Domain\Entities\TeamEntity;
 use Module\Game\GameMaker\Domain\Entities\TeamUserEntity;
 use Module\Game\GameMaker\Domain\Entities\WarehouseEntity;
+use Module\Game\GameMaker\Domain\Repositories\BattleRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -67,6 +69,7 @@ final class CreateGameMakerTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('project_id');
+            $table->uint('identity_id')->default(0);
             $table->string('nickname')->comment('游戏名');
             $table->bool('sex')->default(0)->comment('游戏名,男/女');
             $table->uint('grade', 4)->default(0)->comment('等级');
@@ -74,6 +77,7 @@ final class CreateGameMakerTables extends Migration {
             $table->string('exp', 20)->default(0)->comment('当前等级剩余经验');
             $table->uint('x')->default(0)->comment('大地图位置x');
             $table->uint('y')->default(0)->comment('副本位置y');
+            BattleRepository::addProperty($table);
             $table->timestamps();
         })->append(CharacterStateEntity::tableName(), function (Table $table) {
             $table->comment('角色状态表');
@@ -90,6 +94,8 @@ final class CreateGameMakerTables extends Migration {
             $table->string('image')->default('');
             $table->string('description')->default('');
             // TODO 一些属性的默认值
+            BattleRepository::addProperty($table);
+            $table->uint('status', 1)->default(0)->comment('状态');
         })->append(RuleGradeEntity::tableName(), function (Table $table) {
             $table->comment('角色等级规则表');
             $table->id();
@@ -175,29 +181,55 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('yield_count', 2)->comment('预计产量');
             $table->timestamps();
         })->append(MapEntity::tableName(), function (Table $table) {
+            $table->comment('地图区域');
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('area_id')->default(0);
+            $table->string('name');
+            $table->string('description')->default('');
+            $table->uint('south_id')->default(0)->comment('南边区域');
+            $table->uint('east_id')->default(0)->comment('东边区域');
+            $table->uint('north_id')->default(0)->comment('北边区域');
+            $table->uint('west_id')->default(0)->comment('西边区域');
+            $table->uint('x')->default(0);
+            $table->uint('y')->default(0);
+        })->append(MapAreaEntity::tableName(), function (Table $table) {
             $table->comment('大地图表');
             $table->id();
             $table->uint('project_id');
             $table->string('name');
             $table->uint('parent_id');
-        })->append(MapAreaEntity::tableName(), function (Table $table) {
-            $table->comment('地图区域');
+            $table->uint('x')->default(0);
+            $table->uint('y')->default(0);
+            $table->uint('width')->default(0);
+            $table->uint('height')->default(0);
+        })->append(MapItemEntity::tableName(), function (Table $table) {
+            $table->comment('区域物品');
             $table->id();
             $table->uint('project_id');
             $table->uint('map_id');
-            $table->string('name');
-            $table->string('description');
-            $table->uint('south_id')->default(0)->comment('南边区域');
-            $table->uint('east_id')->default(0)->comment('东边区域');
-            $table->uint('north_id')->default(0)->comment('北边区域');
-            $table->uint('west_id')->default(0)->comment('西边区域');
+            $table->uint('item_id');
+            $table->uint('amount')->default(1);
+            $table->timestamp('expired_at');
+            $table->timestamp('refresh_at');
+            $table->timestamps();
+        })->append(MapIndigenousEntity::tableName(), function (Table $table) {
+            $table->comment('区域npc,怪物');
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('map_id');
+            $table->uint('indigenous_id');
+            $table->uint('refresh_space')->default(0)->comment('怪物击杀后自动刷新时间');
+            $table->uint('status', 1)->default(0);
+            $table->timestamp('refresh_at');
+            $table->timestamps();
         })->append(IndigenousEntity::tableName(), function (Table $table) {
             $table->comment('土著，包括npc、怪物、boss');
             $table->id();
             $table->uint('project_id');
-            $table->uint('area_id');
             $table->string('name');
             $table->string('description');
+            BattleRepository::addProperty($table);
             $table->timestamps();
         })->append(ItemEntity::tableName(), function (Table $table) {
             $table->comment('物品');
@@ -206,13 +238,6 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('type');
             $table->string('name');
             $table->string('description');
-        })->append(MapAreaItemEntity::tableName(), function (Table $table) {
-            $table->comment('区域物品');
-            $table->id();
-            $table->uint('project_id');
-            $table->uint('area_id');
-            $table->uint('item_id');
-            $table->uint('amount')->default(1);
         })->append(SkillEntity::tableName(), function (Table $table) {
             $table->comment('技能表');
             $table->id();

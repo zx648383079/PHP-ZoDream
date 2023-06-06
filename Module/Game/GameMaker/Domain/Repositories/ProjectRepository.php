@@ -47,6 +47,14 @@ final class ProjectRepository {
         throw new Exception('project is error');
     }
 
+    public static function makerOption(array $keys): array {
+
+    }
+
+    public static function makerOptionSave(array $data) {
+
+    }
+
     public static function selfStatistics(int $project) {
         self::isSelfOrThrow($project);
         $character_today = 0;

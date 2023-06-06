@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Module\Game\GameMaker\Service\Api\Maker;
 
 use Exception;
-use Module\Game\GameMaker\Domain\Repositories\TaskRepository;
+use Module\Game\GameMaker\Domain\Repositories\StoreRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class TaskController extends Controller {
+class StoreController extends Controller {
 
     public function indexAction(int $project, string $keywords = '') {
         try {
-            return $this->renderPage(TaskRepository::makerList($project, $keywords));
+            return $this->renderPage(StoreRepository::makerList($project, $keywords));
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -27,7 +27,7 @@ class TaskController extends Controller {
                 'before' => 'required|string:0,255',
             ]);
             return $this->render(
-                TaskRepository::makerSave($data)
+                StoreRepository::makerSave($data)
             );
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -36,7 +36,7 @@ class TaskController extends Controller {
 
     public function deleteAction(int $project, int $id) {
         try {
-            TaskRepository::makerRemove($project, $id);
+            StoreRepository::makerRemove($project, $id);
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
