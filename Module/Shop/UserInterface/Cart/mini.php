@@ -10,8 +10,7 @@ use Zodream\Template\View;
 <?php if(!$cart->isEmpty()):?>
 <div class="cart-dialog">
     <div class="dialog-body">
-        <?php foreach($cart as $group):?>
-            <?php foreach($group as $item):?>
+        <?php foreach($cart as $item):?>
             <div class="cart-item" data-id="<?=$item->id?>">
                 <div class="thumb">
                     <img src="<?=$item->goods->thumb?>" alt="">
@@ -28,7 +27,6 @@ use Zodream\Template\View;
                     <i class="fa fa-times"></i>
                 </div>
             </div>
-            <?php endforeach;?>
         <?php endforeach;?>
     </div>
     <div class="dialog-footer">

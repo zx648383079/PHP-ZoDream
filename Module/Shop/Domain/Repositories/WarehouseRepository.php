@@ -51,4 +51,22 @@ class WarehouseRepository {
             ->value('amount');
         return intval($amount);
     }
+
+    public static function updateStock(int $regionId, int $goodsId, int $productId, int $amount): bool {
+        if ($regionId < 1) {
+            return false;
+        }
+        $idItems = WarehouseRegionModel::whereIn('region_id', RegionRepository::getPathId($regionId))
+            ->pluck('warehouse_id');
+        if (empty($idItems)) {
+            return false;
+        }
+        $count = WarehouseGoodsModel::whereIn('warehouse_id', $idItems)
+            ->where('goods_id', $goodsId)
+            ->where('product_id', $productId)
+            ->orderBy('amount', 'desc')
+            ->limit(1)
+            ->updateIncrement('stock', $amount);
+        return $count > 0;
+    }
 }

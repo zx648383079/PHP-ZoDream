@@ -15,6 +15,7 @@ use Zodream\Helpers\Json;
  * @property integer $input_type
  * @property string $default_value
  * @property integer $position
+ * @property string $property_group
  */
 class AttributeUniqueModel extends AttributeEntity {
 

@@ -1,50 +1,47 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Models\CartModel;
-use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Module\Shop\Domain\Repositories\AttributeRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
-use Module\Shop\Module;
 
 class CartController extends Controller {
 
     public function indexAction() {
-        $cart = Module::cart();
+        $cart = CartRepository::load();
         return $this->render($cart);
     }
 
     public function addAction(int $goods, int $amount = 1, $properties = null) {
         try {
-            list($goods, $product, $success) = CartRepository::checkGoodsOrProduct($goods, $amount, $properties);
-            if (!$success) {
+            $properties = AttributeRepository::formatPostProperties($properties);
+            if (!CartRepository::addGoods($goods, $amount, $properties)) {
                 return $this->render([
                     'dialog' => true,
-                    'data' => GoodsRepository::formatProperties($goods)
+                    'data' => GoodsRepository::getDialog($goods)
                 ]);
             }
-            CartRepository::addGoods($goods, $amount, $properties);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(Module::cart());
+        return $this->render(CartRepository::load());
     }
 
     public function updateGoodsAction(int $goods, int $amount = 1, $properties = null) {
         try {
-            list($goods, $product, $success) = CartRepository::checkGoodsOrProduct($goods, $amount, $properties);
-            if (!$success) {
+            $properties = AttributeRepository::formatPostProperties($properties);
+            if (!CartRepository::updateGoods($goods, $amount, $properties)) {
                 return $this->render([
                     'dialog' => true,
-                    'data' => GoodsRepository::formatProperties($goods)
+                    'data' => GoodsRepository::getDialog($goods)
                 ]);
             }
-            CartRepository::updateGoods($goods, $amount, $properties);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(Module::cart());
+        return $this->render(CartRepository::load());
     }
 
     public function updateAction($id, $amount) {
@@ -53,17 +50,21 @@ class CartController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->render(Module::cart());
+        return $this->render(CartRepository::load());
     }
 
     public function deleteAction(int|array $id) {
-        Module::cart()->remove($id);
-        return $this->render(Module::cart());
+        $cart = CartRepository::load();
+        $cart->remove($id);
+        $cart->save();
+        return $this->render($cart);
     }
 
     public function clearAction() {
-        Module::cart()->clear();
-        return $this->render(Module::cart());
+        $cart = CartRepository::load();
+        $cart->clear();
+        $cart->save();
+        return $this->render($cart);
     }
 
     public function deleteInvalidAction() {

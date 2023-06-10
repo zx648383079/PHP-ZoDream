@@ -10,6 +10,13 @@ use Module\Shop\Domain\Repositories\SearchRepository;
 
 class GoodsController extends Controller {
 
+    public function rules() {
+        return [
+            'ask' => '@',
+            '*' => '*'
+        ];
+    }
+
     public function indexAction($id = 0,
                                 int $category = 0,
                                 int $brand = 0,
@@ -73,9 +80,12 @@ class GoodsController extends Controller {
         );
     }
 
-    public function issueCreateAction(int $item_id, string $content) {
-        return $this->renderPage(
-            IssueRepository::create($item_id, $content)
-        );
+    public function issueAskAction(int $item_id, string $content) {
+        try {
+            IssueRepository::create($item_id, $content);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 }

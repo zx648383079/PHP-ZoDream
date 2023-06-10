@@ -4,7 +4,9 @@ namespace Module\Shop\Service\Mobile;
 use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\AttributeRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
+use Zodream\Html\Page;
 
 class GoodsController extends Controller {
 
@@ -21,8 +23,9 @@ class GoodsController extends Controller {
 
     public function priceAction($id, $amount = 1, $properties = null) {
         $goods = GoodsModel::where('id', $id)->first('id', 'price', 'stock');
+        $properties = AttributeRepository::formatPostProperties($properties);
         $price = GoodsRepository::finalPrice($goods, $amount, $properties);
-        $box = AttributeModel::getProductAndPriceWithProperties($properties, $id);
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $id);
         return $this->renderData([
             'price' => $price,
             'total' => $price * $amount,

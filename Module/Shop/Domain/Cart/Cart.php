@@ -1,7 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Cart;
 
 use Module\Shop\Domain\Models\CartModel;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
+use Module\Shop\Domain\Repositories\AttributeRepository;
+use Module\Shop\Domain\Repositories\GoodsRepository;
+use Traversable;
 use Zodream\Helpers\Json;
 use IteratorAggregate;
 use Zodream\Infrastructure\Contracts\JsonAble;
@@ -10,60 +15,92 @@ use ArrayIterator;
 
 class Cart implements IteratorAggregate, JsonAble, ArrayAble {
 
-    const COOKIE_KEY = 'cart_identifier';
     /**
-     * @var Group[]
+     * @var ICartItem[]
      */
-    protected array $groups = [];
+    protected array $items = [];
 
     protected bool $booted = false;
 
     public function __construct() {
-        $this->loadFromDb();
+        $this->load();
     }
 
-    public function id() {
-        $id = request()->cookie(self::COOKIE_KEY);
-        if (!empty($id)) {
-            return $id;
-        }
-        $id = md5(uniqid(null, true));
-        response()->cookie(self::COOKIE_KEY, $id, 0, '/');
-        return $id;
-    }
-
-    protected function loadFromDb() {
-        $this->booted = false;
-        $this->setGoods(auth()->guest() ? [] : CartModel::with('goods')
-            ->where('user_id', auth()->id())
-            ->all());
+    public function load(): void {
         $this->booted = true;
     }
 
+    public function save(): void {
+
+    }
+
+    protected function createItem(int $goodsId, array|string $properties, int $amount): ICartItem {
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goodsId);
+        return new CartItem([
+            'goods_id' => $goodsId,
+            'product_id' => !empty($box['product']) ? $box['product']['id'] : 0,
+            'amount' => $amount,
+            'price' => GoodsRepository::finalPrice($goodsId, $amount, $properties),
+            'attribute_id' => is_array($properties) ? implode(',', $properties) : $properties,
+            'attribute_value' => $box['properties_label'],
+        ]);
+    }
+
     /**
-     * @param CartModel[] $goods
+     * @param ICartItem[] $items
      * @return $this
      */
-    public function setGoods(array $goods) {
-        $this->groups = [];
-        foreach ($goods as $item) {
+    public function setItems(array $items) {
+        $this->items = [];
+        foreach ($items as $item) {
             $this->add($item);
         }
         return $this;
     }
 
     public function add(ICartItem $item) {
-        foreach ($this->groups as $group) {
-            if ($group->can($item)) {
-                $group->add($item);
-                return $this;
+        foreach ($this->items as $cart) {
+            if ($cart->canMerge($item)) {
+                $cart->mergeItem($item);
+                return true;
             }
         }
-        $this->groups[] = new Group($item);
+        $this->items[] = $item;
         return $this;
     }
 
-    public function update($id, $amount) {
+    public function tryAdd(int $goodsId, array $properties, int $amount): ICartItem {
+        $attrId = implode(',', $properties);
+        foreach ($this->items as $item) {
+            if ($item->is($goodsId, $attrId)) {
+                $item->updateAmount($item->amount() + $amount);
+                return $item;
+            }
+        }
+        $item = $this->createItem($goodsId, $attrId, $amount);
+        $this->items[] = $item;
+        return $item;
+    }
+
+    public function tryUpdate(int $goodsId, array $properties, int $amount): ?ICartItem {
+        $attrId = implode(',', $properties);
+        foreach ($this->items as $key => $item) {
+            if (!$item->is($goodsId, $attrId)) {
+                continue;
+            }
+            $item->updateAmount($amount);
+            if ($item->amount() > 0) {
+                return $item;
+            }
+            unset($this->items[$key]);
+            return null;
+        }
+        $item = $this->createItem($goodsId, $attrId, $amount);
+        $this->items[] = $item;
+        return $item;
+    }
+
+    public function update($id, int $amount) {
         $this->get($id)->updateAmount($amount);
         return $this;
     }
@@ -74,8 +111,11 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return ICartItem|null
      */
     public function get($id) {
-        foreach ($this->groups as $group) {
-            if ($item = $group->get($id)) {
+        foreach ($this->items as $item) {
+            if (is_callable($id) && call_user_func($id, $item)) {
+                return $item;
+            }
+            if (!is_callable($id) && $item->getId() == $id) {
                 return $item;
             }
         }
@@ -88,9 +128,10 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @param int $productId
      * @return ICartItem|null
      */
-    public function getGoods($goodsId, int $productId = 0) {
-        foreach ($this->groups as $group) {
-            if ($item = $group->getGoods($goodsId, $productId)) {
+    public function getItem($goodsId, array $properties = []) {
+        $attrId = implode(',', $properties);
+        foreach ($this->items as $item) {
+            if ($item->is($goodsId, $attrId)) {
                 return $item;
             }
         }
@@ -98,12 +139,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function clear() {
-        foreach ($this->groups as $group) {
-            foreach ($group as $item) {
-                $item->delete();
-            }
-        }
-        $this->groups = [];
+        $this->items = [];
         return true;
     }
 
@@ -118,45 +154,40 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function removeId($id) {
-        foreach ($this->groups as $key => $group) {
-            if (!$group->remove($id)) {
-                continue;
+        foreach ($this->items as $key => $item) {
+            if ($item->getId() == $id) {
+                unset($this->items[$key]);
+                return true;
             }
-            if ($group->isEmpty()) {
-                unset($this->groups[$key]);
-            }
-            return true;
         }
         return false;
     }
 
     public function total() {
         $total = 0;
-        foreach ($this->groups as $group) {
-            $total += $group->total();
+        foreach ($this->items as $item) {
+            $total += $item->total();
         }
         return $total;
     }
 
     public function count() {
         $total = 0;
-        foreach ($this->groups as $group) {
-            $total += $group->count();
+        foreach ($this->items as $item) {
+            $total += $item->amount();
         }
         return $total;
     }
 
     public function all() {
-        return array_values($this->groups);
+        return array_values($this->items);
     }
 
     public function filter(callable $cb) {
         $data = [];
-        foreach ($this->groups as $group) {
-            foreach ($group as $item) {
-                if ($cb($item) === true) {
-                    $data[] = $item;
-                }
+        foreach ($this->items as $item) {
+            if ($cb($item) === true) {
+                $data[] = $item;
             }
         }
         return $data;
@@ -165,15 +196,9 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     public function isEmpty() {
-        return empty($this->groups);
+        return empty($this->items);
     }
 
-    public function save() {
-        foreach ($this->groups as $group) {
-            $group->save();
-        }
-        return $this;
-    }
 
     public function checkoutButton() {
         return [
@@ -182,10 +207,14 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         ];
     }
 
-    public function promotionCell() {
+    public function promotionCell(array $subtotal) {
+        $free = 88;
+        if ($subtotal['total'] >= $free) {
+            return [];
+        }
         return [
             [
-                'popup_tip' => '还差8元包邮',
+                'popup_tip' => sprintf('还差%d元包邮', $free - $subtotal['total']),
                 'link' => [
                     'text' => '去凑单',
                     'url' => '',
@@ -204,7 +233,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         ];
     }
 
-    public function getIterator() {
+    public function getIterator(): Traversable {
         return new ArrayIterator($this->all());
     }
 
@@ -214,16 +243,43 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @return array
      */
     public function toArray() {
-        $items = array_map(function (Group $group) {
-            return $group->toArray();
-        }, $this->all());
         $subtotal = $this->subtotal();
         return [
-            'data' => $items,
+            'data' => $this->toGroupArray(),
             'subtotal' => $subtotal,
             'checkout_button' => $this->checkoutButton(),
-            'promotion_cell' => $subtotal['total'] > 99 ? [] : $this->promotionCell()
+            'promotion_cell' => $this->promotionCell($subtotal)
         ];
+    }
+
+    public function toGroupArray(): array {
+        if (empty($this->items)) {
+            return [];
+        }
+        $goodsId = [];
+        foreach ($this->items as $item) {
+            $goodsId[] = $item->goodsId();
+        }
+        $items = GoodsSimpleModel::query()->whereIn('id', $goodsId)->get();
+        $goodsItems = [];
+        foreach ($items as $item) {
+            $goodsItems[$item['id']] = $item;
+        }
+
+        $items = [];
+        foreach ($this->items as $item) {
+            $groupIndex = $item->getGroupName();
+            if (!isset($items[$groupIndex])) {
+                $items[$groupIndex] = [
+                    'name' => $item->getGroupName(),
+                    'goods_list' => []
+                ];
+            }
+            $data = $item->getData();
+            $data['goods'] = $goodsItems[$item->goodsId()];
+            $items[$groupIndex]['goods_list'][] = $data;
+        }
+        return array_values($items);
     }
 
     /**

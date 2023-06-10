@@ -14,24 +14,26 @@ use Domain\Entities\Entity;
  * @property integer $input_type
  * @property string $default_value
  * @property integer $position
+ * @property string $property_group
  */
 class AttributeEntity extends Entity {
 
     public static function tableName() {
         return 'shop_attribute';
     }
-
-    public function rules() {
+    protected function rules() {
         return [
             'name' => 'required|string:0,30',
             'group_id' => 'required|int',
-            'type' => 'int:0,9',
-            'search_type' => 'int:0,9',
-            'input_type' => 'int:0,9',
+            'type' => 'int:0,127',
+            'search_type' => 'int:0,127',
+            'input_type' => 'int:0,127',
             'default_value' => 'string:0,255',
-            'position' => 'int:0,999',
+            'position' => 'int',
+            'property_group' => 'string:0,20',
         ];
     }
+
 
     protected function labels() {
         return [
@@ -43,6 +45,7 @@ class AttributeEntity extends Entity {
             'input_type' => '输入类型',
             'default_value' => '默认值',
             'position' => '排序',
+            'property_group' => '属性分组',
         ];
     }
 }

@@ -3,6 +3,9 @@ namespace Module\Shop\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Option;
+use Module\Shop\Domain\Entities\AttributeEntity;
+use Module\Shop\Domain\Entities\AttributeGroupEntity;
+use Module\Shop\Domain\Entities\PluginEntity;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
@@ -169,20 +172,10 @@ class CreateShopTables extends Migration {
             $table->string('expiry_date', 30)->default('')->comment('卡有效期');
             $table->uint('status', 2)->default(0)->comment('审核状态');
             $table->timestamps();
-        })->append(AffiliateLogModel::tableName(), function (Table $table) {
-            $table->comment('用户分销记录表');
-            $table->id();
-            $table->uint('user_id');
-            $table->uint('item_type', 1)->default(0)->comment('类型: 0 用户 1 订单');
-            $table->uint('item_id')->comment('订单号/被推荐的用户');
-            $table->string('order_sn', 30)->default('')->comment('订单号');
-            $table->decimal('order_amount', 8, 2)->default(0)->comment('订单金额');
-            $table->decimal('money', 8, 2)->default(0)->comment('佣金');
-            $table->uint('status', 2)->default(0)->comment('审核状态');
-            $table->timestamps();
         });
         $this->createAttribute();
         $this->createComment();
+        $this->createPlugin();
         $this->append(NavigationModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('type', 10)->default('middle');
@@ -209,6 +202,96 @@ class CreateShopTables extends Migration {
         parent::up();
     }
 
+
+
+    public function seed() {
+        RoleRepository::newRole('shop_admin', '商城管理员', [
+            'shop_manage' => '商城管理'
+        ]);
+        Option::group('商城设置', function () {
+            return [
+                [
+                    'name' => '商城开启状态',
+                    'code' => 'shop_open_status',
+                    'type' => 'switch',
+                    'value' => 1,
+                ],
+                [
+                    'name' => '开启游客购买',
+                    'code' => 'shop_guest_buy',
+                    'type' => 'switch',
+                    'value' => 0,
+                    'visibility' => 2,
+                ],
+                [
+                    'name' => '开启仓库',
+                    'code' => 'shop_warehouse',
+                    'type' => 'switch',
+                    'value' => 0,
+                ],
+                [
+                    'name' => '扣库存时间',
+                    'code' => 'shop_store',
+                    'type' => 'radio',
+                    'value' => 0,
+                    'default_value' => "不扣库存\n下单时\n支付时\n发货时"
+                ],
+            ];
+        });
+        $this->findOrNewById(AdPositionModel::query(), [
+            'id' => 1,
+            'name' => 'PC 首页 banner',
+            'width' => '100%',
+            'height' => '100%',
+            'template' => '{url}',
+        ]);
+        $this->findOrNewById(AdPositionModel::query(), [
+            'id' => 2,
+            'name' => 'Mobile 首页 banner',
+            'width' => '100%',
+            'height' => '100%',
+            'template' => '{url}',
+        ]);
+        $this->findOrNewById(ArticleCategoryModel::query(), [
+            'id' => 1,
+            'name' => '通知中心',
+        ]);
+        $this->findOrNewById(ArticleCategoryModel::query(), [
+            'id' => 2,
+            'name' => '帮助中心',
+        ]);
+    }
+
+    private function findOrNewById(Builder $query, array $data) {
+        $count = (clone $query)->where('id', $data['id'])->count();
+        if ($count > 0) {
+            return;
+        }
+        $query->insert($data);
+    }
+
+
+    public function createPlugin() {
+        $this->append(PluginEntity::tableName(), function (Table $table) {
+            $table->comment('插件列表及配置文件');
+            $table->id();
+            $table->string('code', 20)->comment('插件别名');
+            $table->text('setting')->comment('配置信息');
+            $table->bool('status')->default(0)->comment('开始状态');
+            $table->timestamps();
+        })->append(AffiliateLogModel::tableName(), function (Table $table) {
+            $table->comment('用户分销记录表');
+            $table->id();
+            $table->uint('user_id');
+            $table->uint('item_type', 1)->default(0)->comment('类型: 0 用户 1 订单');
+            $table->uint('item_id')->comment('订单号/被推荐的用户');
+            $table->string('order_sn', 30)->default('')->comment('订单号');
+            $table->decimal('order_amount', 8, 2)->default(0)->comment('订单金额');
+            $table->decimal('money', 8, 2)->default(0)->comment('佣金');
+            $table->uint('status', 2)->default(0)->comment('审核状态');
+            $table->timestamps();
+        });
+    }
 
 
     /**
@@ -309,72 +392,6 @@ class CreateShopTables extends Migration {
         });
     }
 
-    public function seed() {
-        RoleRepository::newRole('shop_admin', '商城管理员', [
-            'shop_manage' => '商城管理'
-        ]);
-        Option::group('商城设置', function () {
-            return [
-                [
-                    'name' => '商城开启状态',
-                    'code' => 'shop_open_status',
-                    'type' => 'switch',
-                    'value' => 1,
-                ],
-                [
-                    'name' => '开启游客购买',
-                    'code' => 'shop_guest_buy',
-                    'type' => 'switch',
-                    'value' => 0,
-                    'visibility' => 2,
-                ],
-                [
-                    'name' => '开启仓库',
-                    'code' => 'shop_warehouse',
-                    'type' => 'switch',
-                    'value' => 0,
-                ],
-                [
-                    'name' => '扣库存时间',
-                    'code' => 'shop_store',
-                    'type' => 'radio',
-                    'value' => 0,
-                    'default_value' => "不扣库存\n下单时\n支付时\n发货时"
-                ],
-            ];
-        });
-        $this->findOrNewById(AdPositionModel::query(), [
-            'id' => 1,
-            'name' => 'PC 首页 banner',
-            'width' => '100%',
-            'height' => '100%',
-            'template' => '{url}',
-        ]);
-        $this->findOrNewById(AdPositionModel::query(), [
-            'id' => 2,
-            'name' => 'Mobile 首页 banner',
-            'width' => '100%',
-            'height' => '100%',
-            'template' => '{url}',
-        ]);
-        $this->findOrNewById(ArticleCategoryModel::query(), [
-            'id' => 1,
-            'name' => '通知中心',
-        ]);
-        $this->findOrNewById(ArticleCategoryModel::query(), [
-            'id' => 2,
-            'name' => '帮助中心',
-        ]);
-    }
-
-    private function findOrNewById(Builder $query, array $data) {
-        $count = (clone $query)->where('id', $data['id'])->count();
-        if ($count > 0) {
-            return;
-        }
-        $query->insert($data);
-    }
-
     /**
      * 物流发货
      */
@@ -440,14 +457,16 @@ class CreateShopTables extends Migration {
      * 创建属性
      */
     public function createAttribute(): void {
-        $this->append(AttributeGroupModel::tableName(), function (Table $table) {
+        $this->append(AttributeGroupEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 30);
+            $table->string('property_groups')->default('')->comment('静态属性的可选分组，以换行符分隔');
             $table->timestamps();
-        })->append(AttributeModel::tableName(), function (Table $table) {
+        })->append(AttributeEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 30);
             $table->uint('group_id');
+            $table->string('property_group',20)->default('')->comment('静态属性的分组');
             $table->uint('type', 1)->default(0);
             $table->uint('search_type', 1)->default(0);
             $table->uint('input_type', 1)->default(0);

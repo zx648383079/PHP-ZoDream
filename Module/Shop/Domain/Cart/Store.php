@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Cart;
 
-use Module\Shop\Domain\Models\GoodsModel;
+use Module\SEO\Domain\Option;
+use Module\Shop\Domain\Entities\GoodsEntity;
+use Module\Shop\Domain\Entities\ProductEntity;
+use Module\Shop\Domain\Repositories\WarehouseRepository;
 
 class Store {
 
@@ -19,16 +23,29 @@ class Store {
      */
     const STATUS_SHIPPING = 2;
 
-    private $status;
-
     /**
      * 存储预扣库存
      * @var array
      */
-    private $data = [];
+    private array $data = [];
+    private int $stockTime;
+    private bool $useWarehouse;
+    private int $orderStatus = self::STATUS_NONE;
+    private int $region = 0;
 
-    public function __construct($status = self::STATUS_ORDER) {
-        $this->status = $status;
+    public function __construct() {
+        $this->stockTime = intval(Option::value('shop_store'));
+        $this->useWarehouse = Option::value('shop_warehouse', 0) > 1;
+    }
+
+    public function setStatus(int $status) {
+        $this->orderStatus = $status;
+        return $this;
+    }
+
+    public function setRegion(int $region) {
+        $this->region = $region;
+        return $this;
     }
 
     /**
@@ -39,7 +56,7 @@ class Store {
     public function frozen(array $goods_list): bool {
         $success = true;
         foreach ($goods_list as $item) {
-            if (!$this->frozenGoods($item->goodsId(), $item->productId(), $item->amount())) {
+            if (!$this->frozenItem($item->goodsId(), $item->productId(), $item->amount())) {
                 $success = false;
                 break;
             }
@@ -50,23 +67,74 @@ class Store {
         return $success;
     }
 
-    public function frozenGoods($goods_id, $product_id, $amount) {
-        $store = GoodsModel::query()->where('id', $goods_id)
-            ->where('status', GoodsModel::STATUS_SALE)->value('stock');
-        if (empty($store) || $store < $amount) {
+    /**
+     * 冻结库存
+     * @param int $goods_id
+     * @param int $product_id
+     * @param int $amount
+     * @return bool
+     */
+    public function frozenItem(int $goods_id, int $product_id, int $amount): bool {
+        if ($amount < 1 || $this->stockTime < 1 || $this->orderStatus !== $this->stockTime) {
+            return true;
+        }
+        $store = $this->get($goods_id, $product_id);
+        if ($store < $amount) {
             return false;
         }
-        GoodsModel::query()->where('id', $goods_id)
-            ->updateIncrement('stock', -$amount);
+        $this->update($goods_id, $product_id, -$amount);
         $this->data[$goods_id][$product_id] = $amount;
         return true;
     }
 
-    public function checkGoods($goods_id, $product_id, $amount) {
-        $store = GoodsModel::query()->where('id', $goods_id)
-            ->where('status', GoodsModel::STATUS_SALE)
-            ->value('stock');
-        return empty($store) || $store < $amount;
+    /**
+     * 判读库存是否充足
+     * @param int $goods_id
+     * @param int $product_id
+     * @param int $amount
+     * @return bool
+     */
+    public function check(int $goods_id, int $product_id, int $amount): bool {
+        if ($amount < 1 || $this->stockTime < 1) {
+            return true;
+        }
+        return $this->get($goods_id, $product_id) >= $amount;
+    }
+
+    /**
+     * 获取库存
+     * @param int $goods_id
+     * @param int $product_id
+     * @return int
+     */
+    public function get(int $goods_id, int $product_id): int {
+        if ($this->useWarehouse && $this->region > 0) {
+            return WarehouseRepository::getStock($this->region, $goods_id, $product_id);
+        }
+        if ($product_id > 0) {
+            return intval(ProductEntity::where('id', $product_id)
+                ->where('goods_id', $goods_id)->value('stock'));
+        }
+        return intval(GoodsEntity::query()->where('id', $goods_id)
+            ->where('status', GoodsEntity::STATUS_SALE)
+            ->value('stock'));
+    }
+
+    public function update(int $goods_id, int $product_id, int $amount) {
+        if ($amount === 0) {
+            return;
+        }
+        if ($this->useWarehouse && $this->region > 0) {
+            WarehouseRepository::updateStock($this->region, $goods_id, $product_id, $amount);
+            return;
+        }
+        if ($product_id > 0) {
+            ProductEntity::query()->where('id', $product_id)
+                ->where('goods_id', $goods_id)->updateIncrement('stock', $amount);
+        } else {
+            GoodsEntity::query()->where('id', $goods_id)
+                ->updateIncrement('stock', $amount);
+        }
     }
 
     /**
@@ -85,9 +153,8 @@ class Store {
      */
     public function restore() {
         foreach ($this->data as $goods_id => $items) {
-            foreach ($items as $amount) {
-                GoodsModel::query()->where('id', $goods_id)
-                    ->updateIncrement('stock', $amount);
+            foreach ($items as $product_id => $amount) {
+                $this->update($goods_id, $product_id, $amount);
             }
         }
         $this->data = [];

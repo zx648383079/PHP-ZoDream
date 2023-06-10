@@ -5,6 +5,7 @@ namespace Module\Shop\Service\Api;
 use Module\Shop\Domain\Repositories\AdRepository;
 use Module\Shop\Domain\Repositories\ArticleRepository;
 use Module\Shop\Domain\Repositories\BrandRepository;
+use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\CategoryRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Module\Shop\Domain\Repositories\OrderRepository;
@@ -21,7 +22,7 @@ class BatchController extends Controller {
         return $this->render($this->invokeBatch([
             'category' => sprintf('%s::%s', CategoryRepository::class, 'getList'),
             'brand' => sprintf('%s::%s', BrandRepository::class, 'recommend'),
-            'cart' => sprintf('%s::%s', Module::class, 'cart'),
+            'cart' => sprintf('%s::%s', CartRepository::class, 'load'),
             'hot_keywords' => sprintf('%s::%s', SearchRepository::class, 'hotKeywords'),
             'notice' => sprintf('%s::%s', ArticleRepository::class, 'getNotices'),
             'help' => sprintf('%s::%s', ArticleRepository::class, 'getHelps'),

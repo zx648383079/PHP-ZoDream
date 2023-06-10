@@ -21,6 +21,12 @@ use Zodream\Helpers\Json;
  */
 final class CashierRepository {
 
+    public static function store(int $status = 0):  Store {
+        $store = new Store();
+        $store->setStatus($status);
+        return $store;
+    }
+
     public static function formatAddress(int $user, mixed $address): ?AddressModel {
         if (is_array($address) && isset($address['id']) && $address['id'] > 0) {
             $address = $address['id'];
@@ -184,7 +190,7 @@ final class CashierRepository {
     public static function checkout(int $userId, mixed $address, int $shipping, int $payment,
                                     int $coupon = 0, string $coupon_code = '', $cart = '', int $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
-        $store = new Store();
+        $store = self::store(Store::STATUS_ORDER);
         if (!$store->frozen($goods_list)) {
             throw new InvalidArgumentException('库存不足！');
         }
@@ -205,7 +211,7 @@ final class CashierRepository {
             throw new InvalidArgumentException('操作失败，请重试');
         }
         if ($type < 1) {
-            Module::cart()->remove(...$goods_list);
+            CartRepository::load()->remove(...$goods_list);
         }
         return $order;
     }
@@ -220,7 +226,7 @@ final class CashierRepository {
     public static function getGoodsList($cart = '', int $type = 0) {
         if ($type < 1) {
             $cart_ids = is_array($cart) ? $cart : explode('-', $cart);
-            return Module::cart()->filter(function ($item) use ($cart_ids) {
+            return CartRepository::load()->filter(function ($item) use ($cart_ids) {
                 return in_array($item['id'], $cart_ids);
             });
         }

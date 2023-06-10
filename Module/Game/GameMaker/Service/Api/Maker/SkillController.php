@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Module\Game\GameMaker\Service\Api\Maker;
 
 use Exception;
-use Module\Game\GameMaker\Domain\Repositories\TaskRepository;
+use Module\Game\GameMaker\Domain\Repositories\SkillRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class TaskController extends Controller {
+class SkillController extends Controller {
 
     public function indexAction(int $project, string $keywords = '') {
         try {
-            return $this->renderPage(TaskRepository::makerList($project, $keywords));
+            return $this->renderPage(SkillRepository::makerList($project, $keywords));
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -22,13 +22,12 @@ class TaskController extends Controller {
                 'id' => 'int',
                 'project_id' => 'required|int',
                 'title' => 'required|string:0,255',
-                'description' => 'string:0,255',
-                'gift' => 'string:0,255',
-                'before' => 'string:0,255',
-                'type' => 'int:0,127',
+                'description' => 'required|string:0,255',
+                'gift' => 'required|string:0,255',
+                'before' => 'required|string:0,255',
             ]);
             return $this->render(
-                TaskRepository::makerSave($data)
+                SkillRepository::makerSave($data)
             );
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -37,7 +36,7 @@ class TaskController extends Controller {
 
     public function deleteAction(int $project, int $id) {
         try {
-            TaskRepository::makerRemove($project, $id);
+            SkillRepository::makerRemove($project, $id);
         } catch (Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

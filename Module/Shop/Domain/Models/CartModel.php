@@ -7,10 +7,9 @@ namespace Module\Shop\Domain\Models;
  * Date: 2016/12/15
  * Time: 19:07
  */
-use Domain\Model\Model;
-
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Item;
+use Module\Shop\Domain\Entities\CartEntity;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 
@@ -20,44 +19,24 @@ use Module\Shop\Domain\Repositories\GoodsRepository;
  * @property integer $type
  * @property integer $user_id
  * @property integer $goods_id
+ * @property integer $product_id
  * @property integer $amount
- * @property bool $is_checked
  * @property float $price
+ * @property integer $is_checked
+ * @property integer $selected_activity
+ * @property string $attribute_id
+ * @property string $attribute_value
+ * @property integer $expired_at
  * @property float $total
  * @property GoodsModel $goods
  * @property ProductModel $product
  * @property ActivityModel $activity
  */
-class CartModel extends Model implements ICartItem {
+class CartModel extends CartEntity implements ICartItem {
 
     use Item;
 
     protected array $append = ['goods'];
-
-    public static function tableName() {
-        return 'shop_cart';
-    }
-
-    public function rules() {
-        return [
-            'type' => 'int:0,9',
-            'user_id' => 'required|int',
-            'goods_id' => 'required|int',
-            'amount' => 'int',
-            'price' => '',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'type' => 'Type',
-            'user_id' => 'User Id',
-            'goods_id' => 'Goods Id',
-            'amount' => '数量',
-            'price' => 'Price',
-        ];
-    }
 
     public function goods() {
         return $this->hasOne(GoodsSimpleModel::class, 'id', 'goods_id');

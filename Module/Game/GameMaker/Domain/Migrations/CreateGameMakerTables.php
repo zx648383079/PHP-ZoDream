@@ -304,9 +304,10 @@ final class CreateGameMakerTables extends Migration {
             $table->id();
             $table->uint('project_id');
             $table->string('title');
-            $table->string('description');
-            $table->string('gift');
-            $table->string('before');
+            $table->string('description')->default('');
+            $table->uint('type', 1)->default(0);
+            $table->string('gift')->default('');
+            $table->string('before')->default('');
             $table->timestamps();
         })->append(TaskItemEntity::tableName(), function (Table $table) {
             $table->comment('任务详细');

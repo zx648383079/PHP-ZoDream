@@ -4,6 +4,7 @@ namespace Module\Shop\Domain\Plugin\Tbk;
 
 use Module\SEO\Domain\Model\OptionModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\Admin\PluginRepository;
 use Zodream\Helpers\Json;
 use Zodream\ThirdParty\ALi\TaoBaoKe;
 
@@ -19,19 +20,18 @@ class TbkRepository {
     }
 
     public static function option() {
-        return OptionModel::findCodeJson(self::OPTION_CODE, [
+        return PluginRepository::settingGet(self::OPTION_CODE, [
             'app_key' => '',
             'secret' => ''
         ]);
     }
 
     public static function isInstalled(): bool {
-        $option = static::option();
-        return !empty($option) && !empty($option['app_key']) && !empty($option['secret']);
+        return PluginRepository::isInstalled(self::OPTION_CODE);
     }
 
     public static function saveOption(array $data) {
-        OptionModel::insertOrUpdate(self::OPTION_CODE, Json::encode($data), '淘宝客');
+        PluginRepository::settingSave(self::OPTION_CODE, Json::encode($data));
         return $data;
     }
 

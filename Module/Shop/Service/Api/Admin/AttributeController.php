@@ -1,52 +1,94 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-
-use Module\Shop\Domain\Models\AttributeGroupModel;
-use Module\Shop\Domain\Models\AttributeModel;
-use Module\Shop\Domain\Repositories\AttributeRepository;
+use Module\Shop\Domain\Repositories\Admin\AttributeRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AttributeController extends Controller {
 
-    public function indexAction(int $group_id) {
-        $model_list = AttributeModel::with('group')->where('group_id', $group_id)->page();
-        return $this->renderPage($model_list);
+    public function indexAction(int $group_id, string $keywords = '') {
+        return $this->renderPage(AttributeRepository::getList($group_id, $keywords));
     }
 
     public function detailAction(int $id) {
-        $model = AttributeModel::find($id);
-        return $this->render($model);
-    }
-
-    public function saveAction() {
-        $model = new AttributeModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+        try {
+            return $this->render(
+                AttributeRepository::get($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
+    }
+
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'group_id' => 'required|int',
+                'type' => 'int:0,127',
+                'search_type' => 'int:0,127',
+                'input_type' => 'int:0,127',
+                'default_value' => 'string:0,255',
+                'position' => 'int',
+                'property_group' => 'string:0,20',
+            ]);
+            return $this->render(
+                AttributeRepository::save($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function deleteAction(int $id) {
+        try {
+            AttributeRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 
 
-    public function groupAction() {
-        $model_list = AttributeGroupModel::all();
-        return $this->renderData($model_list);
+    public function groupAction(string $keywords = '') {
+        return $this->renderPage(
+            AttributeRepository::groupList($keywords)
+        );
     }
 
     public function detailGroupAction(int $id) {
-        $model = AttributeGroupModel::find($id);
-        return $this->render($model);
+        try {
+            return $this->render(
+                AttributeRepository::groupGet($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
-    public function saveGroupAction() {
-        $model = new AttributeGroupModel();
-        if ($model->load() && $model->autoIsNew()->save()) {
-            return $this->render($model);
+    public function saveGroupAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,30',
+                'property_groups' => 'string:0,255',
+            ]);
+            return $this->render(
+                AttributeRepository::groupSave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderFailure($model->getFirstError());
     }
 
     public function deleteGroupAction(int $id) {
-        AttributeGroupModel::where('id', $id)->delete();
+        try {
+            AttributeRepository::groupRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 

@@ -4,31 +4,38 @@ namespace Module\Shop\Domain\Cart;
 
 use Module\Shop\Domain\Repositories\CashierRepository;
 
-trait Item  {
+class CartItem implements ICartItem {
+    public function __construct(
+        protected array $data) {
+        $this->isUpdated = empty($this->getId());
+    }
+
+
 
     protected bool $isUpdated = false;
 
     public function getData(): array {
-        return $this->getAttribute();
+        return $this->data;
     }
     public function setData(array $data) {
-        $this->setAttribute($data);
+        $this->data = array_merge($this->data, $data);
     }
-
     public function isUpdated(): bool {
         return $this->isUpdated;
     }
 
     public function getGroupName(): string {
-        return $this->selected_activity > 0 ? sprintf('联合活动[#%d]', $this->selected_activity) :  '自营';
+        return isset($this->data['selected_activity']) && $this->data['selected_activity'] > 0 ?
+            sprintf('联合活动[#%d]', $this->data['selected_activity']) :  '自营';
     }
 
     public function getId(): int|string {
-        return $this->id;
+        return $this->data['id'] ?? 0;
     }
 
     public function canMerge(ICartItem $item): bool {
-        return $this->productId() == $item->productId() && $this->goodsId() == $item->goodsId();
+        return $this->productId() === $item->productId()
+            && $this->goodsId() === $item->goodsId() && $this->properties() === $item->properties();
     }
 
     public function is(int|string $goodsId, array|string $properties = ''): bool {
@@ -42,31 +49,41 @@ trait Item  {
     }
 
     public function mergeItem(ICartItem $item) {
-        $this->amount += $item->amount();
+        $this->data['amount'] += $item->amount();
+        $this->isUpdated = true;
         return $this;
     }
 
     public function goodsId(): int|string {
-        return $this->goods_id;
+        return $this->data['goods_id'];
     }
 
     public function productId(): int|string {
-        return $this->product_id;
+        return $this->data['product_id'];
     }
 
     public function properties(): string {
-        return $this->attribute_id;
+        if (is_array($this->data['attribute_id'])) {
+            return implode(',', $this->data['attribute_id']);
+        }
+        return (string)$this->data['attribute_id'];
     }
 
     public function total(): int|float {
-        return $this->price * $this->amount();
+        return $this->data['price'] * $this->amount();
     }
 
     public function amount(): int {
-        return $this->amount;
+        return $this->data['amount'];
     }
 
     public function invalid(): bool {
         return !CashierRepository::store()->check($this->goodsId(), $this->productId(), $this->amount());
+    }
+
+    public function updateAmount(int $amount) {
+        $this->data['amount'] = $amount;
+        $this->isUpdated = true;
+        return $this;
     }
 }

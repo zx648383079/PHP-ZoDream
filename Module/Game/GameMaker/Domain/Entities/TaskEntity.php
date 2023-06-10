@@ -12,6 +12,7 @@ use Domain\Entities\Entity;
  * @property string $description
  * @property string $gift
  * @property string $before
+ * @property integer $type
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -24,9 +25,10 @@ class TaskEntity extends Entity {
         return [
             'project_id' => 'required|int',
             'title' => 'required|string:0,255',
-            'description' => 'required|string:0,255',
-            'gift' => 'required|string:0,255',
-            'before' => 'required|string:0,255',
+            'description' => 'string:0,255',
+            'gift' => 'string:0,255',
+            'before' => 'string:0,255',
+            'type' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -40,6 +42,7 @@ class TaskEntity extends Entity {
             'description' => 'Description',
             'gift' => 'Gift',
             'before' => 'Before',
+            'type' => 'Type',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];

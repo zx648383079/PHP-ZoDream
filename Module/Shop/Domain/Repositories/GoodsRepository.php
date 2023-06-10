@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\AttributeModel;
+use Module\Shop\Domain\Models\GoodsDialogModel;
 use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
@@ -51,12 +52,13 @@ class GoodsRepository {
             return false;
         }
         $data = $goods->toArray();
-        $data = array_merge($data, GoodsMetaModel::getOrDefault($id));
+        $data = array_merge($data,
+            GoodsMetaModel::getOrDefault($id),
+            AttributeRepository::batchProperties($goods->attribute_group_id, $goods->id)
+        );
         unset($data['cost_price']);
-        $data['properties'] = $goods->properties;
         $data['category'] = $goods->category;
         $data['brand'] = $goods->brand;
-        $data['static_properties'] = $goods->static_properties;
         $data['products'] = $goods->products;
         $data['is_collect'] = $goods->is_collect;
         $data['gallery'] = $goods->gallery;
@@ -64,6 +66,14 @@ class GoodsRepository {
             $data['countdown'] = self::getCountdown($goods);
             $data['promotes'] = self::getPromoteList($goods);
             $data['coupons'] = self::getCoupon($goods);
+            $data['favorable_rate'] = CommentRepository::favorableRate($id);
+            $data['services'] = [
+                '48小时快速退款',
+                '支持30天无忧退换货',
+                '满88元免邮费',
+                '自营品牌',
+                '国内部分地区无法配送'
+            ];
         }
         return $data;
     }
@@ -76,12 +86,14 @@ class GoodsRepository {
     }
 
     public static function formatProperties(GoodsModel $goods) {
-        if (empty($goods)) {
-            return false;
-        }
         $data = $goods->toArray();
-        $data['properties'] = $goods->properties;
+        unset($data['cost_price']);
+        $data['properties'] = AttributeRepository::getProperties($goods->attribute_group_id, $goods->id);
         return $data;
+    }
+
+    public static function getDialog(int $goods) {
+        return self::formatProperties(GoodsDialogModel::findOrThrow($goods));
     }
 
     public static function getCountdown(GoodsModel $goods) {
@@ -104,10 +116,10 @@ class GoodsRepository {
      * 判断是否能购买指定数量
      * @param GoodsModel|int $goods
      * @param int $amount
-     * @param null $properties
+     * @param int[] $properties
      * @return bool
      */
-    public static function canBuy($goods, int $amount = 1, $properties = null) {
+    public static function canBuy($goods, int $amount = 1, array $properties = []) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');
@@ -115,7 +127,7 @@ class GoodsRepository {
         if (empty($properties)) {
             return static::checkStock($goods, $amount);
         }
-        $box = AttributeModel::getProductAndPriceWithProperties($properties, $goods->id);
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goods->id);
         if (empty($box['product'])) {
             return static::checkStock($goods, $amount);
         }
@@ -142,10 +154,10 @@ class GoodsRepository {
      * 获取最终价格
      * @param GoodsModel|int $goods
      * @param int $amount
-     * @param null $properties
+     * @param array $properties
      * @return float
      */
-    public static function finalPrice(GoodsModel|int $goods, int $amount = 1, $properties = null) {
+    public static function finalPrice(GoodsModel|int $goods, int $amount = 1, array $properties = []) {
         if (is_numeric($goods)) {
             $goods = GoodsModel::query()->where('id', $goods)
                 ->first('id', 'price', 'stock');
@@ -153,7 +165,7 @@ class GoodsRepository {
         if (empty($properties)) {
             return $goods->price;
         }
-        $box = AttributeModel::getProductAndPriceWithProperties($properties, $goods->id);
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goods->id);
         if (empty($box['product'])) {
             return $goods->price + $box['properties_price'];
         }

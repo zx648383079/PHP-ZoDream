@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Affiliate;
-
 
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\UserModel;
-use Module\SEO\Domain\Model\OptionModel;
 use Module\Shop\Domain\Models\OrderModel;
+use Module\Shop\Domain\Repositories\Admin\PluginRepository;
 use Zodream\Helpers\Json;
 
 final class AffiliateRepository {
@@ -24,7 +24,7 @@ final class AffiliateRepository {
     }
 
     public static function option() {
-        return OptionModel::findCodeJson(self::OPTION_CODE, [
+        return PluginRepository::settingGet(self::OPTION_CODE, [
             'by_user' => 0,
             'by_user_next' => 0,
             'by_user_grade' => [],
@@ -34,12 +34,11 @@ final class AffiliateRepository {
     }
 
     public static function isInstalled(): bool {
-        $option = static::option();
-        return !empty($option);
+        return PluginRepository::isInstalled(self::OPTION_CODE);
     }
 
     public static function saveOption(array $data) {
-        OptionModel::insertOrUpdate(self::OPTION_CODE, Json::encode($data), '分销返佣');
+        PluginRepository::settingSave(self::OPTION_CODE, Json::encode($data));
         return $data;
     }
 

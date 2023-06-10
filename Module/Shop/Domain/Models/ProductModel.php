@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Models;
 
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Entities\ProductEntity;
 
 /**
  * Class ProductModel
@@ -17,53 +18,15 @@ use Domain\Model\Model;
  * @property string $attributes_value
  * @property float $weight
  */
-class ProductModel extends Model {
+class ProductModel extends ProductEntity {
 
     const ATTRIBUTE_LINK = ',';
 
-    public static function tableName() {
-        return 'shop_product';
-    }
-
-    public function rules() {
-        return [
-            'goods_id' => 'required|int',
-            'price' => '',
-            'market_price' => '',
-            'stock' => 'int',
-            'series_number' => 'string:0,50',
-            'attributes' => 'string:0,100',
-            'weight' => 'numeric'
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'goods_id' => 'Goods Id',
-            'price' => 'Price',
-            'market_price' => '市场价',
-            'stock' => 'Stock',
-            'series_number' => 'Series Number',
-            'attributes' => 'Attributes',
-        ];
-    }
 
     public function getAttributesValue() {
         $ids = explode(self::ATTRIBUTE_LINK, $this->attributes);
         $data = AttributeModel::whereIn('id', $ids)->where('goods_id', $this->goods_id)->pluck('value');
         return implode(',', $data);
-    }
-
-    /**
-     * @param array $data
-     * @param $goods_id
-     * @return static
-     */
-    public static function findByAttribute(array $data, $goods_id) {
-        sort($data);
-        $attributes = implode(self::ATTRIBUTE_LINK, $data);
-        return static::where('attributes', $attributes)->where('goods_id', $goods_id)->first();
     }
 
     public static function batchSave($data, $goods_id) {

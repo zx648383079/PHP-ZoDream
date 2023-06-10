@@ -47,4 +47,9 @@ class GoodsIssueModel extends Model {
             'created_at' => 'Created At',
         ];
     }
+
+    public function goods() {
+        return $this->hasOne(GoodsModel::class, 'id', 'goods_id')
+            ->select('id', 'name', 'thumb');
+    }
 }

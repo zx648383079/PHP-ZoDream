@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Cart;
 
 
 use Module\Shop\Domain\Models\ShippingModel;
+use Traversable;
 use Zodream\Infrastructure\Contracts\ArrayAble;
 use ArrayIterator;
 
@@ -122,7 +124,7 @@ class Group implements \IteratorAggregate, ArrayAble {
         return $this;
     }
 
-    public function getIterator() {
+    public function getIterator(): Traversable {
         return new ArrayIterator($this->all());
     }
 

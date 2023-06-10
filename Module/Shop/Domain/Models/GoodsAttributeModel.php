@@ -3,6 +3,7 @@ namespace Module\Shop\Domain\Models;
 
 
 use Domain\Model\Model;
+use Module\Shop\Domain\Entities\GoodsAttributeEntity;
 
 /**
  * Class GoodsAttributeModel
@@ -13,30 +14,8 @@ use Domain\Model\Model;
  * @property string $value
  * @property float $price
  */
-class GoodsAttributeModel extends Model {
+class GoodsAttributeModel extends GoodsAttributeEntity {
 
-    public static function tableName() {
-        return 'shop_goods_attribute';
-    }
-
-    public function rules() {
-        return [
-            'goods_id' => 'int',
-            'attribute_id' => 'required|int',
-            'value' => 'required|string:0,255',
-            'price' => '',
-        ];
-    }
-
-    protected function labels() {
-        return [
-            'id' => 'Id',
-            'goods_id' => 'Goods Id',
-            'attribute_id' => 'Attribute Id',
-            'value' => 'Value',
-            'price' => 'Price',
-        ];
-    }
 
     public function checkValue() {
         $count = static::where('goods_id', $this->goods_id)->where('attribute_id', $this->attribute_id)->where('value', $this->value)

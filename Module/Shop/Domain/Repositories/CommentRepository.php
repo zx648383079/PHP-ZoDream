@@ -20,6 +20,24 @@ class CommentRepository {
         $data['user_id'] = auth()->id();
         return CommentModel::createOrThrow($data);
     }
+
+    /**
+     * 获取好评率
+     * @param int $item_id
+     * @param int $item_type
+     * @return float %
+     */
+    public static function favorableRate(int $item_id, int $item_type = 0): float {
+        $total = CommentModel::where('item_type', $item_type)->where('item_id', $item_id)
+            ->count();
+        if ($total < 1) {
+            return 100;
+        }
+        $good = CommentModel::where('item_type', $item_type)->where('item_id', $item_id)
+            ->where('`rank`', '>', 7)->count();
+        return ceil($good * 100 / $total);
+    }
+
     /**
      * 获取评论的统计信息
      * @param $item_id

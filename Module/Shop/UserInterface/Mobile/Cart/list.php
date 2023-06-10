@@ -12,14 +12,14 @@ $this->registerJsFile('@jquery.swipeAction.min.js')
     ->registerJs($js);
 ?>
 <div class="cart-box">
-    <?php foreach($cart as $group):?>
+    <?php foreach($cart->toGroupArray() as $group):?>
     <div class="cart-group-item">
         <div class="group-header">
             <i class="fa check-box"></i>
-            <span><?=$group->getName()?></span>
+            <span><<?=$group['name']?></span>
         </div>
         <div class="swipe-box goods-list">
-            <?php foreach($group as $item):?>
+            <?php foreach($group['goods_list'] as $item):?>
             <div class="swipe-row cart-item" data-id="<?=$item->id?>">
                 <div class="swipe-content goods-item">
                     <i class="fa check-box"></i>

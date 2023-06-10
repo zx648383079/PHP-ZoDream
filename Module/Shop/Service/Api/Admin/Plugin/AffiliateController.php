@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AffiliateController extends Controller {
     public function indexAction(string $keywords = '', int $user = 0, int $status = 0) {
-        return $this->renderData(AffiliateRepository::getList($keywords, $user, $status));
+        return $this->renderPage(AffiliateRepository::getList($keywords, $user, $status));
     }
 
     public function optionAction() {

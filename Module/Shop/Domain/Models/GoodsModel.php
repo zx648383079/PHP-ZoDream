@@ -43,8 +43,6 @@ use Zodream\Html\Page;
  * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
- * @property AttributeModel[] $static_properties
- * @property AttributeModel[] $properties
  */
 class GoodsModel extends GoodsEntity {
 
@@ -81,46 +79,6 @@ class GoodsModel extends GoodsEntity {
 
     public function getCommentCountAttribute() {
         return CommentModel::where('item_type', 0)->where('item_id', $this->id)->count();
-    }
-
-    public function getPropertiesAttribute() {
-        if ($this->attribute_group_id < 1) {
-            return [];
-        }
-        $attr_list = AttributeModel::where('group_id', $this->attribute_group_id)
-            ->where('type', '>', 0)->orderBy('position asc')->orderBy('type asc')
-            ->get('id', 'name', 'type');
-        if (empty($attr_list)) {
-            return [];
-        }
-        return array_filter(Relation::create($attr_list, [
-            'attr_items' => [
-                'query' => GoodsAttributeModel::where('goods_id', $this->id),
-                'link' => ['id', 'attribute_id'],
-            ]
-        ]), function ($item) {
-            return empty($item->attr_items);
-        });
-    }
-
-    public function getStaticPropertiesAttribute() {
-        if ($this->attribute_group_id < 1) {
-            return [];
-        }
-        $attr_list = AttributeUniqueModel::where('group_id', $this->attribute_group_id)
-            ->where('type', 0)->orderBy('position asc')->orderBy('type asc')->get('id', 'name');
-        if (empty($attr_list)) {
-            return [];
-        }
-        return array_filter(Relation::create($attr_list, [
-            'attr_item' => [
-                'query' => GoodsAttributeModel::where('goods_id', $this->id),
-                'link' => ['id', 'attribute_id'],
-                'type' => Relation::TYPE_ONE
-            ]
-        ]), function ($item) {
-            return empty($item->attr_item);
-        });
     }
 
 }

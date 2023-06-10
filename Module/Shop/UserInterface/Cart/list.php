@@ -19,12 +19,12 @@ $this->registerJs($js);
     <div>操作</div>
 </div>
 
-<?php foreach($cart as $group):?>
+<?php foreach($cart->toGroupArray() as $group):?>
 <div class="cart-group-item">
     <div class="group-header">
-    <?=$group->getName()?>
+    <?=$group['name']?>
     </div>
-    <?php foreach($group as $item):?>
+    <?php foreach($group['goods_list'] as $item):?>
     <div class="cart-item" data-id="<?=$item->id?>">
         <div class="chk">
             <input type="checkbox" class="check-box">

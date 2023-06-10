@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Repositories\Admin\GoodsRepository;
+use Module\Shop\Domain\Repositories\IssueRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class GoodsController extends Controller {
@@ -94,7 +95,11 @@ class GoodsController extends Controller {
     }
 
     public function cardDeleteAction(int $id) {
-        GoodsRepository::cardRemove($id);
+        try {
+            GoodsRepository::cardRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 
@@ -115,4 +120,31 @@ class GoodsController extends Controller {
         return $this->render($data);
     }
 
+    public function issueAction(int $goods = 0, string $keywords = '') {
+        return $this->renderPage(IssueRepository::manageList($goods, $keywords));
+    }
+
+    public function issueSaveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'goods_id' => 'required|int',
+                'question' => 'required|string:0,255',
+                'answer' => 'string:0,255',
+                'status' => 'int:0,127',
+            ]);
+            return $this->render(IssueRepository::manageSave($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function issueDeleteAction(array|int $id) {
+        try {
+            IssueRepository::manageRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

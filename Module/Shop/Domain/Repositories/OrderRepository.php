@@ -15,7 +15,7 @@ use Module\Shop\Domain\Models\Scene\Order;
 use Zodream\Html\Page;
 use Exception;
 
-class OrderRepository {
+final class OrderRepository {
 
     /**
      * @param int|int[] $status
