@@ -91,6 +91,12 @@ class CartModel extends CartEntity implements ICartItem {
         return $this->save();
     }
 
+    public function updatePrice(float $price, int $activity = 0) {
+        $this->price = $price;
+        $this->selected_activity = $activity;
+        return $this->save();
+    }
+
     public function save() {
         if ($this->amount <= 0) {
             return $this->delete();

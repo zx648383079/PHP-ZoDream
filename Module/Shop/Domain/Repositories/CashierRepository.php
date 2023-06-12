@@ -6,6 +6,7 @@ use Exception;
 use InvalidArgumentException;
 use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Cart\Store;
+use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\CouponLogModel;
@@ -223,7 +224,7 @@ final class CashierRepository {
      * @return ICartItem[]
      * @throws \Exception
      */
-    public static function getGoodsList($cart = '', int $type = 0) {
+    public static function getGoodsList(mixed $cart = '', int $type = 0) {
         if ($type < 1) {
             $cart_ids = is_array($cart) ? $cart : explode('-', $cart);
             return CartRepository::load()->filter(function ($item) use ($cart_ids) {
@@ -241,11 +242,15 @@ final class CashierRepository {
             if (!isset($item['goods']) && !isset($item['goods_id'])) {
                 continue;
             }
-            $goods = GoodsModel::find($item['goods_id'] ?? $item['goods']);
-            if (empty($goods)) {
+            $goods = CartRepository::getGoods(intval($item['goods_id'] ?? $item['goods']));
+            if (empty($goods) || $goods->status !== GoodsEntity::STATUS_SALE) {
                 continue;
             }
-            $data[] = CartModel::fromGoods($goods,
+            $properties = $item['properties'] ?? '';
+            if (empty($properties) && isset($item['attribute_id'])) {
+                $properties = $item['attribute_id'];
+            }
+            $data[] = CartRepository::formatCartItem($goods->id, $properties,
                 max(1, isset($item['amount']) ? intval($item['amount']) : 1));
         }
         return $data;

@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
 use Module\Shop\Domain\Plugin\BasePayment;
+use Module\Shop\Domain\Plugin\IPaymentPlugin;
 use Zodream\Disk\File;
 use Zodream\Http\Http;
 use Zodream\Infrastructure\Support\Process;
 
-class Boc extends BasePayment {
+class Boc extends BasePayment implements IPaymentPlugin {
 
     public function getName(): string {
         return '中行支付';

@@ -33,17 +33,17 @@ class VisualWeight implements IVisualEngine {
     public function __construct(
         protected SitePageWeightModel $pageWeight,
         protected ?IVisualEngine $engine = null) {
-        $this->model = VisualFactory::getOrSet(SiteWeightModel::class,
+        $this->model = VisualFactory::cache()->getOrSet(SiteWeightModel::class,
             $this->pageWeight->weight_id, function () {
                 return SiteWeightModel::where('id', $this->pageWeight->weight_id)->first();
             });
-        $this->weight = VisualFactory::getOrSet(SiteComponentModel::class,
+        $this->weight = VisualFactory::cache()->getOrSet(SiteComponentModel::class,
             $this->model->component_id, function () {
                 return SiteComponentModel::where('component_id', $this->model->component_id)
                     ->where('site_id', $this->model->site_id)
                     ->where('type', 1)->first();
             });
-        $this->property = VisualFactory::getOrSet(VisualWeightProperty::class,
+        $this->property = VisualFactory::cache()->getOrSet(VisualWeightProperty::class,
             $this->model->id, function () {
                 return VisualWeightProperty::create($this->model);
             });

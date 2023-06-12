@@ -14,24 +14,23 @@ use Zodream\Helpers\Json;
 
 final class AttributeRepository {
 
-
     /**
      * 根据属性选择值获取货品和附加属性
      * @param int[] $properties
      * @param int $goods
-     * @return array{product_properties: array, properties: array, properties_price: float, properties_label: string, product: ProductModel|null}
+     * @return array{product_properties: array, properties: array, properties_price: float, properties_label: string, total_properties_price: float, product: ProductModel|null}
+     *     properties_price 未排除货品属性之后的价格
+     *     total_properties_price 全部选中属性的价格
      */
     public static function getProductAndPriceWithProperties(array $properties, int $goods): array
     {
-        static $cache = [];
-        $key = md5(Json::encode($properties) .$goods);
-        if (isset($cache[$key])) {
-            return $cache[$key];
-        }
-        list($product_properties, $properties, $properties_price, $properties_label) = self::splitProperties($properties);
-        $product = empty($product_properties) ? null :
-            self::getProduct($product_properties, $goods);
-        return $cache[$key] = compact('product_properties', 'properties', 'properties_price', 'product', 'properties_label');
+        return CartRepository::cache()->getOrSet(implode(',', $properties), $goods,
+            function () use ($properties, $goods) {
+                list($product_properties, $properties, $properties_price, $properties_label, $total_properties_price) = self::splitProperties($properties);
+                $product = empty($product_properties) ? null :
+                    self::getProduct($product_properties, $goods);
+                return compact('product_properties', 'properties', 'properties_price', 'product', 'properties_label', 'total_properties_price');
+        });
     }
 
     /**
@@ -69,15 +68,15 @@ final class AttributeRepository {
     /**
      * 分离商品规格和附加属性
      * @param int[] $properties
-     * @return array [product: [], properties: [], properties_price: 0, properties_label: '']
+     * @return array [product: [], properties: [], properties_price: 0, properties_label: '', total_properties_price]
      */
     public static function splitProperties(array $properties) {
         if (empty($properties)) {
-            return [[], [], 0, ''];
+            return [[], [], 0, '', 0];
         }
         $items = GoodsAttributeEntity::whereIn('id', $properties)->get('attribute_id', 'id', 'price', 'value');
         if (empty($data)) {
-            return [[], [], 0, ''];
+            return [[], [], 0, '', 0];
         }
 
         $attrId = [];
@@ -96,11 +95,13 @@ final class AttributeRepository {
             $data[$item['attribute_id']]['label'][] = $item['value'];
         }
         $properties_price = 0;
+        $total_properties_price = 0;
         $properties_label = [];
         $attr_list = AttributeEntity::whereIn('id', $attrId)->get('id', 'type', 'name');
         $properties = $product_properties = [];
         foreach ($attr_list as $item) {
             $group = $data[$item['id']];
+            $total_properties_price += $group['price'];
             $properties_label[] = sprintf('[%s]:%s', $item['name'], implode(',', $group['label']));
             if ($item->type == 2) {
                 $properties = array_merge($properties, $group['items']);
@@ -109,7 +110,7 @@ final class AttributeRepository {
             }
             $product_properties = array_merge($product_properties, $group['items']);
         }
-        return [$product_properties, $properties, $properties_price, implode(';', $properties_label)];
+        return [$product_properties, $properties, $properties_price, implode(';', $properties_label), $total_properties_price];
     }
 
     public static function getProperties(int $group, int $goods): array {

@@ -50,9 +50,9 @@ class VisualPage implements IVisualEngine {
         protected SitePageModel $page,
         protected bool $editable = false) {
         VisualFactory::unlock();
-        VisualFactory::set(SiteModel::class, $this->site->id, $this->site);
-        VisualFactory::set(SitePageModel::class, $this->page->id, $this->page);
-        $this->themePage = VisualFactory::getOrSet(SiteComponentModel::class,
+        VisualFactory::cache()->set(SiteModel::class, $this->site->id, $this->site);
+        VisualFactory::cache()->set(SitePageModel::class, $this->page->id, $this->page);
+        $this->themePage = VisualFactory::cache()->getOrSet(SiteComponentModel::class,
             $this->page->component_id, function () {
             return SiteComponentModel::where('component_id', $this->page->component_id)
                 ->where('site_id', $this->page->site_id)
@@ -156,10 +156,10 @@ class VisualPage implements IVisualEngine {
         $this->weights = array_merge($this->weights, $weight);
         $renderer = $this->renderer();
         foreach ($weight as $item) {
-            $siteWeight = VisualFactory::getOrSet(SiteWeightModel::class, $item['weight_id'], function () use ($item) {
+            $siteWeight = VisualFactory::cache()->getOrSet(SiteWeightModel::class, $item['weight_id'], function () use ($item) {
                 return SiteWeightModel::find($item['weight_id']);
             });
-            $themeWeight = VisualFactory::getOrSet(SiteComponentModel::class,
+            $themeWeight = VisualFactory::cache()->getOrSet(SiteComponentModel::class,
                 $siteWeight['component_id'], function () use ($siteWeight) {
                 return SiteComponentModel::where('component_id', $siteWeight['component_id'])
                     ->where('site_id', $siteWeight['site_id'])->first();
@@ -241,8 +241,8 @@ class VisualPage implements IVisualEngine {
             return;
         }
         $siteId = $items[0]['site_id'];
-        VisualFactory::setAny(SitePageWeightModel::class, $items);
-        $weightItems = VisualFactory::getAutoSet(
+        VisualFactory::cache()->setAny(SitePageWeightModel::class, $items);
+        $weightItems = VisualFactory::cache()->getAutoSet(
             Relation::columns($items, 'weight_id'),
             SiteWeightModel::class,
             function (array $idItems) use ($siteId) {
@@ -251,7 +251,7 @@ class VisualPage implements IVisualEngine {
                     ->get();
             }
         );
-        VisualFactory::getAutoSet(
+        VisualFactory::cache()->getAutoSet(
             Relation::columns($weightItems, 'component_id'),
             SiteComponentModel::class,
             function (array $idItems) use ($siteId) {
@@ -261,7 +261,7 @@ class VisualPage implements IVisualEngine {
                     ->get();
             }
         );
-        VisualFactory::getAutoSet(
+        VisualFactory::cache()->getAutoSet(
             Relation::columns($weightItems, 'style_id'),
             ThemeStyleModel::class,
             function (array $idItems) {

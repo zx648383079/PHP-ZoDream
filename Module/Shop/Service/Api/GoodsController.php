@@ -4,6 +4,7 @@ namespace Module\Shop\Service\Api;
 
 use Domain\Model\ModelHelper;
 use Module\ModuleController;
+use Module\Shop\Domain\Repositories\AttributeRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Module\Shop\Domain\Repositories\IssueRepository;
 use Module\Shop\Domain\Repositories\SearchRepository;
@@ -52,6 +53,17 @@ class GoodsController extends Controller {
         try {
             return $this->render(
                 GoodsRepository::stock($id, $region)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function priceAction(int $id, $properties = null, int $amount = 1, int $region = 0) {
+        try {
+            $properties = AttributeRepository::formatPostProperties($properties);
+            return $this->render(
+                GoodsRepository::price($id, $properties, $amount, $region)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

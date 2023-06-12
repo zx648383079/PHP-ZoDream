@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
 use Module\Shop\Domain\Plugin\BasePayment;
+use Module\Shop\Domain\Plugin\IPaymentPlugin;
 
-class Zo extends BasePayment {
+class Zo extends BasePayment implements IPaymentPlugin {
     public function getName(): string {
         return 'Zo支付';
     }

@@ -28,11 +28,13 @@ class OrderController extends Controller {
     }
 
     public function infoAction(int $id) {
-        $order = Order::findWithAuth($id);
-        $address = OrderAddressModel::where('order_id', $id)->one();
-        $data = $order->toArray();
-        $data['address'] = $address;
-        return $this->render($data);
+        try {
+            return $this->render(
+                OrderRepository::selfGet($id)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function countAction() {

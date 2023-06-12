@@ -49,6 +49,14 @@ class Store {
     }
 
     /**
+     * 判断当前状态是否影响库存
+     * @return bool
+     */
+    public function isImpactInventory(): bool {
+        return $this->stockTime > 0 && $this->orderStatus === $this->stockTime;
+    }
+
+    /**
      * 冻结库存
      * @param ICartItem[] $goods_list
      * @return bool
@@ -75,7 +83,7 @@ class Store {
      * @return bool
      */
     public function frozenItem(int $goods_id, int $product_id, int $amount): bool {
-        if ($amount < 1 || $this->stockTime < 1 || $this->orderStatus !== $this->stockTime) {
+        if ($amount < 1 || !$this->isImpactInventory()) {
             return true;
         }
         $store = $this->get($goods_id, $product_id);
@@ -83,7 +91,7 @@ class Store {
             return false;
         }
         $this->update($goods_id, $product_id, -$amount);
-        $this->data[$goods_id][$product_id] = $amount;
+        $this->pushStock($goods_id, $product_id, $amount);
         return true;
     }
 
@@ -155,9 +163,31 @@ class Store {
         foreach ($this->data as $goods_id => $items) {
             foreach ($items as $product_id => $amount) {
                 $this->update($goods_id, $product_id, $amount);
+                $this->data[$goods_id][$product_id] = 0;
             }
         }
         $this->data = [];
         return true;
+    }
+
+    /**
+     * 手动设置冻结的库存
+     * @param int $goods_id
+     * @param int $product_id
+     * @param int $amount
+     * @return void
+     */
+    public function pushStock(int $goods_id, int $product_id, int $amount) {
+        if (!$this->data[$goods_id]) {
+            $this->data[$goods_id] = [
+                $product_id => $amount
+            ];
+            return;
+        }
+        if (isset($this->data[$goods_id][$product_id])) {
+            $this->data[$goods_id][$product_id] += $amount;
+            return;
+        }
+        $this->data[$goods_id][$product_id] = $amount;
     }
 }

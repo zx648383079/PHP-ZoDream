@@ -5,6 +5,7 @@ namespace Module\Shop\Domain\Cart;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Repositories\AttributeRepository;
+use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Traversable;
 use Zodream\Helpers\Json;
@@ -35,15 +36,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
     }
 
     protected function createItem(int $goodsId, array|string $properties, int $amount): ICartItem {
-        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goodsId);
-        return new CartItem([
-            'goods_id' => $goodsId,
-            'product_id' => !empty($box['product']) ? $box['product']['id'] : 0,
-            'amount' => $amount,
-            'price' => GoodsRepository::finalPrice($goodsId, $amount, $properties),
-            'attribute_id' => is_array($properties) ? implode(',', $properties) : $properties,
-            'attribute_value' => $box['properties_label'],
-        ]);
+        return CartRepository::formatCartItem($goodsId, $properties, $amount);
     }
 
     /**
@@ -52,9 +45,14 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      */
     public function setItems(array $items) {
         $this->items = [];
+        $goodsId = [];
         foreach ($items as $item) {
+            $goodsId[] = $item->goodsId();
             $this->add($item);
         }
+        CartRepository::cache()->getAutoSet($goodsId, 'goods', function (array $goodsId) {
+            return GoodsSimpleModel::query()->whereIn('id', $goodsId)->get();
+        });
         return $this;
     }
 
@@ -260,12 +258,13 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
         foreach ($this->items as $item) {
             $goodsId[] = $item->goodsId();
         }
-        $items = GoodsSimpleModel::query()->whereIn('id', $goodsId)->get();
+        $items = CartRepository::cache()->getAutoSet($goodsId, 'goods', function (array $goodsId) {
+            return GoodsSimpleModel::query()->whereIn('id', $goodsId)->get();
+        });
         $goodsItems = [];
         foreach ($items as $item) {
             $goodsItems[$item['id']] = $item;
         }
-
         $items = [];
         foreach ($this->items as $item) {
             $groupIndex = $item->getGroupName();

@@ -5,7 +5,6 @@ namespace Module\Shop\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Entities\GoodsEntity;
-use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\GoodsDialogModel;
 use Module\Shop\Domain\Models\GoodsMetaModel;
 use Module\Shop\Domain\Models\GoodsModel;
@@ -22,8 +21,8 @@ class GoodsRepository {
                                   int $brand = 0,
                                   string $keywords = '',
                                   int $per_page = 20, $sort = null, $order = null, string $price = ''): Page {
-        return GoodsSimpleModel::sortBy($sort, $order)
-            ->when(!empty($id), function ($query) use ($id) {
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['id', 'name', 'price'], 'desc');
+        return GoodsSimpleModel::when(!empty($id), function ($query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
             })
             ->when(!empty($keywords), function ($query) {
@@ -34,7 +33,7 @@ class GoodsRepository {
                 $query->where('brand_id', $brand);
             })->when(!empty($price), function ($query) use ($price) {
                 SearchRepository::filterPrice($query, $price);
-            })->page($per_page);
+            })->orderBy($sort, $order)->page($per_page);
     }
 
     /**
@@ -83,6 +82,25 @@ class GoodsRepository {
         // 判断库存
         // 判断快递是否支持
         return $goods->toArray();
+    }
+
+    /**
+     * 查询价格和库存
+     * @param int $id
+     * @param array $properties
+     * @param int $amount
+     * @param int $region
+     * @return array
+     */
+    public static function price(int $id, array $properties = [], int $amount = 1, int $region = 0): array {
+        $goods = GoodsModel::where('id', $id)->first('id', 'price', 'stock');
+        $price = GoodsRepository::finalPrice($goods, $amount, $properties);
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $id);
+        return [
+            'price' => $price,
+            'total' => $price * $amount,
+            'stock' => !empty($box['product']) ? $box['product']->stock : $goods->stock
+        ];
     }
 
     public static function formatProperties(GoodsModel $goods) {
@@ -159,8 +177,7 @@ class GoodsRepository {
      */
     public static function finalPrice(GoodsModel|int $goods, int $amount = 1, array $properties = []) {
         if (is_numeric($goods)) {
-            $goods = GoodsModel::query()->where('id', $goods)
-                ->first('id', 'price', 'stock');
+            $goods = CartRepository::getGoods(intval($goods));
         }
         if (empty($properties)) {
             return $goods->price;

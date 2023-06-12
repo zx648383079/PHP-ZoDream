@@ -11,37 +11,33 @@ class Scheduler {
      *
      * @var array
      */
-    private $jobs = [];
+    private array $jobs = [];
     /**
      * Successfully executed jobs.
      *
      * @var array
      */
-    private $executedJobs = [];
+    private array $executedJobs = [];
     /**
      * Failed jobs.
      *
      * @var array
      */
-    private $failedJobs = [];
+    private array $failedJobs = [];
     /**
      * The verbose output of the scheduled jobs.
      *
      * @var array
      */
-    private $outputSchedule = [];
-    /**
-     * @var array
-     */
-    private $config;
+    private array $outputSchedule = [];
     /**
      * Create new instance.
      *
      * @param  array  $config
      */
-    public function __construct(array $config = [])
+    public function __construct(
+        private readonly array $config = [])
     {
-        $this->config = $config;
     }
     /**
      * Queue a job for execution in the correct queue.
@@ -49,8 +45,7 @@ class Scheduler {
      * @param  Job  $job
      * @return void
      */
-    private function queueJob(Job $job)
-    {
+    private function queueJob(Job $job): void {
         $this->jobs[] = $job;
     }
     /**
@@ -58,8 +53,7 @@ class Scheduler {
      *
      * @return array
      */
-    private function prioritiseJobs()
-    {
+    private function prioritiseJobs(): array {
         $background = [];
         $foreground = [];
         foreach ($this->jobs as $job) {
@@ -76,7 +70,7 @@ class Scheduler {
      *
      * @return Job[]
      */
-    public function getQueuedJobs()
+    public function getQueuedJobs(): array
     {
         return $this->prioritiseJobs();
     }
@@ -88,7 +82,7 @@ class Scheduler {
      * @param  string  $id   Optional custom identifier
      * @return Job
      */
-    public function call(callable $fn, $args = [], $id = null)
+    public function call(callable $fn, array $args = [], string $id = '')
     {
         $job = new Job($fn, $args, $id);
         $this->queueJob($job->configure($this->config));
@@ -103,11 +97,8 @@ class Scheduler {
      * @param  string  $id      Optional custom identifier
      * @return Job
      */
-    public function php($script, $bin = null, $args = [], $id = null) {
-        if (! is_string($script)) {
-            throw new InvalidArgumentException('The script should be a valid path to a file.');
-        }
-        $bin = $bin !== null && is_string($bin) && file_exists($bin) ?
+    public function php(string $script, string $bin = '', array $args = [], string $id = '') {
+        $bin = !empty($bin) && file_exists($bin) ?
             $bin : (PHP_BINARY === '' ? '/usr/bin/php' : PHP_BINARY);
         $job = new Job($bin . ' ' . $script, $args, $id);
         if (! file_exists($script)) {
@@ -122,13 +113,13 @@ class Scheduler {
 
     /**
      * 执行php 语句
-     * @param $script
-     * @param null $bin
+     * @param string $script
+     * @param string $bin
      * @param array $args
-     * @param null $id
+     * @param string $id
      * @return Job
      */
-    public function phpRaw($script, $bin = null, $args = [], $id = null) {
+    public function phpRaw(string $script, string $bin = '', array $args = [], string $id = '') {
         return $this->php(sprintf('-r %s', escapeshellarg($script)), $bin, $args, $id);
     }
     /**
@@ -139,18 +130,19 @@ class Scheduler {
      * @param  string  $id       Optional custom identifier
      * @return Job
      */
-    public function raw($command, $args = [], $id = null) {
+    public function raw(string $command, array $args = [], string $id = '') {
         $job = new Job($command, $args, $id);
         $this->queueJob($job->configure($this->config));
         return $job;
     }
+
     /**
      * Run the scheduler.
      *
-     * @param  DateTime  $runTime  Optional, run at specific moment
+     * @param DateTime|null $runTime Optional, run at specific moment
      * @return array  Executed jobs
      */
-    public function run(Datetime $runTime = null) {
+    public function run(?Datetime $runTime = null) {
         $jobs = $this->getQueuedJobs();
         if (is_null($runTime)) {
             $runTime = new DateTime('now');
@@ -185,7 +177,7 @@ class Scheduler {
      * @param  string  $string
      * @return void
      */
-    private function addSchedulerVerboseOutput($string) {
+    private function addSchedulerVerboseOutput(string $string) {
         $now = '[' . (new DateTime('now'))->format('c') . '] ';
         $this->outputSchedule[] = $now . $string;
         // Print to stdoutput in light gray
@@ -238,7 +230,7 @@ class Scheduler {
      *
      * @return array
      */
-    public function getFailedJobs() {
+    public function getFailedJobs(): array {
         return $this->failedJobs;
     }
     /**
@@ -247,17 +239,13 @@ class Scheduler {
      * @param  string  $type  Allowed: text, html, array
      * @return mixed  The return depends on the requested $type
      */
-    public function getVerboseOutput($type = 'text') {
-        switch ($type) {
-            case 'text':
-                return implode("\n", $this->outputSchedule);
-            case 'html':
-                return implode('<br>', $this->outputSchedule);
-            case 'array':
-                return $this->outputSchedule;
-            default:
-                throw new InvalidArgumentException('Invalid output type');
-        }
+    public function getVerboseOutput(string $type = 'text'): string {
+        return match ($type) {
+            'text' => implode("\n", $this->outputSchedule),
+            'html' => implode('<br>', $this->outputSchedule),
+            'array' => $this->outputSchedule,
+            default => throw new InvalidArgumentException('Invalid output type'),
+        };
     }
     /**
      * Remove all queued Jobs.

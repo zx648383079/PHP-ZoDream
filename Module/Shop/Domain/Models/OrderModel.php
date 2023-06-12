@@ -9,6 +9,7 @@ namespace Module\Shop\Domain\Models;
  */
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
 use Zodream\Helpers\Time;
@@ -250,14 +251,14 @@ class OrderModel extends Model {
     }
 
     /**
-     * @param CartModel[] $goods_list
+     * @param ICartItem[] $goods_list
      * @return OrderModel
      */
     public static function preview(array $goods_list) {
         $model = new static;
         $total = 0;
         foreach ($goods_list as $item) {
-            $total += $item->getTotalAttribute();
+            $total += $item->total();
         }
         $model->goods_amount = $total;
         $model->setRelation('goods', $goods_list);

@@ -2,25 +2,52 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Providers\MemoryCacheProvider;
 use Module\Shop\Domain\Cart\Cart;
+use Module\Shop\Domain\Cart\CartItem;
 use Module\Shop\Domain\Cart\DatabaseCart;
+use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Entities\GoodsEntity;
 use Module\Shop\Domain\Entities\ProductEntity;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsDialogModel;
 use Module\Shop\Domain\Models\GoodsModel;
-use Module\Shop\Module;
 use Exception;
+use Module\Shop\Domain\Models\GoodsSimpleModel;
 
 final class CartRepository {
 
     private static mixed $instance = null;
+    public static function cache(): MemoryCacheProvider {
+        return MemoryCacheProvider::getInstance();
+    }
 
     public static function load(): Cart {
         if (empty(self::$instance)) {
             self::$instance = new DatabaseCart();
         }
         return self::$instance;
+    }
+
+    public static function getGoods(int $goodId): GoodsSimpleModel|null {
+        return self::cache()->getOrSet('goods', $goodId, function () use ($goodId) {
+            return GoodsSimpleModel::query()->where('id', $goodId)->first();
+        });
+    }
+
+    public static function formatCartItem(int $goodsId, array|string $properties, int $amount): ICartItem {
+        if (!is_array($properties)) {
+            $properties = AttributeRepository::formatPostProperties($properties);
+        }
+        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goodsId);
+        return new CartItem([
+            'goods_id' => $goodsId,
+            'product_id' => !empty($box['product']) ? $box['product']['id'] : 0,
+            'amount' => $amount,
+            'price' => GoodsRepository::finalPrice($goodsId, $amount, $properties),
+            'attribute_id' => implode(',', $properties),
+            'attribute_value' => $box['properties_label'],
+        ]);
     }
 
     /**

@@ -2,8 +2,11 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
+use Domain\Model\Model;
 use Infrastructure\LinkRule;
+use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Module\SEO\Domain\Option;
 use Module\Shop\Domain\Models\OrderActivityModel;
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderCouponModel;
@@ -16,6 +19,10 @@ use Zodream\Html\Page;
 use Exception;
 
 final class OrderRepository {
+
+    public static function orderExpireTime(): int {
+        return intval(Option::value('shop_order_expire', 3600));
+    }
 
     /**
      * @param int|int[] $status
@@ -39,13 +46,34 @@ final class OrderRepository {
             ->page();
     }
 
+    public static function selfGet(int $id) {
+        $order = Order::findWithAuth($id);
+        if (empty($order)) {
+            throw new Exception('订单不存在');
+        }
+        $address = OrderAddressModel::where('order_id', $id)->first();
+        $data = $order->toArray();
+        $data['address'] = self::formatAddress($address);
+        if ($order->status === OrderModel::STATUS_UN_PAY) {
+            $data['expired_at'] = $order->getAttributeSource('created_at') + self::orderExpireTime();
+        }
+        return $data;
+    }
+
+    public static function formatAddress(Model|array $model): array {
+        $data = $model instanceof Model ? $model->toArray() : $model;
+        $data['name'] = Helpers::hideName($data['name']);
+        $data['tel'] = Helpers::hideTel($data['tel']);
+        return $data;
+    }
+
     /**
      * 签收
      * @param $id
      * @return OrderModel
      * @throws Exception
      */
-    public static function receive($id) {
+    public static function receive(int $id) {
         $order = OrderModel::findWithAuth($id);
         if (empty($order)) {
             throw new Exception('订单不存在');
@@ -59,7 +87,7 @@ final class OrderRepository {
         return $order;
     }
 
-    public static function cancel($id) {
+    public static function cancel(int $id) {
         $order = OrderModel::findWithAuth($id);
         if (empty($order)) {
             throw new Exception('订单不存在');
@@ -88,7 +116,7 @@ final class OrderRepository {
         return $order;
     }
 
-    public static function repurchase($id) {
+    public static function repurchase(int $id) {
         $order = OrderModel::findWithAuth($id);
         if (empty($order)) {
             throw new Exception('订单不存在');

@@ -12,7 +12,7 @@ class Module extends BaseModule implements ScheduleAble {
         return new CreateGameMakerTables();
     }
 
-    public function registerSchedule(Scheduler $scheduler) {
+    public function registerSchedule(Scheduler $scheduler): void {
         $scheduler->call(function () {
 
         })->everyMinute();

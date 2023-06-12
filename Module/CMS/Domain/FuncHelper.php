@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain;
 
+use Domain\Providers\MemoryCacheProvider;
 use Infrastructure\HtmlExpand;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
@@ -9,7 +10,6 @@ use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Module\SEO\Domain\Option;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -31,32 +31,22 @@ class FuncHelper {
 
     protected static array $index = [];
 
-    protected static array $cache = [];
-
-    protected static function getOrSet($func, $key, $callback) {
-        if (!isset(static::$cache[$func])) {
-            static::$cache[$func] = [];
-        }
-        if (isset(static::$cache[$func][$key])
-            || array_key_exists($key, static::$cache[$func])) {
-            return static::$cache[$func][$key];
-        }
-        return static::$cache[$func][$key] = is_callable($callback) ?
-            call_user_func($callback) : $callback;
+    public static function cache(): MemoryCacheProvider {
+        return MemoryCacheProvider::getInstance();
     }
 
     public static function option(string $code) {
         if (empty($code)) {
             return null;
         }
-        $options = static::getOrSet(__FUNCTION__, 'all', function () {
+        $options = static::cache()->getOrSet(__FUNCTION__, 'all', function () {
             return CMSRepository::options();
         });
         return $options[$code] ?? null;
     }
 
     public static function channels(array $params = null) {
-        $data = static::getOrSet(__FUNCTION__, 'all',
+        $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
                 $data = CategoryModel::query()->orderBy('position', 'asc')->all();
                 static::setChannel(...$data);
@@ -82,7 +72,7 @@ class FuncHelper {
                 return $item['parent_id'] == $params['parent'];
             });
         } elseif (isset($params['tree'])) {
-            $data = static::getOrSet(__FUNCTION__,
+            $data = static::cache()->getOrSet(__FUNCTION__,
                 sprintf('tree-%s', $params['group'] ?? ''),
                 function () use ($data) {
                     return (new Tree($data))->makeIdTree();
@@ -113,12 +103,12 @@ class FuncHelper {
      * @return ModelModel
      */
     public static function model(string|int $model) {
-        static::getOrSet(__FUNCTION__, 'all', function () use ($model) {
+        static::cache()->getOrSet(__FUNCTION__, 'all', function () use ($model) {
             $data = ModelModel::query()->all();
             static::setModel(...$data);
             return $data;
         });
-        $item = static::getOrSet(__FUNCTION__, $model, function () use ($model) {
+        $item = static::cache()->getOrSet(__FUNCTION__, $model, function () use ($model) {
             if (is_numeric($model)) {
                 return ModelModel::find($model);
             }
@@ -128,19 +118,15 @@ class FuncHelper {
             return $item;
         }
         if (is_numeric($model)) {
-            return static::getOrSet(__FUNCTION__, $item->table, $item);
+            return static::cache()->getOrSet(__FUNCTION__, $item->table, $item);
         }
-        return static::getOrSet(__FUNCTION__, $item->id, $item);
+        return static::cache()->getOrSet(__FUNCTION__, $item->id, $item);
     }
 
     protected static function setModel(...$data) {
         foreach ($data as $item) {
-            if (!isset(static::$cache['model'][$item['id']])) {
-                static::$cache['model'][$item['id']] = $item;
-            }
-            if (!isset(static::$cache['model'][$item['table']])) {
-                static::$cache['model'][$item['table']] = $item;
-            }
+            static::cache()->trySet('model', $item['id'], $item);
+            static::cache()->trySet('model', $item['table'], $item);
         }
     }
 
@@ -150,7 +136,7 @@ class FuncHelper {
      */
     public static function contents(array $params = null) {
         $data = self::getContentsQuery($params);
-        return static::getOrSet(__FUNCTION__,
+        return static::cache()->getOrSet(__FUNCTION__,
             md5(Json::encode($data)),
             function () use ($data) {
             if (isset($data[1]['model_id'])) {
@@ -224,7 +210,7 @@ class FuncHelper {
     }
 
     public static function locationPath(): array {
-        $path = static::getOrSet(__FUNCTION__, __FUNCTION__, function () {
+        $path = static::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
             $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
             $path[] = static::$current['channel'];
             return $path;
@@ -246,7 +232,7 @@ class FuncHelper {
     }
 
     public static function previous($name = null) {
-        $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
+        $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->query()->where('id', '<', static::$current['content'])
@@ -256,7 +242,7 @@ class FuncHelper {
     }
 
     public static function next($name = null) {
-        $data = static::getOrSet(__FUNCTION__, static::$current['content'], function () {
+        $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $scene = CMSRepository::scene()->setModel($cat->model);
             return $scene->query()->where('id', '>', static::$current['content'])
@@ -277,11 +263,11 @@ class FuncHelper {
 
     protected static function setChannel(...$data) {
         foreach ($data as $item) {
-            if (isset(static::$cache['channel'][$item['id']])) {
+            if (static::cache()->has('channel', $item['id'])) {
                 return;
             }
             $item['model'] = self::model($item['model_id']);
-            static::$cache['channel'][$item['id']] = $item;
+            static::cache()->set('channel', $item['id'], $item);
         }
     }
 
@@ -291,7 +277,7 @@ class FuncHelper {
      * @return mixed
      */
     public static function fieldList(string|int $model_id) {
-        return static::getOrSet(__FUNCTION__,
+        return static::cache()->getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
                 return ModelFieldModel::query()->where('model_id', $model_id)->get();
@@ -316,7 +302,7 @@ class FuncHelper {
 
     public static function field(array $params) {
         $category = self::getCategoryId($params);
-        $field = static::getOrSet(__FUNCTION__,
+        $field = static::cache()->getOrSet(__FUNCTION__,
             sprintf('%s-%s', $category, $params['field']),
             function () use ($category, $params) {
                 $cat = static::channel($category, true);
@@ -336,7 +322,7 @@ class FuncHelper {
     }
 
     public static function searchField(string|int $category) {
-        return static::getOrSet(__FUNCTION__, $category,function () use ($category) {
+        return static::cache()->getOrSet(__FUNCTION__, $category,function () use ($category) {
             $fields = ['id', 'cat_id', 'model_id', 'view_count',
                 'title', 'keywords', 'description', 'thumb',
                 'updated_at', 'created_at', 'parent_id'];
@@ -380,7 +366,7 @@ class FuncHelper {
         if ($name === 'url') {
             return url('./category', ['id' => $id]);
         }
-        $data = static::getOrSet(__FUNCTION__, $id, function () use ($id) {
+        $data = static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
         });
         $data['model'] = self::model($data->model_id);
@@ -414,7 +400,7 @@ class FuncHelper {
         if ($id < 1 || $category < 1) {
             return null;
         }
-        $data = static::getOrSet(__FUNCTION__, sprintf('%s:%s', $category, $id),
+        $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s', $category, $id),
             function () use ($id, $category) {
                 $cat = static::channel($category, true);
                 $scene = CMSRepository::scene()->setModel($cat->model);
@@ -437,7 +423,7 @@ class FuncHelper {
         if ($model->setting('is_only') && $user < 1) {
             $user = auth()->id();
         }
-        $data = static::getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category, $model->id, $user),
+        $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category, $model->id, $user),
             function () use ($model, $category, $user) {
                 $scene = CMSRepository::scene()->setModel($model);
                 return $scene->find(
@@ -532,7 +518,7 @@ class FuncHelper {
         if (empty($id)) {
             return '';
         }
-        return static::getOrSet(__FUNCTION__, $id, function () use ($id) {
+        return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
             return LinkageDataModel::where('id', $id)->value('full_name');
         });
     }
@@ -676,7 +662,7 @@ class FuncHelper {
 
     public static function comments(array $params = []) {
         $data = self::getCommentQuery($params);
-        return static::getOrSet(__FUNCTION__,
+        return static::cache()->getOrSet(__FUNCTION__,
             md5(Json::encode($data)),
             function () use ($data) {
                 if (!isset($data[1]['model_id'])) {

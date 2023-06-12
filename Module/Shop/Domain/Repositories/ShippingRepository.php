@@ -1,8 +1,8 @@
 <?php
 namespace Module\Shop\Domain\Repositories;
 
+use Module\Shop\Domain\Cart\ICartItem;
 use Module\Shop\Domain\Entities\AddressEntity;
-use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\ShippingGroupModel;
 use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Models\ShippingRegionModel;
@@ -76,7 +76,7 @@ class ShippingRepository {
      * 计算配送费
      * @param ShippingModel $shipping
      * @param array $settings
-     * @param CartModel[] $goods_list
+     * @param ICartItem[] $goods_list
      * @return float
      */
     public static function getFee(ShippingModel $shipping, array $settings, array $goods_list) {
@@ -85,7 +85,7 @@ class ShippingRepository {
         $weight = 0;
         foreach ($goods_list as $item) {
             $amount += $item->amount;
-            $price += $item->getTotalAttribute();
+            $price += $item->total();
             $weight += $item->goods->weight * $item->amount;
         }
         $instance = Manager::shipping($shipping->code);

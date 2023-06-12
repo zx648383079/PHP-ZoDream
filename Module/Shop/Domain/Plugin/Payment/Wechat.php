@@ -1,13 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\OpenPlatform\Domain\Platform;
 use Module\Shop\Domain\Plugin\BasePayment;
+use Module\Shop\Domain\Plugin\IPaymentPlugin;
 use Zodream\Helpers\Str;
 use Zodream\ThirdParty\Pay\WeChat as Payer;
 
-class Wechat extends BasePayment {
+class Wechat extends BasePayment implements IPaymentPlugin {
 
     public function getName(): string {
         return '微信支付';

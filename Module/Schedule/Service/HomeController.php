@@ -3,26 +3,26 @@ namespace Module\Schedule\Service;
 
 use Module\Schedule\Domain\Scheduler;
 use Module\Schedule\Domain\ScheduleAble;
+use Zodream\Infrastructure\Contracts\HttpContext as HttpContextInterface;
 use Zodream\Infrastructure\Queue\QueueManager;
 use Zodream\Infrastructure\Queue\Worker;
 use Zodream\Infrastructure\Queue\WorkerOptions;
 use Zodream\Route\ModuleRoute;
-use Zodream\Route\Router;
 
 class HomeController extends Controller {
-    public function indexAction($name = 'schedule') {
+    public function indexAction(string $name = 'schedule') {
         QueueManager::logFailedJob();
         $scheduler = new Scheduler(config('schedule', []));
         $scheduler->call(function () {
             (new Worker())
-                ->runNextJob(null, null, new WorkerOptions());
+                ->runNextJob('', '', new WorkerOptions());
         })->everyMinute();
         $this->registerSchedule($scheduler, $name);
         $scheduler->run();
         return $this->showContent('complete!');
     }
 
-    protected function registerSchedule(Scheduler $scheduler, $name = 'schedule') {
+    protected function registerSchedule(Scheduler $scheduler, string $name = 'schedule') {
         $data = config($name);
         foreach ($data as $item) {
             if (is_callable($item)) {
@@ -38,9 +38,9 @@ class HomeController extends Controller {
             }
             $instance->registerSchedule($scheduler);
         }
-        $modules = config('modules');
+        $modules = config('route.modules', []);
         foreach ($modules as $module) {
-            $instance = ModuleRoute::moduleInstance($module);
+            $instance = ModuleRoute::moduleInstance($module, app(HttpContextInterface::class));
             if (!$instance instanceof ScheduleAble) {
                 continue;
             }

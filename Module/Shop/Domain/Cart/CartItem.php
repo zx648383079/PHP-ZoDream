@@ -62,15 +62,23 @@ class CartItem implements ICartItem {
         return $this->data['product_id'];
     }
 
-    public function properties(): string {
+    public function activityId(): int|string|null {
+        return intval($this->data['selected_activity']);
+    }
+
+    public function properties(): array {
         if (is_array($this->data['attribute_id'])) {
-            return implode(',', $this->data['attribute_id']);
+            return $this->data['attribute_id'];
         }
-        return (string)$this->data['attribute_id'];
+        return empty($this->data['attribute_id']) ? [] : explode(',', $this->data['attribute_id']);
     }
 
     public function total(): int|float {
-        return $this->data['price'] * $this->amount();
+        return $this->price() * $this->amount();
+    }
+
+    public function price(): int|float {
+        return floatval($this->data['price']);
     }
 
     public function amount(): int {
@@ -86,4 +94,12 @@ class CartItem implements ICartItem {
         $this->isUpdated = true;
         return $this;
     }
+
+    public function updatePrice(float $price, int $activity = 0) {
+        $this->data['price'] = $price;
+        $this->data['selected_activity'] = $activity;
+        $this->isUpdated = true;
+        return $this;
+    }
+
 }

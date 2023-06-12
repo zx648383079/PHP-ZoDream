@@ -206,7 +206,7 @@ final class PageRepository {
             'parent_id', 'parent_index', 'position'];
         $maps = ['style_id', 'title', 'content', 'is_share', 'settings'];
         $data = (new VisualWeight($pageModel))->parseForm();
-        $model = VisualFactory::getOrSet(SiteWeightModel::class,
+        $model = VisualFactory::cache()->getOrSet(SiteWeightModel::class,
             $pageModel->weight_id, function () use ($pageModel) {
                 return SiteWeightModel::where('id', $pageModel->weight_id);
             });

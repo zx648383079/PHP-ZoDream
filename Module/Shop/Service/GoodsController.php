@@ -10,7 +10,7 @@ use Module\Shop\Domain\Repositories\CommentRepository;
 
 class GoodsController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction(int $id) {
         if (request()->isMobile()) {
             return $this->redirect(['./mobile/goods', 'id' => $id]);
         }
@@ -22,17 +22,17 @@ class GoodsController extends Controller {
         return $this->sendWithShare()->show(compact('goods', 'gallery_list'));
     }
 
-    public function recommendAction($id) {
+    public function recommendAction(int $id) {
         $goods_list = GoodsSimpleModel::limit(7)->all();
         return $this->renderData(compact('goods_list'));
     }
 
-    public function hotAction($id) {
+    public function hotAction(int $id) {
         $goods_list = GoodsSimpleModel::limit(7)->all();
         return $this->renderData(compact('goods_list'));
     }
 
-    public function commentAction($id, $page = -1) {
+    public function commentAction(int $id, $page = -1) {
         $this->layout = false;
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();

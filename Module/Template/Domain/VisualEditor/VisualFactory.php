@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
+use Domain\Providers\MemoryCacheProvider;
 use Module\Template\Domain\Model\SiteModel;
 use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\Repositories\PageRepository;
@@ -14,71 +15,9 @@ use Zodream\Template\ViewFactory;
 
 class VisualFactory {
     protected static array $lockData = [];
-    protected static array $cacheData = [];
 
-    /**
-     * 获取并进行数据缓存
-     * @param string $func
-     * @param string|int $key
-     * @param callable|mixed $callback
-     * @return mixed
-     */
-    public static function getOrSet(string $func, string|int $key, mixed $callback): mixed {
-        if (!isset(static::$cacheData[$func])) {
-            static::$cacheData[$func] = [];
-        }
-        if (isset(static::$cacheData[$func][$key])
-            || array_key_exists($key, static::$cacheData[$func])) {
-            return static::$cacheData[$func][$key];
-        }
-        return static::$cacheData[$func][$key] = is_callable($callback) ?
-            call_user_func($callback) : $callback;
-    }
-
-    public static function set(string $func, string|int $key, mixed $data) {
-        if (!isset(static::$cacheData[$func])) {
-            static::$cacheData[$func] = [];
-        }
-        static::$cacheData[$func][$key] = $data;
-    }
-
-    /**
-     * 缓存多个数据
-     * @param string $func
-     * @param array $items
-     * @param string $key
-     * @return void
-     */
-    public static function setAny(string $func, array $items, string $key = 'id') {
-        foreach ($items as $item) {
-            static::set($func, $item[$key], $item);
-        }
-    }
-
-    /**
-     * 批量获取根据id，没缓存的进行缓存
-     * @param array $idItems
-     * @param string $func
-     * @param callable $callback
-     * @param string $key
-     * @return array
-     */
-    public static function getAutoSet(array $idItems, string $func, callable $callback, string $key = 'id'): array {
-        $notItems = [];
-        $items = [];
-        foreach ($idItems as $id) {
-            if (isset(static::$cacheData[$func][$id])) {
-                $items[] = static::$cacheData[$func][$id];
-                continue;
-            }
-            $notItems[] = $id;
-        }
-        if (empty($notItems)) {
-            return $items;
-        }
-        $queries = call_user_func($callback, $notItems);
-        static::setAny($func, $queries, $key);
-        return array_merge($items, $queries);
+    public static function cache(): MemoryCacheProvider {
+        return MemoryCacheProvider::getInstance();
     }
 
     /**

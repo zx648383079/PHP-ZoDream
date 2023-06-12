@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Shop\Domain\Plugin\BasePayment;
+use Module\Shop\Domain\Plugin\IPaymentPlugin;
 use Module\Shop\Domain\Repositories\PaymentRepository;
 
-class Balance extends BasePayment {
+class Balance extends BasePayment implements IPaymentPlugin {
 
     public function getName(): string {
         return '余额支付';

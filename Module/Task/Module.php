@@ -22,7 +22,7 @@ class Module extends BaseModule implements ScheduleAble {
         return new CreateTaskTables();
     }
 
-    public function registerSchedule(Scheduler $scheduler) {
+    public function registerSchedule(Scheduler $scheduler): void {
         $scheduler->call(function () {
             new FinishTask();
         })->everyMinute();

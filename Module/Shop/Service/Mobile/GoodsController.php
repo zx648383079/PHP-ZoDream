@@ -22,15 +22,14 @@ class GoodsController extends Controller {
     }
 
     public function priceAction($id, $amount = 1, $properties = null) {
-        $goods = GoodsModel::where('id', $id)->first('id', 'price', 'stock');
-        $properties = AttributeRepository::formatPostProperties($properties);
-        $price = GoodsRepository::finalPrice($goods, $amount, $properties);
-        $box = AttributeRepository::getProductAndPriceWithProperties($properties, $id);
-        return $this->renderData([
-            'price' => $price,
-            'total' => $price * $amount,
-            'stock' => !empty($box['product']) ? $box['product']->stock : $goods->stock
-        ]);
+        try {
+            $properties = AttributeRepository::formatPostProperties($properties);
+            return $this->renderData(
+                GoodsRepository::price($id, $properties, $amount)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function commentAction($id) {

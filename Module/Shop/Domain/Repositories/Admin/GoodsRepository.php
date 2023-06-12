@@ -6,7 +6,6 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Shop\Domain\Entities\AttributeEntity;
 use Module\Shop\Domain\Models\AttributeModel;
-use Module\Shop\Domain\Models\AttributeUniqueModel;
 use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\CollectModel;
 use Module\Shop\Domain\Models\CommentModel;
@@ -26,6 +25,7 @@ use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 use Zodream\Validate\Validator;
+use Module\Shop\Domain\Repositories\AttributeRepository as Attribute;
 
 class GoodsRepository {
 
@@ -34,7 +34,8 @@ class GoodsRepository {
                                    int $brand = 0,
                                    string $keywords = '',
                                    int $perPage = 20, string $sort = '', string $order = '', bool $trash = false) {
-        return GoodsPageModel::sortBy($sort, $order)->with('category', 'brand')
+        list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['id', 'name', 'price', 'stock'], 'desc');
+        return GoodsPageModel::with('category', 'brand')
             ->when(!empty($id), function ($query) use ($id) {
                 $query->whereIn('id', array_map('intval', $id));
             })
@@ -46,7 +47,7 @@ class GoodsRepository {
                 $query->where('brand_id', $brand);
             })->when($trash, function ($query) {
                 $query->where('deleted_at', '>', 0);
-            })->page($perPage);
+            })->orderBy($sort, $order)->page($perPage);
     }
     public static function get(int $id) {
         return GoodsModel::findOrThrow($id, '商品不存在');
@@ -387,12 +388,10 @@ class GoodsRepository {
 
     public static function preview(int $id) {
         $goods = GoodsModel::findOrThrow($id);
-        $data = $goods->toArray();
+        $data = array_merge($goods->toArray(), Attribute::batchProperties($goods->attribute_group_id, $id));
         unset($data['cost_price']);
-        $data['properties'] = $goods->properties;
         $data['category'] = $goods->category;
         $data['brand'] = $goods->brand;
-        $data['static_properties'] = $goods->static_properties;
         $data['products'] = $goods->products;
         $data['gallery'] = $goods->gallery;
         return $data;

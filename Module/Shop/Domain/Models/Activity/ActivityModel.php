@@ -36,6 +36,7 @@ class ActivityModel extends Model {
     const TYPE_BARGAIN = 8; // 砍价
     const TYPE_LOTTERY = 9; // 抽奖
     const TYPE_FREE_TRIAL = 10; // 试用
+    const TYPE_WHOLESALE = 11; // 批发
 
     const SCOPE_ALL = 0;
     const SCOPE_GOODS = 3;

@@ -20,6 +20,5 @@ class CreateScheduleTables extends Migration {
             $table->comment('失败任务');
             DatabaseFailedJobProvider::createMigration($table);
         })->autoUp();
-
     }
 }

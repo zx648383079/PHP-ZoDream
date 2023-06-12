@@ -9,13 +9,6 @@ class GoodsEntity extends Entity {
     const STATUS_SALE = 10;
     const STATUS_OFF = 0;
 
-    const SORT_NONE = 0;
-    const SORT_PRICE = 1;
-    const SORT_NAME = 2;
-    const SORT_SALE = 3;
-    const SORT_ID = 4;
-    const SORT_HOT = 5;
-
     protected array $append = ['shop'];
 
     public static function tableName() {
@@ -107,29 +100,5 @@ class GoodsEntity extends Entity {
             return '';
         }
         return url()->asset($thumb);
-    }
-
-    /**
-     * @param $sort
-     * @param $order
-     * @return Query
-     */
-    public static function sortBy($sort, $order) {
-        if (empty($sort)) {
-            return static::query();
-        }
-        $get_order = function ($order, $def = 'desc') {
-            return is_null($order) ? $def : ($order > 0 ? 'desc' : 'asc');
-        };
-        if ($sort == self::SORT_NAME) {
-            return static::orderBy('name', $get_order($order, 'asc'));
-        }
-        if ($sort == self::SORT_PRICE) {
-            return static::orderBy('price', $get_order($order, 'asc'));
-        }
-        if ($sort == self::SORT_ID) {
-            return static::orderBy('id', $get_order($order, 'desc'));
-        }
-        return static::query();
     }
 }

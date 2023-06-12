@@ -236,6 +236,12 @@ class CreateShopTables extends Migration {
                     'value' => 0,
                     'default_value' => "不扣库存\n下单时\n支付时\n发货时"
                 ],
+                [
+                    'name' => '未支付订单过期时间/s',
+                    'code' => 'shop_order_expire',
+                    'type' => 'text',
+                    'value' => 180,
+                ],
             ];
         });
         $this->findOrNewById(AdPositionModel::query(), [

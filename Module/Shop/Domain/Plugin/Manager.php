@@ -15,9 +15,10 @@ use Exception;
  */
 class Manager {
     const NAME_MAP = [
-            'oauth' => 'Module\Shop\Domain\Plugin\OAuth\\',
-            'payment' => 'Module\Shop\Domain\Plugin\Payment\\',
-            'shipping' => 'Module\Shop\Domain\Plugin\Shipping\\'
+        'oauth' => 'Module\Shop\Domain\Plugin\OAuth\\',
+        'payment' => 'Module\Shop\Domain\Plugin\Payment\\',
+        'shipping' => 'Module\Shop\Domain\Plugin\Shipping\\',
+        'activity' => 'Module\Shop\Domain\Plugin\Activity\\',
     ];
     private static array $instances = [];
 
@@ -51,7 +52,7 @@ class Manager {
      * @param string $type
      * @return string[]
      */
-    public static function all($type = 'payment') {
+    public static function all(string $type = 'payment') {
         $type = strtolower($type);
         if (!isset(self::NAME_MAP[$type])) {
             return [];

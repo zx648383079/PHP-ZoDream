@@ -25,14 +25,18 @@ interface ICartItem {
     public function goodsId(): int|string;
 
     public function productId(): int|string;
+    public function activityId(): int|string|null;
 
-    public function properties(): string;
+    public function properties(): array;
 
     public function total(): int|float;
 
     public function amount(): int;
 
+    public function price(): int|float;
+
     public function updateAmount(int $amount);
+    public function updatePrice(float $price, int $activity = 0);
 
     public function invalid(): bool;
 }

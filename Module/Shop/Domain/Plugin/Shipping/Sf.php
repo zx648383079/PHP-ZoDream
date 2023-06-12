@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Shipping;
 
 use Module\Shop\Domain\Plugin\BaseShipping;
+use Module\Shop\Domain\Plugin\IShippingPlugin;
 
-class Sf extends BaseShipping {
+class Sf extends BaseShipping implements IShippingPlugin {
 
     public function getName(): string {
         return '顺丰速递';

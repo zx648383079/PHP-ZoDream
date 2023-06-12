@@ -54,18 +54,29 @@ trait Item  {
         return $this->product_id;
     }
 
-    public function properties(): string {
-        return $this->attribute_id;
+    public function activityId(): int|string|null {
+        return $this->selected_activity;
+    }
+
+    public function properties(): array {
+        $val = $this->attribute_id;
+        if (is_array($val)) {
+            return $val;
+        }
+        return empty($val) ? [] : explode(',', $val);
     }
 
     public function total(): int|float {
-        return $this->price * $this->amount();
+        return $this->price() * $this->amount();
     }
 
     public function amount(): int {
         return $this->amount;
     }
 
+    public function price(): int|float {
+        return $this->price;
+    }
     public function invalid(): bool {
         return !CashierRepository::store()->check($this->goodsId(), $this->productId(), $this->amount());
     }

@@ -2,7 +2,9 @@
 namespace Module\Shop\Domain\Models;
 
 use Domain\Model\Model;
-use Module\Shop\Domain\Models\Scene\Goods;
+use Module\Shop\Domain\Cart\ICartItem;
+use Module\Shop\Domain\Repositories\AttributeRepository;
+use Module\Shop\Domain\Repositories\CartRepository;
 
 
 /**
@@ -115,25 +117,29 @@ class OrderGoodsModel extends Model {
     /**
      * 从购物车中转入
      * @param OrderModel $order
-     * @param CartModel $cart
+     * @param ICartItem $cart
      * @param integer $amount
      * @return static
      * @throws \Exception
      */
-    public static function addCartGoods(OrderModel $order, CartModel $cart, $amount = 0) {
+    public static function addCartGoods(OrderModel $order, ICartItem $cart, int $amount = 0) {
         if (empty($amount)) {
-            $amount = $cart->amount;
+            $amount = $cart->amount();
         }
         $model = new static();
         $model->status = $order->status;
         $model->user_id = $order->user_id;
-        $model->goods_id = $cart->goods_id;
+        $model->goods_id = $cart->goodsId();
         $model->order_id = $order->id;
-        $model->name = $cart->goods->name;
-        $model->series_number = $cart->goods->series_number;
-        $model->thumb = $cart->goods->thumb;
-        $model->price = $cart->price;
+        $goods = CartRepository::getGoods($cart->goodsId());
+        $model->name = $goods->name;
+        $model->series_number = $goods->series_number;
+        $model->thumb = $goods->thumb;
+        $model->price = $cart->price();
         $model->amount = $amount;
+        $model->product_id = $cart->productId();
+        $box = AttributeRepository::getProductAndPriceWithProperties($cart->properties(), $cart->goodsId());
+        $model->type_remark = $box['properties_label'];
         $model->save();
         return $model;
     }

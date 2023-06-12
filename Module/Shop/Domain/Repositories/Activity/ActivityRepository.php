@@ -8,6 +8,7 @@ use Module\Shop\Domain\Models\Activity\ActivityTimeModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
 use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\GoodsModel;
+use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\CategoryRepository;
 use Zodream\Html\Page;
 
@@ -108,21 +109,25 @@ class ActivityRepository {
         });
     }
 
-    public static function canUseGoods(ActivityModel $item, GoodsModel $goods) {
-        if (!in_array($item->type, [ActivityModel::TYPE_CASH_BACK, ActivityModel::TYPE_DISCOUNT])) {
+    public static function canUseGoods(ActivityModel|array $item, GoodsModel|int $goods, bool $checkType = true) {
+        if (is_numeric($goods)) {
+            $goods = CartRepository::getGoods(intval($goods));
+        }
+        if ($checkType && !in_array(intval($item['type']), [ActivityModel::TYPE_CASH_BACK, ActivityModel::TYPE_DISCOUNT])) {
             return false;
         }
-        if ($item->scope_type == ActivityModel::SCOPE_ALL) {
+        $scopeType = intval($item['scope_type']);
+        if ($scopeType === ActivityModel::SCOPE_ALL) {
             return true;
         }
-        $range = explode(',', $item->scope);
-        if ($item->scope_type == ActivityModel::SCOPE_GOODS) {
+        $range = explode(',', $item['scope']);
+        if ($scopeType === ActivityModel::SCOPE_GOODS) {
             return in_array($goods->id, $range);
         }
-        if ($item->scope_type == ActivityModel::SCOPE_BRAND) {
+        if ($item['scope_type'] === ActivityModel::SCOPE_BRAND) {
             return in_array($goods->brand_id, $range);
         }
-        if ($item->scope_type != ActivityModel::SCOPE_CATEGORY) {
+        if ($item['scope_type'] !== ActivityModel::SCOPE_CATEGORY) {
             return true;
         }
         $args = array_intersect($range, CategoryRepository::path($goods->cat_id));
