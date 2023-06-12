@@ -35,8 +35,8 @@
     "gulp-uglify": "^3.0.2",
     "gulp-vue2mini": "^1.3.4",
     "tslint": "^6.1.3",
-    "typescript": "^5.0.4",
-    "vue": "^3.2.47"
+    "typescript": "^5.1.3",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "gulp-autoprefixer": "^8.0.0"

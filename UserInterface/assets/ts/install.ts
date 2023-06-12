@@ -1,5 +1,3 @@
-import { data } from "jquery";
-
 function bindDB() {
     $('input[name="db[database]"]').blur(function() {
         let db = $(this).val().toString().trim();
