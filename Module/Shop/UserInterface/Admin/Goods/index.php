@@ -6,7 +6,7 @@ use Zodream\Helpers\Str;
 /** @var $this View */
 $this->title = '商品列表';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label class="sr-only" for="keywords">标题</label>

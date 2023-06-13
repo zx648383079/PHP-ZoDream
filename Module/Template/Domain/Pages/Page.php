@@ -4,10 +4,13 @@ namespace Module\Template\Domain\Pages;
 
 use Module\Template\Domain\Weights\INode;
 use Module\Template\Domain\Weights\Node;
+use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Helpers\Str;
 use Exception;
+use Zodream\Template\ITheme;
 
-class Page implements IPage {
+class Page implements IPage, ITheme {
 
     protected array $nodeItems = [];
     /**
@@ -26,8 +29,18 @@ class Page implements IPage {
         $this->loadNodes();
     }
 
+    public function getRoot(): Directory
+    {
+        return app_path();
+    }
+
+    public function getFile(string $name): File
+    {
+        return $this->getRoot()->file($name);
+    }
+
     protected function loadNodes() {
-        $data = config('view.weight', []);
+        $data = config('view.weights', []);
         foreach ($data as $key => $item) {
             $this->register($key, $item);
         }
@@ -46,7 +59,7 @@ class Page implements IPage {
         return $this;
     }
 
-    public function instance($name): INode {
+    public function instance(string|int $name): INode {
         $name = $this->formatName($name);
         if (!isset($this->nodeItems[$name])) {
             return $this->notFoundNode($name);

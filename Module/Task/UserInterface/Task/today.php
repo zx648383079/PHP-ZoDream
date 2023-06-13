@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '今日任务';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./task/create_day')?>">新增任务</a>
 </div>
 

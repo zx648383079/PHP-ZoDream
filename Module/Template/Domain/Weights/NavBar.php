@@ -45,7 +45,7 @@ class NavBar extends Node implements INode {
     public function render($type = null) {
         $data = $this->page->trigger(self::KEY);
         $js = <<<JS
-$('.nav-bar .nav-bar-toggle').click(function() {
+$('.nav-bar .nav-bar-toggle').on('click', function() {
   $(this).closest('.nav-bar').toggleClass('open');
 });
 JS;

@@ -1,14 +1,5 @@
-$defaultColor: transparent;
-$bg: #9e1622;
-$hoverColor: #959f25;
-$activeColor: #638828;
-$shadow: rgba(33,33,33,.7);
-$white: #fff;
-$acolor: #f4cf98;
-$lesscolor: #c7b590;
-
 body {
-    background-color: $bg;
+    background-color: $body;
     background-image: url('../images/sd_bg.png');
     background-attachment: fixed;
     background-repeat:no-repeat;
@@ -26,7 +17,7 @@ body {
     .book-footer {
         .book-pager {
             li {
-                background-color: $bg;
+                background-color: $body;
             }
         }
     }

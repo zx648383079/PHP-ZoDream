@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '文章分类列表';
 ?>
 
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/category/create')?>">新增分类</a>
 </div>
 

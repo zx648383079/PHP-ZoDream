@@ -1,39 +1,105 @@
 // 黑白配
-// $headerBg: #333;
+// $primary: #333;
 // $headerFg: #fff;
 // $secondary: #767676;
 // $disable: #ccc;
 // $error: red;
 // $shadow: rgba(51, 51, 51, 0.7);
-// $border: $headerBg;
+// $border: $primary;
 // $bodyBg: #f4f4f4;
 // $bg: #fff;
 // $fg: #333;
 // $secondaryFg: #b3b1b1;
 
 // 原木色
-// $headerBg: #af5d0d;
+// $primary: #af5d0d;
 // $headerFg: #fff;
 // $secondary: #e29344;
 // $disable: #FF9787;
 // $error: red;
 // $shadow: rgba(51, 51, 51, 0.7);
-// $border: $headerBg;
+// $border: $primary;
 // $bodyBg: #f4f4f4;
 // $bg: #f9cfa6;
 // $fg: #333;
 // $secondaryFg: #b3b1b1;
 
 // 中国红
-$headerBg: #A10000;
-$headerFg: #fff;
-$secondary: #CC2525;
-$disable: #FF9787;
-$error: red;
-$shadow: rgba(51, 51, 51, 0.7);
-$border: $headerBg;
-$bodyBg: #f4f4f4;
-$bg: #fff;
-$fg: #333;
-$secondaryFg: #b3b1b1;
-$primary: #dff0d8;
+// $primary: #A10000;
+// $headerFg: #fff;
+// $secondary: #CC2525;
+// $disable: #FF9787;
+// $error: red;
+// $shadow: rgba(51, 51, 51, 0.7);
+// $border: $primary;
+// $bodyBg: #f4f4f4;
+// $bg: #fff;
+// $fg: #333;
+// $secondaryFg: #b3b1b1;
+// $primary: #dff0d8;
+
+$primary: #bb0b0b;
+$primaryText: #fff;
+$primarySubText: #ccc;
+
+$secondary: #13171c;
+$secondaryText: #fff;
+
+$body: #f4f4f4;
+$bodyText: #0a0a0a;
+$bodySecondaryText: #666;
+
+$bodyHeader: #fff;
+
+$third: #ebebeb;
+$thirdText: #333;
+
+$hover: #404040;
+$hoverText: white;
+
+$active: #454545;
+$activeText: white;
+
+$dialog: #000;
+$dialogText: #fff;
+
+$border: #dee2e6;
+
+$button: #bb0b0b;
+$buttonText: #fff;
+$buttonBorder: #bb0b0b;
+$buttonHoverText:  white;
+$buttonHover: #c43434;
+
+$linkText: #0a0a0a;
+$linkHoverText: #bb0b0b;
+
+$shadow: rgba(0, 0, 0, .25);
+$disable: #ababaa;
+
+$input: #fff;
+$inputTextIcon: white;
+$inputText: #333;
+$inputLabel: #929292;
+$inputBorder: #ced4da;
+$inputFocusBorder: #bb0b0b;
+$inputFocusShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
+
+$nav: rgb(48, 65, 86);
+$navText: rgb(191, 203, 217);
+$navActiveText: #1890ff;
+$navHover: #263445;
+$navPop: #04b4e0;
+$navPopText: white;
+$navSecondary: #1f2d3d;
+
+$titleText: #333;
+$titleStrongText: #bb0b0b;
+
+$copyright: #000;
+$copyrightText: #fff;
+
+$icon: #bb0b0b;
+
+$tag: #04b4e0;
+$tagText: #fff;

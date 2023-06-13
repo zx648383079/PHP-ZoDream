@@ -145,7 +145,7 @@ header,
     top: 0;
     left: 0;
     right: 0;
-    background: $headerBg;
+    background: $primary;
     color: $white;
     text-align: center;
     z-index: 99;
@@ -376,7 +376,7 @@ footer,
         line-height: 3rem;
         height: 3rem;
         position: static;
-        background: $headerBg;
+        background: $primary;
         border: none;
         a {
             color: $white;
@@ -926,7 +926,7 @@ footer,
         padding: 20px;
         text-align: center;
         font-size: 40px;
-        background: $headerBg;
+        background: $primary;
         color: $white;
         em {
             font-style: normal;
@@ -1329,7 +1329,7 @@ footer,
     position: relative;
     padding-top: 1.5625rem;
     padding-bottom: 1.875rem;
-    background: $headerBg;
+    background: $primary;
     .avatar {
         width: 5.625rem;
         height: 5.625rem;
@@ -1653,7 +1653,7 @@ footer,
     }
     .status-header {
         padding: 10px 20px 30px;
-        background-color: $headerBg;
+        background-color: $primary;
         color: $white;
         text-align: center;
         font-size: 30px;
@@ -1887,7 +1887,7 @@ footer,
 }
 
 .search-back-box {
-    background: $headerBg;
+    background: $primary;
     color: $white;
     position: relative;
     height: 44px;
@@ -2107,7 +2107,7 @@ footer,
 
 .account-header,
 .affiliate-header {
-    background-color: $headerBg;
+    background-color: $primary;
     padding: 20px;
     color: $white;
     .money {

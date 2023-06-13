@@ -6,7 +6,8 @@ use Zodream\Template\View;
 $this->title = '权限列表';
 ?>
 
-    <div class="page-search">
+<div class="panel-container">
+    <div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">权限名</label>
@@ -17,7 +18,7 @@ $this->title = '权限列表';
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/permission/create')?>">新增权限</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -33,7 +34,7 @@ $this->title = '权限列表';
                 <td><?=$item->name?></td>
                 <td><?=$item->display_name?></td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
+                    <div class="btn-group">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/permission/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/permission/delete', ['id' => $item->id])?>">删除</a>
                     </div>
@@ -42,6 +43,12 @@ $this->title = '权限列表';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($permission_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
     <div align="center">
         <?=$permission_list->getLink()?>
     </div>
+</div>

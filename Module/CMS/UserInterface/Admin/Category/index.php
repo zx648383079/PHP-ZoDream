@@ -4,11 +4,13 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
-   <div class="page-search">
+
+<div class="panel-container">
+    <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -31,11 +33,11 @@ $this->title = 'ZoDream';
                 <td><?=$item['groups']?></td>
                 <td></td>
                 <td class="text-right">
-                    <div class="btn-group  btn-group-xs">
+                    <div class="btn-group">
                         <?php if($item['type'] < 1):?>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">查看</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">查看</a>
                         <?php endif;?>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' => $item['id']])?>">删除</a>
                     </div>
                 </td>
@@ -43,3 +45,9 @@ $this->title = 'ZoDream';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if(empty($model_list)):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
+</div>

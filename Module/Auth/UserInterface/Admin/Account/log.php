@@ -6,38 +6,45 @@ use Zodream\Template\View;
 $this->title = '操作记录';
 ?>
 
-<div class="page-search">
-    <form class="form-horizontal" role="form">
-        <div class="input-group">
-            <label class="sr-only" for="keywords">IP</label>
-            <input type="text" class="form-control" name="keywords" id="keywords" placeholder="IP">
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
-    </form>
-</div>
+<div class="panel-container">
+    <div class="page-search-bar">
+        <form class="form-horizontal" role="form">
+            <div class="input-group">
+                <label class="sr-only" for="keywords">IP</label>
+                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="IP">
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+    </div>
 
-<table class="table  table-bordered well">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>操作</th>
-        <th>备注</th>
-        <th>IP</th>
-        <th>操作时间</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach($model_list as $item):?>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <td><?=$item->id?></td>
-            <td><?=$item->action?></td>
-            <td><?=$item->remark?></td>
-            <td><?=$item->ip?></td>
-            <td><?=$item->created_at?></td>
+            <th>ID</th>
+            <th>操作</th>
+            <th>备注</th>
+            <th>IP</th>
+            <th>操作时间</th>
         </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
-<div align="center">
-    <?=$model_list->getLink()?>
+        </thead>
+        <tbody>
+        <?php foreach($model_list as $item):?>
+            <tr>
+                <td><?=$item->id?></td>
+                <td><?=$item->action?></td>
+                <td><?=$item->remark?></td>
+                <td><?=$item->ip?></td>
+                <td><?=$item->created_at?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
+    <div align="center">
+        <?=$model_list->getLink()?>
+    </div>
 </div>

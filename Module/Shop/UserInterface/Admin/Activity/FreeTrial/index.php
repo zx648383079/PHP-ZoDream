@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '免费试用列表';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/free_trial/create')?>">新增免费试用</a>
 </div>
 <table class="table table-hover">

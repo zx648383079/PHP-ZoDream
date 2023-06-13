@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '标签列表';
 ?>
 
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/tag/create')?>">新增标签</a>
 </div>
 

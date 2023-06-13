@@ -5,7 +5,7 @@ use Zodream\Template\View;
 
 $this->title = '理财产品列表';
 ?>
-    <div class="page-search">
+    <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./money/add_product')?>">新增产品</a>
     </div>
     

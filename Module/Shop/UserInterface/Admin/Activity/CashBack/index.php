@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '砍价活动列表';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/cash_back/create')?>">新增返现</a>
 </div>
 <table class="table table-hover">

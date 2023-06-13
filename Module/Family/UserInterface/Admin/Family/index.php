@@ -7,7 +7,7 @@ $this->title = '族人列表';
 $canDo = auth()->user()->isAdministrator();
 ?>
 
-<div class="page-search">
+<div class="page-search-bar">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <label for="keywords">姓名</label>

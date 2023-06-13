@@ -2,9 +2,10 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = sprintf('“%s” 的表单列表', $model['name']);
 ?>
-   <div class="page-search">
+<div class="panel-container">
+<div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">标题</label>
@@ -16,7 +17,7 @@ $this->title = 'ZoDream';
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/form/create', ['model_id' => $model->id])?>">新增数据</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -41,6 +42,12 @@ $this->title = 'ZoDream';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
+</div>

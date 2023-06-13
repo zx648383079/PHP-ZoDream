@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '团购活动列表';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/group_buy/create')?>">新增团购活动</a>
 </div>
 <table class="table table-hover">

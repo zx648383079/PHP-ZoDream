@@ -1,19 +1,13 @@
 @import 'theme';
-$defaultColor: $bg;
-$hoverColor: $secondary;
-$activeColor: $headerBg;
-$shadow: $shadow;
-$white: $headerFg;
-$lesscolor: $secondaryFg;
-$acolor: $fg;
+
 @mixin active() {
-    background: $activeColor;
-    color: $white;
+    background: $active;
+    color: $activeText;
 }
 
 @mixin hover() {
-    background: $hoverColor;
-    color: $white;
+    background: $hover;
+    color: $hoverText;
 }
 
 @import './markdown';
@@ -646,7 +640,7 @@ $acolor: $fg;
             .count {
                 position: absolute;
                 color: $white;
-                background-color: $headerBg;
+                background-color: $primary;
                 border-radius: 50%;
                 display: inline-block;
                 width: 25px;
@@ -668,7 +662,7 @@ $acolor: $fg;
                     color: $white;
                 }
                 .count {
-                    color: $headerBg; 
+                    color: $primary; 
                     background-color: $white;
                     left: auto;
                     right: 0;
@@ -781,7 +775,7 @@ $acolor: $fg;
         text-align: center;
         font-weight: 700;
         b {
-            color: $headerBg;
+            color: $primary;
         }
     }
     .rule-tip {
@@ -807,7 +801,7 @@ $acolor: $fg;
             height: 30px;
             border: 0;
             outline: 0;
-            background: $bg;
+            background: $body;
             padding: 0 10px;
         }
     }

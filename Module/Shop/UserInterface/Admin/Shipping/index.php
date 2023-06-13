@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '配送方式列表';
 ?>
-   <div class="page-search">
+   <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/shipping/create')?>">新增配送方式</a>
     </div>
 

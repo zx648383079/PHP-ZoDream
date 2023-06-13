@@ -15,17 +15,17 @@ trait EditPlatformOption {
     public function optionAction() {
         $url = preg_replace('#option[^/]*#', '', url()->current());
         $items = PlatformModel::findWidthAuth();
-        return $this->renderFile(Module::viewFile('Option/index.php'), compact('items', 'url'));
+        return $this->showContent($this->renderFile(Module::viewFile('Option/index.php'), compact('items', 'url')));
     }
 
-    public function editOptionAction($platform_id) {
+    public function editOptionAction(int $platform_id) {
         $this->layout = false;
         $platform = PlatformModel::findWithAuth($platform_id);
         if (empty($platform)) {
             return '';
         }
         $data = PlatformOptionModel::getStores($platform_id, $this->platformOption());
-        return $this->renderFile(Module::viewFile('Option/edit.php'), compact('data'));
+        return $this->showContent($this->renderFile(Module::viewFile('Option/edit.php'), compact('data')));
     }
 
     public function saveOptionAction($platform_id, $option) {

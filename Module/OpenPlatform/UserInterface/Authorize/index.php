@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '我的授权信息';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <?php if(!empty($platform_list)):?>
     <form class="form-horizontal" action="<?=$this->url('./authorize/save')?>" role="form" method="POST" data-type="ajax">
         <div class="input-group">

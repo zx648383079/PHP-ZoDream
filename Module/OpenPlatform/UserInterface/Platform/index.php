@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '管理应用';
 $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
 ?>
-   <div class="page-search">
+   <div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">名称</label>

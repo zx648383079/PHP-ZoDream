@@ -14,8 +14,12 @@ use Zodream\Domain\Upload\UploadBase64;
 use Zodream\Domain\Upload\UploadFile;
 use Zodream\Domain\Upload\UploadRemote;
 use Zodream\Html\Page;
+use Zodream\Image\Base\Box;
 use Zodream\Image\Base\Font;
+use Zodream\Image\Base\Point;
+use Zodream\Image\Image;
 use Zodream\Image\WaterMark;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class FileRepository {
 
@@ -342,6 +346,20 @@ class FileRepository {
         $image->addText($text, $x + 2, $y + 2, $font->getSize(), '#777', $font->getFile());
         $image->addText($text, $x, $y, $font->getSize(), $font->getColor(), $font->getFile());
         $image->save();
+    }
+
+    /**
+     * 画文字
+     * @param string $text
+     * @return Output
+     */
+    public static function paintText(string $text): Output {
+        $image = new Image();
+        $image->instance()->create(new Box(200, 100), '#fff');
+        $image->instance()->text($text,
+            new Font((string)app_path(config('disk.font')), 30, '#333'),
+            new Point(30, 50));
+        return response()->image($image);
     }
 
     protected static function formatExtension(array $data): array {

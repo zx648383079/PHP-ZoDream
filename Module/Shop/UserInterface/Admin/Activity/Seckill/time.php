@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '秒杀时间列表';
 ?>
 <?php if($id < 1):?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/activity/seckill/create_time')?>">新增秒杀时间</a>
 </div>
 <?php endif;?>

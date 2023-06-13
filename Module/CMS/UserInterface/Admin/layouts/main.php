@@ -107,11 +107,11 @@ $this->registerCssFile([
                 './@admin/theme',
                 'fa fa-desktop'
             ],
-            [
-                '主题市场',
-                './@admin/theme/market',
-                'fa fa-shopping-bag'
-            ],
+            // [
+            //     '主题市场',
+            //     './@admin/theme/market',
+            //     'fa fa-shopping-bag'
+            // ],
         ]
     ]
-], $content, 'ZoDream CMS Admin') ?>
+], $content, $this->title ?? 'ZoDream CMS Admin', $this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>

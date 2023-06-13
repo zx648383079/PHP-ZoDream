@@ -1,15 +1,12 @@
 <?php
 namespace Module\Disk\Service;
 
+use Domain\Repositories\FileRepository;
 use Module\Disk\Domain\App\Ipa;
 use Module\Disk\Domain\FFmpeg;
 use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Repositories\DiskRepository;
 use Module\Disk\Domain\WebVTT;
-use Zodream\Image\Base\Box;
-use Zodream\Image\Base\Font;
-use Zodream\Image\Base\Point;
-use Zodream\Image\Image;
 use Zodream\Image\QrCode;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\HttpContext;
@@ -221,12 +218,7 @@ class FileController extends Controller {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {
-            $image = new Image();
-            $image->instance()->create(new Box(200, 100), '#fff');
-            $image->instance()->text($ex->getMessage(),
-                new Font((string)app_path()->file(config('disk.font')), 30, '#333'),
-                new Point(30, 50));
-            return $response->image($image);
+            return FileRepository::paintText($ex->getMessage());
         }
         $response->header->setContentType($data['extension'])
             ->setContentDisposition($data['name']);
@@ -241,12 +233,7 @@ class FileController extends Controller {
                 throw new \Exception('无法预览');
             }
         } catch (\Exception $ex) {
-            $image = new Image();
-            $image->instance()->create(new Box(200, 100), '#fff');
-            $image->instance()->text($ex->getMessage(),
-                new Font((string)app_path()->file(config('disk.font')), 30, '#333'),
-                new Point(30, 50));
-            return $response->image($image);
+            return FileRepository::paintText($ex->getMessage());
         }
         $video = $data['path'];
         $fileId = md5($data['id']);

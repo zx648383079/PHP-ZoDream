@@ -2,11 +2,11 @@
 @import "theme";
 @import "mixin";
 body {
-    background-color: $bodyBg;
+    background-color: $body;
 }
 
 a {
-    color: $fg;
+    color: $bodyText;
     text-decoration: none;
 }
 
@@ -18,10 +18,10 @@ a {
 }
 header,
 footer {
-    background-color: $headerBg;
-    color: $headerFg;
+    background-color: $primary;
+    color: $primaryText;
     a {
-        color: $headerFg;
+        color: $primaryText;
     }
     ul,
     li {
@@ -134,26 +134,26 @@ footer {
     justify-content: center;
     a {
         display: block;
-        line-height: 80px;
-        height: 80px;
-        width: 300px;
-        font-size: 30px;
+        line-height: 5rem;
+        height: 5rem;
+        width: 18.75rem;
+        font-size: 1.875rem;
         text-align: center;
-        background-color: $bg;
-        margin: 8px;
-        box-shadow: $shadow 0 0 10px;
+        background-color: $bodyHeader;
+        margin: 0.5rem;
+        box-shadow: $shadow 0 0 0.625rem;
         position: relative;
         overflow: hidden;
         &.unknow {
             img {
-                height: 20px;
+                height: 1.25rem;
             }
         }
         .desc {
-            font-size: 20px;
-            line-height: 40px;
+            font-size: 1.25rem;
+            line-height: 2.5rem;
             position: absolute;
-            bottom: -40px;
+            bottom: -2.5rem;
             text-align: center;
             width: 100%;
             color: #af5d0d;
@@ -174,12 +174,12 @@ footer {
 }
 
 .panel {
-    background-color: $bg;
+    background-color: $bodyHeader;
     margin-bottom: 20px;
     .panel-header {
         line-height: 50px;
         padding-left: 20px;
-        border-left: 5px solid $border;
+        border-left: 5px solid $primary;
         font-size: 20px;
         font-weight: 700;
         small {
@@ -235,7 +235,7 @@ footer {
             flex: 1;
         }
         .time {
-            color: $secondaryFg;
+            color: $secondaryText;
             font-size: .8rem;
             height: 2.5rem;
             word-break: keep-all;
@@ -302,7 +302,7 @@ footer {
         bottom: 0;
         left: 0;
         right: 0;
-        background: $headerBg;
+        background: $primary;
         transform: scaleX(0);
         transform-origin: 50%;
         transition-property: transform;
@@ -360,13 +360,13 @@ footer {
 
 .about-box,
 .contact-box {
-    background-color: $bg;
-    padding: 20px;
+    background-color: $bodyHeader;
+    padding: 1.25rem;
     .heading {
         h3, 
         h1, 
         h2 {
-            color: $fg;
+            color: $bodyText;
             font-size: 2.1em;
             font-weight: 500;
             margin: 0;
@@ -434,7 +434,7 @@ footer {
             font-family: 'Play-Regular';
         }
         p {
-            color: $secondaryFg;
+            color: $bodySecondaryText;
             font-size: 15px;
             margin: 5px 0px 0px;
             font-family: 'Play-Regular';
@@ -443,33 +443,33 @@ footer {
     }
     .autograph {
         line-height: 30px;
-        color: $fg;
+        color: $bodyText;
         text-align: right;
     }
 }
 
 .friend-box {
-    margin: 50px 0;
-    background-color: $bg;
-    min-height: 300px;
-    line-height: 40px;
-    padding: 20px 10px;
+    margin: 3.125rem 0;
+    background-color: $bodyHeader;
+    min-height: 18.75rem;
+    line-height: 2.5rem;
+    padding: 1.25rem 0.625rem;
     .friend-link {
-        padding-left: 150px;
+        padding-left: 9.375rem;
         > div:first-child {
-            width: 140px;
-            border-right: 5px solid $border;
-            font-size: 20px;
+            width: 8.75rem;
+            border-right: 5px solid $primary;
+            font-size: 1.25rem;
         }
     }
 }
 
 .link-box {
-    margin: 50px 0;
-    min-height: 300px;
+    margin: 3.125rem 0;
+    min-height: 18.75rem;
     .panel-body {
-        padding: 10px;
-        line-height: 30px;
+        padding: 0.625rem;
+        line-height: 1.875rem;
     }
 }
 
@@ -478,7 +478,7 @@ footer {
     margin-bottom: 30px;
     .btn {
         border: 1px solid $border;
-        background-color: $bg;
+        background-color: $body;
     }
 }
 
@@ -509,18 +509,18 @@ footer {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: $bg;
+    background-color: $body;
     box-shadow: $shadow 0 0 10px;
     padding: 40px 20px;
     .dialog-footer {
         text-align: right;
         .btn {
-            background-color: $headerBg;
-            color: $headerFg;
+            background-color: $button;
+            color: $buttonText;
         }
     }
     a {
-        color: $secondary;
+        color: $linkText;
     }
 }
 

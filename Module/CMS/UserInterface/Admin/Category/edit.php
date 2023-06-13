@@ -47,7 +47,7 @@ $this->registerJs($js);
                 <?=Form::file('image')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
-                <?=Form::checkbox('groups', [$group_list, 'name', 'name'])->value(explode(',', $model->groups))?>
+                <?=Form::checkbox('groups', [$group_list, 'name', 'name'])->value(explode(',', (string)$model->groups))?>
                 <?=Form::text('position')?>
             </div>
             <div class="zd-tab-item">
@@ -65,6 +65,8 @@ $this->registerJs($js);
         </div>
     </div>
 
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?=Form::close('id')?>

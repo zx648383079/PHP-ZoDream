@@ -8,7 +8,7 @@ bindSecKill({$act_id}, {$time_id});
 JS;
 $this->registerJs($js);
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" data-type="goods" href="javascript:;">设置商品</a>
 </div>
 <table class="table table-hover">

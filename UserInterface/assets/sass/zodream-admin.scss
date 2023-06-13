@@ -1,13 +1,8 @@
-$bg: #333;
-$back: #000;
-$white: #fff;
-$mainBg: #f4f4f4;
-$tipBg: #F5FAFF;
-$tipFg: #666;
-$shadow: rgba(0, 0, 0, 0.8);
+@import 'theme';
+@import 'menu';
 
 body {
-    background: $bg;
+    background: $body;
 }
 
 a {
@@ -16,23 +11,27 @@ a {
 
 footer,
 header {
-    background: $back;
-    color: $white; 
+    background: $primary;
+    color: $primaryText; 
     a {
-        color: $white;
+        color: $primaryText;
         text-decoration: none;
     }
 }
-.btn,
-.zd-tab .zd-tab-head .zd-tab-item.active,
-.zd-tab .zd-tab-head .zd-tab-item:hover {
-    background: $bg;
-    color: $white;
+// .btn,
+// .zd-tab .zd-tab-head .zd-tab-item.active,
+// .zd-tab .zd-tab-head .zd-tab-item:hover {
+//     background: $button;
+//     color: $buttonText;
+// }
+
+.zd-tab .zd-tab-head {
+    background-color: #fff;
 }
 
 header {
-    height: 50px;
-    line-height: 50px;
+    height: 3.125rem;
+    line-height: 3.125rem;
     position: fixed;
     z-index: 500;
     top: 0;
@@ -41,117 +40,26 @@ header {
 }
 
 footer {
-    padding: 32px 20px;
+    padding: 2rem 1.25rem;
     position: relative;
 }
 
 .container {
-    width: 1200px;
+    width: 75rem;
     margin: 0 auto;
     position: relative;
 }
 
-.main-container {
-    .container {
-        width: 100%;
-        max-width: 1200px;
-    }
-}
 
-.app-wrapper {
-    width: 1200px;
-    margin: 50px auto 0;
-    position: relative;
-    .search-container {
-        display: none;
-    }
-    .sidebar-container {
-        font-size: 1rem;
-    }
-    &.search-mode {
-        transform-origin: 50vw 50vh;
-        transform: perspective(1000px) translate3d(0,50vh,0) rotate3d(1,0,0,30deg);
-        pointer-events: none;
-        max-width: 1920px;
-        margin: 0 auto;
-        overflow: auto;
-        height: 100vh;
-        display: block;
-        .search-container {
-            display: block;
-            pointer-events: auto;
-        }
-    }
-    &.wrapper-min {
-        width: 100%;
-        .sidebar-container {
-            left: -208px;
-            .sidebar-container-toggle {
-                &::before {
-                    content: "\f101";
-                }
-            }
-        }
-        .main-container {
-            width: 100%;
-            margin-left: 0;
-        }
-    }
-}
-
-.sidebar-container {
-    width: 208px;
-    left: 0;
-    transition: left 1s;
-    vertical-align: baseline;
-    padding: 20px 12px 60px 36px;
-    top: auto;
-    position: absolute;
-    overflow-y: visible;
-    display: inline-block;
-    .sidebar-container-toggle {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        text-rendering: auto;
-        position: absolute;
-        right: -12px;
-        width: 12px;
-        height: 80px;
-        background-color: #333;
-        z-index: 199;
-        font-size: 10px;
-        line-height: 80px;
-        text-align: center;
-        color: #fff;
-        cursor: pointer;
-        &::before {
-            content: "\f100";
-        }
-    }
-}
-
-.main-container {
-    transition: all 1s;
-    width: calc(100% - 208px);
-    position: relative;
-    vertical-align: baseline;
-    background-color: $mainBg;
-    flex-grow: unset;
-    display: inline-block;
-    top: 0;
-    padding: 8px;
-    min-height: 300px;
-    margin-left: 208px;
-}
 
 .page-tip {
-    border: 1px dashed $bg;
+    border: 1px dashed $body;
     padding: 10px;
     border-radius: 5px;
-    background-color: $tipBg;
+    background-color: $dialog;
     position: relative;
     .blue {
-        color: $bg;
+        color: $body;
     }
     ul {
         width: 100%;
@@ -160,7 +68,7 @@ footer {
             padding-left: 10px;
             list-style: inside;
             a {
-                color: $tipFg;
+                color: $dialogText;
             }
         }
     }
@@ -216,8 +124,8 @@ footer {
     .actions {
         right: 20px;
         button {
-            background: $back;
-            color: $white;
+            background: $button;
+            color: $buttonText;
             line-height: 30px;
             padding: 0 8px;
             margin: 0;
@@ -258,8 +166,11 @@ footer {
         padding: 20px 10px;
     }
 }
-
-.page-search {
+.page-search-bar {
+    padding: 0.625rem 0;
+    .btn {
+        vertical-align: top;
+    }
     .form-horizontal {
         display: inline-block;
     }
@@ -287,100 +198,119 @@ footer {
     }
 }
 
-@media (max-width: 1200px){
-    .container {
-        width: 100%;
-    }
-    .app-wrapper {
-        width: 100%;
-    }
 
+
+.auto-hide {
+    display: none;
+}
+table,
+.table {
+    .btn {
+        padding: 0 10px;
+        margin: 0;
+    }
 }
 
-@media (max-width: 767px){
-    .app-wrapper {
+.column-item {
+    width: 90%;
+    margin: 10px 5%;
+}
+
+
+.column-full-item {
+    border-radius: .25rem;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    display: block;
+    margin-bottom: 1.25rem;
+    position: relative;
+    background-color: #17a2b8;
+    color: #fff;
+    .overlay {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
         width: 100%;
-        min-height: calc(100vh - 50px);
-        .sidebar-container {
-            .sidebar-container-toggle {
-                &::before {
-                    content: "\f0c9";
-                }
-            }
+        border-radius: .25rem;
+        align-items: center;
+        background: rgba(255,255,255,.7);
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        z-index: 50;
+        i {
+            color: #343a40;
+            font-size: 3em;
+            animation: spin 1s linear infinite;
         }
-        &.wrapper-min {
-            .sidebar-container {
-                left: 0;
-                box-shadow: 0 0 20px $shadow;
-                .sidebar-container-toggle {
-                    box-shadow: none;
-                    left: .5rem;
-                    &::before {
-                        content: "\f00d";
-                    }
-                }
-            }
-            &.sidebar-fixed {
-                .sidebar-container {
-                    position: fixed;
-                    top: 50px;
-                }
+    }
+    .inner {
+        padding: 0.625rem;
+        z-index: 5;
+    }
+    h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        padding: 0;
+        white-space: nowrap;
+    }
+    p {
+        font-size: 1rem;
+    }
+    .icon {
+        color: rgba(0,0,0,.15);
+        z-index: 0;
+        i {
+            font-size: 50px;
+            position: absolute;
+            right: 15px;
+            top: 20px;
+            transition: all .3s linear;
+        }
+    }
+    .column-footer {
+        background: rgba(0,0,0,.1);
+        color: rgba(255,255,255,.8);
+        display: block;
+        padding: 3px 0;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        z-index: 10;
+        &:hover {
+            background: rgba(0,0,0,.15);
+            color: #fff;
+        }
+    }
+    a {
+        color: #fff;
+    }
+    &:hover {
+        .icon {
+            i {
+                font-size: 3.4375rem;
             }
         }
     }
-    .sidebar-container {
-        left: -208px;
-        transition: left .3s;
-        z-index: 189;
-        bottom: 0;
-        .sidebar-container-toggle {
-            display: block;
-            position: fixed;
-            right: auto;
-            font-size: inherit;
-            line-height: unset;
-            width: auto;
-            height: auto;
-            left: .7rem;
-            bottom: .7rem;
-            font-size: 2rem;
-            background: $bg;
-            box-shadow: 0 0 20px $shadow;
-            transition: all .3s;
-            padding: 4px 6px;
-            color: $white;
-        }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
     }
-    .main-container {
-        margin-left: 0;
-        width: 100%;
-        padding-bottom: 50px;
+    to {
+        transform: rotate(360deg);
     }
+}
+
+
+@media (min-width: 48rem) {
     .auto-hide {
-        display: none;
+        display: table-cell;
     }
-    table,
-    .table {
-        .btn {
-            padding: 0 10px;
-            margin: 0;
-        }
-    }
-    .full-theme {
-        .main-container {
-            transition: all .3s;
-        }
-        .sidebar-container {
-            &.expand {
-                box-shadow: none;
-                &+.main-container {
-                    transform: translateX(208px);
-                }
-            }
-        }
-    }
-    .column-item {
-        width: 90%;
-        margin: 10px 5%;
-    }
+}
+
+@media (min-width: 75rem){
+    
 }

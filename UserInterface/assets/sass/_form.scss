@@ -57,27 +57,36 @@
     }
 }
 .btn {
-    padding: 0 30px;
+    padding: 0 .8rem;
     background: $primary;
     border: none;
     display: inline-block;
     text-decoration: none;
-    line-height: 30px;
-    margin: 0 8px;
+    line-height: $lineHeight;
+    margin: 0 0.5rem;
     vertical-align:middle;
+    border-radius: .25rem;
+    &.btn-default {
+        background-color: #0dcaf0;
+        color: #fff;
+    }
     &.btn-full {
         width: 100%;
         margin: 0;
     }
     &.btn-danger {
         color: #fff;
-        background-color: #d9534f;
+        background-color: #dc3545;
         border-color: #d43f3a;
     }
     &.btn-primary {
         color: #fff;
         background-color: #337ab7;
         border-color: #2e6da4;
+    }
+    &.btn-success {
+        background-color: #198754;
+        color: #fff;
     }
 }
 
@@ -110,13 +119,16 @@
         }
     }
 }
+
+$toggleHeight: $lineHeight * .8;
+
 .check-toggle {
     input[type=checkbox] {
         display: none;
         &:checked {
             &+label {
                 &::before {
-                    left: 20px;
+                    left: $toggleHeight;
                 }
                 &::after {
                     background: #4cda60;
@@ -128,27 +140,27 @@
     label {
         cursor: pointer;
         background-color: #fafbfa;
-        border-radius: 50px;
+        border-radius: 3.125rem;
         display: inline-block;
         position: relative;
-        margin-right: 30px;
+        margin-right: 1.875rem;
         transition: all 0.1s ease-in;
-        width: 40px;
-        height: 22px;
+        width: $toggleHeight * 2;
+        height: $toggleHeight;
         &::before,
         &::after {
             content: ' ';
             position: absolute;
-            border-radius: 100px;
+            border-radius: 6.25rem;
         }
         &::before {
             background: white;
-            top: 1px;
-            left: 1px;
+            top: .1rem;
+            left: .1rem;
             z-index: 1;
-            width: 20px;
+            width: $toggleHeight - .2rem;
             transition: all 0.1s ease-in;
-            height: 20px;
+            height: $toggleHeight - .2rem;
             box-shadow: 0 3px 1px rgba(0,0,0,0.05), 0 0px 1px rgba(0,0,0,0.3);
         }
         &::after {
@@ -179,11 +191,11 @@
     }
     label {
         cursor: pointer;
-        padding: 0 10px 0 30px;
-        margin-top: 2px;
+        padding: 0 0.625rem 0 1.875rem;
+        margin-top: 0.125rem;
         display: inline-block;
         position: relative;
-        line-height: 25px;
+        line-height: $lineHeight;
         background-color: #eaeaea;
         color: #a7a7a7;
         &::before {
@@ -358,12 +370,17 @@ i {
         }
     }
     .file-input {
+        display: flex;
         button {
-            padding: 0 10px;
-            line-height: 30px;
+            padding: 0 .8rem;
+            line-height: $lineHeight;
             border: none;
-            background: #000;
+            background-color: $brand-info;
             color: #fff;
+            cursor: auto;
+            &:last-of-type {
+                background-color: $brand-warning;
+            }
         }
     }
     .actions {
@@ -377,5 +394,55 @@ i {
         .btn {
             line-height: $lineHeight;
         }
+    }
+}
+
+.btn-group {
+    display: inline-flex;
+    .btn {
+        border-radius: 0;
+        margin: 0;
+        &:first-child {
+            border-radius: .25rem 0 0 .25rem;
+        }
+        &:last-child {
+            border-radius: 0 .25rem .25rem 0;
+        }
+    }
+}
+
+.flat-input {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    .form-control,
+    .btn {
+        border-radius: 0;
+    }
+    .form-control:first-child {
+        position: relative;
+        flex: 1 1 auto;
+        width: 1%;
+        margin-bottom: 0;
+        border-radius: .25rem 0 0 .25rem;
+    }
+    .btn:last-child {
+        display: flex;
+        border-radius: 0 .25rem .25rem 0;
+    }
+}
+
+.flat-group {
+    .form-control {
+        width: auto;
+        display: inline-block;
+    }
+    :first-child {
+        border-radius: .25rem 0 0 .25rem;
+    }
+    :last-child {
+        border-radius: 0 .25rem .25rem 0; 
     }
 }

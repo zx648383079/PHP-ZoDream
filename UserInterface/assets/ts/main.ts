@@ -213,12 +213,18 @@ $(function() {
     .on('click', ".page-tip .toggle", function() {
         $(this).closest('.page-tip').toggleClass('min');
     });
-    $('.sidebar-container .sidebar-container-toggle').on('click',function() {
+    $('.sidebar-container .sidebar-container-toggle,.app-header-container .sidebar-container-toggle,.app-wrapper .app-mask').on('click', function() {
         let box = $(this).closest('.app-wrapper').toggleClass('wrapper-min');
         if (box.find('ul').height() < $(window).height() - 100) {
             box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
         }
         $(window).trigger('resize');
+    });
+    $('.app-header-container .nav-item a').on('click', function(e) {
+        const box = $(this).closest('.nav-item');
+        if (box.find('.drop-bar').length > 0) {
+            box.toggleClass('nav-drop-open');
+        }
     });
     $('.sidebar-container li a').on('click',function() {
         let $this = $(this),

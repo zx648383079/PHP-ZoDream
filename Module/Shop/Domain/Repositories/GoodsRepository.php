@@ -13,6 +13,8 @@ use Module\Shop\Domain\Models\ProductModel;
 use Module\Shop\Domain\Repositories\Activity\ActivityRepository;
 use Zodream\Database\Model\Query;
 use Zodream\Html\Page;
+use Zodream\Image\Base\Font;
+use Zodream\Image\Image;
 
 class GoodsRepository {
 
@@ -224,5 +226,14 @@ class GoodsRepository {
         $new_products = GoodsRepository::getRecommendQuery('is_new')->all();
         $best_products = GoodsRepository::getRecommendQuery('is_best')->all();
         return compact('hot_products', 'new_products', 'best_products');
+    }
+
+    public static function paintShareImage(int $id) {
+        $goods = public_path('assets/images/zd.jpg');
+        $qr = public_path('assets/images/wx.jpg');
+
+        $font = new Font((string)app_path(config('disk.font')));
+
+
     }
 }

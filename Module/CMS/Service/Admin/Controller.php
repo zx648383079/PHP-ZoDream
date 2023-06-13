@@ -17,7 +17,7 @@ class Controller extends ModuleController {
 
     public function rules() {
         return [
-            '*' => 'cms_admin'
+            '*' => 'cms_manage'
         ];
     }
 

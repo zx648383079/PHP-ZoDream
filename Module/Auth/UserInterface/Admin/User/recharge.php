@@ -37,7 +37,9 @@ $this->title = '账户充值';
             <textarea rows="10" name="remark" required></textarea>
         </div>
     </div>
-    <button type="submit" class="btn btn-success">确认执行</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消执行</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认执行</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消执行</a>
+    </div>
     <input type="hidden" name="user_id" value="<?=$user->id?>">
 <?= Form::close() ?>

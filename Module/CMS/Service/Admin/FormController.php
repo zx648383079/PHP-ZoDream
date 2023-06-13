@@ -7,6 +7,7 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Module;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class FormController extends Controller {
     public function indexAction(int $id, string $keywords = '') {
@@ -24,8 +25,9 @@ class FormController extends Controller {
 
     /**
      * 为了适配可能出现的多表
-     * @param $id
-     * @param $model_id
+     * @param int $id
+     * @param int $model_id
+     * @return Output
      * @throws \Exception
      */
     public function editAction(int $id, int $model_id) {

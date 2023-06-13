@@ -1,9 +1,10 @@
+declare const UE: any;
 function bindField(baseUri: string) {
     let field = $('#field');
-    $('#name').blur(function() {
+    $('#name').on('blur', function() {
         pinyinIfEmpty(field, $(this).val() as string);
     });
-    $("#type").change(function() {
+    $("#type").on('change', function() {
         $.get(baseUri, {
             id: $("[name=id]").val(),
             type: $(this).val()
@@ -34,8 +35,8 @@ function bindField(baseUri: string) {
 
 function bindCat(baseUri: string) {
     let name = $('#name');
-    $('#title').blur(function() {
-        pinyinIfEmpty(name, $(this).val());
+    $('#title').on('blur', function() {
+        pinyinIfEmpty(name, $(this).val() as any);
     });
     $.when(
         $.getScript('/assets/ueditor/ueditor.config.js'), 
@@ -75,8 +76,8 @@ function bindEditModel() {
         valIfEmpty($('#list_template'), val + '_list');
         valIfEmpty($('#show_template'), val + '_detail');
     });
-    $('#name').blur(function() {
-        pinyinIfEmpty(table, $(this).val());
+    $('#name').on('blur', function() {
+        pinyinIfEmpty(table, $(this).val() as any);
     });
     let type0 = $("#type0").on('click',function() {
         $(".content-box").hide();
@@ -98,3 +99,9 @@ function bindEditOption() {
         $(this).closest('.input-group').remove();
     });
 }
+
+$(function() {
+    setTimeout(() => {
+        $('.column-full-item .overlay').remove();
+    }, 1000);
+});

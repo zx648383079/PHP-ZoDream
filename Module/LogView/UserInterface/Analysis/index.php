@@ -143,7 +143,7 @@ $this->registerJsFile('@echarts.min.js')
     ->registerJs($js);
 ?>
 
-<div class="page-search">
+<div class="page-search-bar">
     <form class="form-horizontal" role="form">
         <div class="input-group">
             <select name="name">

@@ -21,6 +21,7 @@ $this->registerCssFile([
         '@auth.min.js'
     ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 
+$user = auth()->user();
 ?>
 
 
@@ -48,7 +49,7 @@ $this->registerCssFile([
         ],
         true,
         false,
-        auth()->user()->isAdministrator()
+        $user->isAdministrator()
     ],
     [
         '权限管理',
@@ -78,7 +79,7 @@ $this->registerCssFile([
         ],
         false,
         false,
-        auth()->user()->isAdministrator()
+        $user->isAdministrator()
     ],
     [
         '第三方管理',
@@ -93,7 +94,7 @@ $this->registerCssFile([
         ],
         true,
         false,
-        auth()->user()->isAdministrator()
+        $user->isAdministrator()
     ],
     [
         '消息管理',
@@ -113,7 +114,7 @@ $this->registerCssFile([
         ]
     ],
     [
-        $this->text(auth()->user()->name),
+        $this->text($user->name),
         false,
         'fa fa-user',
         [
@@ -150,4 +151,7 @@ $this->registerCssFile([
         ],
         true
     ]
-], $content, 'ZoDream Account Admin') ?>
+], $content, $this->title ?? 'ZoDream Account Admin',  $this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>
+
+
+

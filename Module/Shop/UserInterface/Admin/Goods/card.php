@@ -10,7 +10,7 @@ bindGoodsCard();
 JS;
 $this->registerJs($js);
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <form class="form-horizontal" role="form">
         <span>商品【
             <a href="<?=$this->url('./@admin/goods/edit', ['id' => $model->id])?>"><?=$model->name?></a>

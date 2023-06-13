@@ -1,12 +1,15 @@
 <?php
 namespace Module\Shop\Service;
 
+use Domain\Repositories\FileRepository;
 use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Models\GoodsGalleryModel;
 use Module\Shop\Domain\Models\GoodsIssueModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
 use Module\Shop\Domain\Repositories\CommentRepository;
+use Module\Shop\Domain\Repositories\GoodsRepository;
+use Zodream\Infrastructure\Contracts\Http\Output;
 
 class GoodsController extends Controller {
 
@@ -43,9 +46,17 @@ class GoodsController extends Controller {
         return $this->show(compact('comment_list', 'comment_count'));
     }
 
-    public function issueAction($id) {
+    public function issueAction(int $id) {
         $this->layout = false;
         $issue_list = GoodsIssueModel::whereIn('goods_id', [$id, 0])->all();
         return $this->show(compact('issue_list'));
+    }
+
+    public function shareAction(Output $output, int $id) {
+        try {
+            return $output->image(GoodsRepository::paintShareImage($id));
+        } catch (\Exception $ex) {
+            return FileRepository::paintText($ex->getMessage());
+        }
     }
 }

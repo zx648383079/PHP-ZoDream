@@ -3,19 +3,22 @@
     .zd-tab-head,
     .tab-header {
         position: relative;
+        display: flex;
         .zd-tab-item,
         .tab-item {
-            &.active,
             &:hover {
+                background: #ccc;
+            }
+            &.active {
                 @include active();
                 .fa {
                     display: block;
                 }
             }
             display: inline-block;
-            width: 150px;
-            height: 30px;
-            line-height: 30px;
+            width: 9.375rem;
+            height: $lineHeight;
+            line-height: $lineHeight;
             text-align: center;
             position: relative;
             .fa-close {

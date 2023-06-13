@@ -6,7 +6,7 @@ use Zodream\Template\View;
 $this->title = '族谱附录';
 ?>
 
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/clan/create_meta', compact('clan_id'))?>">新增附录</a>
 </div>
 

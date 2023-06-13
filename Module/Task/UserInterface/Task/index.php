@@ -5,7 +5,7 @@ use Module\Task\Domain\Model\TaskModel;
 /** @var $this View */
 $this->title = 'ZoDream';
 ?>
-<div class="page-search">
+<div class="page-search-bar">
     <a class="btn btn-success pull-right" href="<?=$this->url('./task/create')?>">新增任务</a>
 </div>
 
