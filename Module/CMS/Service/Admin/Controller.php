@@ -28,7 +28,8 @@ class Controller extends ModuleController {
             return $item['type'] < 1;
         });
         $form_list = ModelModel::where('type', 1)->get('id,name');
-        $this->send(compact('cat_menu', 'form_list'));
+        $currentSite = CMSRepository::site();
+        $this->send(compact('cat_menu', 'form_list', 'currentSite'));
     }
 
     protected function getUrl($path, $args = []) {

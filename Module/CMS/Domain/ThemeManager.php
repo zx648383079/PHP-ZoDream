@@ -348,10 +348,7 @@ class ThemeManager {
             return;
         }
         $scene = CMSRepository::scene();
-        $model = ModelFieldModel::create($data);
-        if (!$model) {
-            throw new Exception('数据错误');
-        }
+        $model = ModelFieldModel::createOrThrow($data, '数据错误');
         $scene = $scene->setModel($this->getCacheId((string)$model->model_id, 'model'));
         $scene->addField($model);
     }

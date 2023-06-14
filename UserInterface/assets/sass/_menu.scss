@@ -81,7 +81,10 @@
             flex: 1;
         }
         .nav-item {
+            display: inline-block;
             position: relative;
+            vertical-align: top;
+            margin-left: .8rem;
             img {
                 cursor: pointer;
                 width: 2.5rem;

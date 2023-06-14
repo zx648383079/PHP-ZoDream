@@ -82,10 +82,11 @@ $inputTextIcon: white;
 $inputText: #333;
 $inputLabel: #929292;
 $inputBorder: #ced4da;
-$inputFocusBorder: #bb0b0b;
+$inputFocusBorder: rgb(47, 65, 86);
 $inputFocusShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
+$inputErrorBorder: #d9534f;
 
-$nav: rgb(48, 65, 86);
+$nav: rgb(47, 65, 86);
 $navText: rgb(191, 203, 217);
 $navActiveText: #1890ff;
 $navHover: #263445;

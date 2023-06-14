@@ -59,9 +59,6 @@ class CreateSEOTables extends Migration {
     }
 
     public function seed() {
-        RoleRepository::newPermission([
-            'system_manage' => '系统配置'
-        ]);
         if (OptionModel::query()->count() > 0) {
             return;
         }

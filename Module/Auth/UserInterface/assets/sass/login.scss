@@ -25,7 +25,7 @@
                 input {
                     padding-left: 0;
                     padding-right: 30px;
-                    border-bottom: 2px solid $primary;
+                    border-bottom: 2px solid $inputFocusBorder;
                 }
                 .fa {
                     left: 280px;
@@ -34,12 +34,12 @@
             }
             &.error {
                 .fa {
-                    color: $error;
+                    color: $inputErrorBorder;
                 }
                 input[type="text"],
                 input[type="email"],
                 input[type="password"] {
-                    border-bottom-color: $error;
+                    border-bottom-color: $inputErrorBorder;
                 }
             }
         }
@@ -62,17 +62,17 @@
             }
             &.input-focus {
                 .fa {
-                    left: 200px;
+                    left: 12.5rem;
                 }
             }
         }
         .btn {
-            background: $secondary;
-            color: $headerFg;
+            background: $nav;
+            color: $navText;
             width: 100%;
             margin: 0;
             &:hover {
-                background: $primary;
+                background: $navHover;
             }
         }
         a {
@@ -103,7 +103,7 @@
                     top: 106px;
                     left: 129px;
                     font-size: 50px;
-                    color: $error;
+                    color: $inputErrorBorder;
                     display: none;
                 }
             }
@@ -111,10 +111,10 @@
             .success-box,
             .failure-box {
                 display: none;
-                min-height: 250px;
+                min-height: 15.625rem;
                 .fa {
-                    font-size: 80px;
-                    margin: 80px 30px 20px;
+                    font-size: 5rem;
+                    margin: 5rem 1.875rem 1.25rem;
                 }
             }
             .failure-box {
@@ -175,14 +175,14 @@
 }
 .footer {
     background: $primary;
-    color: $headerFg;
+    color: $primaryText;
     font-weight: 400;
     font-size: 14px;
     padding: 32px 20px;
     position: relative;
     text-align: center;
     a {
-        color: $headerFg;
+        color: $primaryText;
         text-decoration: none;
     }
 }

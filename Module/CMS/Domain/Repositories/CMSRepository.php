@@ -80,7 +80,7 @@ class CMSRepository {
      * @return SiteModel
      * @throws \Exception
      */
-    public static function site($model = null) {
+    public static function site(mixed $model = null) {
         if (!empty($model)) {
             static::$cacheSite = $model;
         }
@@ -88,7 +88,7 @@ class CMSRepository {
             return self::$cacheSite;
         }
         /** @var SiteModel[] $model_list */
-        $model_list = SiteModel::query()->all();
+        $model_list = SiteModel::query()->get();
         if (empty($model_list)) {
             throw new \Exception('无任何站点');
         }
@@ -119,7 +119,7 @@ class CMSRepository {
         $site = static::site();
         $items = [];
         foreach ($site['options'] as $item) {
-            $items[$item['code']] = Option::formatOption($item['value'], $item['type']);
+            $items[$item['code']] = Option::formatOption((string)$item['value'], $item['type']);
         }
         foreach (
             ['title', 'keywords', 'description', 'logo'] as $code
@@ -180,6 +180,7 @@ class CMSRepository {
         $model_list = ModelModel::query()->get();
         $old = self::$cacheSite;
         self::$cacheSite = $site;
+        CreateCmsTables::dropTable(SiteLogModel::tableName());
         CreateCmsTables::dropTable(CategoryModel::tableName());
         CreateCmsTables::dropTable(ContentModel::tableName());
         CreateCmsTables::dropTable(CommentModel::tableName());
@@ -196,7 +197,7 @@ class CMSRepository {
         }
     }
 
-    public static function resetSite($id = 0) {
+    public static function resetSite(int $id = 0) {
         if ($id > 0) {
             session([
                 'cms_site' => $id

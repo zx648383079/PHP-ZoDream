@@ -71,6 +71,22 @@
         },
         {
             "action": "model",
+            "name": "图片",
+            "table": "images",
+            "fields": [{
+                    "action": "disable",
+                    "field": "content"
+                },
+                {
+                    "name": "图片",
+                    "field": "image",
+                    "type": "file",
+                    "is_main": true
+                }
+            ]
+        },
+        {
+            "action": "model",
             "name": "文件资料",
             "table": "resources",
             "category_template": "resource",
@@ -151,36 +167,36 @@
             "show_template": "salesman",
             "fields": [
                 {
-                    "tel": "姓名",
+                    "name": "姓名",
                     "field": "title",
                     "type": "text"
                 },
                 {
-                    "tel": "电话",
+                    "name": "电话",
                     "field": "phone",
                     "type": "text",
                     "is_main": true
                 },
                 {
-                    "tel": "传真",
+                    "name": "传真",
                     "field": "fax",
                     "type": "text",
                     "is_main": true
                 },
                 {
-                    "tel": "邮箱",
+                    "name": "邮箱",
                     "field": "email",
                     "type": "text",
                     "is_main": true
                 },
                 {
-                    "tel": "手机",
+                    "name": "手机",
                     "field": "tel",
                     "type": "text",
                     "is_main": true
                 },
                 {
-                    "tel": "QQ",
+                    "name": "QQ",
                     "field": "qq",
                     "type": "text",
                     "is_main": true
@@ -826,6 +842,12 @@
             "group": "nav",
             "category_template": "index",
             "image": "/assets/images/banner.jpg"
+        },
+        {
+            "action": "channel",
+            "title": "首页Banner",
+            "name": "banner",
+            "type": "@model:images"
         }
     ]
 }

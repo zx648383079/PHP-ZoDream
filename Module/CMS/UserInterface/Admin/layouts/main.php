@@ -26,6 +26,14 @@ if (isset($form_list)) {
     }
 }
 
+$navCurrent = '';
+if ($currentSite) {
+    $siteUrl = $this->url('./@admin/site');
+    $navCurrent = <<<HTML
+    <a class="nav-item" href="{$siteUrl}">当前站点：{$currentSite['title']}</a>
+HTML;
+}
+
 
 $this->registerCssFile([
         '@font-awesome.min.css',
@@ -114,4 +122,4 @@ $this->registerCssFile([
             // ],
         ]
     ]
-], $content, $this->title ?? 'ZoDream CMS Admin', $this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>
+], $content, $this->title ?? 'ZoDream CMS Admin', $navCurrent.$this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>

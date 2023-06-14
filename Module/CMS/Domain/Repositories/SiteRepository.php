@@ -26,8 +26,14 @@ class SiteRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if ($id < 1) {
+        if ($id > 0) {
+            return $model;
+        }
+        try {
             CMSRepository::generateSite($model);
+        } catch (\Exception $ex) {
+            static::remove($id);
+            throw $ex;
         }
         return $model;
     }

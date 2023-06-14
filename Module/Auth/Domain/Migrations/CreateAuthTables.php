@@ -126,6 +126,9 @@ class CreateAuthTables extends Migration {
         RoleRepository::newPermission([
             'user_manage' => '会员管理'
         ]);
+        RoleRepository::newPermission([
+            'system_manage' => '系统配置'
+        ]);
         Option::group('高级', function () {
             return [
                 [
