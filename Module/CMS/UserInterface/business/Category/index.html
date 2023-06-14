@@ -1,0 +1,61 @@
+{layout:main}
+{extendContent:$page,definition}
+
+<div class="screen-box">
+    <div class="screen-grid">
+        <div class="screen-line">
+            <div class="line-title">分类</div>
+            <div class="line-body">
+                <a href="{search:id,$cat.id}" class="{searchActive:id,$cat.id}">全部</a>
+                {channels:parent=$cat.id}
+                <a href="{search:id,$channel.id}" class="{searchActive:id,$channel.id}">{$channel.title}</a>
+                {/channels}
+            </div>
+            <div class="line-more">更多</div>
+        </div>
+        <div class="screen-line">
+            <div class="line-title">地区</div>
+            <div class="line-body">
+                <a href="{search:area}" class="{searchActive:area}">全部</a>
+                {linkage:area}
+                <a href="{search:area,$item.id}" class="{searchActive:area,$item.id}">{$item.name}</a>
+                {/linkage}
+            </div>
+            <div class="line-more">更多</div>
+        </div>
+        <div class="screen-line">
+            <div class="line-title">年份</div>
+            <div class="line-body">
+                <a href="{search:age}" class="{searchActive:age}">全部</a>
+                {range:Y,1996}
+                <a href="{search:age,$item}" class="{searchActive:age,$item}">{$item}</a>
+                {/range}
+            </div>
+            <div class="line-more">更多</div>
+        </div>
+    </div>
+    <div class="screen-more">
+        <a href="">+ 更多选项</a>
+    </div>
+</div>
+<div class="tab-header">
+    <a href="{channel:movie,url}" class="{channelActive:movie}">电影</a>
+    <a href="{channel:tv,url}" class="{channelActive:tv}">电视剧</a>
+</div>
+
+<div>
+    {for:$page,$item}
+    <a class="video-item" href="{url:$item}">
+        <div class="thumb">
+            <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
+            <span class="play-icon"></span>
+            <span class="tag">{linkageText:$item.definition}</span>
+        </div>
+        <div class="title">{$item.title}</div>
+    </a>
+    {/for}
+</div>
+
+<div>
+    {$page.getLink:}
+</div>

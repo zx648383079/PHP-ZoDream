@@ -70,7 +70,7 @@ use Zodream\Template\View;
                     <a>Friend Links</a>
                 </div>
                 <div class="copyright">
-                        © 2020-2021 ZoDream.cn. All rights reserved.
+                    Copyright ©<?= request()->host() ?>, All Rights Reserved.
                 </div>
             </div>
         </div>

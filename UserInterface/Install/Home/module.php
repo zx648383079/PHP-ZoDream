@@ -15,12 +15,20 @@ $this->registerJs($js);
 	<form method="post" action="<?=$this->url('./import_module')?>">
 		<p>请在选择安装模块。</p>
 		<div class="module-box">
+			<table class="table">
 			<?php foreach($module_list as $item):?>
-			<p>
-				<input type="checkbox" name="module[checked][]" value="<?=$item?>"><?=$item?>&nbsp;&nbsp;&nbsp;&nbsp;路径：
-				<input type="text" name="module[uri][<?=$item?>]" class="form-control" size="10" placeholder="请输入路径">
-			</p>
+				<tr>
+					<td>
+						<input type="checkbox" name="module[checked][]" value="<?=$item?>" <?= isset($must_items[$item]) ? 'checked' : '' ?>><?=$item?>
+					</td>
+					<td>
+						路径：
+						<input type="text" name="module[uri][<?=$item?>]" class="form-control" size="10" placeholder="请输入路径" value="<?= $must_items[$item] ?? '' ?>">
+					</td>
+				</tr>
 			<?php endforeach;?>
+
+			</table>
 		</div>
 		<p>请填写管理员账号。</p>
 		<table class="table table-hover">

@@ -5,7 +5,7 @@ use Zodream\Template\View;
 $this->title = '模块字段列表';
 ?>
 
-<div class="panel-contianer">
+<div class="panel-container">
     <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/model/create_field', ['model_id' => $model->id])?>">新增字段</a>
     </div>

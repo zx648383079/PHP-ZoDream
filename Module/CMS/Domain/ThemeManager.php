@@ -27,13 +27,13 @@ class ThemeManager {
     /**
      * @var Directory
      */
-    protected $src;
+    protected Directory $src;
     /**
      * @var Directory
      */
-    protected $dist;
+    protected Directory $dist;
 
-    protected $cache = [];
+    protected array $cache = [];
 
     public function __construct() {
         $this->src = new Directory(dirname(__DIR__).'/UserInterface');
@@ -47,7 +47,7 @@ class ThemeManager {
         return $this->src;
     }
 
-    public function pack() {
+    public function pack(): void {
         $this->src = $this->src->directory('default_'.time());
         $data = [
             'name' => 'default',
@@ -71,7 +71,7 @@ class ThemeManager {
         $zip->comment($data['description'])->close();
     }
 
-    protected function packOption() {
+    protected function packOption(): array {
         $data = [];
         $args = OptionModel::query()->orderBy('parent_id', 'asc')->all();
         foreach ($args as $item) {
@@ -92,7 +92,7 @@ class ThemeManager {
         ];
     }
 
-    protected function packModel() {
+    protected function packModel(): array {
         $data = [];
         $model_list = ModelModel::query()->asArray()->all();
         foreach ($model_list as $item) {
@@ -112,7 +112,7 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packFields(int $model_id) {
+    protected function packFields(int $model_id): array {
         $data = [];
         $fields = ModelFieldModel::query()->where('model_id', $model_id)->asArray()->all();
         foreach ($fields as $item) {
@@ -132,7 +132,7 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packChannel(int $parent_id = 0) {
+    protected function packChannel(int $parent_id = 0): array {
         $data = [];
         $model_list = CategoryModel::query()->where('parent_id', $parent_id)
             ->asArray()->all();
@@ -154,7 +154,7 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packChannelType(array $item) {
+    protected function packChannelType(array $item): string|int {
         if ($item['type'] === CategoryEntity::TYPE_LINK) {
             return 'link';
         }
@@ -164,7 +164,7 @@ class ThemeManager {
         return $this->getCacheId($item['model_id'], 'model');
     }
 
-    protected function packContent() {
+    protected function packContent(): array {
         $data = [];
         $model_list = ModelModel::query()->all();
         foreach ($model_list as $model) {
@@ -184,7 +184,7 @@ class ThemeManager {
                 ],
             ]);
             foreach ($args as $item) {
-                if (isset($item['extend']) && !empty($item['extend'])) {
+                if (!empty($item['extend'])) {
                     $item = array_merge($item['extend'], $item);
                 }
                 $item['cat_id'] = $this->getCacheId($item['cat_id'], 'channel');
@@ -196,13 +196,13 @@ class ThemeManager {
         return $data;
     }
 
-    public function unpack() {
+    public function unpack(): void {
         $zip = new ZipStream($this->src->file('theme.zip'));
         $zip->extractTo($this->src);
         $this->apply('theme');
     }
 
-    public function apply(string $theme = '') {
+    public function apply(string $theme = ''): void {
         if (!empty($theme)) {
             $this->src = $this->src->directory($theme);
         }
@@ -217,18 +217,18 @@ class ThemeManager {
         $this->runScript($configs['script']);
     }
 
-    protected function setCache(array $data, string $prefix) {
+    protected function setCache(array $data, string $prefix): void {
         foreach ($data as $name => $id) {
             $this->cache[sprintf('@%s:%s', $prefix, $name)] = $id;
         }
     }
 
-    protected function getCacheId(string $name, string $prefix = '') {
+    protected function getCacheId(string $name, string $prefix = ''): mixed {
         $key = empty($prefix) && str_starts_with($name, '@') ? $name : sprintf('@%s:%s', $prefix, $name);
         return $this->cache[$key] ?? 0;
     }
 
-    protected function runScript(array $data) {
+    protected function runScript(array $data): void {
         usort($data, function ($pre, $next) {
             $maps = ['group' => 1, 'linkage' => 2, 'model' => 3, 'form' => 4, 'field' => 5, 'channel' => 6, 'content' => 7];
             if (!isset($maps[$pre['action']])) {
@@ -252,22 +252,22 @@ class ThemeManager {
 
 
 
-    protected function runActionCopy(array $data) {
+    protected function runActionCopy(array $data): void {
         $this->src->directory($data['src'])->copy($this->dist->directory($data['dist']));
     }
 
-    protected function runActionGroup(array $data) {
+    protected function runActionGroup(array $data): void {
         if (!isset($data['data'])) {
             $this->insertGroup($data);
         }
     }
 
-    protected function runActionForm(array $data) {
+    protected function runActionForm(array $data): void {
         $data['type'] = 1;
         $this->runActionModel($data);
     }
 
-    protected function runActionLinkage(array $data) {
+    protected function runActionLinkage(array $data): void {
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
         $model = LinkageModel::where('code', $data['code'])->first();
@@ -281,7 +281,7 @@ class ThemeManager {
         $this->runActionLinkageData($items, 0, '', $model->id);
     }
 
-    public function runActionLinkageData(array $data, $parent_id, $prefix, $linkage_id) {
+    public function runActionLinkageData(array $data, int $parent_id, string $prefix, int $linkage_id): void {
         foreach ($data as $item) {
             $children = $item['children'] ?? [];
             unset($item['children']);
@@ -352,14 +352,13 @@ class ThemeManager {
         if (!$model) {
             throw new Exception('数据错误');
         }
-        $scene = $scene->setModel($this->getCacheId($model->model_id, 'model'));
+        $scene = $scene->setModel($this->getCacheId((string)$model->model_id, 'model'));
         $scene->addField($model);
     }
 
     protected function runActionChannel(array $data) {
         $type = $data['type'] ?? null;
         if (empty($type)) {
-
         } elseif ($type === 'page') {
             $data['type'] = CategoryEntity::TYPE_PAGE;
         } elseif ($type === 'link') {
@@ -374,6 +373,9 @@ class ThemeManager {
         }
         if (isset($data['group'])) {
             $data['groups'] = implode(',', (array)$data['group']);
+        }
+        if (empty($data['name'])) {
+            $data['name'] = CMSRepository::generateTableName($data['title']);
         }
         $model = CategoryModel::where('name', $data['name'])->first();
         if (empty($model)) {
@@ -423,7 +425,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionOption($data) {
+    protected function runActionOption(array $data) {
         $newOptions = [];
         foreach ($data['data'] as $item) {
             if (isset($item['items'])) {
@@ -433,7 +435,7 @@ class ThemeManager {
                 $item['default_value'] = $item['default'];
             }
             unset($item['default'], $item['items'], $item['id']);
-            $options[] = $item;
+            $newOptions[] = $item;
         }
         CMSRepository::site()->saveOption($newOptions);
     }
@@ -464,7 +466,7 @@ class ThemeManager {
         return $data;
     }
 
-    public static function clear() {
+    public static function clear(): void {
         $truncateTables = [
             ModelModel::tableName(),
             ModelFieldModel::tableName(),

@@ -123,7 +123,7 @@ class ModelController extends Controller {
     }
 
     public function optionAction(string $type, int $id = 0) {
-        $this->layout = false;
+        $this->layout = '';
         $model = ModelFieldModel::findOrNew($id);
         $field = SingleScene::newField($type);
         return $this->showContent($field->options($model));

@@ -28,13 +28,15 @@ class OpenRepository {
             $model = new PlatformModel();
             $model->user_id = auth()->id();
             $model->generateNewId();
+            $model->sign_key = '';
             $model->status = PlatformModel::STATUS_WAITING;
         }
         if (empty($model)) {
             throw new Exception('应用不存在');
         }
-        if (!$model->load($data) || !$model->save()) {
-            throw new Exception($model->getFirstError());
+        $model->load($data);
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError() ?? 'save error');
         }
         return $model;
     }

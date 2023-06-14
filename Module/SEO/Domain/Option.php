@@ -34,7 +34,11 @@ class Option {
     private function format() {
         $data = [];
         /** @var OptionModel[]  $items */
-        $items = OptionModel::query()->orderBy('position', 'desc')->get('code', 'value', 'type');
+        try {
+            $items = OptionModel::query()->orderBy('position', 'desc')->get('code', 'value', 'type');
+        } catch (\Exception) {
+            $items = [];
+        }
         foreach ($items as $item) {
             $data[$item->code] = static::formatOption((string)$item->getAttributeSource('value'), $item->type);
         }

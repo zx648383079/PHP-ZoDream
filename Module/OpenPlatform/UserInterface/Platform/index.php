@@ -5,7 +5,8 @@ use Zodream\Template\View;
 $this->title = '管理应用';
 $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
 ?>
-   <div class="page-search-bar">
+<div class="panel-container">
+    <div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
                 <label class="sr-only" for="keywords">名称</label>
@@ -16,7 +17,7 @@ $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
         <a class="btn btn-success pull-right" href="<?=$this->url('./platform/create')?>">新增应用</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -42,7 +43,7 @@ $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
                     <?=$item->created_at?>
                 </td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
+                    <div class="btn-group">
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./platform/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./platform/delete', ['id' => $item->id])?>">删除</a>
                     </div>
@@ -51,6 +52,12 @@ $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
+</div>

@@ -39,7 +39,7 @@ $this->registerJs($js);
         <div class="tab-body">
             <div class="tab-item active">
             <?php foreach($model->options as $item):?>
-                <?php $item['label'] = '<i class="fa fa-times" data-id="'. $item['code'].'"></i>'.$item['name'];
+                <?php $item['label'] = '<i class="fa fa-times" data-id="'. $item['code'].'" title="删除此配置"></i>'.$item['name'];
                 if($item['type'] == 'text'):?>
                 <?=Theme::text(sprintf('option[%s]', $item['code']), $item['value'], $item['name'])->setLabel($item['label'])?>
                 <?php elseif ($item['type'] == 'textarea'):?>

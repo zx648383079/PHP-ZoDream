@@ -22,7 +22,7 @@ class CreateOpenPlatformTables extends Migration {
             $table->string('appid', 12)->unique();
             $table->char('secret', 32);
             $table->uint('sign_type', 1)->default(0)->comment('签名方式');
-            $table->string('sign_key', 32)->comment('签名密钥');
+            $table->string('sign_key', 32)->default('')->comment('签名密钥');
             $table->uint('encrypt_type', 1)->default(0)->comment('加密方式');
             $table->text('public_key')->nullable()->comment('密钥');
             $table->string('rules')->default('')->comment('允许访问的网址');

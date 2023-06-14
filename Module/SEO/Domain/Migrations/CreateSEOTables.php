@@ -21,7 +21,7 @@ class CreateSEOTables extends Migration {
             $table->comment('全局设置');
             $table->id();
             $table->string('name', 20);
-            $table->string('code', 20)->default('');
+            $table->string('code', 50)->default('');
             $table->uint('parent_id')->default(0);
             $table->string('type', 20)->default('text');
             $table->uint('visibility', 1)->default(1)->comment('是否对外显示, 0 页面不可见，1 编辑可见 2 前台可见');
@@ -87,6 +87,16 @@ class CreateSEOTables extends Migration {
                     'name' => '站点LOGO',
                     'code' => 'site_logo',
                     'type' => 'image',
+                    'visibility' => 2,
+                ],
+                [
+                    'name' => 'ICP备案号',
+                    'code' => 'site_icp_beian',
+                    'visibility' => 2,
+                ],
+                [
+                    'name' => '公网安备案号',
+                    'code' => 'site_pns_beian',
                     'visibility' => 2,
                 ],
             ];

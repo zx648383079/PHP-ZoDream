@@ -18,13 +18,15 @@ $this->registerJs($js);
     <?=Form::text('table', true)->readonly($model->id > 0)?>
     <div class="content-box">
         <?=Form::select('child_model', [$model_list, ['无分集']])?>
-        <?=Form::text('category_template', true)?>
-        <?=Form::text('list_template', true)?>
-        <?=Form::text('show_template', true)?>
+        <?=Form::text('category_template', true)->tip('栏目页，文件夹为Category')?>
+        <?=Form::text('list_template', true)->tip('栏目文章搜索页，文件夹为Category')?>
+        <?=Form::text('show_template', true)->tip('文章详情页，文件夹为Content')?>
     </div>
     <div class="form-box">
         <?=Form::checkbox('setting[is_show]')->value($model->setting('is_show'))->label('显示')->tip('允许显示在前台')?>
         <?=Form::checkbox('setting[is_only]')->value($model->setting('is_only'))->label('唯一')->tip('是否保持用户唯一')?>
+        <?=Form::text('setting[form_template]')->value($model->setting('form_template'))->label('表单模板')->tip('表单填写的模板，文件夹为Content')?>
+        <?=Form::text('setting[show_template]')->value($model->setting('show_template'))->label('显示模板')->tip('表单内容显示的模板，文件夹为Content')?>
     </div>
     <?=Form::text('position')?>
     <div class="btn-group">

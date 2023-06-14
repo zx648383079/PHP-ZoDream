@@ -1,0 +1,831 @@
+{
+    "name": "business",
+    "description": "企业门户主题",
+    "author": "zodream",
+    "cover": "assets/images/screenshot.png",
+    "script": [
+        {
+            "action": "copy",
+            "src": "assets",
+            "dist": "assets"
+        },
+        {
+            "action": "option",
+            "data": [
+                {
+                    "name": "主题",
+                    "code": "theme",
+                    "type": "text",
+                    "value": "business"
+                },
+                {
+                    "name": "公司名",
+                    "code": "company_name",
+                    "type": "text"
+                },
+                {
+                    "name": "ICP备案号",
+                    "code": "icp_beian_no",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "action": "group",
+            "name": "nav"
+        },
+        {
+            "action": "linkage",
+            "name": "行业",
+            "code": "industry",
+            "data": [
+            ]
+        },
+        {
+            "action": "linkage",
+            "name": "产品类型",
+            "code": "product_type",
+            "data": [
+            ]
+        },
+        {
+            "action": "model",
+            "name": "新闻",
+            "table": "news",
+            "category_template": "page",
+            "list_template": "list",
+            "show_template": "index",
+            "fields": [
+                {
+                    "name": "作者",
+                    "field": "author",
+                    "type": "text"
+                },
+                {
+                    "name": "显示灰色",
+                    "field": "is_gray",
+                    "type": "switch",
+                    "is_main": true
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "文件资料",
+            "table": "resources",
+            "category_template": "resource",
+            "list_template": "resource_list",
+            "show_template": "resource",
+            "fields": [
+                {
+                    "name": "语言",
+                    "field": "language",
+                    "type": "select",
+                    "setting": {
+                        "option": {
+                            "items": "中文\n英文"
+                        }
+                    }
+                },
+                {
+                    "name": "文件名称",
+                    "field": "file_name",
+                    "type": "text"
+                },
+                {
+                    "name": "文件大小",
+                    "field": "file_size",
+                    "type": "text"
+                },
+                {
+                    "name": "文档类类型",
+                    "field": "file_type",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "产品",
+            "table": "products",
+            "category_template": "product",
+            "list_template": "product_list",
+            "show_template": "product",
+            "fields": [
+                {
+                    "name": "行业",
+                    "field": "industry",
+                    "type": "@linkage:industry",
+                    "is_main": true
+                },
+                {
+                    "name": "行业",
+                    "field": "product_type",
+                    "type": "@linkage:product_type",
+                    "is_main": true
+                },
+                {
+                    "name": "订购编号",
+                    "field": "product_no",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "name": "应用范围",
+                    "field": "applications",
+                    "type": "editor"
+                },
+                {
+                    "name": "标准及认证证书",
+                    "field": "standards_certification",
+                    "type": "editor"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "销售网络",
+            "table": "salesman",
+            "category_template": "salesman",
+            "list_template": "salesman_list",
+            "show_template": "salesman",
+            "fields": [
+                {
+                    "tel": "姓名",
+                    "field": "title",
+                    "type": "text"
+                },
+                {
+                    "tel": "电话",
+                    "field": "phone",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "tel": "传真",
+                    "field": "fax",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "tel": "邮箱",
+                    "field": "email",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "tel": "手机",
+                    "field": "tel",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "tel": "QQ",
+                    "field": "qq",
+                    "type": "text",
+                    "is_main": true
+                },
+                {
+                    "action": "disable",
+                    "field": "content"
+                }
+            ]
+        },
+        {
+            "action": "form",
+            "name": "询价表单",
+            "table": "inquiry",
+            "setting": {
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": [
+                {
+                    "name": "品牌厂商",
+                    "field": "manutacturer",
+                    "type": "text",
+                    "is_main": true,
+                    "is_required": true
+                },
+                {
+                    "name": "产品名称",
+                    "field": "product_name",
+                    "type": "text",
+                    "is_main": true,
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号",
+                    "field": "product_type",
+                    "type": "text",
+                    "is_main": true,
+                    "is_required": true
+                },
+                {
+                    "name": "产品序列号",
+                    "field": "product_no",
+                    "type": "text"
+                },
+                {
+                    "name": "产品描述",
+                    "field": "product_desc",
+                    "type": "text"
+                },
+                {
+                    "name": "需求数量",
+                    "field": "quantity",
+                    "type": "text"
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系人",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系地址",
+                    "field": "link_address",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系电话",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "传真",
+                    "field": "link_fax",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系邮箱",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "附加信息",
+                    "field": "content",
+                    "type": "textarea"
+                }
+            ]
+        },
+        {
+            "action": "form",
+            "name": "留言表单",
+            "table": "feedback",
+            "setting": {
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": [
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系人",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系电话",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "联系邮箱",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "留言内容",
+                    "field": "content",
+                    "type": "textarea"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "关于我们",
+            "name": "about_us",
+            "type": "page",
+            "content": "",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "公司介绍",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "企业文化",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "发展历程",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "组织机构",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "公司资质",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "公司荣誉",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "公司视频",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "产品中心",
+            "name": "product_center",
+            "type": "@model:products",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "产品类型",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "行业分类",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                },
+                {
+                    "action": "channel",
+                    "title": "品牌",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "新闻中心",
+            "name": "news_center",
+            "type": "@model:news",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "公司新闻",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "行业新闻",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "专题新闻",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "展会信息",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "员工风采",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "通知通告",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "服务与支持",
+            "name": "service_support",
+            "type": "page",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "服务网络",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "公司业绩",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "解决方案",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "下载专区",
+                    "name": "",
+                    "type": "@model:resources",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg",
+                    "children": [
+                        {
+                            "action": "channel",
+                            "title": "产品样本",
+                            "name": "",
+                            "type": "@model:resources",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "产品证书",
+                            "name": "",
+                            "type": "@model:resources",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "技术资料",
+                            "name": "",
+                            "type": "@model:resources",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }
+                    ]
+                }, 
+                {
+                    "action": "channel",
+                    "title": "服务分类",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg",
+                    "children": [
+                        {
+                            "action": "channel",
+                            "title": "技术支持",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "产品维修",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "现场服务",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "商务支持",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "产品校验",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "投诉与建议",
+                            "name": "",
+                            "type": "page",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }
+                    ]
+                }, 
+                {
+                    "action": "channel",
+                    "title": "常见问题",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg",
+                    "children": [
+                        {
+                            "action": "channel",
+                            "title": "产品选型",
+                            "name": "",
+                            "type": "@model:news",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "同类产品替代",
+                            "name": "",
+                            "type": "@model:news",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "注意事项",
+                            "name": "",
+                            "type": "@model:news",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "联系我们",
+            "name": "",
+            "type": "page",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "联系方式",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg",
+                    "children": [
+                        {
+                            "action": "channel",
+                            "title": "业务部",
+                            "name": "",
+                            "type": "@model:salesman",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }, 
+                        {
+                            "action": "channel",
+                            "title": "市场技术部",
+                            "name": "",
+                            "type": "@model:salesman",
+                            "category_template": "index",
+                            "image": "/assets/images/banner.jpg"
+                        }
+                    ]
+                }, 
+                {
+                    "action": "channel",
+                    "title": "销售网络",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "反馈留言",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "微博",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "微信",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "手机站",
+                    "name": "",
+                    "type": "page",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "网上商城",
+            "name": "",
+            "type": "link",
+            "group": "nav",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "阿里巴巴",
+                    "name": "",
+                    "type": "link",
+                    "group": "nav"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "人力资源",
+            "name": "",
+            "type": "@model:news",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg",
+            "children": [
+                {
+                    "action": "channel",
+                    "title": "用人机制",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "人才招聘",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "员工活动",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "员工培训",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }, 
+                {
+                    "action": "channel",
+                    "title": "最新通知",
+                    "name": "",
+                    "type": "@model:news",
+                    "group": "nav",
+                    "category_template": "index",
+                    "image": "/assets/images/banner.jpg"
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "网站地图",
+            "name": "",
+            "type": "page",
+            "group": "nav",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg"
+        }
+    ]
+}

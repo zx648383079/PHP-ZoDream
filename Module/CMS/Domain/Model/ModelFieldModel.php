@@ -28,7 +28,7 @@ use Zodream\Helpers\Json;
  */
 class ModelFieldModel extends BaseModel {
 
-    public $type_list = [
+    public array $type_list = [
         'text' => '文本字段',
         'textarea' => '多行文本',
         'markdown' => 'Markdown',

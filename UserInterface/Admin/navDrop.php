@@ -26,6 +26,9 @@ $user = auth()->user();
             <a href="<?=$this->url('/cms/admin')?>">CMS管理</a>
         </li>
         <li>
+            <a href="<?=$this->url('/seo/admin')?>">系统设置</a>
+        </li>
+        <li>
             <a href="https://zodream.cn/doc">帮助</a>
         </li>
         <li>

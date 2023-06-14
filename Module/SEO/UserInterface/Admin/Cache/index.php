@@ -9,7 +9,11 @@ $this->title = '缓存管理';
 
     <?=Form::checkbox('store[]', array_column($storeItems, 'name', 'value'))->label('缓存区')?>
 
-    <button type="submit" class="btn btn-success">清除选中</button>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">清除选中</button>
+        <a href="<?=$this->url('./@admin/cache/clear')?>" data-type="del" data-tip="确认清除全部缓存" class="btn btn-danger">清除全部缓存</a>
+    </div>
+    
     <input type="hidden" name="store[]" value="">
-    <a href="<?=$this->url('./@admin/cache/clear')?>" data-type="del" data-tip="确认清除全部缓存" class="btn btn-danger">清除全部缓存</a>
+    
 <?= Form::close('id') ?>

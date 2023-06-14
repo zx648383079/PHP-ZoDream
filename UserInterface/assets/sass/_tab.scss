@@ -4,6 +4,7 @@
     .tab-header {
         position: relative;
         display: flex;
+        user-select: none;
         .zd-tab-item,
         .tab-item {
             &:hover {
@@ -51,13 +52,14 @@
     .tab-body {
         .zd-tab-item,
         .tab-item {
+            display: none;
+            width: 100%;
+            padding: 0.8rem 0;
             &.active {
                 display: block;
                 background: transparent;
                 color: #767676;
             }
-            display: none;
-            width: 100%;
         }
     }
 }

@@ -10,6 +10,13 @@ use Zodream\Module\Gzo\Domain\Repositories\ModuleRepository;
 
 class HomeController extends Controller {
 
+    private string $lockFile = APP_DIR .'/data/install.off';
+    private array $mustModuleItems = [
+        'seo' => 'SEO',
+        'auth' => 'Auth',
+        // 'contact' => 'Contact',
+    ];
+
     public function rules() {
         return [
             '*' => '*',
@@ -18,11 +25,14 @@ class HomeController extends Controller {
     }
 
     public function indexAction() {
+        if (is_file($this->lockFile)) {
+            return $this->redirectWithMessage('/', '已安装完成');
+        }
 		return $this->show();
 	}
 
     public function environmentAction() {
-        return $this->show(array(
+        $data = array(
             'name' => Environment::getName(),
             'os' => Environment::getOS(),
             'server' => Environment::getServer(),
@@ -34,9 +44,40 @@ class HomeController extends Controller {
             'mysql' => Environment::getMysql(),
             'mysqli' => Environment::getMysqli(),
             'pdo' => Environment::getPdo(),
-            'temp' => Environment::getWriteAble(APP_DIR. '/data/temp'),
-            'log' => Environment::getWriteAble(APP_DIR. '/data/log')
-        ));
+            'folders' => [
+
+            ],
+        );
+        $folderItems = [
+            [
+                'name' => 'Session文件夹',
+                'path' => APP_DIR. '/data/temp',
+            ],
+            [
+                'name' => '缓存文件夹',
+                'path' => APP_DIR. '/data/cache',
+                'required' => true
+            ],
+            [
+                'name' => '文件上传文件夹',
+                'path' => APP_DIR. '/html/assets/upload',
+                'required' => true
+            ],
+            [
+                'name' => '错误日志文件夹',
+                'path' => APP_DIR. '/data/log',
+                'required' => true
+            ],
+        ];
+        foreach ($folderItems as $item) {
+            if (!isset($item['required'])) {
+                $item['required'] = false;
+            }
+            $item['writeable'] = Environment::getWriteAble($item['path']);
+            $item['path'] = str_replace('\\', '/', $item['path']);
+            $data['folders'][] = $item;
+        }
+        return $this->show($data);
     }
 
     public function databaseAction() {
@@ -44,12 +85,9 @@ class HomeController extends Controller {
 	}
 
     public function dbsAction(Request $request) {
-        $configs = $request->get('db');
-        $configs['database'] = 'information_schema';
-        config([
-            'db' => [
-                'connections' => $configs
-            ]
+        $configs = array_merge(config('database.connections'), $request->get('db', []));
+        config()->set('database', [
+            'connections' => $configs
         ]);
         try {
             return $this->renderData(DatabaseRepository::schemas());
@@ -59,41 +97,58 @@ class HomeController extends Controller {
     }
 
     public function importAction(Request $request) {
-        $configs = $request->get('db');
-        $data = config('database');
-        $data['connections'] = array_merge($data['connections'], $configs);
-        config([
-            'database' => $data
-        ]);
-        ModuleGenerator::renderConfigs('database', $data);
-        DatabaseRepository::schemaCreate(request()->get('db.database'), '');
-        config()->reset();
-        return $this->renderData([
-            'url' => url('./module')
-        ]);
+        try {
+            $configs = $request->get('db');
+            $data = config('database');
+            $data['connections'] = array_merge($data['connections'], $configs);
+            ModuleGenerator::renderConfigs('database', $data);
+            $data['connections']['database'] = 'information_schema';
+            config()->set('database', $data);
+            DatabaseRepository::schemaCreate($configs['database']);
+            config()->set('database', null);
+            return $this->renderData([
+                'url' => url('./module')
+            ]);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
     }
 
     public function moduleAction() {
         $module_list = ModuleRepository::moduleList();
-        return $this->show(compact('module_list'));
+        $must_items = [];
+        foreach ($this->mustModuleItems as $path => $name) {
+            $must_items[$name] = $path;
+        }
+        return $this->show(compact('module_list', 'must_items'));
     }
 
     public function importModuleAction(array $module, array $user) {
-        foreach ($module['checked'] as $item) {
-            $uri = $module['uri'][$item];
-            ModuleRepository::install($uri, 'Module\\'.$item, true, true);
-        }
         try {
+            foreach ($this->mustModuleItems as $uri => $item) {
+                if (!empty($module['uri'][$item])) {
+                    $uri = $module['uri'][$item];
+                }
+                ModuleRepository::install($uri, 'Module\\'.$item, true, true);
+            }
+            foreach ($module['checked'] as $item) {
+                if (in_array($item, $this->mustModuleItems)) {
+                    continue;
+                }
+                $uri = $module['uri'][$item];
+                ModuleRepository::install($uri, 'Module\\'.$item, true, true);
+            }
             AuthRepository::createAdmin($user['email'], $user['password']);
+            return $this->renderData([
+                'url' => url('./complete')
+            ]);
         } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData([
-            'url' => url('./complete')
-        ]);
     }
 
     public function completeAction() {
-        file_put_contents('install.off', '');
+        file_put_contents($this->lockFile, '');
         return $this->show();
     }
 
@@ -120,7 +175,7 @@ class HomeController extends Controller {
         ]);
         try {
             DatabaseRepository::schemaCreate($db['database']);
-        } catch (\PDOException $ex) {
+        } catch (\Exception $ex) {
             return $this->showContent(sprintf('请确认数据库【%s】是否创建？请手动创建', $database));
         }
         ModuleGenerator::renderConfigs('database', [
@@ -131,15 +186,10 @@ class HomeController extends Controller {
             return $this->showContent('安装完成！');
         }
         $module_list = ModuleRepository::moduleList();
-        $modules = [
-            'auth' => 'Module\Auth',
-            'blog' => 'Module\Blog',
-            'seo' => 'Module\SEO',
-            'contact' => 'Module\Contact',
-        ];
+        $modules = $this->mustModuleItems;
         echo '模块列表：', PHP_EOL;
         foreach ($module_list as $i => $item) {
-            echo $i + 1, ',', $item, (in_array('Module\\'.$item, $modules) ? '(默认)' : ''), PHP_EOL;
+            echo $i + 1, ',', $item, (in_array($item, $modules) ? '(默认)' : ''), PHP_EOL;
         }
         while (($num = $request->post('请选要安装的模块：', '0')) > 0) {
             if ($num > count($module_list)) {
@@ -149,10 +199,19 @@ class HomeController extends Controller {
             if (empty($uri)) {
                 continue;
             }
-            $modules[trim($uri, '/')] = 'Module\\'.$module_list[$num - 1];
+            $modules[trim($uri, '/')] = $module_list[$num - 1];
+        }
+        foreach ($this->mustModuleItems as $uri => $item) {
+            if (in_array($item, $modules)) {
+                $uri = array_search($item, $modules);
+            }
+            ModuleRepository::install($uri, 'Module\\'.$item, true, true);
         }
         foreach ($modules as $path => $module) {
-            ModuleRepository::install($path, $module, true, true);
+            if (in_array($module, $this->mustModuleItems)) {
+                continue;
+            }
+            ModuleRepository::install($path, 'Module\\'.$module, true, true);
         }
 
         $email = $request->post('请输入管理员邮箱：', '');

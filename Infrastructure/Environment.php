@@ -34,26 +34,26 @@ class Environment {
 	/**
 	 * 是否支持 allow_url_fopen
 	 */
-	public static function getUrlFopen() {
+	public static function getUrlFopen(): bool|string {
 		return ini_get('allow_url_fopen');
 	}
 	
 	/**
 	 * 是否是安全模式
 	 */
-	public static function getSafeMode() {
+	public static function getSafeMode(): bool|string {
 		return ini_get('safe_mode');
 	}
 	
 	/**
 	 * 获取GB图形库版本
 	 */
-	public static function getGbVersion() {
+	public static function getGbVersion(): string {
 		if (!function_exists('phpinfo')) {
 			if (function_exists('imagecreate')) {
 				return '2.0';
 			}
-			return 0;
+			return '0';
 		}
 		ob_start();
 		phpinfo(8);
@@ -62,14 +62,14 @@ class Environment {
 		if (preg_match('/\bgd\s+version\b[^\d\n\r]+?([\d\.]+)/i', $info, $match)) {
 			return $match[1];
 		}
-		return 0;
+		return '0';
 	}
 	
 	/**
 	 * 判断mysql是否支持
 	 * @return boolean
 	 */
-	public static function getMysql() {
+	public static function getMysql(): bool {
 		return function_exists('mysql_connect');
 	}
 	
@@ -77,7 +77,7 @@ class Environment {
 	 * 判断mysqli是否支持
 	 * @return boolean
 	 */
-	public static function getMysqli() {
+	public static function getMysqli(): bool {
 		return function_exists('mysqli_connect');
 	}
 	
@@ -85,7 +85,7 @@ class Environment {
 	 * 判断pdo是否支持
 	 * @return boolean
 	 */
-	public static function getPdo() {
+	public static function getPdo(): bool {
 		return class_exists('PDO');
 	}
 	
@@ -94,7 +94,7 @@ class Environment {
 	 * @param string $dir
 	 * @return boolean
 	 */
-	public static function getReadAble($dir) {
+	public static function getReadAble(string $dir): bool {
 		if (!is_dir($dir)) {
 			return false;
 		}
@@ -105,7 +105,7 @@ class Environment {
 	 * @param string $dir
 	 * @return boolean
 	 */
-	public static function getWriteAble(string $dir) {
+	public static function getWriteAble(string $dir): bool {
 		if (!is_dir($dir)) {
 			return false;
 		}
@@ -119,7 +119,7 @@ class Environment {
 		return boolval($rs);
 	}
 	
-	public static function getFileByDir($dir = '/') {
+	public static function getFileByDir(string $dir = '/'): array {
 		$files    = $dirs = array();
 		$dir = '/'.trim($dir, '/');
 		$dirList = @scandir(APP_DIR.$dir);
@@ -154,7 +154,7 @@ class Environment {
 	 * @param array $files
 	 * @return array
 	 */
-	public static function getFiles(string $path, string $allowFiles = '.*', array &$files = array()) {
+	public static function getFiles(string $path, string $allowFiles = '.*', array &$files = array()): array {
 	    if (!is_dir($path)) {
 			return [];
 		}

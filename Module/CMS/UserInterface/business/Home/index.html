@@ -1,0 +1,61 @@
+{layout:main}
+{@slider.css}
+{@jquery.slider.min.js}
+{>js}
+var silder = $(".banner .slider").slider({
+    width: 1,
+    height: 284,
+});
+{/>}
+<div class="banner">        
+    <div class="slider" data-auto="true">
+        <div class="slider-box">
+            <ul>
+                {contents:category=banner num=4}
+                <li><img src="{$content.thumb}" width="100%" alt=""></li>
+                {/contents}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="panel tab-panel">
+    <div class="panel-header">
+        <i class="fa fa-boxes"></i>
+        最近热播
+        <a href="{channel:movie,url}" class="more">
+            更多
+            <i class="fa fa-chevron-right"></i>
+        </a>
+        <div class="tab-header">
+            <a href="{channel:movie,url}" class="active">电影</a>
+            <a href="{channel:tv,url}">电视剧</a>
+        </div>
+        
+    </div>
+    <div class="panel-body">
+        <div class="tab-item active">
+            {contents:category=movie field=id,cat_id,model_id,title,thumb,definition num=10}
+            <a class="video-item" href="{url:$content}">
+                <div class="thumb">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                    <span class="play-icon"></span>
+                    <span class="tag">{linkageText:$content.definition}</span>
+                </div>
+                <div class="title">{$content.title}</div>
+            </a>
+            {/contents}
+        </div>
+        <div class="tab-item">
+            {contents:category=tv field=id,cat_id,model_id,title,thumb,definition num=10}
+            <a class="video-item" href="{url:$content}">
+                <div class="thumb">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                    <span class="play-icon"></span>
+                    <span class="tag">{linkageText:$content.definition}</span>
+                </div>
+                <div class="title">{$content.title}</div>
+            </a>
+            {/contents}
+        </div>
+    </div>
+</div>

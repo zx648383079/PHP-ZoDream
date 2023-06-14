@@ -50,14 +50,13 @@ function pinyinIfEmpty(ele: JQuery, val: string) {
     if (ele.val() || !val) {
         return;
     }
-    postJson('/tool/converter', {
-        type: 'pinyin',
-        content: val
+    postJson(BASE_URI + 'home/generate', {
+        name: val
     }, function(data) {
         if (data.code != 200) {
             return;
         }
-        ele.val(data.data.result.replace(/\s/g, '').toLowerCase()).trigger('blur');
+        ele.val(data.data.replace(/\s/g, '').toLowerCase()).trigger('blur');
     });
 }
 
@@ -67,7 +66,7 @@ function bindEditModel() {
             ele.val(val);
         }
     },
-    table = $('#table').blur(function() {
+    table = $('#table').on('blur', function() {
         let val = $(this).val();
         if (!val) {
             return;

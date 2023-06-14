@@ -15,6 +15,8 @@ use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Schema\Table;
+use Zodream\Helpers\PinYin;
+use Zodream\Helpers\Str;
 use Zodream\Http\Uri;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Template\Engine\ParserCompiler;
@@ -205,5 +207,13 @@ class CMSRepository {
             static::$cacheSite = SiteModel::find($id);
             return;
         }
+    }
+
+    public static function generateTableName(string $name) {
+        if (empty($name)) {
+            return Str::randomByNumber(8);
+        }
+        $val = PinYin::encode($name, 'all');
+        return empty($val) ? Str::randomByNumber(8) : $val;
     }
 }

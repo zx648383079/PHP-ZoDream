@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\SEO\Domain\Option;
 /** @var $this View */
 
 $this->registerCssFile([
@@ -17,6 +18,14 @@ $this->registerCssFile([
     '@main.min.js',
     '@home.min.js'
 ]);
+
+$icp_beian = Option::value('site_icp_beian');
+$pns_beian = Option::value('site_pns_beian');
+$pns_beian_no = '';
+if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
+    $pns_beian_no = $match[0];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="<?=trans()->getLanguage()?>">
@@ -51,21 +60,25 @@ $this->registerCssFile([
             <div class="container">
                 <?=$this->node('friend-link')?>
                 <div class="copyright">
-                    <p>Copyright ©zodream.cn, All Rights Reserved.</p>
-                    <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16003508号</a>
+                    <p>Copyright ©<?= request()->host() ?>, All Rights Reserved.</p>
+                    <?php if($icp_beian):?>
+                    <a href="https://beian.miit.gov.cn/" target="_blank"><?= $icp_beian ?></a>
+                    <?php endif;?>
+                    <?php if($pns_beian):?>
                     <p>
-                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43052402000190">
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=<?= $pns_beian_no ?>">
                             <img src="<?=$this->asset('images/beian.png')?>" alt="备案图标">
-                        湘公网安备 43052402000190号
+                        <?= $pns_beian ?>
                         </a>
                     </p>
+                    <?php endif;?>
                 </div>
             </div>
         </footer>
         <div class="dialog-search">
             <i class="dialog-close"></i>
             <div class="dialog-body">
-                <form action="<?=isset($layout_search_url) ? $layout_search_url : $this->url('./')?>" method="get">
+                <form action="<?= $layout_search_url ?? $this->url('./') ?>" method="get">
                     <i class="input-search"></i>
                     <input type="text" name="keywords" value="<?=$this->text(request()->get('keywords'))?>" placeholder="请输入关键字，按回车 / Enter 搜索" autocomplete="off">
                     <i class="input-clear"></i>

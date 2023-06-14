@@ -66,28 +66,35 @@
     margin: 0 0.5rem;
     vertical-align:middle;
     border-radius: .25rem;
-    &.btn-default {
-        background-color: #0dcaf0;
-        color: #fff;
-    }
     &.btn-full {
         width: 100%;
         margin: 0;
     }
-    &.btn-danger {
-        color: #fff;
-        background-color: #dc3545;
-        border-color: #d43f3a;
-    }
-    &.btn-primary {
-        color: #fff;
-        background-color: #337ab7;
-        border-color: #2e6da4;
-    }
-    &.btn-success {
-        background-color: #198754;
-        color: #fff;
-    }
+}
+
+.btn-default {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #d43f3a;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.btn-success {
+    background-color: #198754;
+    color: #fff;
+}
+
+.btn-info {
+    background-color: #5bc0de;
+    color: #fff;
 }
 
 .checkbox {
@@ -408,6 +415,14 @@ i {
         &:last-child {
             border-radius: 0 .25rem .25rem 0;
         }
+    }
+}
+
+.input-group {
+    .input-tip {
+        color: #767676;
+        font-size: 0.75rem;
+        padding: 0 0 0.625rem 0.625rem;
     }
 }
 

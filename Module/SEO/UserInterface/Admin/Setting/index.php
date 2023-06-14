@@ -81,9 +81,11 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-success btn-save">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
-    <a href="javascript:;" class="btn" data-action="edit">切换编辑模式</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success btn-save">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+        <a href="javascript:;" class="btn btn-info" data-action="edit">切换编辑模式</a>
+    </div>
 <?= Form::close() ?>
 
 <div class="dialog dialog-box option-dialog" data-type="dialog">

@@ -1,5 +1,5 @@
 function bindDB() {
-    $('input[name="db[database]"]').blur(function() {
+    $('input[name="db[database]"]').on('blur', function() {
         let db = $(this).val().toString().trim();
         postJson(BASE_URI + 'dbs', $('form').serialize(), res => {
             if (res.code === 200) {
@@ -8,7 +8,8 @@ function bindDB() {
             parseAjax(res);
         });
     });
-    $('.page-footer .btn').on('click',function() {
+    $('.page-footer .btn').on('click', function(e) {
+        e.preventDefault();
         let form = $('form');
         ajaxForm(form.attr('action'), form.serialize(), res => {
             parseAjax(res);
@@ -28,7 +29,8 @@ function bindModule() {
         }
         next.val(this.value.toString().toLowerCase().replace('\\', '/'));
     });
-    $('.page-footer .btn').on('click',function() {
+    $('.page-footer .btn').on('click',function(e) {
+        e.preventDefault();
         let form = $('form');
         ajaxForm(form.attr('action'), form.serialize(), res => {
             parseAjax(res);

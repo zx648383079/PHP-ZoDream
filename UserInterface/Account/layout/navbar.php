@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Template\View */
 ?>
