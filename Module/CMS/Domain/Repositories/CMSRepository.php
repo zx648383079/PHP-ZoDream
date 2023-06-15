@@ -119,7 +119,7 @@ class CMSRepository {
         $site = static::site();
         $items = [];
         foreach ($site['options'] as $item) {
-            $items[$item['code']] = Option::formatOption((string)$item['value'], $item['type']);
+            $items[$item['code']] = Option::formatOption((string)($item['value'] ?? ''), $item['type']);
         }
         foreach (
             ['title', 'keywords', 'description', 'logo'] as $code
@@ -215,6 +215,6 @@ class CMSRepository {
             return Str::randomByNumber(8);
         }
         $val = PinYin::encode($name, 'all');
-        return empty($val) ? Str::randomByNumber(8) : $val;
+        return empty($val) ? Str::randomByNumber(8) : str_replace(' ', '_', $val);
     }
 }

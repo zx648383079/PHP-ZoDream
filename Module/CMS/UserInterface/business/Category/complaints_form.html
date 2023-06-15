@@ -1,0 +1,470 @@
+{layout:main}
+<div class="banner-bg" style="background-image: url({$cat.image})"></div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">{extend:layouts/nav}</div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>
+                    {location:}
+                </ul>
+            </div>
+            <article id="content">{$cat.content}</article>
+
+            <div class="form-panel">
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <th class="input-label">省市：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="provinces"
+                                    id="textfield40"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">公司名称：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="companyname"
+                                    id="textfield41"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="input-label">姓名：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    id="textfield42"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">电话号码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="phone_number"
+                                    id="textfield43"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="input-label">邮件地址：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="email"
+                                    id="textfield44"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">手机号码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    id="textfield45"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="input-label">传真号码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="faxnumber"
+                                    id="textfield46"
+                                />
+                            </td>
+
+                            <th class="input-label">首选联系方式：</th>
+
+                            <td>
+                                <select name="firstcontact" id="select">
+                                    <option value="邮件">邮件</option>
+
+                                    <option value="电话">电话</option>
+
+                                    <option value="传真">传真</option>
+
+                                    <option value="手机">手机</option>
+                                </select>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="input-label">投诉建议类别：</th>
+
+                            <td colspan="3" id="asdf">
+                                <select name="suggestions_type">
+                                    <option value="0">产品质量投诉</option>
+
+                                    <option value="1">包装质量投诉</option>
+
+                                    <option value="2">工作服务投诉</option>
+
+                                    <option value="3">建议</option>
+                                </select>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">产品型号规格：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_specification"
+                                    id="textfield49"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">产品数量：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="quantity"
+                                    id="textfield53"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">生产日期或条码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="start_dates"
+                                    id="textfield57"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">购买点名称：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="sale_address"
+                                    id="textfield58"
+                                    notempty=""
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">购买点联系方式：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="sales_contact"
+                                    id="textfield48"
+                                />
+                            </td>
+
+                            <th class="input-label">购买日期：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="sale_date"
+                                    id="textfield52"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">产品使用省市：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_provinces"
+                                    id="textfield54"
+                                />
+                            </td>
+
+                            <th class="input-label">产品使用日期：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_date"
+                                    id="textfield60"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">故障现象描述：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="problem_description"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield55"
+                                    notempty=""
+                                ></textarea>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t0">
+                            <th class="input-label">
+                                使用场合、<br />
+
+                                负载及线路情况：
+                            </th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="loads"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield47"
+                                ></textarea>
+                            </td>
+                        </tr>
+
+                        <tr class="t1 hidden">
+                            <th class="input-label">产品型号规格：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_specification1"
+                                    id="textfield56"
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+
+                            <th class="input-label">产品数量</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="quantity1"
+                                    id="text1"
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t1 hidden">
+                            <th class="input-label">外箱条码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="carton_barcode"
+                                    id="textfield64"
+                                />
+                            </td>
+
+                            <th class="input-label">中盒条码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="box_barcode"
+                                    id="textfield63"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr class="t1 hidden">
+                            <th class="input-label">产品条码：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_barcode"
+                                    id="textfield65"
+                                />
+                            </td>
+
+                            <th class="input-label">到货时间：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="product_start"
+                                    id="textfield62"
+                                />
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t1 hidden">
+                            <th class="input-label">问题描述：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="problem_description1"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield59"
+                                ></textarea>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t1 hidden">
+                            <th class="input-label">所需服务及要求：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="services_requirements1"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield71"
+                                ></textarea>
+                            </td>
+                        </tr>
+
+                        <tr class="t2 hidden">
+                            <th class="input-label">外箱封条情况：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="carton_seal_case"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield61"
+                                ></textarea>
+                            </td>
+                        </tr>
+
+                        <tr class="t2 hidden">
+                            <th class="input-label">投诉对象：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="complaints_object"
+                                    id="textfield67"
+                                />
+                            </td>
+
+                            <th class="input-label">投诉原因：</th>
+
+                            <td>
+                                <input
+                                    type="text"
+                                    name="complaints_reason"
+                                    id="textfield68"
+                                />
+                            </td>
+                        </tr>
+
+                        <tr class="t2 hidden">
+                            <th class="input-label">问题描述：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="problem_description2"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield66"
+                                ></textarea>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+
+                        <tr class="t2 hidden">
+                            <th class="input-label">所需服务及要求：</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="services_requirements2"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield69"
+                                ></textarea>
+                            </td>
+                        </tr>
+
+                        <tr class="t3 hidden">
+                            <th class="input-label">建议及意见</th>
+
+                            <td colspan="3">
+                                <textarea
+                                    name="suggestions"
+                                    cols="50"
+                                    style="width: 380px"
+                                    rows="5"
+                                    id="textfield70"
+                                    notempty=""
+                                ></textarea>
+
+                                <i class="input-star">*</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-action">
+                    <button class="btn btn-default">提交信息登记表</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

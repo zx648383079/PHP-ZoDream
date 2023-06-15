@@ -4,11 +4,11 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
-use Zodream\Html\Tree;
+use Module\CMS\Domain\Repositories\LinkageRepository;
 
 class LinkageController extends Controller {
     public function indexAction() {
-        $model_list = LinkageModel::all();
+        $model_list = LinkageRepository::getList();
         return $this->show(compact('model_list'));
     }
 

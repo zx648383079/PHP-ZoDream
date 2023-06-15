@@ -1,0 +1,42 @@
+{layout:main}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            
+            <div class="page-body">
+                {for:$page,$item}
+                <div class="link-line-item">
+                    <a href="{url:$item}" class="item-title">
+                        <i class="fa fa-caret-right"></i>
+                        {$item.title}
+                    </a>
+                    <div class="item-time">
+                        {this.ago:$item.created_at}
+                    </div>
+                </div>
+                {/for}
+                {if:$page}
+                <div class="page-link-bar">
+                    {$page.getLink:}
+                    <div class="page-info">
+                        共 {$page.getPageTotal:} 页{$page.getTotal:}条记录
+                    </div>
+                </div>
+                {/if}
+            </div>
+
+        </div>
+        
+    </div>
+</div>

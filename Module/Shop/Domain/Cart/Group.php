@@ -128,7 +128,7 @@ class Group implements \IteratorAggregate, ArrayAble {
         return new ArrayIterator($this->all());
     }
 
-    public function toArray() {
+    public function toArray(): array {
         return [
             'name' => $this->name,
             'goods_list' => $this->all()

@@ -7,7 +7,8 @@ use Zodream\Html\MarkDown;
 
 class HtmlExpand {
 
-    public static function toUrl(string $url): string {
+    public static function toUrl(mixed $url): string {
+        $url = (string)$url;
         if (!str_contains($url, '//')) {
             return $url;
         }
@@ -18,7 +19,7 @@ class HtmlExpand {
     }
 
 
-    public static function toHtml($content, bool $isMarkDown = false, bool $imgLazy = false) {
+    public static function toHtml(string $content, bool $isMarkDown = false, bool $imgLazy = false): string {
         if ($isMarkDown) {
             $content = MarkDown::parse($content, true, $imgLazy ? [
                 'class' => 'lazy',

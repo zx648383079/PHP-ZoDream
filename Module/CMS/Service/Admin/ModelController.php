@@ -12,7 +12,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ModelController extends Controller {
     public function indexAction() {
-        $model_list = ModelModel::all();
+        $model_list = ModelRepository::getList();
         return $this->show(compact('model_list'));
     }
 
@@ -33,7 +33,7 @@ class ModelController extends Controller {
 
     public function saveAction(Input $input) {
         try {
-            ModelRepository::save($input->validate([
+            $data = $input->validate([
                 'id' => 'int',
                 'name' => 'required|string:0,100',
                 'table' => 'required|string:0,100',
@@ -44,7 +44,8 @@ class ModelController extends Controller {
                 'list_template' => 'string:0,20',
                 'show_template' => 'string:0,20',
                 'setting' => '',
-            ]));
+            ]);
+            ModelRepository::save($data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

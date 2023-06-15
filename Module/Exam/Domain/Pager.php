@@ -221,7 +221,7 @@ class Pager implements ArrayAble {
      * @return array
      * @throws Exception
      */
-    public function toArray() {
+    public function toArray(): array {
         $items = [];
         for ($i = 0; $i < count($this->items); $i ++) {
             $items[] = $this->format($i);

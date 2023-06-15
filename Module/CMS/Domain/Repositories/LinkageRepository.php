@@ -2,16 +2,23 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
+use Zodream\Database\Relation;
 
 class LinkageRepository {
     public static function getList(string $keywords = '') {
-        return LinkageModel::query()
+        $items = LinkageModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->page();
+        if ($items->isEmpty()) {
+            return $items;
+        }
+        return ModelHelper::bindCount($items, LinkageDataModel::query(),
+            'id', 'linkage_id');
     }
 
     public static function get(int $id) {

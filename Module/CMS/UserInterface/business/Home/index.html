@@ -3,12 +3,14 @@
 {@jquery.slider.min.js}
 {>js}
 var silder = $(".banner .slider").slider({
+    item: '.slider-box li',
+    spacetime: 5000,
     width: 1,
-    height: 284,
+    height: 420,
 });
 {/>}
 <div class="banner">        
-    <div class="slider" data-auto="true">
+    <div class="slider" data-auto="true" data-haspoint="false">
         <div class="slider-box">
             <ul>
                 {contents:category=banner num=4}
@@ -16,46 +18,151 @@ var silder = $(".banner .slider").slider({
                 {/contents}
             </ul>
         </div>
-    </div>
-</div>
-<div class="panel tab-panel">
-    <div class="panel-header">
-        <i class="fa fa-boxes"></i>
-        最近热播
-        <a href="{channel:movie,url}" class="more">
-            更多
-            <i class="fa fa-chevron-right"></i>
-        </a>
-        <div class="tab-header">
-            <a href="{channel:movie,url}" class="active">电影</a>
-            <a href="{channel:tv,url}">电视剧</a>
-        </div>
-        
-    </div>
-    <div class="panel-body">
-        <div class="tab-item active">
-            {contents:category=movie field=id,cat_id,model_id,title,thumb,definition num=10}
-            <a class="video-item" href="{url:$content}">
-                <div class="thumb">
-                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
-                    <span class="play-icon"></span>
-                    <span class="tag">{linkageText:$content.definition}</span>
-                </div>
-                <div class="title">{$content.title}</div>
-            </a>
-            {/contents}
-        </div>
-        <div class="tab-item">
-            {contents:category=tv field=id,cat_id,model_id,title,thumb,definition num=10}
-            <a class="video-item" href="{url:$content}">
-                <div class="thumb">
-                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
-                    <span class="play-icon"></span>
-                    <span class="tag">{linkageText:$content.definition}</span>
-                </div>
-                <div class="title">{$content.title}</div>
-            </a>
-            {/contents}
+        <div class="slider-point">
+            <ul>
+                {contents:category=banner num=4}
+                <li><img src="{$content.thumb}" width="100" height="45"></li>
+                {/contents}
+            </ul>
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="panel">
+        <div class="panel-header">
+            <i class="fa fa-angle-right circle-icon"></i>
+            产品中心
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                {channels:parent=product_center}
+                <div class="col-md-4 col-lg-3">
+                    <a class="product-cat-item" href="{url:./category?id=:$channel.id}">
+                        <div class="item-thumb">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$channel.thumb}" alt="{$channel.title}">
+                        </div>
+                        <div class="item-title">{$channel.title}</div>
+                    </a>
+                </div>
+                {/channels}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-lg-3">
+            <div class="panel with-border">
+                <div class="panel-header">
+                    <i class="fa fa-angle-right"></i>
+                    关于我们
+                </div>
+                <div class="panel-body">
+                    <p>
+                        {channel:about_us,description}
+                    </p>
+                    <a href="{channel:about_us,url}" class="btn btn-default">
+                        查看详情
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="panel with-border">
+                <div class="panel-header">
+                    <i class="fa fa-angle-right"></i>
+                    新闻中心
+                </div>
+                <div class="panel-body">
+                    {contents:category=news_center field=id,cat_id,model_id,title num=5}
+                    <a class="news-item" href="{url:$content}">
+                        <div class="item-title">{$content.title}</div>
+                    </a>
+                    {/contents}
+                    <a href="{channel:news_center,url}" class="btn btn-default">
+                        查看详情
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="panel with-border">
+                <div class="panel-header">
+                    <i class="fa fa-angle-right"></i>
+                    解决方案
+                </div>
+                <div class="panel-body">
+                    {contents:category=solutions field=id,cat_id,model_id,title num=5}
+                    <a class="news-item" href="{url:$content}">
+                        <div class="item-title">{$content.title}</div>
+                    </a>
+                    {/contents}
+                    <a href="{channel:solutions,url}" class="btn btn-default">
+                        查看详情
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 col-lg-3">
+            <div class="login-panel">
+                <div class="panel-header">会员登录</div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <label for="">账号：</label>
+                        <input type="text">
+                    </div>
+                    <div class="input-group">
+                        <label for="">密码：</label>
+                        <input type="password">
+                    </div>
+                    <div class="code-input-group">
+                        <label for="">验证码：</label>
+                        <input type="text">
+                        <img src="{url:/auth/captcha}" alt="">
+                    </div>
+                </div>
+                <div class="panel-action">
+                    <div class="btn btn-default">登录</div>
+                    <div class="btn btn-info">注册</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="panel with-border">
+        <div class="panel-header">
+            <i class="fa fa-angle-right"></i>
+            合作伙伴
+        </div>
+        <div class="panel-body partner-floor">
+            <div class="slider" data-auto="true" data-haspoint="false" data-width="234" data-height="72">
+                <div class="slider-box">
+                    <div class="slider-previous">
+                        <i class="fa fa-angle-left"></i>
+                    </div>
+                    <ul>
+                        {contents:category=partners field=id,cat_id,model_id,title,thumb num=20}
+                        <li>
+                            <a href="{url:$content}"><img src="{$content.thumb}" width="100%" alt="{$content.title}"></a>
+                        </li>
+                        {/contents}
+                    </ul>
+                    <div class="slider-previous">
+                        <i class="fa fa-angle-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="share-bar">
+                <a href=""><i class="fab fa-alipay"></i> 微博</a>
+                <a href=""><i class="fab fa-amazon"></i>微博</a>
+                <a href=""><i class="fa fa-share-alt"></i>分享</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{extend:layouts/login}

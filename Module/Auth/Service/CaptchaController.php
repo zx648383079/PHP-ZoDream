@@ -17,7 +17,7 @@ class CaptchaController extends Controller {
 		$level = intval($request->get('level'));
 		$captchaKey = $request->get('captcha_token');
 		if (empty($level) && empty($captchaKey)) {
-			$level = session('level');
+			$level = intval(session('level'));
 		}
 		$captcha = new Captcha();
 		$captcha->setConfigs([

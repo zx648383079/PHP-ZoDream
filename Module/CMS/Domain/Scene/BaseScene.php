@@ -10,6 +10,7 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\ModelRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
@@ -397,7 +398,7 @@ abstract class BaseScene implements SceneInterface {
     }
 
     protected function initDefaultModelField() {
-        ModelFieldModel::query()->insert([
+        ModelRepository::batchAddField([
             [
                 'name' => '标题',
                 'field' => 'title',
@@ -443,14 +444,14 @@ abstract class BaseScene implements SceneInterface {
                 'is_required' => 0,
                 'type' => 'switch'
             ],
-        ]);
-        ModelFieldModel::create([
-            'name' => '内容',
-            'field' => 'content',
-            'model_id' => $this->model->id,
-            'is_main' => 0,
-            'is_system' => 1,
-            'type' => 'editor',
+            [
+                'name' => '内容',
+                'field' => 'content',
+                'model_id' => $this->model->id,
+                'is_main' => 0,
+                'is_system' => 1,
+                'type' => 'editor',
+            ]
         ]);
     }
 

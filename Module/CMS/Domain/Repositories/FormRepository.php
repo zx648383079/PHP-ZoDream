@@ -33,7 +33,7 @@ class FormRepository {
 
     public static function save(Input $input) {
         $model = static::getModel($input);
-        if (empty($model) || $model->type < 1) {
+        if (empty($model) || $model->type != 1) {
             throw new Exception('表单数据错误');
         }
         $scene = CMSRepository::scene()->setModel($model);

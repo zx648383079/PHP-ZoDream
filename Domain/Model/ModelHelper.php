@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace Domain\Model;
 
+use Zodream\Database\Contracts\SqlBuilder;
+use Zodream\Database\Relation;
 use Zodream\Helpers\Json;
+use Zodream\Html\Page;
 
 class ModelHelper {
     /**
@@ -115,5 +118,30 @@ class ModelHelper {
             throw new \Exception($model->getFirstError());
         }
         return $model;
+    }
+
+    /**
+     * 获取关联数据的统计数据
+     * @param array|Page $items
+     * @param SqlBuilder $builder
+     * @param string $dataKey
+     * @param string $foreignKey
+     * @param string $countKey
+     * @return array|Page
+     */
+    public static function bindCount(array|Page $items, SqlBuilder $builder, string $dataKey,
+                                     string $foreignKey, string $countKey = 'data_count'): array|Page {
+        $keyItems = Relation::columns($items, $dataKey);
+        if (empty($keyItems)) {
+            return $items;
+        }
+        $results =  $builder->groupBy($foreignKey)
+            ->selectRaw('COUNT(*) as count')
+            ->select($foreignKey)->asArray()->pluck('count', $foreignKey);
+        foreach ($items as &$item) {
+            $item[$countKey] = isset($results[$item[$dataKey]]) ? intval($results[$item[$dataKey]]) : 0;
+        }
+        unset($item);
+        return $items;
     }
 }

@@ -131,7 +131,7 @@ class FieldModel extends Model {
     }
 
 
-    public function toArray()
+    public function toArray(): array
     {
         $data = parent::toArray();
         if ($this->type === 'array' || $this->type === 'object') {

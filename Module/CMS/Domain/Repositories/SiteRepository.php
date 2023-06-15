@@ -32,7 +32,7 @@ class SiteRepository {
         try {
             CMSRepository::generateSite($model);
         } catch (\Exception $ex) {
-            static::remove($id);
+            static::remove($model->id);
             throw $ex;
         }
         return $model;

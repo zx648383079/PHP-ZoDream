@@ -20,7 +20,7 @@
                 },
                 {
                     "name": "ICP备案号",
-                    "code": "icp_beian_no",
+                    "code": "icp_beian",
                     "type": "text",
                     "value": "",
                     "default": ""

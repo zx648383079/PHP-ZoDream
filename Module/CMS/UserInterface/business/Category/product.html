@@ -1,0 +1,55 @@
+{layout:main}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div class="filter-panel">
+                <div class="filter-item">
+                    <div class="item-header">
+                        按行业分类
+                    </div>
+                    <div class="item-body">
+                        {linkage:industry}
+                        <a href="">{$item.name}</a>
+                        {/linkage}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="page-body">
+                <div class="page-panel with-product">
+                    {for:$page,$item}
+                    <a class="product-item" href="{url:$item}">
+                        <div class="item-thumb">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                        </div>
+                        <div class="item-name">
+                            {$item.title}
+                        </div>
+                    </a>
+                    {/for}
+                </div>
+                {if:$page}
+                <div class="page-link-bar">
+                    {$page.getLink:}
+                    <div class="page-info">
+                        共 {$page.getPageTotal:} 页{$page.getTotal:}条记录
+                    </div>
+                </div>
+                {/if}
+            </div>
+
+        </div>
+    </div>
+</div>

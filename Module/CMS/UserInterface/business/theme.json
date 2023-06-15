@@ -25,7 +25,12 @@
                 },
                 {
                     "name": "ICP备案号",
-                    "code": "icp_beian_no",
+                    "code": "icp_beian",
+                    "type": "text"
+                },
+                {
+                    "name": "公网安备案号",
+                    "code": "pns_beian",
                     "type": "text"
                 }
             ]
@@ -66,6 +71,35 @@
                     "field": "is_gray",
                     "type": "switch",
                     "is_main": true
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "合作伙伴",
+            "table": "partners",
+            "category_template": "page",
+            "list_template": "list",
+            "show_template": "index",
+            "fields": []
+        },
+        {
+            "action": "model",
+            "name": "解决方案",
+            "table": "solutions",
+            "category_template": "solution",
+            "list_template": "solution_list",
+            "show_template": "solution",
+            "fields": [
+                {
+                    "name": "作者",
+                    "field": "author",
+                    "type": "text"
+                },
+                {
+                    "name": "附件",
+                    "field": "file",
+                    "type": "file"
                 }
             ]
         },
@@ -117,6 +151,16 @@
                     "name": "文档类类型",
                     "field": "file_type",
                     "type": "text"
+                },
+                {
+                    "name": "产品类型",
+                    "field": "product_type",
+                    "type": "@linkage:product_type"
+                },
+                {
+                    "name": "附件",
+                    "field": "file",
+                    "type": "file"
                 }
             ]
         },
@@ -162,9 +206,9 @@
             "action": "model",
             "name": "销售网络",
             "table": "salesman",
-            "category_template": "salesman",
-            "list_template": "salesman_list",
-            "show_template": "salesman",
+            "category_template": "contact",
+            "list_template": "contact_list",
+            "show_template": "contact",
             "fields": [
                 {
                     "name": "姓名",
@@ -416,7 +460,6 @@
             "name": "product_center",
             "type": "@model:products",
             "group": "nav",
-            "category_template": "index",
             "image": "/assets/images/banner.jpg",
             "children": [
                 {
@@ -425,7 +468,7 @@
                     "name": "",
                     "type": "page",
                     "group": "nav",
-                    "category_template": "index",
+                    "category_template": "product",
                     "image": "/assets/images/banner.jpg"
                 },
                 {
@@ -434,7 +477,7 @@
                     "name": "",
                     "type": "page",
                     "group": "nav",
-                    "category_template": "index",
+                    "category_template": "product",
                     "image": "/assets/images/banner.jpg"
                 },
                 {
@@ -443,7 +486,7 @@
                     "name": "",
                     "type": "page",
                     "group": "nav",
-                    "category_template": "index",
+                    "category_template": "product",
                     "image": "/assets/images/banner.jpg"
                 }
             ]
@@ -454,7 +497,6 @@
             "name": "news_center",
             "type": "@model:news",
             "group": "nav",
-            "category_template": "index",
             "image": "/assets/images/banner.jpg",
             "children": [
                 {
@@ -463,7 +505,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -472,7 +513,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -481,7 +521,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -490,7 +529,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -499,7 +537,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -508,7 +545,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }
             ]
@@ -543,19 +579,17 @@
                 {
                     "action": "channel",
                     "title": "解决方案",
-                    "name": "",
-                    "type": "page",
+                    "name": "solutions",
+                    "type": "@model:solutions",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
                     "action": "channel",
                     "title": "下载专区",
-                    "name": "",
+                    "name": "download",
                     "type": "@model:resources",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg",
                     "children": [
                         {
@@ -563,7 +597,6 @@
                             "title": "产品样本",
                             "name": "",
                             "type": "@model:resources",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -571,7 +604,6 @@
                             "title": "产品证书",
                             "name": "",
                             "type": "@model:resources",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -579,7 +611,6 @@
                             "title": "技术资料",
                             "name": "",
                             "type": "@model:resources",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }
                     ]
@@ -598,7 +629,7 @@
                             "title": "技术支持",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "support_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -606,7 +637,7 @@
                             "title": "产品维修",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "maintenance_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -614,7 +645,7 @@
                             "title": "现场服务",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "live_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -622,7 +653,7 @@
                             "title": "商务支持",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "business_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -630,7 +661,7 @@
                             "title": "产品校验",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "verify_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -638,7 +669,7 @@
                             "title": "投诉与建议",
                             "name": "",
                             "type": "page",
-                            "category_template": "index",
+                            "category_template": "complaints_form",
                             "image": "/assets/images/banner.jpg"
                         }
                     ]
@@ -649,7 +680,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg",
                     "children": [
                         {
@@ -657,7 +687,6 @@
                             "title": "产品选型",
                             "name": "",
                             "type": "@model:news",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -665,7 +694,6 @@
                             "title": "同类产品替代",
                             "name": "",
                             "type": "@model:news",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
@@ -673,7 +701,6 @@
                             "title": "注意事项",
                             "name": "",
                             "type": "@model:news",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }
                     ]
@@ -685,32 +712,31 @@
             "title": "联系我们",
             "name": "",
             "type": "page",
+            "group": "nav",
             "category_template": "index",
             "image": "/assets/images/banner.jpg",
             "children": [
                 {
                     "action": "channel",
                     "title": "联系方式",
-                    "name": "",
+                    "name": "contact_information",
                     "type": "page",
                     "group": "nav",
-                    "category_template": "index",
+                    "category_template": "contact",
                     "image": "/assets/images/banner.jpg",
                     "children": [
                         {
                             "action": "channel",
                             "title": "业务部",
-                            "name": "",
+                            "name": "business_department",
                             "type": "@model:salesman",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
                             "action": "channel",
                             "title": "市场技术部",
-                            "name": "",
+                            "name": "technical_department",
                             "type": "@model:salesman",
-                            "category_template": "index",
                             "image": "/assets/images/banner.jpg"
                         }
                     ]
@@ -730,7 +756,7 @@
                     "name": "",
                     "type": "page",
                     "group": "nav",
-                    "category_template": "index",
+                    "category_template": "feedback_form",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -784,7 +810,6 @@
             "name": "",
             "type": "@model:news",
             "group": "nav",
-            "category_template": "index",
             "image": "/assets/images/banner.jpg",
             "children": [
                 {
@@ -793,7 +818,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -802,7 +826,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -811,7 +834,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -820,7 +842,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {
@@ -829,7 +850,6 @@
                     "name": "",
                     "type": "@model:news",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }
             ]
@@ -840,8 +860,14 @@
             "name": "",
             "type": "page",
             "group": "nav",
-            "category_template": "index",
+            "category_template": "map",
             "image": "/assets/images/banner.jpg"
+        },
+        {
+            "action": "channel",
+            "title": "合作伙伴",
+            "name": "partners",
+            "type": "@model:partners"
         },
         {
             "action": "channel",

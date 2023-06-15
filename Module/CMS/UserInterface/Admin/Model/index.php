@@ -17,6 +17,7 @@ $this->title = '模块列表';
             <th>名称</th>
             <th>表名</th>
             <th>类型</th>
+            <th>字段数</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -31,20 +32,26 @@ $this->title = '模块列表';
                     <?=$item->type > 0 ? '表单' : '实体'?>
                 </td>
                 <td>
+                    <?=$item['field_count']?>
+                </td>
+                <td>
                     <div class="btn-group">
                         <a class="btn btn-primary" href="<?=$this->url('./@admin/model/field', ['id' => $item->id])?>">模块字段</a>
                         <a class="btn btn-default" href="<?=$this->url('./@admin/model/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/model/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/model/delete', ['id' => $item->id])?>"  data-tip="模型是所有站点公用的，确定删除？">删除</a>
                     </div>
                 </td>
             </tr>
         <?php endforeach?>
         </tbody>
     </table>
-    <?php if(empty($model_list)):?>
-    <div class="page-empty-tip">
-        空空如也~~
-    </div>
+    <?php if($model_list->isEmpty()):?>
+        <div class="page-empty-tip">
+            空空如也~~
+        </div>
     <?php endif;?>
+    <div align="center">
+        <?=$model_list->getLink()?>
+    </div>
 </div>
 

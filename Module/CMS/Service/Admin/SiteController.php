@@ -39,7 +39,7 @@ class SiteController extends Controller {
                 'options' => '',
             ]));
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
         return $this->renderData([
             'url' => $this->getUrl('site')

@@ -1,0 +1,61 @@
+{layout:main}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <article id="content">
+                {$cat.content}
+            </article>
+            <div class="contact-panel">
+                <div class="panel-header">
+                    {channels:parent=contact_information}
+                    <a href="#contact_{$channel.id}">
+                        <img src="{$channel.thumb}" alt="">
+                        <span>{$channel.title}</span>
+                    </a>
+                    {/channels}
+                </div>
+                <div class="panel-body">
+                    {channels:parent=contact_information}
+                    <div id="contact_{$channel.id}" class="group-item">
+                        <div class="group-header">{$channel.title}</div>
+                        <div class="group-body">
+                            {contents:category=$channel.id field=id,cat_id,model_id,title,thumb,phone,fax,email,tel,qq num=50}
+                            <div class="link-item">
+                                <div class="item-thumb">
+                                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                                    <div class="item-action">
+                                        <i class="fab fa-qq"></i>
+                                        在线交流
+                                    </div>
+                                </div>
+                                <div class="item-body">
+                                    <div class="item-title">联系方式</div>
+                                    <p>姓名: {$content.title}</p>
+                                    <p>电话：{$content.phone}</p>
+                                    <p>传真：{$content.fax}</p>
+                                    <p>邮箱：{$content.email}</p>
+                                    <p>手机：{$content.tel}</p>
+                                    <p>Q Q： {$content.qq}</p>
+                                </div>
+                            </div>
+                            {/contents}
+                        </div>
+                    </div>
+                    {/channels}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

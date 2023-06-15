@@ -31,7 +31,7 @@ $this->title = 'ZoDream';
                     <a href="<?=$this->url('./category', ['id' => $item['id']])?>"><?=$item['title']?></a>
                 </td>
                 <td><?=$item['groups']?></td>
-                <td></td>
+                <td><?=intval($item['content_count'])?></td>
                 <td class="text-right">
                     <div class="btn-group">
                         <?php if($item['type'] < 1):?>

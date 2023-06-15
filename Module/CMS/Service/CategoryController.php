@@ -19,7 +19,7 @@ class CategoryController extends Controller {
             $page = FuncHelper::contents([]);
         }
         $title = $cat['title'];
-        return $this->show($cat->category_template,
+        return $this->show((string)$cat->category_template,
             compact('cat', 'page', 'title'));
     }
 

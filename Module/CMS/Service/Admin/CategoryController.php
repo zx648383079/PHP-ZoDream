@@ -5,13 +5,12 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Module\CMS\Module;
-use Zodream\Helpers\Json;
 
 class CategoryController extends Controller {
     public function indexAction() {
-        $model_list = CategoryModel::tree()->makeTreeForHtml();
+        $model_list = CategoryRepository::getList(CMSRepository::siteId());
         return $this->show(compact('model_list'));
     }
 
@@ -26,7 +25,7 @@ class CategoryController extends Controller {
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->all();
         $group_list = GroupModel::where('type', 0)->all();
-        $cat_list = CategoryModel::tree()->makeTreeForHtml();
+        $cat_list = CategoryRepository::all(CMSRepository::siteId());
         if (!empty($id)) {
             $excludes = [$id];
             $cat_list = array_filter($cat_list, function ($item) use (&$excludes) {

@@ -1,0 +1,37 @@
+{layout:main}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div class="feedback-panel">
+                <div class="input-line-group">
+                    <input type="text" placeholder="您的姓名：">
+                    <input type="text" placeholder="电话：">
+                </div>
+                <div class="input-line-group">
+                    <input type="text" placeholder="公司名称：">
+                    <input type="text" placeholder="邮箱：">
+                </div>
+                <textarea name="" rows="10" placeholder="请写下您的留言内容："></textarea>
+                <div class="code-input-group">
+                    <input type="text" placeholder="验证码：">
+                    <img src="{url:/auth/captcha}" alt="">
+                </div>
+                <div class="panel-action">
+                    <button class="btn btn-default">提交</button>
+                    <button class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

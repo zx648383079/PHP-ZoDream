@@ -13,18 +13,20 @@ $this->title = '联动菜单列表';
         <thead>
         <tr>
             <th>名称</th>
+            <th>项个数</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td><?=$item->name?></td>
+                <td><?=$item['name']?></td>
+                <td><?=$item['data_count']?></td>
                 <td>
                    <div class="btn-group">
-                        <a class="btn btn-priamry" href="<?=$this->url('./@admin/linkage/data', ['id' => $item->id])?>">模块项</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/linkage/data', ['id' => $item->id])?>">模块项</a>
                         <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete', ['id' => $item->id])?>" data-tip="联动菜单是所有站点公用的，确定删除？">删除</a>
                    </div>
                 </td>
             </tr>

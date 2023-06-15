@@ -16,6 +16,7 @@ use Zodream\Helpers\Str;
 use Zodream\Html\Form;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
+use Zodream\Html\VerifyCsrfToken;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Helpers\Tree as TreeHelper;
@@ -48,7 +49,7 @@ class FuncHelper {
     public static function channels(array $params = null) {
         $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
-                $data = CategoryModel::query()->orderBy('position', 'asc')->all();
+                $data = CategoryModel::query()->orderBy('position', 'asc')->get();
                 static::setChannel(...$data);
                 return $data;
             });
@@ -104,7 +105,7 @@ class FuncHelper {
      */
     public static function model(string|int $model) {
         static::cache()->getOrSet(__FUNCTION__, 'all', function () use ($model) {
-            $data = ModelModel::query()->all();
+            $data = ModelModel::query()->get();
             static::setModel(...$data);
             return $data;
         });
@@ -274,9 +275,9 @@ class FuncHelper {
     /***
      * 获取字段集合
      * @param string|int $model_id
-     * @return mixed
+     * @return ModelFieldModel[]
      */
-    public static function fieldList(string|int $model_id) {
+    public static function fieldList(string|int $model_id): array {
         return static::cache()->getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
@@ -286,18 +287,18 @@ class FuncHelper {
 
     /**
      * 获取摸一个字段
-     * @param $model_id
-     * @param $field
-     * @return bool
+     * @param string|int $model_id
+     * @param string $field
+     * @return ModelFieldModel|null
      */
-    public static function getField($model_id, $field) {
+    public static function getField(string|int $model_id, string $field): ?ModelFieldModel {
         $field_list = static::fieldList($model_id);
         foreach ($field_list as $item) {
             if ($item['field'] == $field) {
                 return $item;
             }
         }
-        return false;
+        return null;
     }
 
     public static function field(array $params) {
@@ -342,17 +343,17 @@ class FuncHelper {
         });
     }
 
-    public static function markdown($content) {
+    public static function markdown(string $content): string {
         return HtmlExpand::toHtml($content, true);
     }
 
     /**
      * @param $id
-     * @param null $name
+     * @param string|bool|null $name
      * @return CategoryModel|string
      * @throws \Exception
      */
-    public static function channel($id, $name = null) {
+    public static function channel(mixed $id, string|bool|null $name = null): mixed {
         if (is_array($id)) {
             isset($id['name']) && $name = $id['name'];
             $id = $id['id'];
@@ -379,11 +380,10 @@ class FuncHelper {
     /**
      * @param array|integer $id
      * @param null|string $name
-     * @param integer $category
+     * @param string|int $category
      * @return array|string
-     * @throws \Exception
      */
-    public static function content($id, $name = null, $category = 0) {
+    public static function content(mixed $id, mixed $name = null, string|int $category = 0) {
         if (is_array($id)) {
             isset($id['name']) && $name = $id['name'];
             $category = static::getVal($id, ['category', 'cat_id', 'cat', 'channel']);
@@ -447,11 +447,11 @@ class FuncHelper {
     }
 
     /**
-     * @param $name
-     * @param $data
+     * @param string|bool $name
+     * @param array|null $data
      * @return null|string|mixed
      */
-    protected static function getContentValue($name, $data) {
+    protected static function getContentValue(string|bool $name, ?array $data): mixed {
         if (empty($data)) {
             return null;
         }
@@ -464,7 +464,7 @@ class FuncHelper {
         return $data[$name] ?? null;
     }
 
-    public static function isChildren($parent_id, $id) {
+    public static function isChildren(int $parent_id, int $id): int {
         if ($parent_id === $id) {
             return 0;
         }
@@ -475,7 +475,7 @@ class FuncHelper {
         return -1;
     }
 
-    public static function channelActive($id) {
+    public static function channelActive(int|string $id): string {
         if (!is_numeric($id)) {
             $id = static::getChannelId($id);
         }
@@ -504,9 +504,11 @@ class FuncHelper {
         return false;
     }
 
-    public static function linkage($id) {
+    public static function linkage(int|string $id) {
         if (!is_numeric($id)) {
-            $id = LinkageModel::query()->where('code', $id)->value('id');
+            $id = static::cache()->getOrSet('linkageId', $id, function () use ($id) {
+                return LinkageModel::query()->where('code', $id)->value('id');
+            });
         }
         if (empty($id)) {
             return [];
@@ -514,7 +516,7 @@ class FuncHelper {
         return LinkageModel::idTree($id);
     }
 
-    public static function linkageText($id) {
+    public static function linkageText(int|string $id): string {
         if (empty($id)) {
             return '';
         }
@@ -552,11 +554,14 @@ class FuncHelper {
     }
 
     /**
-     * @param $id
+     * @param int|string $id
      * @return string
+     * @throws \Exception
      */
-    public static function formAction(int $id) {
-        return url('./form/save', compact('id'));
+    public static function formAction(int|string $id): string {
+        return url('./form/save', [
+            is_numeric($id) ? 'id' : 'model' => $id
+        ]);
     }
 
     /**
@@ -589,7 +594,62 @@ class FuncHelper {
         }
     }
 
-    public static function contentUrl(array $data) {
+    /**
+     * 获取表单
+     * @param int|string $id
+     * @return string
+     */
+    public static function extendForm(int|string $id): string {
+        $model = self::model($id);
+        if (empty($model) || $model->type != 1) {
+            return '';
+        }
+        $fileName = $model->setting('form_template');
+        if (empty($fileName)) {
+            return '';
+        }
+        $formAction = self::formAction($model->id);
+        $formData = self::formData($id);
+        $token = VerifyCsrfToken::get();
+        return CMSRepository::registerView()->render(sprintf('Content/%s', $fileName),
+            compact('formAction',
+            'formData', 'token'));
+    }
+
+    public static function formData(int|string $id): array {
+        $model = self::model($id);
+        if (empty($model) || $model->type != 1) {
+            return [];
+        }
+        return static::cache()->getOrSet(__FUNCTION__,
+            $model->id,
+            function () use ($model) {
+                $items = self::fieldList($model->id);
+                $data = [];
+                foreach ($items as $item) {
+                    if ($item->is_disable) {
+                        continue;
+                    }
+                    $data[] = [
+                        'name' => $item->name,
+                        'field' => $item->field,
+                        'type' => $item->type,
+                        'length' => $item->length,
+                        'is_required' => $item->is_required,
+                        'match' => $item->match,
+                        'tip_message' => $item->tip_message,
+                        'error_message' => $item->error_message,
+                    ];
+                }
+                return $data;
+            });
+    }
+
+    public static function formColumns(int|string $id): array {
+        return self::formData($id);
+    }
+
+    public static function contentUrl(array $data): string {
         $args = [
             'id' => $data['id'],
             'category' => $data['cat_id'],
@@ -685,7 +745,7 @@ class FuncHelper {
      * @return string
      * @throws \Exception
      */
-    public static function search(string $name, string $val = '') {
+    public static function search(string $name, string $val = ''): string {
         $data = request()->get();
         unset($data['page']);
         if (empty($val)) {
@@ -734,6 +794,13 @@ class FuncHelper {
         return $html;
     }
 
+    public static function regex(mixed $input, string $pattern, int|string $tag = 0): string {
+        if (preg_match($pattern, (string)$input, $match)) {
+            return $match[intval($tag)] ?? '';
+        }
+        return '';
+    }
+
     public static function registerFunc(ParserCompiler $compiler, $class, $method = null) {
         if (empty($method)) {
             list($class, $method) = [static::class, $class];
@@ -744,7 +811,7 @@ class FuncHelper {
         return $compiler;
     }
 
-    public static function registerBlock(ParserCompiler $compiler, $method, $item = 'item') {
+    public static function registerBlock(ParserCompiler $compiler, string $method, string $item = 'item') {
         return $compiler->registerFunc($method,
             function ($params = null) use ($method, $item, $compiler) {
             if ($params === -1) {
@@ -779,10 +846,13 @@ class FuncHelper {
             'commentHidden',
             'linkageText',
             'extendContent',
+            'extendForm',
+            'regex'
         ]);
         static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');
         static::registerBlock($compiler, 'contents', 'content');
+        static::registerBlock($compiler, 'formColumns');
         static::registerBlock($compiler, 'linkage');
         static::registerBlock($compiler, 'range');
         static::registerBlock($compiler, 'contentPage', 'content')

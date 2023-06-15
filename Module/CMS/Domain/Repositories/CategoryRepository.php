@@ -4,12 +4,28 @@ namespace Module\CMS\Domain\Repositories;
 
 use Exception;
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\ModelModel;
+use Zodream\Helpers\Arr;
 use Zodream\Html\Tree;
 
 class CategoryRepository {
     public static function getList(int $site) {
         SiteRepository::apply($site);
-        return (new Tree(CategoryModel::query()->orderBy('position', 'asc')->get()))
+        $modelItems = Arr::pluck(ModelModel::query()->select('id', '`table`')
+            ->get(), null, 'id');
+        $items = CategoryModel::query()->orderBy('position', 'asc')->get();
+        $countKey = 'content_count';
+        foreach ($items as &$item) {
+            if ($item['type'] > 0 || !isset($modelItems[$item['model_id']])) {
+                $item[$countKey] = 0;
+                continue;
+            }
+            $item[$countKey] = CMSRepository::scene()->setModel($modelItems[$item['model_id']], $site)
+                ->query()->where('model_id', $item['model_id'])
+                ->where('cat_id', $item['id'])->count();
+        }
+        unset($item);
+        return (new Tree($items))
             ->makeTreeForHtml();
     }
 

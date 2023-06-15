@@ -98,7 +98,4 @@ interface SceneInterface {
 
     public function extendQuery(): Builder;
 
-
-
-
 }

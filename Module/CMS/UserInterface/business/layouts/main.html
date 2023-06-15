@@ -1,10 +1,10 @@
 {@font-awesome.min.css}
 {@animate.min.css}
 {@zodream.css}
-{@cms-movie.css}
+{@cms-business.css}
 {@jquery.min.js}
 {@jquery.lazyload.min.js}
-{js file=@cms-movie.min.js}
+{js file=@cms-business.min.js}
 <!DOCTYPE html>
 <html lang="{$language,'zh-CN'}">
    <head>
@@ -19,61 +19,116 @@
        {header:}
    </head>
    <body>
-       <div class="container">
-            <header>
-                    <div class="row">
-                        <div class="col-md-4 logo">
-                            <a href="{url:./}">
-                                <img src="{option:logo}" alt="">
-                            </a>
+        <header class="app-header">
+            <div class="container">
+                <div class="top-bar">
+                    <a class="nav-logo" href="{url:./}">
+                        <img src="{option:logo}" alt="">
+                    </a>
+                    <div class="nav-brand">
+                        {option:company_name}
+                    </div>
+                    <div class="nav-group-bar">
+                        <div class="nav-item">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </div>
+                        <a class="nav-item">
+                            设为首页
+                        </a>
+                        <a class="nav-item">
+                            收藏
+                        </a>
+                        <div class="nav-item">
+                            <select>
+                                <option>中文</option>
+                                <option>English</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="nav-bar">
-                        <i class="nav-toggle"></i>
-                        <ul>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="nav-bar">
+                    <i class="nav-toggle"></i>
+                    <ul>
+                        <li class="nav-item">
+                            <a href="{url:./}">首页</a>
+                        </li>
+                        {channels:tree=1 group=nav}
+                        <li class="nav-item {channelActive:$channel.id,true}">
+                            <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                            {if:isset($channel.children)}
+                            <ul class="nav-item-drop">
+                                {for:$channel.children,$item}
+                                <li  class="nav-item">
+                                    <a href="{url:./category?id=:$item.id}">{$item.title}</a>
+                                </li>
+                                {/for}
+                            </ul>
+                            {/if}
+                        </li>
+                        
+                        {/channels}
+                    </ul>
+                </div>
+            </div>
+        </header>
+        {$content}
+        <footer class="app-footer">
+            <div class="map-bar">
+                <div class="container">
+                    {channels:tree=1 group=nav}
+                    <div class="map-item">
+                        <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                        <ul class="item-body">
+                            {if:isset($channel.children)}
+                            {for:$channel.children,$item}
                             <li>
-                                <a href="{url:./}">首页</a>
+                                <a href="{url:./category?id=:$item.id}">{$item.title}</a>
                             </li>
-                            {channels:tree=1 group=nav}
-                            <li class="{channelActive:$channel.id,true}">
+                            {/for}
+                            {else}
+                            <li>
                                 <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
-                                {if:isset($channel.children)}
-                                <ul class="sub-menu">
-                                    {for:$channel.children,$item}
-                                    <li>
-                                        <a href="{url:./category?id=:$item.id}">{$item.title}</a>
-                                    </li>
-                                    {/for}
-                                </ul>
-                                {/if}
-                            </li>
-                            
-                            {/channels}
-                            {if:isset($cat)}
-                            <li class="search-bar">
-                                <a class="search-icon" href="javascript:;">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                                <div class="search-input">
-                                    <form action="{url:./category/list}" method="get">
-                                        <input type="text" name="keywords" placeholder="请输入搜索关键字" value="{if:isset($keywords),$keywords}">
-                                        <button>搜索</button>
-                                        {searchHidden:}
-                                    </form>
-                                </div>
                             </li>
                             {/if}
                         </ul>
+                        
                     </div>
-            </header>
-            {$content}
-            <footer>
-                <div class="copyright">
-                    <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian_no}
-                    </a>
+                    {/channels}
+
+                    <div class="link-image-bar">
+                        <div class="link-item">
+                            <img src="/assets/images/wx.jpg" alt="">
+                            <p>微信</p>
+                        </div>
+                        <div class="link-item">
+                            <img src="/assets/images/wx.jpg" alt="">
+                            <p>微博</p>
+                        </div>
+                    </div>
                 </div>
-            </footer>
-       </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    <p>Copyright © 2011-2023 {request.host}. All Rights Reserved</p>
+                    <p>
+                        {option:company_name}
+                        <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}
+                        </a>
+                    </p>
+                    <p>
+                        {> //$pns_beian=option:pns_beian}
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,/\d+/}">
+                            <img src="/assets/images/beian.png" alt="备案图标">
+                            {pns_beian}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </footer>
         {footer:}
    </body>
 </html>

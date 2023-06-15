@@ -105,25 +105,25 @@ class MultiScene extends BaseScene {
         if ($field->is_system > 0) {
             return true;
         }
-        if ($field->is_main == $field->getOldAttribute('is_main')) {
+        if ($field->is_main == $field->getAttributeFromOld('is_main')) {
             $table = new Table($this->getTableByMain($field->is_main));
-            static::converterTableField($table->column($field->getOldAttribute('field'))->name($field->field), $field);
+            static::converterTableField($table->column($field->getAttributeFromOld('field'))->name($field->field), $field);
             CreateCmsTables::updateTable($table,
                 updateColumns: $table->columns()
             );
             return true;
         }
-        $old_table = $this->getTableByMain($field->getOldAttribute('is_main'));
+        $old_table = $this->getTableByMain($field->getAttributeFromOld('is_main'));
         $table = $this->getTableByMain($field->is_main);
         $this->addField($field);
-        $data = DB::table($old_table)->pluck($field->getOldAttribute('field'), 'id');
+        $data = DB::table($old_table)->pluck($field->getAttributeFromOld('field'), 'id');
         foreach ($data as $id => $value) {
             DB::table($table)->where('id', $id)->update([
                 $field->field => $value
             ]);
         }
         $table = new Table($old_table);
-        $table->column($field->getOldAttribute('field'));
+        $table->column($field->getAttributeFromOld('field'));
         CreateCmsTables::updateTable($table,
             dropColumns: $table->columns()
         );

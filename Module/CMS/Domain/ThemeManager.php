@@ -296,7 +296,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionModel(array $data) {
+    protected function runActionModel(array $data): void {
         $fields = $data['fields'] ?? [];
         if (isset($data['child'])) {
             $data['child_model'] = $this->getCacheId($data['child']);
@@ -320,14 +320,16 @@ class ThemeManager {
         }
     }
 
-    protected function runActionField(array $data) {
+    protected function runActionField(array $data): void {
         if (isset($data['model'])) {
             $data['model_id'] = $this->getCacheId($data['model']);
         }
         if (isset($data['action']) && $data['action'] === 'disable') {
             ModelFieldModel::query()->where('model_id', $data['model_id'])
                 ->where('field', $data['field'])
-                ->updateBool('is_disable');
+                ->update([
+                    'is_disable' => 1
+                ]);
             return;
         }
         unset($data['model'], $data['action']);
@@ -343,8 +345,13 @@ class ThemeManager {
             $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
             $data['type'] = 'linkage';
         }
-        if (ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])
-        ->count() > 0) {
+        $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])->first();
+        if (!empty($model)) {
+            if (empty($data['name'])) {
+                return;
+            }
+            $model->name = $data['name'];
+            $model->save();
             return;
         }
         $scene = CMSRepository::scene();
@@ -353,14 +360,13 @@ class ThemeManager {
         $scene->addField($model);
     }
 
-    protected function runActionChannel(array $data) {
+    protected function runActionChannel(array $data): void {
         $type = $data['type'] ?? null;
-        if (empty($type)) {
-        } elseif ($type === 'page') {
+        if ($type === 'page') {
             $data['type'] = CategoryEntity::TYPE_PAGE;
         } elseif ($type === 'link') {
             $data['type'] = CategoryEntity::TYPE_LINK;
-        } else {
+        } else if (!empty($type)) {
             $data['model_id'] = $this->getCacheId($type);
             $data['type'] = CategoryEntity::TYPE_CONTENT;
         }
@@ -388,7 +394,7 @@ class ThemeManager {
                 $this->runActionContent($item);
                 continue;
             }
-            if (isset($item['type'])) {
+            if (empty($item['type'])) {
                 $item['type'] = $type;
             }
             $item['parent_id'] = $model->id;
@@ -396,7 +402,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionContent(array $data) {
+    protected function runActionContent(array $data): void {
         if (isset($data['cat_id']) && !is_numeric($data['cat_id'])) {
             $data['cat_id'] = $this->getCacheId($data['cat_id']);
         } elseif (isset($data['type'])) {
@@ -409,7 +415,7 @@ class ThemeManager {
         $scene->insert($data);
     }
 
-    protected function insertGroup(array $item) {
+    protected function insertGroup(array $item): void {
         if ($this->getCacheId($item['name'], 'group') > 0) {
             return;
         }
@@ -422,7 +428,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionOption(array $data) {
+    protected function runActionOption(array $data): void {
         $newOptions = [];
         foreach ($data['data'] as $item) {
             if (isset($item['items'])) {
@@ -437,12 +443,12 @@ class ThemeManager {
         CMSRepository::site()->saveOption($newOptions);
     }
 
-    protected function getOptionParent(string $code) {
+    protected function getOptionParent(string $code): int {
         $code = substr($code, 8);
         return intval(OptionModel::where('code', $code)->value('id'));
     }
 
-    public function getAllThemes() {
+    public function getAllThemes(): array {
         $data = [];
         $this->src->map(function ($file) use (&$data) {
             if (!$file instanceof Directory) {
@@ -473,7 +479,7 @@ class ThemeManager {
             LinkageDataModel::tableName(),
             ForumModel::tableName()
         ];
-        $model_list = ModelModel::query()->all();
+        $model_list = ModelModel::query()->get();
         foreach ($model_list as $model) {
             $scene = CMSRepository::scene()->setModel($model);
             CreateCmsTables::dropTable($scene->getExtendTable());

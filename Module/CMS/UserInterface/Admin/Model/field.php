@@ -38,7 +38,7 @@ $this->title = '模块字段列表';
                         <?php endif;?>
                         
                         <?php if($item->is_system < 1):?>
-                        <a class="btn btn-success" data-type="del" href="<?=$this->url('./@admin/model/delete_field', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-success" data-type="del" href="<?=$this->url('./@admin/model/delete_field', ['id' => $item->id])?>" data-tip="模型字段是所有站点公用的，确定删除？">删除</a>
                         <?php endif;?>
                     </div>
                 </td>

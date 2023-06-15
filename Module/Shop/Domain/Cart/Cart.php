@@ -240,7 +240,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      *
      * @return array
      */
-    public function toArray() {
+    public function toArray(): array {
         $subtotal = $this->subtotal();
         return [
             'data' => $this->toGroupArray(),
@@ -287,7 +287,7 @@ class Cart implements IteratorAggregate, JsonAble, ArrayAble {
      * @param  int $options
      * @return string
      */
-    public function toJson($options = 0) {
+    public function toJson(int $options = 0): string {
         return Json::encode($this->toArray());
     }
 }

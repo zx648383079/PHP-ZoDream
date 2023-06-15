@@ -1,13 +1,27 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var Eve = /** @class */ (function () {
     function Eve() {
     }
@@ -19,16 +33,16 @@ var Eve = /** @class */ (function () {
         return this.options.hasOwnProperty('on' + event);
     };
     Eve.prototype.trigger = function (event) {
+        var _a;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        var _a;
         var realEvent = 'on' + event;
         if (!this.hasEvent(event)) {
             return;
         }
-        return (_a = this.options[realEvent]).call.apply(_a, [this].concat(args));
+        return (_a = this.options[realEvent]).call.apply(_a, __spreadArray([this], args, false));
     };
     return Eve;
 }());
@@ -51,7 +65,13 @@ var Point = /** @class */ (function () {
      * 取元素的x
      * @param width
      */
-    Point.prototype.getLeft = function (width) {
+    Point.prototype.getLeft = function (width, align) {
+        if (align === 'left') {
+            return this.x;
+        }
+        if (align === 'right') {
+            return this.x - this.width + width;
+        }
         return this.x - (width - 3 * this.width) / 2;
     };
     /**
@@ -98,6 +118,7 @@ var SliderItem = /** @class */ (function (_super) {
         _this.options.height = _this._getOption('height');
         _this.options.animationmode = _this._getOption('animationmode');
         _this.options.haspoint = _this._getOption('haspoint');
+        _this.options.align = _this._getOption('align');
         _this.element.addClass(_this.options.animationmode + '-slider');
         _this._length = items.length;
         _this._box = items.parent();
@@ -128,7 +149,7 @@ var SliderItem = /** @class */ (function (_super) {
     SliderItem.prototype._initOnly = function (items) {
         var instance = this;
         this._resetOnly(items);
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             instance._resetOnly(items);
         });
     };
@@ -176,13 +197,16 @@ var SliderItem = /** @class */ (function (_super) {
     };
     SliderItem.prototype._bindEvent = function () {
         var instance = this;
-        this.element.find(this.options.previous).click(function () {
+        this.element.find(this.options.previous).on('click', function () {
             instance.previous();
         });
-        this.element.find(this.options.next).click(function () {
+        this.element.find(this.options.next).on('click', function () {
             instance.next();
         });
-        $(window).resize(function () {
+        this.element.on(this._getOption('pointevent'), ".slider-point li", function () {
+            instance.index = $(this).index();
+        });
+        $(window).on('resize', function () {
             instance.resize();
         });
         if (!$.fn.swipe) {
@@ -233,10 +257,6 @@ var SliderItem = /** @class */ (function (_super) {
             html += '<li><span>' + i + '</span></i>';
         }
         this.element.append('<ul class="slider-point">' + html + '</ul>');
-        var instance = this;
-        this.element.on(this._getOption('pointEvent'), ".slider-point li", function () {
-            instance.index = $(this).index();
-        });
     };
     /**
      * 浏览器尺寸变化
@@ -265,7 +285,7 @@ var SliderItem = /** @class */ (function (_super) {
         $.each(this._data, function (i, point) {
             point.x -= width;
         });
-        this._box.css({ left: this._data[this._index].getLeft(maxWidth) + "px" });
+        this._box.css({ left: this._data[this._index].getLeft(maxWidth, this.options.align) + "px" });
         this._box.width(width * 3);
     };
     Object.defineProperty(SliderItem.prototype, "index", {
@@ -275,7 +295,7 @@ var SliderItem = /** @class */ (function (_super) {
         set: function (index) {
             this.goto(index);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /**
@@ -340,9 +360,6 @@ var SliderItem = /** @class */ (function (_super) {
     };
     SliderItem.prototype._showPoint = function (index) {
         this._index = index;
-        if (!this.options.haspoint) {
-            return;
-        }
         this.element.find(".slider-point li")
             .eq(index).addClass("active").siblings().removeClass("active");
     };
@@ -351,13 +368,13 @@ var SliderItem = /** @class */ (function (_super) {
         var width = this.element.width();
         this.element.height(points[0].height);
         var instance = this;
-        this._goAndCallback(points[0].getLeft(width), function () {
+        this._goAndCallback(points[0].getLeft(width, this.options.align), function () {
             if (points[0].index != points[1].index) {
-                instance._box.css({ left: points[1].getLeft(width) + 'px' });
+                instance._box.css({ left: points[1].getLeft(width, instance.options.align) + 'px' });
             }
             instance._showPoint(points[1].index);
         });
-        this.trigger.apply(this, ['change'].concat(points));
+        this.trigger.apply(this, __spreadArray(['change'], points, false));
     };
     /**
      * 移动动画及回调
@@ -455,7 +472,7 @@ var Slider = /** @class */ (function () {
 }());
 var SliderDefaultOptions = /** @class */ (function () {
     function SliderDefaultOptions() {
-        this.item = 'li';
+        this.item = '.slider-box li';
         this.spacetime = 3000;
         this.animationtime = 1000;
         this.animationmode = "swing";
@@ -464,6 +481,7 @@ var SliderDefaultOptions = /** @class */ (function () {
         this.haspoint = true;
         this.pointevent = "click";
         this.auto = true;
+        this.align = 'center';
     }
     return SliderDefaultOptions;
 }());

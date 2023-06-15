@@ -1,89 +1,62 @@
 {layout:main}
+{this.title=$data.title}
+{if:$data.is_gray}
+{>css}
+html {
+    filter: grayscale(100%);
+}
+{/>}
+{/if}
+<div class="banner-bg" style="background-image:url({$cat.image});">
 
-<div class="info-header">
-    <div class="thumb">
-        <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$data.thumb}" alt="">
-        <span class="play-icon"></span>
-        <span class="tag">{$data.definition}</span>
-    </div>
-    <div class="header-detail">
-        <div class="title">{$data.title}</div>
-        <p>
-            <span class="tag">导演:</span>
-            <span>{$data.director}</span>
-        </p>
-        <p>
-            <span class="tag">主演:</span>
-            <span>{$data.leader}</span>
-        </p>
-        <p>
-            <span class="tag">类型:</span>
-            <span>{$cat.name}</span>
-            <span class="split-line"></span>
-            <span class="tag">地区:</span>
-            <span>{$data.area}</span>
-            <span class="split-line"></span>
-            <span class="tag">年份:</span>
-            <span>{$data.age}</span>
-        </p>
-        <p>
-            <span class="tag">简介:</span>
-            <span>{$data.description}</span>
-        </p>
-        {contents:category=$cat.id parent=$data.id num=100}
-        <a href="{url:$content}" class="btn btn-primary">立即播放</a>
-        {break:}
-        {/contents}
-        <a href="" class="btn">分享</a>
-    </div>
 </div>
-
-{contents:category=$cat.id parent=$data.id num=100}
-<div class="panel">
-    <div class="panel-header">
-        分集
-    </div>
-    <div class="panel-body">
-        {contents:category=$cat.id parent=$data.id num=100}
-        <a class="play-item" href="{url:$content}">{$content.title}</a>
-        {/contents}
-    </div>
-</div>
-{break:}
-{/contents}
-
-<div class="panel">
-    <div class="panel-header">
-        <i class="fa fa-file"></i>
-        详细剧情
-        <div class="tip">
-                更新时间：{this.time:$data.updated_at}
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
         </div>
-    </div>
-    <div class="panel-body">
-        {$data.content}
-    </div>
-</div>
-
-<div class="panel">
-    <div class="panel-header">
-        <i class="fa fa-heart"></i>
-        猜你喜欢
-        <a href="{channel:$cat.id,url}" class="more">
-            <i class="fa fa-refresh"></i>
-            换一换
-        </a>
-    </div>
-    <div class="panel-body">
-            {contents:category=$cat.id num=10}
-            <a class="video-item" href="{url:$content}">
-                <div class="thumb">
-                    <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
-                    <span class="play-icon"></span>
-                    <span class="tag">高清</span>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div id="content" class="article-panel">
+                <h3 class="title-bar">
+                    {$data.title}
+                </h3>
+                <div class="tag-bar">
+                    <span class="tag-item">时间：{this.time:$data.created_at}</span>
+                    <span class="tag-item">作者：
+                        <a href="{redirect:$data.source_url}" target="_blank" rel="noopener noreferrer">{$data.author}</a>
+                    </span>
                 </div>
-                <div class="title">{$content.title}</div>
-            </a>
-            {/contents}
+                <article class="content">
+                    {$data.content}
+                </article>
+
+                <div class="navigation-bar">
+                    <div class="prev-item">
+                        上一篇：
+                        {= $prev=previous:}
+                        {if:$prev}
+                        <a href="{url:$prev}">{$prev.title}</a>
+                        {else}
+                        没有了
+                        {/if}
+                    </div>
+                    <div class="next-item">
+                        下一篇： 
+                        {= $next=next:}
+                        {if:$next}
+                        <a href="{url:$next}">{$next.title}</a>
+                        {else}
+                        没有了
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>

@@ -91,7 +91,7 @@ class SingleScene extends BaseScene {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->column($field->getOldAttribute('field'))->name($field->field), $field);
+        static::converterTableField($table->column($field->getAttributeFromOld('field'))->name($field->field), $field);
         CreateCmsTables::updateTable($table,
             updateColumns: $table->columns()
         );

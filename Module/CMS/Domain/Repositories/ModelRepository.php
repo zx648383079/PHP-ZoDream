@@ -11,10 +11,15 @@ use Module\CMS\Domain\Scene\SingleScene;
 
 class ModelRepository {
     public static function getList(string $keywords = '', int $type = 0) {
-        return ModelModel::query()
+        $items = ModelModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['title']);
-            })->page();
+            })->orderBy('id', 'desc')->page();
+        if ($items->isEmpty()) {
+            return $items;
+        }
+        return ModelHelper::bindCount($items, ModelFieldModel::query(),
+            'id', 'model_id', 'field_count');
     }
 
     public static function get(int $id) {
@@ -24,7 +29,10 @@ class ModelRepository {
     public static function save(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $model = ModelModel::findOrNew($id);
+        $model = $id > 0 ? ModelModel::findOrThrow($id) : new ModelModel();
+        if (empty($model)) {
+            throw new \Exception('');
+        }
         if ($id > 0) {
             unset($data['table']);
         } elseif (ModelModel::where('`table`', $data['table'])->count() > 0) {
@@ -42,7 +50,7 @@ class ModelRepository {
     }
 
     public static function remove(int $id) {
-        $model = ModelModel::where('id', $id);
+        $model = ModelModel::where('id', $id)->first();
         if (!$model) {
             throw new \Exception('模型不存在');
         }
@@ -175,5 +183,26 @@ class ModelRepository {
         $field = SingleScene::newField($type);
         $data = $field->options($model, true);
         return empty($data) || !is_array($data) ? [] : $data;
+    }
+
+    public static function batchAddField(array $items): void {
+        $add = [];
+        foreach ($items as $item) {
+            $model = ModelFieldModel::where('field', $item['field'])
+                ->where('model_id', $item['model_id'])->first();
+            if (empty($model)) {
+                $add[] = $item;
+                continue;
+            }
+            if (empty($item['name']) || $item['name'] === $model->name) {
+                continue;
+            }
+            ModelFieldModel::where('id', $model->id)
+                ->update(['name', $item['name']]);
+        }
+        if (empty($add)) {
+            return;
+        }
+        ModelFieldModel::query()->insert($add);
     }
 }
