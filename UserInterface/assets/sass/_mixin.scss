@@ -3,7 +3,7 @@
     height: $height;
 }
 
-@mixin icon($code, $size: 16px) {
+@mixin icon($code, $size: 1rem) {
     display: inline-block;
     font-family: "Font Awesome 5 Free";
     font-weight: 900;

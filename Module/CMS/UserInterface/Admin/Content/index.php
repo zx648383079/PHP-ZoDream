@@ -21,7 +21,7 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
             <input type="hidden" name="parent_id" value="<?=$parent_id?>">
             <input type="hidden" name="model_id" value="<?=$model->id?>">
         </form>
-        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/content/create', ['cat_id' => $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
+        <a class="btn btn-success pull-right no-jax" href="<?=$this->url('./@admin/content/create', ['cat_id' => $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
     </div>
     
     <table class="table table-hover">
@@ -54,7 +54,7 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
                         <?php if($model->child_model > 0):?>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/content', ['parent_id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->child_model])?>">分集</a>
                         <?php endif;?>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">编辑</a>
+                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/content/delete', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">删除</a>
                     </div>
                 </td>

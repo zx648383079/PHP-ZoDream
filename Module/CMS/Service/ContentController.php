@@ -13,13 +13,13 @@ class ContentController extends Controller {
         if (empty($cat)) {
             return $this->redirect('./');
         }
-        FuncHelper::$current['channel'] = $cat->id;
+        FuncHelper::$current['channel'] = $cat['id'];
         FuncHelper::$current['content'] = $id;
         $model = FuncHelper::model($model);
         if (empty($model)) {
             return $this->redirect('./');
         }
-        FuncHelper::$current['model'] = $model->id;
+        FuncHelper::$current['model'] = $model['id'];
         $scene = CMSRepository::scene()->setModel($model);
         $data = $scene->find($id);
         $parent = null;
@@ -28,9 +28,10 @@ class ContentController extends Controller {
         }
         $data['view_count'] ++;
         $scene->update($id, ['view_count' => $data['view_count']]);
-        if ($data['parent_id'] > 0 && $cat->model) {
+        $catModel = FuncHelper::model($cat['model_id']);
+        if ($data['parent_id'] > 0 && $catModel) {
             $parent = CMSRepository::scene()
-                ->setModel($cat->model)->find($data['parent_id']);
+                ->setModel($catModel)->find($data['parent_id']);
         }
         CMSRepository::scene()->setModel($model);
         $title = $data['title'];
@@ -38,9 +39,9 @@ class ContentController extends Controller {
             $title = sprintf('%s %s', $parent['title'], $data['title']);
         }
         return $this->show(
-            $cat->model_id === $model->id
-                ? $cat->show_template
-                : $model->show_template,
+            $cat['model_id'] === $model['id']
+                ? $cat['show_template']
+                : $model['show_template'],
             compact('cat', 'data', 'title', 'model', 'parent'));
     }
 }

@@ -106,6 +106,7 @@ var silder = $(".banner .slider").slider({
             </div>
         </div>
         <div class="col-md-5 col-lg-3">
+            {if:auth()->guest()}
             <div class="login-panel">
                 <div class="panel-header">会员登录</div>
                 <div class="panel-body">
@@ -125,9 +126,42 @@ var silder = $(".banner .slider").slider({
                 </div>
                 <div class="panel-action">
                     <div class="btn btn-default">登录</div>
-                    <div class="btn btn-info">注册</div>
+                    <div class="btn btn-info" modal="authDialog">注册</div>
                 </div>
             </div>
+            {else}
+            {$user=authUser:}
+            <div class="profile-panel">
+                <div class="avatar-header">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$user.avatar}" alt="{$user.name}">
+                </div>
+                <div class="line-row-item">
+                    <label for="">昵称：</label>
+                    <span>{$user.name}</span>
+                    <a href="{redirect:/auth/logout}" data-type="ajax" data-tip="确认退出账户？">[登出]</a>
+                </div>
+                <div class="line-row-item">
+                    <label for="">邮箱：</label>
+                    <span>{$user.email}</span>
+                </div>
+                <div class="line-row-item">
+                    <label for="">性别：</label>
+                    <span>{$user.sex_label}</span>
+                </div>
+                <div class="line-row-item">
+                    <label for="">生日：</label>
+                    <span>{$user.birthday}</span>
+                </div>
+                <div class="line-row-item">
+                    <label for="">登录IP：</label>
+                    <span>{$user.last_ip}</span>
+                </div>
+                <div class="line-row-item">
+                    <label for="">注册时间：</label>
+                    <span>{$user.created_at}</span>
+                </div>
+            </div>
+            {/if}
         </div>
     </div>
 </div>

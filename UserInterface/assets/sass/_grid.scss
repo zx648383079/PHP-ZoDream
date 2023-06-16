@@ -1,5 +1,5 @@
-$prefix: bs;
 @use "sass:math";
+$prefix: bs;
 @function breakpoint-next(
     $name,
     $breakpoints: $grid-breakpoints,

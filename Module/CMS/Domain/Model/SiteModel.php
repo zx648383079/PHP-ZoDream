@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Helpers\Json;
+use Zodream\Http\Uri;
 
 /**
  * Class SiteModel
@@ -86,6 +87,14 @@ class SiteModel extends Model {
             $value = Json::encode($value);
         }
         $this->__attributes['options'] = $value;
+    }
+
+    public function getPreviewUrlAttribute() {
+        if ($this->match_type < 1) {
+            $uri = new Uri(url('./'));
+            return (string)$uri->setHost($this->match_rule);
+        }
+        return url(sprintf('/%s', $this->match_rule));
     }
 
     public function saveOption(array $data) {

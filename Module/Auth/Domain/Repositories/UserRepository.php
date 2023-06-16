@@ -12,6 +12,7 @@ use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\Scene\User;
 use Module\Auth\Domain\Model\UserMetaModel;
@@ -73,6 +74,7 @@ class UserRepository {
         $userId = intval($data['id']);
         $extraWords = explode(',', $extra);
         foreach ([
+            'last_ip',
             'card_items',
              'bulletin_count',
              'today_checkin',
@@ -94,6 +96,11 @@ class UserRepository {
         return $data;
     }
 
+    public static function getLastIp(int $user) {
+         return Helpers::hideIp((string)LoginLogModel::where('user_id', $user)
+             ->where('status', 1)->orderBy('created_at', 'desc')
+             ->value('ip'));
+    }
     public static function getFollowStatus(int $user) {
         if (auth()->id() === $user) {
             return 0;

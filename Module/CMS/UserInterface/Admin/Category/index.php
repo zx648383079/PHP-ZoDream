@@ -7,7 +7,7 @@ $this->title = 'ZoDream';
 
 <div class="panel-container">
     <div class="page-search-bar">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
+        <a class="btn btn-success pull-right no-jax" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
     </div>
 
     <table class="table table-hover">
@@ -37,7 +37,7 @@ $this->title = 'ZoDream';
                         <?php if($item['type'] < 1):?>
                         <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">查看</a>
                         <?php endif;?>
-                        <a class="btn btn-default" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>
+                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' => $item['id']])?>">删除</a>
                     </div>
                 </td>

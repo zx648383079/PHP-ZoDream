@@ -19,7 +19,7 @@ $timeOut = ($time ?? 3) * 1000;
                 }, <?= $timeOut ?>)
             </script>
             <?php endif;?>
-			<a class="btn btn-show" href="<?=$this->url('/')?>"><?=__('back home')?></a>
+			<a class="btn btn-default" href="<?=$this->url('/')?>"><?=__('back home')?></a>
 		</p>
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
@@ -53,11 +54,12 @@ $('#linkage-{$field->id}').multiSelect({
 });
 JS;
 
-        view()->registerJsFile('@jquery.multi-select.min.js')
+        view()->registerJsFile('@jquery.min.js')
+            ->registerJsFile('@jquery.multi-select.min.js')
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div class="input-group">
-    <label for="{$field->field}">地区</label>
+    <label for="{$field->field}">{$field->name}</label>
     <div id="linkage-{$field->id}">
     
     </div>

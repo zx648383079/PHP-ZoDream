@@ -67,7 +67,9 @@ class ModelRepository {
 
     public static function fieldList(int $model) {
         return ModelFieldModel::query()
-            ->where('model_id', $model)->get();
+            ->where('model_id', $model)->orderBy('position', 'asc')
+            ->orderBy('is_system', 'desc')
+            ->orderBy('id', 'asc')->get();
     }
 
     public static function field(int $id) {
@@ -204,5 +206,12 @@ class ModelRepository {
             return;
         }
         ModelFieldModel::query()->insert($add);
+    }
+
+    public static function restart(int $id) {
+        $model = ModelModel::findOrThrow($id);
+        $scene = CMSRepository::scene()->setModel($model);
+        $scene->removeTable();
+        $scene->initTable();
     }
 }

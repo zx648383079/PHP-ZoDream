@@ -155,7 +155,14 @@
                 {
                     "name": "产品类型",
                     "field": "product_type",
-                    "type": "@linkage:product_type"
+                    "type": "@linkage:product_type",
+                    "is_main": true
+                },
+                {
+                    "name": "关联产品",
+                    "field": "product_id",
+                    "type": "@model:products",
+                    "is_main": true
                 },
                 {
                     "name": "附件",
@@ -179,7 +186,7 @@
                     "is_main": true
                 },
                 {
-                    "name": "行业",
+                    "name": "产品类型",
                     "field": "product_type",
                     "type": "@linkage:product_type",
                     "is_main": true
@@ -193,11 +200,6 @@
                 {
                     "name": "应用范围",
                     "field": "applications",
-                    "type": "editor"
-                },
-                {
-                    "name": "标准及认证证书",
-                    "field": "standards_certification",
                     "type": "editor"
                 }
             ]
@@ -595,21 +597,21 @@
                         {
                             "action": "channel",
                             "title": "产品样本",
-                            "name": "",
+                            "name": "product_sample",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
                             "action": "channel",
                             "title": "产品证书",
-                            "name": "",
+                            "name": "product_cert",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
                             "action": "channel",
                             "title": "技术资料",
-                            "name": "",
+                            "name": "product_information",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
                         }

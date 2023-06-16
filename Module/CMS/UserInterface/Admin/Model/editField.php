@@ -40,7 +40,7 @@ $this->registerJs($js);
             <?php if(count($tab_list) < 5):?>
                <div class="add-box">
                    <input type="text">
-                   <button type="button">添加</button>
+                   <button type="button" class="btn btn-info">添加</button>
                </div>
             <?php endif;?>
         </div>

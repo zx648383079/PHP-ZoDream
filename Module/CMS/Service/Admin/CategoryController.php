@@ -56,13 +56,14 @@ class CategoryController extends Controller {
         }
         CMSRepository::generateCategoryTable($model);
         return $this->renderData([
-            'url' => $this->getUrl('category')
+            'url' => $this->getUrl('category'),
+            'no_jax' => true
         ]);
     }
 
     public function deleteAction(int $id) {
         $items = CategoryModel::getChildrenWithParent($id);
-        $cat = CategoryModel::find($id);
+        // $cat = CategoryModel::find($id);
         $modelIds = CategoryModel::whereIn('id', $items)
             ->where('model_id', '>', 0)
             ->pluck('model_id');
@@ -77,7 +78,8 @@ class CategoryController extends Controller {
         }
         CategoryModel::whereIn('id', $items)->delete();
         return $this->renderData([
-            'url' => $this->getUrl('category')
+            'url' => $this->getUrl('category'),
+            'no_jax' => true
         ]);
     }
 }

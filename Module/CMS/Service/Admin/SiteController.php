@@ -49,14 +49,16 @@ class SiteController extends Controller {
     public function deleteAction(int $id) {
         SiteRepository::remove($id);
         return $this->renderData([
-            'url' => $this->getUrl('site')
+            'url' => $this->getUrl('site'),
+            'no_jax' => true
         ]);
     }
 
     public function changeAction(int $id) {
         CMSRepository::resetSite($id);
         return $this->renderData([
-            'url' => $this->getUrl('site')
+            'url' => $this->getUrl('site'),
+            'no_jax' => true
         ]);
     }
 

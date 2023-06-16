@@ -1,5 +1,6 @@
 declare var BASE_URI: string;
 declare var UPLOAD_URI: string;
+declare var file_upload: any;
 
 interface IResponse {
     code: number,
@@ -58,7 +59,7 @@ function parseAjax(data: IResponse) {
     Dialog.tip(data.message || '操作执行完成！');
     if (data.data && data.data.refresh) {
         setTimeout(() => {
-            if (typeof parseAjaxUri == 'function') {
+            if (!data.data.no_jax && typeof parseAjaxUri == 'function') {
                 parseAjaxUri(window.location.href);
                 return;
             }
@@ -71,7 +72,7 @@ function parseAjax(data: IResponse) {
                 history.go(-1);
                 return;
             }
-            if (typeof parseAjaxUri == 'function') {
+            if (!data.data.no_jax && typeof parseAjaxUri == 'function') {
                 parseAjaxUri(data.data.url);
                 return;
             }

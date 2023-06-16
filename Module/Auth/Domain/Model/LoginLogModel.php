@@ -57,7 +57,7 @@ class LoginLogModel extends Model {
      * @return LoginLogModel
      * @throws \Exception
      */
-	public static function addLoginLog($user, $user_id = 0, $status = false, $mode = self::MODE_WEB) {
+	public static function addLoginLog(string $user, int $user_id = 0, bool $status = false, string $mode = self::MODE_WEB) {
 		return static::create([
             'ip' => request()->ip(),
             'user' => $user,

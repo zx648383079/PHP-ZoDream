@@ -1,0 +1,77 @@
+{layout:main}
+{this.title=$data.title}
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {extend:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">首页</a></li>{location:}
+                </ul>
+            </div>
+            <div id="content" class="product-panel">
+                <div class="gallery-panel">
+                    <div class="item-thumb">
+                        <img src="{$data.thumb}" alt="">
+                    </div>
+                    <div class="item-row">
+                        <div class="item-title-bar">
+                            <span class="item-title">{$data.title}</span>
+                            <span class="item-no">订单编号：{$data.product_no}</span>
+                        </div>
+                        <a modal="inquiryDialog"><i class="fa fa-edit"></i> 点击这里发送询价</a>
+                    </div>
+                </div>
+
+                <div class="tab-box">
+                    <div class="tab-header">
+                        <div class="tab-item active">产品介绍</div>
+                        <div class="tab-item">相关产品及附件</div>
+                        <div class="tab-item">应用范围</div>
+                        <div class="tab-item">标准及认证证书</div>
+                        <div class="tab-item">技术资料</div>
+                    </div>
+                    <div class="tab-body">
+                        <div class="tab-item active">{$data.content}</div>
+                        <div class="tab-item">相关产品及附件</div>
+                        <div class="tab-item">{$data.applications}</div>
+                        <div class="tab-item">
+                            <div class="res-download-item">
+                                <a href="{url:$content}" class="item-title">aaaaa</a>
+                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                            </div>
+                            {contents:category=product_cert product_id=$data.id field=id,cat_id,model_id,title,file num=5}
+                            <div class="res-download-item">
+                                <a href="{url:$content}" class="item-title">{$content.title}</a>
+                                {if:auth().guest()}
+                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {else}
+                                <a href="{$content.file}" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {/if}
+                            </div>
+                            {/contents}
+                        </div>
+                        <div class="tab-item">技术资料</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{extend:layouts/inquiry}

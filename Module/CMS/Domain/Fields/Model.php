@@ -46,7 +46,7 @@ class Model extends BaseField {
         }
         $option = $field->setting('option');
         $model = ModelModel::find($option['model']);
-        $items = CMSRepository::scene()->setModel($model)
+        $items = empty($model) ? [] : CMSRepository::scene()->setModel($model)
             ->query()->where('model_id', $model->id)->pluck('title', 'id');
         return Theme::select($field->field, $items, $value, $field->name, $field->is_required > 0);
     }

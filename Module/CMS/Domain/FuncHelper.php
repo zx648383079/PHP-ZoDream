@@ -4,12 +4,14 @@ namespace Module\CMS\Domain;
 
 use Domain\Providers\MemoryCacheProvider;
 use Infrastructure\HtmlExpand;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\LinkageRepository;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -36,22 +38,50 @@ class FuncHelper {
         return MemoryCacheProvider::getInstance();
     }
 
-    public static function option(string $code) {
+    public static function option(string $code, string $type = '') {
         if (empty($code)) {
             return null;
         }
         $options = static::cache()->getOrSet(__FUNCTION__, 'all', function () {
             return CMSRepository::options();
         });
-        return $options[$code] ?? null;
+        $val = $options[$code] ?? null;
+        if ($type === 'number') {
+            return static::toNumber($val);
+        }
+        return $val;
+    }
+
+    protected static function toNumber(mixed $value) {
+        if (is_numeric($value)) {
+            return $value;
+        }
+        if (preg_match('/\d+/', (string)$value, $match)) {
+            return $match[0];
+        }
+        return intval($value);
     }
 
     public static function channels(array $params = null) {
         $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
                 $data = CategoryModel::query()->orderBy('position', 'asc')->get();
-                static::setChannel(...$data);
-                return $data;
+                $maps = [];
+                foreach ($data as $item) {
+                    if (!isset($maps[$item['parent_id']])) {
+                        $maps[$item['parent_id']] = 0;
+                    }
+                    $maps[$item['parent_id']] ++;
+                }
+                $items = [];
+                foreach ($data as $item) {
+                    $formatted = $item->toArray();
+                    $formatted['children_count'] = $maps[$item['id']] ?? 0;
+                    $items[] = $formatted;
+                }
+                unset($data, $maps);
+                static::setChannel(...$items);
+                return $items;
             });
         if (empty($params)) {
             return $data;
@@ -147,12 +177,13 @@ class FuncHelper {
             $category = $data[1]['cat_id'];
             $children = static::channels(['children' => $category]);
             $cat = static::channel($category, true);
-            if (empty($cat) || !$cat->model) {
+            $model = empty($cat) ? null : static::model($cat['model_id']);
+            if (empty($cat) || !$model) {
                 return new Page(0);
             }
             $children[] = $category;
             $data[1]['cat_id'] = $children;
-            $scene = CMSRepository::scene()->setModel($cat->model);
+            $scene = CMSRepository::scene()->setModel($model);
             return $scene->search(...$data);
         });
     }
@@ -235,7 +266,8 @@ class FuncHelper {
     public static function previous($name = null) {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
-            $scene = CMSRepository::scene()->setModel($cat->model);
+            $catModel = static::model($cat['model_id']);
+            $scene = CMSRepository::scene()->setModel($catModel);
             return $scene->query()->where('id', '<', static::$current['content'])
                 ->orderBy('id', 'desc')->first();
         });
@@ -245,7 +277,8 @@ class FuncHelper {
     public static function next($name = null) {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
-            $scene = CMSRepository::scene()->setModel($cat->model);
+            $catModel = static::model($cat['model_id']);
+            $scene = CMSRepository::scene()->setModel($catModel);
             return $scene->query()->where('id', '>', static::$current['content'])
                 ->orderBy('id', 'asc')->first();
         });
@@ -255,7 +288,7 @@ class FuncHelper {
     protected static function getChannelId($val, $key = 'name') {
         $data = static::channels();
         foreach ($data as $item) {
-            if ($item[$key] === $val) {
+            if ($item[$key] === $val || $item['id'] === $val) {
                 return $item['id'];
             }
         }
@@ -307,10 +340,10 @@ class FuncHelper {
             sprintf('%s-%s', $category, $params['field']),
             function () use ($category, $params) {
                 $cat = static::channel($category, true);
-                if (empty($cat) || $cat->model_id < 1) {
+                if (empty($cat) || $cat['model_id'] < 1) {
                     return null;
                 }
-                return static::getField($cat->model_id, $params['field']);
+                return static::getField($cat['model_id'], $params['field']);
             });
         if (empty($field)) {
             return '';
@@ -328,7 +361,8 @@ class FuncHelper {
                 'title', 'keywords', 'description', 'thumb',
                 'updated_at', 'created_at', 'parent_id'];
             $cat = static::channel($category, true);
-            $scene = CMSRepository::scene()->setModel($cat->model);
+            $catModel = static::model($cat['model_id']);
+            $scene = CMSRepository::scene()->setModel($catModel);
             if ($scene) {
                 foreach ($scene->fieldList() as $item) {
                     if ($item->is_disable) {
@@ -348,9 +382,9 @@ class FuncHelper {
     }
 
     /**
-     * @param $id
+     * @param mixed $id
      * @param string|bool|null $name
-     * @return CategoryModel|string
+     * @return array|string
      * @throws \Exception
      */
     public static function channel(mixed $id, string|bool|null $name = null): mixed {
@@ -370,11 +404,21 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
         });
-        $data['model'] = self::model($data->model_id);
+        $data['model'] = self::model($data['model_id']);
         if ($name === true) {
             return $data;
         }
         return $data[$name];
+    }
+
+    public static function channelRoot(mixed $id) {
+        $id = static::getChannelId($id);
+        if (empty($id)) {
+            return null;
+        }
+        $items = static::channels();
+        $parent = TreeHelper::getTreeParent($items, $id);
+        return static::channel(empty($parent) ? $id : $parent[0], true);
     }
 
     /**
@@ -403,7 +447,8 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s', $category, $id),
             function () use ($id, $category) {
                 $cat = static::channel($category, true);
-                $scene = CMSRepository::scene()->setModel($cat->model);
+                $catModel = static::model($cat['model_id']);
+                $scene = CMSRepository::scene()->setModel($catModel);
             return $scene->find($id);
         });
         return self::getContentValue($name, $data);
@@ -451,7 +496,7 @@ class FuncHelper {
      * @param array|null $data
      * @return null|string|mixed
      */
-    protected static function getContentValue(string|bool $name, ?array $data): mixed {
+    protected static function getContentValue(string|bool|null $name, ?array $data): mixed {
         if (empty($data)) {
             return null;
         }
@@ -513,7 +558,7 @@ class FuncHelper {
         if (empty($id)) {
             return [];
         }
-        return LinkageModel::idTree($id);
+        return LinkageRepository::idTree(intval($id));
     }
 
     public static function linkageText(int|string $id): string {
@@ -669,7 +714,7 @@ class FuncHelper {
         if (isset($_GET['preview'])) {
             $args['preview'] = $_GET['preview'];
         }
-        if (Str::endWith($data, ',false')) {
+        if (!is_null($data) && Str::endWith($data, ',false')) {
             return url(substr($data, 0, strlen($data) - 6), $args, null, false);
         }
         return url($data, $args);
@@ -801,6 +846,16 @@ class FuncHelper {
         return '';
     }
 
+    public static function authGuest(): bool {
+        return auth()->guest();
+    }
+
+    public static function authUser(): ?array {
+        return self::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
+            return UserRepository::getCurrentProfile('last_ip');
+        });
+    }
+
     public static function registerFunc(ParserCompiler $compiler, $class, $method = null) {
         if (empty($method)) {
             list($class, $method) = [static::class, $class];
@@ -828,6 +883,7 @@ class FuncHelper {
     public static function register(ParserCompiler $compiler) {
         static::registerFunc($compiler, [
             'channel',
+            'channelRoot',
             'channelActive',
             'content',
             'formContent',
@@ -847,7 +903,9 @@ class FuncHelper {
             'linkageText',
             'extendContent',
             'extendForm',
-            'regex'
+            'regex',
+            'authGuest',
+            'authUser'
         ]);
         static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');

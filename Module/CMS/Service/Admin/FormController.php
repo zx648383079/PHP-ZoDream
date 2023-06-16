@@ -11,12 +11,16 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 
 class FormController extends Controller {
     public function indexAction(int $id, string $keywords = '') {
-        $model = ModelModel::find($id);
-        $scene = CMSRepository::scene()->setModel($model);
-        $model_list = $scene->search($keywords, [
-            'model_id' => $id
-        ], 'id desc');
-        return $this->show(compact('model_list', 'keywords', 'model'));
+        try {
+            $model = ModelModel::find($id);
+            $scene = CMSRepository::scene()->setModel($model);
+            $model_list = $scene->search($keywords, [
+                'model_id' => $id
+            ], 'id desc');
+            return $this->show(compact('model_list', 'keywords', 'model'));
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./', '此表单不存在于当前站点');
+        }
     }
 
     public function createAction(int $model_id) {

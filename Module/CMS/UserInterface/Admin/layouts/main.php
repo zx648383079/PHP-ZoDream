@@ -45,12 +45,13 @@ $this->registerCssFile([
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@jquery.pjax.min.js',
         '@main.min.js',
         '@cms_admin.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
-<?= Layout::main($this, [
+<?= Layout::mainIfPjax($this, [
     [
         '首页',
         './@admin',
@@ -104,6 +105,28 @@ $this->registerCssFile([
         '站点管理',
         './@admin/site',
         'fa fa-building',
+    ],
+    [
+        '缓存管理',
+        false,
+        'fa fa-cookie',
+        [
+            [
+                '所有缓存',
+                './@admin/cache',
+                'fa fa-bars'
+            ],
+            [
+                '页面缓存',
+                './@admin/cache/page',
+                'fa fa-file-alt'
+            ],
+            [
+                '数据缓存',
+                './@admin/cache/data',
+                'fa fa-database'
+            ],
+        ],
     ],
     [
         '主题管理',

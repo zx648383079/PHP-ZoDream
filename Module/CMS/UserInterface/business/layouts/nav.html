@@ -1,10 +1,11 @@
+{$root=channelRoot:$cat.id}
 <div class="card-panel mb-30">
     <div class="panel-header">
-        {$cat.title}
+        {$root.title}
     </div>
     <div class="panel-body">
         <ul class="menu-bar">
-            {channels:parent=$cat.id}
+            {channels:parent=$root.id}
             <li class="menu-item">
                 <div class="menu-name">
                     <i class="fa fa-angle-right"></i>
@@ -18,7 +19,6 @@
                     {channels:parent=$channel.id}
                     <li class="menu-item">
                         <div class="menu-name">
-                            <i class="fa fa-angle-right"></i>
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                         </div>
                     </li>

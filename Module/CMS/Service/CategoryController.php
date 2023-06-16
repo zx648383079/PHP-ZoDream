@@ -13,13 +13,13 @@ class CategoryController extends Controller {
         if (empty($cat)) {
             return $this->redirect('./');
         }
-        FuncHelper::$current['channel'] = $cat->id;
+        FuncHelper::$current['channel'] = $cat['id'];
         $page = null;
-        if ($cat->type < 1) {
+        if ($cat['type'] < 1) {
             $page = FuncHelper::contents([]);
         }
         $title = $cat['title'];
-        return $this->show((string)$cat->category_template,
+        return $this->show((string)$cat['category_template'],
             compact('cat', 'page', 'title'));
     }
 

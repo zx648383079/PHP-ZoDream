@@ -35,10 +35,13 @@ html {
                     {$data.content}
                 </article>
 
-                <div class="navigation-bar">
+                {$prev=previous:}
+                {$next=next:}
+
+                {if:$prev || $next}
+                <div class="navigation-bar m-30">
                     <div class="prev-item">
                         上一篇：
-                        {= $prev=previous:}
                         {if:$prev}
                         <a href="{url:$prev}">{$prev.title}</a>
                         {else}
@@ -47,7 +50,6 @@ html {
                     </div>
                     <div class="next-item">
                         下一篇： 
-                        {= $next=next:}
                         {if:$next}
                         <a href="{url:$next}">{$next.title}</a>
                         {else}
@@ -55,6 +57,8 @@ html {
                         {/if}
                     </div>
                 </div>
+                {/if}
+                
             </div>
         </div>
         

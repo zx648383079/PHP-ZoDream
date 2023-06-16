@@ -18,9 +18,9 @@ JS
 		<p><?=__($message ?? 'error page')?></p>
 		<p class="text-center">
 			<?php if($code === 401):?>
-			<a class="btn btn-show" href="<?=$this->url(config('auth.home'), ['redirect_uri' => request()->url()])?>"><?=__('Sign in')?></a>
+			<a class="btn btn-primary" href="<?=$this->url(config('auth.home'), ['redirect_uri' => request()->url()])?>"><?=__('Sign in')?></a>
 			<?php endif;?>
-			<a class="btn btn-show" href="<?=$this->url('/')?>"><?=__('back home')?></a>
+			<a class="btn btn-default" href="<?=$this->url('/')?>"><?=__('back home')?></a>
 		</p>
 	</div>
 </div>

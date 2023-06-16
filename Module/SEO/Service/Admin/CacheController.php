@@ -10,7 +10,7 @@ class CacheController extends Controller {
         return $this->show(compact('storeItems'));
     }
 
-    public function clearAction($store = []) {
+    public function clearAction(array $store = []) {
         SEORepository::clearCache($store);
         return $this->renderData(null, '清理完成');
     }

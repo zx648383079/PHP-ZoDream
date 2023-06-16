@@ -15,6 +15,10 @@ a {
     }
 }
 
+.btn {
+    user-select: none;
+}
+
 .m-30 {
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -270,6 +274,49 @@ a {
     }
 }
 
+.profile-panel {
+    // box-shadow: 0 2px 10px gray;
+    padding: .8rem;
+    background-color: #f4f4f4;
+    label {
+        display: inline-block;
+        text-align: right;
+        width: 5rem;
+        color: #767676;
+    }
+    .line-row-item {
+        line-height: 1.5rem;
+        font-size: .8rem;
+    }
+    a {
+        margin-left: .8rem;
+    }
+    .avatar-header {
+        width: 5.625rem;
+        height: 5.625rem;
+        margin: .4rem auto;
+        text-align: center;
+        line-height: 0;
+        position: relative;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+        }
+        &::after {
+            content: "";
+            width: 6.25rem;
+            height: 6.25rem;
+            border: 3px solid $primary;
+            border-radius: 100%;
+            position: absolute;
+            left: -0.3125rem;
+            top: -0.3125rem;
+            z-index: 0;
+        }
+    }
+}
+
 .login-panel {
     box-shadow: 0 2px 10px gray;
     padding: .8rem;
@@ -347,6 +394,7 @@ $dialogHeight: 20rem;
         display: inline-block;
         line-height: 1.625rem;
         vertical-align: bottom;
+        font-style: normal;
     }
     .code-input-group {
         input {
@@ -362,6 +410,70 @@ $dialogHeight: 20rem;
         .btn-default {
             padding: 0 2rem;
         }
+    }
+    .dialog-footer {
+        background-color: #f4f4f4;
+        padding: .8rem;
+    }
+}
+
+.form-line-table {
+    .form-tip {
+        margin-bottom: .4rem;
+        font-size: .8rem;
+    }
+    label {
+        font-size: .9rem;
+        line-height: 1.625rem;
+        display: block;
+        span {
+            color: #767676;
+        }
+    }
+    input,
+    textarea {
+        font-size: .9rem;
+        padding: 0 .5rem;
+        outline: none;
+        display: block;
+        width: 100%;
+        margin-bottom: .4rem;
+    }
+    input {
+        height: 1.625rem;
+    }
+    textarea {
+        resize: vertical;
+        padding: .5rem;
+    }
+}
+
+.inquiry-dialog {
+    width: $dialogWidth * 1.4;
+    margin-left: $dialogWidth * -.7;
+    top: 4rem;
+    .dialog-body {
+        padding: .8rem;
+    }
+}
+
+.search-dialog {
+    top: 0;
+    left: auto;
+    right: 0;
+    width: 20rem;
+    .dialog-body {
+        padding: 1.4rem .8rem;
+    }
+    input {
+        height: 2.5rem;
+        padding: 0 .4rem;
+        border: 2px solid $primary;
+        outline: none;
+    }
+    .btn {
+        line-height: 2.5rem;
+        margin: 0;
     }
 }
 
@@ -385,6 +497,49 @@ $dialogHeight: 20rem;
         border-bottom: 1px dotted #ccc;
         .fa {
             color: #ccc;
+        }
+    }
+    .menu-children {
+        display: none;
+        padding-left: .6rem;
+        .menu-item {
+            border-bottom: none;
+        }
+        .menu-name {
+            padding-left: 1rem;
+            border-left: 1px solid #ccc;
+            &:hover {
+                border-color: $primary;
+            }
+        }
+    }
+    .menu-item-arrow {
+        font-size: .8rem;
+        &::before {
+            content: "\f067";
+        }
+    }
+    .menu-name {
+        display: flex;
+        a {
+            flex: 1;
+        }
+        .fa {
+            display: flex;
+            padding: 0 .3rem;
+            align-items: center;
+        }
+    }
+    .menu-item-open {
+        >.menu-name {
+            .menu-item-arrow {
+                &::before {
+                    content: "\f068";
+                }
+            }
+        }
+        >.menu-children {
+            display: block;
         }
     }
 }
@@ -746,7 +901,7 @@ $dialogHeight: 20rem;
 
 .product-item {
     display: inline-block;
-    margin-top: 1rem .5rem;
+    margin: 1rem .5rem;
     .item-thumb {
         padding: .4rem;
         border: 1px solid #ccc;
@@ -836,5 +991,78 @@ $dialogHeight: 20rem;
                 margin-right: .8rem;
             }
         }
+    }
+}
+
+.navigation-bar {
+    font-size: .8rem;
+    .prev-item,
+    .next-item {
+        display: inline-block;   
+    }
+    .prev-item {
+        margin-right: 2rem;
+    }
+}
+
+.gallery-panel {
+    border:  1px solid #ccc;
+    .item-thumb {
+        img {
+            width: 100%;
+        }
+    }
+    .item-row {
+        display: flex;
+        justify-content: space-between;
+        line-height: 3rem;
+        padding: 0 1rem;
+        a {
+            color: #333;
+            user-select: none;
+        }
+    }
+    .item-title-bar {
+        flex: 1;
+        color: $primary;
+        text-align: center;
+        .item-title {
+            margin-right: 1rem;
+        }
+    }
+}
+
+.product-panel {
+    .gallery-panel {
+        margin-bottom: 2rem;
+    }
+    .tab-header {
+        border-bottom: 1px solid #ccc;
+        .tab-item {
+            border: 1px solid #ccc;
+            background-color: #f4f4f4;
+            margin-bottom: -1px;
+            &.active {
+                background: linear-gradient(to bottom, $primary, #fff 40%);
+                border-bottom-color: #fff;
+                color: #333;
+            }
+            &:not(:last-of-type) {
+                border-right: none;
+            }
+        }
+    }
+    .tab-body {
+        border: 1px solid #ccc;
+        border-top: none;
+        padding: 0 .8rem;
+    }
+}
+.res-download-item {
+    display: flex;
+    justify-content: space-between;
+    line-height: 3rem;
+    &:not(:last-of-type) {
+        border-bottom: 1px solid $primary;
     }
 }

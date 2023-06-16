@@ -29,14 +29,14 @@
                         {option:company_name}
                     </div>
                     <div class="nav-group-bar">
-                        <div class="nav-item">
+                        <div class="nav-item" modal="searchDialog">
                             <i class="fa fa-search"></i>
                             搜索
                         </div>
-                        <a class="nav-item">
+                        <a class="nav-item" href="javascript:setHome(this);">
                             设为首页
                         </a>
-                        <a class="nav-item">
+                        <a class="nav-item" href="javascript:addFavorite();">
                             收藏
                         </a>
                         <div class="nav-item">
@@ -113,22 +113,30 @@
             </div>
             <div class="copyright">
                 <div class="container">
-                    <p>Copyright © 2011-2023 {request.host}. All Rights Reserved</p>
+                    <p>Copyright © 2011-2023 {request.host:}. All Rights Reserved</p>
                     <p>
                         {option:company_name}
                         <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}
                         </a>
                     </p>
                     <p>
-                        {> //$pns_beian=option:pns_beian}
+                        {$pns_beian=option:pns_beian}
                         <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,/\d+/}">
                             <img src="/assets/images/beian.png" alt="备案图标">
-                            {pns_beian}
+                            {$pns_beian}
                         </a>
                     </p>
                 </div>
             </div>
         </footer>
+
+        <div id="searchDialog" class="dialog search-dialog">
+            <div class="dialog-body flat-input">
+                <input type="text" class="form-control">
+                <button class="btn btn-default">搜索</button>
+            </div>
+        </div>
+
         {footer:}
    </body>
 </html>

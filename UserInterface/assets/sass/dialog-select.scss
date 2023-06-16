@@ -1,7 +1,9 @@
+$dialogIndex: 1200;
+
 .dialog-select-input {
-    padding: 0 20px 0 10px;
-    height: 36px;
-    line-height: 36px;
+    padding: 0 1.25rem 0 0.625rem;
+    height: 2.25rem;
+    line-height: 2.25rem;
     position: relative;
     border: 1px solid #eee;
     cursor: pointer;
@@ -22,7 +24,7 @@
     left: 0;
     width: 100%;
     display: none;
-    z-index: 920;
+    z-index: $dialogIndex;
     background: #fff;
     .dialog-header {
         position: relative;
@@ -31,21 +33,21 @@
         text-align: center;
         background: #fff;
         border-bottom: 1px solid #ccc;
-        z-index: 921;
+        z-index: $dialogIndex + 1;
         .dialog-close {
             position: absolute;
-            left: 15px;
-            line-height: 30px;
+            left: 0.9375rem;
+            line-height: 1.875rem;
         }
         .dialog-yes {
             position: absolute;
-            right: 15px;
+            right: 0.9375rem;
             top: 0;
-            line-height: 30px;
+            line-height: 1.875rem;
         }
     }
     .dialog-body {
-        height: 150px;
+        height: 9.375rem;
         position: relative;
         overflow: hidden;
         ul {
@@ -54,7 +56,7 @@
             transition: all .3s;
             li {
                 list-style: none;
-                line-height: 30px;
+                line-height: 1.875rem;
                 color: rgba(0, 0, 0, .3);
                 text-align: center;
                 &.active {
@@ -70,10 +72,10 @@
             padding: 0;
         }
         .dialog-top-hr {
-            top: 60px;
+            top: 3.75rem;
         }
         .dialog-bottom-hr {
-            top: 90px;
+            top: 5.625rem;
         }
     }
     &.dialog-select-column-3 {

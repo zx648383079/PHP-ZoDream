@@ -2,7 +2,6 @@
 namespace Module\CMS\Domain\Model;
 
 use Domain\Model\Model;
-use Zodream\Html\Tree;
 
 /**
  * Class LinkageModel
@@ -34,11 +33,5 @@ class LinkageModel extends Model {
         ];
     }
 
-    public static function idTree($id) {
-        return cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
-            $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
-                ->select('id', 'name', 'parent_id')->asArray()->all());
-            return $tree->makeIdTree();
-        }, 600);
-    }
+
 }

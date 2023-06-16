@@ -6,7 +6,7 @@ use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
-use Zodream\Database\Relation;
+use Zodream\Html\Tree;
 
 class LinkageRepository {
     public static function getList(string $keywords = '') {
@@ -60,6 +60,7 @@ class LinkageRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        cache()->delete('cms_linkage_tree_'.$model->linkage_id);
         return $model;
     }
 
@@ -68,6 +69,14 @@ class LinkageRepository {
     }
 
     public static function tree(int $id) {
-        return LinkageModel::idTree($id);
+        return static::idTree($id);
+    }
+
+    public static function idTree(int $id) {
+        return cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
+            $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
+                ->select('id', 'name', 'parent_id')->asArray()->all());
+            return $tree->makeIdTree();
+        }, 600);
     }
 }

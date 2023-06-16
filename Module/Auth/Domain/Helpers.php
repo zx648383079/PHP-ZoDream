@@ -8,7 +8,7 @@ class Helpers {
      * @param string $name
      * @return string
      */
-    public static function hideName(string $name) {
+    public static function hideName(string $name): string {
         return static::hideText($name, 1, 100, 1);
     }
 
@@ -17,7 +17,7 @@ class Helpers {
      * @param string $phone
      * @return string
      */
-    public static function hideTel(string $phone) {
+    public static function hideTel(string $phone): string {
         return static::hideText($phone, 1, 5, 3);
     }
 
@@ -26,7 +26,7 @@ class Helpers {
      * @param string $email
      * @return string
      */
-    public static function hideEmail(string $email) {
+    public static function hideEmail(string $email): string {
         $index = strpos($email, '@');
         if ($index === false) {
             return static::hideText($email, 1, 5, 1);
@@ -37,7 +37,26 @@ class Helpers {
             substr($email, $index));
     }
 
-    public static function hideText(string $text, int $first = 1, int $middle = 2, int $end = 1) {
+    public static function hideIp(string $ip): string {
+        if (empty($ip)) {
+            return '';
+        }
+        $tag = str_contains($ip, ':') ? ':' : '.';
+        $items = explode($tag, $ip);
+        $last = count($items) - 1;
+        if ($last < 3) {
+            return $ip;
+        }
+        foreach ($items as $i => $_) {
+            if ($i === 0 || $i === $last) {
+                continue;
+            }
+            $items[$i] = '*';
+        }
+        return implode($tag, $items);
+    }
+
+    public static function hideText(string $text, int $first = 1, int $middle = 2, int $end = 1): string {
         $len = mb_strlen($text);
         if ($len < 2) {
             return $text;

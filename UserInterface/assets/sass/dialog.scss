@@ -9,6 +9,8 @@
 @import "prefix";
 @import "loading";
 
+$dialogIndex: 1200;
+
 .fa {
     &.fa-close {
         &::before {
@@ -24,7 +26,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, .4);
-    z-index: 910;
+    z-index: $dialogIndex - 10;
     display: none;
     &.dialog-bg-private {
         position: absolute;
@@ -35,18 +37,18 @@
 
 .dialog {
     position: fixed;
-    z-index: 920;
+    z-index: $dialogIndex;
     &.dialog-private {
         position: absolute;
-        z-index: 919;
+        z-index: $dialogIndex - 1;
     }
     &.dialog-tip,
     &.dialog-pop {
         background: rgba(0, 0, 0, .6);
         color: #fff;
         max-width: 66.66%;
-        min-width: 100px;
-        padding: 5px 10px;
+        min-width: 6.25rem;
+        padding: 0.3125rem 0.625rem;
         text-align: center;
         @include prefix-animation(dialog-tip 1s both);
         @include prefix-content(transition, top 1s);
@@ -55,8 +57,8 @@
         background: rgba(0, 0, 0, .6);
         color: #fff;
         max-width: 33.33%;
-        min-width: 100px;
-        padding: 5px 10px;
+        min-width: 6.25rem;
+        padding: 0.3125rem 0.625rem;
         right: 0;
         @include prefix-animation(dialog-message .5s);
         @include prefix-content(transition, top 1s);
@@ -76,17 +78,17 @@
         &.dialog-pop-center,
             {
             &:before {
-                bottom: -40px;
+                bottom: -2.5rem;
                 left: 50%;
-                margin-left: -20px;
+                margin-left: -1.25rem;
                 border-top-color: rgba(0, 0, 0, .6);
             }
         }
         &.dialog-pop-left,
         &.dialog-pop-leftBottom {
             &:before {
-                right: -40px;
-                margin-top: -20px;
+                right: -2.5rem;
+                margin-top: -1.25rem;
                 top: 50%;
                 border-left-color: rgba(0, 0, 0, 0.6);
             }
@@ -94,17 +96,17 @@
         &.dialog-pop-bottom,
         &.dialog-pop-rightBottom {
             &:before {
-                top: -40px;
+                top: -2.5rem;
                 left: 50%;
-                margin-left: -20px;
+                margin-left: -1.25rem;
                 border-bottom-color: rgba(0, 0, 0, .6);
             }
         }
         &.dialog-pop-right,
         &.dialog-pop-rightTop {
             &:before {
-                left: -40px;
-                margin-top: -20px;
+                left: -2.5rem;
+                margin-top: -1.25rem;
                 top: 50%;
                 border-right-color: rgba(0, 0, 0, 0.6);
             }
@@ -116,18 +118,18 @@
     &.dialog-form,
     &.dialog-disk {
         background: #fff;
-        min-width: 260px;
+        min-width: 16.25rem;
         display: none;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.2);
         @include prefix-animation(dialog-box 0.5s);
         .dialog-header {
             position: relative;
             background: #333;
             color: #fff;
             height: 40px;
-            line-height: 30px;
+            line-height: 1.875rem;
             text-align: center;
-            padding: 5px 10px;
+            padding: 0.3125rem 0.625rem;
             border-bottom: 1px solid #ccc;
             .dialog-title {
                 cursor: move;
@@ -139,7 +141,7 @@
                 position: absolute;
                 top: 0;
                 color: #fff;
-                line-height: 30px;
+                line-height: 1.875rem;
             }
             .fa-arrow-left {
                 left: 0;
@@ -158,15 +160,15 @@
             }
         }
         .dialog-body {
-            min-height: 100px;
+            min-height: 6.25rem;
             overflow: auto;
-            padding: 10px;
+            padding: 0.625rem;
         }
         .dialog-footer {
             button {
                 width: 50%;
                 border: none;
-                line-height: 30px;
+                line-height: 1.875rem;
                 background: #333;
                 color: #fff;
                 padding: 0;
@@ -181,8 +183,8 @@
                 color: #fff;
                 padding: 3px;
                 border: none;
-                margin-right: 5px;
-                line-height: 30px;
+                margin-right: 0.3125rem;
+                line-height: 1.875rem;
             }
             .dialog-close {
                 width: 30%;
@@ -190,7 +192,7 @@
                 color: #fff;
                 padding: 3px;
                 border: none;
-                line-height: 30px;
+                line-height: 1.875rem;
             }
         }
     }
@@ -231,9 +233,9 @@
         }
         .dialog-body {
             position: absolute;
-            bottom: 40px;
+            bottom: 2.5rem;
             width: 100%;
-            top: 40px;
+            top: 2.5rem;
         }
         .dialog-footer {
             position: absolute;
@@ -246,7 +248,7 @@
         .dialog-body {
             input,
             textarea {
-                font-size: 20px;
+                font-size: 1.25rem;
                 width: 100%;
                 box-sizing: border-box;
                 border: none;
@@ -254,10 +256,10 @@
                 padding: 5px;
             }
             label {
-                font-size: 20px;
+                font-size: 1.25rem;
             }
             select {
-                font-size: 20px;
+                font-size: 1.25rem;
                 width: 100px;
                 float: right;
                 border: none;
@@ -272,7 +274,7 @@
         .dialog-next,
         .dialog-close {
             position: absolute;
-            font-size: 30px;
+            font-size: 1.875rem;
             display: none;
         }
 
@@ -294,9 +296,9 @@
             color: #fff;
             background-color: rgba($color: #cccc, $alpha: .4);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
+            width: 3.125rem;
+            height: 3.125rem;
+            line-height: 3.125rem;
             text-align: center;
             cursor: pointer;
         }
@@ -310,11 +312,11 @@
     }
     &.dialog-disk {
         .dialog-body {
-            min-width: 300px;
-            min-height: 500px;
+            min-width: 18.75rem;
+            min-height: 31.25rem;
             position: relative;
             .dialog-catalog {
-                width: 100px;
+                width: 6.25rem;
                 display: inline-block;
                 top: 0;
                 bottom: 0;
@@ -364,12 +366,12 @@
                 .folder-item,
                 .file-item {
                     display: inline-block;
-                    width: 100px;
+                    width: 6.25rem;
                     text-align: center;
-                    padding: 20px 5px;
+                    padding: 1.25rem 0.3125rem;
                     box-sizing: border-box;
                     .fa {
-                        font-size: 40px;
+                        font-size: 2.5rem;
                     }
                     &.active,
                     &:hover {

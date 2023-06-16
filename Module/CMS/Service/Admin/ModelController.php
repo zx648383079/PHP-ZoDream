@@ -50,7 +50,8 @@ class ModelController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
-            'url' => $this->getUrl('model')
+            'url' => $this->getUrl('model'),
+            'no_jax' => isset($data['id'])
         ]);
     }
 
@@ -61,8 +62,18 @@ class ModelController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
-            'url' => $this->getUrl('model')
+            'url' => $this->getUrl('model'),
+            'no_jax' => true
         ]);
+    }
+
+    public function restartAction(int $id) {
+        try {
+            ModelRepository::restart($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(null, '操作完成');
     }
 
     public function fieldAction(int $id) {

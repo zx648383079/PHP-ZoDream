@@ -5,6 +5,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Repositories\LinkageRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class LinkageController extends Controller {
     public function indexAction() {
@@ -21,10 +22,17 @@ class LinkageController extends Controller {
         return $this->show('edit', compact('model'));
     }
 
-    public function saveAction() {
-        $model = new LinkageModel();
-        if (!$model->load() || !$model->autoIsNew()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,100',
+                'type' => 'int:0,9',
+                'code' => 'required|string:0,20',
+            ]);
+            LinkageRepository::save($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'url' => $this->getUrl('linkage')
@@ -32,7 +40,7 @@ class LinkageController extends Controller {
     }
 
     public function deleteAction(int $id) {
-        LinkageModel::where('id', $id)->delete();
+        LinkageRepository::remove($id);
         return $this->renderData([
             'url' => $this->getUrl('linkage')
         ]);
@@ -40,7 +48,7 @@ class LinkageController extends Controller {
 
     public function dataAction(int $id, int $parent_id = 0) {
         $model = LinkageModel::find($id);
-        $model_list = LinkageDataModel::where('linkage_id', $id)->where('parent_id', $parent_id)->all();
+        $model_list = LinkageRepository::dataList($id, '', $parent_id);
         $parent = $parent_id > 0 ? LinkageDataModel::find($id) : null;
         return $this->show(compact('model_list', 'model', 'parent_id', 'parent'));
     }
@@ -63,10 +71,18 @@ class LinkageController extends Controller {
         return $this->show('editData', compact('model'));
     }
 
-    public function saveDataAction() {
-        $model = new LinkageDataModel();
-        if (!$model->load() || !$model->autoIsNew()->createFullName()->save()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveDataAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'linkage_id' => 'required|int',
+                'name' => 'required|string:0,100',
+                'parent_id' => 'int',
+                'position' => 'int:0,999',
+            ]);
+            $model = LinkageRepository::dataSave($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData([
             'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
@@ -82,7 +98,9 @@ class LinkageController extends Controller {
     }
 
     public function treeAction(int $id) {
-        return $this->renderData(LinkageModel::idTree($id));
+        return $this->renderData(LinkageRepository::idTree($id));
     }
+
+
 
 }

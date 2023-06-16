@@ -1,17 +1,19 @@
+$inputPadding: 0 .5rem;
+$inputTypeMaps: (text, email, tel, password, url, search);
+
 .form-ico {
     .input-group {
         position: relative;
         line-height: $lineHeight;
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        input[type="url"] {
-            padding-left: $lineHeight;
-            height: $lineHeight;
-            width: 100%;
-            box-sizing: border-box;
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}] {
+                padding-left: $lineHeight;
+                height: $lineHeight;
+                width: 100%;
+                box-sizing: border-box;
+            }
         }
+        
         .fa {
             position: absolute;
             left: 10px;
@@ -246,17 +248,20 @@ i {
         display: inline-block;
         border-bottom: 1px solid #777;
         height: $lineHeight;
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        input[type="url"], 
-        input[type="number"],
-        select {
-            border: none;
-            background: transparent;
-            height: $lineHeight;
-            box-sizing: border-box;
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            select {
+                border: none;
+                background: transparent;
+                height: $lineHeight;
+                box-sizing: border-box;
+            }
+        }
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            textarea {
+                padding: $inputPadding;
+            }
         }
     }
     .btn {
@@ -269,23 +274,25 @@ i {
         display: block;
         border-bottom: 1px solid #777;
         min-height: $lineHeight;
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        input[type="url"], 
-        input[type="number"], 
-        select,
-        textarea {
-            border: none;
-            background: transparent;
-            height: $lineHeight;
-            box-sizing: border-box;
-            &.height-auto {
-                height: auto;
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            select,
+            textarea {
+                border: none;
+                background: transparent;
+                height: $lineHeight;
+                box-sizing: border-box;
+                &.height-auto {
+                    height: auto;
+                }
             }
         }
-        
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            textarea {
+                padding: $inputPadding;
+            }
+        }
     }
     .btn {
         line-height: $lineHeight;
@@ -297,17 +304,21 @@ i {
     .input-group {
         display: block;
         border-bottom: 1px solid #777;
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        input[type="url"], 
-        select {
-            border: none;
-            background: transparent;
-            box-sizing: border-box;
-            height: $lineHeight;
-            display: block;
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            select {
+                border: none;
+                background: transparent;
+                box-sizing: border-box;
+                height: $lineHeight;
+                display: block;
+            }
+        }
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            textarea {
+                padding: $inputPadding;
+            }
         }
         textarea {
             width: 100%;
@@ -326,22 +337,26 @@ i {
 .form-table {
     .input-group {
         display: flex;
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        input[type="url"],
-        input[type="number"] {
-            height: $lineHeight;
-            min-width: 200px;
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}] {
+                height: $lineHeight;
+                min-width: 12.5rem;
+                padding: 0 .3rem;
+            }
+        }
+        @each $type in $inputTypeMaps {
+            input[type=#{$type}],
+            textarea {
+                padding: $inputPadding;
+            }
         }
         select {
             height: $lineHeight;
-            min-width: 100px;
+            min-width: 6.25rem;
         }
         textarea {
-            min-width: 200px;
-            min-height: $lineHeight * 3 
+            min-width: 12.5rem;
+            min-height: $lineHeight * 3;
         }
         >label:first-child {
             width: 25%;
@@ -356,8 +371,6 @@ i {
                 width: 100%;
                 resize: vertical;
             }
-            
-
             .inline {
                 line-height: $lineHeight;
                 min-width: 100px;
@@ -366,9 +379,9 @@ i {
 
             .input-desc {
                 display: block;
-                font-size: 12px;
+                font-size: 0.75rem;
                 color: #767676;
-                margin-bottom: 8px;
+                margin-bottom: 0.5rem;
             }
             // label {
             //     padding: 0 8px;
