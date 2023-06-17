@@ -675,7 +675,7 @@ class FuncHelper {
                     if ($item->is_disable) {
                         continue;
                     }
-                    $data[] = [
+                    $data[$item->field] = [
                         'name' => $item->name,
                         'field' => $item->field,
                         'type' => $item->type,
@@ -852,6 +852,7 @@ class FuncHelper {
 
     public static function authUser(): ?array {
         return self::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
+            // 获取拓展表单的信息
             return UserRepository::getCurrentProfile('last_ip');
         });
     }

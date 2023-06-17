@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -7,7 +8,7 @@ use Zodream\Html\Dark\Theme;
 
 class Text extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 [
@@ -67,7 +68,7 @@ class Text extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
+    public function converterField(Column $column, ModelFieldModel $field): void {
         $option = $field->setting('option');
         $type = 'string';
         if (!empty($option) && isset($option['type'])
@@ -77,7 +78,7 @@ class Text extends BaseField {
         $column->comment($field->name)->{$type}()->default($type === 'int' ? 0 : '');
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 'name' => $field->field,

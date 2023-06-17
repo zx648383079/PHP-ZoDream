@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\UserSimpleModel;
@@ -170,5 +171,34 @@ class ContentRepository {
             }
         }
         return CMSRepository::scene()->setModel(ModelRepository::get($modelId), $site);
+    }
+
+    public static function search(int $site, int $model = 0,
+                                  string $keywords = '',
+                                  int $channel = 0, array|int $id = [],
+                                    int $page = 1, int $perPage = 20,
+    ) {
+        SiteRepository::apply($site);
+        if ($model < 1) {
+            $model = $channel > 0 ? intval(CategoryModel::where('id', $channel)
+                ->value('model_id')) : 0;
+            if ($model < 1) {
+                throw new Exception('栏目不包含模型');
+            }
+        }
+        $modelModel = ModelRepository::get($model);
+        $scene = CMSRepository::scene()->setModel($modelModel, $site);
+        return $scene->query()->where('model_id', $model)
+            ->when($channel > 0, function ($query) use ($channel) {
+            $query->where('cat_id', $channel);
+        })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'title');
+            })->when(!empty($id), function ($query) use ($id) {
+                if (is_array($id)) {
+                    $query->whereIn('id', $id);
+                    return;
+                }
+                $query->where('id', $id);
+            })->select('id','title','thumb')->page($perPage, page: $page);
     }
 }

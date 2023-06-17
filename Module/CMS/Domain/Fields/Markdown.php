@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Infrastructure\HtmlExpand;
@@ -9,7 +10,7 @@ use Zodream\Html\Dark\Theme;
 
 class Markdown extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 [
@@ -33,11 +34,11 @@ class Markdown extends BaseField {
     }
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
-        return $column->mediumtext()->nullable()->comment($field->name);
+    public function converterField(Column $column, ModelFieldModel $field): void {
+        $column->mediumtext()->nullable()->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 'name' => $field->field,
@@ -50,7 +51,7 @@ class Markdown extends BaseField {
             $field->is_required > 0);
     }
 
-    public function toText($value, ModelFieldModel $field) {
+    public function toText($value, ModelFieldModel $field): string {
         return HtmlExpand::toHtml($value, true);
     }
 }

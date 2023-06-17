@@ -1,22 +1,28 @@
-$dialogIndex: 1200;
+@use "sass:math";
+$dialogIndex: 992;
+$lineHeight: 2.25rem;
 
-.dialog-select-input {
-    padding: 0 1.25rem 0 0.625rem;
-    height: 2.25rem;
-    line-height: 2.25rem;
-    position: relative;
-    border: 1px solid #eee;
-    cursor: pointer;
+@mixin arrow() {
     &::after {
         content: "";
         position: absolute;
         top: 50%;
-        right: 10px;
+        right: 0.625rem;
         margin-top: -2px;
         border-top: 5px solid #666;
         border-right: 5px solid transparent;
         border-left: 5px solid transparent;
     }
+}
+
+.dialog-select-input {
+    padding: 0 1.25rem 0 0.625rem;
+    height: $lineHeight;
+    line-height: $lineHeight;
+    position: relative;
+    border: 1px solid #eee;
+    cursor: pointer;
+    @include arrow();
 }
 .dialog.dialog-select {
     position: fixed;
@@ -28,8 +34,8 @@ $dialogIndex: 1200;
     background: #fff;
     .dialog-header {
         position: relative;
-        height: 30px;
-        line-height: 30px;
+        height: $lineHeight;
+        line-height: $lineHeight;
         text-align: center;
         background: #fff;
         border-bottom: 1px solid #ccc;
@@ -37,13 +43,13 @@ $dialogIndex: 1200;
         .dialog-close {
             position: absolute;
             left: 0.9375rem;
-            line-height: 1.875rem;
+            line-height: $lineHeight;
         }
         .dialog-yes {
             position: absolute;
             right: 0.9375rem;
             top: 0;
-            line-height: 1.875rem;
+            line-height: $lineHeight;
         }
     }
     .dialog-body {
@@ -56,7 +62,7 @@ $dialogIndex: 1200;
             transition: all .3s;
             li {
                 list-style: none;
-                line-height: 1.875rem;
+                line-height: $lineHeight;
                 color: rgba(0, 0, 0, .3);
                 text-align: center;
                 &.active {
@@ -72,10 +78,10 @@ $dialogIndex: 1200;
             padding: 0;
         }
         .dialog-top-hr {
-            top: 3.75rem;
+            top: 2 * $lineHeight;
         }
         .dialog-bottom-hr {
-            top: 5.625rem;
+            top: 3 * $lineHeight;
         }
     }
     &.dialog-select-column-3 {
@@ -85,6 +91,83 @@ $dialogIndex: 1200;
                 float: left;
             }
         }
-        
+    }
+}
+
+.select--with-search {
+    line-height: $lineHeight;
+    display: inline-block;
+    width: 7 * $lineHeight;
+    position: relative;
+    .select-input {
+        border: 1px solid #ccc;
+        padding: 0 .3rem;
+        height: $lineHeight;
+        box-sizing: border-box;
+        position: relative;
+        user-select: none;
+        @include arrow();
+    }
+    .select-option-bar {
+        position: absolute;
+        display: none;
+        z-index: $dialogIndex;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #333;
+        box-sizing: border-box;
+    }
+    .search-option-item {
+        position: relative;
+        input {
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            height: $lineHeight;
+            padding-left: $lineHeight - .5rem !important;
+        }
+        .fa {
+            position: absolute;
+            left: .3rem;
+            top: math.div($lineHeight, 2) - .4rem;
+            color: #ccc;
+        }
+    }
+    .loading-option-item {
+        border-top: 1px solid #333;
+        color: #ccc;
+        text-align: center;
+        font-size: .8rem;
+        user-select: none;
+        display: none;
+    }
+    .option-item {
+        border-top: 1px solid #333;
+        display: block;
+        padding: 0 .3rem;
+        &:hover {
+            background-color: #f4f4f4;
+        }
+        &.selected {
+            background-color: #f4f4f4;
+        }
+    }
+    &.select-loading {
+        .loading-option-item {
+            display: block;
+        }
+    }
+    &.focus {
+        .select-input {
+            border-color: #333;
+            border-bottom: none;
+            &::after {
+                transform: rotate(180deg);
+            }
+        }
+        .select-option-bar {
+            display: block;
+        }
     }
 }

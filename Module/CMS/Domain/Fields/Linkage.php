@@ -12,7 +12,7 @@ use Zodream\Template\View;
 
 class Linkage extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 [
@@ -31,11 +31,11 @@ class Linkage extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
+    public function converterField(Column $column, ModelFieldModel $field): void {
         $column->uint()->default(0)->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 'name' => $field->field,
@@ -68,7 +68,7 @@ HTML;
 
     }
 
-    public function toText($value, ModelFieldModel $field) {
-        return LinkageDataModel::where('id', $value)->value('full_name');
+    public function toText($value, ModelFieldModel $field): string {
+        return (string)LinkageDataModel::where('id', $value)->value('full_name');
     }
 }

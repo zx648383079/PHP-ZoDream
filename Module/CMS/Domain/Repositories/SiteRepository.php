@@ -65,6 +65,9 @@ class SiteRepository {
     }
 
     public static function apply(int $id) {
+        if (CMSRepository::siteId() === $id) {
+            return;
+        }
         CMSRepository::site(new SiteModel(compact('id')));
     }
 

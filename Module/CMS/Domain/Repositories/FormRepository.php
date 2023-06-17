@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Exception;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelModel;
 use Zodream\Infrastructure\Contracts\Http\Input;
@@ -38,6 +39,19 @@ class FormRepository {
         }
         $scene = CMSRepository::scene()->setModel($model);
         $id = 0;
+        $data = $scene->validate($input->get());
+        if ($model->setting('is_extend_auth')) {
+            // 注册
+            AuthRepository::register(
+                $input->string('name'),
+                $input->string('email'),
+                $input->string('password'),
+                $input->string('confirm_password'),
+                true, '', [
+                    'sex' => $input->int('sex'),
+                ]
+            );
+        }
         if ($model->setting('is_only')) {
             if (auth()->guest()) {
                 throw new Exception('请先登录！');
@@ -47,14 +61,14 @@ class FormRepository {
                 ->where('user_id', auth()->id())
                 ->value('id');
         }
-        $data = $input->get();
+
         if ($id > 0) {
             $res = $scene->update($id, $data);
         } else {
             $res = $scene->insert($data);
         }
         if (!$res) {
-            throw new Exception($scene->getFirstError());
+            throw new Exception('表单填写有误');
         }
         return $res;
     }

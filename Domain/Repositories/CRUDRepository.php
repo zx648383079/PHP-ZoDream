@@ -39,6 +39,7 @@ abstract class CRUDRepository {
             throw new \Exception($model->getFirstError());
         }
         static::afterSave($model->id, $data);
+        static::updateCache();
         return $model;
     }
 
@@ -55,9 +56,15 @@ abstract class CRUDRepository {
             throw new \Exception(__('delete is error'));
         }
         $model->delete();
+        static::updateCache();
     }
 
     protected static function removeWith(int $id): bool {
         return true;
+    }
+
+    protected static function updateCache() {
+        cache()->delete('shop_category_tree');
+        cache()->delete('shop_category_level');
     }
 }

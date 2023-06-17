@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Scene;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Query\Builder;
 use Zodream\Html\Page;
+use Zodream\Validate\ValidationException;
 
 interface SceneInterface {
 
@@ -41,6 +42,12 @@ interface SceneInterface {
     public function initModel(): bool;
 
     /**
+     * 判断是否已经初始话了表
+     * @return bool
+     */
+    public function initializedModel(): bool;
+
+    /**
      * 删除表
      * @return mixed
      */
@@ -66,6 +73,13 @@ interface SceneInterface {
      * @return mixed
      */
     public function removeField(ModelFieldModel $field): bool;
+
+    /**
+     * @param array $data
+     * @return array
+     * @throws ValidationException
+     */
+    public function validate(array $data): array;
 
     public function insert(array $data): bool|int;
 

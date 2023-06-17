@@ -18,7 +18,7 @@ class FormController extends Controller {
         try {
             FormRepository::save($input);
         } catch (Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
         return $this->renderData(true);
     }

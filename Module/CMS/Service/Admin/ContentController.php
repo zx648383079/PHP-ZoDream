@@ -7,6 +7,7 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\ContentRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 
 class ContentController extends Controller {
@@ -59,15 +60,16 @@ class ContentController extends Controller {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
         $data = request()->get();
-        if ($id > 0) {
-            $scene->update($id, $data);
-        } else {
-            $scene->insert($data);
+        try {
+            if ($id > 0) {
+                $scene->update($id, $data);
+            } else {
+                $scene->insert($data);
+            }
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
         }
         event(new ManageAction('cms_content_edit', '', 33, $id));
-        if ($scene->hasError()) {
-            return $this->renderFailure($scene->getFirstError());
-        }
         $queries = [
             'cat_id' => $cat_id,
             'model_id' => $model_id
@@ -99,5 +101,16 @@ class ContentController extends Controller {
         return $this->renderData([
             'url' => $this->getUrl('content', $queries)
         ]);
+    }
+
+    public function searchAction(int $model = 0, string $keywords = '', int $channel = 0,
+                                 array|int $id = [], int $page = 1, int $perPage = 20) {
+        try {
+            return $this->renderPage(ContentRepository::search(
+                CMSRepository::siteId(),
+                $model, $keywords, $channel, $id, $page, $perPage));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
     }
 }

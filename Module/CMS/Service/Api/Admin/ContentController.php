@@ -33,7 +33,7 @@ class ContentController extends Controller {
                 ContentRepository::save($site_id, $cat_id, $model_id, $input->get())
             );
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
     }
 

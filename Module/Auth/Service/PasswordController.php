@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;

@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Scene;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Zodream\Database\DB;
 use Zodream\Database\Schema\Table;
 use Zodream\Html\Page;
 
@@ -37,6 +38,10 @@ class SingleScene extends BaseScene {
     public function initModel(): bool {
         $this->initDefaultModelField();
         return $this->initTable();
+    }
+
+    public function initializedModel(): bool {
+        return DB::tableExist($this->getExtendTable());
     }
 
     public function initTable(): bool {

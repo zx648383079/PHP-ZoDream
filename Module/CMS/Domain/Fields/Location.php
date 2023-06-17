@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -7,9 +8,9 @@ use Zodream\Template\View;
 
 class Location extends BaseField {
     
-    static $isInit = false;
+    static bool $isInit = false;
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): string|array {
         if ($isJson) {
             return [];
         }
@@ -18,11 +19,11 @@ class Location extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
+    public function converterField(Column $column, ModelFieldModel $field): void {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 'name' => $field->field,
@@ -45,7 +46,7 @@ HTML;
     }
     
     
-    public function getDialog() {
+    public function getDialog(): string {
         if (static::$isInit) {
             return '';
         }

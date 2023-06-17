@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -7,7 +8,7 @@ use Zodream\Html\Dark\Theme;
 
 class Checkbox extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): string|array {
         if ($isJson) {
             return [
                 [
@@ -24,11 +25,11 @@ class Checkbox extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
+    public function converterField(Column $column, ModelFieldModel $field): void {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): string|array {
         if ($isJson) {
             return [
                 'name' => $field->field,
@@ -41,8 +42,8 @@ class Checkbox extends BaseField {
         return Theme::checkbox($field->field, self::textToItems($field->setting('option', 'items')), $value, $field->name);
     }
 
-    public function toText($value, ModelFieldModel $field) {
+    public function toText($value, ModelFieldModel $field): string {
         $items = self::textToItems($field->setting('option', 'items'));
-        return array_key_exists($value, $items) ? $items[$value] : null;
+        return array_key_exists($value, $items) ? (string)$items[$value] : '';
     }
 }

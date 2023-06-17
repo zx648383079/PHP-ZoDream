@@ -33,7 +33,7 @@ function bindField(baseUri: string) {
     });
 }
 
-function bindCat(baseUri: string) {
+function bindCat() {
     let name = $('#name');
     $('#title').on('blur', function() {
         pinyinIfEmpty(name, $(this).val() as any);

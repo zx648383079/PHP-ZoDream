@@ -256,8 +256,9 @@
         {
             "action": "form",
             "name": "询价表单",
-            "table": "inquiry",
+            "table": "inquiry_form",
             "setting": {
+                "form_template": "inquiry_form",
                 "is_show": false,
                 "is_only": false
             },
@@ -343,11 +344,26 @@
         },
         {
             "action": "form",
-            "name": "留言表单",
-            "table": "feedback",
+            "name": "个人信息表单",
+            "table": "profile_form",
             "setting": {
+                "form_template": "profile_form",
                 "is_show": false,
-                "is_only": false
+                "is_only": true,
+                "is_extend_auth": true,
+                "open_captcha": true
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "留言表单",
+            "table": "feedback_form",
+            "setting": {
+                "form_template": "feedback_form",
+                "is_show": false,
+                "is_only": false,
+                "open_captcha": true
             },
             "fields": [
                 {
@@ -380,6 +396,72 @@
                     "type": "textarea"
                 }
             ]
+        },
+        {
+            "action": "form",
+            "name": "商务支持表单",
+            "table": "business_form",
+            "setting": {
+                "form_template": "business_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "投诉与建议表单",
+            "table": "complaints_form",
+            "setting": {
+                "form_template": "complaints_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "现场服务表单",
+            "table": "live_form",
+            "setting": {
+                "form_template": "live_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "产品维修表单",
+            "table": "maintenance_form",
+            "setting": {
+                "form_template": "maintenance_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "技术支持表单",
+            "table": "support_form",
+            "setting": {
+                "form_template": "support_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
+        },
+        {
+            "action": "form",
+            "name": "产品校验表单",
+            "table": "verify_form",
+            "setting": {
+                "form_template": "verify_form",
+                "is_show": false,
+                "is_only": false
+            },
+            "fields": []
         },
         {
             "action": "channel",

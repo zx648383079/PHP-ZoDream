@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -9,7 +10,7 @@ class Image extends BaseField {
 
     const DEFAULT_ALLOW = 'image/*';
 
-    public function options(ModelFieldModel $field, bool $isJson = false) {
+    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 [
@@ -34,11 +35,11 @@ class Image extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field) {
+    public function converterField(Column $column, ModelFieldModel $field): void {
         $column->string($field->length > 10 ? $field->length : 255)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
                 'name' => $field->field,

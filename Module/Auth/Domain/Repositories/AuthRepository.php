@@ -158,7 +158,7 @@ class AuthRepository {
      */
     public static function register(
         string $name, string $email, string $password, string $confirmPassword,
-        bool $agreement = false, string $inviteCode = '') {
+        bool $agreement = false, string $inviteCode = '', array $extra = []) {
         if (!$agreement) {
             throw new Exception('必须同意相关协议');
         }
@@ -178,8 +178,9 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
-        $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($email, $name, $password) {
-            return self::createUser($email, $name, $password, compact('parent_id'));
+        $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($email, $name, $password, $extra) {
+            $extra['parent_id'] = $parent_id;
+            return self::createUser($email, $name, $password, $extra);
         });
         event(new Register($user, request()->ip(), time()));
         return self::doLogin($user);

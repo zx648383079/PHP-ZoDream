@@ -39,6 +39,9 @@ class ModelRepository {
             throw new \Exception('表名已存在');
         }
         $model->load($data);
+        if ($model->type > 0 && $model->setting('is_extend_auth')) {
+            $model->setting['is_only'] = 1;
+        }
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }

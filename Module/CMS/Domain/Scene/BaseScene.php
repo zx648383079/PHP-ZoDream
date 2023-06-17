@@ -19,10 +19,10 @@ use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Concerns\ErrorTrait;
+use Zodream\Infrastructure\Support\MessageBag;
+use Zodream\Validate\ValidationException;
 
 abstract class BaseScene implements SceneInterface {
-
-    use ErrorTrait;
 
     protected int $site = 1;
 
@@ -96,11 +96,31 @@ abstract class BaseScene implements SceneInterface {
         }));
     }
 
+    public function validate(array $data): array {
+        $field_list = $this->fieldList();
+        if (empty($field_list)) {
+            return [];
+        }
+        $res = [];
+        $bag = new MessageBag();
+        foreach ($field_list as $field) {
+            if (!array_key_exists($field->field, $data)) {
+                continue;
+            }
+            $res[$field->field] = static::newField($field->type)
+                ->filterInput($data[$field->field] ?? null, $field, $bag);
+        }
+        if (!$bag->isEmpty()) {
+            throw new ValidationException($bag);
+        }
+        return $res;
+    }
+
     public function insert(array $data): bool|int {
         $count = $this->query()
             ->where('title', $data['title'])->count();
         if ($count > 0) {
-            return $this->setError('title', '标题重复');
+            throw new \Exception('标题重复');
         }
         list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
@@ -127,7 +147,7 @@ abstract class BaseScene implements SceneInterface {
             $count = $this->query()->where('id', '<>', $id)
                 ->where('title', $data['title'])->count();
             if ($count > 0) {
-                return $this->setError('title', '标题重复');
+                throw new \Exception('标题重复');
             }
         }
         list($main, $extend) = $this->filterInput($data, false);
@@ -480,17 +500,21 @@ abstract class BaseScene implements SceneInterface {
         if (empty($field_list)) {
             return [$main, $extend];
         }
+        $bag = new MessageBag();
         foreach ($field_list as $field) {
             if (!$isNew && !array_key_exists($field->field, $data)) {
                 continue;
             }
             $value = static::newField($field->type)
-                ->filterInput($data[$field->field] ?? null, $field);
+                ->filterInput($data[$field->field] ?? null, $field, $bag);
             if ($field->is_main > 0) {
                 $main[$field->field] = $value;
                 continue;
             }
             $extend[$field->field] = $value;
+        }
+        if ($bag->isEmpty()) {
+            throw new ValidationException($bag);
         }
         return [$main, $extend];
     }

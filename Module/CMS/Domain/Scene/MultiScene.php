@@ -44,6 +44,10 @@ class MultiScene extends BaseScene {
         return $this->initTable();
     }
 
+    public function initializedModel(): bool {
+        return DB::tableExist($this->getMainTable());
+    }
+
     public function initTable(): bool {
         $extend_list = array_filter($this->fieldList(), function ($item) {
             return $item->is_main < 1;

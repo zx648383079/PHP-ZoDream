@@ -2,15 +2,26 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 /**
  * 缓存数据
  */
@@ -99,7 +110,7 @@ var Eve = /** @class */ (function () {
         if (!this.hasEvent(event)) {
             return;
         }
-        return (_a = this.options[realEvent]).call.apply(_a, [this].concat(args));
+        return (_a = this.options[realEvent]).call.apply(_a, __spreadArray([this], args, false));
     };
     return Eve;
 }());
@@ -118,13 +129,17 @@ var MultiSelect = /** @class */ (function (_super) {
         _this._index = -1;
         var instance = _this;
         _this.options = $.extend({}, new MultiSelectDefaultOptions(), options);
+        _this.customControl = _this.options.searchable;
+        if (_this.customControl && typeof _this.options.data === 'string' && !_this.options.searchUri) {
+            _this.options.searchUri = _this.options.data;
+        }
         if (typeof _this.options.data == 'function') {
             _this.options.data = _this.options.data.call(_this, function (data) {
                 instance.options.data = data;
                 instance.init();
             });
         }
-        if (typeof _this.options.data == 'object') {
+        if (_this.customControl || typeof _this.options.data == 'object') {
             _this.init();
             return _this;
         }
@@ -148,13 +163,17 @@ var MultiSelect = /** @class */ (function (_super) {
             this._val = arg;
             this._selectedPath.apply(this, this.getPath(arg));
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     MultiSelect.prototype._selectedPath = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
+        }
+        if (!this.options.multiLevel) {
+            this.controlVal(this.controlItems().eq(0), args[0]);
+            return;
         }
         var data = this.options.data;
         this._index = -1;
@@ -183,18 +202,26 @@ var MultiSelect = /** @class */ (function (_super) {
      * 获取生成标签的头和身体
      */
     MultiSelect.prototype._getHtml = function (data, title, selected) {
+        var _this = this;
         if (title === void 0) { title = '请选择'; }
-        var html = '<option>' + title + '</option>';
+        var html = '';
         var instance = this;
         $.each(data, function (i, item) {
             var _a = instance._getIdAndName(item, i), id = _a[0], name = _a[1];
-            if (selected && id == selected) {
-                html += '<option selected value="' + id + '">' + name + '</li>';
-                return;
-            }
-            html += '<option value="' + id + '">' + name + '</li>';
+            html += _this.renderOptionItem(id, name, selected && id == selected);
         });
-        return '<select name="' + this.options.tag + '">' + html + '</ul>';
+        if (this.customControl) {
+            return "<div class=\"select--with-search\">\n            <div class=\"select-input\">\n            ".concat(title, "\n            </div>\n            <div class=\"select-option-bar\">\n                <div class=\"search-option-item\">\n                    <input type=\"search\" placeholder=\"Enter\u641C\u7D22\">\n                    <i class=\"fa fa-search\"></i>\n                </div>\n            </div>\n            <input type=\"hidden\" name=\"").concat(this.options.tag, "\">\n        </div>");
+        }
+        return "<select name=\"".concat(this.options.tag, "\"><option>").concat(title, "</option>").concat(html, "</select>");
+    };
+    MultiSelect.prototype.renderOptionItem = function (value, label, selected) {
+        if (selected === void 0) { selected = false; }
+        var sel = selected ? ' selected' : '';
+        if (this.customControl) {
+            return "<div class=\"option-item".concat(sel, "\" data-value=\"").concat(value, "\">").concat(label, "</div>");
+        }
+        return "<option value=\"".concat(value, "\"").concat(sel, ">").concat(label, "</option>");
     };
     /**
      * 获取一个数据的id和显示的文字
@@ -212,22 +239,157 @@ var MultiSelect = /** @class */ (function (_super) {
         return [i, name];
     };
     MultiSelect.prototype._create = function () {
-        this.addElement(this.options.data);
+        this.addElement(typeof this.options.data === 'object' ? this.options.data : {});
     };
     MultiSelect.prototype._bindEvent = function () {
         var instance = this;
-        this.element.on('change', 'select', function () {
+        if (!this.customControl) {
+            this.element.on('change', 'select', function () {
+                var $this = $(this);
+                var id = $this.val();
+                var index = $this.index();
+                instance.selected(id + '', index);
+            });
+            return;
+        }
+        this.element.on('click', '.select--with-search .select-input', function () {
+            $(this).closest('.select--with-search').toggleClass('focus');
+        }).on('keydown', '.select--with-search .search-option-item input', function (e) {
+            var _a;
+            if (e.key !== 'Enter') {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
             var $this = $(this);
-            var id = $this.val();
-            var index = $this.index();
+            var ctl = $this.closest('.select--with-search');
+            instance.loadRomote(ctl, (_a = {},
+                _a[instance.options.query] = $this.val(),
+                _a));
+        }).on('click', '.select--with-search .option-item', function () {
+            var $this = $(this);
+            var ctl = $(this).closest('.select--with-search');
+            var val = $this.data('value');
+            $this.addClass('selected').siblings().removeClass('selected');
+            ctl.data('value', val);
+            ctl.find('.select-input').text($this.text());
+            ctl.find('input[type=hidden]').val(val);
+            ctl.trigger('change', [val, $this.index() - 2]);
+            ctl.removeClass('focus');
+        }).on('change', '.select--with-search', function (arg) {
+            var id = arg[0];
+            var index = $(this).index();
             instance.selected(id + '', index);
         });
+        $(document).on('click', function (e) {
+            var target = $(e.target);
+            var ctl = target.hasClass('.select--with-search') ? target : target.closest('.select--with-search');
+            instance.controlItems().each(function () {
+                var $this = $(this);
+                if (!$this.hasClass('focus') || $this.is(ctl)) {
+                    return;
+                }
+                $this.removeClass('focus');
+            });
+        });
+    };
+    MultiSelect.prototype.loadRomote = function (ctl, data, cb) {
+        var _this = this;
+        data[this.options.parentId] = this.getParentId(ctl);
+        ctl.addClass('select-loading');
+        $.getJSON(this.options.searchUri, data, function (res) {
+            ctl.removeClass('select-loading');
+            _this.replaceOption(ctl, res.code === 200 ? res.data : []);
+            cb && cb();
+        });
+    };
+    MultiSelect.prototype.replaceOption = function (ctl, items) {
+        if (items === void 0) { items = []; }
+        var i = 0;
+        var that = this;
+        ctl.find(this.customControl ? '.option-item' : 'option').each(function () {
+            var $this = $(this);
+            if (i >= items.length) {
+                $this.remove();
+                return;
+            }
+            that.optionVal($this, items[i][that.options.id]);
+            $this.text(items[i][that.options.name]);
+            i++;
+        });
+        while (i < items.length) {
+            this.appendOption(ctl, items[i]);
+            i++;
+        }
+    };
+    MultiSelect.prototype.appendOption = function (ctl, data) {
+        var bar = this.customControl ? ctl.find('.select-option-bar') : ctl;
+        bar.append($(this.renderOptionItem(data[this.options.id], data[this.options.name])));
+    };
+    MultiSelect.prototype.controlItems = function () {
+        return this.element.find(this.customControl ? '.select--with-search' : 'select');
+    };
+    MultiSelect.prototype.controlVal = function (ctl, val) {
+        var _a;
+        var _this = this;
+        if (typeof val === 'undefined') {
+            return this.customControl ? ctl.data('value') : ctl.val();
+        }
+        if (!this.customControl) {
+            ctl.val(val);
+            return;
+        }
+        var that = this;
+        var target;
+        ctl.find('.option-item').each(function () {
+            var $this = $(this);
+            var selected = that.optionVal($this) == val;
+            $this.toggleClass('.selected', selected);
+            if (selected) {
+                target = $this;
+            }
+        });
+        ctl.data('value', val);
+        ctl.find('input[type=hidden]').val(val);
+        if (target) {
+            ctl.find('.select-input').text(target.text());
+            return;
+        }
+        this.loadRomote(ctl, (_a = {},
+            _a[this.options.id] = val,
+            _a), function () {
+            _this.selectOption(ctl, val);
+        });
+    };
+    MultiSelect.prototype.selectOption = function (ctl, val) {
+        if (!this.customControl) {
+            ctl.val(val);
+            return;
+        }
+        var that = this;
+        ctl.find('.option-item').each(function () {
+            var $this = $(this);
+            var selected = that.optionVal($this) == val;
+            $this.toggleClass('.selected', selected);
+        });
+    };
+    MultiSelect.prototype.optionVal = function (ctl, val) {
+        if (typeof val === 'undefined') {
+            return this.customControl ? ctl.data('value') : ctl.val();
+        }
+        return this.customControl ? ctl.data('value', val) : ctl.val(val);
+    };
+    MultiSelect.prototype.getParentId = function (element) {
+        var items = this.controlItems();
+        var i = items.index(element);
+        return i < 1 ? 0 : this.controlVal(items.eq(i - 1));
     };
     MultiSelect.prototype.bodyMap = function (callback, index) {
         if (index === void 0) { index = this._index; }
-        this.element.find('select').eq(index).find('option').each(function (i, ele) {
+        var that = this;
+        this.controlItems().eq(index).find(this.customControl ? '.option-item' : 'option').each(function (i, ele) {
             var item = $(ele);
-            var id = item.val();
+            var id = that.optionVal(item);
             if (!id) {
                 return;
             }
@@ -241,10 +403,12 @@ var MultiSelect = /** @class */ (function (_super) {
      */
     MultiSelect.prototype.selected = function (id, index) {
         if (index === void 0) { index = this._index; }
-        this.remove(index + 1);
-        var data = this._getNextData();
+        if (this.options.multiLevel) {
+            this.remove(index + 1);
+        }
         this.trigger('change');
-        if (typeof data == 'object' && (!(data instanceof Array) || data.length > 0)) {
+        var data = this.options.multiLevel ? this._getNextData() : undefined;
+        if (this.options.multiLevel && typeof data == 'object' && (!(data instanceof Array) || data.length > 0)) {
             this.addElement(data, '请选择');
         }
         if (!data || data.length == 0) {
@@ -289,20 +453,21 @@ var MultiSelect = /** @class */ (function (_super) {
     };
     MultiSelect.prototype.remove = function (start) {
         if (start === void 0) { start = 1; }
-        var items = this.element.find('select');
+        var items = this.controlItems();
         for (var i = items.length - 1; i >= start; i--) {
             items.eq(i).remove();
         }
         return this;
     };
     MultiSelect.prototype.map = function (callback) {
-        this.element.find('select').each(function (i, ele) {
+        var that = this;
+        this.controlItems().each(function (i, ele) {
             var item = $(ele);
-            var id = item.val();
+            var id = that.controlVal(item);
             if (!id) {
                 return;
             }
-            if (callback.call(item, id, item.find('option:selected').text(), i) == false) {
+            if (callback.call(item, id, item.find(that.customControl ? '.option-item.selected' : 'option:selected').text(), i) == false) {
                 return false;
             }
         });
@@ -344,7 +509,7 @@ var MultiSelect = /** @class */ (function (_super) {
         if (!id) {
             return [];
         }
-        if (this.options.hasOwnProperty(id)) {
+        if (!this.options.multiLevel || this.options.data.hasOwnProperty(id)) {
             return [id];
         }
         var path = [], found = false, instance = this, findPath = function (data) {
@@ -381,6 +546,9 @@ var MultiSelectDefaultOptions = /** @class */ (function () {
         this.id = 'id';
         this.name = 'name';
         this.children = 'children';
+        this.parentId = 'parent_id';
+        this.query = 'keywords';
+        this.multiLevel = true;
     }
     return MultiSelectDefaultOptions;
 }());
