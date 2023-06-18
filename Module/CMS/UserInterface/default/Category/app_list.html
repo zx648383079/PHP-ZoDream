@@ -15,7 +15,7 @@
                 <li>
                     <a href="{url:./}">返回所有应用</a>
                 </li>
-                {channels:parent=app_market tree=1}
+                {channels:parent=>app_market,tree=>1}
                 <li class="{channelActive:$channel.id,true}">
                     <a href="{url:./category/list?id=:$channel.id}">{$channel.title}</a>
                     {if:isset($channel.children)}
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            {$page.getLink:}
+            {page:$page}
         </div>
     </div>
     

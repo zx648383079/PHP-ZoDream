@@ -1,7 +1,7 @@
 {layout:main}
-{css href=@video-js.min.css}
-{js src=@video.min.js}
-{js src=@videojs-http-streaming.min.js}
+{@video-js.min.css}
+{@video.min.js}
+{@videojs-http-streaming.min.js}
 {>js}
 var player = videojs('example-video');
 player.play();
@@ -42,7 +42,7 @@ player.play();
         分集
     </div>
     <div class="panel-body">
-        {contents:category=$cat.id parent=$data.parent_id num=100}
+        {contents:category=>$cat.id,parent=>$data.parent_id,num=>100}
         <a class="play-item" href="{url:$content}">{$content.title}</a>
         {/contents}
     </div>

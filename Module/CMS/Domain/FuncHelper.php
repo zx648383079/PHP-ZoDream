@@ -871,12 +871,12 @@ class FuncHelper {
         return $compiler->registerFunc($method,
             function ($params = null) use ($method, $item, $compiler) {
             if ($params === -1) {
-                return $compiler->block('endforeach;');
+                return 'endforeach;';
             }
             $i = count(static::$index);
             $box = sprintf('$_%s_%d', $method, $i);
             static::$index[] = $box;
-            return $compiler->block('%s=%s::%s(%s); foreach(%s as $%s):', $box,
+            return sprintf('%s=%s::%s(%s); foreach(%s as $%s):', $box,
                 static::class, $method, $params, $box, $item);
         }, true);
     }
@@ -923,7 +923,7 @@ class FuncHelper {
                 if (strpos($tag, 'channel') > 0) {
                     return '';
                 }
-                return $compiler->echo('%s->getLink()', $tag);
+                return sprintf('%s->getLink()', $tag);
             })
             ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;

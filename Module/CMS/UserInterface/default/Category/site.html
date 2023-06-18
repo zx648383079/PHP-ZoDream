@@ -1,8 +1,8 @@
 {layout:main}
-{css href=@dialog.css}
-{js src=@jquery.dialog.min.js}
-{js src=@jquery.cookie.js}
-{$navigation=content:model=navigation name=content}
+{@dialog.css}
+{@jquery.dialog.min.js}
+{@jquery.cookie.js}
+{$navigation=content:model=>navigation,name=>content}
 {>js}
 bindNavigation({$navigation});
 {/>}
@@ -177,7 +177,7 @@ bindNavigation({$navigation});
             <span>{$cat.title}</span>
         </div>
         <div class="panel-body">
-            {contents:category=$cat.id num=20 field=id,cat_id,model_id,title,description,thumb,uri}
+            {contents:category=>$cat.id,num=>20,field=>'id,cat_id,model_id,title,description,thumb,uri'}
             <div  class="site-item" title="{$content.title}-{$content.description}">
                 <div class="item-name">
                     <a href="{url:$content}"><img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}"></a>
@@ -194,7 +194,7 @@ bindNavigation({$navigation});
         </div>
     </div>
     {/if}
-    {channels:parent=$cat.id}
+    {channels:parent=>$cat.id}
     <div class="panel site-panel">
         <div class="panel-header">
             <i class="{$channel.thumb}"></i>
@@ -202,7 +202,7 @@ bindNavigation({$navigation});
             <a class="more" href="{url:./category?id=:$channel.id}">更多&gt;</a>
         </div>
         <div class="panel-body">
-            {contents:category=$channel.id num=20 field=id,cat_id,model_id,title,description,thumb,uri}
+            {contents:category=>$channel.id,num=>20,field=>'id,cat_id,model_id,title,description,thumb,uri'}
             <div  class="site-item" title="{$content.title}-{$content.description}">
                 <div class="item-name">
                     <a href="{url:$content}"><img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}"></a>

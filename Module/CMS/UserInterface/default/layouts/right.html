@@ -1,5 +1,5 @@
 <div class="right-box">
-    {if:isset($cat)}
+    {if:isset:$cat}
     <form class="search-input-bar" action="{url:./category/list}" method="GET">
         <input type="text" name="keywords" placeholder="请输入搜索关键字">
         <button type="submit"><i class="fa fa-search"></i></button>
@@ -12,7 +12,7 @@
         </div>
         <div class="body">
            <ul>
-                {contents:channel=news order=hot num=10}
+                {contents:channel=>news,order=>hot,num=>10}
                 <li> 
                     <a href="{url:$content}" title="{$content.title}">
                         {$content.title}</a>

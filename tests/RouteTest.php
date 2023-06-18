@@ -20,7 +20,7 @@ final class RouteTest extends TestCase {
     public static function actionProvider(): array
     {
         return [
-            ['Service\Home\ToController@index', '/to'],
+            ['Service\Home\ToController@index', '/home/to'],
             ['Module\Auth\Service\Api\BatchController@index', '/auth/api/batch'],
             ['Module\Auth\Service\Api\HomeController@index', '/auth/api'],
         ];
@@ -34,6 +34,12 @@ final class RouteTest extends TestCase {
 
     #[DataProvider('actionProvider')]
     public function testGenerate(string $module, string $path) {
+        foreach ([
+            'app',
+            'route'
+                 ] as $item) {
+            config()->set($item, require APP_DIR.'/Service/config/'.$item.'.php');
+        }
         $route = new ModuleRoute();
         $args = $route->formatAction($module);
         $this->assertEquals($route->toPath($args['module'] ?? '',

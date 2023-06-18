@@ -513,7 +513,7 @@ abstract class BaseScene implements SceneInterface {
             }
             $extend[$field->field] = $value;
         }
-        if ($bag->isEmpty()) {
+        if (!$bag->isEmpty()) {
             throw new ValidationException($bag);
         }
         return [$main, $extend];

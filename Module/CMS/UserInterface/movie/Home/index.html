@@ -11,7 +11,7 @@ var silder = $(".banner .slider").slider({
     <div class="slider" data-auto="true">
         <div class="slider-box">
             <ul>
-                {contents:category=banner num=4}
+                {contents:category=>banner,num=>4}
                 <li><img src="{$content.thumb}" width="100%" alt=""></li>
                 {/contents}
             </ul>
@@ -34,7 +34,7 @@ var silder = $(".banner .slider").slider({
     </div>
     <div class="panel-body">
         <div class="tab-item active">
-            {contents:category=movie field=id,cat_id,model_id,title,thumb,definition num=10}
+            {contents:category=>movie,field='id,cat_id,model_id,title,thumb,definition',num=>10}
             <a class="video-item" href="{url:$content}">
                 <div class="thumb">
                     <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
@@ -46,7 +46,7 @@ var silder = $(".banner .slider").slider({
             {/contents}
         </div>
         <div class="tab-item">
-            {contents:category=tv field=id,cat_id,model_id,title,thumb,definition num=10}
+            {contents:category=>tv,field=>'id,cat_id,model_id,title,thumb,definition',num=>10}
             <a class="video-item" href="{url:$content}">
                 <div class="thumb">
                     <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">

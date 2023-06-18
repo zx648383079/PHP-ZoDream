@@ -6,7 +6,7 @@
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">
-            {extend:layouts/nav}
+            {tpl:layouts/nav}
         </div>
         <div class="col-md-9">
             <div class="path-bar">
@@ -41,17 +41,10 @@
                         <div class="tab-item">相关产品及附件</div>
                         <div class="tab-item">{$data.applications}</div>
                         <div class="tab-item">
-                            <div class="res-download-item">
-                                <a href="{url:$content}" class="item-title">aaaaa</a>
-                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
-                                    <i class="fa fa-file-pdf"></i>
-                                    下载
-                                </a>
-                            </div>
-                            {contents:category=product_cert product_id=$data.id field=id,cat_id,model_id,title,file num=5}
+                            {contents:category=>product_cert,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
-                                {if:auth().guest()}
+                                {if:authGuest:}
                                 <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
                                     下载
@@ -74,4 +67,4 @@
     </div>
 </div>
 
-{extend:layouts/inquiry}
+{tpl:layouts/inquiry}

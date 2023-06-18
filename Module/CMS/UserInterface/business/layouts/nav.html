@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
         <ul class="menu-bar">
-            {channels:parent=$root.id}
+            {channels:parent=>$root.id}
             <li class="menu-item">
                 <div class="menu-name">
                     <i class="fa fa-angle-right"></i>
@@ -16,7 +16,7 @@
                 </div>
                 {if:$channel.children_count>0}
                 <ul class="menu-children">
-                    {channels:parent=$channel.id}
+                    {channels:parent=>$channel.id}
                     <li class="menu-item">
                         <div class="menu-name">
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
@@ -37,7 +37,7 @@
         <i class="fa card-arrow"></i>
     </div>
     <div class="panel-body link-bar">
-        {channels:parent=download}
+        {channels:parent=>download}
         <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
         {/channels}
     </div>

@@ -5,7 +5,7 @@
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">
-            {extend:layouts/nav}
+            {tpl:layouts/nav}
         </div>
         <div class="col-md-9">
             <div class="path-bar">
@@ -32,7 +32,7 @@
                     {for:$page,$item}
                     <a class="product-item" href="{url:$item}">
                         <div class="item-thumb">
-                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
                         </div>
                         <div class="item-name">
                             {$item.title}

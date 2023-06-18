@@ -5,7 +5,7 @@
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">
-            {extend:layouts/nav}
+            {tpl:layouts/nav}
         </div>
         <div class="col-md-9">
             <div class="path-bar">
@@ -18,7 +18,7 @@
             </article>
             <div class="contact-panel">
                 <div class="panel-header">
-                    {channels:parent=contact_information}
+                    {channels:parent=>contact_information}
                     <a href="#contact_{$channel.id}">
                         <img src="{$channel.thumb}" alt="">
                         <span>{$channel.title}</span>
@@ -26,11 +26,11 @@
                     {/channels}
                 </div>
                 <div class="panel-body">
-                    {channels:parent=contact_information}
+                    {channels:parent=>contact_information}
                     <div id="contact_{$channel.id}" class="group-item">
                         <div class="group-header">{$channel.title}</div>
                         <div class="group-body">
-                            {contents:category=$channel.id field=id,cat_id,model_id,title,thumb,phone,fax,email,tel,qq num=50}
+                            {contents:category=>$channel.id,field='id,cat_id,model_id,title,thumb,phone,fax,email,tel,qq',num=>50}
                             <div class="link-item">
                                 <div class="item-thumb">
                                     <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">

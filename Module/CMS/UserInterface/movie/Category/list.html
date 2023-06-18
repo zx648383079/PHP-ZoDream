@@ -7,7 +7,7 @@
             <div class="line-title">分类</div>
             <div class="line-body">
                 <a href="{search:id,$cat.id}" class="{searchActive:id,$cat.id}">全部</a>
-                {channels:parent=$cat.id}
+                {channels:parent=>$cat.id}
                 <a href="{search:id,$channel.id}" class="{searchActive:id,$channel.id}">{$channel.title}</a>
                 {/channels}
             </div>

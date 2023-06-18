@@ -30,7 +30,7 @@
             <span class="tag">简介:</span>
             <span>{$data.description}</span>
         </p>
-        {contents:category=$cat.id parent=$data.id num=100}
+        {contents:category=>$cat.id,parent=>$data.id,num=>100}
         <a href="{url:$content}" class="btn btn-primary">立即播放</a>
         {break:}
         {/contents}
@@ -38,13 +38,13 @@
     </div>
 </div>
 
-{contents:category=$cat.id parent=$data.id num=100}
+{contents:category=>$cat.id,parent=>$data.id,num=>100}
 <div class="panel">
     <div class="panel-header">
         分集
     </div>
     <div class="panel-body">
-        {contents:category=$cat.id parent=$data.id num=100}
+        {contents:category=>$cat.id,parent=>$data.id,num=>100}
         <a class="play-item" href="{url:$content}">{$content.title}</a>
         {/contents}
     </div>
@@ -75,7 +75,7 @@
         </a>
     </div>
     <div class="panel-body">
-            {contents:category=$cat.id num=10}
+            {contents:category=>$cat.id,num=>10}
             <a class="video-item" href="{url:$content}">
                 <div class="thumb">
                     <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">

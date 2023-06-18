@@ -5,14 +5,14 @@
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">
-            {extend:layouts/nav}
+            {tpl:layouts/nav}
         </div>
         <div class="col-md-9">
             <div class="path-bar with-search-bar">
                 <div class="page-search-bar">
                     <select name="" id="">
                         <option value="">所有栏目</option>
-                        {channels:parent=download}
+                        {channels:parent=>download}
                         <option value="{$channel.id}">{$channel.title}</option>
                         {/channels}
                     </select>
@@ -29,7 +29,7 @@
            
 
             <div class="tab-bar">
-                {channels:parent=download}
+                {channels:parent=>download}
                 <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                 {/channels}
             </div>

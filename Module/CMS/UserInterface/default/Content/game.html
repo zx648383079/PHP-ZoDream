@@ -33,7 +33,7 @@
                     <div class="body">
                        <ul>
                            {$i=1}
-                            {contents:model=game_bang game=$data.id order=score_desc num=10 field=title,score}
+                            {contents:model=>game_bang,game=>$data.id,order=>score_desc,num=>10,field=>'title,score'}
                             <li> 
                                 <span class="item-top">{=$i++}</span>
                                 <a href="javascript:;">{$content.title}</a>

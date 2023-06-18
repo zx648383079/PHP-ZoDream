@@ -4,9 +4,9 @@
 {@cms-business.css}
 {@jquery.min.js}
 {@jquery.lazyload.min.js}
-{js file=@cms-business.min.js}
+{@cms-business.min.js}
 <!DOCTYPE html>
-<html lang="{$language,'zh-CN'}">
+<html lang="{$language??'zh-CN'}">
    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,7 +56,7 @@
                         <li class="nav-item">
                             <a href="{url:./}">首页</a>
                         </li>
-                        {channels:tree=1 group=nav}
+                        {channels:tree=>1,group=>nav}
                         <li class="nav-item {channelActive:$channel.id,true}">
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                             {if:isset($channel.children)}
@@ -79,7 +79,7 @@
         <footer class="app-footer">
             <div class="map-bar">
                 <div class="container">
-                    {channels:tree=1 group=nav}
+                    {channels:tree=>1,group=>nav}
                     <div class="map-item">
                         <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                         <ul class="item-body">
@@ -121,7 +121,7 @@
                     </p>
                     <p>
                         {$pns_beian=option:pns_beian}
-                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,/\d+/}">
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,'/\d+/'}">
                             <img src="/assets/images/beian.png" alt="备案图标">
                             {$pns_beian}
                         </a>

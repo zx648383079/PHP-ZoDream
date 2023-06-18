@@ -4,9 +4,9 @@
 {@cms-movie.css}
 {@jquery.min.js}
 {@jquery.lazyload.min.js}
-{js file=@cms-movie.min.js}
+{@cms-movie.min.js}
 <!DOCTYPE html>
-<html lang="{$language,'zh-CN'}">
+<html lang="{$language??'zh-CN'}">
    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,7 +34,7 @@
                             <li>
                                 <a href="{url:./}">首页</a>
                             </li>
-                            {channels:tree=1 group=nav}
+                            {channels:tree=>1,group=>nav}
                             <li class="{channelActive:$channel.id,true}">
                                 <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                                 {if:isset($channel.children)}

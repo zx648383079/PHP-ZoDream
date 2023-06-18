@@ -5,7 +5,7 @@
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">
-            {extend:layouts/nav}
+            {tpl:layouts/nav}
         </div>
         <div class="col-md-9">
             <div class="path-bar">
@@ -14,7 +14,7 @@
                 </ul>
             </div>
             <div class="map-large-bar">
-                {channels:tree=1 group=nav}
+                {channels:tree=>1,group=>nav}
                 <div class="map-item">
                     <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                     <ul class="item-body">

@@ -9,7 +9,7 @@
         </ul>
     </div>
 
-    {channels:parent=$cat.id}
+    {channels:parent=>$cat.id}
     <div class="panel">
         <div class="panel-header">
             {$channel.title} <small>{$channel.description}</small>
@@ -17,7 +17,7 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                {contents:category=$channel.id num=8}
+                {contents:category=>$channel.id,num=>8}
                 <div class="col-md-3 app-item">
                     <div class="thumb">
                         <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
