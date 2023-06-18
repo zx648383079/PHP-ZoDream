@@ -37,15 +37,15 @@ class Email extends BaseField {
         $column->string(100)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'email',
                 'value' => $value
             ];
         }
-        return Theme::email($field->field, $value, $field->name);
+        return (string)Theme::email($field['field'], $value, $field['name']);
     }
 }

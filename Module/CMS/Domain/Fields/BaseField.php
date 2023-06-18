@@ -13,7 +13,7 @@ abstract class BaseField {
 
     abstract public function options(ModelFieldModel $field, bool $isJson = false): string|array;
 
-    abstract public function toInput(mixed $value, ModelFieldModel $field, bool $isJson = false): array|string;
+    abstract public function toInput(mixed $value, ModelFieldModel|array $field, bool $isJson = false): array|string;
 
     public function filterInput(mixed $value, ModelFieldModel $field, MessageBag $bag): mixed {
         if ($field->is_required && is_null($value)) {
@@ -27,6 +27,27 @@ abstract class BaseField {
 
     public function toText(mixed $value, ModelFieldModel $field): string {
         return Html::text((string)$value);
+    }
+
+    public static function fieldSetting(ModelFieldModel|array $field, string ...$keys): mixed {
+        if ($field instanceof ModelFieldModel) {
+            return $field->setting(...$keys);
+        }
+        $data = $field['setting'] ?? [];
+        foreach ($keys as $key) {
+            if (empty($key)) {
+                return $data;
+            }
+            if (empty($data) || !is_array($data)) {
+                return null;
+            }
+            if (isset($data[$key]) || array_key_exists($key, $data)) {
+                $data = $data[$key];
+                continue;
+            }
+            return null;
+        }
+        return $data;
     }
 
     public static function textToItems(?string $text): array {

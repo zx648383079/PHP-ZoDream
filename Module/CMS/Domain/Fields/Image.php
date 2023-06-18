@@ -39,18 +39,18 @@ class Image extends BaseField {
         $column->string($field->length > 10 ? $field->length : 255)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'image',
                 'value' => $value
             ];
         }
-        $option = $field->setting('option');
-        return Theme::file($field->field, $value, $field->name, null,
-            $field->is_required > 0)->options([
+        $option = static::fieldSetting($field, 'option');
+        return (string)Theme::file($field['field'], $value, $field['name'], null,
+            $field['is_required'] > 0)->options([
                 'allow' => $option && isset($option['allow']) ? $option['allow'] : self::DEFAULT_ALLOW
         ]);
     }

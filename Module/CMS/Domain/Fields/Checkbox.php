@@ -29,17 +29,18 @@ class Checkbox extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): string|array {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): string|array {
+        $options = static::fieldSetting($field, 'option', 'items');
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'checkbox',
-                'items' => self::textToItems($field->setting('option', 'items')),
+                'items' => self::textToItems($options),
                 'value' => $value
             ];
         }
-        return Theme::checkbox($field->field, self::textToItems($field->setting('option', 'items')), $value, $field->name);
+        return (string)Theme::checkbox($field['field'], self::textToItems($options), $value, $field['name']);
     }
 
     public function toText($value, ModelFieldModel $field): string {

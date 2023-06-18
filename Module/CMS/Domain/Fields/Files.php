@@ -44,16 +44,16 @@ class Files extends BaseField {
         $column->text()->nullable()->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'files',
                 'value' => $value
             ];
         }
-        return Theme::file($field->field, $value, $field->name, null,
-            $field->is_required > 0);
+        return (string)Theme::file($field['field'], $value, $field['name'], null,
+            $field['is_required'] > 0);
     }
 }

@@ -30,15 +30,15 @@ class Ip extends BaseField {
         $column->string(120)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'ip',
                 'value' => $value
             ];
         }
-        return Theme::text($field->field, $value, $field->name);
+        return (string)Theme::text($field['field'], $value, $field['name']);
     }
 }

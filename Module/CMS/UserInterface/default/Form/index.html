@@ -2,7 +2,7 @@
 {this.title=填写表单}
 <form data-type="ajax" action="{url:./form/save}" method="post" class="form-table" role="form">
     {for:$field_list,$item}
-        {=$scene.toInput:$item}
+        {formInput:$item}
     {/for}
     
     <button type="submit" class="btn btn-success">确认提交</button>

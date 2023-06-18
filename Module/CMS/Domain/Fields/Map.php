@@ -21,16 +21,16 @@ class Map extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'map',
                 'value' => $value
             ];
         }
-        return Theme::text($field->field, $value, $field->name, null,
-            $field->is_required > 0);
+        return (string)Theme::text($field['field'], $value, $field['name'], null,
+            $field['is_required'] > 0);
     }
 }

@@ -21,15 +21,15 @@ class Number extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false) {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'number',
                 'value' => $value
             ];
         }
-        return Theme::text($field->field, $value, $field->name);
+        return (string)Theme::text($field['field'], $value, $field['name']);
     }
 }

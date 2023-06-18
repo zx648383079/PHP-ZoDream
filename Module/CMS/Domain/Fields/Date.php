@@ -39,24 +39,24 @@ class Date extends BaseField {
         $column->string(30)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'date',
                 'value' => $value
             ];
         }
-        $format = $field->setting('option', 'format');
+        $format = static::fieldSetting($field,'option', 'format');
         $js = <<<JS
-$('[name={$field->field}]').datetimer({
+$('[name={$field['field']}]').datetimer({
     format: '{$format}'
 });
 JS;
         view()->registerCssFile('@datetimer.css')
             ->registerJsFile('@jquery.datetimer.min.js')
             ->registerJs($js, View::JQUERY_READY);
-        return Theme::text($field->field, $value, $field->name);
+        return (string)Theme::text($field['field'], $value, $field['name']);
     }
 }

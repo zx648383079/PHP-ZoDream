@@ -35,22 +35,23 @@ class Linkage extends BaseField {
         $column->uint()->default(0)->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'linkage',
                 'value' => $value
             ];
         }
         $value = intval($value);
-        $url = url('./@admin/linkage/tree', ['id' => $field->setting('option', 'linkage_id')]);
+        $url = url('./form/linkage', ['id' => $linkageId]);
         $js = <<<JS
-$('#linkage-{$field->id}').multiSelect({
+$('#linkage-{$field['id']}').multiSelect({
     default: {$value},
     data: '{$url}',
-    tag: '{$field->field}'
+    tag: '{$field['field']}'
 });
 JS;
 
@@ -59,8 +60,8 @@ JS;
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div class="input-group">
-    <label for="{$field->field}">{$field->name}</label>
-    <div id="linkage-{$field->id}">
+    <label for="{$field['field']}">{$field['name']}</label>
+    <div id="linkage-{$field['id']}">
     
     </div>
 </div>

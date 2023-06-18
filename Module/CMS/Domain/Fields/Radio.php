@@ -29,17 +29,18 @@ class Radio extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+        $options = static::fieldSetting($field, 'option', 'items');
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'radio',
                 'value' => $value,
-                'items' => self::textToItems($field->setting('option', 'items'))
+                'items' => self::textToItems($options)
             ];
         }
-        return Theme::radio($field->field, self::textToItems($field->setting('option', 'items')), $value, $field->name);
+        return (string)Theme::radio($field['field'], self::textToItems($options), $value, $field['name']);
     }
 
     public function toText(mixed $value, ModelFieldModel $field): string {

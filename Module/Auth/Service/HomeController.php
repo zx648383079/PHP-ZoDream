@@ -32,7 +32,7 @@ class HomeController extends Controller {
                 $request->has('rememberMe'));
             return $this->redirect($redirect_uri);
         } catch (\Exception $ex) {}
-        if ($request->isAjax() && $request->isGet()) {
+        if ($request->isAjax() && $request->isGet() && !$request->isPjax()) {
             return $this->render([
                 'code' => 302,
                 'status' => __('failure'),

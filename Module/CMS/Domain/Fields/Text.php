@@ -78,20 +78,20 @@ class Text extends BaseField {
         $column->comment($field->name)->{$type}()->default($type === 'int' ? 0 : '');
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'text',
                 'value' => $value,
             ];
         }
-        if ($field->setting('option', 'is_pwd')) {
-            return Theme::password($field->field, $value, $field->name,
-                $field->is_required > 0);
+        if ($field instanceof ModelFieldModel && $field->setting('option', 'is_pwd')) {
+            return Theme::password($field['field'], $value, $field['name'],
+                $field['is_required'] > 0);
         }
-        return Theme::text($field->field, $value, $field->name, null,
-            $field->is_required > 0);
+        return (string)Theme::text($field['field'], $value, $field['name'], null,
+            $field['is_required'] > 0);
     }
 }

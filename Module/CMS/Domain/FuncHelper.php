@@ -676,14 +676,18 @@ class FuncHelper {
                         continue;
                     }
                     $data[$item->field] = [
+                        'id' => $item->id,
                         'name' => $item->name,
+                        'model_id' => $item->model_id,
                         'field' => $item->field,
                         'type' => $item->type,
                         'length' => $item->length,
+                        'is_disable' => $item->is_disable,
                         'is_required' => $item->is_required,
                         'match' => $item->match,
                         'tip_message' => $item->tip_message,
                         'error_message' => $item->error_message,
+                        'setting' => $item->setting
                     ];
                 }
                 return $data;
@@ -692,6 +696,18 @@ class FuncHelper {
 
     public static function formColumns(int|string $id): array {
         return self::formData($id);
+    }
+
+    public static function formInput(mixed $data): string {
+        if (!(is_array($data) || $data instanceof ModelFieldModel)) {
+            return '';
+        }
+        if ($data['type'] === 'model') {
+            return sprintf('<input type="hidden" name="%s" value="%d">',
+                $data['field'], static::$current['content']);
+        }
+        return CMSRepository::scene()->setModel(static::model(intval($data['model_id'])))
+            ->toInput($data);
     }
 
     public static function contentUrl(array $data): string {
@@ -891,6 +907,7 @@ class FuncHelper {
             'field',
             'markdown',
             'formAction',
+            'formInput',
             'location',
             'previous',
             'next',
@@ -906,7 +923,7 @@ class FuncHelper {
             'extendForm',
             'regex',
             'authGuest',
-            'authUser'
+            'authUser',
         ]);
         static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');

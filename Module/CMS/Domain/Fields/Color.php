@@ -22,16 +22,16 @@ class Color extends BaseField {
         $column->string(20)->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'color',
                 'value' => $value
             ];
         }
         view()->registerJsFile('@jscolor.min.js');
-        return Theme::text($field->field, $value, $field->name)->class('jscolor');
+        return (string)Theme::text($field['field'], $value, $field['name'])->class('jscolor');
     }
 }

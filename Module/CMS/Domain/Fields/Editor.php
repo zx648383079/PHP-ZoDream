@@ -52,25 +52,25 @@ class Editor extends BaseField {
         $column->mediumtext()->nullable()->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'editor',
                 'value' => $value
             ];
         }
         $options = $this->getEditorOptions();
-        $id = 'editor_'.$field->id;
+        $id = 'editor_'.$field['id'];
         $js = <<<JS
 var ue = UE.getEditor('{$id}', {$options});
 JS;
         view()->registerJsFile('/assets/ueditor/ueditor.config.js')
             ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
         return <<<HTML
-<div>{$field->name}</div>
-<script id="{$id}" style="height: 400px" name="{$field->field}" type="text/plain">
+<div>{$field['name']}</div>
+<script id="{$id}" style="height: 400px" name="{$field['field']}" type="text/plain">
     {$value}
 </script>
 HTML;

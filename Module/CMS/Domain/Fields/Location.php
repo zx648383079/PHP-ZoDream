@@ -23,11 +23,11 @@ class Location extends BaseField {
         $column->string()->default('')->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'location',
                 'value' => $value
             ];
@@ -35,9 +35,9 @@ class Location extends BaseField {
         $html = $this->getDialog();
         return <<<HTML
 <div class="input-group">
-    <label for="{$field->field}">{$field->name}</label>
+    <label for="{$field['field']}">{$field['name']}</label>
     <div>
-       <input type="text" id="{$field->field}" name="{$field->field}" value="{$value}">
+       <input type="text" id="{$field['field']}" name="{$field['field']}" value="{$value}">
        <button type="button" data-type="location">拾取</button>
     </div>
 </div>

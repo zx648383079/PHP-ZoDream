@@ -30,16 +30,16 @@ class SwitchBox extends BaseField {
         $column->bool()->default(0)->comment($field->name);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): string|array {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): string|array {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'switch',
                 'value' => $value,
             ];
         }
-        return Theme::checkbox($field->field, null, $value, $field->name);
+        return (string)Theme::checkbox($field['field'], null, $value, $field['name']);
     }
 
     public function filterInput(mixed $value, ModelFieldModel $field, MessageBag $bag): mixed {

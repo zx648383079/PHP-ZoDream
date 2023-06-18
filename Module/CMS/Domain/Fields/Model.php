@@ -37,16 +37,16 @@ class Model extends BaseField {
         $column->uint()->default(0);
     }
 
-    public function toInput($value, ModelFieldModel $field, bool $isJson = false): array|string {
+    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field->field,
-                'label' => $field->name,
+                'name' => $field['field'],
+                'label' => $field['name'],
                 'type' => 'model',
                 'value' => $value
             ];
         }
-        $option = $field->setting('option');
+        $option = static::fieldSetting($field,'option');
 //        $model = ModelModel::find($option['model']);
 //        $items = empty($model) ? [] : CMSRepository::scene()->setModel($model)
 //            ->query()->where('model_id', $model->id)->pluck('title', 'id');
@@ -54,10 +54,10 @@ class Model extends BaseField {
         $value = intval($value);
         $url = url('./@admin/content/search', ['model' => intval($option['model'])]);
         $js = <<<JS
-$('#model-{$field->id}').multiSelect({
+$('#model-{$field['id']}').multiSelect({
     default: {$value},
     data: '{$url}',
-    tag: '{$field->field}',
+    tag: '{$field['field']}',
     name: 'title',
     searchable: true,
     multiLevel: false
@@ -70,8 +70,8 @@ JS;
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div class="input-group">
-    <label for="{$field->field}">{$field->name}</label>
-    <div id="model-{$field->id}">
+    <label for="{$field['field']}">{$field['name']}</label>
+    <div id="model-{$field['id']}">
     
     </div>
 </div>

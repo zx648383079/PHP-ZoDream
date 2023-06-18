@@ -75,7 +75,7 @@ class LinkageRepository {
     public static function idTree(int $id) {
         return cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
             $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
-                ->select('id', 'name', 'parent_id')->asArray()->all());
+                ->select('id', 'name', 'parent_id')->asArray()->get());
             return $tree->makeIdTree();
         }, 600);
     }
