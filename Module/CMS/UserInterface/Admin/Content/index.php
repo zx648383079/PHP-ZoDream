@@ -38,7 +38,7 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
             <tr>
                 <td><?=$item['id']?></td>
                 <td class="text-left">
-                    <a href="<?=$this->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"><?=$this->text($item['title'])?></a>
+                    <a href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"><?=$this->text($item['title'])?></a>
                 </td>
                 <td>
                     <?php if ($cat):?>

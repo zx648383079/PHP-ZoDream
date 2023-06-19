@@ -107,28 +107,28 @@ var silder = $(".banner .slider").slider({
         </div>
         <div class="col-md-5 col-lg-3">
             {if:authGuest:}
-            <div class="login-panel">
+            <form class="login-panel" action="{url:./auth/login}" data-type="ajax" method="post">
                 <div class="panel-header">会员登录</div>
                 <div class="panel-body">
                     <div class="input-group">
                         <label for="">账号：</label>
-                        <input type="text">
+                        <input type="text" name="email" required>
                     </div>
                     <div class="input-group">
                         <label for="">密码：</label>
-                        <input type="password">
+                        <input type="password" name="password" required>
                     </div>
                     <div class="code-input-group">
                         <label for="">验证码：</label>
-                        <input type="text">
-                        <img src="{url:/auth/captcha}" alt="">
+                        <input type="text" name="captcha" required>
+                        <img src="{url:/auth/captcha}" alt="验证码" title="点击刷新验证码">
                     </div>
                 </div>
                 <div class="panel-action">
-                    <div class="btn btn-default">登录</div>
+                    <button class="btn btn-default">登录</button>
                     <div class="btn btn-info" modal="authDialog">注册</div>
                 </div>
-            </div>
+            </form>
             {else}
             {$user=authUser:}
             <div class="profile-panel">

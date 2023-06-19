@@ -11,7 +11,7 @@ $(function() {
         e.preventDefault();
         const img = $(this).find('img');
         img.attr('src', img.data('src') + '?v=' + Math.random());
-    }).submit(function() {
+    }).on('submit', function() {
         let _this = $(this);
         if (_this.find('.error').length > 0) {
             Dialog.tip('您填写的信息不正确!');
@@ -31,7 +31,7 @@ $(function() {
 });
 
 function bindRegister() {
-    $('.login-form .input-group input').blur(function() {
+    $('.login-form .input-group input').on('blur', function() {
         let _this = $(this);
         let box = _this.closest('.input-group');
         let name = _this.attr('name');

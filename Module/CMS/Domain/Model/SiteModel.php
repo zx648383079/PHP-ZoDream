@@ -97,6 +97,17 @@ class SiteModel extends Model {
         return url(sprintf('/%s', $this->match_rule));
     }
 
+    public function url(string $path, array $data = []) {
+        if ($this->match_type < 1) {
+            $uri = new Uri(url($path, $data));
+            return $uri->setHost($this->match_rule);
+        }
+        if (str_starts_with($path, './')) {
+            $path = substr($path, 2);
+        }
+        return url(sprintf('/%s/%s', $this->match_rule, $path), $data);
+    }
+
     public function saveOption(array $data) {
         $options = $this->options;
         $items = [];

@@ -58,6 +58,36 @@ function addFavorite() {
     alert("加入收藏失败，请使用Ctrl+D进行添加");
 }
 
+/**
+ * 转化请求响应结果
+ * @param data 
+ */
+function parseAjax(data: IResponse) {
+    if (data.code === 302 || (data.code === 401 && data.url)) {
+        window.location.href = data.url;
+        return;
+    }
+    if (data.code !== 200) {
+        Dialog.tip(data.message || '操作执行失败！');
+        return;
+    }
+    Dialog.tip(data.message || '操作执行完成！');
+    if (data.data && data.data.refresh) {
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    if (data.data && data.data.url) {
+        setTimeout(() => {
+            if (data.data.url === -1) {
+                history.go(-1);
+                return;
+            }
+            window.location.href = data.data.url;
+        }, 500);
+    }
+};
+
 $(function() {
     $('img.lazy').lazyload({
         callback: 'img'
@@ -76,6 +106,14 @@ $(function() {
         e.stopPropagation();
         const target = $(this).attr('modal');
         $('#' + target).show();
+    }).on('submit', "form[data-type=ajax]", function() {
+        let $this = $(this);
+        let loading = Dialog.loading();
+        postJson($this.attr('action'), $this.serialize(), function(data) {
+            loading.close();
+            parseAjax(data);
+        });
+        return false;
     }).on('click', "a[data-type=ajax]", function(e) {
         e.preventDefault();
         let tip = $(this).attr('data-tip') || '确定执行此操作？';
@@ -92,6 +130,15 @@ $(function() {
                 // window.location.href = res.url;
             }
         }, 'json');
+    }).on('click', '.code-input-group img', function(e) {
+        e.preventDefault();
+        const img = $(this);
+        const url = img.attr('src') as string;
+        img.attr('src', url.split('?')[0] + '?v=' + Math.random());
+    }).on('click', '.dialog .dialog-close', function() {
+        $(this).closest('.dialog').hide();
+    }).on('click', '.dialog .dialog-submit', function() {
+        $(this).closest('.dialog').find('form').trigger('submit');
     }).on('click', function(e) {
         const target = $(e.target);
         const modal = target.hasClass('dialog') ? target : target.closest('.dialog');

@@ -1,11 +1,11 @@
 <!-- 注册表单 -->
-<form action="{$formAction}" method="post">
+<form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
     <div class="form-table">
         <div class="input-group">
             <label for="">用户名:</label>
             <div>
-                <input type="text" name="name">
+                <input type="text" name="name" required>
                 <span class="input-star">*</span>
             </div>
         </div>
@@ -13,14 +13,14 @@
         <div class="input-group">
             <label for="">密码:</label>
             <div>
-                <input type="password" name="password">
+                <input type="password" name="password" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">校验密码:</label>
             <div>
-                <input type="password" name="confirm_password">
+                <input type="password" name="confirm_password" required>
                 <span class="input-star">*</span>
             </div>
         </div>
@@ -28,7 +28,7 @@
         <div class="input-group">
             <label for="">真实姓名:</label>
             <div>
-                <input type="text">
+                <input type="text" name="real_name" required>
                 <span class="input-star">*</span>
             </div>
         </div>
@@ -36,56 +36,56 @@
             <label for="">性别:</label>
             <div>
                 <div class="check-item">
-                    <input type="radio" name="sex"><span>男</span>
+                    <input type="radio" name="sex" value="1"><span>男</span>
                 </div>
                 <div class="check-item">
-                    <input type="radio" name="sex"><span>女</span>
+                    <input type="radio" name="sex" value="2"><span>女</span>
                 </div>
                 <div class="check-item">
-                    <input type="radio" name="sex"><span>保密</span>
+                    <input type="radio" name="sex" value="0"><span>保密</span>
                 </div>
             </div>
         </div>
         <div class="input-group">
             <label for="">公司名称:</label>
             <div>
-                <input type="text">
+                <input type="text" name="company_name" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">公司地址:</label>
             <div>
-                <input type="text">
+                <input type="text" name="company_address" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">电子邮件:</label>
             <div>
-                <input type="text" name="email">
+                <input type="text" name="email" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">公司电话:</label>
             <div>
-                <input type="text">
+                <input type="text" name="company_tel" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">手机号码:</label>
             <div>
-                <input type="text" name="mobile">
+                <input type="text" name="mobile" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
             <label for="">验证码:</label>
             <div class="code-input-group">
-                <input type="text" name="captcha">
-                <img src="{url:/auth/captcha}" alt="">
+                <input type="text" name="captcha" required>
+                <img src="{url:/auth/captcha}" alt="点击刷新">
                 <span class="input-star">*</span>
             </div>
         </div>

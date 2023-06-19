@@ -43,17 +43,18 @@
     </div>
 </div>
 
-<div class="search-bar mb-30">
+<form class="search-bar mb-30" action="{search:id,$cat.id}">
+    {searchHidden:}
     <div class="search-input">
-        <input type="text">
+        <input type="text" name="keywords" required>
         <i class="fa fa-search"></i>
     </div>
     <button class="btn btn-default">搜索</button>
     <div class="search-tip">
         *注：按产品型号，可检索常见问答、样本、证书等信息。
     </div>
-</div>
+</form>
 
 <div class="link-image-bar mb-30">
-    <img src="/assets/images/wx.jpg" alt="">
+    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:wx_qr}" alt="微信公众号">
 </div>

@@ -1,114 +1,10 @@
 <!-- 商务支持表单 -->
-<form action="{$formAction}" method="post">
+<form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
-                <tr>
-                    <th class="input-label">省市：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="provinces"
-                            id="textfield40"
-                            notempty=""
-                        />
-
-                        <i class="input-star">*</i>
-                    </td>
-
-                    <th class="input-label">公司名称：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="companyname"
-                            id="textfield41"
-                        />
-                    </td>
-                </tr>
-
-                <tr>
-                    <th class="input-label">姓名：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="username"
-                            id="textfield42"
-                            notempty=""
-                        />
-
-                        <i class="input-star">*</i>
-                    </td>
-
-                    <th class="input-label">电话号码：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="phone_number"
-                            id="textfield43"
-                            notempty=""
-                        />
-
-                        <i class="input-star">*</i>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th class="input-label">邮件地址：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="email"
-                            id="textfield44"
-                            notempty=""
-                        />
-
-                        <i class="input-star">*</i>
-                    </td>
-
-                    <th class="input-label">手机号码：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="phone"
-                            id="textfield45"
-                        />
-                    </td>
-                </tr>
-
-                <tr>
-                    <th class="input-label">传真号码：</th>
-
-                    <td>
-                        <input
-                            type="text"
-                            name="faxnumber"
-                            id="textfield46"
-                        />
-                    </td>
-
-                    <th class="input-label">首选联系方式：</th>
-
-                    <td>
-                        <select name="firstcontact">
-                            <option value="邮件">邮件</option>
-
-                            <option value="电话">电话</option>
-
-                            <option value="传真">传真</option>
-
-                            <option value="手机">手机</option>
-                        </select>
-
-                        <i class="input-star">*</i>
-                    </td>
-                </tr>
+                {tpl:layouts/form_base}
 
                 <tr>
                     <th class="input-label">商务支持：</th>
@@ -132,7 +28,7 @@
                     <th class="input-label">接收方式：</th>
 
                     <td>
-                        <select name="receive_mode" id="select2">
+                        <select name="receive_mode">
                             <option value="0">请选择</option>
 
                             <option value="邮件">邮件</option>
@@ -151,8 +47,6 @@
                         <input
                             type="text"
                             name="required_info"
-                            id="textfield48"
-                            notempty=""
                         />
                         <i class="input-star">*</i>
                     </td>
@@ -165,8 +59,7 @@
                         <input
                             type="text"
                             name="product_specification"
-                            id="textfield49"
-                            notempty=""
+                            required
                         />
 
                         <i class="input-star">*</i>
@@ -178,8 +71,7 @@
                         <input
                             type="text"
                             name="product_number"
-                            id="textfield53"
-                            notempty=""
+                            required
                         />
 
                         <i class="input-star">*</i>
@@ -199,8 +91,6 @@
                             cols="50"
                             style="width: 390px"
                             rows="5"
-                            id="textfield55"
-                            notempty=""
                         ></textarea>
 
                         <i class="input-star">*</i>

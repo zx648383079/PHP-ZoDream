@@ -101,11 +101,11 @@
 
                     <div class="link-image-bar">
                         <div class="link-item">
-                            <img src="/assets/images/wx.jpg" alt="">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:wx_qr}" alt="微信公众号">
                             <p>微信</p>
                         </div>
                         <div class="link-item">
-                            <img src="/assets/images/wx.jpg" alt="">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:weibo_qr}" alt="微博">
                             <p>微博</p>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
             </div>
             <div class="copyright">
                 <div class="container">
-                    <p>Copyright © 2011-2023 {request.host:}. All Rights Reserved</p>
+                    <p>Copyright © 2011-{.time:Y} {request.host:}. All Rights Reserved</p>
                     <p>
                         {option:company_name}
                         <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}
@@ -131,10 +131,12 @@
         </footer>
 
         <div id="searchDialog" class="dialog search-dialog">
-            <div class="dialog-body flat-input">
-                <input type="text" class="form-control">
+            {$catid = isset($cat) ? $cat.id : 'product_center'}
+            <form class="dialog-body flat-input" action="{search:id,$catid}">
+                <input type="text" class="form-control" name="keywords" required>
                 <button class="btn btn-default">搜索</button>
-            </div>
+                {searchHidden:}
+            </form>
         </div>
 
         {footer:}

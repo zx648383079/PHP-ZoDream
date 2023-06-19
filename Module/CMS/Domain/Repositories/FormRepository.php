@@ -6,6 +6,7 @@ use Exception;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelModel;
+use Zodream\Image\Captcha;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class FormRepository {
@@ -39,6 +40,15 @@ class FormRepository {
         }
         $scene = CMSRepository::scene()->setModel($model);
         $id = 0;
+        $captcha = $input->string('captcha');
+        if (!empty($captcha)) {
+            $verifier = new Captcha();
+            if (!$verifier->verify($captcha)) {
+                throw new Exception('验证码错误');
+            }
+        } elseif ($model->setting('open_captcha')) {
+            throw new Exception('请输入验证码');
+        }
         $data = $scene->validate($input->get());
         if ($model->setting('is_extend_auth')) {
             // 注册

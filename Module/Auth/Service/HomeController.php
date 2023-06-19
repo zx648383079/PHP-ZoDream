@@ -68,7 +68,7 @@ class HomeController extends Controller {
      * @return Output
      * @throws \Exception
      */
-    public function loginAction(Request $request, $email = null) {
+    public function loginAction(Request $request, string $email = '') {
         try {
             $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $email, $captcha);

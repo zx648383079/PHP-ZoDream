@@ -1066,3 +1066,16 @@ $dialogHeight: 20rem;
         border-bottom: 1px solid $primary;
     }
 }
+
+@media (max-width: 48rem) {
+    .app-footer {
+        .map-bar {
+            .map-item {
+                display: none;
+            }
+        }
+        .link-image-bar {
+            justify-content: center;
+        }
+    }
+}

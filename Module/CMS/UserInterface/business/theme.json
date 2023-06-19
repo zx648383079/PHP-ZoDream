@@ -32,6 +32,16 @@
                     "name": "公网安备案号",
                     "code": "pns_beian",
                     "type": "text"
+                },
+                {
+                    "name": "公众号二维码",
+                    "code": "wx_qr",
+                    "type": "image"
+                },
+                {
+                    "name": "微博二维码",
+                    "code": "weibo_qr",
+                    "type": "image"
                 }
             ]
         },
@@ -353,7 +363,46 @@
                 "is_extend_auth": true,
                 "open_captcha": true
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "真实姓名",
+                    "field": "real_name",
+                    "type": "text",
+                    "is_main": true,
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_main": true,
+                    "is_required": true
+                },
+                {
+                    "name": "公司地址",
+                    "field": "company_address",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电子邮件",
+                    "field": "email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司电话",
+                    "field": "company_tel",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "mobile",
+                    "type": "text",
+                    "is_required": true
+                }
+            ]
         },
         {
             "action": "form",
@@ -406,7 +455,120 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "商务支持",
+                    "field": "business_support",
+                    "type": "select",
+                    "is_required": true
+                },
+                {
+                    "name": "接收方式",
+                    "field": "receive_mode",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "所需资料",
+                    "field": "required_info",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品条码或编号",
+                    "field": "product_number",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "所需资料补充说明",
+                    "field": "required_info_sup",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description_d",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "services_requirement",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification_d",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品数量",
+                    "field": "phone_number_d",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购货地址",
+                    "field": "sale_address",
+                    "type": "text",
+                    "is_required": true
+                }
+            ]
         },
         {
             "action": "form",
@@ -417,7 +579,187 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "投诉建议类别",
+                    "field": "suggestions_type",
+                    "type": "select",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品数量",
+                    "field": "quantity",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "生产日期或条码",
+                    "field": "start_dates",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购买点名称",
+                    "field": "sale_address",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购买点联系方式",
+                    "field": "sales_contact",
+                    "type": "text"
+                },
+                {
+                    "name": "购买日期",
+                    "field": "sale_date",
+                    "type": "text"
+                },
+                {
+                    "name": "产品使用省市",
+                    "field": "product_provinces",
+                    "type": "text"
+                },
+                {
+                    "name": "产品使用日期",
+                    "field": "product_date",
+                    "type": "text"
+                },
+                {
+                    "name": "故障现象描述",
+                    "field": "problem_description",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "使用场合负载及线路情况",
+                    "field": "loads",
+                    "type": "textarea"
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification1",
+                    "type": "text"
+                },
+                {
+                    "name": "产品数量",
+                    "field": "quantity1",
+                    "type": "text"
+                },
+                {
+                    "name": "外箱条码",
+                    "field": "carton_barcode",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "中盒条码",
+                    "field": "box_barcode",
+                    "type": "text"
+                },
+                {
+                    "name": "产品条码",
+                    "field": "product_barcode",
+                    "type": "text"
+                },
+                {
+                    "name": "到货时间",
+                    "field": "product_start",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description1",
+                    "type": "textarea"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "services_requirements1",
+                    "type": "textarea"
+                },
+                {
+                    "name": "外箱封条情况",
+                    "field": "carton_seal_case",
+                    "type": "textarea"
+                },
+                {
+                    "name": "投诉对象",
+                    "field": "complaints_object",
+                    "type": "text"
+                },
+                {
+                    "name": "投诉原因",
+                    "field": "complaints_reason",
+                    "type": "text"
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description2",
+                    "type": "textarea"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "services_requirements2",
+                    "type": "textarea"
+                },
+                {
+                    "name": "建议及意见",
+                    "field": "suggestions",
+                    "type": "textarea"
+                }
+            ]
         },
         {
             "action": "form",
@@ -428,7 +770,151 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "现场服务",
+                    "field": "servertype",
+                    "type": "select",
+                    "is_required": true
+                },
+                {
+                    "name": "质保期",
+                    "field": "endtime",
+                    "type": "text"
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品数量",
+                    "field": "quantity",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购买点名称",
+                    "field": "sale_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "生产日期或条码",
+                    "field": "start_dates",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购买日期",
+                    "field": "sale_date",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "购买点联系方式",
+                    "field": "sales_contact",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品使用日期",
+                    "field": "production_date",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "requirements",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "使用场合、负载及线路情况",
+                    "field": "loads",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification_a",
+                    "type": "text"
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description_a",
+                    "type": "textarea"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "requirements_a",
+                    "type": "textarea"
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description_j",
+                    "type": "textarea"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "requirements_j",
+                    "type": "textarea"
+                }
+
+            ]
         },
         {
             "action": "form",
@@ -439,7 +925,106 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品数量",
+                    "field": "quantity",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "生产日期或条码",
+                    "field": "production_date",
+                    "type": "text"
+                },
+                {
+                    "name": "购买点名称",
+                    "field": "address",
+                    "type": "text"
+                },
+                {
+                    "name": "购买点联系方式",
+                    "field": "contact",
+                    "type": "text"
+                },
+                {
+                    "name": "购买日期",
+                    "field": "purchase_date",
+                    "type": "text"
+                },
+                {
+                    "name": "产品使用省市",
+                    "field": "product_provinces",
+                    "type": "text"
+                },
+                {
+                    "name": "开始使用日期",
+                    "field": "start_dates",
+                    "type": "text"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "requirements",
+                    "type": "textarea"
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description",
+                    "type": "textarea"
+                }
+            ]
         },
         {
             "action": "form",
@@ -450,7 +1035,106 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "技术支持",
+                    "field": "technical_support",
+                    "type": "select",
+                    "is_required": true
+                },
+                {
+                    "name": "产品问题",
+                    "field": "product_issues",
+                    "type": "text"
+                },
+
+                {
+                    "name": "问题描述",
+                    "field": "problem_description",
+                    "type": "textarea",
+                    "is_required": true
+                },
+                {
+                    "name": "功能要求",
+                    "field": "functional_requirements",
+                    "type": "text",
+                    "is_required": true
+                },
+
+                {
+                    "name": "负载情况",
+                    "field": "load",
+                    "type": "text",
+                    "is_required": true
+                },
+
+                {
+                    "name": "主要技术参数要求",
+                    "field": "parameters",
+                    "type": "textarea",
+                    "is_required": true
+                },
+
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+
+                {
+                    "name": "问题描述",
+                    "field": "problem_description_t",
+                    "type": "textarea",
+                    "is_required": true
+                }
+            ]
         },
         {
             "action": "form",
@@ -461,7 +1145,111 @@
                 "is_show": false,
                 "is_only": false
             },
-            "fields": []
+            "fields": [
+                {
+                    "name": "省市",
+                    "field": "provinces",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "公司名称",
+                    "field": "company_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "姓名",
+                    "field": "link_name",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "电话号码",
+                    "field": "link_phone",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "邮件地址",
+                    "field": "link_email",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "手机号码",
+                    "field": "link_tel",
+                    "type": "text"
+                },
+                {
+                    "name": "传真号码",
+                    "field": "link_fax",
+                    "type": "text"
+                },
+                {
+                    "name": "首选联系方式",
+                    "field": "link_first",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品型号规格",
+                    "field": "product_specification",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "产品数量",
+                    "field": "quantity",
+                    "type": "text",
+                    "is_required": true
+                },
+                {
+                    "name": "生产日期或条码",
+                    "field": "production_date",
+                    "type": "text"
+                },
+
+                {
+                    "name": "购买点名称",
+                    "field": "address",
+                    "type": "text"
+                },
+
+                {
+                    "name": "购买点联系方式",
+                    "field": "contact",
+                    "type": "text"
+                },
+
+                {
+                    "name": "购买日期",
+                    "field": "purchase_date",
+                    "type": "text"
+                },
+
+                {
+                    "name": "产品使用省市",
+                    "field": "product_provinces",
+                    "type": "text"
+                },
+
+                {
+                    "name": "开始使用日期",
+                    "field": "start_dates",
+                    "type": "text"
+                },
+                {
+                    "name": "所需服务及要求",
+                    "field": "requirements",
+                    "type": "textarea"
+                },
+                {
+                    "name": "问题描述",
+                    "field": "problem_description",
+                    "type": "textarea"
+                }
+            ]
         },
         {
             "action": "channel",

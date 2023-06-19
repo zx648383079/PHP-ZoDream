@@ -653,12 +653,12 @@ class FuncHelper {
         if (empty($fileName)) {
             return '';
         }
-        $formAction = self::formAction($model->id);
-        $formData = self::formData($id);
+        $form_action = self::formAction($model->id);
+        $field_list = self::formData($id);
         $token = VerifyCsrfToken::get();
-        return CMSRepository::registerView()->render(sprintf('Content/%s', $fileName),
-            compact('formAction',
-            'formData', 'token'));
+        return CMSRepository::registerView()->render(sprintf('Form/%s', $fileName),
+            compact('form_action',
+            'field_list', 'token'));
     }
 
     public static function formData(int|string $id): array {

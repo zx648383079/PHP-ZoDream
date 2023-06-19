@@ -1,53 +1,10 @@
 <!-- 技术支持表单 -->
-<form action="{$formAction}" method="post">
+<form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
-                <tr>
-                    <th class="input-label">省市：</th>
-                    <td>
-                        <input type="text" name="provinces" />
-                        <i class="input-star">*</i>
-                    </td>
-                    <th class="input-label">公司名称：</th>
-                    <td><input type="text" name="companyname" /></td>
-                </tr>
-                <tr>
-                    <th class="input-label">姓名：</th>
-                    <td>
-                        <input type="text" name="username" />
-                        <i class="input-star">*</i>
-                    </td>
-                    <th class="input-label">电话号码：&nbsp;</th>
-                    <td>
-                        <input type="text" name="phone_number" />
-                        <i class="input-star">*</i>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="input-label">邮件地址：</th>
-                    <td>
-                        <input type="text" name="email" />
-                        <i class="input-star">*</i>
-                    </td>
-                    <th class="input-label">手机号码：</th>
-                    <td><input type="text" name="phone" /></td>
-                </tr>
-                <tr>
-                    <th class="input-label">传真号码：</th>
-                    <td><input type="text" name="faxnumber" /></td>
-                    <th class="input-label">首选联系方式：</th>
-                    <td>
-                        <select name="firstcontact" id="select">
-                            <option value="邮件">邮件</option>
-                            <option value="电话">电话</option>
-                            <option value="传真">传真</option>
-                            <option value="手机">手机</option>
-                        </select>
-                        <i class="input-star">*</i>
-                    </td>
-                </tr>
+                {tpl:layouts/form_base}
                 <tr>
                     <th class="input-label">技术支持：</th>
                     <td colspan="3">
