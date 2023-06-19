@@ -88,12 +88,25 @@ function parseAjax(data: IResponse) {
     }
 };
 
+function updateModalCenter(modal: JQuery) {
+    modal.css({
+        left: Math.max(window.innerWidth - modal.width(), 0) / 2,
+        top: Math.max(window.innerHeight - modal.height(), 0) / 2,
+        margin: 0,
+    });
+}
+
 $(function() {
     $('img.lazy').lazyload({
         callback: 'img'
     });
     $('.menu-bar').on('click', '.menu-item-arrow', function() {
         $(this).closest('.menu-item').toggleClass('menu-item-open');
+    });
+    $(window).on('resize', function() {
+        $('.dialog:visible').each(function() {
+            updateModalCenter($(this));
+        });
     });
     $(document).on('click', ".tab-box .tab-header .tab-item", function() {
         let $this = $(this);
@@ -105,7 +118,8 @@ $(function() {
         e.preventDefault();
         e.stopPropagation();
         const target = $(this).attr('modal');
-        $('#' + target).show();
+        const modal = $('#' + target).show();
+        updateModalCenter(modal);
     }).on('submit', "form[data-type=ajax]", function() {
         let $this = $(this);
         let loading = Dialog.loading();

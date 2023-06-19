@@ -90,8 +90,10 @@ class FileRepository {
      * @throws Exception
      */
     public static function upload(string $fieldName, array $config, string $base64 = 'upload') {
-        return static::uploadFromData($base64 === 'base64' || $base64 === 'remote' ? request()->get($fieldName) :
-            request()->file($fieldName), $config, $base64);
+        $request = request();
+        return static::uploadFromData($base64 === 'base64' || $base64 === 'remote' ?
+            $request->get($fieldName) :
+            $request->file($fieldName), $config, $base64);
     }
 
     /**

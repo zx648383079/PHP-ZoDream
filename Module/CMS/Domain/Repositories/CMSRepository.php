@@ -15,6 +15,7 @@ use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Schema\Table;
+use Zodream\Disk\Directory;
 use Zodream\Helpers\PinYin;
 use Zodream\Helpers\Str;
 use Zodream\Http\Uri;
@@ -34,6 +35,8 @@ class CMSRepository {
      */
     private static string $cacheTheme = '';
 
+    private static ?Directory $viewFolder = null;
+
     public static function theme() {
         if (!empty(self::$cacheTheme)) {
             return self::$cacheTheme;
@@ -48,14 +51,19 @@ class CMSRepository {
         return self::$cacheTheme = static::site()->theme;
     }
 
-    public static function registerView(string|SiteModel $theme = ''): ViewFactory {
+    public static function registerView(string|SiteModel $theme = '', ?ViewFactory $provider = null): ViewFactory {
         if (empty($theme)) {
             $theme = static::theme();
         } elseif ($theme instanceof SiteModel) {
             $theme = $theme->theme;
         }
-        $provider = view();
-        $dir = $provider->getDirectory()
+        if (empty($provider)) {
+            $provider = view();
+        }
+        if (empty(static::$viewFolder)) {
+            static::$viewFolder = $provider->getDirectory();
+        }
+        $dir = static::$viewFolder
             ->directory($theme);
         if (!$dir->exist()) {
             throw new Exception('THEME IS ERROR!');
@@ -66,6 +74,13 @@ class CMSRepository {
                 'suffix' => '.html'
             ]);
         return $provider;
+    }
+
+    public static function viewTemporary(callable $cb) {
+        return view()->temporary(function ($provider) use ($cb) {
+            static::registerView('', $provider);
+            return call_user_func($cb, $provider);
+        });
     }
 
     /**

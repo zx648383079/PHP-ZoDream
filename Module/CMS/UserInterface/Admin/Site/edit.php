@@ -5,6 +5,10 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 
 $this->title = $model->id > 0 ? '编辑' : '新增'.'站点';
+$js = <<<JS
+bindSite();
+JS;
+$this->registerJs($js);
 ?>
 
 <h1><?=$this->title?></h1>

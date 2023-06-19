@@ -22,11 +22,18 @@ class SiteRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = SiteModel::findOrNew($id);
+        $oldTheme = $model->theme;
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if ($id > 0) {
+        if (!empty($oldTheme) && $oldTheme !== $model->theme) {
+            $old = new SiteModel();
+            $old->id = $model->id;
+            $old->theme = $oldTheme;
+            CMSRepository::removeSite($model);
+        }
+        if ($oldTheme === $model->theme) {
             return $model;
         }
         try {

@@ -10,8 +10,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 class SiteController extends Controller {
     public function indexAction(string $keywords = '') {
         $model_list = SiteRepository::getList($keywords);
-        $current = CMSRepository::siteId();
-        return $this->show(compact('model_list', 'current'));
+        return $this->show(compact('model_list'));
     }
 
     public function createAction() {
@@ -82,12 +81,12 @@ class SiteController extends Controller {
         $model = SiteModel::find($id);
         $options = $model->options;
         if (!empty($option)) {
-            foreach ($options as &$item) {
+            foreach ($options as $k => $item) {
                 if (array_key_exists($item['code'], $option)) {
-                    $item['value'] = $option[$item['code']];
+                    $options[$k]['value'] = $option[$item['code']];
                     continue;
                 }
-                unset($item);
+                unset($options[$k]);
             }
         } else {
             $options = [];

@@ -153,7 +153,7 @@ class StorageProvider {
         $path = $file->getRelative($this->root);
         if (empty($path)) {
             // 保存文件位置可能不在目录下
-            throw new \Exception('add file error');
+            throw new \Exception('found file error');
         }
         $md5 = $file->md5();
         try {
@@ -173,7 +173,7 @@ class StorageProvider {
         $model = [
             'name' => $rawData['name'] ?? $file->getName(),
             'extension' => $rawData['type'] ?? $file->getExtension(),
-            'path' => $path,
+            'path' => ltrim($path, '/'),
             'size' => $file->size(),
             'md5' => $md5,
             'folder' => $this->tag,
@@ -183,7 +183,7 @@ class StorageProvider {
         $model['id'] = $this->query()->insert($model);
         if (empty($model['id'])) {
             $file->delete();
-            throw new \Exception('add file error');
+            throw new \Exception('add file log error');
         }
         if ($backFile) {
             $model['file'] = $file;

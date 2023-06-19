@@ -502,6 +502,9 @@ abstract class BaseScene implements SceneInterface {
         }
         $bag = new MessageBag();
         foreach ($field_list as $field) {
+            if ($field->is_disable) {
+                continue;
+            }
             if (!$isNew && !array_key_exists($field->field, $data)) {
                 continue;
             }

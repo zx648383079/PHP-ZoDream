@@ -415,6 +415,9 @@ $dialogHeight: 20rem;
         background-color: #f4f4f4;
         padding: .8rem;
     }
+    .form-table {
+        border: none;
+    }
 }
 
 .form-line-table {
@@ -567,6 +570,20 @@ $dialogHeight: 20rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+    .slider-box {
+        a {
+            display: block;
+            width: 14.625rem;
+            height: 4.5rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        img {
+            display: block;
+            width: 14.625rem;
+            height: 4.5rem;
+        }
     }
 }
 .path-bar {
@@ -1064,6 +1081,22 @@ $dialogHeight: 20rem;
     line-height: 3rem;
     &:not(:last-of-type) {
         border-bottom: 1px solid $primary;
+    }
+}
+
+.solution-file-item {
+    display: flex;
+    line-height: 2.5rem;
+    .item-icon {
+        width: 2.5rem;
+        text-align: center;
+        border: 1px solid #ccc;
+        margin-right: .2rem;
+    }
+    .item-title {
+        flex: 1;
+        border: 1px solid #ccc;
+        padding: 0 .3rem;
     }
 }
 

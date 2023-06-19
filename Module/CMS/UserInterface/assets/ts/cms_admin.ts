@@ -33,6 +33,15 @@ function bindField(baseUri: string) {
     });
 }
 
+function bindSite() {
+    $(document).on('change', 'select[name=theme]', function(e) {
+        const siteId = $(this).closest('form').find('[name="id"]').val() as any;
+        if (siteId && siteId > 0) {
+            confirm('你正在更改主题，更改主题将删除站点数据！');
+        }
+    });
+}
+
 function bindCat() {
     let name = $('#name');
     $('#title').on('blur', function() {
@@ -98,7 +107,6 @@ function bindEditOption() {
         $(this).closest('.input-group').remove();
     });
 }
-
 $(function() {
     setTimeout(() => {
         $('.column-full-item .overlay').remove();

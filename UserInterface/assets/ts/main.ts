@@ -1,6 +1,6 @@
 declare var BASE_URI: string;
 declare var UPLOAD_URI: string;
-declare var file_upload: any;
+// declare var file_upload: any;
 
 interface IResponse {
     code: number,
@@ -115,9 +115,11 @@ let strFormat = function(arg: string, ...args: any[]) {
     });
 }
 
+let file_upload: any;
+
 $(function() {
     if (typeof Upload === 'function' && typeof UPLOAD_URI === 'string') {
-        let file_upload = new Upload(null, {
+        file_upload = new Upload(null, {
             url: UPLOAD_URI,
             name: 'upfile',
             template: '{url}',

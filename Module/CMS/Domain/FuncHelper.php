@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain;
 
 use Domain\Providers\MemoryCacheProvider;
+use Domain\Repositories\FileRepository;
 use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\CMS\Domain\Model\CategoryModel;
@@ -23,6 +24,7 @@ use Zodream\Infrastructure\Support\Html;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Helpers\Html as HtmlHelper;
+use Zodream\Template\ViewFactory;
 
 class FuncHelper {
 
@@ -653,12 +655,16 @@ class FuncHelper {
         if (empty($fileName)) {
             return '';
         }
-        $form_action = self::formAction($model->id);
-        $field_list = self::formData($id);
-        $token = VerifyCsrfToken::get();
-        return CMSRepository::registerView()->render(sprintf('Form/%s', $fileName),
-            compact('form_action',
-            'field_list', 'token'));
+        $id = $model->id;
+        return CMSRepository::viewTemporary(function (ViewFactory $factory) use ($fileName, $id) {
+            $form_action = self::formAction($id);
+            $field_list = self::formData($id);
+            $token = VerifyCsrfToken::get();
+            $factory->setLayout('');
+            return $factory->render(sprintf('Form/%s', $fileName),
+                compact('form_action',
+                    'field_list', 'token'));
+        });
     }
 
     public static function formData(int|string $id): array {
@@ -855,6 +861,29 @@ class FuncHelper {
         return $html;
     }
 
+    /**
+     * 获取上传文件的原始文件名
+     * @param mixed $url
+     * @return string
+     */
+    public static function fileName(mixed $url): string {
+        if (empty($url)) {
+            return '';
+        }
+        $i = strpos($url, 'assets/');
+        if ($i >= 0) {
+            $path = substr($url, $i + 7);
+        } else {
+            $path = parse_url($url, PHP_URL_PATH);
+        }
+        try {
+            $model = FileRepository::storage()->get($path);
+            return (string)$model['name'];
+        } catch (\Exception $ex) {
+            return '';
+        }
+    }
+
     public static function regex(mixed $input, string $pattern, int|string $tag = 0): string {
         if (preg_match($pattern, (string)$input, $match)) {
             return $match[intval($tag)] ?? '';
@@ -924,6 +953,7 @@ class FuncHelper {
             'regex',
             'authGuest',
             'authUser',
+            'fileName',
         ]);
         static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');

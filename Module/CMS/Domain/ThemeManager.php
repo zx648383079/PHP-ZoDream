@@ -223,7 +223,7 @@ class ThemeManager {
         }
     }
 
-    protected function getCacheId(string $name, string $prefix = ''): mixed {
+    protected function getCacheId(string|int $name, string $prefix = ''): mixed {
         $key = empty($prefix) && str_starts_with($name, '@') ? $name : sprintf('@%s:%s', $prefix, $name);
         return $this->cache[$key] ?? 0;
     }
@@ -347,7 +347,7 @@ class ThemeManager {
         }
         $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])->first();
         if (!empty($model)) {
-            if (empty($data['name'])) {
+            if (empty($data['name']) || $model->name === $data['name']) {
                 return;
             }
             $model->name = $data['name'];
