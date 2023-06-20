@@ -349,4 +349,56 @@ class StorageProvider {
         }
         return $output;
     }
+
+    /**
+     * 判断当前根目录是否是对外开放的
+     * @return bool
+     * @throws \Exception
+     */
+    public function isPublic(): bool {
+        return str_starts_with((string)$this->root, (string)public_path());
+    }
+
+    /**
+     * 从路径转成访问网址
+     * @param string $path
+     * @return string 不在公共目录返回 ''
+     * @throws \Exception
+     */
+    public function toPublicUrl(string $path): string {
+        $root = (string)public_path();
+        $file = (string)$this->root->file($path);
+        if (str_starts_with($file, $root)) {
+            return url()->asset(substr($file, strlen($root)));
+        }
+        return '';
+    }
+
+    /**
+     * 从网址转成路径
+     * @param string $path
+     * @return string
+     * @throws \Exception
+     */
+    public function fromPublicUrl(string $path): string {
+        $assetName = config('view.asset_directory', '');
+        if (!empty($assetName)) {
+            if (!str_ends_with($assetName, '/')) {
+                $assetName .= '/';
+            }
+            $i = strpos($path, $assetName);
+            if ($i !== false) {
+                return substr($path, $i + strlen($assetName));
+            }
+        }
+        if (str_contains($path, '://')) {
+            $path = parse_url($path, PHP_URL_PATH);
+        }
+        $file = (string)public_path()->file($path);
+        $root = (string)$this->root;
+        if (str_starts_with($file, $root)) {
+            return ltrim(substr($file, strlen($root)), '/');
+        }
+        return $path;
+    }
 }

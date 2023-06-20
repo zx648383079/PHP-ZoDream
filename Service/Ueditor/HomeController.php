@@ -4,6 +4,7 @@ namespace Service\Ueditor;
 
 use Domain\Repositories\FileRepository;
 use Infrastructure\Environment;
+use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\Response\JsonResponse;
 use Zodream\Route\Response\Json;
 use Zodream\Service\Http\Request;
@@ -37,9 +38,10 @@ class HomeController extends Controller {
      *     'type' => ''            //文件类型
      *     'size' => '',           //文件大小
      * )
-     * @param $fieldName
-     * @param $config
+     * @param string $fieldName
+     * @param array $config
      * @param string $base64
+     * @return Output
      */
 	protected function upload(string $fieldName, array $config, string $base64 = 'upload') {
         try {

@@ -28,11 +28,13 @@ $this->title = '联动项列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td><?=$item->name?></td>
+                <td class="text-left"><?=$item->name?></td>
                 <td>
-                    <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>">下一级</a>
-                    <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit_data', ['id' => $item->id])?>">编辑</a>
-                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete_data', ['id' => $item->id])?>">删除</a>
+                    <div class="btn-group">
+                        <a class="btn btn-info" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>">下一级</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit_data', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete_data', ['id' => $item->id])?>">删除</a>
+                    </div>
                 </td>
             </tr>
         <?php endforeach?>

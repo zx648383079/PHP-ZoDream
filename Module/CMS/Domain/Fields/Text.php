@@ -91,7 +91,7 @@ class Text extends BaseField {
             return Theme::password($field['field'], $value, $field['name'],
                 $field['is_required'] > 0);
         }
-        return (string)Theme::text($field['field'], $value, $field['name'], null,
+        return (string)Theme::text($field['field'], $value, $field['name'], '',
             $field['is_required'] > 0);
     }
 }

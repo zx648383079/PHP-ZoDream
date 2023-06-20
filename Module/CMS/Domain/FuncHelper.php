@@ -870,14 +870,9 @@ class FuncHelper {
         if (empty($url)) {
             return '';
         }
-        $i = strpos($url, 'assets/');
-        if ($i >= 0) {
-            $path = substr($url, $i + 7);
-        } else {
-            $path = parse_url($url, PHP_URL_PATH);
-        }
         try {
-            $model = FileRepository::storage()->get($path);
+            $provider = FileRepository::storage();
+            $model = $provider->get($provider->fromPublicUrl($url));
             return (string)$model['name'];
         } catch (\Exception $ex) {
             return '';

@@ -24,7 +24,7 @@ $this->title = '联动菜单列表';
                 <td><?=$item['data_count']?></td>
                 <td>
                    <div class="btn-group">
-                        <a class="btn btn-primary" href="<?=$this->url('./@admin/linkage/data', ['id' => $item->id])?>">模块项</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/linkage/data', ['id' => $item->id])?>">联动项</a>
                         <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete', ['id' => $item->id])?>" data-tip="联动菜单是所有站点公用的，确定删除？">删除</a>
                    </div>

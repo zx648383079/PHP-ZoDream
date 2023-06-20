@@ -138,8 +138,9 @@ class FileRepository {
         }
         $fileName = $upload->getRandomName($config['pathFormat']);
         $upload->setFile(public_path($fileName));
-        $res = static::storage()->addFile($upload);
-        $url = url()->asset($fileName);
+        $provider = static::storage();
+        $res = $provider->addFile($upload);
+        $url = $provider->toPublicUrl($res['url']);
         $thumb = static::loadThumb($res, $url, $upload);
         return [
             'url' => $url,

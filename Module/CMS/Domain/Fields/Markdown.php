@@ -47,7 +47,7 @@ class Markdown extends BaseField {
                 'value' => $value
             ];
         }
-        return (string)Theme::textarea($field['field'], $value, $field['name'], null,
+        return (string)Theme::textarea($field['field'], $value, $field['name'], '',
             $field['is_required'] > 0);
     }
 

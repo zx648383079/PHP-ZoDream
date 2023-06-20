@@ -13,7 +13,7 @@ $this->title = '主题市场';
             </div>
             <div class="name">12312</div>
             <div class="desc">21313123</div>
-            <a href="" class="btn">安装</a>
+            <a href="" class="btn btn-danger">安装</a>
         </div>
     </div>
 </div>

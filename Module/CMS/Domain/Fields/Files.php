@@ -53,7 +53,7 @@ class Files extends BaseField {
                 'value' => $value
             ];
         }
-        return (string)Theme::file($field['field'], $value, $field['name'], null,
+        return (string)Theme::file($field['field'], $value, $field['name'], '',
             $field['is_required'] > 0);
     }
 }
