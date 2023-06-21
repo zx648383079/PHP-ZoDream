@@ -40,7 +40,7 @@ class Controller extends ModuleController {
         return url('./@admin/'.$path, $args);
     }
 
-    public function redirectWithMessage($url, $message, $time = 4, $status = 404) {
+    public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $code = 404) {
         return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
     }
 }

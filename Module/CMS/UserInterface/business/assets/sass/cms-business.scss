@@ -27,6 +27,14 @@ a {
     margin-bottom: 2rem;
 }
 
+.f-12 {
+    font-size: .8rem;
+}
+
+.mw-12 {
+    min-height: 12rem;
+}
+
 .app-header {
     background: linear-gradient(to top, #dfdde0 20%, #fff 50%);
     .top-bar {
@@ -106,6 +114,7 @@ a {
             }
             a {
                 font-weight: 500;
+                font-size: 1rem;
             }
         }
     }
@@ -238,6 +247,7 @@ a {
     height: 16.25rem;
     box-shadow: 0 2px 10px gray;
     padding: 1rem .8rem;
+    margin-bottom: 2rem;
     .item-thumb {
         img {
             width: 11.25rem;
@@ -564,20 +574,34 @@ $dialogHeight: 20rem;
     display: flex;
     .slider {
         flex: 1;
+        margin: 2rem 0;
+        height: 6rem;
+        padding: 0 2rem;
+        .slider-previous,
+        .slider-next {
+            color: gray;
+        }
+        .slider-previous {
+            left: 0;
+        }
     }
     .share-bar {
         width: 6rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding-left: .8rem;
     }
-    .slider-box {
+    .partner-item {
         a {
             display: block;
             width: 14.625rem;
             height: 4.5rem;
             margin-left: auto;
             margin-right: auto;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px gray;
+            margin: .4rem;
         }
         img {
             display: block;
@@ -912,6 +936,10 @@ $dialogHeight: 20rem;
         }
         .item-body {
             flex: 1;
+            a {
+                margin: 0 .5rem;
+                word-break: keep-all;
+            }
         }
     }
 }

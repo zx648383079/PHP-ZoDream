@@ -5,6 +5,58 @@
     </div>
     <div class="panel-body">
         <ul class="menu-bar">
+            {if:$root.name == product_center}
+            {linkage:product_type}
+            <li class="menu-item">
+                <div class="menu-name">
+                    <i class="fa fa-angle-right"></i>
+                    <a href="{url:./category?id=product_center&product_type=:$item.id}">{$item.name}</a>
+                    {if:$item.children_count>0}
+                    <i class="fa menu-item-arrow"></i>
+                    {/if}
+                </div>
+                {if:$item.children_count>0}
+                <ul class="menu-children">
+                    {for:$item.children,$it}
+                    <li class="menu-item">
+                        <div class="menu-name">
+                            <a href="{url:./category?id=product_center&product_type=:$it.id}">{$it.name}</a>
+                            {if:$it.children_count>0}
+                            <i class="fa menu-item-arrow"></i>
+                            {/if}
+                        </div>
+                        {if:$it.children_count>0}
+                        <ul class="menu-children">
+                            {for:$it.children,$i}
+                            <li class="menu-item">
+                                <div class="menu-name">
+                                    <a href="{url:./category?id=product_center&product_type=:$i.id}">{$i.name}</a>
+                                    {if:$i.children_count>0}
+                                    <i class="fa menu-item-arrow"></i>
+                                    {/if}
+                                </div>
+                                {if:$i.children_count>0}
+                                <ul class="menu-children">
+                                    {for:$i.children,$j}
+                                    <li class="menu-item">
+                                        <div class="menu-name">
+                                            <a href="{url:./category?id=product_center&product_type=:$j.id}">{$j.name}</a>
+                                        </div>
+                                    </li>
+                                    {/for}
+                                </ul>
+                                {/if}
+                            </li>
+                            {/for}
+                        </ul>
+                        {/if}
+                    </li>
+                    {/for}
+                </ul>
+                {/if}
+            </li>
+            {/linkage}
+            {else}
             {channels:parent=>$root.id}
             <li class="menu-item">
                 <div class="menu-name">
@@ -27,6 +79,7 @@
                 {/if}
             </li>
             {/channels}
+            {/if}
         </ul>
     </div>
 </div>

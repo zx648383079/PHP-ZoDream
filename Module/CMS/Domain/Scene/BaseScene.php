@@ -27,18 +27,18 @@ abstract class BaseScene implements SceneInterface {
     protected int $site = 1;
 
     /**
-     * @var ModelModel
+     * @var ModelModel|array
      */
     protected mixed $model = null;
 
-    public function setModel(ModelModel $model, int $site = 0) {
+    public function setModel(ModelModel|array $model, int $site = 0) {
         $this->model = $model;
         $this->site = $site > 0 ? $site : CMSRepository::siteId();
         return $this;
     }
 
     public function modelId(): int {
-        return $this->model['id'];
+        return intval($this->model['id']);
     }
 
     public function remove(int|array|callable $id): bool {
@@ -57,7 +57,7 @@ abstract class BaseScene implements SceneInterface {
                 continue;
             }
             if ($i < 1) {
-                $query->where('model_id', $this->model->id);
+                $query->where('model_id', $this->modelId());
             }
             if (($main = call_user_func($id, $query, $main, $i)) === false) {
                 return true;
@@ -83,7 +83,7 @@ abstract class BaseScene implements SceneInterface {
                 continue;
             }
             if ($i < 1) {
-                $query->where('model_id', $this->model->id);
+                $query->where('model_id', $this->modelId());
             }
             if (call_user_func($id, $query, $main, $i) === false) {
                 return $data;
@@ -104,11 +104,11 @@ abstract class BaseScene implements SceneInterface {
         $res = [];
         $bag = new MessageBag();
         foreach ($field_list as $field) {
-            if (!array_key_exists($field->field, $data)) {
+            if (!array_key_exists($field['field'], $data)) {
                 continue;
             }
-            $res[$field->field] = static::newField($field->type)
-                ->filterInput($data[$field->field] ?? null, $field, $bag);
+            $res[$field['field']] = static::newField($field['type'])
+                ->filterInput($data[$field['field']] ?? null, $field, $bag);
         }
         if (!$bag->isEmpty()) {
             throw new ValidationException($bag);
@@ -126,7 +126,7 @@ abstract class BaseScene implements SceneInterface {
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
-        $main['model_id'] = $this->model->id;
+        $main['model_id'] = $this->modelId();
         $main['user_id'] = auth()->id();
         $id = intval($this->query()->insert($main));
         if ($id <= 0) {
@@ -152,7 +152,7 @@ abstract class BaseScene implements SceneInterface {
         }
         list($main, $extend) = $this->filterInput($data, false);
         $main['updated_at'] = time();
-        $main['model_id'] = $this->model->id;
+        $main['model_id'] = $this->modelId();
         $this->query()
             ->where('id', $id)->update($main);
         if (!empty($extend)) {
@@ -182,10 +182,10 @@ abstract class BaseScene implements SceneInterface {
     }
 
     /**
-     * @return ModelFieldModel[]
+     * @return array[]
      */
     public function fieldList(): array {
-        return FuncHelper::fieldList($this->model->id);
+        return FuncHelper::fieldList($this->modelId());
     }
 
     public function searchComment(string $keywords, array $params = [], string $order = '', string $extra = '', int $page = 1, int $perPage = 20): Page {
@@ -231,11 +231,11 @@ abstract class BaseScene implements SceneInterface {
         $main = $this->mainDefaultField();
         $extra = [];
         foreach ($field_list as $item) {
-            if ($item->is_main > 0) {
-                $main[] = $item->field;
+            if ($item['is_main'] > 0) {
+                $main[] = $item['field'];
                 continue;
             }
-            $extra[] = $item->field;
+            $extra[] = $item['field'];
         }
         return [$main, $extra];
     }
@@ -335,14 +335,14 @@ abstract class BaseScene implements SceneInterface {
         $main = ['title', 'keywords'];
         $extra = [];
         foreach ($field_list as $item) {
-            if ($item->is_search < 1) {
+            if ($item['is_search'] < 1) {
                 continue;
             }
-            if ($item->is_main > 0) {
-                $main[] = $item->field;
+            if ($item['is_main'] > 0) {
+                $main[] = $item['field'];
                 continue;
             }
-            $extra[] = $item->field;
+            $extra[] = $item['field'];
         }
         $query->where(function ($query) use ($keywords, $main) {
             $items = explode(' ', $keywords);
@@ -376,6 +376,34 @@ abstract class BaseScene implements SceneInterface {
             return $query;
         }
         return $query->whereIn($this->getMainTable().'.id', $ids);
+    }
+
+    /**
+     * @param string $keywords
+     * @param array $params
+     * @param string $order
+     * @param int $page
+     * @param int $perPage
+     * @param string $fields
+     * @return Page
+     * @throws \Exception
+     */
+    public function search(string $keywords, array $params = [], string $order = '',
+                           int $page = 1, int $perPage = 20, string $fields = '',
+                           bool $isPage = true): Page {
+        if (empty($fields)) {
+            $fields = '*';
+        }
+        $query = $this->addQuery($this->query(), $params, $order, $fields)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                $this->addSearchQuery($query, $keywords);
+            });
+        if ($isPage) {
+            return $query->page($perPage, 'page', $page);
+        }
+        return new Page($query->limit(max(($page - 1) * $page, 0), $perPage)->get(),
+            $perPage, 'page', $page
+        );
     }
 
     protected function getResultByField(Builder $query, string $field = '*') {
@@ -422,7 +450,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '标题',
                 'field' => 'title',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 1,
                 'is_system' => 1,
                 'is_required' => 1,
@@ -431,7 +459,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '关键字',
                 'field' => 'keywords',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 1,
                 'is_system' => 1,
                 'is_required' => 0,
@@ -440,7 +468,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '简介',
                 'field' => 'description',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 1,
                 'is_system' => 1,
                 'is_required' => 0,
@@ -449,7 +477,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '缩略图',
                 'field' => 'thumb',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 1,
                 'is_system' => 1,
                 'is_required' => 0,
@@ -458,7 +486,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '开启评论',
                 'field' => 'comment_open',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 1,
                 'is_system' => 1,
                 'is_required' => 0,
@@ -467,7 +495,7 @@ abstract class BaseScene implements SceneInterface {
             [
                 'name' => '内容',
                 'field' => 'content',
-                'model_id' => $this->model->id,
+                'model_id' => $this->modelId(),
                 'is_main' => 0,
                 'is_system' => 1,
                 'type' => 'editor',
@@ -502,19 +530,19 @@ abstract class BaseScene implements SceneInterface {
         }
         $bag = new MessageBag();
         foreach ($field_list as $field) {
-            if ($field->is_disable) {
+            if ($field['is_disable']) {
                 continue;
             }
-            if (!$isNew && !array_key_exists($field->field, $data)) {
+            if (!$isNew && !array_key_exists($field['field'], $data)) {
                 continue;
             }
-            $value = static::newField($field->type)
-                ->filterInput($data[$field->field] ?? null, $field, $bag);
-            if ($field->is_main > 0) {
-                $main[$field->field] = $value;
+            $value = static::newField($field['type'])
+                ->filterInput($data[$field['field']] ?? null, $field, $bag);
+            if ($field['is_main'] > 0) {
+                $main[$field['field']] = $value;
                 continue;
             }
-            $extend[$field->field] = $value;
+            $extend[$field['field']] = $value;
         }
         if (!$bag->isEmpty()) {
             throw new ValidationException($bag);
@@ -543,7 +571,7 @@ abstract class BaseScene implements SceneInterface {
         );
     }
 
-    public static function converterTableField(Column $column, ModelFieldModel $field) {
+    public static function converterTableField(Column $column, ModelFieldModel $field): void {
         static::newField($field->type)->converterField($column, $field);
     }
 }

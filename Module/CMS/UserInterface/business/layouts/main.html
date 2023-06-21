@@ -59,7 +59,7 @@
                         {channels:tree=>1,group=>nav}
                         <li class="nav-item {channelActive:$channel.id,true}">
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
-                            {if:isset($channel.children)}
+                            {if:$channel.children_count>0}
                             <ul class="nav-item-drop">
                                 {for:$channel.children,$item}
                                 <li  class="nav-item">
@@ -83,7 +83,7 @@
                     <div class="map-item">
                         <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                         <ul class="item-body">
-                            {if:isset($channel.children)}
+                            {if:$channel.children_count>0}
                             {for:$channel.children,$item}
                             <li>
                                 <a href="{url:./category?id=:$item.id}">{$item.title}</a>

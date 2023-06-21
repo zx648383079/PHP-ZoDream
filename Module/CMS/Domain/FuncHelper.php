@@ -6,11 +6,11 @@ use Domain\Providers\MemoryCacheProvider;
 use Domain\Repositories\FileRepository;
 use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
-use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
 use Zodream\Database\Query\Builder;
@@ -45,7 +45,7 @@ class FuncHelper {
             return null;
         }
         $options = static::cache()->getOrSet(__FUNCTION__, 'all', function () {
-            return CMSRepository::options();
+            return CacheRepository::getOptionCache();
         });
         $val = $options[$code] ?? null;
         if ($type === 'number') {
@@ -54,7 +54,7 @@ class FuncHelper {
         return $val;
     }
 
-    protected static function toNumber(mixed $value) {
+    protected static function toNumber(mixed $value): string|int {
         if (is_numeric($value)) {
             return $value;
         }
@@ -64,24 +64,26 @@ class FuncHelper {
         return intval($value);
     }
 
+    /**
+     * 转化为内容使用的id
+     * @param string|int $name
+     * @param string $type model|channel|linkage
+     * @return int
+     */
+    protected static function mapId(string|int $name, string $type = 'model'): int {
+        if (is_numeric($name)) {
+            return intval($name);
+        }
+        $map = static::cache()->getOrSet(__FUNCTION__, 'all', function () {
+            return CacheRepository::getMapCache();
+        });
+        return intval($map[$type][$name] ?? 0);
+    }
+
     public static function channels(array $params = null) {
         $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
-                $data = CategoryModel::query()->orderBy('position', 'asc')->get();
-                $maps = [];
-                foreach ($data as $item) {
-                    if (!isset($maps[$item['parent_id']])) {
-                        $maps[$item['parent_id']] = 0;
-                    }
-                    $maps[$item['parent_id']] ++;
-                }
-                $items = [];
-                foreach ($data as $item) {
-                    $formatted = $item->toArray();
-                    $formatted['children_count'] = $maps[$item['id']] ?? 0;
-                    $items[] = $formatted;
-                }
-                unset($data, $maps);
+                $items = CacheRepository::getChannelCache();
                 static::setChannel(...$items);
                 return $items;
             });
@@ -89,8 +91,7 @@ class FuncHelper {
             return $data;
         }
         if (isset($params['children'])) {
-            return TreeHelper::getTreeChild($data, is_numeric($params['children']) ? $params['children']
-                : static::getChannelId($params['children']));
+            return TreeHelper::getTreeChild($data, static::getChannelId($params['children']));
         }
         if (isset($params['group'])) {
             $data = array_filter($data, function ($item) use ($params) {
@@ -99,12 +100,12 @@ class FuncHelper {
             });
         }
         if (isset($params['parent'])) {
-            $params['parent'] = is_numeric($params['parent']) ? $params['parent']
-                : static::getChannelId($params['parent']);
+            $params['parent'] = static::getChannelId($params['parent']);
             $data = array_filter($data, function ($item) use ($params) {
                 return $item['parent_id'] == $params['parent'];
             });
         } elseif (isset($params['tree'])) {
+
             $data = static::cache()->getOrSet(__FUNCTION__,
                 sprintf('tree-%s', $params['group'] ?? ''),
                 function () use ($data) {
@@ -133,27 +134,13 @@ class FuncHelper {
 
     /**
      * @param string|int $model
-     * @return ModelModel
+     * @return array
      */
-    public static function model(string|int $model) {
-        static::cache()->getOrSet(__FUNCTION__, 'all', function () use ($model) {
-            $data = ModelModel::query()->get();
-            static::setModel(...$data);
-            return $data;
+    public static function model(string|int $model): array {
+        $modelId = self::mapId($model, 'model');
+        return static::cache()->getOrSet(__FUNCTION__, $modelId, function () use ($modelId) {
+            return CacheRepository::getModelCache($modelId);
         });
-        $item = static::cache()->getOrSet(__FUNCTION__, $model, function () use ($model) {
-            if (is_numeric($model)) {
-                return ModelModel::find($model);
-            }
-            return ModelModel::query()->where('`table`', $model)->first();
-        });
-        if (empty($item)) {
-            return $item;
-        }
-        if (is_numeric($model)) {
-            return static::cache()->getOrSet(__FUNCTION__, $item->table, $item);
-        }
-        return static::cache()->getOrSet(__FUNCTION__, $item->id, $item);
     }
 
     protected static function setModel(...$data) {
@@ -190,10 +177,15 @@ class FuncHelper {
         });
     }
 
-    protected static function getContentsQuery(array $param) {
+    /**
+     * 提前过滤查询参数
+     * @param array $param
+     * @return array
+     */
+    protected static function getContentsQuery(array $param): array {
         $data = [];
         if (isset($param['model'])) {
-            $data['model_id'] = self::model($param['model'])->id;
+            $data['model_id'] = self::mapId($param['model'], 'model');
         } else {
             $data['cat_id'] = self::getCategoryId($param);
         }
@@ -207,6 +199,10 @@ class FuncHelper {
         }
         if ($order === 'hot') {
             $order = 'view_count desc';
+        }
+        $isPage = true;
+        if (isset($param['num']) || isset($param['limit'])) {
+            $isPage = false;
         }
         $per_page = static::getVal($param, ['per_page', 'size', 'num', 'limit'], 20);
         $tags = ['model', 'keywords', 'keyword',
@@ -223,7 +219,44 @@ class FuncHelper {
             }
             $data[$key] = $value;
         }
-        return [$keywords, $data, $order, $page, $per_page, $fields];
+        $modelId = $data['model_id'] ?? 0;
+        if ($modelId < 1) {
+            $modelId = intval(static::channel($data['cat_id'], 'model_id'));
+        }
+        $fieldItems = static::fieldList($modelId);
+        foreach ($fieldItems as $item) {
+            if (!isset($data[$item['field']])) {
+                continue;
+            }
+            if ($item['is_disable']) {
+                unset($data[$item['field']]);
+                continue;
+            }
+            if ($item['type'] === 'linkage') {
+                $data[$item['field']] = self::treeChildId(
+                    CacheRepository::getLinkageCache(
+                        intval(BaseField::fieldSetting($item,
+                            'option', 'linkage_id'))
+                    ), intval($data[$item['field']]));
+            }
+        }
+
+        return [$keywords, $data, $order, $page, $per_page, $fields, $isPage];
+    }
+
+    /**
+     * 获取自身及子孙id
+     * @param array $data
+     * @param int|string $parent
+     * @return array
+     */
+    protected static function treeChildId(array $data, int|string $parent): array {
+        if (empty($data)) {
+            return [$parent];
+        }
+        $items = TreeHelper::getTreeChild($data, $parent);
+        $items[] = $parent;
+        return $items;
     }
 
     /**
@@ -287,14 +320,8 @@ class FuncHelper {
         return static::getContentValue($name, $data);
     }
 
-    protected static function getChannelId($val, $key = 'name') {
-        $data = static::channels();
-        foreach ($data as $item) {
-            if ($item[$key] === $val || $item['id'] === $val) {
-                return $item['id'];
-            }
-        }
-        return 0;
+    protected static function getChannelId(string|int $val) {
+        return self::mapId($val, 'channel');
     }
 
     protected static function setChannel(...$data) {
@@ -310,13 +337,14 @@ class FuncHelper {
     /***
      * 获取字段集合
      * @param string|int $model_id
-     * @return ModelFieldModel[]
+     * @return array[]
      */
     public static function fieldList(string|int $model_id): array {
         return static::cache()->getOrSet(__FUNCTION__,
             $model_id,
             function () use ($model_id) {
-                return ModelFieldModel::query()->where('model_id', $model_id)->get();
+                $data = CacheRepository::getModelCache($model_id);
+                return $data['field_items'] ?? [];
             });
     }
 
@@ -324,9 +352,9 @@ class FuncHelper {
      * 获取摸一个字段
      * @param string|int $model_id
      * @param string $field
-     * @return ModelFieldModel|null
+     * @return array|ModelFieldModel|null
      */
-    public static function getField(string|int $model_id, string $field): ?ModelFieldModel {
+    public static function getField(string|int $model_id, string $field): array|null|ModelFieldModel {
         $field_list = static::fieldList($model_id);
         foreach ($field_list as $item) {
             if ($item['field'] == $field) {
@@ -367,11 +395,11 @@ class FuncHelper {
             $scene = CMSRepository::scene()->setModel($catModel);
             if ($scene) {
                 foreach ($scene->fieldList() as $item) {
-                    if ($item->is_disable) {
+                    if ($item['is_disable']) {
                         continue;
                     }
-                    if (!$item->is_system && $item->is_search && !in_array($item->field, $fields)) {
-                        $fields[] = $item->field;
+                    if (!$item['is_system'] && $item['is_search'] && !in_array($item['field'], $fields)) {
+                        $fields[] = $item['field'];
                     }
                 }
             }
@@ -464,20 +492,21 @@ class FuncHelper {
             $model = $model['model'];
         }
         $model = self::model($model);
-        if (!$model->setting('is_show')) {
+        if (!BaseField::fieldSetting($model,  'is_show')) {
             return null;
         }
-        if ($model->setting('is_only') && $user < 1) {
+        if (BaseField::fieldSetting($model,  'is_only') && $user < 1) {
             $user = auth()->id();
         }
-        $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category, $model->id, $user),
+        $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category,
+            $model['id'], $user),
             function () use ($model, $category, $user) {
                 $scene = CMSRepository::scene()->setModel($model);
                 return $scene->find(
                     function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {
                             $query->where('id', $pre['id']);
-                            return;
+                            return null;
                         }
                         if ($i > 0 && empty($pre)) {
                             return false;
@@ -485,9 +514,10 @@ class FuncHelper {
                     if (!empty($category)) {
                         $query->where('cat_id', self::channel($category, 'id'));
                     }
-                    if (!empty($user) || $model->setting('is_only')) {
+                    if (!empty($user) || BaseField::fieldSetting($model,  'is_only')) {
                         $query->where('user_id', intval($user));
                     }
+                    return null;
                 });
             });
         return self::getContentValue($name, $data);
@@ -551,16 +581,14 @@ class FuncHelper {
         return false;
     }
 
-    public static function linkage(int|string $id) {
-        if (!is_numeric($id)) {
-            $id = static::cache()->getOrSet('linkageId', $id, function () use ($id) {
-                return LinkageModel::query()->where('code', $id)->value('id');
-            });
-        }
+    public static function linkage(int|string $id): array {
+        $id = static::mapId($id, 'linkage');
         if (empty($id)) {
             return [];
         }
-        return LinkageRepository::idTree(intval($id));
+        return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
+            return LinkageRepository::dataTree($id);
+        });
     }
 
     public static function linkageText(int|string $id): string {
@@ -572,7 +600,14 @@ class FuncHelper {
         });
     }
 
-    public static function range(string|int $start, string|int $end, string|int $step = 1) {
+    /**
+     * 生成一段连续数字数组
+     * @param string|int $start
+     * @param string|int $end
+     * @param string|int $step
+     * @return array
+     */
+    public static function range(string|int $start, string|int $end, string|int $step = 1): array {
         if (empty($step)) {
             $step = 1;
         }
@@ -648,14 +683,14 @@ class FuncHelper {
      */
     public static function extendForm(int|string $id): string {
         $model = self::model($id);
-        if (empty($model) || $model->type != 1) {
+        if (empty($model) || $model['type'] != 1) {
             return '';
         }
-        $fileName = $model->setting('form_template');
+        $fileName = BaseField::fieldSetting($model,  'form_template');
         if (empty($fileName)) {
             return '';
         }
-        $id = $model->id;
+        $id = $model['id'];
         return CMSRepository::viewTemporary(function (ViewFactory $factory) use ($fileName, $id) {
             $form_action = self::formAction($id);
             $field_list = self::formData($id);
@@ -669,31 +704,31 @@ class FuncHelper {
 
     public static function formData(int|string $id): array {
         $model = self::model($id);
-        if (empty($model) || $model->type != 1) {
+        if (empty($model) || $model['type'] != 1) {
             return [];
         }
         return static::cache()->getOrSet(__FUNCTION__,
-            $model->id,
+            $model['id'],
             function () use ($model) {
-                $items = self::fieldList($model->id);
+                $items = self::fieldList($model['id']);
                 $data = [];
                 foreach ($items as $item) {
-                    if ($item->is_disable) {
+                    if ($item['is_disable']) {
                         continue;
                     }
-                    $data[$item->field] = [
-                        'id' => $item->id,
-                        'name' => $item->name,
-                        'model_id' => $item->model_id,
-                        'field' => $item->field,
-                        'type' => $item->type,
-                        'length' => $item->length,
-                        'is_disable' => $item->is_disable,
-                        'is_required' => $item->is_required,
-                        'match' => $item->match,
-                        'tip_message' => $item->tip_message,
-                        'error_message' => $item->error_message,
-                        'setting' => $item->setting
+                    $data[$item['field']] = [
+                        'id' => $item['id'],
+                        'name' => $item['name'],
+                        'model_id' => $item['model_id'],
+                        'field' => $item['field'],
+                        'type' => $item['type'],
+                        'length' => $item['length'],
+                        'is_disable' => $item['is_disable'],
+                        'is_required' => $item['is_required'],
+                        'match' => $item['match'],
+                        'tip_message' => $item['tip_message'],
+                        'error_message' => $item['error_message'],
+                        'setting' => $item['setting']
                     ];
                 }
                 return $data;
@@ -750,7 +785,7 @@ class FuncHelper {
         }
         if (static::hasVal($param, ['model', 'model_id'])) {
             if (isset($param['model'])) {
-                $data['model_id'] = self::model($param['model'])->id;
+                $data['model_id'] = self::mapId($param['model'], 'model');
             }
         } elseif (static::hasVal($param, ['category', 'cat_id', 'cat', 'channel'])) {
             $category = self::getCategoryId($param);

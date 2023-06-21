@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '编辑表单';
+$this->title = $model->id > 0 ? '表单编辑' : '新增表单';
 ?>
 
 <h1><?=$this->title?></h1>

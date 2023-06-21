@@ -19,14 +19,13 @@
                         按行业分类
                     </div>
                     <div class="item-body">
+                        {$pt=request:'product_type'}
                         {linkage:industry}
-                        <a href="">{$item.name}</a>
+                        <a href="{url:./category?id=product_center&product_type=:$pt:&industry=:$item.id}">{$item.name}</a>
                         {/linkage}
                     </div>
                 </div>
             </div>
-
-
             <div class="page-body">
                 <div class="page-panel with-product">
                     {for:$page,$item}
@@ -49,7 +48,6 @@
                 </div>
                 {/if}
             </div>
-
         </div>
     </div>
 </div>

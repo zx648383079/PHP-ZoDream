@@ -3,16 +3,22 @@
     height: $height;
 }
 
-@mixin icon($code, $size: 1rem) {
+@mixin iconFont($size: 1rem) {
     display: inline-block;
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     font-size: inherit;
     text-rendering: auto;
     font-style: normal;
-    font-size: $size;
+    
+}
+
+@mixin icon($code, $size: 1rem) {
+    @include iconFont($size);
     &::before {
         content: $code;
     }
 }
+
+
 

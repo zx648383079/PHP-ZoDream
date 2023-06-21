@@ -125,10 +125,10 @@ class FileRepository {
      */
     protected static function uploading(BaseUpload $upload, array $config, bool $isImage = false): array {
         if (!$upload->checkSize($config['maxSize'])) {
-            throw new Exception($upload->getError());
+            throw new Exception((string)$upload->getError());
         }
         if ($upload instanceof UploadRemote && !$upload->checkType($config['allowFiles'])) {
-            throw new Exception($upload->getError());
+            throw new Exception((string)$upload->getError());
         }
         if (isset($config['oriName'])) {
             $upload->setType(FileSystem::getExtension($config['oriName']));

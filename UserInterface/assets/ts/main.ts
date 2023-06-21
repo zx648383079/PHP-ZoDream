@@ -53,6 +53,14 @@ function parseAjax(data: IResponse) {
         return;
     }
     if (data.code !== 200) {
+        if (typeof data.message === 'object') {
+            $.each(data.message, (i, v) => {
+                $.each(v, (j, m) => {
+                    Dialog.tip(i + (m || '操作执行失败！'));
+                });
+            });
+            return;
+        }
         Dialog.tip(data.message || '操作执行失败！');
         return;
     }
@@ -182,23 +190,38 @@ $(function() {
         e.preventDefault();
         let form = $('<form action="'+ $(this).attr('href') +'" method="post"></form');
         $(document.body).append(form);
-        form.submit();
+        form.trigger('submit');
     })
     .on('click', ".file-input [data-type=upload]", function() {
-        let that = $(this);
-        file_upload.options.filter = that.data('allow') || '';
+        const that = $(this);
+        const filter: string = that.data('allow') || '';
+        file_upload.options.filter = filter;
+        if (filter.indexOf('image') < 0) {
+            file_upload.options.url = UPLOAD_URI.replace('uploadimage', 'uploadfile');
+        }
         file_upload.start(that);
     })
     .on('click', ".file-input [data-type=preview]", function() {
-        let img = $(this).parents('.file-input').find('input').val();
+        let img = $(this).parents('.file-input').find('input').val() as any;
         if (!img) {
             Dialog.tip('请上传图片！');
             return;
         }
-        Dialog.box({
-            title: '预览',
-            content: '<img src="'+ img +'">'
-        });
+        const target = new Image;
+        target.src = img;
+        target.onload = () => {
+            const modal = Dialog.box({
+                title: '预览',
+                content: ''
+            });
+            if (target.width > window.innerWidth || target.height > window.innerHeight) {
+                const scale = Math.min((window.innerWidth - 100) / target.width, (window.innerHeight - 100) / target.height);
+                target.style.width = scale * target.width + 'px';
+                target.style.height = scale * target.height + 'px';
+            }
+            modal.find('.dialog-body').append(target);
+            modal.showCenter();
+        };
     })
     .on('click', ".zd-tab .zd-tab-head .zd-tab-item", function() {
         let $this = $(this);
@@ -212,6 +235,22 @@ $(function() {
         let tab = $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active");
         tab.siblings().removeClass("active");
         tab.trigger('tabActived', $this.index());
+    })
+    .on('click', '.tree-table .tree-item-arrow', function(e) {
+        e.preventDefault();
+        const tr = $(this).closest('.tree-item');
+        const level = toInt(tr.data('level'));
+        const open = !tr.hasClass('tree-item-open');
+        tr.toggleClass('tree-item-open', open);
+        let next = tr.next('.tree-item');
+        while (next && next.length > 0) {
+            const nextLevel = toInt(next.data('level'));
+            if (nextLevel <= level) {
+                return;
+            }
+            next.toggleClass('tree-level-open', open && nextLevel === level + 1);
+            next = next.next('.tree-item');
+        }
     })
     .on('click', ".page-tip .toggle", function() {
         $(this).closest('.page-tip').toggleClass('min');

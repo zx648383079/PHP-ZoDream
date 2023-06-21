@@ -36,16 +36,16 @@ var silder = $(".banner .slider").slider({
         </div>
         <div class="panel-body">
             <div class="row">
-                {channels:parent=>product_center}
+                {linkage:product_type}
                 <div class="col-md-4 col-lg-3">
-                    <a class="product-cat-item" href="{url:./category?id=:$channel.id}">
+                    <a class="product-cat-item" href="{url:./category?id=product_center&product_type=:$item.id}">
                         <div class="item-thumb">
-                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$channel.thumb}" alt="{$channel.title}">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.name}">
                         </div>
-                        <div class="item-title">{$channel.title}</div>
+                        <div class="item-title">{$item.name}</div>
                     </a>
                 </div>
-                {/channels}
+                {/linkage}
             </div>
         </div>
     </div>
@@ -59,8 +59,8 @@ var silder = $(".banner .slider").slider({
                     <i class="fa fa-angle-right"></i>
                     关于我们
                 </div>
-                <div class="panel-body">
-                    <p>
+                <div class="panel-body mw-12">
+                    <p class="f-12">
                         {channel:about_us,description}
                     </p>
                     <a href="{channel:about_us,url}" class="btn btn-default">
@@ -75,7 +75,7 @@ var silder = $(".banner .slider").slider({
                     <i class="fa fa-angle-right"></i>
                     新闻中心
                 </div>
-                <div class="panel-body">
+                <div class="panel-body mw-12">
                     {contents:category=>news_center,field=>'id,cat_id,model_id,title',num=>5}
                     <a class="news-item" href="{url:$content}">
                         <div class="item-title">{$content.title}</div>
@@ -93,7 +93,7 @@ var silder = $(".banner .slider").slider({
                     <i class="fa fa-angle-right"></i>
                     解决方案
                 </div>
-                <div class="panel-body">
+                <div class="panel-body mw-12">
                     {contents:category=>solutions,field=>'id,cat_id,model_id,title',num=>5}
                     <a class="news-item" href="{url:$content}">
                         <div class="item-title">{$content.title}</div>
@@ -107,7 +107,7 @@ var silder = $(".banner .slider").slider({
         </div>
         <div class="col-md-5 col-lg-3">
             {if:authGuest:}
-            <form class="login-panel" action="{url:./auth/login}" data-type="ajax" method="post">
+            <form class="login-panel" action="{url:/auth/login}" data-type="ajax" method="post">
                 <div class="panel-header">会员登录</div>
                 <div class="panel-body">
                     <div class="input-group">
@@ -174,20 +174,20 @@ var silder = $(".banner .slider").slider({
         </div>
         <div class="panel-body partner-floor">
             <div class="slider" data-auto="true" data-haspoint="false" data-width="234" data-height="72">
+                <div class="slider-previous">
+                    <i class="fa fa-angle-left"></i>
+                </div>
                 <div class="slider-box">
-                    <div class="slider-previous">
-                        <i class="fa fa-angle-left"></i>
-                    </div>
                     <ul>
                         {contents:category=>partners,field=>'id,cat_id,model_id,title,thumb',num=>20}
-                        <li>
+                        <li class="partner-item">
                             <a href="{url:$content}"><img src="{$content.thumb}" width="100%" alt="{$content.title}"></a>
                         </li>
                         {/contents}
                     </ul>
-                    <div class="slider-previous">
-                        <i class="fa fa-angle-right"></i>
-                    </div>
+                </div>
+                <div class="slider-next">
+                    <i class="fa fa-angle-right"></i>
                 </div>
             </div>
             <div class="share-bar">

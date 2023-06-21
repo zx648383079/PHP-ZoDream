@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 
-$this->title = $model->id > 0 ? '编辑' : '新增'.'站点';
+$this->title = ($model->id > 0 ? '编辑' : '新增').'站点';
 $js = <<<JS
 bindSite();
 JS;

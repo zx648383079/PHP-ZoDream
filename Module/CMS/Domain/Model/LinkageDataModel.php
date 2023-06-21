@@ -12,6 +12,8 @@ use Domain\Model\Model;
  * @property integer $parent_id
  * @property integer $position
  * @property string $full_name
+ * @property string $description
+ * @property string $thumb
  */
 class LinkageDataModel extends Model {
     public static function tableName() {
@@ -25,6 +27,8 @@ class LinkageDataModel extends Model {
             'parent_id' => 'int',
             'position' => 'int:0,999',
             'full_name' => 'required|string:0,100',
+            'description' => 'string:0,255',
+            'thumb' => 'string:0,255',
         ];
     }
 
@@ -36,6 +40,8 @@ class LinkageDataModel extends Model {
             'parent_id' => 'Parent Id',
             'position' => '排序',
             'full_name' => '完整名称',
+            'description' => '备注',
+            'thumb' => '图片',
         ];
     }
 

@@ -5,7 +5,9 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Helpers\Html;
+use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Support\MessageBag;
+use Zodream\Database\Model\Model as BaseModel;
 
 abstract class BaseField {
 
@@ -15,12 +17,14 @@ abstract class BaseField {
 
     abstract public function toInput(mixed $value, ModelFieldModel|array $field, bool $isJson = false): array|string;
 
-    public function filterInput(mixed $value, ModelFieldModel $field, MessageBag $bag): mixed {
-        if ($field->is_required && is_null($value)) {
-            $bag->add($field->field, $field->error_message ?? '必填项');
+    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
+        if ($field['is_required'] && is_null($value)) {
+            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
+                !empty($field['error_message']) ? $field['error_message'] : '必填项'));
         }
-        if (!is_null($value) && $field->match && !preg_match($field->match, (string)$value, $_)) {
-            $bag->add($field->field, $field->error_message ?? '必填项');
+        if (!is_null($value) && $field['match'] && !preg_match($field['match'], (string)$value, $_)) {
+            $bag->add($field['field'],
+            sprintf('[%s]%s', $field['name'], !empty($field['error_message']) ? $field['error_message'] : '必填项'));
         }
         return $value.'';
     }
@@ -29,11 +33,14 @@ abstract class BaseField {
         return Html::text((string)$value);
     }
 
-    public static function fieldSetting(ModelFieldModel|array $field, string ...$keys): mixed {
-        if ($field instanceof ModelFieldModel) {
+    public static function fieldSetting(BaseModel|array $field, string ...$keys): mixed {
+        if ($field instanceof BaseModel && method_exists($field, 'setting')) {
             return $field->setting(...$keys);
         }
-        $data = $field['setting'] ?? [];
+        $data = empty($field['setting']) ? [] : (is_array($field['setting']) ? $field['setting'] : Json::decode($field['setting']));
+        if (empty($data)) {
+            return null;
+        }
         foreach ($keys as $key) {
             if (empty($key)) {
                 return $data;

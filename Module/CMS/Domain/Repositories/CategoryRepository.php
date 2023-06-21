@@ -43,12 +43,14 @@ class CategoryRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        CacheRepository::onChannelUpdated(intval($model->id));
         return $model;
     }
 
     public static function remove(int $site, int $id) {
         SiteRepository::apply($site);
         CategoryModel::where('id', $id)->delete();
+        CacheRepository::onChannelUpdated($id);
     }
 
     public static function all(int $site) {

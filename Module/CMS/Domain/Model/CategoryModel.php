@@ -2,6 +2,7 @@
 namespace Module\CMS\Domain\Model;
 
 use Module\CMS\Domain\Entities\CategoryEntity;
+use Module\CMS\Domain\FuncHelper;
 use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Html\Tree;
 
@@ -28,7 +29,6 @@ use Zodream\Html\Tree;
  * @property string $setting
  * @property integer $created_at
  * @property integer $updated_at
- * @property ModelModel $model
  */
 class CategoryModel extends CategoryEntity {
 
@@ -49,8 +49,9 @@ class CategoryModel extends CategoryEntity {
         if (!empty($tpl)) {
             return $tpl;
         }
-        if ($this->type < 1 && $this->model) {
-            return $this->model->category_template;
+        if ($this->type < 1) {
+            $model = FuncHelper::model($this->model_id);
+            return $model['category_template'] ?? '';
         }
         return null;
     }
@@ -60,8 +61,9 @@ class CategoryModel extends CategoryEntity {
         if (!empty($tpl)) {
             return $tpl;
         }
-        if ($this->type < 1 && $this->model) {
-            return $this->model->list_template;
+        if ($this->type < 1) {
+            $model = FuncHelper::model($this->model_id);
+            return $model['list_template'] ?? '';
         }
         return null;
     }
@@ -71,8 +73,9 @@ class CategoryModel extends CategoryEntity {
         if (!empty($tpl)) {
             return $tpl;
         }
-        if ($this->type < 1 && $this->model) {
-            return $this->model->show_template;
+        if ($this->type < 1) {
+            $model = FuncHelper::model($this->model_id);
+            return $model['show_template'] ?? '';
         }
         return null;
     }

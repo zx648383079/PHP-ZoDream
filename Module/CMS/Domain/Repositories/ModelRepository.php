@@ -49,6 +49,7 @@ class ModelRepository {
         if ($id < 1) {
             CMSRepository::scene()->setModel($model)->initModel();
         }
+        CacheRepository::onModelUpdated(intval($model->id));
         return $model;
     }
 
@@ -60,6 +61,7 @@ class ModelRepository {
         $model->delete();
         ModelFieldModel::where('model_id', $id)->delete();
         CMSRepository::removeModel($model);
+        CacheRepository::onModelUpdated($id);
     }
 
     public static function all(int $type = 0) {
@@ -106,6 +108,7 @@ class ModelRepository {
         } else {
             $scene->setModel($model->model)->addField($model);
         }
+        CacheRepository::onModelUpdated(intval($model->model_id));
         return $model;
     }
 
@@ -119,6 +122,7 @@ class ModelRepository {
         }
         CMSRepository::scene()->setModel($model->model)->removeField($model);
         $model->delete();
+        CacheRepository::onModelUpdated(intval($model->model_id));
         return $model;
     }
 

@@ -7,7 +7,6 @@ use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
 use Zodream\Database\Schema\Table;
-use Zodream\Html\Page;
 
 class SingleScene extends BaseScene {
 
@@ -16,7 +15,7 @@ class SingleScene extends BaseScene {
     }
 
     public function getExtendTable(): string {
-        return sprintf('%s_%s', $this->getMainTable(), $this->model->table);
+        return sprintf('%s_%s', $this->getMainTable(), $this->model['table']);
     }
 
     public function getCommentTable(): string {
@@ -46,14 +45,14 @@ class SingleScene extends BaseScene {
 
     public function initTable(): bool {
         $field_list = array_filter($this->fieldList(), function ($item) {
-            return $item->is_system < 1;
+            return $item['is_system'] < 1;
         });
         CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
             $table->column('id')->int(10)->pk(true);
             foreach ($field_list as $item) {
                 static::converterTableField($table->column($item->field), $item);
             }
-            $table->comment($this->model->name);
+            $table->comment($this->model['name']);
         });
         return true;
     }
@@ -120,27 +119,5 @@ class SingleScene extends BaseScene {
         );
         return true;
     }
-
-
-    /**
-     * @param string $keywords
-     * @param array $params
-     * @param string $order
-     * @param int $page
-     * @param int $perPage
-     * @param string $fields
-     * @return Page
-     * @throws \Exception
-     */
-    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page {
-        if (empty($fields)) {
-            $fields = '*';
-        }
-        return $this->addQuery($this->query(), $params, $order, $fields)
-            ->when(!empty($keywords), function ($query) use ($keywords) {
-            $this->addSearchQuery($query, $keywords);
-        })->page($perPage, 'page', $page);
-    }
-
 
 }

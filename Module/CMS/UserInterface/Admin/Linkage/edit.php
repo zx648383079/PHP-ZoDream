@@ -1,9 +1,10 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 
-$this->title = $model->id > 0 ? '编辑' : '新增'.'联动菜单';
+$this->title = ($model->id > 0 ? '编辑' : '新增').'联动菜单';
 ?>
 
 <h1><?=$this->title?></h1>

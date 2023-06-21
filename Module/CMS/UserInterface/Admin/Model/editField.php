@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 
-$this->title = $model->id > 0 ? '编辑' : '新增'.'字段';
+$this->title = ($model->id > 0 ? '编辑' : '新增').'字段';
 $url = $this->url('./@admin/model/option');
 $js = <<<JS
 bindField('{$url}');

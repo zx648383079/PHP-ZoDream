@@ -79,6 +79,8 @@ class LinkageController extends Controller {
                 'name' => 'required|string:0,100',
                 'parent_id' => 'int',
                 'position' => 'int:0,999',
+                'description' => 'string:0,255',
+                'thumb' => 'string:0,255',
             ]);
             $model = LinkageRepository::dataSave($data);
         } catch (\Exception $ex) {
@@ -98,7 +100,7 @@ class LinkageController extends Controller {
     }
 
     public function treeAction(int $id) {
-        return $this->renderData(LinkageRepository::idTree($id));
+        return $this->renderData(LinkageRepository::dataTree($id));
     }
 
 

@@ -42,7 +42,7 @@ class SwitchBox extends BaseField {
         return (string)Theme::checkbox($field['field'], null, $value, $field['name']);
     }
 
-    public function filterInput(mixed $value, ModelFieldModel $field, MessageBag $bag): mixed {
+    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
         return intval($value) > 0 ? 1 : 0;
     }
 }

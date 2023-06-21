@@ -6,12 +6,11 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\DB;
 use Zodream\Database\Schema\Table;
-use Zodream\Html\Page;
 
 class MultiScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s_%s', $this->site, $this->model->table);
+        return sprintf('cms_content_%s_%s', $this->site, $this->model['table']);
     }
 
     public function getExtendTable(): string {
@@ -19,7 +18,7 @@ class MultiScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d_%s', $this->site, $this->model->table);
+        return sprintf('cms_comment_%d_%s', $this->site, $this->model['table']);
     }
 
     public function getTableByMain(mixed $isMain): string {
@@ -50,10 +49,10 @@ class MultiScene extends BaseScene {
 
     public function initTable(): bool {
         $extend_list = array_filter($this->fieldList(), function ($item) {
-            return $item->is_main < 1;
+            return $item['is_main'] < 1;
         });
         $field_list = array_filter($this->fieldList(), function ($item) {
-            return $item->is_main > 0 && $item->is_system < 1;
+            return $item['is_main'] > 0 && $item['is_system'] < 1;
         });
         CreateCmsTables::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
             $this->initMainTableField($table);
@@ -66,7 +65,7 @@ class MultiScene extends BaseScene {
             foreach ($extend_list as $item) {
                 static::converterTableField($table->column($item->field), $item);
             }
-            $table->comment($this->model->name);
+            $table->comment($this->model['name']);
         });
         return true;
     }
@@ -159,23 +158,4 @@ class MultiScene extends BaseScene {
         $this->initCommentTable();
     }
 
-    /**
-     * @param string $keywords
-     * @param array $params
-     * @param string $order
-     * @param int $page
-     * @param int $perPage
-     * @param string $fields
-     * @return Page
-     * @throws \Exception
-     */
-    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page {
-        if (empty($fields)) {
-            $fields = '*';
-        }
-        return $this->addQuery($this->query(), $params, $order, $fields)
-            ->when(!empty($keywords), function ($query) use ($keywords) {
-                $this->addSearchQuery($query, $keywords);
-            })->page($perPage, 'page', $page);
-    }
 }

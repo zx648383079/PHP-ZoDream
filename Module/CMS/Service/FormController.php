@@ -4,6 +4,7 @@ namespace Module\CMS\Service;
 
 use Exception;
 use Module\CMS\Domain\FuncHelper;
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\FormRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
@@ -33,6 +34,6 @@ class FormController extends Controller {
     }
 
     public function linkageAction(int $id) {
-        return $this->renderData(LinkageRepository::idTree($id));
+        return $this->renderData(LinkageRepository::dataTree($id));
     }
 }

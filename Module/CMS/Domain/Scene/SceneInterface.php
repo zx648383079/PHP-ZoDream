@@ -94,9 +94,13 @@ interface SceneInterface {
      * @param int $page
      * @param int $perPage
      * @param string $fields
+     * @param bool $isPage 声明需不需要获取分页链接
      * @return Page
      */
-    public function search(string $keywords, array $params = [], string $order = '', int $page = 1, int $perPage = 20, string $fields = ''): Page;
+    public function search(string $keywords, array $params = [],
+                           string $order = '', int $page = 1,
+                           int $perPage = 20,
+                           string $fields = '', bool $isPage = true): Page;
 
     public function find(int|callable $id): array;
 

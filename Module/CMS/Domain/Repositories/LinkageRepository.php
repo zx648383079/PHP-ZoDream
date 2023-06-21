@@ -60,7 +60,7 @@ class LinkageRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        cache()->delete('cms_linkage_tree_'.$model->linkage_id);
+        CacheRepository::onLinkageUpdated(intval($model->linkage_id));
         return $model;
     }
 
@@ -68,15 +68,7 @@ class LinkageRepository {
         LinkageDataModel::where('id', $id)->delete();
     }
 
-    public static function tree(int $id) {
-        return static::idTree($id);
-    }
-
-    public static function idTree(int $id) {
-        return cache()->getOrSet('cms_linkage_tree_'.$id, function () use ($id) {
-            $tree = new Tree(LinkageDataModel::query()->where('linkage_id', $id)
-                ->select('id', 'name', 'parent_id')->asArray()->get());
-            return $tree->makeIdTree();
-        }, 600);
+    public static function dataTree(int $id): array {
+        return (new Tree(CacheRepository::getLinkageCache($id)))->makeIdTree();
     }
 }

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
-$this->title = '栏目编辑';
+$this->title = $model->id > 0 ? '栏目编辑' : '新增栏目';
 $js = <<<JS
 bindCat();
 JS;

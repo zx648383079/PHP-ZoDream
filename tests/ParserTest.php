@@ -4,6 +4,7 @@ namespace Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Zodream\Template\CharReader;
 use Zodream\Template\Engine\ParserCompiler;
 
 final class ParserTest extends TestCase {
@@ -61,6 +62,32 @@ final class ParserTest extends TestCase {
         ];
     }
 
+    public static function lineProvider(): array {
+        return  [
+            ['url:./aaa:$a:?query=:$b,false', '$this->url(\'./aaa\'.$a.\'?query=\'.$b,false)'],
+            ['$a=b', '$a = \'b\''],
+            ['.a=b', '$this->a = \'b\''],
+            ['this.a=b', '$this->a = \'b\''],
+            ['case:hhhh>0', 'case \'hhhh\' > 0:'],
+            ['case:$hhhh>0', 'case $hhhh > 0:'],
+            ['case:true', 'case true:'],
+            ['tpl:file', '$this->extend(\'file\')'],
+            ['tpl:file,a=b,1', '$this->extend(\'file\',[\'a\' => \'b\',1])'],
+            ['tpl:file,[a=b],1', '$this->extend(\'file\',[\'a\' => \'b\'],1)'],
+            ['if:authGuest:', 'if (authGuest()):', 'authGuest'],
+            ['if:isset($a.a)', 'if (isset($a[\'a\'])):'],
+            ['if:isset:$a.a', 'if (isset($a[\'a\'])):'],
+            ['if:$a==qq', 'if ($a == \'qq\'):'],
+            ['if:$a==\'qq\'', 'if ($a == \'qq\'):'],
+            ['if:$name==qq,hh,false', 'if ($name == \'qq\') { echo \'hh\'; } else { echo false;}'],
+            ['if:$name==qq,hh', 'if ($name == \'qq\') { echo \'hh\'; }'],
+            ['for:$a,', 'if (!empty($a)): foreach ($a as $item):'],
+            ['$a??q', '$a ?? \'q\''],
+            ['if:$channel.children_count>0', 'if ($channel[\'children_count\'] > 0):'],
+            ['contents:category=>banner,num=>4', 'contents([\'category\' => \'banner\',\'num\' => 4])', 'contents'],
+        ];
+    }
+
     public static function funcProvider(): array
     {
         return [
@@ -96,6 +123,16 @@ final class ParserTest extends TestCase {
     public function testCode(string $input, string $output) {
         $parser = new ParserCompiler();
         $this->assertEquals($parser->parse($input), $output);
+    }
+
+    #[DataProvider('lineProvider')]
+    public function testLine(string $input, string $output, string $func = '') {
+        $parser = new ParserCompiler();
+        if (!empty($func)) {
+            $parser->registerFunc($func);
+        }
+        $reader = new CharReader($input);
+        $this->assertEquals($parser->parseCode($reader, $reader->length())[0], $output);
     }
 
     #[DataProvider('funcProvider')]

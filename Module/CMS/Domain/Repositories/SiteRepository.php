@@ -7,6 +7,11 @@ use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\ThemeManager;
 
 class SiteRepository {
+
+    const PUBLISH_STATUS_DRAFT = 0; // 草稿
+    const PUBLISH_STATUS_POSTED = 5; // 已发布
+    const PUBLISH_STATUS_TRASH = 9; // 垃圾箱
+
     public static function getList(string $keywords = '') {
         return SiteModel::query()
             ->when(!empty($keywords), function ($query) {
@@ -27,6 +32,7 @@ class SiteRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        CacheRepository::onSiteUpdated(intval($model->id));
         if (!empty($oldTheme) && $oldTheme !== $model->theme) {
             $old = new SiteModel();
             $old->id = $model->id;

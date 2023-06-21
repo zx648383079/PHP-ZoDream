@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Service\Api\Admin;
 
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
@@ -55,7 +56,7 @@ class LinkageController extends Controller {
     }
 
     public function treeAction(int $id) {
-        return $this->renderData(LinkageRepository::tree($id));
+        return $this->renderData(LinkageRepository::dataTree($id));
     }
 
     public function dataSaveAction(Input $input) {

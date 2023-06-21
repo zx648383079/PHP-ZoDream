@@ -9,6 +9,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -63,6 +64,8 @@ class CreateCmsTables extends Migration {
             $table->string('name', 100);
             $table->uint('parent_id')->default(0);
             $table->uint('position', 2)->default(99);
+            $table->string('description')->default('');
+            $table->string('thumb')->default('');
             $table->string('full_name', 200)->default('');
         })->append(SiteModel::tableName(), function (Table $table) {
             $table->id();
@@ -74,6 +77,8 @@ class CreateCmsTables extends Migration {
             $table->uint('match_type', 2)->default(0);
             $table->string('match_rule', 100)->default('');
             $table->bool('is_default')->default(0);
+            $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_POSTED)
+                ->comment('发布状态');
             $table->text('options')->nullable();
             $table->timestamps();
         })->autoUp();

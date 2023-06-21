@@ -68,10 +68,20 @@ function parseAjax(data: IResponse) {
         return;
     }
     if (data.code !== 200) {
-        Dialog.tip(data.message || '操作执行失败！');
+        if (typeof data.message === 'object') {
+            let msg = '';
+            $.each(data.message, (i, v) => {
+                $.each(v, (j, m) => {
+                    msg = i + (m || '表单未填写完整');
+                });
+            });
+            alert(msg || '表单未填写完整');
+            return;
+        }
+        alert(data.message || '操作执行失败！');
         return;
     }
-    Dialog.tip(data.message || '操作执行完成！');
+    alert(data.message || '操作执行完成！');
     if (data.data && data.data.refresh) {
         setTimeout(() => {
             window.location.reload();
@@ -120,13 +130,18 @@ $(function() {
         const target = $(this).attr('modal');
         const modal = $('#' + target).show();
         updateModalCenter(modal);
-    }).on('submit', "form[data-type=ajax]", function() {
-        let $this = $(this);
-        let loading = Dialog.loading();
-        postJson($this.attr('action'), $this.serialize(), function(data) {
-            loading.close();
+    }).on('submit', "form[data-type=ajax]", function(e) {
+        e.preventDefault();
+        const $this = $(this);
+        // let loading = Dialog.loading();
+        $.post($this.attr('action'), $this.serialize(), function(data) {
+            if (data.code === 200 && $this.hasClass('login-panel')) {
+                window.location.reload();
+                return;
+            }
+            // loading.close();
             parseAjax(data);
-        });
+        }, 'json');
         return false;
     }).on('click', "a[data-type=ajax]", function(e) {
         e.preventDefault();

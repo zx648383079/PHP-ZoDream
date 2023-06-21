@@ -1,5 +1,4 @@
-
-
+@import 'mixin';
 .table {
     display: table;
     width: 100%;
@@ -66,20 +65,44 @@ table {
         }
         .sort-desc {
             &::after {
-                font-family: "Font Awesome 5 Free";
-                font-size: inherit;
-                text-rendering: auto;
-                -webkit-font-smoothing: antialiased;
+                @include iconFont();
                 content: "\f15e";
             }
         }
         .sort-asc {
             &::after {
-                font-family: "Font Awesome 5 Free";
-                font-size: inherit;
-                text-rendering: auto;
-                -webkit-font-smoothing: antialiased;
+                @include iconFont();
                 content: "\f15d";
+            }
+        }
+    }
+}
+
+.tree-table {
+    .tree-arrow-td {
+        padding: 0 0 0 .3rem;
+        text-align: left;
+    }
+    .tree-item-arrow {
+        color: #444;
+        @include icon('\f07b');
+    }
+    .tree-item {
+        display: none;
+    }
+    .tree-level-open {
+        display: table-row;
+    }
+    .tree-next-level {
+        .tree-item-arrow {
+            color: #767676;
+        }
+    }
+    .tree-item-open {
+        .tree-item-arrow {
+            color: #337ab7;
+            &::before {
+                content: "\f07c";
             }
         }
     }

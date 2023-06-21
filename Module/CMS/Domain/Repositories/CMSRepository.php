@@ -102,46 +102,37 @@ class CMSRepository {
         if (!empty(self::$cacheSite)){
             return self::$cacheSite;
         }
-        /** @var SiteModel[] $model_list */
-        $model_list = SiteModel::query()->get();
-        if (empty($model_list)) {
+        $request = request();
+        $site = static::matchSite($request->host(), ltrim($request->path(), '/'));
+        if ($site < 1) {
             throw new \Exception('无任何站点');
         }
-        $default = $model_list[0];
-        $url = new Uri(request()->url());
-        $path = ltrim($url->getPath(), '/');
-        foreach ($model_list as $item) {
-            if ($item->is_default) {
-                $default = $item;
-            }
-            if ($item->match_type == SiteModel::MATCH_TYPE_DOMAIN) {
-                if ($item->match_rule === $url->getHost()) {
-                    return self::$cacheSite = $item;
-                }
-                continue;
-            }
-            if ($item->match_type == SiteModel::MATCH_TYPE_PATH) {
-                if (str_starts_with($path, ltrim($item->match_rule, '/'))) {
-                    return self::$cacheSite = $item;
-                }
-                continue;
-            }
-        }
-        return self::$cacheSite = $default;
+        return self::$cacheSite = SiteModel::findOrThrow($site);
     }
 
-    public static function options() {
-        $site = static::site();
-        $items = [];
-        foreach ($site['options'] as $item) {
-            $items[$item['code']] = Option::formatOption((string)($item['value'] ?? ''), $item['type']);
+    protected static function matchSite(string $host, string $path): int {
+        $items = CacheRepository::getSiteCache();
+        if (empty($items)) {
+            return 0;
         }
-        foreach (
-            ['title', 'keywords', 'description', 'logo'] as $code
-        ) {
-            $items[$code] = $code === 'logo' ? url()->asset($site[$code]) : $site[$code];
+        $default = $items[0]['id'];
+        foreach ($items as $item) {
+            if ($item['is_default'] > 0) {
+                $default = $item;
+            }
+            if ($item['match_type'] == SiteModel::MATCH_TYPE_DOMAIN) {
+                if ($item['match_rule'] === $host) {
+                    return $item['id'];
+                }
+                continue;
+            }
+            if ($item['match_type'] == SiteModel::MATCH_TYPE_PATH) {
+                if (str_starts_with($path, ltrim($item['match_rule'], '/'))) {
+                    return $item['id'];
+                }
+            }
         }
-        return $items;
+        return $default;
     }
 
     public static function siteId() {

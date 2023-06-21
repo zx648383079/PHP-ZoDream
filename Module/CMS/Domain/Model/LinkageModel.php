@@ -29,7 +29,7 @@ class LinkageModel extends Model {
             'id' => 'Id',
             'name' => '名称',
             'type' => '类型',
-            'code' => 'Code',
+            'code' => '别名(模板调用)',
         ];
     }
 
