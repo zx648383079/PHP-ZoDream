@@ -98,12 +98,16 @@ class SiteModel extends Model {
     }
 
     public function url(string $path, array $data = []) {
+        $rule = $this->match_rule;
         if ($this->match_type < 1) {
             $uri = new Uri(url($path, $data));
-            return $uri->setHost($this->match_rule);
+            return empty($rule) ? $uri : $uri->setHost($this->match_rule);
         }
         if (str_starts_with($path, './')) {
             $path = substr($path, 2);
+        }
+        if (empty($rule)) {
+            return url(sprintf('/%s', $path), $data);
         }
         return url(sprintf('/%s/%s', $this->match_rule, $path), $data);
     }
