@@ -22,6 +22,7 @@ $this->registerCssFile([
     ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 
 $user = auth()->user();
+$isAdministrator = $user && $user->isAdministrator()
 ?>
 
 
@@ -49,7 +50,7 @@ $user = auth()->user();
         ],
         true,
         false,
-        $user->isAdministrator()
+        $isAdministrator
     ],
     [
         '权限管理',
@@ -79,7 +80,7 @@ $user = auth()->user();
         ],
         false,
         false,
-        $user->isAdministrator()
+        $isAdministrator
     ],
     [
         '第三方管理',
@@ -94,7 +95,7 @@ $user = auth()->user();
         ],
         true,
         false,
-        $user->isAdministrator()
+        $isAdministrator
     ],
     [
         '消息管理',

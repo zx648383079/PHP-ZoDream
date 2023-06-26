@@ -118,7 +118,7 @@ class CMSRepository {
         $default = $items[0]['id'];
         foreach ($items as $item) {
             if ($item['is_default'] > 0) {
-                $default = $item;
+                $default = $item['id'];
             }
             if ($item['match_type'] == SiteModel::MATCH_TYPE_DOMAIN) {
                 if ($item['match_rule'] === $host) {
