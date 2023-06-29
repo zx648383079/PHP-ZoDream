@@ -7,15 +7,15 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
         '@zodream-admin.css',
+        '@editor.css',
         '@dialog.css',
         '@wechat.css'
     ])->registerJsFile([
-        'ueditor/ueditor.config.js',
-        'ueditor/ueditor.all.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
+        '@jquery.editor.min.js',
         '@main.min.js',
         '@wechat.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);

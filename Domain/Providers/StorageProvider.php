@@ -55,7 +55,7 @@ class StorageProvider {
             $table->id();
             $table->string('name', 100);
             $table->string('extension', 10);
-            $table->char('md5', 32)->unique();
+            $table->char('md5', 32);//->unique();
             $table->string('path', 200);
             $table->uint('folder', 2)->default(1);
             $table->string('size')->default('0');

@@ -469,7 +469,7 @@ function bindComment() {
 }
 
 function bindMemberCenter() {
-    $(window).scroll(function() {
+    $(window).on('scroll', function() {
         $('header.top').toggleClass('fixed', $(window).scrollTop() < 176);
     });
 }

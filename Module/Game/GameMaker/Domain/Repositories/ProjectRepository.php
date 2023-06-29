@@ -66,4 +66,10 @@ final class ProjectRepository {
         return compact('character_count', 'character_today', 'view_today',
             'view_count', 'billing_count', 'billing_today');
     }
+
+    public static function getList(string $keywords) {
+        return ProjectEntity::query()->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, ['name']);
+        })->where('status', 1)->orderBy('id', 'desc')->page();
+    }
 }

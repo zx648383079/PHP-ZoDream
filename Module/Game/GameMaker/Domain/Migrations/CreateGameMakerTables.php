@@ -15,7 +15,6 @@ use Module\Game\GameMaker\Domain\Entities\IndigenousEntity;
 use Module\Game\GameMaker\Domain\Entities\ItemEntity;
 use Module\Game\GameMaker\Domain\Entities\MapAreaEntity;
 use Module\Game\GameMaker\Domain\Entities\MapEntity;
-use Module\Game\GameMaker\Domain\Entities\MapIndigenousEntity;
 use Module\Game\GameMaker\Domain\Entities\MapItemEntity;
 use Module\Game\GameMaker\Domain\Entities\MessageEntity;
 use Module\Game\GameMaker\Domain\Entities\MineEntity;
@@ -193,32 +192,27 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('west_id')->default(0)->comment('西边区域');
             $table->uint('x')->default(0);
             $table->uint('y')->default(0);
+            $table->bool('is_begin_map')->default(0)->comment('是否是新手村，随机出现');
         })->append(MapAreaEntity::tableName(), function (Table $table) {
             $table->comment('大地图表');
             $table->id();
             $table->uint('project_id');
             $table->string('name');
-            $table->uint('parent_id');
+            $table->uint('parent_id')->default(0);
             $table->uint('x')->default(0);
             $table->uint('y')->default(0);
             $table->uint('width')->default(0);
             $table->uint('height')->default(0);
         })->append(MapItemEntity::tableName(), function (Table $table) {
-            $table->comment('区域物品');
+            $table->comment('区域物品,包括npc、怪物、矿石、植物、掉落等');
             $table->id();
             $table->uint('project_id');
             $table->uint('map_id');
+            $table->uint('item_type', 1)->default(0);
             $table->uint('item_id');
             $table->uint('amount')->default(1);
             $table->timestamp('expired_at');
             $table->timestamp('refresh_at');
-            $table->timestamps();
-        })->append(MapIndigenousEntity::tableName(), function (Table $table) {
-            $table->comment('区域npc,怪物');
-            $table->id();
-            $table->uint('project_id');
-            $table->uint('map_id');
-            $table->uint('indigenous_id');
             $table->uint('refresh_space')->default(0)->comment('怪物击杀后自动刷新时间');
             $table->uint('status', 1)->default(0);
             $table->timestamp('refresh_at');

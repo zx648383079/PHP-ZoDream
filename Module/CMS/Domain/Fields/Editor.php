@@ -5,7 +5,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
-
+use Zodream\Template\View;
 
 class Editor extends BaseField {
 
@@ -61,13 +61,14 @@ class Editor extends BaseField {
                 'value' => $value
             ];
         }
-        $options = $this->getEditorOptions();
         $id = 'editor_'.$field['id'];
         $js = <<<JS
-var ue = UE.getEditor('{$id}', {$options});
+$('#{$id}').editor();
 JS;
-        view()->registerJsFile('/assets/ueditor/ueditor.config.js')
-            ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
+        view()
+//            ->registerJsFile('@jquery.editor.min.js')
+//            ->registerCssFile('@editor.css')
+            ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div>{$field['name']}</div>
 <script id="{$id}" style="height: 400px" name="{$field['field']}" type="text/plain">
@@ -75,28 +76,5 @@ JS;
 </script>
 HTML;
 
-    }
-
-    private function getEditorOptions(int $mode = 0): string {
-        if ($mode < 1) {
-            return '{}';
-        }
-        return json_encode([
-            'toolbars' => [
-                [
-                    'fullscreen',
-                    'source',
-                    'undo',
-                    'redo',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'customstyle',
-                    'link',
-                    'simpleupload',
-                    'insertvideo',
-                ]
-            ]
-        ]);
     }
 }

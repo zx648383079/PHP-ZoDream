@@ -24,7 +24,7 @@ class MapAreaEntity extends Entity {
         return [
             'project_id' => 'required|int',
             'name' => 'required|string:0,255',
-            'parent_id' => 'required|int',
+            'parent_id' => 'int',
             'x' => 'int',
             'y' => 'int',
             'width' => 'int',

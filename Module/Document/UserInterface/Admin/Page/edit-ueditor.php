@@ -8,23 +8,13 @@ $js = <<<JS
 $('[name=parent_id]').change(function () { 
     $(".extent-box").toggle($(this).val() > 0);
 });
-var ue = UE.getEditor('container',{
-        toolbars: [
-            ['fullscreen', 'source', 'undo', 'redo', 'bold', 'italic', 'underline', 'customstyle', 'insertcode', 'inserttable', 
-            'edittable', //表格属性
-        'edittd', //单元格属性'imagecenter',
-            'justifyleft', //居左对齐
-            'justifyright', //居右对齐
-            'justifycenter', //居中对齐
-            'justifyjustify', //两端对齐
-            'anchor', //锚点
-            'link','simpleupload', 'insertvideo']
-        ],
-    });
+$('#container').editor();
 JS;
 $this->registerJsFile([
-    'ueditor/ueditor.config.js',
-    'ueditor/ueditor.all.js',
+    '@jquery.editor.min.js',
+])
+->registerCssFile([
+    '@editor.css',
 ])
 ->registerJs($js, View::JQUERY_READY);
 ?>

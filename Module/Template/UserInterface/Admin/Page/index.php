@@ -13,10 +13,10 @@ $js = <<<JS
 bindPage('{$id}');
 JS;
 $this->registerJsFile([
-    'ueditor/ueditor.config.js',
-    'ueditor/ueditor.all.js',
+    '@jquery.editor.min.js',
     '@visual_editor.min.js'
 ])->registerCssFile([
+    '@editor.css',
     '@visual_editor.css'
 ])->registerJs($js, View::JQUERY_READY);
 ?>

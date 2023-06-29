@@ -9,6 +9,7 @@ $this->registerCssFile([
         '@zodream.css',
         '@zodream-admin.css',
         '@dialog.css',
+        '@editor.css',
         '@datetimer.css',
         '@shop_admin.css',
         '@select2.min.css'
@@ -19,8 +20,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@select2.min.js',
         '@jquery.datetimer.min.js',
-        // 'ueditor/ueditor.config.js',
-        // 'ueditor/ueditor.all.js',
+        '@jquery.editor.min.js',
         '@template-web.js',
         '@main.min.js',
         '@shop_admin.min.js'

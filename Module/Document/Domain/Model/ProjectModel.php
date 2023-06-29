@@ -39,7 +39,7 @@ class ProjectModel extends Model {
     protected function rules() {
         return [
             'user_id' => 'required|int',
-            'cat_id' => 'required|int',
+            'cat_id' => 'int',
             'name' => 'required|string:0,35',
             'description' => 'string:0,255',
             'cover' => 'string:0,255',

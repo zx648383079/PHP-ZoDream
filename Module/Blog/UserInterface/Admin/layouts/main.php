@@ -9,6 +9,7 @@ $this->registerCssFile([
         '@select2.min.css',
         '@zodream.css',
         '@zodream-admin.css',
+        '@editor.css',
         '@dialog.css',
         '@blog_admin.css'
     ])->registerJsFile([
@@ -17,8 +18,7 @@ $this->registerCssFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
         '@select2.min.js',
-        'ueditor/ueditor.config.js',
-        'ueditor/ueditor.all.js',
+        '@jquery.editor.min.js',
         '@main.min.js',
         '@blog_admin.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);

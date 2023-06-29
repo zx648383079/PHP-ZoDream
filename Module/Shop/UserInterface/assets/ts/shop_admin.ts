@@ -1229,14 +1229,13 @@ function bindOperate() {
         let that = $(this);
         let box = that.closest('form');
         box.find('input[name=operate]').val(that.data('operate'));
-        box.submit();
+        box.trigger('submit');
     });
 }
 
 function bindEdit() {
     $.when(
-        $.getScript('/assets/ueditor/ueditor.config.js'), 
-        $.getScript('/assets/ueditor/ueditor.all.js')).then(function() {
+        $.getScript('/assets/js/jquery.editor.min.js')).then(function() {
             UE.delEditor('container');
             UE.getEditor('container');
     });

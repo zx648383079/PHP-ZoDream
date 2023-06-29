@@ -62,12 +62,11 @@ function bindBlogPage() {
 
 function bindBlog(id: number, type: number, langs = {}) {
     bindLoadImg();
-
     if (type != 1) {
-        uParse('#content', {
-            rootPath: '/assets/ueditor'
-        });
-        SyntaxHighlighter.all();
+        // uParse('#content', {
+        //     rootPath: '/assets/ueditor'
+        // });
+        // SyntaxHighlighter.all();
     }
     let dynamicBox = $('.book-dynamic');
     $.get(BASE_URI + 'log', {blog: id}, html => {

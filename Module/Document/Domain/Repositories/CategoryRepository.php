@@ -5,7 +5,7 @@ namespace Module\Document\Domain\Repositories;
 use Domain\Model\Model;
 use Domain\Model\SearchModel;
 use Domain\Repositories\CRUDRepository;
-use Module\OnlineTV\Domain\Models\CategoryModel;
+use Module\Document\Domain\Model\CategoryModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Tree;
 

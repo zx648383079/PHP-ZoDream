@@ -31,7 +31,7 @@ class CreateDocumentTables extends Migration {
             $table->comment('项目表');
             $table->id();
             $table->uint('user_id');
-            $table->uint('cat_id');
+            $table->uint('cat_id')->default(0);
             $table->string('name', 35)->comment('项目名');
             $table->string('cover', 200)->default('')
                 ->comment('项目封面');

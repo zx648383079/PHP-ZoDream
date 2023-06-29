@@ -2,15 +2,26 @@
 declare(strict_types=1);
 namespace Module\Game\GameMaker\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\Game\GameMaker\Domain\Entities\MapAreaEntity;
 use Module\Game\GameMaker\Domain\Entities\MapEntity;
+use Module\Game\GameMaker\Domain\Entities\MapItemEntity;
 
 final class MapRepository {
 
     const POS_MAP = ['north_id', 'east_id', 'south_id', 'west_id'];
 
-    public static function makerList(int $project) {
+    public static function makerList(int $project, int $area, string $keywords = '') {
+        ProjectRepository::isSelfOrThrow($project);
+        return MapEntity::where('project_id', $project)
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['name']);
+            })
+            ->where('area_id', $area)->page();
+    }
+
+    public static function makerAll(int $project) {
         ProjectRepository::isSelfOrThrow($project);
         $area_items = MapAreaEntity::where('project_id', $project)->get();
         $items = MapEntity::where('project_id', $project)->get();
@@ -118,5 +129,62 @@ final class MapRepository {
                 self::doSave($item, true);
             } catch (Exception) {}
         }
+    }
+
+    public static function makerAreaList(int $project, int $parent = 0, string $keywords = '') {
+        ProjectRepository::isSelfOrThrow($project);
+        return MapAreaEntity::query()->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, ['name']);
+        })->where('parent_id', $parent)->where('project_id', $project)->orderBy('id', 'desc')->page();
+    }
+
+    public static function makerAreaGet(int $project, int $id) {
+        ProjectRepository::isSelfOrThrow($project);
+        return MapAreaEntity::findOrThrow($id);
+    }
+
+    public static function makerAreaSave(array $data) {
+        ProjectRepository::isSelfOrThrow(intval($data['project_id']));
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = $id > 0 ? MapAreaEntity::where('project_id', $data['project_id'])
+            ->where('id', $id)->first() : new MapAreaEntity();
+        $model->load($data);
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function makerAreaRemove(int $project, int $id) {
+        ProjectRepository::isSelfOrThrow($project);
+        MapAreaEntity::where('project_id', $project)
+            ->where('id', $id)->delete();
+    }
+
+    public static function makerItemList(int $project, int $map) {
+        ProjectRepository::isSelfOrThrow($project);
+        return MapItemEntity::where('project_id', $project)
+            ->where('map_id', $map)
+            ->orderBy('item_type', 'asc')->page();
+    }
+
+    public static function makerItemSave(array $data) {
+        ProjectRepository::isSelfOrThrow(intval($data['project_id']));
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = $id > 0 ? MapItemEntity::where('project_id', $data['project_id'])
+            ->where('id', $id)->first() : new MapItemEntity();
+        $model->load($data);
+        if (!$model->save()) {
+            throw new Exception($model->getFirstError());
+        }
+        return $model;
+    }
+
+    public static function makerItemRemove(int $project, int $id) {
+        ProjectRepository::isSelfOrThrow($project);
+        MapItemEntity::where('project_id', $project)
+            ->where('id', $id)->delete();
     }
 }

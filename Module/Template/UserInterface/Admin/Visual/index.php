@@ -16,13 +16,13 @@ $this->registerJsFile([
     '@jquery.datetimer.min.js',
     '@main.min.js',
     '@template.min.js',
-    'ueditor/ueditor.config.js',
-    'ueditor/ueditor.all.js',
+    '@jquery.editor.min.js',
     '@visual_editor.min.js'
 ])->registerCssFile([
     '@font-awesome.min.css',
     '@zodream.css',
     '@zodream-admin.css',
+    '@editor.css',
     '@dialog.css',
     '@template.css',
     '@visual_editor.css',
