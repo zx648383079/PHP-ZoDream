@@ -18,6 +18,8 @@ use Domain\Entities\Entity;
  * @property integer $y
  * @property integer $updated_at
  * @property integer $created_at
+ * @property integer $org_id
+ * @property integer $team_id
  */
 class CharacterEntity extends Entity {
     public static function tableName() {
@@ -37,6 +39,8 @@ class CharacterEntity extends Entity {
             'y' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
+            'org_id' => 'int',
+            'team_id' => 'int',
         ];
     }
 

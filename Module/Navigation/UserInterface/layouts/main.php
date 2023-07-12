@@ -11,7 +11,7 @@ $this->registerCssFile([
     '@searcher.css'
 ])->registerJsFile([
     '@jquery.min.js',
-    '@jquery.cookie.js',
+    '@js.cookie.min.js',
     '@jquery.dialog.min.js',
     '@main.min.js',
     '@searcher.min.js'

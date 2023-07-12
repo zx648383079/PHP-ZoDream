@@ -35,6 +35,8 @@ class SiteController extends Controller {
                 'match_type' => 'int:0,127',
                 'match_rule' => 'string:0,100',
                 'is_default' => 'int:0,127',
+                'status' => 'int:0,127',
+                'language' => 'string:0,10',
                 'options' => '',
             ]));
         } catch (\Exception $ex) {

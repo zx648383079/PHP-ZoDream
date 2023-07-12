@@ -12,7 +12,7 @@ $this->registerCssFile([
     '@home.css'
 ])->registerJsFile([
     '@jquery.min.js',
-    '@jquery.cookie.js',
+    '@js.cookie.min.js',
     '@jquery.lazyload.min.js',
     '@jquery.dialog.min.js',
     '@main.min.js',

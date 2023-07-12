@@ -51,6 +51,16 @@ class CMSRepository {
         return self::$cacheTheme = static::site()->theme;
     }
 
+    public static function registerLocate(Directory $folder, ?string $language) {
+        if (empty($language)) {
+            return;
+        }
+        $file = $folder->file(sprintf('languages/%s.json', $language));
+        if (!$file->exist()) {
+            return;
+        }
+    }
+
     public static function registerView(string|SiteModel $theme = '', ?ViewFactory $provider = null): ViewFactory {
         if (empty($theme)) {
             $theme = static::theme();

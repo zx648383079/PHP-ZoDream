@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service;
 
 use Module\Book\Domain\Model\BookAuthorModel;
@@ -6,12 +7,9 @@ use Module\Book\Domain\Model\BookModel;
 
 class AuthorController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction(int $id) {
         $author = BookAuthorModel::find($id);
-        $hot_book = BookModel::ofClassify()->isOpen()->where('author_id',  $id)->orderBy('click_count', 'desc')->limit(15)->all();
-        $book_list = BookModel::ofClassify()->isOpen()->where('author_id',  $id)->all();
-        $month_click = BookModel::ofClassify()->isOpen()->where('author_id',  $id)->orderBy('click_count', 'desc')->limit(5)->all();
-        $hot_author = BookAuthorModel::limit(10)->all();
-        return $this->show(compact('author', 'hot_book', 'book_list', 'month_click', 'hot_author'));
+        $book_list = BookModel::ofClassify()->isOpen()->where('author_id',  $id)->get();
+        return $this->show(compact('author', 'book_list',));
     }
 }

@@ -18,10 +18,12 @@ $this->registerJs($js);
     <?=Form::select('theme', [$themes, 'description', 'name'])?>
     <?=Form::select('match_type', ['域名', '路径'])?>
     <?=Form::text('match_rule')?>
+    <?=Form::text('language')->tip('具体语言请查看模板')?>
     <?=Form::file('logo')?>
     <?=Form::text('keywords')?>
     <?=Form::textarea('description')?>
-   
+    <?=Form::select('status', [0 => '下线', 5 => '上线'])?>
+
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>

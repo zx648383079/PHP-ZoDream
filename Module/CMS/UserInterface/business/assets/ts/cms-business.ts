@@ -129,6 +129,9 @@ $(function() {
         e.stopPropagation();
         const target = $(this).attr('modal');
         const modal = $('#' + target).show();
+        if (target === 'searchDialog') {
+            return;
+        }
         updateModalCenter(modal);
     }).on('submit', "form[data-type=ajax]", function(e) {
         e.preventDefault();

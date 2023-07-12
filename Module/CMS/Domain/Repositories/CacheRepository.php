@@ -60,7 +60,9 @@ final class CacheRepository {
             }
             $method = sprintf('%s::flush%sCache', self::class, Str::studly($item));
             if (is_callable($method)) {
-                call_user_func($method);
+                try {
+                    call_user_func($method);
+                } catch (\Exception){};
             }
         }
     }
@@ -207,8 +209,10 @@ final class CacheRepository {
     }
 
     public static function flushDataCache() {
-        $site = CMSRepository::siteId();
-        cache()->delete(self::mapKey($site));
+        try {
+            $site = CMSRepository::siteId();
+            cache()->delete(self::mapKey($site));
+        } catch (\Exception) {};
         cache()->delete(self::siteKey());
     }
 

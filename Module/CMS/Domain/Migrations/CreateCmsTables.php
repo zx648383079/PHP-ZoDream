@@ -73,6 +73,7 @@ class CreateCmsTables extends Migration {
             $table->string('keywords')->default('');
             $table->string('description')->default('');
             $table->string('logo')->default('');
+            $table->string('language', 10)->default('');
             $table->string('theme', 100);
             $table->uint('match_type', 2)->default(0);
             $table->string('match_rule', 100)->default('');

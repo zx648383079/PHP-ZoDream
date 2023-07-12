@@ -2,80 +2,82 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '书单-'.$list->title;
-$this->body_class = 'bodyph';
-$this->extend('layouts/header');
+$this->title = '书单-'.$list['title'];
 ?>
-<div class="clear"></div>
-<!--body开始-->
-<div class="box-container local">当前位置：
-    <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('./list')?>">书单</a>
-</div>
-<div class="clear"></div>
-<div class="box-container m_list list">
-    <div class="book-list-info">
-        <div class="info-main">
-            <div class="title"><?=$list->title?></div>
-            <p class="desc"><?=$list->description?></p>
-            <div class="info-footer">
-                <a href=""><?=$list->user->name?></a>
-                <span><?=$list->created_at?></span>
+
+<div class="container">
+    <div class="panel-container novel-list-info">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="info-main">
+                    <div class="title"><?=$list['title']?></div>
+                    <p class="desc"><?=$list['description']?></p>
+                    <div class="info-footer">
+                        <a href=""><?=$list['user']['name']?></a>
+                        <span class="time"><?=$list['created_at']?></span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="info-action">
-            <div class="info-count">
-                <span><?=$list->book_count?>本书</span>
-                <span><?=$list->click_count?>浏览</span>
-                <span><?=$list->collect_count?>收藏</span>
+            <div class="col-md-4">
+                <div class="info-action">
+                    <div class="info-count">
+                        <span><?=$list['book_count']?>本书</span>
+                        <span><?=$list['click_count']?>浏览</span>
+                        <span><?=$list['collect_count']?>收藏</span>
+                    </div>
+                    <div class="text-center mt-30">
+                        <div class="btn btn-primary">
+                            <i class="fa fa-heart"></i>
+                            收藏
+                        </div>
+                    </div>
+                </div>
             </div>
-            <a href="" class="btn">收藏</a>
         </div>
     </div>
-
-    <?php foreach($items as $item):?>
-        <div class="list-book-item">
-            <div class="thumb">
-                <a href="<?=$this->url('./book', ['id' => $item->book_id])?>">
-                    <img src="/assets/images/book_default.jpg" alt="">
+    <div class="panel-container">
+        <?php foreach($model_list as $item):?>
+        <div class="list-novel-item">
+            <div class="item-thumb">
+                <a href="<?=$this->url('./book', ['id' => $item['book_id']])?>">
+                    <img src="<?= $item['book']['cover'] ?>" alt="">
                 </a>
             </div>
-            <div class="info">
-                <a href="<?=$this->url('./book', ['id' => $item->book_id])?>" class="title"><?=$item->book->name?></a>
+            <div class="item-body">
+                <a class="item-title" href="<?=$this->url('./book', ['id' => $item['book_id']])?>"><?=$item['book']['name']?></a>
                 <p>
-                    <a href="">作者</a>
-                    <span>1w</span>
-                    <span>完结</span>
+                    <a><?=$item['book']['author']['name']?></a>|
+                    <span><?=$item['book']['format_size']?></span>|
+                    <span><?=$item['book']['status_label']?></span>
                 </p>
                 <p>
-                更新时间：4 年前
+                    更新时间：<?=$item['updated_at']?>
                 </p>
-                <p>
-                单主评分：
-                    <span class="star-box">
+                <div>
+                    单主评分：
+                    <div class="star-bar">
                     <?php for($i = 0; $i < 10; $i += 2):?>
                         <i class="fa fa-star <?=$i < $item['star'] ? 'light' : ''?>"></i>
                     <?php endfor;?>
-                    </span>
-                </p>
+                    </div>
+                </div>
             </div>
-            <p class="remark">
-                <?=$item->remark?>
+            <p class="item-remark">
+                <?=$item['remark']?>
             </p>
-            <div class="action-box">
-                <a href="">
-                    赞
+            <div class="item-action">
+                <a>
+                    <i class="fa fa-thumbs-up"></i><?= $item['agree_count'] ?>
                 </a>
-                <a href="">
-                    踩
+                <a>
+                    <i class="fa fa-thumbs-down"></i><?= $item['disagree_count'] ?>
                 </a>
-                <a href="">
+                <a>
                     加入书架
                 </a>
             </div>
         </div>
-    <?php endforeach;?>
+        <?php endforeach;?>
+    </div>
+
 </div>
-<!--body结束-->
-<div class="clear"></div>
-<?php $this->extend('layouts/footer');?>

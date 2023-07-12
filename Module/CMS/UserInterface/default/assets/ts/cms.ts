@@ -88,7 +88,7 @@ class Search {
         let that = this;
         let isEngine = false;
         const engineBox = this.box.find(".search-engine");
-        engineBox.click(function(e) {
+        engineBox.on('click', function(e) {
             e.stopPropagation();
         }).on('click', '.toggle-box', function(e) {
             $(this).toggleClass('checked');

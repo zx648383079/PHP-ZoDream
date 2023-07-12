@@ -19,6 +19,12 @@
 composer install --ignore-platform-reqs
 ```
 
+### 生产环境部署
+
+```shell
+composer install --no-dev
+```
+
 ### 资源文件编译说明
 
 ```cmd

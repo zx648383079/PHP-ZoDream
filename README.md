@@ -18,6 +18,12 @@ Increase the linkage within each module.
 composer install --ignore-platform-reqs
 ```
 
+### Production Environment Deployment
+
+```shell
+composer install --no-dev
+```
+
 ### Resource file compilation instructions
 
 ```cmd

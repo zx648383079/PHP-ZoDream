@@ -10,9 +10,6 @@ class ListController extends Controller {
         if ($id > 0) {
             return $this->detailAction($id);
         }
-        if (request()->isMobile()) {
-            return $this->redirect('./mobile/list');
-        }
         $model_list = BookListModel::with('user')->orderBy('created_at', 'desc')->page();
         return $this->show(compact('model_list'));
     }

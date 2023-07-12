@@ -3,42 +3,113 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = 'ZoDream';
-$this->body_class = 'bodyph';
-$this->extend('layouts/header');
 ?>
-<div class="clear"></div>
-<!--body开始-->
-<div class="box-container local">当前位置：
-    <a href="<?=$this->url('./')?>" title=""><?=$site_name?></a>&nbsp;>&nbsp;
-    <a href="<?=$this->url('./search/list')?>">搜索“<?= $this->text($keywords)?>”</a></div>
-<div class="clear"></div>
-<div class="box-container m_list list">
-    <div class="Con">
-            <div class="m_head"> <span class="c">类型</span> <span class="t">书名/章节</span> <span class="w">字数</span> <span class="a">作者</span><span class="z">状态</span></div>
-            <ul class="ul_m_list">
-                <?php foreach ($book_list as $key => $item):?>
-                    <li <?=$key % 2 == 1 ? 'class="odd"' : '' ?>>
-                        <div class="c">[<a href="<?=$item->category->url?>" title="<?=$item->category->name?>" target="_blank"><?=$item->category->real_name?></a>]</div>
-                        <div class="title">
-                            <div class="t"><a href="<?=$item->url?>" title="<?=$item->name?>" target="_blank"><?=$item->name?></a></div>
-                            <div class="n">[<a href="<?=$item->download_url?>" title="<?=$item->name?>txt下载" target="_blank">下载</a>] <a href="#" target="_blank"></a> </div>
-                        </div>
-                        <div class="words">0</div>
-                        <div class="author"><a href="<?=$item->author->url?>" title="<?=$item->author->name?>作品" target="_blank"><?=$item->author->name?></a></div>
-                        <div class="abover"><span><?=$item->status_label?></span></div>
-                    </li>
-                <?php endforeach;?>
-            </ul>
-            <div class="bot_more">
-                <div class="page_info">每页显示<b>&nbsp;50&nbsp;</b>部，共<b><?=$book_list->getTotal()?></b>部</div>
-                <div class="page_num">
-                    <div><a class="info">第<b><?=$book_list->getIndex()?></b>页/共<?=$book_list->getTotal()?>页</a>
-                        <a href="<? echo $pagestart; ?>" title="第一页">第一页</a><a href="<? echo $pagepre; ?>" title="上一页">上一页</a></div>
-                    <div><a href="<? echo $pagenext; ?>" title="下一页">下一页</a>
-                        <a href="<? echo $pageend; ?>" title="最后一页">最后一页</a></div>
+<div class="container main-box">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="filter-box">
+                <div class="filter-line">
+                      <div class="filter-header">
+                          分类
+                      </div>
+                      <div class="filter-body">
+                            <a class="<?= $cat_id < 1 ? 'active' : '' ?>">全部</a>
+                            <?php foreach($cat_list as $item):?>
+                            <a href="<?= $this->url('./search', ['cat_id' => $item['id']]) ?>" class="<?= $item['id'] === $cat_id ? 'active' : '' ?>"><?=$item['name']?></a>
+                            <?php endforeach;?>
+                      </div>
+                </div>
+                <div class="filter-line">
+                    <div class="filter-header">
+                        排序
+                    </div>
+                    <div class="filter-body">
+                        <a class="active">热度
+                            <i class="fa fa-sort-alpha-down"></i>
+                        </a>
+                        <a class="active">热度
+                            <i class="fa fa-sort-alpha-up"></i>
+                        </a>
+                        <a>热度
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-9">
+            <?php if($mode < 1):?>
+            <div class="row">
+            <?php foreach($book_list as $item):?>
+            <div class="col-md-6">
+                <div class="novel-item">
+                    <div class="item-cover">
+                        <a href="<?=$item['url']?>">
+                            <img src="<?=$item['cover']?>" alt="<?=$item['name']?>">
+                            <div class="mask">
+                
+                            </div>
+                        </a>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-name">
+                            <a href="<?=$item['url']?>"><?=$item['name']?></a>
+                        </div>
+                        <div class="item-tags">
+                            <a>
+                                <i class="fa fa-user"></i>
+                                <?=$item['author']['name']?>
+                            </a>
+                            <a href="<?=$item['cat']['url']?>"><?=$item['cat']['real_name']?></a>
+                            <a href="javascription:;"><?=$item['status_label']?></a>
+                        </div>
+                        <div class="item-meta">
+                            <?=$item['description']?>
+                        </div>
+                        <div class="item-status">
+                            <span><?=$item['format_size']?></span>
+                            <?php if (!$item['over_at'] && $item['last_chapter']):?>
+                                <a href="<?=$item['last_chapter']['url']?>"><?=$item['last_chapter']['name']?></a>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach;?>
+            </div>
+            <?php else:?>
+            <table class="table table-hover novel-table">
+                <thead>
+                    <tr>
+                        <th>类别</th>
+                        <th>小说书名</th>
+                        <th>最新章节</th>
+                        <th>字数</th>
+                        <th>小说作者</th>
+                        <th>更新时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($book_list as $item):?>
+                <tr>
+                    <td>「<a href="<?=$item['cat']['url']?>"><?=$item['cat']['real_name']?></a>」</td>
+                    <td>
+                        <a href="<?=$item['url']?>"><?=$item['name']?></a>
+                    </td>
+                    <td>
+                        <?php if (!$item['over_at'] && $item['last_chapter']):?>
+                            <a href="<?=$item['last_chapter']['url']?>"><?=$item['last_chapter']['name']?></a>
+                        <?php endif;?>
+                    </td>
+                    <td><?=$item['format_size']?></td>
+                    <td><?=$item['author']['name']?></td>
+                    <td><?=$item['updated_at']?></td>
+                </tr>
+                <?php endforeach;?>
+                </tbody>
+            </table>
+            <?php endif;?>
+
+            <?= $book_list->pageLink() ?>
+        </div>
+    </div>
 </div>
-<!--body结束-->
-<div class="clear"></div>
-<?php $this->extend('layouts/footer');?>

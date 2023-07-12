@@ -117,7 +117,7 @@ class BookModel extends BookEntity {
      * @return BookChapterModel
      */
     public function getLastChapterAttribute() {
-        return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->one();
+        return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->first();
     }
 
     public function getChapterCountAttribute() {

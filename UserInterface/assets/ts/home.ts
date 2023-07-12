@@ -5,11 +5,11 @@ $(function() {
     if (diff > 0) {
         footer.css('margin-top', diff + 'px');
     }
-    if (!$.cookie('c_t')) {
+    if (!window.localStorage.getItem('c_t')) {
         $('.dialog-cookie-tip').show();
     }
     $('.dialog-cookie-tip .btn').on('click',function() {
-        $.cookie('c_t', 1);
+        window.localStorage.setItem('c_t', '1');
         $(this).closest('.dialog-cookie-tip').hide();
     });
     if (typeof SUGGESTION_URI === 'undefined' && typeof BASE_URI !== 'undefined') {

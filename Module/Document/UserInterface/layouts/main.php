@@ -52,7 +52,7 @@ if(isset($project_list)) {
                     $child['name'],
                     [$baseUri, 'id' => $child['id']],
                     'fa fa-file',
-                    null,
+                    [],
                     false,
                     $is_active
                 ];

@@ -8,11 +8,14 @@ use Module\Game\GameMaker\Domain\Entities\BagEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterIdentityEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterStateEntity;
+use Module\Game\GameMaker\Domain\Entities\CheckLogEntity;
 use Module\Game\GameMaker\Domain\Entities\FinancialEntity;
 use Module\Game\GameMaker\Domain\Entities\FriendEntity;
 use Module\Game\GameMaker\Domain\Entities\HouseEntity;
 use Module\Game\GameMaker\Domain\Entities\IndigenousEntity;
 use Module\Game\GameMaker\Domain\Entities\ItemEntity;
+use Module\Game\GameMaker\Domain\Entities\MailEntity;
+use Module\Game\GameMaker\Domain\Entities\MailUserEntity;
 use Module\Game\GameMaker\Domain\Entities\MapAreaEntity;
 use Module\Game\GameMaker\Domain\Entities\MapEntity;
 use Module\Game\GameMaker\Domain\Entities\MapItemEntity;
@@ -33,6 +36,7 @@ use Module\Game\GameMaker\Domain\Entities\SkillEntity;
 use Module\Game\GameMaker\Domain\Entities\StoreEntity;
 use Module\Game\GameMaker\Domain\Entities\TaskEntity;
 use Module\Game\GameMaker\Domain\Entities\TaskItemEntity;
+use Module\Game\GameMaker\Domain\Entities\TaskLogEntity;
 use Module\Game\GameMaker\Domain\Entities\TeamEntity;
 use Module\Game\GameMaker\Domain\Entities\TeamUserEntity;
 use Module\Game\GameMaker\Domain\Entities\WarehouseEntity;
@@ -69,6 +73,8 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('user_id');
             $table->uint('project_id');
             $table->uint('identity_id')->default(0);
+            $table->uint('org_id')->default(0);
+            $table->uint('team_id')->default(0);
             $table->string('nickname')->comment('游戏名');
             $table->bool('sex')->default(0)->comment('游戏名,男/女');
             $table->uint('grade', 4)->default(0)->comment('等级');
@@ -312,6 +318,15 @@ final class CreateGameMakerTables extends Migration {
             $table->string('text');
             $table->string('option')->default('');
             $table->timestamps();
+        })->append(TaskLogEntity::tableName(), function (Table $table) {
+            $table->comment('任务执行记录');
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('user_id');
+            $table->uint('task_id');
+            $table->string('step')->default('');
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
         })->append(ActionLogEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('project_id');
@@ -321,6 +336,28 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('action');
             $table->string('remark')->default('');
             $table->timestamp('created_at');
+        })->append(CheckLogEntity::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('user_id');
+            $table->uint('type', 1)->default(0)->comment('签到类型，1为补签');
+            $table->uint('running', 5)->default(1)->comment('连续几天');
+            $table->string('reward')->default('')->comment('奖励');
+            $table->timestamp('created_at');
+        })->append(MailEntity::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('project_id');
+            $table->text('content');
+            $table->string('gift')->default('');
+            $table->timestamp('expired_at');
+            $table->timestamp('created_at');
+        })->append(MailUserEntity::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('mail_id');
+            $table->uint('user_id');
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
         })->append(MessageEntity::tableName(), function(Table $table) {
             $table->comment('聊天频道');
             $table->id();
