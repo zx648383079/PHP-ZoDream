@@ -13,6 +13,6 @@ $this->set('current_id', $model->id);
         <h1> <?=$this->title?></h1>
     </div>
     <div class="col-lg-12 style-type-1">
-        <?=MarkDown::parse($model->content, true)?>
+        <?=MarkDown::parse((string)$model->content, true)?>
     </div>
 </div>
