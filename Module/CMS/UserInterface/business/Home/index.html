@@ -32,7 +32,7 @@ var silder = $(".banner .slider").slider({
     <div class="panel">
         <div class="panel-header">
             <i class="fa fa-angle-right circle-icon"></i>
-            产品中心
+            {__:产品中心}
         </div>
         <div class="panel-body">
             <div class="row">
@@ -57,14 +57,14 @@ var silder = $(".banner .slider").slider({
             <div class="panel with-border">
                 <div class="panel-header">
                     <i class="fa fa-angle-right"></i>
-                    关于我们
+                    {__:关于我们}
                 </div>
                 <div class="panel-body mw-12">
                     <p class="f-12">
                         {channel:about_us,description}
                     </p>
                     <a href="{channel:about_us,url}" class="btn btn-default">
-                        查看详情
+                        {__:查看详情}
                     </a>
                 </div>
             </div>
@@ -73,7 +73,7 @@ var silder = $(".banner .slider").slider({
             <div class="panel with-border">
                 <div class="panel-header">
                     <i class="fa fa-angle-right"></i>
-                    新闻中心
+                    {__:新闻中心}
                 </div>
                 <div class="panel-body mw-12">
                     {contents:category=>news_center,field=>'id,cat_id,model_id,title',num=>5}
@@ -82,7 +82,7 @@ var silder = $(".banner .slider").slider({
                     </a>
                     {/contents}
                     <a href="{channel:news_center,url}" class="btn btn-default">
-                        查看详情
+                        {__:查看详情}
                     </a>
                 </div>
             </div>
@@ -91,7 +91,7 @@ var silder = $(".banner .slider").slider({
             <div class="panel with-border">
                 <div class="panel-header">
                     <i class="fa fa-angle-right"></i>
-                    解决方案
+                    {__:解决方案}
                 </div>
                 <div class="panel-body mw-12">
                     {contents:category=>solutions,field=>'id,cat_id,model_id,title',num=>5}
@@ -100,7 +100,7 @@ var silder = $(".banner .slider").slider({
                     </a>
                     {/contents}
                     <a href="{channel:solutions,url}" class="btn btn-default">
-                        查看详情
+                        {__:查看详情}
                     </a>
                 </div>
             </div>
@@ -108,10 +108,10 @@ var silder = $(".banner .slider").slider({
         <div class="col-md-5 col-lg-3">
             {if:authGuest:}
             <form class="login-panel" action="{url:/auth/login}" data-type="ajax" method="post">
-                <div class="panel-header">会员登录</div>
+                <div class="panel-header">{__:会员登录}</div>
                 <div class="panel-body">
                     <div class="input-group">
-                        <label for="">账号：</label>
+                        <label for="">{__:账号：}</label>
                         <input type="text" name="email" required>
                     </div>
                     <div class="input-group">
@@ -125,8 +125,8 @@ var silder = $(".banner .slider").slider({
                     </div>
                 </div>
                 <div class="panel-action">
-                    <button class="btn btn-default">登录</button>
-                    <div class="btn btn-info" modal="authDialog">注册</div>
+                    <button class="btn btn-default">{__:登录}</button>
+                    <div class="btn btn-info" modal="authDialog">{__:注册}</div>
                 </div>
             </form>
             {else}
@@ -136,9 +136,9 @@ var silder = $(".banner .slider").slider({
                     <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$user.avatar}" alt="{$user.name}">
                 </div>
                 <div class="line-row-item">
-                    <label for="">昵称：</label>
+                    <label for="">{__:昵称：}</label>
                     <span>{$user.name}</span>
-                    <a href="{redirect:'/auth/logout'}" data-type="ajax" data-tip="确认退出账户？">[登出]</a>
+                    <a href="{redirect:'/auth/logout'}" data-type="ajax" data-tip="确认退出账户？">[{__:登出}]</a>
                 </div>
                 <div class="line-row-item">
                     <label for="">邮箱：</label>
@@ -170,7 +170,7 @@ var silder = $(".banner .slider").slider({
     <div class="panel with-border">
         <div class="panel-header">
             <i class="fa fa-angle-right"></i>
-            合作伙伴
+            {__:合作伙伴}
         </div>
         <div class="panel-body partner-floor">
             <div class="slider" data-auto="true" data-haspoint="false" data-width="234" data-height="72">
@@ -191,9 +191,9 @@ var silder = $(".banner .slider").slider({
                 </div>
             </div>
             <div class="share-bar">
-                <a href=""><i class="fab fa-alipay"></i> 微博</a>
-                <a href=""><i class="fab fa-amazon"></i>微博</a>
-                <a href=""><i class="fa fa-share-alt"></i>分享</a>
+                <a href=""><i class="fab fa-alipay"></i>{__:微信}</a>
+                <a href=""><i class="fab fa-amazon"></i>{__:微博}</a>
+                <a href=""><i class="fa fa-share-alt"></i>{__:分享}</a>
             </div>
         </div>
     </div>

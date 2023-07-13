@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Service\Install;
 
 use Infrastructure\Environment;
@@ -125,19 +126,21 @@ class HomeController extends Controller {
 
     public function importModuleAction(array $module, array $user) {
         try {
+            $items = [];
             foreach ($this->mustModuleItems as $uri => $item) {
                 if (!empty($module['uri'][$item])) {
                     $uri = $module['uri'][$item];
                 }
-                ModuleRepository::install($uri, 'Module\\'.$item, true, true);
+                $items[$uri] = 'Module\\'.$item;
             }
             foreach ($module['checked'] as $item) {
                 if (in_array($item, $this->mustModuleItems)) {
                     continue;
                 }
                 $uri = $module['uri'][$item];
-                ModuleRepository::install($uri, 'Module\\'.$item, true, true);
+                $items[$uri] = 'Module\\'.$item;
             }
+            ModuleRepository::install($items, '', true, true);
             AuthRepository::createAdmin($user['email'], $user['password']);
             return $this->renderData([
                 'url' => url('./complete')
@@ -201,19 +204,20 @@ class HomeController extends Controller {
             }
             $modules[trim($uri, '/')] = $module_list[$num - 1];
         }
+        $items = [];
         foreach ($this->mustModuleItems as $uri => $item) {
             if (in_array($item, $modules)) {
                 $uri = array_search($item, $modules);
             }
-            ModuleRepository::install($uri, 'Module\\'.$item, true, true);
+            $items[$uri] = 'Module\\'.$item;
         }
         foreach ($modules as $path => $module) {
             if (in_array($module, $this->mustModuleItems)) {
                 continue;
             }
-            ModuleRepository::install($path, 'Module\\'.$module, true, true);
+            $items[$path] = 'Module\\'.$module;
         }
-
+        ModuleRepository::install($items, '', true, true);
         $email = $request->post('请输入管理员邮箱：', '');
         $password = $request->post('请输入管理员密码：', '');
         if (empty($email) || empty($password)) {

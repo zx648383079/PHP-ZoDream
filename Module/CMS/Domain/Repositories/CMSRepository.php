@@ -16,6 +16,7 @@ use Module\CMS\Domain\ThemeManager;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
+use Zodream\Helpers\Json;
 use Zodream\Helpers\PinYin;
 use Zodream\Helpers\Str;
 use Zodream\Http\Uri;
@@ -59,12 +60,17 @@ class CMSRepository {
         if (!$file->exist()) {
             return;
         }
+        FuncHelper::$translateItems = Json::decode($file->read());
     }
 
-    public static function registerView(string|SiteModel $theme = '', ?ViewFactory $provider = null): ViewFactory {
+    public static function registerView(string|SiteModel $theme = '',
+                                        ?ViewFactory $provider = null): ViewFactory {
+        $language = '';
         if (empty($theme)) {
             $theme = static::theme();
+            $language = static::site()->language;
         } elseif ($theme instanceof SiteModel) {
+            $language = $theme->language;
             $theme = $theme->theme;
         }
         if (empty($provider)) {
@@ -83,6 +89,7 @@ class CMSRepository {
             ->setConfigs([
                 'suffix' => '.html'
             ]);
+        static::registerLocate($dir, $language);
         return $provider;
     }
 

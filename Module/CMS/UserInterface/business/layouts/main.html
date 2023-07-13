@@ -31,18 +31,19 @@
                     <div class="nav-group-bar">
                         <div class="nav-item" modal="searchDialog">
                             <i class="fa fa-search"></i>
-                            搜索
+                            {__:搜索}
                         </div>
                         <a class="nav-item" href="javascript:setHome(this);">
-                            设为首页
+                            {__:设为首页}
                         </a>
                         <a class="nav-item" href="javascript:addFavorite();">
-                            收藏
+                            {__:收藏}
                         </a>
                         <div class="nav-item">
+                            {> $lang = option:language}
                             <select>
                                 <option>中文</option>
-                                <option>English</option>
+                                <option {if:$lang=='en',selected}>English</option>
                             </select>
                         </div>
                     </div>
@@ -54,7 +55,7 @@
                     <i class="nav-toggle"></i>
                     <ul>
                         <li class="nav-item">
-                            <a href="{url:./}">首页</a>
+                            <a href="{url:./}">{__:首页}</a>
                         </li>
                         {channels:tree=>1,group=>nav}
                         <li class="nav-item {channelActive:$channel.id,true}">
@@ -101,12 +102,12 @@
 
                     <div class="link-image-bar">
                         <div class="link-item">
-                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:wx_qr}" alt="微信公众号">
-                            <p>微信</p>
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:wx_qr}" alt="{__:微信公众号}">
+                            <p>{__:微信}</p>
                         </div>
                         <div class="link-item">
-                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:weibo_qr}" alt="微博">
-                            <p>微博</p>
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{option:weibo_qr}" alt="{__:微博}">
+                            <p>{__:微博}</p>
                         </div>
                     </div>
                 </div>
@@ -134,7 +135,7 @@
             {$catid = isset($cat) ? $cat.id : 'product_center'}
             <form class="dialog-body flat-input" action="{search:id,$catid}">
                 <input type="text" class="form-control" name="keywords" required>
-                <button class="btn btn-default">搜索</button>
+                <button class="btn btn-default">{__:搜索}</button>
                 {searchHidden:}
             </form>
         </div>

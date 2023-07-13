@@ -164,7 +164,7 @@ final class CacheRepository {
                 $items[$item['code']] = Option::formatOption((string)($item['value'] ?? ''), $item['type']);
             }
             foreach (
-                ['title', 'keywords', 'description', 'logo'] as $code
+                ['title', 'keywords', 'description', 'logo', 'language'] as $code
             ) {
                 $items[$code] = $code === 'logo' ? url()->asset($site[$code]) : $site[$code];
             }

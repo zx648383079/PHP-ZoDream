@@ -34,10 +34,25 @@ class FuncHelper {
         'model' => 0,
     ];
 
+    public static array $translateItems = [];
     protected static array $index = [];
 
     public static function cache(): MemoryCacheProvider {
         return MemoryCacheProvider::getInstance();
+    }
+
+    /**
+     * 翻译
+     * @param string $format
+     * @param array $data
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function translate(string $format, array $data = []) {
+        if (isset(static::$translateItems[$format])) {
+            return trans()->format(static::$translateItems[$format], $data);
+        }
+        return trans()->translate($format, $data);
     }
 
     public static function option(string $code, string $type = '') {
@@ -985,6 +1000,7 @@ class FuncHelper {
             'authUser',
             'fileName',
         ]);
+        $compiler->registerFunc('__', sprintf('%s::%s', static::class, 'translate'));
         static::registerBlock($compiler, 'comments', 'comment');
         static::registerBlock($compiler, 'channels', 'channel');
         static::registerBlock($compiler, 'contents', 'content');
