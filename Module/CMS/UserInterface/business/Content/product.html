@@ -38,7 +38,24 @@
                     </div>
                     <div class="tab-body">
                         <div class="tab-item active">{$data.content}</div>
-                        <div class="tab-item">相关产品及附件</div>
+                        <div class="tab-item">
+                            {contents:category=>product_sample,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            <div class="res-download-item">
+                                <a href="{url:$content}" class="item-title">{$content.title}</a>
+                                {if:authGuest:}
+                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {else}
+                                <a href="{$content.file}" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {/if}
+                            </div>
+                            {/contents}
+                        </div>
                         <div class="tab-item">{$data.applications}</div>
                         <div class="tab-item">
                             {contents:category=>product_cert,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
@@ -58,7 +75,24 @@
                             </div>
                             {/contents}
                         </div>
-                        <div class="tab-item">技术资料</div>
+                        <div class="tab-item">
+                            {contents:category=>product_information,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            <div class="res-download-item">
+                                <a href="{url:$content}" class="item-title">{$content.title}</a>
+                                {if:authGuest:}
+                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {else}
+                                <a href="{$content.file}" class="item-action">
+                                    <i class="fa fa-file-pdf"></i>
+                                    下载
+                                </a>
+                                {/if}
+                            </div>
+                            {/contents}
+                        </div>
                     </div>
                 </div>
             </div>

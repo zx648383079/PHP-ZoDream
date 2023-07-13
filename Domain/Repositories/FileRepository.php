@@ -104,7 +104,10 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadFromData(array|string $data, array $config, string $base64 = 'upload') {
+    public static function uploadFromData(array|string|null $data, array $config, string $base64 = 'upload') {
+        if (is_null($data)) {
+            throw new Exception('file error');
+        }
         if ($base64 === 'base64') {
             $upload = new UploadBase64($data);
         } elseif ($base64 === 'remote') {

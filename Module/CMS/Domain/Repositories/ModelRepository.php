@@ -207,7 +207,7 @@ class ModelRepository {
                 continue;
             }
             ModelFieldModel::where('id', $model->id)
-                ->update(['name', $item['name']]);
+                ->update(['name' => $item['name']]);
         }
         if (empty($add)) {
             return;

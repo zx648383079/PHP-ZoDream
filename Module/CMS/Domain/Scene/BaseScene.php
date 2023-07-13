@@ -571,7 +571,7 @@ abstract class BaseScene implements SceneInterface {
         );
     }
 
-    public static function converterTableField(Column $column, ModelFieldModel $field): void {
-        static::newField($field->type)->converterField($column, $field);
+    public static function converterTableField(Column $column, ModelFieldModel|array $field): void {
+        static::newField($field['type'])->converterField($column, is_array($field) ? new ModelFieldModel($field) : $field);
     }
 }

@@ -199,6 +199,7 @@ class ContentRepository {
                     return;
                 }
                 $query->where('id', $id);
-            })->select('id','title','thumb')->page($perPage, page: $page);
+            })->select('id','title','thumb')
+            ->orderBy('created_at', 'desc')->page($perPage, page: $page);
     }
 }

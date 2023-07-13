@@ -345,11 +345,13 @@ class ThemeManager {
             $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
             $data['type'] = 'linkage';
         }
-        $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])->first();
+        $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])
+            ->first();
         if (!empty($model)) {
             if (empty($data['name']) || $model->name === $data['name']) {
                 return;
             }
+            /** @var ModelFieldModel $model */
             $model->name = $data['name'];
             $model->save();
             return;

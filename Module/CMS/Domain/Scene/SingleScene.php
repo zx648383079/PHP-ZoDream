@@ -50,7 +50,7 @@ class SingleScene extends BaseScene {
         CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
             $table->column('id')->int(10)->pk(true);
             foreach ($field_list as $item) {
-                static::converterTableField($table->column($item->field), $item);
+                static::converterTableField($table->column($item['field']), $item);
             }
             $table->comment($this->model['name']);
         });
