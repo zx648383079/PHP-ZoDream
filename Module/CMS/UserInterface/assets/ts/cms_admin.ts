@@ -106,4 +106,23 @@ $(function() {
     setTimeout(() => {
         $('.column-full-item .overlay').remove();
     }, 1000);
+    $(document).on('click', '.multi-input-container .selected-container .item-close', function() {
+        $(this).closest('.selected-item').remove();
+    }).on('click', '.multi-input-container .add-container .add-item', function() {
+        const $this = $(this);
+        const target = $this.closest('.multi-input-container').find('.selected-container');
+        const input = $this.closest('.add-container').find('select:last,input,textarea');
+        const val = input.val();
+        let label = val;
+        if (input[0].nodeName === 'SELECT') {
+            const ele = input[0] as HTMLSelectElement;
+            label = ele.options[ele.selectedIndex].text;
+        }
+        const name = input.attr('name').substring(4);
+        target.append(`<div class="selected-item">
+        <span class="item-close">&times;</span>
+        <div class="item-label">${label}</div>
+        <input type="hidden" name="${name}[]" value="${val}">
+    </div>`);
+    });
 });

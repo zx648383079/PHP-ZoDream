@@ -5,6 +5,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 
@@ -55,6 +56,7 @@ class CategoryController extends Controller {
             return $this->renderFailure($model->getFirstError());
         }
         CMSRepository::generateCategoryTable($model);
+        CacheRepository::onChannelUpdated(intval($model->id));
         return $this->renderData([
             'url' => $this->getUrl('category'),
             'no_jax' => true
@@ -77,6 +79,7 @@ class CategoryController extends Controller {
             }
         }
         CategoryModel::whereIn('id', $items)->delete();
+        CacheRepository::onChannelUpdated($id);
         return $this->renderData([
             'url' => $this->getUrl('category'),
             'no_jax' => true

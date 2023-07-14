@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Scene;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Fields\BaseField;
+use Module\CMS\Domain\Fields\Linkages;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -280,6 +281,7 @@ abstract class BaseScene implements SceneInterface {
             $field = implode(',', array_map(function($key) use ($prefix) {
                 return in_array($key, ['*', 'id']) ? $prefix. $key : $key;
             }, explode(',', $field)));
+
             $query->leftJoin($this->getExtendTable().' extra', $prefix.'id', 'extra.id');
         }
         $query->select($field);
@@ -307,10 +309,57 @@ abstract class BaseScene implements SceneInterface {
         foreach ($extraNames as $key) {
             if (str_contains($order, $key)) {
                 $hasExtra = true;
-                $order = str_replace($key, 'extra.' . $key, $order);
+                $order = $this->addExtraKey($order, $key);
             }
         }
         return [$order, $hasExtra];
+    }
+
+    /**
+     * 添加 extra. 标志
+     * @param string $val
+     * @param string $search
+     * @return string
+     */
+    private function addExtraKey(string $val, string $search): string {
+        $len = strlen($search);
+        $tags = ['', ',', '('];
+        $i = 0;
+        while (true) {
+            $j = strpos($val, $search, $i);
+            if ($j === false) {
+                break;
+            }
+            if (($j > 0 && !in_array($val[$j - 1], $tags))
+                || (($j + $len) < strlen($val) && !in_array($val[$j + $len], $tags))) {
+                $i = $j + $len;
+                continue;
+            }
+            $val = sprintf('%sextra.%s', substr($val, 0, $j),
+                substr($val, $j));
+            $i = $j + $len + 6;
+        }
+        return $val;
+    }
+
+    protected function isMultipleField(string $key): bool {
+        foreach ($this->fieldList() as $item) {
+            if ($item['field'] !== $key) {
+                continue;
+            }
+            return $item['type'] === 'linkages';
+        }
+        return false;
+    }
+
+    private function addWhereIfMultiple(Builder $query, string $key, mixed $value) {
+        $items = BaseField::fromMultipleValue($value);
+        if (empty($items)) {
+            return;
+        }
+        $query->where($key, 'REGEXP', implode('|', array_map(function($item) {
+            return BaseField::toMultipleValueQuery($item);
+        }, $items)));
     }
 
     private function addWhereOrIn(Builder $query, array $params, string $prefix = ''): Builder {
@@ -318,6 +367,10 @@ abstract class BaseScene implements SceneInterface {
             return $query;
         }
         foreach ($params as $key => $item) {
+            if ($this->isMultipleField($key)) {
+                $this->addWhereIfMultiple($query, $prefix.$key, $item);
+                continue;
+            }
             if (is_array($item)) {
                 $query->whereIn($prefix.$key, $item);
                 continue;

@@ -64,3 +64,37 @@ table {
         }
     }
 }
+
+.multi-input-container {
+    .selected-container {
+        min-height: 2rem;
+    }
+    .selected-item {
+        line-height: 1.5rem;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        background-color: #ebf5ff;
+        border-radius: 2px;
+        margin-right: 5px;
+        white-space: nowrap;
+        display: inline-block;
+        user-select: none;
+        .item-close {
+            border-right: 1px solid #b8dbff;
+        }
+        .item-label,
+        .item-close {
+            display: inline-block;
+            padding: 1px 5px;
+        }
+        &:hover {
+            box-shadow: 0 .3rem .5rem rgba($color: #000000, $alpha: .1);
+        }
+    }
+    .add-container {
+        display: flex;
+        .add-item {
+            user-select: none;
+        }
+    }
+}

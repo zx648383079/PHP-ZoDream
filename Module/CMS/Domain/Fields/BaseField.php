@@ -82,4 +82,44 @@ abstract class BaseField {
         return $data;
     }
 
+    /**
+     * 多选值合并成字符串
+     * @param array|string $items
+     * @return string
+     */
+    public static function toMultipleValue(array|string $items): string {
+        $items = static::fromMultipleValue($items);
+        return sprintf(',%s,', implode(',', $items));
+    }
+
+    /**
+     * 多选值合并成查询值
+     * @param mixed $value
+     * @return string
+     */
+    public static function toMultipleValueQuery(mixed $value): string {
+        return sprintf(',%d,', $value);
+    }
+
+    /**
+     * 多选的值转成数组
+     * @param mixed $val
+     * @return array
+     */
+    public static function fromMultipleValue(mixed $val): array {
+        if (empty($val)) {
+            return [];
+        }
+        $items = is_array($val) ? $val : explode(',', (string)$val);
+        $data = [];
+        foreach ($items as $item) {
+            $item = intval($item);
+            if ($item < 1 || in_array($item, $data)) {
+                continue;
+            }
+            $data[] = $item;
+        }
+        return $data;
+    }
+
 }

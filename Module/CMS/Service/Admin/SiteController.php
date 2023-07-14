@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\SiteModel;
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
@@ -99,6 +100,7 @@ class SiteController extends Controller {
         }
         $model->options = $options;
         $model->save();
+        CacheRepository::flushOptionCache();
         return $this->renderData([
             'url' => $this->getUrl('site/option', ['id' => $id])
         ]);

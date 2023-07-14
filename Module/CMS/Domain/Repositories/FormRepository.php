@@ -80,6 +80,10 @@ class FormRepository {
         if (!$res) {
             throw new Exception('表单填写有误');
         }
+        $notifyMail = $model->setting('notify_mail');
+        if (!empty($notifyMail)) {
+            // TODO 发送邮件通知对方
+        }
         return $res;
     }
 

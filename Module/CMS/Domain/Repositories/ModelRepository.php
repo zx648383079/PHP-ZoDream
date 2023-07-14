@@ -10,6 +10,34 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Scene\SingleScene;
 
 class ModelRepository {
+
+    const FIELD_TYPE_ITEMS = [
+        'text' => '文本字段',
+        'textarea' => '多行文本',
+        'markdown' => 'Markdown',
+        'editor' => '编辑器',
+        'radio' => '单选按钮',
+        'select' => '下拉选择',
+        'switch' => '开关',
+        'checkbox' => '复选框',
+        'color' => '颜色选取',
+        'email' => '邮箱字段',
+        'password' => '密码字段',
+        'url' => '链接字段',
+        'ip' => 'IP字段',
+        'number' => '数字字段',
+        'date' => '日期时间',
+        'file' => '单文件',
+        'image' => '单图',
+        'images' => '多图',
+        'files' => '多文件',
+        'linkage' => '联动菜单',
+        'linkages' => '多联动菜单',
+        'location' => '定位',
+        'map' => '地图',
+        'model' => '关联实体模型',
+    ];
+
     public static function getList(string $keywords = '', int $type = 0) {
         $items = ModelModel::query()
             ->when(!empty($keywords), function ($query) {
@@ -179,7 +207,7 @@ class ModelRepository {
     }
 
     public static function fieldType(): array {
-        $items = (new ModelFieldModel())->type_list;
+        $items = static::FIELD_TYPE_ITEMS;
         $data = [];
         foreach ($items as $value => $name) {
             $data[] = compact('name', 'value');

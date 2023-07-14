@@ -247,7 +247,8 @@ class FuncHelper {
                 unset($data[$item['field']]);
                 continue;
             }
-            if ($item['type'] === 'linkage') {
+            if ($item['type'] === 'linkage' ||
+                $item['type'] === 'linkages') {
                 $data[$item['field']] = self::treeChildId(
                     CacheRepository::getLinkageCache(
                         intval(BaseField::fieldSetting($item,
@@ -965,8 +966,9 @@ class FuncHelper {
             }
             $i = count(static::$index);
             $box = sprintf('$_%s_%d', $method, $i);
+            $lastKey = sprintf('$_last_%s', $method);
             static::$index[] = $box;
-            return sprintf('%s=%s::%s(%s); foreach(%s as $%s):', $box,
+            return sprintf('%s=%s=%s::%s(%s); foreach(%s as $%s):', $lastKey, $box,
                 static::class, $method, $params, $box, $item);
         }, true);
     }

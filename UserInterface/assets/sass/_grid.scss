@@ -114,9 +114,17 @@ $prefix: bs;
         }
     }
 
+    @for $i from 1 through $columns {
+        .col-#{$i} {
+            @include make-col($i, $columns)
+        }
+    }
+
     $breakpoint-counter: 0;
     @each $breakpoint in map-keys($breakpoints) {
         $breakpoint-counter: ($breakpoint-counter + 1);
+
+        
 
         @for $i from 1 through $columns {
             .col-#{$breakpoint}-#{$i} {

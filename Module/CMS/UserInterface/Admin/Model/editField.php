@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Module\CMS\Domain\Repositories\ModelRepository;
 /** @var $this View */
 
 $this->title = ($model->id > 0 ? '编辑' : '新增').'字段';
@@ -18,7 +19,7 @@ $this->registerJs($js);
     <?=Form::text('field', true)?>
     <?=Form::radio('is_main', ['否', '是'])?>
     <?php if($model->is_system < 1):?>
-    <?=Form::select('type', $model->type_list)?>
+    <?=Form::select('type', ModelRepository::FIELD_TYPE_ITEMS)?>
     <div class="option-box">
 
     </div>

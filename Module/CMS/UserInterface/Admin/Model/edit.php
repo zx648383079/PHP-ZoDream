@@ -29,6 +29,7 @@ $this->registerJs($js);
         <?=Form::checkbox('setting[open_captcha]')->value($model->setting('open_captcha'))->label('验证码')->tip('是否开启验证码')?>
         <?=Form::text('setting[form_template]')->value($model->setting('form_template'))->label('表单模板')->tip('表单填写的模板，文件夹为Content')?>
         <?=Form::text('setting[show_template]')->value($model->setting('show_template'))->label('显示模板')->tip('表单内容显示的模板，文件夹为Content')?>
+        <?=Form::text('setting[notify_mail]')->value($model->setting('notify_mail'))->label('邮件通知地址')->tip('是否需要同时把表单发送到指定的邮箱')?>
     </div>
     <?=Form::text('position')?>
     <div class="btn-group">

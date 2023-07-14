@@ -27,16 +27,18 @@
                 </div>
             </div>
             <div class="page-body">
-                <div class="page-panel with-product">
+                <div class="row">
                     {for:$page,$item}
-                    <a class="product-item" href="{url:$item}">
-                        <div class="item-thumb">
-                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
-                        </div>
-                        <div class="item-name">
-                            {$item.title}
-                        </div>
-                    </a>
+                    <div class="col-6 col-lg-3 col-md-3">
+                        <a class="product-item" href="{url:$item}">
+                            <div class="item-thumb">
+                                <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
+                            </div>
+                            <div class="item-name">
+                                {$item.title}
+                            </div>
+                        </a>
+                    </div>
                     {/for}
                 </div>
                 {if:$page}

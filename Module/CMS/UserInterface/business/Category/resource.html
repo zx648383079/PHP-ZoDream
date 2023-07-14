@@ -9,19 +9,19 @@
         </div>
         <div class="col-md-9">
             <div class="path-bar with-search-bar">
-                <div class="page-search-bar">
-                    <select name="" id="">
-                        <option value="">所有栏目</option>
+                <form class="page-search-bar">
+                    <select name="id">
+                        <option value="{channel:download,id}">所有栏目</option>
                         {channels:parent=>download}
                         <option value="{$channel.id}">{$channel.title}</option>
                         {/channels}
                     </select>
                     <div class="search-input">
-                        <input type="text" placeholder="关键词：">
+                        <input type="text" placeholder="关键词：" name="keywords">
                         <i class="fa fa-search"></i>
                     </div>
                     <button class="btn btn-default">搜索</button>
-                </div>
+                </form>
                 <ul>
                     <li><a href="{url:./}">首页</a></li>{location:}
                 </ul>
@@ -49,22 +49,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {for:$page,$item}
+                        {> $keywords=request:keywords}
+                        {contentPage:category=>$cat.id,keywords=$keywords,field=>'id,cat_id,model_id,title,language,file_name,product_type,file_size,file_type,created_at,file'}
                         <tr>
                             <td>
-                                <a href="">{$item.title}</a>
+                                {if:authGuest:}
+                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');">
+                                    {$content.title}
+                                </a>
+                                {else}
+                                <a href="{$content.file}">
+                                    {$content.title}
+                                </a>
+                                {/if}
                             </td>
-                            <td>{$item.language}</td>
-                            <td>{$item.file_name}</td>
-                            <td>{linkageText:$item.product_type}</td>
-                            <td>{$item.file_size}</td>
-                            <td>{$item.file_type}</td>
-                            <td>{this.ago:$item.created_at}</td>
+                            <td>{$content.language}</td>
+                            <td>{$content.file_name}</td>
+                            <td>{linkageText:$content.product_type}</td>
+                            <td>{$content.file_size}</td>
+                            <td>{$content.file_type}</td>
+                            <td>{this.ago:$content.created_at}</td>
                         </tr>
-                        {/for}
+                        {/contentPage}
                     </tbody>
                 </table>
                 <div class="page-link-bar">
+                    {> $page=$_last_contentPage}
                     {$page.getLink:}
                     <div class="page-info">
                         共 {$page.getPageTotal:} 页{$page.getTotal:}条记录
