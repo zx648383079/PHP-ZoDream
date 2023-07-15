@@ -1,6 +1,7 @@
 <!-- 商务支持表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
+    <input type="hidden" name="title" value="商务支持">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
@@ -10,7 +11,7 @@
                     <th class="input-label">商务支持：</th>
 
                     <td colspan="3" id="asdf">
-                        <select name="business_support">
+                        <select name="business_support" data-tab="q">
                             <option value="0" selected="selected">
                                 产品咨询
                             </option>
@@ -24,7 +25,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">接收方式：</th>
 
                     <td>
@@ -52,7 +53,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">产品型号规格：</th>
 
                     <td>
@@ -78,7 +79,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">
                         所需资料　<br />
 
@@ -97,7 +98,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1" style="display: none">
+                <tr class="q-1 hidden">
                     <th class="input-label">问题描述：</th>
 
                     <td colspan="3">
@@ -111,7 +112,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1" style="display: none">
+                <tr class="q-1 hidden">
                     <th class="input-label">
                         所需服务<br />
 
@@ -131,7 +132,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1" style="display: none">
+                <tr class="q-1 hidden">
                     <th class="input-label">产品型号规格：</th>
 
                     <td>
@@ -157,7 +158,7 @@
                     </td>
                 </tr>
 
-                <tr class="t2" style="display: none">
+                <tr class="q-2 hidden">
                     <th class="input-label">购货地址：</th>
 
                     <td colspan="3">

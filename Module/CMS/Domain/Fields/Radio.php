@@ -43,8 +43,8 @@ class Radio extends BaseField {
         return (string)Theme::radio($field['field'], self::textToItems($options), $value, $field['name']);
     }
 
-    public function toText(mixed $value, ModelFieldModel $field): string {
-        $items = self::textToItems($field->setting('option', 'items'));
+    public function toText(mixed $value, ModelFieldModel|array $field): string {
+        $items = self::textToItems(static::fieldSetting($field, 'option', 'items'));
         return array_key_exists($value, $items) ? (string)$items[$value] : '';
     }
 }

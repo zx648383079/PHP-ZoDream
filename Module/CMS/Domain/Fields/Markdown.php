@@ -51,7 +51,7 @@ class Markdown extends BaseField {
             $field['is_required'] > 0);
     }
 
-    public function toText($value, ModelFieldModel $field): string {
+    public function toText($value, ModelFieldModel|array $field): string {
         return HtmlExpand::toHtml($value, true);
     }
 }

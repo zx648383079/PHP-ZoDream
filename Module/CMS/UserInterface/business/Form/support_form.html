@@ -1,6 +1,7 @@
 <!-- 技术支持表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
+    <input type="hidden" name="title" value="技术支持">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
@@ -8,7 +9,7 @@
                 <tr>
                     <th class="input-label">技术支持：</th>
                     <td colspan="3">
-                        <select name="technical_support">
+                        <select name="technical_support" data-tab="q">
                             <option selected="selected" value="0">
                                 产品咨询
                             </option>
@@ -18,7 +19,7 @@
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr>
+                <tr class="q-0">
                     <th class="input-label">产品问题：</th>
                     <td colspan="3">
                         <input
@@ -28,7 +29,7 @@
                         />
                     </td>
                 </tr>
-                <tr>
+                <tr class="q-0">
                     <th class="input-label">问题描述：</th>
                     <td colspan="3">
                         <textarea
@@ -39,7 +40,7 @@
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr class="hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">功能要求：</th>
                     <td colspan="3">
                         <input
@@ -49,14 +50,14 @@
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr class="hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">负载情况：</th>
                     <td colspan="3">
                         <input type="text" name="load" />
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr class="hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">主要技术参数要求：</th>
                     <td colspan="3">
                         <textarea
@@ -67,7 +68,7 @@
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr class="hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">产品型号规格：</th>
                     <td colspan="3">
                         <input
@@ -77,7 +78,7 @@
                         <i class="input-star">*</i>
                     </td>
                 </tr>
-                <tr class="hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">问题描述：</th>
                     <td colspan="3">
                         <textarea

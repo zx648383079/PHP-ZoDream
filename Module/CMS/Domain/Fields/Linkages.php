@@ -90,7 +90,7 @@ HTML;
 
     }
 
-    public function toText($value, ModelFieldModel $field): string {
+    public function toText($value, ModelFieldModel|array $field): string {
         $items = static::fromMultipleValue($value);
         if (empty($items)) {
             return '';

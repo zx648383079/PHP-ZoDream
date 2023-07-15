@@ -1081,6 +1081,20 @@ $dialogHeight: 20rem;
             line-height: 2rem;
         }
     }
+    .form-line-item {
+        display: flex;
+        line-height: 2.25rem;
+        label {
+            width: 30%;
+            max-width: 8rem;
+            text-align: right;
+            color: #767676;
+        }
+        .item-body {
+            flex: 1;
+            padding-left: .8rem;
+        }
+    }
 }
 
 .form-table {

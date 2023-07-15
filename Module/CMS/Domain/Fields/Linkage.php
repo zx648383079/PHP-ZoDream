@@ -69,7 +69,7 @@ HTML;
 
     }
 
-    public function toText($value, ModelFieldModel $field): string {
+    public function toText($value, ModelFieldModel|array $field): string {
         return (string)LinkageDataModel::where('id', $value)->value('full_name');
     }
 }

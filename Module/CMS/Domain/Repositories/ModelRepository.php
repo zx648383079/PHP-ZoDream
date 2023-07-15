@@ -73,7 +73,7 @@ class ModelRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        event(new ManageAction('cms_model_edit', '', 32, $id));
+        event(new ManageAction('cms_model_edit', '', 32, intval($id)));
         if ($id < 1) {
             CMSRepository::scene()->setModel($model)->initModel();
         }

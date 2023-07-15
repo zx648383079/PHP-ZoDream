@@ -1,0 +1,25 @@
+{layout:main}
+{this.title=表单}
+<div class="container">
+    <div class="form-panel m-30">
+        <div class="row">
+            {for:$field_list,$item}
+                {if:$item.type == 'textarea' || $item.type == 'editor'}
+                <div class="col-md-12">
+                    <div class="form-line-item">
+                        <label for="">{$item.name}</label>
+                        <div class="item-body">{$item.value}</div>
+                    </div>
+                </div>
+                {else}
+                <div class="col-md-6">
+                    <div class="form-line-item">
+                        <label for="">{$item.name}</label>
+                        <div class="item-body">{$item.value}</div>
+                    </div>
+                </div>
+                {/if}
+            {/for}
+        </div>
+    </div>
+</div>

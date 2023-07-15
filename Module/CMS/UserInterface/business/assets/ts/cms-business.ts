@@ -134,6 +134,25 @@ $(function() {
             return;
         }
         updateModalCenter(modal);
+    }).on('change', '.form-table select', function() {
+        const $this = $(this);
+        let prefix = $this.data('tab');
+        if (!prefix) {
+            return;
+        }
+        const index = (this as HTMLSelectElement).selectedIndex;
+        prefix += '-';
+        const panel = $this.closest('.form-table');
+        panel.find('tr').each(function(this: HTMLTableRowElement) {
+            if (this.classList.contains(prefix + index)) {
+                this.classList.remove('hidden');
+                return;
+            }
+            if (this.className.indexOf(prefix) >= 0) {
+                this.classList.add('hidden');
+                return;
+            }
+        });
     }).on('submit', "form[data-type=ajax]", function(e) {
         e.preventDefault();
         const $this = $(this);

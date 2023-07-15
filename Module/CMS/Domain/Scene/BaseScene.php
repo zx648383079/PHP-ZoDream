@@ -556,9 +556,9 @@ abstract class BaseScene implements SceneInterface {
         ]);
     }
 
-    public function toInput(ModelFieldModel|array $field, array $data = [], bool $isJson = false) {
+    public function toInput(ModelFieldModel|array $field, array $data = [], bool $isJson = false): array|string {
         if ($field['is_disable'] > 0) {
-            return null;
+            return '';
         }
         return self::newField($field['type'])->toInput($data[$field['field']] ?? '', $field, $isJson);
     }

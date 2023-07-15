@@ -1,6 +1,7 @@
 <!-- 投诉与建议表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
+    <input type="hidden" name="title" value="投诉建议">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
@@ -10,7 +11,7 @@
                     <th class="input-label">投诉建议类别：</th>
 
                     <td colspan="3" id="asdf">
-                        <select name="suggestions_type">
+                        <select name="suggestions_type" data-tab="q">
                             <option value="0">产品质量投诉</option>
 
                             <option value="1">包装质量投诉</option>
@@ -24,7 +25,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">产品型号规格：</th>
 
                     <td>
@@ -52,7 +53,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">生产日期或条码：</th>
 
                     <td>
@@ -80,7 +81,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">购买点联系方式：</th>
 
                     <td>
@@ -102,7 +103,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">产品使用省市：</th>
 
                     <td>
@@ -124,7 +125,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">故障现象描述：</th>
 
                     <td colspan="3">
@@ -141,7 +142,7 @@
                     </td>
                 </tr>
 
-                <tr class="t0">
+                <tr class="q-0">
                     <th class="input-label">
                         使用场合、<br />
 
@@ -159,7 +160,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1 hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">产品型号规格：</th>
 
                     <td>
@@ -185,7 +186,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1 hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">外箱条码：</th>
 
                     <td>
@@ -207,7 +208,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1 hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">产品条码：</th>
 
                     <td>
@@ -231,7 +232,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1 hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">问题描述：</th>
 
                     <td colspan="3">
@@ -247,7 +248,7 @@
                     </td>
                 </tr>
 
-                <tr class="t1 hidden">
+                <tr class="q-1 hidden">
                     <th class="input-label">所需服务及要求：</th>
 
                     <td colspan="3">
@@ -261,7 +262,7 @@
                     </td>
                 </tr>
 
-                <tr class="t2 hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">外箱封条情况：</th>
 
                     <td colspan="3">
@@ -275,7 +276,7 @@
                     </td>
                 </tr>
 
-                <tr class="t2 hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">投诉对象：</th>
 
                     <td>
@@ -297,7 +298,7 @@
                     </td>
                 </tr>
 
-                <tr class="t2 hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">问题描述：</th>
 
                     <td colspan="3">
@@ -313,7 +314,7 @@
                     </td>
                 </tr>
 
-                <tr class="t2 hidden">
+                <tr class="q-2 hidden">
                     <th class="input-label">所需服务及要求：</th>
 
                     <td colspan="3">
@@ -327,7 +328,7 @@
                     </td>
                 </tr>
 
-                <tr class="t3 hidden">
+                <tr class="q-3 hidden">
                     <th class="input-label">建议及意见</th>
 
                     <td colspan="3">

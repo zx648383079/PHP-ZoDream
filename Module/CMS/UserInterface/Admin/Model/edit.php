@@ -18,9 +18,9 @@ $this->registerJs($js);
     <?=Form::text('table', true)->readonly($model->id > 0)?>
     <div class="content-box">
         <?=Form::select('child_model', [$model_list, ['无分集']])?>
-        <?=Form::text('category_template', true)->tip('栏目页，文件夹为Category')?>
-        <?=Form::text('list_template', true)->tip('栏目文章搜索页，文件夹为Category')?>
-        <?=Form::text('show_template', true)->tip('文章详情页，文件夹为Content')?>
+        <?=Form::text('category_template')->tip('栏目页，文件夹为Category')?>
+        <?=Form::text('list_template')->tip('栏目文章搜索页，文件夹为Category')?>
+        <?=Form::text('show_template')->tip('文章详情页，文件夹为Content')?>
     </div>
     <div class="form-box">
         <?=Form::checkbox('setting[is_show]')->value($model->setting('is_show'))->label('显示')->tip('允许显示在前台')?>

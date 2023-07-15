@@ -13,6 +13,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
+use Module\CMS\Domain\Scene\BaseScene;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -774,6 +775,33 @@ class FuncHelper {
         }
         return CMSRepository::scene()->setModel(static::model(intval($data['model_id'])))
             ->toInput($data);
+    }
+
+    public static function formRender(array|string|int $model, string|int $id): string {
+        if (!is_array($model)) {
+            $model = static::model($model);
+        }
+        $scene = CMSRepository::scene()->setModel($model);
+        $data = $scene->find(intval($id));
+        if (empty($data)) {
+            return '';
+        }
+        $fileName = BaseField::fieldSetting($model,  'show_template');
+        if (empty($fileName)) {
+            return '';
+        }
+        $id = $model['id'];
+        return CMSRepository::viewTemporary(function (ViewFactory $factory) use ($fileName,
+            $id, $data) {
+            $field_list = self::formData($id);
+            foreach ($field_list as $k => $item) {
+                $field_list[$k]['value'] = BaseScene::newField($item['type'])
+                    ->toText($data[$item['field']], $item);
+            }
+            $factory->setLayout('');
+            return $factory->render(sprintf('Content/%s', $fileName),
+                compact('field_list'));
+        });
     }
 
     public static function contentUrl(array $data): string {

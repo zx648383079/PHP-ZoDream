@@ -14,7 +14,7 @@ class ManageAction {
         protected string $action,
         protected string $remark,
         protected int $type,
-        protected int $id
+        protected int|string $id
     ) {
         $request = request();
         $this->ip = $request->ip();

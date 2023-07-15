@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
+use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
@@ -78,9 +79,9 @@ JS;
 HTML;
     }
 
-    public function toText(mixed $value, ModelFieldModel $field): string {
-        $option = $field->setting('option');
-        $model = ModelModel::find($option['model']);
+    public function toText(mixed $value, ModelFieldModel|array $field): string {
+        $option = static::fieldSetting($field,'option');
+        $model = FuncHelper::model(intval($option['model']));
         // TODO 临时使用注意事项
         return (string)CMSRepository::scene()->setModel($model)->query()->where('id', $value)->value('title');
     }

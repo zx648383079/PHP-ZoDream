@@ -305,6 +305,7 @@
             "table": "inquiry_form",
             "setting": {
                 "form_template": "inquiry_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -394,6 +395,7 @@
             "table": "profile_form",
             "setting": {
                 "form_template": "profile_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": true,
                 "is_extend_auth": true,
@@ -446,6 +448,7 @@
             "table": "feedback_form",
             "setting": {
                 "form_template": "feedback_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false,
                 "open_captcha": true
@@ -488,6 +491,7 @@
             "table": "business_form",
             "setting": {
                 "form_template": "business_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -612,6 +616,7 @@
             "table": "complaints_form",
             "setting": {
                 "form_template": "complaints_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -803,6 +808,7 @@
             "table": "live_form",
             "setting": {
                 "form_template": "live_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -958,6 +964,7 @@
             "table": "maintenance_form",
             "setting": {
                 "form_template": "maintenance_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -1068,6 +1075,7 @@
             "table": "support_form",
             "setting": {
                 "form_template": "support_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },
@@ -1178,6 +1186,7 @@
             "table": "verify_form",
             "setting": {
                 "form_template": "verify_form",
+                "show_template": "form",
                 "is_show": false,
                 "is_only": false
             },

@@ -29,7 +29,7 @@ abstract class BaseField {
         return $value.'';
     }
 
-    public function toText(mixed $value, ModelFieldModel $field): string {
+    public function toText(mixed $value, ModelFieldModel|array $field): string {
         return Html::text((string)$value);
     }
 
