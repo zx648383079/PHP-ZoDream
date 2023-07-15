@@ -1,3 +1,4 @@
+const isTouchDevice = 'ontouchstart' in document.documentElement;
 function setHome(target: any) {
     const win = window as any;
     const url = window.location.href;
@@ -171,6 +172,18 @@ $(function() {
         $(this).closest('.dialog').hide();
     }).on('click', '.dialog .dialog-submit', function() {
         $(this).closest('.dialog').find('form').trigger('submit');
+    }).on('click', '.app-header .nav-bar .nav-item', function(e) {
+        if (!isTouchDevice) {
+            return;
+        }
+        const $this = $(this);
+        if ($this.find('.nav-item-drop').length === 0) {
+            return;
+        }
+        e.preventDefault();
+        $this.toggleClass('nav-item-open').siblings().removeClass('nav-item-open');
+    }).on('click', '.app-header .nav-bar-toggle', function() {
+        $(this).closest('.app-header').toggleClass('nav-bar-open');
     }).on('click', function(e) {
         const target = $(e.target);
         const modal = target.hasClass('dialog') ? target : target.closest('.dialog');

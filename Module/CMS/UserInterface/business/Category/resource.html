@@ -11,19 +11,19 @@
             <div class="path-bar with-search-bar">
                 <form class="page-search-bar">
                     <select name="id">
-                        <option value="{channel:download,id}">所有栏目</option>
+                        <option value="{channel:download,id}">{__:所有栏目}</option>
                         {channels:parent=>download}
                         <option value="{$channel.id}">{$channel.title}</option>
                         {/channels}
                     </select>
                     <div class="search-input">
-                        <input type="text" placeholder="关键词：" name="keywords">
+                        <input type="text" placeholder="{__:关键词：}" name="keywords">
                         <i class="fa fa-search"></i>
                     </div>
-                    <button class="btn btn-default">搜索</button>
+                    <button class="btn btn-default">{__:搜索}</button>
                 </form>
                 <ul>
-                    <li><a href="{url:./}">首页</a></li>{location:}
+                    <li><a href="{url:./}">{__:首页}</a></li>{location:}
                 </ul>
             </div>
            
@@ -39,13 +39,13 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>标题</th>
-                            <th>语言</th>
-                            <th>文件名称</th>
-                            <th>产品分类</th>
-                            <th>文件大小</th>
-                            <th>文档类型</th>
-                            <th>日期</th>
+                            <th>{__:标题}</th>
+                            <th>{__:语言}</th>
+                            <th>{__:文件名称}</th>
+                            <th>{__:产品分类}</th>
+                            <th>{__:文件大小}</th>
+                            <th>{__:文档类型}</th>
+                            <th>{__:日期}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +54,7 @@
                         <tr>
                             <td>
                                 {if:authGuest:}
-                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');">
+                                <a href="javascript:alert('{__:downloadtip}');">
                                     {$content.title}
                                 </a>
                                 {else}
@@ -77,7 +77,9 @@
                     {> $page=$_last_contentPage}
                     {$page.getLink:}
                     <div class="page-info">
-                        共 {$page.getPageTotal:} 页{$page.getTotal:}条记录
+                        {> $count=$page.getPageTotal:}
+                        {> $total=$page.getTotal:}
+                        {=__:pagination,pages=>$count,total=>$total}
                     </div>
                 </div>
             </div>

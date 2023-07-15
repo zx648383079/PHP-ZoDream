@@ -1,0 +1,84 @@
+{layout:main}
+{>js}
+function loadJScript() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//api.map.baidu.com/api?type=webgl&v=1.0&ak='+MAPAPIKEY+'&callback=init';
+    document.body.appendChild(script);
+}
+function init() {
+    var map = new BMapGL.Map("mapArea");
+    map.enableScrollWheelZoom(true);
+
+    $('.map-bar .map-item').on('click', function() {
+        map.clearOverlays();
+        var that = $( this );
+        var title = that.find('span').text();
+        var address = that.data('address');
+        that.addClass('active').siblings().removeClass('active');
+        var loc = that.data('location').split(',');
+        var point = new BMapGL.Point(loc[0], loc[1]);
+        var marker = new BMapGL.Marker(point);
+        map.addOverlay(marker);
+        var label = new BMapGL.Label(address, {
+            position: point,
+            offset: new BMapGL.Size(20, -25)
+        });
+        label.setStyle({
+            padding: '5px',
+        });
+        map.addOverlay(label);
+        map.centerAndZoom(point, 12);
+        marker.addEventListener('click', function() {
+            var infoWindow = new BMapGL.InfoWindow(that.find('script').text(), {
+                title: title
+            });
+            map.openInfoWindow(infoWindow, point); 
+        });
+    }).eq(0).trigger('click');
+}
+loadJScript();
+{/>}
+<script>
+    var MAPAPIKEY = '{option:mapApiKey}';
+</script>
+<div class="banner-bg" style="background-image:url({$cat.image});">
+
+</div>
+<div class="container m-30">
+    <div class="row">
+        <div class="col-md-3">
+            {tpl:layouts/nav}
+        </div>
+        <div class="col-md-9">
+            <div class="path-bar">
+                <ul>
+                    <li><a href="{url:./}">{__:首页}</a></li>{location:}
+                </ul>
+            </div>
+            <article id="content">
+                {$cat.content}
+            </article>
+            <div class="map-container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="mapArea" class="map-area"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="map-bar">
+                            {contentPage:category=>$cat.id,field=>'id,cat_id,model_id,title,description,content,location'}
+                            <div class="map-item" data-location="{$content.location}" data-address="{$content.description}">
+                                <span>{$content.title}</span>
+                                <script type="text/plain">
+                                    {$content.content}
+                                </script>
+                            </div>
+                            {/contentPage}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

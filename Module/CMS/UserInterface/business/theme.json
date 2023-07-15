@@ -42,6 +42,16 @@
                     "name": "微博二维码",
                     "code": "weibo_qr",
                     "type": "image"
+                },
+                {
+                    "name": "中文站网址",
+                    "code": "zh_site",
+                    "type": "text"
+                },
+                {
+                    "name": "英文站网址",
+                    "code": "en_site",
+                    "type": "text"
                 }
             ]
         },
@@ -260,6 +270,32 @@
                 {
                     "action": "disable",
                     "field": "content"
+                }
+            ]
+        },
+        {
+            "action": "model",
+            "name": "销售门店",
+            "table": "salestore",
+            "category_template": "store",
+            "list_template": "store_list",
+            "show_template": "store",
+            "fields": [
+                {
+                    "name": "名称",
+                    "field": "title",
+                    "type": "text"
+                },
+                {
+                    "name": "详细地址",
+                    "field": "description",
+                    "type": "textarea"
+                },
+                {
+                    "name": "坐标",
+                    "field": "location",
+                    "type": "location",
+                    "is_main": true
                 }
             ]
         },
@@ -1617,9 +1653,8 @@
                     "action": "channel",
                     "title": "销售网络",
                     "name": "",
-                    "type": "page",
+                    "type": "@model:salestore",
                     "group": "nav",
-                    "category_template": "index",
                     "image": "/assets/images/banner.jpg"
                 }, 
                 {

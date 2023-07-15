@@ -24,7 +24,7 @@ class CategoryController extends Controller {
         if (!$model->position) {
             $model->position = 99;
         }
-        $model_list = ModelModel::where('type', 0)->select('name', 'id')->all();
+        $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->all();
         $cat_list = CategoryRepository::all(CMSRepository::siteId());
         if (!empty($id)) {
@@ -50,7 +50,7 @@ class CategoryController extends Controller {
         }
         $model->autoIsNew();
         if ($model->isNewRecord && empty($model->setting)) {
-            $model->setting = serialize([]);
+            $model->setting = [];
         }
         if (!$model->save()) {
             return $this->renderFailure($model->getFirstError());

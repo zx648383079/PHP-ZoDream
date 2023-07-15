@@ -2,6 +2,15 @@ $primary: #266faf;
 $primaryText: #fff;
 $linkHoverText: #a40000;
 
+@mixin iconFont($size: 1rem) {
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: inherit;
+    text-rendering: auto;
+    font-style: normal;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -37,6 +46,19 @@ a {
 
 .app-header {
     background: linear-gradient(to top, #dfdde0 20%, #fff 50%);
+    .nav-bar-toggle {
+        display: none;
+        width: 2rem;
+        height: 1rem;
+        span {
+            display: block;
+            width: 1.5rem;
+            height: 0.15rem;
+            background-color: #333;
+            margin-top: .4rem;
+            transition: transform .5s;
+        }
+    }
     .top-bar {
         display: flex;
         padding: .8rem 0;
@@ -68,6 +90,9 @@ a {
             &:not(:last-child) {
                 border-right: 1px solid #000;
             }
+            &.with-not-border {
+                border-right: none;
+            }
         }
     }
     .nav-bar {
@@ -89,6 +114,14 @@ a {
         li {
             list-style: none;
         }
+        .nav-item-arrow {
+            display: none;
+            float: right;
+            &::after {
+                @include iconFont();
+                content: '\f105';
+            }
+        }
         .nav-item {
             display: inline-block;
             position: relative;
@@ -99,8 +132,16 @@ a {
                     color: #fff;
                 }
             }
-            &:hover {
-                .nav-item-drop {
+            &:hover,
+            &.nav-item-open {
+                >a {
+                    .nav-item-arrow {
+                        &::after{
+                            content: '\f107';
+                        }
+                    }
+                }
+                >.nav-item-drop {
                     display: block;
                 }
             }
@@ -117,6 +158,54 @@ a {
             a {
                 font-weight: 500;
                 font-size: 1rem;
+            }
+            .nav-item-drop {
+                margin-left: 100%;
+                top: 0;
+            }
+        }
+        .nav-large-drop-item {
+            position: static;
+        }
+        .nav-large-drop-panel {
+            left: 0;
+            width: 100%;
+            min-height: 5rem;
+            .panel-first-item {
+                display: inline-block;
+                min-width: 10rem;
+                vertical-align: top;
+                a {
+                    text-align: left;
+                }
+                >a {
+                    font-weight: 700;
+                }
+            }
+            .nav-item-drop {
+                display: block;
+                position: static;
+                margin-left: 0;
+            }
+        }
+    }
+    &.nav-bar-open {
+        .nav-bar-toggle {
+            position: relative;
+            span {
+                display: none;
+                &:first-of-type,
+                &:last-of-type {
+                    display: block;
+                    position: absolute;
+                    top: .25rem;
+                }
+                &:first-of-type {
+                    transform: rotateZ(45deg);
+                }
+                &:last-of-type {
+                    transform: rotateZ(-45deg);
+                }
             }
         }
     }
@@ -1142,6 +1231,31 @@ $dialogHeight: 20rem;
     }
 }
 
+.map-container {
+    .map-area {
+        width: 100%;
+        height: 30rem;
+    }
+    .map-bar {
+        border: 1px solid #ccc;
+        height: 30rem;
+        overflow-y: auto;
+        .map-item {
+            padding: .4rem;
+            &:not(:last-of-type) {
+                border-bottom: 1px solid #ccc;
+            }
+            &:hover {
+                background-color: #ccc;
+            }
+            &.active {
+                background-color: #68ac37;
+                color: white;
+            }
+        }
+    }
+}
+
 @media (max-width: 48rem) {
     .banner {
         .slider-box {
@@ -1178,6 +1292,58 @@ $dialogHeight: 20rem;
                 padding: 1rem 0;
             }
         }
+        .nav-group-bar {
+            .nav-item {
+                &.with-not-border {
+                    border-right: 1px solid #000;
+                }
+            }
+        }
+        .nav-bar-toggle {
+            display: block;
+        }
+        .nav-bar {
+            display: none;
+            .nav-large-drop-panel {
+                .container {
+                    padding: 0;
+                }
+                .panel-first-item {
+                    >a {
+                        font-weight: 500;
+                    }
+                }
+                .nav-item-drop {
+                    display: none;
+                }
+            }
+        }
+        &.nav-bar-open {
+            .nav-bar {
+                display: block;
+                position: absolute;
+                right: 0;
+                width: 100%;
+                max-width: 30rem;
+                z-index: 888;
+                background-color: #dfdde0;
+                .nav-item {
+                    display: block;
+                    a {
+                        text-align: left;
+                    }
+                }
+                .nav-item-drop {
+                    position: static;
+                    .nav-item-drop {
+                        background-color: #f4f4f4;
+                    }
+                }
+                .nav-item-arrow {
+                    display: inline-block;
+                }
+            }
+        }
     }
     .app-footer {
         .map-bar {
@@ -1187,6 +1353,17 @@ $dialogHeight: 20rem;
         }
         .link-image-bar {
             justify-content: center;
+        }
+    }
+    .contact-panel {
+        .link-item {
+            display: flex;
+            width: 100%;
+        }
+    }
+    .map-container {
+        .map-bar {
+            height: auto;
         }
     }
 }

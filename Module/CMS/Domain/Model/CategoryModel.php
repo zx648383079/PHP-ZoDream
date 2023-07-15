@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Model;
 
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\FuncHelper;
+use Zodream\Helpers\Json;
 use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Html\Tree;
 
@@ -78,6 +79,16 @@ class CategoryModel extends CategoryEntity {
             return $model['show_template'] ?? '';
         }
         return null;
+    }
+
+    public function getSettingAttribute() {
+        $setting = $this->getAttributeSource('setting');
+        return empty($setting) ? [] : Json::decode($setting);
+    }
+
+    public function setSettingAttribute($value) {
+        $this->setAttributeSource('setting', is_array($value) ?
+            Json::encode($value) : $value);
     }
 
     /**

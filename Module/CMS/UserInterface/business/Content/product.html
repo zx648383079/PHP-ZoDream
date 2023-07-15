@@ -11,7 +11,7 @@
         <div class="col-md-9">
             <div class="path-bar">
                 <ul>
-                    <li><a href="{url:./}">首页</a></li>{location:}
+                    <li><a href="{url:./}">{__:首页}</a></li>{location:}
                 </ul>
             </div>
             <div id="content" class="product-panel">
@@ -22,19 +22,19 @@
                     <div class="item-row">
                         <div class="item-title-bar">
                             <span class="item-title">{$data.title}</span>
-                            <span class="item-no">订单编号：{$data.product_no}</span>
+                            <span class="item-no">{__:订单编号：}{$data.product_no}</span>
                         </div>
-                        <a modal="inquiryDialog"><i class="fa fa-edit"></i> 点击这里发送询价</a>
+                        <a modal="inquiryDialog"><i class="fa fa-edit"></i> {__:点击这里发送询价}</a>
                     </div>
                 </div>
 
                 <div class="tab-box">
                     <div class="tab-header">
-                        <div class="tab-item active">产品介绍</div>
-                        <div class="tab-item">相关产品及附件</div>
-                        <div class="tab-item">应用范围</div>
-                        <div class="tab-item">标准及认证证书</div>
-                        <div class="tab-item">技术资料</div>
+                        <div class="tab-item active">{__:产品介绍}</div>
+                        <div class="tab-item">{__:相关产品及附件}</div>
+                        <div class="tab-item">{__:应用范围}</div>
+                        <div class="tab-item">{__:标准及认证证书}</div>
+                        <div class="tab-item">{__:技术资料}</div>
                     </div>
                     <div class="tab-body">
                         <div class="tab-item active">{$data.content}</div>
@@ -43,14 +43,14 @@
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}
-                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                <a href="javascript:alert('{__:downloadtip}');" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {else}
                                 <a href="{$content.file}" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {/if}
                             </div>
@@ -62,14 +62,14 @@
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}
-                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                <a href="javascript:alert('{__:downloadtip}');" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {else}
                                 <a href="{$content.file}" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {/if}
                             </div>
@@ -80,14 +80,14 @@
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}
-                                <a href="javascript:alert('您还未登陆,请返回首页登陆！！！');" class="item-action">
+                                <a href="javascript:alert('{__:downloadtip}');" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {else}
                                 <a href="{$content.file}" class="item-action">
                                     <i class="fa fa-file-pdf"></i>
-                                    下载
+                                    {__:下载}
                                 </a>
                                 {/if}
                             </div>

@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\CMS\Domain\Repositories\ModelRepository;
 /** @var $this View */
 $this->title = '模块字段列表';
 ?>
@@ -26,7 +27,7 @@ $this->title = '模块字段列表';
                     <?=$item->field?>
                 </td>
                 <td>
-                    <?=$item->type_list[$item->type]?>
+                    <?=ModelRepository::FIELD_TYPE_ITEMS[$item->type]?>
                 </td>
                 <td>
                     <div class="btn-group">

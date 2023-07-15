@@ -79,12 +79,17 @@
         }
         .header-body {
             flex: 1;
+            height: 3rem;
+            overflow: hidden;
         }
         .nav-item {
             display: inline-block;
             position: relative;
             vertical-align: top;
             margin-left: .8rem;
+            max-width: 8rem;
+            overflow: hidden;
+            height: 3rem;
             img {
                 cursor: pointer;
                 width: 2.5rem;
@@ -233,6 +238,13 @@
 }
 
 @media (min-width: 48rem) {
+    .app-wrapper {
+        .app-header-container {
+            .nav-item {
+                max-width: none;
+            }
+        }
+    }
     .full-theme {
         .main-container {
             transition: all .3s;
@@ -246,6 +258,7 @@
             }
         }
     }
+    
 }
 @media (min-width: 75rem){
     .app-wrapper {

@@ -17,6 +17,9 @@ class ContentController extends Controller {
             $model_id = $cat->model_id;
         }
         $model = ModelModel::find($model_id);
+        if (empty($model)) {
+            return $this->redirectWithMessage('./@admin', '栏目模型配置错误');
+        }
         $scene = CMSRepository::scene()->setModel($model);
         $model_list = $scene->search($keywords,
             compact('cat_id', 'parent_id'), 'id desc');

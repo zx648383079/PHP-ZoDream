@@ -59,6 +59,9 @@ class FuncHelper {
         if (empty($code)) {
             return null;
         }
+        if ($code === 'mapApiKey') {
+            return config('thirdparty.baidu.map');
+        }
         $options = static::cache()->getOrSet(__FUNCTION__, 'all', function () {
             return CacheRepository::getOptionCache();
         });
@@ -435,7 +438,9 @@ class FuncHelper {
      */
     public static function channel(mixed $id, string|bool|null $name = null): mixed {
         if (is_array($id)) {
-            isset($id['name']) && $name = $id['name'];
+            if (isset($id['name']) && is_null($name)) {
+                $name = $id['name'];
+            }
             $id = $id['id'];
         }
         if (!is_numeric($id)) {
@@ -444,17 +449,21 @@ class FuncHelper {
         if ($id < 1) {
             return null;
         }
-        if ($name === 'url') {
-            return url('./category', ['id' => $id]);
-        }
         $data = static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
         });
+        if ($name === 'url') {
+            if ($data['type'] > 1) {
+                return empty($data['url']) ? 'javascript:;' : url($data['url']);
+            }
+            return url('./category', ['id' => $id]);
+        }
+
         $data['model'] = self::model($data['model_id']);
         if ($name === true) {
             return $data;
         }
-        return $data[$name];
+        return $data[$name] ?? '';
     }
 
     public static function channelRoot(mixed $id) {

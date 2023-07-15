@@ -54,7 +54,7 @@ class CMSRepository {
 
     public static function registerLocate(Directory $folder, ?string $language) {
         if (empty($language)) {
-            return;
+            $language = 'zh-cn';
         }
         $file = $folder->file(sprintf('languages/%s.json', $language));
         if (!$file->exist()) {

@@ -1,6 +1,11 @@
 $inputPadding: 0 .5rem;
 $inputTypeMaps: (text, email, tel, password, url, search);
 
+.form-control {
+    height: $lineHeight;
+    padding: 0 .3rem;
+}
+
 .form-ico {
     .input-group {
         position: relative;

@@ -39,12 +39,21 @@
                         <a class="nav-item" href="javascript:addFavorite();">
                             {__:收藏}
                         </a>
-                        <div class="nav-item">
+                        <div class="nav-item with-not-border">
                             {> $lang = option:language}
-                            <select>
-                                <option>中文</option>
-                                <option {if:$lang=='en',selected}>English</option>
+                            <select onchange="if (this.value) {
+                                window.location.href=this.value;
+                            }">
+                                <option value="{option:zh_site}">中文</option>
+                                <option value="{option:en_site}" {if:$lang=='en',selected}>English</option>
                             </select>
+                        </div>
+                        <div class="nav-item">
+                            <div class="nav-bar-toggle">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -58,16 +67,41 @@
                             <a href="{url:./}">{__:首页}</a>
                         </li>
                         {channels:tree=>1,group=>nav}
-                        <li class="nav-item {channelActive:$channel.id,true}">
-                            <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                        <li class="nav-item  {if:$channel.name==product_center,'nav-large-drop-item'} {channelActive:$channel.id,true}">
+                            <a href="{=channel:$channel,url}">         
+                                <span>{$channel.title}</span>
+                                {if:$channel.children_count>0}
+                                <i class="nav-item-arrow"></i>
+                                {/if}
+                            </a>
                             {if:$channel.children_count>0}
-                            <ul class="nav-item-drop">
-                                {for:$channel.children,$item}
-                                <li  class="nav-item">
-                                    <a href="{url:./category?id=:$item.id}">{$item.title}</a>
-                                </li>
-                                {/for}
-                            </ul>
+                            <div class="nav-item-drop {if:$channel.name==product_center,'nav-large-drop-panel'}">
+                                <div class="{if:$channel.name==product_center,'container'}">
+                                    <ul>
+                                        {for:$channel.children,$item}
+                                        <li class="nav-item panel-first-item">
+                                            <a href="{=channel:$item,url}">
+                                                <span>{$item.title}</span>
+                                                {if:$item.children_count>0}
+                                                <i class="nav-item-arrow"></i>
+                                                {/if}
+                                            </a>
+                                            {if:$item.children_count>0}
+                                            <ul class="nav-item-drop">
+                                                {for:$item.children,$it}
+                                                <li  class="nav-item">
+                                                    <a href="{=channel:$it,url}">
+                                                        <span>{$it.title}</span>
+                                                    </a>
+                                                </li>
+                                                {/for}
+                                            </ul>
+                                            {/if}
+                                        </li>
+                                        {/for}
+                                    </ul>
+                                </div>
+                            </div>
                             {/if}
                         </li>
                         

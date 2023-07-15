@@ -18,7 +18,7 @@ html {
         <div class="col-md-9">
             <div class="path-bar">
                 <ul>
-                    <li><a href="{url:./}">首页</a></li>{location:}
+                    <li><a href="{url:./}">{__:首页}</a></li>{location:}
                 </ul>
             </div>
             <div id="content" class="article-panel">
@@ -26,8 +26,8 @@ html {
                     {$data.title}
                 </h3>
                 <div class="tag-bar">
-                    <span class="tag-item">时间：{this.time:$data.created_at}</span>
-                    <span class="tag-item">作者：
+                    <span class="tag-item">{__:时间：}{this.time:$data.created_at}</span>
+                    <span class="tag-item">{__:作者：}
                         <a href="{redirect:$data.source_url}" target="_blank" rel="noopener noreferrer">{$data.author}</a>
                     </span>
                 </div>
@@ -41,19 +41,19 @@ html {
                 {if:$prev || $next}
                 <div class="navigation-bar m-30">
                     <div class="prev-item">
-                        上一篇：
+                        {__:上一篇：}
                         {if:$prev}
                         <a href="{url:$prev}">{$prev.title}</a>
                         {else}
-                        没有了
+                        {__:没有了}
                         {/if}
                     </div>
                     <div class="next-item">
-                        下一篇： 
+                        {__:下一篇：} 
                         {if:$next}
                         <a href="{url:$next}">{$next.title}</a>
                         {else}
-                        没有了
+                        {__:没有了}
                         {/if}
                     </div>
                 </div>
