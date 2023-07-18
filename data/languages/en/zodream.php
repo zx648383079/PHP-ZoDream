@@ -40,6 +40,11 @@ return [
         66 => 'Shop',
         99 => 'Other'
     ],
+    'disk_drive' => [
+        'a' => 'Public Disk',
+        'b' => 'Private Disk',
+        'c' => 'Online Disk',
+    ],
     'account_status' => [
         0 => 'Waiting',
         1 => 'Done',

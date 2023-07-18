@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Repositories;
 
 use Module\Disk\Domain\Adapters\BaseDiskAdapter;
