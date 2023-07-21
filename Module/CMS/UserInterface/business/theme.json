@@ -61,13 +61,6 @@
         },
         {
             "action": "linkage",
-            "name": "行业",
-            "code": "industry",
-            "data": [
-            ]
-        },
-        {
-            "action": "linkage",
             "name": "产品类型",
             "code": "product_type",
             "data": [
@@ -200,7 +193,19 @@
             "show_template": "product",
             "fields": [
                 {
-                    "name": "行业",
+                    "name": "推荐",
+                    "field": "is_best",
+                    "type": "switch",
+                    "is_main": true
+                },
+                {
+                    "name": "主图",
+                    "field": "image",
+                    "type": "image",
+                    "is_main": true
+                },
+                {
+                    "name": "行业分类",
                     "field": "industry",
                     "type": "@linkage:industry",
                     "is_main": true
@@ -1391,7 +1396,7 @@
                 {
                     "action": "channel",
                     "title": "行业分类",
-                    "name": "",
+                    "name": "product_industry",
                     "type": "page",
                     "group": "nav",
                     "category_template": "product",

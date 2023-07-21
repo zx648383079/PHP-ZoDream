@@ -95,14 +95,20 @@ final class CacheRepository {
             return [];
         }
         return cache()->getOrSet(self::linkageKey($id), function () use ($id) {
-            return self::treeToArray(LinkageDataModel::query()->where('linkage_id', $id)->get());
+            return self::treeToArray(LinkageDataModel::query()->where('linkage_id', $id)
+                ->orderBy('position', 'asc')
+                ->orderBy('id', 'asc')
+                ->get());
         }, 0);
     }
 
     public static function getChannelCache(): array {
         $site = CMSRepository::siteId();
         return cache()->getOrSet(self::channelKey($site), function () {
-            return self::treeToArray(CategoryModel::query()->orderBy('position', 'asc')->get());
+            return self::treeToArray(CategoryModel::query()
+                ->orderBy('position', 'asc')
+                ->orderBy('id', 'asc')
+                ->get());
         });
     }
 

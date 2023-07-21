@@ -31,9 +31,9 @@ class Module extends BaseModule implements ICustomRouteModule {
             array_shift($args);
         }
         $file = implode('/', $args);
-        if (empty($file)) {
-            return null;
-        }
+//        if (empty($file)) {
+//            return null;
+//        }
         return BoundMethod::call(
             sprintf('%s@%s%s', PreviewController::class, 'view', config('app.action')),
             $context, ['id' => $match[1], 'file' => $file]);

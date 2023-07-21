@@ -1,4 +1,6 @@
 {layout:main}
+{$pt=request:'product_type'}
+{$ind=request:'industry'}
 <div class="banner-bg" style="background-image:url({$cat.image});">
 
 </div>
@@ -11,6 +13,12 @@
             <div class="path-bar">
                 <ul>
                     <li><a href="{url:./}">{__:首页}</a></li>{location:}
+                    {if:$pt}
+                    <li><a href="{url:./category?id=product_center&product_type=:$pt}">{linkageText:$pt,product_type}</a></li>
+                    {/if}
+                    {if:$ind}
+                    <li><a href="{url:./category?id=product_center&industry=:$ind}">{linkageText:$ind,industry}</a></li>
+                    {/if}
                 </ul>
             </div>
             <div class="filter-panel">
@@ -21,28 +29,37 @@
                     <div class="item-body">
                         {$pt=request:'product_type'}
                         {linkage:industry}
-                        <a href="{url:./category?id=product_center&product_type=:$pt:&industry=:$item.id}">{$item.name}</a>
+                        <a href="{url:./category?id=product_center&product_type=:$pt:&industry=:$item.id}" class="{if:$item.id==$ind,active}">{$item.name}</a>
                         {/linkage}
+                        <!-- {channels:parent=>product_industry}
+                            <a href="{url:./category?id=:$channel.id:&product_type=:$pt}">{$channel.title}</a>
+                        {/channels} -->
                     </div>
                 </div>
             </div>
             <div class="page-body">
                 <div class="row">
-                    {for:$page,$item}
+                    {> $keywords=request:keywords}
+                    {contentPage:category=>product_center,product_type=>$pt,industry=>$ind,keywords=>$keywords,order=>'is_best desc,id desc',field=>'id,cat_id,model_id,title,thumb,is_best'}
                     <div class="col-6 col-lg-3 col-md-3">
-                        <a class="product-item" href="{url:$item}">
-                            <div class="item-thumb">
-                                <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
+                        <a class="product-item" href="{url:$content}">
+                            <div class="item-thumb-outline">
+                                <div class="item-thumb">
+                                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                                    {if:$content.is_best}
+                                    <div class="item-mark">{__:推荐}</div>
+                                    {/if}
+                                </div>
                             </div>
                             <div class="item-name">
-                                {$item.title}
+                                {$content.title}
                             </div>
                         </a>
                     </div>
-                    {/for}
+                    {/contentPage}
                 </div>
-                {if:$page}
                 <div class="page-link-bar">
+                    {> $page=$_last_contentPage}
                     {$page.getLink:}
                     <div class="page-info">
                         {> $count=$page.getPageTotal:}
@@ -50,7 +67,6 @@
                         {=__:pagination,pages=>$count,total=>$total}
                     </div>
                 </div>
-                {/if}
             </div>
         </div>
     </div>

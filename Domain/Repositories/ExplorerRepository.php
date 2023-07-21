@@ -39,14 +39,14 @@ final class ExplorerRepository {
                                   string $keywords = '',
                                   string $filter = '',
                                   int $page = 1): array|Page {
-        list($drive, $folder) = static::splitPath($path);
+        list($drive, $path, $folder) = static::splitPath($path);
         if (empty($drive)) {
             return static::driveList();
         }
         if (!is_dir($folder)) {
             return [];
         }
-        $visualFolder = sprintf('%s:/%s', $drive, $path);
+        $visualFolder = sprintf('%s:%s%s', $drive, $path !== '' ? '/' : '', $path);
         $items = [];
         FileSystem::eachFile($folder, function (string $name) use ($keywords, $filter,
             $folder, $visualFolder,
@@ -100,13 +100,13 @@ final class ExplorerRepository {
      * @return string
      */
     public static function toFileName(string $path): string {
-        return static::splitPath($path)[1];
+        return static::splitPath($path)[2];
     }
 
     /**
      * 解析地址
      * @param string $path
-     * @return string[] // [$drive: string, $fileName: string]
+     * @return string[] // [$drive: string, $path: string, $fileName: string]
      */
     public static function splitPath(string $path): array {
         if ($path === '' || $path === '/') {
@@ -128,7 +128,8 @@ final class ExplorerRepository {
         $base = $maps[$drive];
         return [
             $drive,
-            $path === '' ? $base : sprintf('%s/%s', $base, $path)
+            $path,
+            $path === '' ? $base : sprintf('%s/%s', $base, $path),
         ];
     }
 

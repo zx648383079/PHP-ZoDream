@@ -31,6 +31,20 @@ class FileRepository {
     }
 
     /**
+     * 获取字体文件
+     * @return string
+     * @throws Exception
+     */
+    public static function fontFile(): string {
+        $fileName = config('disk.font');
+        if (empty($fileName)) {
+            return '';
+        }
+        $path = (string)app_path()->file($fileName);
+        return is_file($path) ? $path : '';
+    }
+
+    /**
      * 获取图片网址，为空时获取默认图片
      * @param mixed|null $url
      * @return string
@@ -341,7 +355,7 @@ class FileRepository {
     public static function addWater(File $file, string $text, int $position) {
         $image = new WaterMark();
         $image->instance()->loadResource($file);
-        $font = new Font((string)app_path(config('disk.font')), 12, '#fff');
+        $font = new Font(static::fontFile(), 12, '#fff');
         $textBox = $image->instance()->fontSize($text, $font);
         list($x, $y) = $image->getPointByDirection(match ($position) {
             3 => WaterMark::RightBottom,
@@ -363,7 +377,7 @@ class FileRepository {
         $image = new Image();
         $image->instance()->create(new Box(200, 100), '#fff');
         $image->instance()->text($text,
-            new Font((string)app_path(config('disk.font')), 30, '#333'),
+            new Font(static::fontFile(), 30, '#333'),
             new Point(30, 50));
         return response()->image($image);
     }

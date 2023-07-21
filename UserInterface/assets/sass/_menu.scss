@@ -58,6 +58,7 @@
         }
     }
     .nav-drop-open {
+        overflow: inherit;
         .drop-bar {
             display: block;
         }
@@ -96,6 +97,9 @@
                 height: 2.5rem;
                 border-radius: 0.625rem;
             }
+        }
+        .nav-drop-open {
+            overflow: inherit;
         }
         .user-icon {
             padding-top: .4rem;

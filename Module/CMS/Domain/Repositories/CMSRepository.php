@@ -63,6 +63,19 @@ class CMSRepository {
         FuncHelper::$translateItems = Json::decode($file->read());
     }
 
+    /**
+     * 获取主题的路径
+     * @return Directory
+     * @throws \Exception
+     */
+    protected static function themeRootFolder(): Directory {
+        $path = config('view.cms_directory');
+        if (empty($path)) {
+            return static::$viewFolder;
+        }
+        return app_path()->directory($path);
+    }
+
     public static function registerView(string|SiteModel $theme = '',
                                         ?ViewFactory $provider = null): ViewFactory {
         $language = '';
@@ -79,7 +92,7 @@ class CMSRepository {
         if (empty(static::$viewFolder)) {
             static::$viewFolder = $provider->getDirectory();
         }
-        $dir = static::$viewFolder
+        $dir = static::themeRootFolder()
             ->directory($theme);
         if (!$dir->exist()) {
             throw new Exception('THEME IS ERROR!');

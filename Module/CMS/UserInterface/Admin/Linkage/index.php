@@ -33,10 +33,13 @@ $this->title = '联动菜单列表';
         <?php endforeach?>
         </tbody>
     </table>
-    <?php if(empty($model_list)):?>
-    <div class="page-empty-tip">
-        空空如也~~
-    </div>
+    <?php if($model_list->isEmpty()):?>
+        <div class="page-empty-tip">
+            空空如也~~
+        </div>
     <?php endif;?>
+    <div align="center">
+        <?=$model_list->getLink()?>
+    </div>
 </div>
 

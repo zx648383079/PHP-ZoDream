@@ -233,7 +233,7 @@ class FuncHelper {
             'cat', 'channel'];
         // 通过标签提前过滤
         foreach ($param as $key => $value) {
-            if (in_array($key, $tags)) {
+            if (in_array($key, $tags) || empty($value)) {
                 continue;
             }
             $data[$key] = $value;
@@ -455,7 +455,7 @@ class FuncHelper {
         });
         if ($name === 'url') {
             if ($data['type'] > 1) {
-                return empty($data['url']) ? 'javascript:;' : url($data['url']);
+                return empty($data['url']) ? 'javascript:;' : static::patchUrl($data['url']);
             }
             return url('./category', ['id' => $id]);
         }
@@ -465,6 +465,40 @@ class FuncHelper {
             return $data;
         }
         return $data[$name] ?? '';
+    }
+
+    /**
+     * 根据地址自动填充内容
+     * @param string $path
+     * @return string
+     */
+    public static function patchUrl(string $path): string {
+        if (!str_starts_with($path, './')) {
+            return url($path);
+        }
+        $args = parse_url($path);
+        if (empty($args) || !isset($args['path'])) {
+            return 'javascript:;';
+        }
+        $path = $args['path'];
+        if (empty($args['query'])) {
+            return url($path);
+        }
+        $request = request();
+        $data = [];
+        parse_str($args['query'], $data);
+        foreach ($data as $k => $value) {
+            if ($value !== '') {
+                continue;
+            }
+            $value = $request->get($k);
+            if (is_null($value) || $value === '') {
+                unset($data[$k]);
+                continue;
+            }
+            $data[$k] = $value;
+        }
+        return url($path, $data);
     }
 
     public static function channelRoot(mixed $id) {
@@ -607,14 +641,32 @@ class FuncHelper {
         return false;
     }
 
-    public static function linkage(int|string $id): array {
+    public static function linkage(int|string $id, int $dataId = 0, string $key = ''): mixed {
         $id = static::mapId($id, 'linkage');
         if (empty($id)) {
-            return [];
+            return empty($dataId) ? [] : null;
         }
-        return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
-            return LinkageRepository::dataTree($id);
+        if (empty($dataId)) {
+            return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
+                return LinkageRepository::dataTree($id);
+            });
+        }
+        $data = static::cache()->getOrSet('linkageData', $dataId, function () use ($id, $dataId) {
+           $items = CacheRepository::getLinkageCache($id);
+           foreach ($items as $item) {
+               if ($item['id'] === $id) {
+                   return $item;
+               }
+           }
+           return null;
         });
+        if (empty($data)) {
+            return null;
+        }
+        if (empty($key)) {
+            return $data;
+        }
+        return $data[$key] ?? '';
     }
 
     public static function linkageText(int|string $id): string {

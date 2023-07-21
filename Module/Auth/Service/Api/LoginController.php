@@ -5,6 +5,7 @@ use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -31,8 +32,7 @@ class LoginController extends Controller {
                 if (empty($captchaKey)) {
                     throw AuthException::invalidCaptcha();
                 }
-                $captchaCode = cache()->store('captcha')->get($captchaKey);
-                if (empty($captchaCode) || strtolower($captcha) !== $captcha) {
+                if (CaptchaRepository::verify($captcha, $captchaKey)) {
                     throw AuthException::invalidCaptcha();
                 }
             }
@@ -64,7 +64,7 @@ class LoginController extends Controller {
                 return $this->renderFailure([
                     'message' => $ex->getMessage(),
                     'code' => $ex->getCode(),
-                    'captcha_token' => !empty($captchaKey) ? $captchaKey : md5($request->ip().Time::millisecond())
+                    'captcha_token' => CaptchaRepository::token($captchaKey)
                 ]);
             }
             return $this->renderFailure($ex->getMessage());

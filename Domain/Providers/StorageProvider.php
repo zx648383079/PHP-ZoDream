@@ -288,7 +288,7 @@ class StorageProvider {
      * 确认一下文件
      * @return void
      */
-    public function reload() {
+    public function reload(): void {
         $this->root->mapDeep(function (FileObject $file) {
             if ($file instanceof Directory) {
                 return;

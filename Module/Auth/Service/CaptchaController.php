@@ -1,9 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service;
 
-use Zodream\Image\Captcha;
-use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Infrastructure\Contracts\Http\Output;
+use Module\Auth\Domain\Repositories\CaptchaRepository;
 
 class CaptchaController extends Controller {
 
@@ -13,24 +12,10 @@ class CaptchaController extends Controller {
         ];
     }
 	
-	function indexAction(Request $request, Output $output) {
-		$level = intval($request->get('level'));
-		$captchaKey = $request->get('captcha_token');
-		if (empty($level) && empty($captchaKey)) {
-			$level = intval(session('level'));
-		}
-		$captcha = new Captcha();
-		$captcha->setConfigs([
-            'width' => intval($request->get('width', 100)),
-            'height' => intval($request->get('height', 30)),
-            'fontSize' => 20,
-            'fontFamily' => (string)app_path()->file('data/fonts/YaHei.ttf')
-        ]);
-		$captcha->createCode(empty($captchaKey));
-		if (!empty($captchaKey)) {
-		    cache()->store('captcha')->set($captchaKey, strtolower($captcha->getCode()), 600);
-        }
-		return $output->image($captcha->generate($level));
+	function indexAction(int $level = 0,
+                         string $captcha_token = '', string $type = '',
+                         int $width = 0, int $height = 0) {
+		return CaptchaRepository::generate($level, $captcha_token, $type, $width, $height);
 	}
 
 }

@@ -29,6 +29,9 @@ class LinkageRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = LinkageModel::findOrNew($id);
+        if (LinkageModel::where('id', '<>', $id)->where('code', $model->code)->count() > 0) {
+            throw new \Exception('别名已存在');
+        }
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
@@ -55,6 +58,11 @@ class LinkageRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = LinkageDataModel::findOrNew($id);
+        if (LinkageDataModel::where('linkage_id', $model->linkage_id)
+        ->where('parent_id', $model->parent_id)
+        ->where('id', '<>', $id)->where('name', $model->name)->count() > 0) {
+            throw new \Exception('名称已存在');
+        }
         $model->load($data);
         $model->createFullName();
         if (!$model->save()) {

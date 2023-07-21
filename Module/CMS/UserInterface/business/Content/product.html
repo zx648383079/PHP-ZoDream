@@ -17,12 +17,16 @@
             <div id="content" class="product-panel">
                 <div class="gallery-panel">
                     <div class="item-thumb">
-                        <img src="{$data.thumb}" alt="">
+                        {if:$data.image}
+                        <img src="{$data.image}" alt="{$data.title}">
+                        {else}
+                        <img src="{$data.thumb}" alt="{$data.title}">
+                        {/if}
                     </div>
                     <div class="item-row">
                         <div class="item-title-bar">
                             <span class="item-title">{$data.title}</span>
-                            <span class="item-no">{__:订单编号：}{$data.product_no}</span>
+                            <span class="item-no">{__:订购编号：}{$data.product_no}</span>
                         </div>
                         <a modal="inquiryDialog"><i class="fa fa-edit"></i> {__:点击这里发送询价}</a>
                     </div>
