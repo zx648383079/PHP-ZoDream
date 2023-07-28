@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -13,6 +14,7 @@ use Zodream\Template\View;
 class Linkage extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $items = LinkageModel::query()->selectRaw('code as id,name')->asArray()->get();
         if ($isJson) {
             return [
                 [
@@ -20,12 +22,12 @@ class Linkage extends BaseField {
                     'label' => '联动项',
                     'type' => 'select',
                     'value' => 0,
-                    'items' => LinkageModel::query()->get()
+                    'items' => $items
                 ],
             ];
         }
         return implode('', [
-            Theme::select('setting[option][linkage_id]', [LinkageModel::query()->get()], 0, '联动项'),
+            Theme::select('setting[option][linkage_id]', [$items], '', '联动项'),
         ]);
     }
 
@@ -46,7 +48,7 @@ class Linkage extends BaseField {
             ];
         }
         $value = intval($value);
-        $url = url('./form/linkage', ['id' => $linkageId]);
+        $url = url('./form/linkage', ['id' => $linkageId, 'lang' => CMSRepository::siteLanguage()]);
         $js = <<<JS
 $('#linkage-{$field['id']}').multiSelect({
     default: {$value},

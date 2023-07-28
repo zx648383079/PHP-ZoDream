@@ -13,6 +13,7 @@ $this->title = '联动菜单列表';
         <thead>
         <tr>
             <th>名称</th>
+            <th>语言</th>
             <th>项个数</th>
             <th>操作</th>
         </tr>
@@ -21,6 +22,7 @@ $this->title = '联动菜单列表';
         <?php foreach($model_list as $item): ?>
             <tr>
                 <td><?=$item['name']?></td>
+                <td><?=$item['language']?></td>
                 <td><?=$item['data_count']?></td>
                 <td>
                    <div class="btn-group">

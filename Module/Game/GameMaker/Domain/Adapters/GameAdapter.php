@@ -6,6 +6,7 @@ use Module\Game\GameMaker\Domain\Entities\BagEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterIdentityEntity;
 use Module\Game\GameMaker\Domain\Entities\CheckLogEntity;
+use Module\Game\GameMaker\Domain\Entities\DescentEntity;
 use Module\Game\GameMaker\Domain\Entities\MapEntity;
 use Module\Game\GameMaker\Domain\Entities\MapItemEntity;
 use Module\Game\GameMaker\Domain\Entities\OrganizationEntity;
@@ -18,6 +19,7 @@ use Module\Game\GameMaker\Domain\Entities\StoreEntity;
 use Module\Game\GameMaker\Domain\Entities\TaskEntity;
 use Module\Game\GameMaker\Domain\Entities\TaskLogEntity;
 use Module\Game\GameMaker\Domain\Entities\TeamEntity;
+use Module\Game\GameMaker\Domain\Entities\TeamUserEntity;
 use Module\Game\GameMaker\Domain\Entities\WarehouseEntity;
 use Module\Game\GameMaker\Domain\Model\CharacterModel;
 use Module\Game\GameMaker\Domain\Repositories\BattleRepository;
@@ -54,6 +56,11 @@ class GameAdapter implements IGameAdapter {
 
     protected function executeIdentityQuery() {
         return CharacterIdentityEntity::where('project_id', $this->project['id'])
+            ->orderBy('id', 'desc')->get();
+    }
+
+    protected function executeDescentQuery() {
+        return DescentEntity::where('project_id', $this->project['id'])
             ->orderBy('id', 'desc')->get();
     }
 
@@ -102,9 +109,10 @@ class GameAdapter implements IGameAdapter {
         return 0;
     }
 
-    protected function executeCharacterStatus() {
+    protected function executeCharacterStatusOwn() {
         $model = $this->character->toArray();
         $model['can_upgrade'] = $this->executeCharacterCanUpgrade();
+        $model['equip_items'] = [];
         return $model;
     }
 
@@ -120,8 +128,54 @@ class GameAdapter implements IGameAdapter {
         return [];
     }
 
+    protected function executeFarmOwn() {
+        return [];
+    }
+
+    protected function executeRanchOwn() {
+        return [];
+    }
+
     protected function executeTeamQuery(array $data) {
         return $this->renderPage(TeamEntity::where('project_id', $this->project['id']), $data);
+    }
+
+    protected function executeTeamCreateOwn(array $data) {
+        $teamId = intval($this->character['team_id']);
+        if ($teamId > 0) {
+            throw new \Exception('无法重复创建队伍');
+        }
+        // TODO
+    }
+
+    protected function executeTeamOwn() {
+        $teamId = intval($this->character['team_id']);
+        if ($teamId < 1) {
+            throw new \Exception('无法查看');
+        }
+        $model = TeamEntity::where('project_id', $this->project['id'])
+            ->where('id', $teamId)->first();
+        $data = $model->toArray();
+        $data['user_items'] = TeamUserEntity::where('project_id', $this->project['id'])
+            ->where('team_id', $teamId)->get();
+        $data['editable'] = $this->character['id'] == $model['user_id'];
+        return $data;
+    }
+
+    protected function executeTeamDisbandOwn() {
+        $teamId = intval($this->character['team_id']);
+        if ($teamId < 1) {
+            throw new \Exception('无法查看');
+        }
+        // TODO
+    }
+
+    protected function executeTeamExcludeOwn(array $data) {
+        $teamId = intval($this->character['team_id']);
+        if ($teamId < 1) {
+            throw new \Exception('无法查看');
+        }
+        // TODO
     }
 
     protected function executeOrgQuery(array $data) {
@@ -191,7 +245,12 @@ class GameAdapter implements IGameAdapter {
             $last->getAttributeSource('created_at') > $today - 86400) {
             $running = $last->running + 1;
         }
-        $reward = [];
+        $reward = [
+            '签到成功',
+            sprintf('获得 %s x %d', '金钱', 1),
+            sprintf('获得 %s x %d', '金钱', 1),
+            sprintf('获得 %s x %d', '金钱', 1)
+        ];
         $model = CheckLogEntity::createOrThrow([
             'project_id' => $this->project['id'],
             'user_id' => $this->character['id'],
@@ -236,6 +295,29 @@ class GameAdapter implements IGameAdapter {
         $link_maps = [];
 
         return compact('npc', 'monsters', 'items', 'link_maps');
+    }
+
+    protected function executeMapPickOwn(array $data) {
+
+        return [
+            sprintf('获得 %s x %d', '石头', 1)
+        ];
+    }
+
+    protected function executeMapInquireOwn(array $data) {
+
+        $command = 'select';
+        $data = [
+        ];
+        return compact('command', 'data');
+    }
+
+    protected function executeBattleOwn(array $data) {
+
+        $enemy = [];
+        $own = [];
+        $log_items = [];
+        return compact('enemy', 'own', 'log_items');
     }
 
 

@@ -86,12 +86,12 @@ class MultiScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function addField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function addField(ModelFieldModel|array $field): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
-        $table = new Table($this->getTableByMain($field->is_main));
-        static::converterTableField($table->column($field->field), $field);
+        $table = new Table($this->getTableByMain($field['is_main']));
+        static::converterTableField($table->column($field['field']), $field);
         CreateCmsTables::updateTable($table,
             $table->columns()
         );
@@ -100,33 +100,35 @@ class MultiScene extends BaseScene {
 
     /**
      * 更新字段
-     * @param ModelFieldModel $field
+     * @param ModelFieldModel|array $field
+     * @param ModelFieldModel|array $oldField
      * @return mixed
      * @throws \Exception
      */
-    public function updateField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function updateField(ModelFieldModel|array $field, ModelFieldModel|array $oldField): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
-        if ($field->is_main == $field->getAttributeFromOld('is_main')) {
-            $table = new Table($this->getTableByMain($field->is_main));
-            static::converterTableField($table->column($field->getAttributeFromOld('field'))->name($field->field), $field);
+        if ($field['is_main'] == $oldField['is_main']) {
+            $table = new Table($this->getTableByMain($field['is_main']));
+            static::converterTableField($table->column(
+                $oldField['field'])->name($field['field']), $field);
             CreateCmsTables::updateTable($table,
                 updateColumns: $table->columns()
             );
             return true;
         }
-        $old_table = $this->getTableByMain($field->getAttributeFromOld('is_main'));
-        $table = $this->getTableByMain($field->is_main);
+        $old_table = $this->getTableByMain($oldField['is_main']);
+        $table = $this->getTableByMain($field['is_main']);
         $this->addField($field);
-        $data = DB::table($old_table)->pluck($field->getAttributeFromOld('field'), 'id');
+        $data = DB::table($old_table)->pluck($oldField['field'], 'id');
         foreach ($data as $id => $value) {
             DB::table($table)->where('id', $id)->update([
-                $field->field => $value
+                $field['field'] => $value
             ]);
         }
         $table = new Table($old_table);
-        $table->column($field->getAttributeFromOld('field'));
+        $table->column($oldField['field']);
         CreateCmsTables::updateTable($table,
             dropColumns: $table->columns()
         );
@@ -139,12 +141,12 @@ class MultiScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function removeField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function removeField(ModelFieldModel|array $field): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
-        $table = new Table($this->getTableByMain($field->is_main));
-        $table->column($field->field);
+        $table = new Table($this->getTableByMain($field['is_main']));
+        $table->column($field['field']);
         CreateCmsTables::updateTable($table,
             dropColumns: $table->columns()
         );

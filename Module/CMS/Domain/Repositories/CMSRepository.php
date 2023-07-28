@@ -63,19 +63,6 @@ class CMSRepository {
         FuncHelper::$translateItems = Json::decode($file->read());
     }
 
-    /**
-     * 获取主题的路径
-     * @return Directory
-     * @throws \Exception
-     */
-    protected static function themeRootFolder(): Directory {
-        $path = config('view.cms_directory');
-        if (empty($path)) {
-            return static::$viewFolder;
-        }
-        return app_path()->directory($path);
-    }
-
     public static function registerView(string|SiteModel $theme = '',
                                         ?ViewFactory $provider = null): ViewFactory {
         $language = '';
@@ -92,7 +79,7 @@ class CMSRepository {
         if (empty(static::$viewFolder)) {
             static::$viewFolder = $provider->getDirectory();
         }
-        $dir = static::themeRootFolder()
+        $dir = ThemeManager::themeRootFolder()
             ->directory($theme);
         if (!$dir->exist()) {
             throw new Exception('THEME IS ERROR!');
@@ -150,14 +137,23 @@ class CMSRepository {
             if ($item['is_default'] > 0) {
                 $default = $item['id'];
             }
-            if ($item['match_type'] == SiteModel::MATCH_TYPE_DOMAIN) {
+            $type = intval($item['match_type']);
+            if ($type === SiteModel::MATCH_TYPE_DOMAIN) {
                 if ($item['match_rule'] === $host) {
                     return $item['id'];
                 }
                 continue;
             }
-            if ($item['match_type'] == SiteModel::MATCH_TYPE_PATH) {
-                if (str_starts_with($path, ltrim($item['match_rule'], '/'))) {
+            if ($type === SiteModel::MATCH_TYPE_PATH) {
+                $rule = ltrim($item['match_rule'], '/');
+                if ($rule === $path) {
+                    return $item['id'];
+                }
+                if ($rule === '') {
+                    $default = $item['id'];
+                    continue;
+                }
+                if (str_starts_with($path, $rule)) {
                     return $item['id'];
                 }
             }
@@ -165,8 +161,12 @@ class CMSRepository {
         return $default;
     }
 
-    public static function siteId() {
-        return static::site()->id;
+    public static function siteId(): int {
+        return intval(static::site()->id);
+    }
+
+    public static function siteLanguage(): string {
+        return (string)static::site()->language;
     }
 
     public static function generateSite(SiteModel $site) {

@@ -36,8 +36,21 @@ class ThemeManager {
     protected array $cache = [];
 
     public function __construct() {
-        $this->src = new Directory(dirname(__DIR__).'/UserInterface');
+        $this->src = ThemeManager::themeRootFolder();
         $this->dist = public_path();
+    }
+
+    /**
+     * 获取主题的路径
+     * @return Directory
+     * @throws \Exception
+     */
+    public static function themeRootFolder(): Directory {
+        $path = config('view.cms_directory');
+        if (empty($path)) {
+            return new Directory(dirname(__DIR__).'/UserInterface');
+        }
+        return app_path()->directory($path);
     }
 
     /**
@@ -114,7 +127,7 @@ class ThemeManager {
 
     protected function packFields(int $model_id): array {
         $data = [];
-        $fields = ModelFieldModel::query()->where('model_id', $model_id)->asArray()->all();
+        $fields = ModelFieldModel::query()->where('model_id', $model_id)->asArray()->get();
         foreach ($fields as $item) {
             $item['setting'] = Json::decode($item['setting']);
             unset($item['model_id'], $item['id']);
@@ -342,7 +355,7 @@ class ThemeManager {
             $data['setting']['option']['model'] = $this->getCacheId($data['type']);
             $data['type'] = 'model';
         } elseif (str_starts_with($data['type'], '@linkage:')) {
-            $data['setting']['option']['linkage_id'] = $this->getCacheId($data['type']);
+            $data['setting']['option']['linkage_id'] = substr($data['type'], 9); //$this->getCacheId($data['type']);
             $data['type'] = 'linkage';
         }
         $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])

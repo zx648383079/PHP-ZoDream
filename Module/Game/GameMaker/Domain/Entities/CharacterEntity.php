@@ -18,8 +18,19 @@ use Domain\Entities\Entity;
  * @property integer $y
  * @property integer $updated_at
  * @property integer $created_at
+ * @property integer $hp
+ * @property integer $mp
+ * @property integer $att
+ * @property integer $def
+ * @property integer $identity_id
+ * @property integer $crt
+ * @property integer $lck
+ * @property integer $dex
+ * @property integer $chr
+ * @property integer $int
  * @property integer $org_id
  * @property integer $team_id
+ * @property integer $descent_id
  */
 class CharacterEntity extends Entity {
     public static function tableName() {
@@ -39,8 +50,19 @@ class CharacterEntity extends Entity {
             'y' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
+            'hp' => 'int',
+            'mp' => 'int',
+            'att' => 'int',
+            'def' => 'int',
+            'identity_id' => 'int',
+            'crt' => 'int',
+            'lck' => 'int',
+            'dex' => 'int',
+            'chr' => 'int',
+            'int' => 'int',
             'org_id' => 'int',
             'team_id' => 'int',
+            'descent_id' => 'int',
         ];
     }
 
@@ -58,6 +80,19 @@ class CharacterEntity extends Entity {
             'y' => 'Y',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
+            'hp' => 'Hp',
+            'mp' => 'Mp',
+            'att' => 'Att',
+            'def' => 'Def',
+            'identity_id' => 'Identity Id',
+            'crt' => 'Crt',
+            'lck' => 'Lck',
+            'dex' => 'Dex',
+            'chr' => 'Chr',
+            'int' => 'Int',
+            'org_id' => 'Org Id',
+            'team_id' => 'Team Id',
+            'descent_id' => 'Descent Id',
         ];
     }
 }

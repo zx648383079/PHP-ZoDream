@@ -29,14 +29,20 @@ class LinkageRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = LinkageModel::findOrNew($id);
-        if (LinkageModel::where('id', '<>', $id)->where('code', $model->code)->count() > 0) {
+        $model->load($data);
+        if (static::exist($model)) {
             throw new \Exception('别名已存在');
         }
-        $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
+    }
+
+    public static function exist(array|LinkageModel $data): bool {
+        return LinkageModel::where('id', '<>', intval($data['id']))
+            ->where('code', $data['code'])
+            ->where('language', $data['language'] ?? '')->count() > 0;
     }
 
     public static function remove(int $id) {
@@ -76,7 +82,12 @@ class LinkageRepository {
         LinkageDataModel::where('id', $id)->delete();
     }
 
-    public static function dataTree(int $id): array {
+    public static function dataTree(string|int $id, string $lang = ''): array {
+        if (is_numeric($id)) {
+            $id = intval($id);
+        } else {
+            $id = intval(LinkageModel::where('language', $lang)->where('code', $id)->value('id'));
+        }
         return (new Tree(CacheRepository::getLinkageCache($id)))->makeIdTree();
     }
 }

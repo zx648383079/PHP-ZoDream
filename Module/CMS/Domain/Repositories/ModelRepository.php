@@ -7,6 +7,8 @@ use Domain\Model\SearchModel;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Model\SiteModel;
+use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
 
 class ModelRepository {
@@ -126,16 +128,20 @@ class ModelRepository {
         }
         $old = $id > 0 ? $model->get() : [];
         $model->load($data);
-        $scene = CMSRepository::scene();
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        if ($id > 0) {
-            $model->setAttributeToOld($old);
-            $scene->setModel($model->model)->updateField($model);
-        } else {
-            $scene->setModel($model->model)->addField($model);
-        }
+        SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($id, $model, $old) {
+            $scene->setModel($model->model, intval($site['id']));
+            if (!$scene->initializedModel()) {
+                return;
+            }
+            if ($id > 0) {
+                $scene->updateField($model, $old);
+            } else {
+                $scene->addField($model);
+            }
+        });
         CacheRepository::onModelUpdated(intval($model->model_id));
         return $model;
     }
@@ -148,7 +154,13 @@ class ModelRepository {
         if ($model->is_system > 0) {
             throw new \Exception('系统自带字段禁止删除');
         }
-        CMSRepository::scene()->setModel($model->model)->removeField($model);
+        SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($model) {
+            $scene->setModel($model->model, intval($site['id']));
+            if (!$scene->initializedModel()) {
+                return;
+            }
+            $scene->removeField($model);
+        });
         $model->delete();
         CacheRepository::onModelUpdated(intval($model->model_id));
         return $model;

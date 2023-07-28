@@ -57,7 +57,8 @@ class CreateCmsTables extends Migration {
             $table->id();
             $table->string('name', 100);
             $table->uint('type', 2)->default(0);
-            $table->char('code', 20)->unique();
+            $table->char('code', 20);
+            $table->string('language', 10)->default('');
         })->append(LinkageDataModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('linkage_id');

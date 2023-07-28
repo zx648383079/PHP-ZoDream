@@ -72,12 +72,12 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function addField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function addField(ModelFieldModel|array $field): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->column($field->field), $field);
+        static::converterTableField($table->column($field['field']), $field);
         CreateCmsTables::updateTable($table,
             $table->columns()
         );
@@ -86,16 +86,17 @@ class SingleScene extends BaseScene {
 
     /**
      * 更新字段
-     * @param ModelFieldModel $field
+     * @param ModelFieldModel|array $field
+     * @param ModelFieldModel|array $oldField
      * @return mixed
-     * @throws \Exception
      */
-    public function updateField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function updateField(ModelFieldModel|array $field, ModelFieldModel|array $oldField): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->column($field->getAttributeFromOld('field'))->name($field->field), $field);
+        static::converterTableField($table->column(
+            $oldField['field'])->name($field['field']), $field);
         CreateCmsTables::updateTable($table,
             updateColumns: $table->columns()
         );
@@ -108,12 +109,12 @@ class SingleScene extends BaseScene {
      * @return mixed
      * @throws \Exception
      */
-    public function removeField(ModelFieldModel $field): bool {
-        if ($field->is_system > 0) {
+    public function removeField(ModelFieldModel|array $field): bool {
+        if ($field['is_system'] > 0) {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        $table->column($field->field);
+        $table->column($field['field']);
         CreateCmsTables::updateTable($table,
             dropColumns: $table->columns()
         );

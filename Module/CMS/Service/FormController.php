@@ -32,7 +32,7 @@ class FormController extends Controller {
         ]);
     }
 
-    public function linkageAction(int $id) {
-        return $this->renderData(LinkageRepository::dataTree($id));
+    public function linkageAction(string|int $id, string $lang = '') {
+        return $this->renderData(LinkageRepository::dataTree($id, $lang));
     }
 }

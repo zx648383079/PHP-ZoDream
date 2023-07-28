@@ -55,24 +55,25 @@ interface SceneInterface {
 
     /**
      * 新建字段
-     * @param ModelFieldModel $field
+     * @param ModelFieldModel|array $field
      * @return mixed
      */
-    public function addField(ModelFieldModel $field): bool;
+    public function addField(ModelFieldModel|array $field): bool;
 
     /**
      * 更新字段
-     * @param ModelFieldModel $field
+     * @param ModelFieldModel|array $field
+     * @param ModelFieldModel|array $oldField
      * @return mixed
      */
-    public function updateField(ModelFieldModel $field): bool;
+    public function updateField(ModelFieldModel|array $field, ModelFieldModel|array $oldField): bool;
 
     /**
      * 删除字段
-     * @param ModelFieldModel $field
+     * @param ModelFieldModel|array $field
      * @return mixed
      */
-    public function removeField(ModelFieldModel $field): bool;
+    public function removeField(ModelFieldModel|array $field): bool;
 
     /**
      * @param array $data

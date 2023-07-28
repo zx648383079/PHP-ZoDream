@@ -192,6 +192,9 @@ $(function() {
     }).on('click', '.dialog .dialog-submit', function() {
         $(this).closest('.dialog').find('form').trigger('submit');
     }).on('click', '.app-header .nav-bar .nav-item', function(e) {
+        if (e.target !== this) {
+            return;
+        }
         if (!isTouchDevice) {
             return;
         }

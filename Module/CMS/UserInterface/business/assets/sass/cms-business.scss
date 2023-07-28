@@ -153,13 +153,15 @@ a {
             background-color: #fff;
             display: none;
             z-index: 99;
-            width: 100%;
+            min-width: 100%;
             .nav-item {
                 display: block;
             }
             a {
                 font-weight: 500;
                 font-size: 1rem;
+                word-break: keep-all;
+                text-wrap: nowrap;
             }
             .nav-item-drop {
                 margin-left: 100%;

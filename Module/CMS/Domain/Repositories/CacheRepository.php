@@ -185,9 +185,17 @@ final class CacheRepository {
     public static function getMapCache(): array {
         $site = CMSRepository::siteId();
         return cache()->getOrSet(self::mapKey($site), function () {
+            $lang = CMSRepository::site()->language;
             $model = ModelModel::query()->selectRaw('id,`table` as name')
                 ->pluck('id', 'name');
-            $linkage = LinkageModel::query()->pluck( 'id', 'code',);
+            $linkage = [];
+            $items = LinkageModel::query()->get( 'id', 'code', 'language');
+            foreach ($items as $item) {
+                if (isset($linkage[$item['code']]) && $lang !== $item['language']) {
+                    continue;
+                }
+                $linkage[$item['code']] = $item['id'];
+            }
             $channel = CategoryModel::query()->pluck( 'id', 'name');
             return compact('model', 'linkage', 'channel');
         });

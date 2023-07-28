@@ -87,4 +87,21 @@ class SiteRepository {
     public static function themeList() {
         return (new ThemeManager)->getAllThemes();
     }
+
+    /**
+     * 遍历全部站点
+     * @param callable $cb
+     * @return void
+     * @throws \Exception
+     */
+    public static function mapTemporary(callable $cb): void {
+        $items = SiteModel::query()->get();
+        $source = CMSRepository::site();
+        $scene = CMSRepository::scene();
+        foreach ($items as $item) {
+            CMSRepository::site($item);
+            call_user_func($cb, $scene, $item);
+        }
+        CMSRepository::site($source);
+    }
 }

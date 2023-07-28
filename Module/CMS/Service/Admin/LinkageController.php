@@ -29,6 +29,7 @@ class LinkageController extends Controller {
                 'name' => 'required|string:0,100',
                 'type' => 'int:0,9',
                 'code' => 'required|string:0,20',
+                'language' => 'string:0,20'
             ]);
             LinkageRepository::save($data);
         } catch (\Exception $ex) {

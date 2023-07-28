@@ -12,6 +12,7 @@ $this->title = ($model->id > 0 ? '编辑' : '新增').'联动菜单';
     <?=Form::text('name', true)?>
     <?=Form::text('code', true)?>
     <?=Form::radio('type', ['栏目', '内容'])?>
+    <?=Form::text('language')->tip('具体语言请对应站点语言')?>
    
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>

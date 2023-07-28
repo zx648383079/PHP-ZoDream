@@ -9,7 +9,9 @@ use Module\Game\GameMaker\Domain\Entities\CharacterEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterIdentityEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterStateEntity;
 use Module\Game\GameMaker\Domain\Entities\CheckLogEntity;
+use Module\Game\GameMaker\Domain\Entities\DescentEntity;
 use Module\Game\GameMaker\Domain\Entities\FinancialEntity;
+use Module\Game\GameMaker\Domain\Entities\FormulaEntity;
 use Module\Game\GameMaker\Domain\Entities\FriendEntity;
 use Module\Game\GameMaker\Domain\Entities\HouseEntity;
 use Module\Game\GameMaker\Domain\Entities\IndigenousEntity;
@@ -67,11 +69,19 @@ final class CreateGameMakerTables extends Migration {
             $table->uint('project_id');
             $table->uint('item_id');
             $table->uint('probability')->comment('中奖概率');
+        })->append(DescentEntity::tableName(), function (Table $table) {
+            $table->comment('血统规则');
+            $table->id();
+            $table->uint('project_id');
+            $table->string('name');
+            BattleRepository::addProperty($table);
+            $table->string('specialty')->default('')->comment('血统特长');
         })->append(CharacterEntity::tableName(), function (Table $table) {
             $table->comment('角色表');
             $table->id();
             $table->uint('user_id');
             $table->uint('project_id');
+            $table->uint('descent_id')->default(0);
             $table->uint('identity_id')->default(0);
             $table->uint('org_id')->default(0);
             $table->uint('team_id')->default(0);
@@ -227,6 +237,7 @@ final class CreateGameMakerTables extends Migration {
             $table->comment('土著，包括npc、怪物、boss');
             $table->id();
             $table->uint('project_id');
+            $table->uint('descent_id')->default(0);
             $table->string('name');
             $table->string('description');
             BattleRepository::addProperty($table);
@@ -236,14 +247,24 @@ final class CreateGameMakerTables extends Migration {
             $table->id();
             $table->uint('project_id');
             $table->uint('type');
+            $table->uint('sub_type')->default(0);
             $table->string('name');
-            $table->string('description');
+            $table->string('icon');
+            $table->string('description')->default('');
+            $table->string('effect')->default('');
+        })->append(FormulaEntity::tableName(), function (Table $table) {
+            $table->comment('物品配方');
+            $table->id();
+            $table->uint('project_id');
+            $table->uint('item_id');
         })->append(SkillEntity::tableName(), function (Table $table) {
             $table->comment('技能表');
             $table->id();
             $table->uint('project_id');
             $table->string('name');
-            $table->string('description');
+            $table->string('icon');
+            $table->string('description')->default('');
+            $table->string('effect')->default('');
         })->append(WarehouseEntity::tableName(), function (Table $table) {
             $table->comment('仓库');
             $table->id();

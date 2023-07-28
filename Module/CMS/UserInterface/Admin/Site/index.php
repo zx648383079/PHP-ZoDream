@@ -12,9 +12,10 @@ $this->title = '站点列表';
     <table class="table table-hover">
         <thead>
         <tr>
-            <td>站点名</td>
-            <td>网址</td>
-            <td>操作</td>
+            <th>站点名</th>
+            <th>语言</th>
+            <th>网址</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@ $this->title = '站点列表';
                     <?php endif;?>
                     <?=$item->title?>
                 </td>
+                <td><?=$item['language']?></td>
                 <td class="text-left">[<?=$item->match_type < 1 ? '域名' : '路径'?>]<?=$item->match_rule ?: '(空)'?></td>
                 <td>
                     <?php if(empty($currentSite) || $item->id != $currentSite['id']):?>
