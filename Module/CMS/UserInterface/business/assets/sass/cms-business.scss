@@ -1242,6 +1242,9 @@ $dialogHeight: 20rem;
             border: 1px solid #ccc;
             background-color: #f4f4f4;
             margin-bottom: -1px;
+            width: auto;
+            min-width: 6rem;
+            overflow: hidden;
             &.active {
                 background: linear-gradient(to bottom, $primary, #fff 40%);
                 border-bottom-color: #fff;

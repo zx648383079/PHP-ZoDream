@@ -9,25 +9,29 @@ use Zodream\Html\Dark\Theme;
 class Email extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'unique' => 0,
+            'value' => '',
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'unique',
                     'label' => '验证重复',
                     'type' => 'switch',
-                    'value' => 0,
+                    'value' => $option['unique'],
                 ],
                 [
                     'name' => 'value',
                     'label' => '默认值',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['value'],
                 ],
             ];
         }
         return implode('', [
-            Theme::checkbox('setting[option][unique]', null, 0, '验证重复'),
-            Theme::text('setting[option][value]', '', '默认值'),
+            Theme::checkbox('setting[option][unique]', null, $option['unique'], '验证重复'),
+            Theme::text('setting[option][value]', $option['value'], '默认值'),
         ]);
     }
 

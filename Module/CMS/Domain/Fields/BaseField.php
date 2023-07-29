@@ -6,6 +6,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Json;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Database\Model\Model as BaseModel;
 
@@ -55,6 +56,31 @@ abstract class BaseField {
             return null;
         }
         return $data;
+    }
+
+    /**
+     * 格式化数据
+     * @param mixed $data
+     * @param array $def
+     * @return array
+     */
+    public static function filterData(mixed $data, array $def): array {
+        if (empty($data) || !is_array($data)) {
+            return $def;
+        }
+        $res = [];
+        foreach ($def as $k => $v) {
+            if (is_bool($k)) {
+                $res[$k] = isset($data[$k]) ? Str::toBool($data[$k]) : $v;
+                continue;
+            }
+            if (is_int($v)) {
+                $res[$k] = isset($data[$k]) ? intval($data[$k]) : $v;
+                continue;
+            }
+            $res[$k] = !empty($data[$k]) ? $data[$k] : $v;
+        }
+        return $res;
     }
 
     public static function textToItems(?string $text): array {

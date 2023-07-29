@@ -11,25 +11,29 @@ use Zodream\Template\View;
 class Date extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'has_time' => 1,
+            'format' => 'yyyy-mm-dd'
+        ]);
         if ($isJson) {
             return [
                 [
-                    'name' => 'format',
+                    'name' => 'has_time',
                     'label' => '不选择时间',
                     'type' => 'switch',
-                    'value' => 1,
+                    'value' => $option['has_time'],
                 ],
                 [
                     'name' => 'format',
                     'label' => '格式化',
                     'type' => 'text',
-                    'value' => 'yyyy-mm-dd'
+                    'value' => $option['format'],
                 ],
             ];
         }
         return implode('', [
-            Theme::radio('setting[option][format]', ['是', '否'], 1, '是否选择时间'),
-            Theme::text('setting[option][format]', 'yyyy-mm-dd', '格式化'),
+            Theme::radio('setting[option][has_time]', ['是', '否'], $option['has_time'], '是否选择时间'),
+            Theme::text('setting[option][format]', $option['format'], '格式化'),
         ]);
     }
 

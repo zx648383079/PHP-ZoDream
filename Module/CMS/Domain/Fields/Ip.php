@@ -9,18 +9,21 @@ use Zodream\Html\Dark\Theme;
 class Ip extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'unique' => 0,
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'unique',
                     'label' => '验证重复',
                     'type' => 'switch',
-                    'value' => 0,
+                    'value' => $option['unique'],
                 ],
             ];
         }
         return implode('', [
-            Theme::checkbox('setting[option][unique]', null, 0, '验证重复'),
+            Theme::checkbox('setting[option][unique]', null, $option['unique'], '验证重复'),
         ]);
     }
 

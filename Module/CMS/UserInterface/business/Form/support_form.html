@@ -1,26 +1,26 @@
 <!-- 技术支持表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="技术支持">
+    <input type="hidden" name="title" value="{__:技术支持}">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
                 {tpl:layouts/form_base}
                 <tr>
-                    <th class="input-label">技术支持：</th>
+                    <th class="input-label">{__:技术支持}：</th>
                     <td colspan="3">
                         <select name="technical_support" data-tab="q">
                             <option selected="selected" value="0">
-                                产品咨询
+                                {__:产品咨询}
                             </option>
-                            <option value="1">产品选型</option>
-                            <option value="2">其他</option>
+                            <option value="1">{__:产品选型}</option>
+                            <option value="2">{__:其他}</option>
                         </select>
                         <i class="input-star">*</i>
                     </td>
                 </tr>
                 <tr class="q-0">
-                    <th class="input-label">产品问题：</th>
+                    <th class="input-label">{__:产品问题}：</th>
                     <td colspan="3">
                         <input
                             type="text"
@@ -30,7 +30,7 @@
                     </td>
                 </tr>
                 <tr class="q-0">
-                    <th class="input-label">问题描述：</th>
+                    <th class="input-label">{__:问题描述}：</th>
                     <td colspan="3">
                         <textarea
                             name="problem_description"
@@ -41,7 +41,7 @@
                     </td>
                 </tr>
                 <tr class="q-1 hidden">
-                    <th class="input-label">功能要求：</th>
+                    <th class="input-label">{__:功能要求}：</th>
                     <td colspan="3">
                         <input
                             type="text"
@@ -51,14 +51,14 @@
                     </td>
                 </tr>
                 <tr class="q-1 hidden">
-                    <th class="input-label">负载情况：</th>
+                    <th class="input-label">{__:负载情况}：</th>
                     <td colspan="3">
                         <input type="text" name="load" />
                         <i class="input-star">*</i>
                     </td>
                 </tr>
                 <tr class="q-1 hidden">
-                    <th class="input-label">主要技术参数要求：</th>
+                    <th class="input-label">{__:主要技术参数要求}：</th>
                     <td colspan="3">
                         <textarea
                             name="parameters"
@@ -69,7 +69,7 @@
                     </td>
                 </tr>
                 <tr class="q-2 hidden">
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
                     <td colspan="3">
                         <input
                             type="text"
@@ -79,7 +79,7 @@
                     </td>
                 </tr>
                 <tr class="q-2 hidden">
-                    <th class="input-label">问题描述：</th>
+                    <th class="input-label">{__:问题描述}：</th>
                     <td colspan="3">
                         <textarea
                             name="problem_description_t"
@@ -93,7 +93,7 @@
         </table>
 
         <div class="form-action">
-            <button class="btn btn-default">提交信息登记表</button>
+            <button class="btn btn-default">{__:提交信息登记表}</button>
         </div>
     </div>
 </form>

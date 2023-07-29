@@ -1,24 +1,24 @@
 <!-- 投诉与建议表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="投诉建议">
+    <input type="hidden" name="title" value="{__:投诉建议}">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
                 {tpl:layouts/form_base}
 
                 <tr>
-                    <th class="input-label">投诉建议类别：</th>
+                    <th class="input-label">{__:投诉建议类别}：</th>
 
                     <td colspan="3" id="asdf">
                         <select name="suggestions_type" data-tab="q">
-                            <option value="0">产品质量投诉</option>
+                            <option value="0">{__:产品质量投诉}</option>
 
-                            <option value="1">包装质量投诉</option>
+                            <option value="1">{__:包装质量投诉}</option>
 
-                            <option value="2">工作服务投诉</option>
+                            <option value="2">{__:工作服务投诉}</option>
 
-                            <option value="3">建议</option>
+                            <option value="3">{__:建议}</option>
                         </select>
 
                         <i class="input-star">*</i>
@@ -26,7 +26,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
 
                     <td>
                         <input
@@ -39,7 +39,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">产品数量：</th>
+                    <th class="input-label">{__:产品数量}：</th>
 
                     <td>
                         <input
@@ -54,7 +54,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">生产日期或条码：</th>
+                    <th class="input-label">{__:生产日期或条码}：</th>
 
                     <td>
                         <input
@@ -67,7 +67,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">购买点名称：</th>
+                    <th class="input-label">{__:购买点名称}：</th>
 
                     <td>
                         <input
@@ -82,7 +82,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">购买点联系方式：</th>
+                    <th class="input-label">{__:购买点联系方式}：</th>
 
                     <td>
                         <input
@@ -92,7 +92,7 @@
                         />
                     </td>
 
-                    <th class="input-label">购买日期：</th>
+                    <th class="input-label">{__:购买日期}：</th>
 
                     <td>
                         <input
@@ -104,7 +104,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">产品使用省市：</th>
+                    <th class="input-label">{__:产品使用省市}：</th>
 
                     <td>
                         <input
@@ -114,7 +114,7 @@
                         />
                     </td>
 
-                    <th class="input-label">产品使用日期：</th>
+                    <th class="input-label">{__:产品使用日期}：</th>
 
                     <td>
                         <input
@@ -126,7 +126,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">故障现象描述：</th>
+                    <th class="input-label">{__:故障现象描述}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -144,9 +144,7 @@
 
                 <tr class="q-0">
                     <th class="input-label">
-                        使用场合、<br />
-
-                        负载及线路情况：
+                        {__:使用场合、<br/>负载及线路情况}：
                     </th>
 
                     <td colspan="3">
@@ -161,7 +159,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
 
                     <td>
                         <input
@@ -173,7 +171,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">产品数量</th>
+                    <th class="input-label">{__:产品数量}</th>
 
                     <td>
                         <input
@@ -187,7 +185,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">外箱条码：</th>
+                    <th class="input-label">{__:外箱条码}：</th>
 
                     <td>
                         <input
@@ -197,7 +195,7 @@
                         />
                     </td>
 
-                    <th class="input-label">中盒条码：</th>
+                    <th class="input-label">{__:中盒条码}：</th>
 
                     <td>
                         <input
@@ -209,7 +207,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">产品条码：</th>
+                    <th class="input-label">{__:产品条码}：</th>
 
                     <td>
                         <input
@@ -219,7 +217,7 @@
                         />
                     </td>
 
-                    <th class="input-label">到货时间：</th>
+                    <th class="input-label">{__:到货时间}：</th>
 
                     <td>
                         <input
@@ -233,7 +231,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">问题描述：</th>
+                    <th class="input-label">{__:问题描述}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -249,7 +247,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">所需服务及要求：</th>
+                    <th class="input-label">{__:所需服务及要求}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -263,7 +261,7 @@
                 </tr>
 
                 <tr class="q-2 hidden">
-                    <th class="input-label">外箱封条情况：</th>
+                    <th class="input-label">{__:外箱封条情况}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -277,7 +275,7 @@
                 </tr>
 
                 <tr class="q-2 hidden">
-                    <th class="input-label">投诉对象：</th>
+                    <th class="input-label">{__:投诉对象}：</th>
 
                     <td>
                         <input
@@ -287,7 +285,7 @@
                         />
                     </td>
 
-                    <th class="input-label">投诉原因：</th>
+                    <th class="input-label">{__:投诉原因}：</th>
 
                     <td>
                         <input
@@ -299,7 +297,7 @@
                 </tr>
 
                 <tr class="q-2 hidden">
-                    <th class="input-label">问题描述：</th>
+                    <th class="input-label">{__:问题描述}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -315,7 +313,7 @@
                 </tr>
 
                 <tr class="q-2 hidden">
-                    <th class="input-label">所需服务及要求：</th>
+                    <th class="input-label">{__:所需服务及要求}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -329,7 +327,7 @@
                 </tr>
 
                 <tr class="q-3 hidden">
-                    <th class="input-label">建议及意见</th>
+                    <th class="input-label">{__:建议及意见}</th>
 
                     <td colspan="3">
                         <textarea
@@ -348,7 +346,7 @@
         </table>
 
         <div class="form-action">
-            <button class="btn btn-default">提交信息登记表</button>
+            <button class="btn btn-default">{__:提交信息登记表}</button>
         </div>
     </div>
 </form>

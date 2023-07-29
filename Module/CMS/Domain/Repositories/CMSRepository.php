@@ -246,7 +246,7 @@ class CMSRepository {
         }
     }
 
-    public static function generateTableName(string $name) {
+    public static function generateTableName(string $name): string {
         if (empty($name)) {
             return Str::randomByNumber(8);
         }

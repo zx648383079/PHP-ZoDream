@@ -9,60 +9,62 @@ use Zodream\Html\Dark\Theme;
 class Text extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'width' => '',
+            'is_mb_auto' => 1,
+            'is_pwd' => 0,
+            'unique' => 0,
+            'value' => '',
+            'type' => 0,
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'width',
                     'label' => '宽度',
                     'type' => 'text',
-                    'value' => '',
-                ],
-                [
-                    'name' => 'height',
-                    'label' => '高度',
-                    'type' => 'text',
-                    'value' => '',
+                    'value' => $option['width'],
                 ],
                 [
                     'name' => 'is_mb_auto',
                     'label' => '移动端自动宽度',
                     'type' => 'switch',
-                    'value' => '',
+                    'value' => $option['is_mb_auto'],
                 ],
                 [
                     'name' => 'is_pwd',
                     'label' => '密码框模式',
                     'type' => 'switch',
-                    'value' => 0,
+                    'value' => $option['is_pwd'],
                 ],
                 [
                     'name' => 'unique',
                     'label' => '验证重复',
                     'type' => 'switch',
-                    'value' => 0,
+                    'value' => $option['unique'],
                 ],
                 [
                     'name' => 'value',
                     'label' => '默认值',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['value'],
                 ],
                 [
                     'name' => 'type',
                     'label' => '字段类型',
                     'type' => 'text',
-                    'value' => 0,
+                    'value' => $option['type'],
                     'items' => ['int', 'char', 'varchar']
                 ],
             ];
         }
         return implode('', [
-            Theme::text('setting[option][width]', '', '输入框宽度'),
-            Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
-            Theme::checkbox('setting[option][is_pwd]', null, 0, '密码框模式'),
-            Theme::checkbox('setting[option][unique]', null, 0, '验证重复'),
-            Theme::text('setting[option][value]', '', '默认值'),
-            Theme::select('setting[option][type]', ['int', 'char', 'varchar'], 0, '字段类型'),
+            Theme::text('setting[option][width]', $option['width'], '输入框宽度'),
+            Theme::radio('setting[option][is_mb_auto]', ['是', '否'], $option['is_mb_auto'], '移动端自动宽度'),
+            Theme::checkbox('setting[option][is_pwd]', null, $option['is_pwd'], '密码框模式'),
+            Theme::checkbox('setting[option][unique]', null, $option['unique'], '验证重复'),
+            Theme::text('setting[option][value]', $option['value'], '默认值'),
+            Theme::select('setting[option][type]', ['int', 'char', 'varchar'], $option['type'], '字段类型'),
         ]);
     }
 

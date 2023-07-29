@@ -9,17 +9,19 @@ use Zodream\Html\Dark\Theme;
 class Select extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $value = static::fieldSetting($field, 'option', 'items');
         if ($isJson) {
             return [
                 [
                     'name' => 'items',
                     'label' => '选项',
                     'type' => 'textarea',
+                    'value' => $value
                 ],
             ];
         }
         return implode('', [
-            Theme::textarea('setting[option][items]', '', '选项'),
+            Theme::textarea('setting[option][items]', $value, '选项'),
         ]);
     }
 

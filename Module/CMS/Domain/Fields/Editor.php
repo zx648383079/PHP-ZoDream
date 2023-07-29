@@ -10,40 +10,46 @@ use Zodream\Template\View;
 class Editor extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'width' => '',
+            'height' => '',
+            'is_mb_auto' => 1,
+            'editor_mode' => 0
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'width',
                     'label' => '宽度',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['width'],
                 ],
                 [
                     'name' => 'height',
                     'label' => '高度',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['height'],
                 ],
                 [
                     'name' => 'is_mb_auto',
                     'label' => '移动端自动宽度',
                     'type' => 'switch',
-                    'value' => '',
+                    'value' => $option['is_mb_auto'],
                 ],
                 [
                     'name' => 'editor_mode',
                     'label' => '编辑器模式',
                     'type' => 'radio',
-                    'value' => 0,
+                    'value' => $option['editor_mode'],
                     'items' => ['完整版', '精简版', '优化版']
                 ],
             ];
         }
         return implode('', [
-            Theme::text('setting[option][width]', '', '宽度'),
-            Theme::text('setting[option][height]', '', '高度'),
-            Theme::radio('setting[option][is_mb_auto]', ['是', '否'], 0, '移动端自动宽度'),
-            Theme::radio('setting[option][editor_mode]', ['完整版', '精简版', '优化版'], 0, '编辑器模式'),
+            Theme::text('setting[option][width]', $option['width'], '宽度'),
+            Theme::text('setting[option][height]', $option['height'], '高度'),
+            Theme::radio('setting[option][is_mb_auto]', ['是', '否'], $option['is_mb_auto'], '移动端自动宽度'),
+            Theme::radio('setting[option][editor_mode]', ['完整版', '精简版', '优化版'], $option['editor_mode'], '编辑器模式'),
         ]);
     }
 

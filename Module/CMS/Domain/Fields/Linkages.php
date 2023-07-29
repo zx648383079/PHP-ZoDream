@@ -16,19 +16,20 @@ class Linkages extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
         $items = LinkageModel::query()->selectRaw('code as id,name')->asArray()->get();
+        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
         if ($isJson) {
             return [
                 [
                     'name' => 'linkage_id',
                     'label' => '联动项',
                     'type' => 'select',
-                    'value' => 0,
+                    'value' => $linkageId,
                     'items' => $items
                 ],
             ];
         }
         return implode('', [
-            Theme::select('setting[option][linkage_id]', [$items], '', '联动项'),
+            Theme::select('setting[option][linkage_id]', [$items], $linkageId, '联动项'),
         ]);
     }
 

@@ -1,64 +1,90 @@
 <!-- 价格询问表单 -->
+{> $lang = option:language}
+{> $isNotEn = $lang!=en}
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="价格询问">
+    <input type="hidden" name="title" value="{__:价格询问}">
     <div class="row">
         <div class="col-md-6">
-            <label for="">品牌厂商 <span>（Manutacturer）</span> <i class="input-star">*</i> </label>
+            <label for="">{__:品牌厂商}
+                {if:$isNotEn}
+                <span>（Manutacturer）</span>
+                {/if}
+                <i class="input-star">*</i> </label>
             <input type="text" name="manutacturer" required>
         </div>
         <div class="col-md-6">
-            <label for="">公司名称 <i class="input-star">*</i> </label>
+            <label for="">{__:公司名称} <i class="input-star">*</i> </label>
             <input type="text">
         </div>
         <div class="col-md-6">
-            <label for="">产品名称 <span>（Product Name）</span> <i class="input-star">*</i> </label>
+            <label for="">{__:产品名称} 
+                {if:$isNotEn}
+                <span>（Product Name）</span>
+                {/if}
+                <i class="input-star">*</i> </label>
             <input type="text">
         </div>
         <div class="col-md-6">
-            <label for="">联系人<i class="input-star">*</i> </label>
-            <input type="text">
-        </div>
-
-        <div class="col-md-6">
-            <label for="">产品型号 <span>（Product Type）</span> <i class="input-star">*</i> </label>
-            <input type="text">
-        </div>
-        <div class="col-md-6">
-            <label for="">联系地址<i class="input-star">*</i> </label>
+            <label for="">{__:联系人}<i class="input-star">*</i> </label>
             <input type="text">
         </div>
 
         <div class="col-md-6">
-            <label for="">产品序列号 <span>（ID-Nr；Artikel-Nr）</span> <i class="input-star">*</i> </label>
+            <label for="">{__:产品型号} 
+                {if:$isNotEn}
+                <span>（Product Type）</span>
+                {/if}
+                 <i class="input-star">*</i> </label>
             <input type="text">
         </div>
         <div class="col-md-6">
-            <label for="">联系电话<i class="input-star">*</i> </label>
+            <label for="">{__:联系地址}<i class="input-star">*</i> </label>
+            <input type="text">
+        </div>
+
+        <div class="col-md-6">
+            <label for="">{__:产品序列号} 
+                {if:$isNotEn}
+                <span>（ID-Nr；Artikel-Nr）</span> 
+                {/if}
+                <i class="input-star">*</i> </label>
+            <input type="text">
+        </div>
+        <div class="col-md-6">
+            <label for="">{__:联系电话}<i class="input-star">*</i> </label>
             <input type="text">
         </div>
         
         <div class="col-md-6">
-            <label for="">产品描述 <span>（Voltage，Amp，Kw,Rpm）</span> <i class="input-star">*</i> </label>
+            <label for="">{__:产品描述} 
+                {if:$isNotEn}
+                <span>（Voltage，Amp，Kw,Rpm）</span>
+                {/if}
+                <i class="input-star">*</i> </label>
             <input type="text">
         </div>
         <div class="col-md-6">
-            <label for="">传真<i class="input-star">*</i> </label>
+            <label for="">{__:传真}<i class="input-star">*</i> </label>
             <input type="text">
         </div>
         
             
         <div class="col-md-6">
-            <label for="">需求数量 <span>（Quantity demanded）</span> <i class="input-star">*</i> </label>
+            <label for="">{__:需求数量} 
+                {if:$isNotEn}
+                <span>（Quantity demanded）</span> 
+                {/if}
+                <i class="input-star">*</i> </label>
             <input type="text">
         </div>
         <div class="col-md-6">
-            <label for="">联系邮箱<i class="input-star">*</i> </label>
+            <label for="">{__:联系邮箱}<i class="input-star">*</i> </label>
             <input type="text">
         </div>
 
         <div class="col-md-12">
-            <label for="">附加信息，更具体要求 <i class="input-star">*</i> </label>
+            <label for="">{__:附加信息，更具体要求} <i class="input-star">*</i> </label>
             <textarea name="" rows="5"></textarea>
         </div>
     </div>

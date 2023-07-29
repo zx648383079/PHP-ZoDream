@@ -179,7 +179,7 @@ class ThemeManager {
 
     protected function packContent(): array {
         $data = [];
-        $model_list = ModelModel::query()->all();
+        $model_list = ModelModel::query()->get();
         foreach ($model_list as $model) {
             $scene = CMSRepository::scene()->setModel($model);
             $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
@@ -281,9 +281,12 @@ class ThemeManager {
     }
 
     protected function runActionLinkage(array $data): void {
+        $data = $this->formatI18n($data);
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
-        $model = LinkageModel::where('code', $data['code'])->first();
+        $data['language'] = CMSRepository::siteLanguage();
+        $model = LinkageModel::where('code', $data['code'])
+            ->where('language', $data['language'])->first();
         if (empty($model)) {
             $model = LinkageModel::create($data);
         }
@@ -298,6 +301,7 @@ class ThemeManager {
         foreach ($data as $item) {
             $children = $item['children'] ?? [];
             unset($item['children']);
+            $item = $this->formatI18n($item);
             $item['parent_id'] = $parent_id;
             $item['linkage_id'] = $linkage_id;
             $item['full_name'] = $prefix.' '.$item['name'];
@@ -354,9 +358,13 @@ class ThemeManager {
         } elseif (str_starts_with($data['type'], '@model:')) {
             $data['setting']['option']['model'] = $this->getCacheId($data['type']);
             $data['type'] = 'model';
-        } elseif (str_starts_with($data['type'], '@linkage:')) {
-            $data['setting']['option']['linkage_id'] = substr($data['type'], 9); //$this->getCacheId($data['type']);
-            $data['type'] = 'linkage';
+        } elseif (str_starts_with($data['type'], '@')) {
+            $type = $data['type'];
+            $i = strpos($type, ':');
+            $data['type'] = substr($type, 1, $i === false ? null : ($i - 1));
+            if (in_array($data['type'], ['linkage', 'linkages'])) {
+                $data['setting']['option']['linkage_id'] = substr($type, $i + 1); //$this->getCacheId($data['type']);
+            }
         }
         $model = ModelFieldModel::where('field', $data['field'])->where('model_id', $data['model_id'])
             ->first();
@@ -376,6 +384,7 @@ class ThemeManager {
     }
 
     protected function runActionChannel(array $data): void {
+        $data = $this->formatI18n($data);
         $type = $data['type'] ?? null;
         if ($type === 'page') {
             $data['type'] = CategoryEntity::TYPE_PAGE;
@@ -427,7 +436,7 @@ class ThemeManager {
         $cat = $this->getCacheId($data['cat_id'], 'channel');
         $scene = CMSRepository::scene()
             ->setModel($this->getCacheId($cat->model_id, 'model'));
-        $scene->insert($data);
+        $scene->insert($this->formatI18n($data));
     }
 
     protected function insertGroup(array $item): void {
@@ -456,6 +465,23 @@ class ThemeManager {
             $newOptions[] = $item;
         }
         CMSRepository::site()->saveOption($newOptions);
+    }
+
+    protected function formatI18n(array $data): array {
+        $lang = CMSRepository::siteLanguage();
+        $res = [];
+        foreach ($data as $key => $item) {
+            $i = strpos($key, ':');
+            if ($i === false) {
+                $res[$key] = $item;
+                continue;
+            }
+            if (substr($key, 0, $i) !== $lang) {
+                continue;
+            }
+            $res[substr($key, $i + 1)] = $item;
+        }
+        return $res;
     }
 
     protected function getOptionParent(string $code): int {

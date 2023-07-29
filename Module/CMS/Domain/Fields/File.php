@@ -11,25 +11,29 @@ class File extends BaseField {
     const DEFAULT_ALLOW = '';
 
     public function options(ModelFieldModel $field, bool $isJson = false): string|array {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'allow' => static::DEFAULT_ALLOW,
+            'size' => '2M',
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'allow',
                     'label' => '允许格式',
                     'type' => 'text',
-                    'value' => self::DEFAULT_ALLOW,
+                    'value' => $option['allow'],
                 ],
                 [
-                    'name' => 'length',
+                    'name' => 'size',
                     'label' => '允许大小',
                     'type' => 'text',
-                    'value' => '2M',
+                    'value' => $option['size'],
                 ],
             ];
         }
         return implode('', [
-            Theme::text('setting[option][allow]', self::DEFAULT_ALLOW, '允许格式'),
-            Theme::text('setting[option][length]', '2M', '允许大小'),
+            Theme::text('setting[option][allow]', $option['allow'], '允许格式'),
+            Theme::text('setting[option][size]', $option['size'], '允许大小'),
         ]);
     }
 

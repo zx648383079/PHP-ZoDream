@@ -16,8 +16,6 @@ class Color extends BaseField {
         return '';
     }
 
-
-
     public function converterField(Column $column, ModelFieldModel $field): void {
         $column->string(20)->default('')->comment($field->name);
     }

@@ -10,17 +10,21 @@ use Zodream\Infrastructure\Support\MessageBag;
 class SwitchBox extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'value' => 0
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'value',
                     'label' => '默认值',
                     'type' => 'switch',
+                    'value' => $option['value']
                 ],
             ];
         }
         return implode('', [
-            Theme::checkbox('setting[option][value]', null, false, '默认值'),
+            Theme::checkbox('setting[option][value]', null, $option['value'], '默认值'),
         ]);
     }
 

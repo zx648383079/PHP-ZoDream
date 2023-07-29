@@ -11,25 +11,29 @@ use Zodream\Html\Dark\Theme;
 class Markdown extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'width' => '',
+            'height' => '',
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'width',
                     'label' => '宽度',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['width'],
                 ],
                 [
                     'name' => 'height',
                     'label' => '高度',
                     'type' => 'text',
-                    'value' => '',
+                    'value' => $option['height'],
                 ],
             ];
         }
         return implode('', [
-            Theme::text('setting[option][width]', '', '宽度'),
-            Theme::text('setting[option][height]', '', '高度'),
+            Theme::text('setting[option][width]', $option['width'], '宽度'),
+            Theme::text('setting[option][height]', $option['height'], '高度'),
         ]);
     }
 

@@ -62,7 +62,16 @@
         {
             "action": "linkage",
             "name": "产品类型",
+            "en:name": "Product Type",
             "code": "product_type",
+            "data": [
+            ]
+        },
+        {
+            "action": "linkage",
+            "name": "应用行业",
+            "en:name": "Industry",
+            "code": "industry",
             "data": [
             ]
         },
@@ -207,7 +216,7 @@
                 {
                     "name": "行业分类",
                     "field": "industry",
-                    "type": "@linkage:industry",
+                    "type": "@linkages:industry",
                     "is_main": true
                 },
                 {
@@ -1304,6 +1313,7 @@
         {
             "action": "channel",
             "title": "关于我们",
+            "en:title": "Abount US",
             "name": "about_us",
             "type": "page",
             "content": "",
@@ -1314,7 +1324,7 @@
                 {
                     "action": "channel",
                     "title": "公司介绍",
-                    "name": "",
+                    "en:title": "Company Profile",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1323,7 +1333,7 @@
                 {
                     "action": "channel",
                     "title": "企业文化",
-                    "name": "",
+                    "en:title": "Enterprise Culture",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1332,7 +1342,7 @@
                 {
                     "action": "channel",
                     "title": "发展历程",
-                    "name": "",
+                    "en:title": "History",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1341,7 +1351,7 @@
                 {
                     "action": "channel",
                     "title": "组织机构",
-                    "name": "",
+                    "en:title": "Organization",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1350,7 +1360,7 @@
                 {
                     "action": "channel",
                     "title": "公司资质",
-                    "name": "",
+                    "en:title": "Company Qualification",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1359,7 +1369,7 @@
                 {
                     "action": "channel",
                     "title": "公司荣誉",
-                    "name": "",
+                    "en:title": "Honors",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1368,7 +1378,7 @@
                 {
                     "action": "channel",
                     "title": "公司视频",
-                    "name": "",
+                    "en:title": "Videos",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1379,6 +1389,7 @@
         {
             "action": "channel",
             "title": "产品中心",
+            "en:title": "Products",
             "name": "product_center",
             "type": "@model:products",
             "group": "nav",
@@ -1387,6 +1398,7 @@
                 {
                     "action": "channel",
                     "title": "产品类型",
+                    "en:title": "Products Specification",
                     "name": "",
                     "type": "page",
                     "group": "nav",
@@ -1396,6 +1408,7 @@
                 {
                     "action": "channel",
                     "title": "行业分类",
+                    "en:title": "Industry Classification",
                     "name": "product_industry",
                     "type": "page",
                     "group": "nav",
@@ -1405,7 +1418,7 @@
                 {
                     "action": "channel",
                     "title": "品牌",
-                    "name": "",
+                    "en:title": "Brand",
                     "type": "page",
                     "group": "nav",
                     "category_template": "product",
@@ -1416,6 +1429,7 @@
         {
             "action": "channel",
             "title": "新闻中心",
+            "en:title": "News Center",
             "name": "news_center",
             "type": "@model:news",
             "group": "nav",
@@ -1424,7 +1438,7 @@
                 {
                     "action": "channel",
                     "title": "公司新闻",
-                    "name": "",
+                    "en:title": "Company News",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1432,7 +1446,7 @@
                 {
                     "action": "channel",
                     "title": "行业新闻",
-                    "name": "",
+                    "en:title": "Industry News",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1440,7 +1454,7 @@
                 {
                     "action": "channel",
                     "title": "专题新闻",
-                    "name": "",
+                    "en:title": "Topic News",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1448,7 +1462,7 @@
                 {
                     "action": "channel",
                     "title": "展会信息",
-                    "name": "",
+                    "en:title": "Exhibitions",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1456,7 +1470,7 @@
                 {
                     "action": "channel",
                     "title": "员工风采",
-                    "name": "",
+                    "en:title": "Staff style",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1464,7 +1478,7 @@
                 {
                     "action": "channel",
                     "title": "通知通告",
-                    "name": "",
+                    "en:title": "Notice",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1474,6 +1488,7 @@
         {
             "action": "channel",
             "title": "服务与支持",
+            "en:title": "Service & Support",
             "name": "service_support",
             "type": "page",
             "group": "nav",
@@ -1483,7 +1498,7 @@
                 {
                     "action": "channel",
                     "title": "服务网络",
-                    "name": "",
+                    "en:title": "Service Network",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1492,7 +1507,7 @@
                 {
                     "action": "channel",
                     "title": "公司业绩",
-                    "name": "",
+                    "en:title": "Company performance",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1501,6 +1516,7 @@
                 {
                     "action": "channel",
                     "title": "解决方案",
+                    "en:title": "Solution",
                     "name": "solutions",
                     "type": "@model:solutions",
                     "group": "nav",
@@ -1509,6 +1525,7 @@
                 {
                     "action": "channel",
                     "title": "下载专区",
+                    "en:title": "Download",
                     "name": "download",
                     "type": "@model:resources",
                     "group": "nav",
@@ -1517,6 +1534,7 @@
                         {
                             "action": "channel",
                             "title": "产品样本",
+                            "en:title": "Product samples",
                             "name": "product_sample",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
@@ -1524,6 +1542,7 @@
                         {
                             "action": "channel",
                             "title": "产品证书",
+                            "en:title": "Product Certificate",
                             "name": "product_cert",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
@@ -1531,6 +1550,7 @@
                         {
                             "action": "channel",
                             "title": "技术资料",
+                            "en:title": "Datasheet",
                             "name": "product_information",
                             "type": "@model:resources",
                             "image": "/assets/images/banner.jpg"
@@ -1540,7 +1560,7 @@
                 {
                     "action": "channel",
                     "title": "服务分类",
-                    "name": "",
+                    "en:title": "Classification of service",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1549,7 +1569,7 @@
                         {
                             "action": "channel",
                             "title": "技术支持",
-                            "name": "",
+                            "en:title": "Technical Support",
                             "type": "page",
                             "category_template": "support_form",
                             "image": "/assets/images/banner.jpg"
@@ -1557,7 +1577,7 @@
                         {
                             "action": "channel",
                             "title": "产品维修",
-                            "name": "",
+                            "en:title": "Product Repair",
                             "type": "page",
                             "category_template": "maintenance_form",
                             "image": "/assets/images/banner.jpg"
@@ -1565,7 +1585,7 @@
                         {
                             "action": "channel",
                             "title": "现场服务",
-                            "name": "",
+                            "en:title": "Field Services",
                             "type": "page",
                             "category_template": "live_form",
                             "image": "/assets/images/banner.jpg"
@@ -1573,7 +1593,7 @@
                         {
                             "action": "channel",
                             "title": "商务支持",
-                            "name": "",
+                            "en:title": "Business Support",
                             "type": "page",
                             "category_template": "business_form",
                             "image": "/assets/images/banner.jpg"
@@ -1581,7 +1601,7 @@
                         {
                             "action": "channel",
                             "title": "产品校验",
-                            "name": "",
+                            "en:title": "Product verification",
                             "type": "page",
                             "category_template": "verify_form",
                             "image": "/assets/images/banner.jpg"
@@ -1589,7 +1609,7 @@
                         {
                             "action": "channel",
                             "title": "投诉与建议",
-                            "name": "",
+                            "en:title": "Complaints and Suggestions",
                             "type": "page",
                             "category_template": "complaints_form",
                             "image": "/assets/images/banner.jpg"
@@ -1599,7 +1619,7 @@
                 {
                     "action": "channel",
                     "title": "常见问题",
-                    "name": "",
+                    "en:title": "Common problem",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg",
@@ -1607,21 +1627,21 @@
                         {
                             "action": "channel",
                             "title": "产品选型",
-                            "name": "",
+                            "en:title": "Product Selection",
                             "type": "@model:news",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
                             "action": "channel",
                             "title": "同类产品替代",
-                            "name": "",
+                            "en:title": "Similar product substitution",
                             "type": "@model:news",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {
                             "action": "channel",
                             "title": "注意事项",
-                            "name": "",
+                            "en:title": "Precautions",
                             "type": "@model:news",
                             "image": "/assets/images/banner.jpg"
                         }
@@ -1632,7 +1652,7 @@
         {
             "action": "channel",
             "title": "联系我们",
-            "name": "",
+            "en:title": "Contact Us",
             "type": "page",
             "group": "nav",
             "category_template": "index",
@@ -1641,6 +1661,7 @@
                 {
                     "action": "channel",
                     "title": "联系方式",
+                    "en:title": "Contact",
                     "name": "contact_information",
                     "type": "page",
                     "group": "nav",
@@ -1650,6 +1671,7 @@
                         {
                             "action": "channel",
                             "title": "业务部",
+                            "en:title": "Business Department",
                             "name": "business_department",
                             "type": "@model:salesman",
                             "image": "/assets/images/banner.jpg"
@@ -1657,6 +1679,7 @@
                         {
                             "action": "channel",
                             "title": "市场技术部",
+                            "en:title": "Market Technical Department",
                             "name": "technical_department",
                             "type": "@model:salesman",
                             "image": "/assets/images/banner.jpg"
@@ -1666,7 +1689,7 @@
                 {
                     "action": "channel",
                     "title": "销售网络",
-                    "name": "",
+                    "en:title": "Sales Network",
                     "type": "@model:salestore",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1674,7 +1697,7 @@
                 {
                     "action": "channel",
                     "title": "反馈留言",
-                    "name": "",
+                    "en:title": "Comments",
                     "type": "page",
                     "group": "nav",
                     "category_template": "feedback_form",
@@ -1683,7 +1706,7 @@
                 {
                     "action": "channel",
                     "title": "微博",
-                    "name": "",
+                    "en:title": "Weibo",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1692,7 +1715,7 @@
                 {
                     "action": "channel",
                     "title": "微信",
-                    "name": "",
+                    "en:title": "Wechat",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1701,7 +1724,7 @@
                 {
                     "action": "channel",
                     "title": "手机站",
-                    "name": "",
+                    "en:title": "WAP Site",
                     "type": "page",
                     "group": "nav",
                     "category_template": "index",
@@ -1712,14 +1735,14 @@
         {
             "action": "channel",
             "title": "网上商城",
-            "name": "",
+            "en:title": "Web Shop",
             "type": "link",
             "group": "nav",
             "children": [
                 {
                     "action": "channel",
                     "title": "阿里巴巴",
-                    "name": "",
+                    "en:title": "Alibaba",
                     "type": "link",
                     "group": "nav"
                 }
@@ -1728,7 +1751,7 @@
         {
             "action": "channel",
             "title": "人力资源",
-            "name": "",
+            "en:title": "HR",
             "type": "@model:news",
             "group": "nav",
             "image": "/assets/images/banner.jpg",
@@ -1736,7 +1759,7 @@
                 {
                     "action": "channel",
                     "title": "用人机制",
-                    "name": "",
+                    "en:title": "Staff Regulation",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1744,7 +1767,7 @@
                 {
                     "action": "channel",
                     "title": "人才招聘",
-                    "name": "",
+                    "en:title": "Recruitment",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1752,7 +1775,7 @@
                 {
                     "action": "channel",
                     "title": "员工活动",
-                    "name": "",
+                    "en:title": "Staff Motivation",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1760,7 +1783,7 @@
                 {
                     "action": "channel",
                     "title": "员工培训",
-                    "name": "",
+                    "en:title": "Staff Training",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1768,7 +1791,7 @@
                 {
                     "action": "channel",
                     "title": "最新通知",
-                    "name": "",
+                    "en:title": "The lastest Notic",
                     "type": "@model:news",
                     "group": "nav",
                     "image": "/assets/images/banner.jpg"
@@ -1778,7 +1801,7 @@
         {
             "action": "channel",
             "title": "网站地图",
-            "name": "",
+            "en:title": "Site Map",
             "type": "page",
             "group": "nav",
             "category_template": "map",
@@ -1787,12 +1810,14 @@
         {
             "action": "channel",
             "title": "合作伙伴",
+            "en:title": "Cooperative Partners",
             "name": "partners",
             "type": "@model:partners"
         },
         {
             "action": "channel",
             "title": "首页Banner",
+            "en:title": "Home Banner",
             "name": "banner",
             "type": "@model:images"
         }

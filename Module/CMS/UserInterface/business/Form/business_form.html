@@ -1,24 +1,24 @@
 <!-- 商务支持表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="商务支持">
+    <input type="hidden" name="title" value="{__:商务支持">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
                 {tpl:layouts/form_base}
 
                 <tr>
-                    <th class="input-label">商务支持：</th>
+                    <th class="input-label">{__:商务支持}：</th>
 
                     <td colspan="3" id="asdf">
                         <select name="business_support" data-tab="q">
                             <option value="0" selected="selected">
-                                产品咨询
+                                {__:产品咨询}
                             </option>
 
-                            <option value="1">电话咨询</option>
+                            <option value="1">{__:电话咨询}</option>
 
-                            <option value="2">产品购买</option>
+                            <option value="2">{__:产品购买}</option>
                         </select>
 
                         <i class="input-star">*</i>
@@ -26,23 +26,23 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">接收方式：</th>
+                    <th class="input-label">{__:接收方式}：</th>
 
                     <td>
                         <select name="receive_mode">
-                            <option value="0">请选择</option>
+                            <option value="0">{__:请选择}</option>
 
-                            <option value="邮件">邮件</option>
+                            <option value="{__:邮件}">{__:邮件}</option>
 
                             <option value="qq">qq</option>
 
-                            <option value="传真">传真</option>
+                            <option value="{__:传真}">{__:传真}</option>
                         </select>
 
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">所需资料：</th>
+                    <th class="input-label">{__:所需资料}：</th>
 
                     <td>
                         <input
@@ -54,7 +54,7 @@
                 </tr>
 
                 <tr class="q-0">
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
 
                     <td>
                         <input
@@ -66,7 +66,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">产品条码或编号：</th>
+                    <th class="input-label">{__:产品条码或编号}：</th>
 
                     <td>
                         <input
@@ -81,9 +81,7 @@
 
                 <tr class="q-0">
                     <th class="input-label">
-                        所需资料　<br />
-
-                        补充说明：
+                        {__:所需资料<br/>补充说明}：
                     </th>
 
                     <td colspan="3">
@@ -99,7 +97,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">问题描述：</th>
+                    <th class="input-label">{__:问题描述}：</th>
 
                     <td colspan="3">
                         <textarea
@@ -133,7 +131,7 @@
                 </tr>
 
                 <tr class="q-1 hidden">
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
 
                     <td>
                         <input
@@ -145,7 +143,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">产品数量</th>
+                    <th class="input-label">{__:产品数量}</th>
 
                     <td>
                         <input
@@ -159,7 +157,7 @@
                 </tr>
 
                 <tr class="q-2 hidden">
-                    <th class="input-label">购货地址：</th>
+                    <th class="input-label">{__:购货地址}：</th>
 
                     <td colspan="3">
                         <input
@@ -175,7 +173,7 @@
         </table>
 
         <div class="form-action">
-            <button class="btn btn-default">提交信息登记表</button>
+            <button class="btn btn-default">{__:提交信息登记表}</button>
         </div>
     </div>
 </form>

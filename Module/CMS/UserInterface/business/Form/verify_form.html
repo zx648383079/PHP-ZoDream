@@ -1,14 +1,14 @@
 <!-- 产品校验表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="产品校验">
+    <input type="hidden" name="title" value="{__:产品校验}">
     <div class="form-panel">
         <table class="form-table">
             <tbody>
                 {tpl:layouts/form_base}
 
                 <tr>
-                    <th class="input-label">产品型号规格：</th>
+                    <th class="input-label">{__:产品型号规格}：</th>
 
                     <td id="asdf">
                         <input
@@ -21,7 +21,7 @@
                         <i class="input-star">*</i>
                     </td>
 
-                    <th class="input-label">产品数量</th>
+                    <th class="input-label">{__:产品数量}</th>
 
                     <td>
                         <input
@@ -36,7 +36,7 @@
                 </tr>
 
                 <tr class="t0">
-                    <th class="input-label">生产日期或条码：</th>
+                    <th class="input-label">{__:生产日期或条码}：</th>
 
                     <td>
                         <input
@@ -46,7 +46,7 @@
                         />
                     </td>
 
-                    <th class="input-label">购买点名称：</th>
+                    <th class="input-label">{__:购买点名称}：</th>
 
                     <td>
                         <input
@@ -58,7 +58,7 @@
                 </tr>
 
                 <tr class="t0">
-                    <th class="input-label">购买点联系方式：</th>
+                    <th class="input-label">{__:购买点联系方式}：</th>
 
                     <td>
                         <input
@@ -68,7 +68,7 @@
                         />
                     </td>
 
-                    <th class="input-label">购买日期：</th>
+                    <th class="input-label">{__:购买日期}：</th>
 
                     <td>
                         <input
@@ -80,7 +80,7 @@
                 </tr>
 
                 <tr class="t0">
-                    <th class="input-label">产品使用省市：</th>
+                    <th class="input-label">{__:产品使用省市}：</th>
 
                     <td>
                         <input
@@ -90,7 +90,7 @@
                         />
                     </td>
 
-                    <th class="input-label">开始使用日期：</th>
+                    <th class="input-label">{__:开始使用日期}：</th>
 
                     <td>
                         <input
@@ -102,7 +102,7 @@
                 </tr>
 
                 <tr class="t0">
-                    <th class="input-label">所需服务及要求</th>
+                    <th class="input-label">{__:所需服务及要求}</th>
 
                     <td colspan="3">
                         <textarea
@@ -117,7 +117,7 @@
                 </tr>
 
                 <tr class="t0">
-                    <th class="input-label">问题描述</th>
+                    <th class="input-label">{__:问题描述}</th>
 
                     <td colspan="3">
                         <textarea
@@ -136,7 +136,7 @@
         </table>
 
         <div class="form-action">
-            <button class="btn btn-default">提交信息登记表</button>
+            <button class="btn btn-default">{__:提交信息登记表}</button>
         </div>
     </div>
 </form>

@@ -14,21 +14,23 @@ use Zodream\Template\View;
 class Model extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'model' => 0
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'linkage_id',
                     'label' => '模型',
                     'type' => 'select',
-                    'value' => $option['model'] ?? 0,
+                    'value' => $option['model'],
                     'items' => ModelRepository::all(0)
                 ],
             ];
         }
         $model_list = ModelModel::where('type', 0)->pluck('name', 'id');
-        $option = $field->setting('option');
         return implode('', [
-            Theme::select('setting[option][model]', $model_list, $option['model'] ?? 0, '模型')
+            Theme::select('setting[option][model]', $model_list, $option['model'], '模型')
         ]);
     }
 

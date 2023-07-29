@@ -9,32 +9,37 @@ use Zodream\Html\Dark\Theme;
 class Images extends BaseField {
 
     public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'allow' => Image::DEFAULT_ALLOW,
+            'size' => '2M',
+            'count' => '*',
+        ]);
         if ($isJson) {
             return [
                 [
                     'name' => 'allow',
                     'label' => '允许格式',
                     'type' => 'text',
-                    'value' => Image::DEFAULT_ALLOW,
+                    'value' => $option['allow'],
                 ],
                 [
-                    'name' => 'length',
+                    'name' => 'size',
                     'label' => '允许单张大小',
                     'type' => 'text',
-                    'value' => '2M',
+                    'value' => $option['size'],
                 ],
                 [
                     'name' => 'count',
                     'label' => '允许几张',
                     'type' => 'text',
-                    'value' => '*',
+                    'value' => $option['count'],
                 ],
             ];
         }
         return implode('', [
-            Theme::text('setting[option][allow]', '*', '允许格式'),
-            Theme::text('setting[option][length]', '2M', '允许单张大小'),
-            Theme::text('setting[option][count]', '*', '允许几张'),
+            Theme::text('setting[option][allow]', $option['allow'], '允许格式'),
+            Theme::text('setting[option][size]', $option['size'], '允许单张大小'),
+            Theme::text('setting[option][count]', $option['count'], '允许几张'),
         ]);
     }
 

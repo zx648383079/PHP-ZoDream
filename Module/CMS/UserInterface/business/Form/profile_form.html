@@ -1,10 +1,10 @@
 <!-- 注册表单 -->
 <form action="{$form_action}" method="post" data-type="ajax">
     <input type="hidden" name="_token" value="{$token}">
-    <input type="hidden" name="title" value="注册">
+    <input type="hidden" name="title" value="{__:注册}">
     <div class="form-table">
         <div class="input-group">
-            <label for="">用户名:</label>
+            <label for="">{__:用户名}:</label>
             <div>
                 <input type="text" name="name" required>
                 <span class="input-star">*</span>
@@ -12,14 +12,14 @@
         </div>
         {if:authGuest:}
         <div class="input-group">
-            <label for="">密码:</label>
+            <label for="">{__:密码}:</label>
             <div>
                 <input type="password" name="password" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">校验密码:</label>
+            <label for="">{__:校验密码}:</label>
             <div>
                 <input type="password" name="confirm_password" required>
                 <span class="input-star">*</span>
@@ -27,73 +27,73 @@
         </div>
         {/if}
         <div class="input-group">
-            <label for="">真实姓名:</label>
+            <label for="">{__:真实姓名}:</label>
             <div>
                 <input type="text" name="real_name" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">性别:</label>
+            <label for="">{__:性别}:</label>
             <div>
                 <div class="check-item">
-                    <input type="radio" name="sex" value="1"><span>男</span>
+                    <input type="radio" name="sex" value="1"><span>{__:男}</span>
                 </div>
                 <div class="check-item">
-                    <input type="radio" name="sex" value="2"><span>女</span>
+                    <input type="radio" name="sex" value="2"><span>{__:女}</span>
                 </div>
                 <div class="check-item">
-                    <input type="radio" name="sex" value="0"><span>保密</span>
+                    <input type="radio" name="sex" value="0"><span>{__:保密}</span>
                 </div>
             </div>
         </div>
         <div class="input-group">
-            <label for="">公司名称:</label>
+            <label for="">{__:公司名称}:</label>
             <div>
                 <input type="text" name="company_name" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">公司地址:</label>
+            <label for="">{__:公司地址}:</label>
             <div>
                 <input type="text" name="company_address" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">电子邮件:</label>
+            <label for="">{__:电子邮件}:</label>
             <div>
                 <input type="text" name="email" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">公司电话:</label>
+            <label for="">{__:公司电话}:</label>
             <div>
                 <input type="text" name="company_tel" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">手机号码:</label>
+            <label for="">{__:手机号码}:</label>
             <div>
                 <input type="text" name="mobile" required>
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="input-group">
-            <label for="">验证码:</label>
+            <label for="">{__:验证码}:</label>
             <div class="code-input-group">
                 <input type="text" name="captcha" required>
-                <img src="{url:/auth/captcha}" alt="点击刷新">
+                <img src="{url:/auth/captcha}" alt="{__:点击刷新}">
                 <span class="input-star">*</span>
             </div>
         </div>
         <div class="dialog-action">
-            <button class="btn btn-default">提交</button>
-            <button type="reset" class="btn btn-secondary">重置</button>
-            <button type="button" class="btn btn-danger dialog-close">取消</button>
+            <button class="btn btn-default">{__:提交}</button>
+            <button type="reset" class="btn btn-secondary">{__:重置}</button>
+            <button type="button" class="btn btn-danger dialog-close">{__:取消}</button>
         </div>
     </div>
 </form>
