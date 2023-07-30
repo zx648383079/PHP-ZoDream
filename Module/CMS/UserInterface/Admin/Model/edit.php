@@ -27,7 +27,7 @@ $this->registerJs($js);
         <?=Form::checkbox('setting[is_only]')->value($model->setting('is_only'))->label('唯一')->tip('是否保持用户唯一')?>
         <?=Form::checkbox('setting[is_extend_auth]')->value($model->setting('is_extend_auth'))->label('是否继承拓展用户表单')->tip('在会员注册时需要填写此表单数据')?>
         <?=Form::checkbox('setting[open_captcha]')->value($model->setting('open_captcha'))->label('验证码')->tip('是否开启验证码')?>
-        <?=Form::text('setting[form_template]')->value($model->setting('form_template'))->label('表单模板')->tip('表单填写的模板，文件夹为Content')?>
+        <?=Form::text('setting[form_template]')->value($model->setting('form_template'))->label('表单模板')->tip('表单填写的模板，文件夹为 Form')?>
         <?=Form::text('setting[show_template]')->value($model->setting('show_template'))->label('显示模板')->tip('表单内容显示的模板，文件夹为Content')?>
         <?=Form::text('setting[notify_mail]')->value($model->setting('notify_mail'))->label('邮件通知地址')->tip('是否需要同时把表单发送到指定的邮箱')?>
     </div>

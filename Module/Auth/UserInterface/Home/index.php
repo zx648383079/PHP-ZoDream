@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\Auth\Domain\Repositories\AuthRepository;
 /** @var $this View */
 
 $js = <<<JS
@@ -67,6 +68,7 @@ $this->extend('layouts/header')
                     <button type="button" class="btn">返回登录</button>
                 </div>
             </form>
+            <?php if(AuthRepository::openOAuth()):?>
             <div class="login-oauth-box">
                 <div class="box-title">第三方登录</div>
                 <a href="<?=$this->url('./oauth', ['type' => 'qq', 'redirect_uri' => $redirect_uri], false)?>" title="QQ登录"><i class="fab fa-qq"></i></a>
@@ -77,6 +79,7 @@ $this->extend('layouts/header')
                     <i class="fa fa-fingerprint"></i>
                 </a>
             </div>
+            <?php endif;?>
         </div>
     </section>
 <?php

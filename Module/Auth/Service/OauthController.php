@@ -16,7 +16,10 @@ class OauthController extends Controller {
         ];
     }
 
-    public function indexAction($type = 'qq', $redirect_uri = '') {
+    public function indexAction(string $type = 'qq', string $redirect_uri = '') {
+        if (!AuthRepository::openOAuth()) {
+            return $this->redirectWithMessage('/', '第三方登录已关闭');
+        }
         $auth = $this->getOAuth($type);
         if (!empty($redirect_uri)) {
             session()->set('redirect_uri', $redirect_uri);
@@ -24,7 +27,7 @@ class OauthController extends Controller {
         return $this->redirect($auth->login());
     }
 
-    public function callbackAction($type = 'qq') {
+    public function callbackAction(string $type = 'qq') {
         /** @var IAuthPlatform $platform */
         $platform = session('platform');
         try {

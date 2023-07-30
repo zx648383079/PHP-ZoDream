@@ -139,6 +139,13 @@ class CreateAuthTables extends Migration {
                     'default_value' => "默认注册\n邀请码注册\n关闭注册",
                     'visibility' => 2,
                 ],
+                [
+                    'name' => '开启第三登录',
+                    'code' => AuthRepository::OPTION_OAUTH_CODE,
+                    'type' => 'switch',
+                    'value' => 0,
+                    'visibility' => 2,
+                ],
             ];
         });
     }

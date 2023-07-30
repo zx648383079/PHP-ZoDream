@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Service\Api\Admin;
 
 use Module\CMS\Domain\Repositories\ModelRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ModelController extends Controller {
@@ -128,5 +129,15 @@ class ModelController extends Controller {
         return $this->renderData(
             ModelRepository::fieldOption($type, $id)
         );
+    }
+
+    public function restartAction(int $id, int $site) {
+        try {
+            SiteRepository::apply($site);
+            ModelRepository::restart($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 }

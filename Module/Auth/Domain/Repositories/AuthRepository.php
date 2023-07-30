@@ -38,6 +38,7 @@ class AuthRepository {
 
     const UNSET_PASSWORD = 'no_password';
     const OPTION_REGISTER_CODE = 'auth_register';
+    const OPTION_OAUTH_CODE = 'auth_oauth';
 
     /**
      * 注册方式
@@ -45,6 +46,10 @@ class AuthRepository {
      */
     public static function registerType(): int {
         return intval(Option::value(static::OPTION_REGISTER_CODE));
+    }
+
+    public static function openOAuth(): bool {
+        return Str::toBool(Option::value(static::OPTION_OAUTH_CODE));
     }
 
     public static function loginPreCheck(string $ip, string $account, string $captcha = '') {
