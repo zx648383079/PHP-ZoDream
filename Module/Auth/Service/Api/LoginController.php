@@ -28,13 +28,8 @@ class LoginController extends Controller {
         try {
             $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $account, $captcha);
-            if (!empty($captcha)) {
-                if (empty($captchaKey)) {
-                    throw AuthException::invalidCaptcha();
-                }
-                if (CaptchaRepository::verify($captcha, $captchaKey)) {
-                    throw AuthException::invalidCaptcha();
-                }
+            if (!empty($captcha) && (empty($captchaKey) || !CaptchaRepository::verify($captcha, $captchaKey))) {
+                throw AuthException::invalidCaptcha();
             }
             if (!empty($mobile)) {
                 $code = $request->string('code');

@@ -5,6 +5,7 @@ use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Zodream\Image\Captcha;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Service\Http\Request;
@@ -72,11 +73,8 @@ class HomeController extends Controller {
         try {
             $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $email, $captcha);
-            if (!empty($captcha)) {
-                $verifier = new Captcha();
-                if (!$verifier->verify($captcha)) {
-                    throw AuthException::invalidCaptcha();
-                }
+            if (!empty($captcha) && !CaptchaRepository::verify($captcha)) {
+                throw AuthException::invalidCaptcha();
             }
             AuthRepository::login(
                 $email,

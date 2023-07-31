@@ -28,6 +28,11 @@ return [
     '帮助文档' => 'Help',
     '算法' => 'Algorithm',
     'feedback_tip' => 'This site and its framework accept any friendly suggestions, and any friendly friends are welcome to leave comments here.',
+    'sex' => [
+        'Unknown',
+        'Male',
+        'Female'
+    ],
     'account_type' => [
         1 => 'System',
         6 => 'Recharge',

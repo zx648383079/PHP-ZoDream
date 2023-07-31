@@ -116,7 +116,8 @@ final class CaptchaRepository {
             'height' => $height > 0 ? $height : 30,
             'fontSize' => 20,
             'fontFamily' => FileRepository::fontFile(),
-            'level' => max($level, 1)
+            'level' => max($level, 1),
+            'sensitive' => $level > 4
         ]);
         return $captcha;
     }

@@ -40,12 +40,6 @@ class UserModel extends BaseModel {
     const SEX_MALE = 1; // 性别男
     const SEX_FEMALE = 2; //性别女
 
-    public $sex_list = [
-        '未知',
-        '男',
-        '女'
-    ];
-
     protected array $hidden = ['password', 'token'];
 
     protected array $append = ['sex_label'];
@@ -53,7 +47,7 @@ class UserModel extends BaseModel {
 	public $roles = [];
 
     public function getSexLabelAttribute() {
-	    return $this->sex_list[$this->sex] ?? $this->sex_list[0];
+	    return __('sex.'.$this->sex);
     }
 
     public function getAvatarAttribute() {
