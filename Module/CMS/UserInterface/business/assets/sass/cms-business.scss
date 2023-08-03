@@ -691,6 +691,9 @@ $dialogHeight: 20rem;
         .slider-previous {
             left: 0;
         }
+        .slider-box {
+            height: 120%;
+        }
     }
     .share-bar {
         width: 6rem;
@@ -702,12 +705,11 @@ $dialogHeight: 20rem;
     .partner-item {
         a {
             display: block;
-            width: 14.625rem;
-            height: 4.5rem;
-            margin-left: auto;
-            margin-right: auto;
+            height: 100%;
+            // width: 14.625rem;
+            // height: 4.5rem;
             border: 1px solid #ccc;
-            box-shadow: 0 2px 10px gray;
+            box-shadow: 0 2px 0.625rem gray;
             margin: .4rem;
         }
         img {

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Catering\Service\Api\Manager;
+namespace Module\Catering\Service\Api\Merchant;
 
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\Catering\Service\Api\Controller as BaseController;

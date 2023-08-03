@@ -1,6 +1,7 @@
 <?php
 namespace Module\Catering\Domain\Migrations;
 
+use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Catering\Domain\Entities\AddressEntity;
 use Module\Catering\Domain\Entities\CartEntity;
 use Module\Catering\Domain\Entities\CategoryEntity;
@@ -12,8 +13,14 @@ use Module\Catering\Domain\Entities\MaterialUnitEntity;
 use Module\Catering\Domain\Entities\OrderEntity;
 use Module\Catering\Domain\Entities\OrderGoodsEntity;
 use Module\Catering\Domain\Entities\PurchaseOrderEntity;
+use Module\Catering\Domain\Entities\PurchaseOrderGoodsEntity;
 use Module\Catering\Domain\Entities\RecipeEntity;
 use Module\Catering\Domain\Entities\RecipeMaterialEntity;
+use Module\Catering\Domain\Entities\StoreEntity;
+use Module\Catering\Domain\Entities\StorePatronEntity;
+use Module\Catering\Domain\Entities\StoreRoleEntity;
+use Module\Catering\Domain\Entities\StoreStaffEntity;
+use Module\Catering\Domain\Entities\StoreStockEntity;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -32,6 +39,7 @@ class CreateCateringTables extends Migration {
             $table->timestamps();
         })->append(CartEntity::tableName(), function(Table $table) {
             $table->id();
+            $table->uint('type', 1)->default(0)->comment('订单类型');
             $table->uint('user_id');
             $table->uint('store_id');
             $table->uint('goods_id');
@@ -42,25 +50,49 @@ class CreateCateringTables extends Migration {
         })->append(CategoryEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('store_id');
+            $table->uint('type', 1)->default(0);
             $table->string('name');
             $table->uint('parent_id');
-            $table->timestamps();
         })->append(GoodsEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('store_id');
+            $table->uint('cat_id');
             $table->string('name');
             $table->string('image')->default('');
-            $table->string('recipe_id')->default('');
+            $table->uint('recipe_id')->default(0);
             $table->string('description')->default('');
             $table->timestamps();
         })->append(GoodsGalleryEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('goods_id');
-            $table->uint('file_type');
+            $table->string('thumb')->default('');
+            $table->uint('file_type', 1)->default(0);
             $table->string('file');
         })->append(OrderEntity::tableName(), function(Table $table) {
             $table->id();
-            // TODO
+            $table->uint('user_id');
+            $table->uint('store_id');
+            $table->uint('address_type', 1)->default(0);
+            $table->string('address_name', 20)->default('');
+            $table->string('address_tel', 20)->default('');
+            $table->string('address')->default('');
+            $table->uint('payment_id')->default(0);
+            $table->string('payment_name', 30)->default(0);
+            $table->uint('shipping_id')->default(0);
+            $table->string('shipping_name', 30)->default(0);
+            $table->decimal('goods_amount', 8, 2)->default(0);
+            $table->decimal('order_amount', 8, 2)->default(0);
+            $table->decimal('discount', 8, 2)->default(0);
+            $table->decimal('shipping_fee', 8, 2)->default(0);
+            $table->decimal('pay_fee', 8, 2)->default(0);
+            $table->uint('status', 1)->default(0);
+            $table->string('remark')->default('');
+            $table->string('reserve_at')->default('')->comment('预约时间');
+            $table->timestamp('pay_at')->comment('支付时间');
+            $table->timestamp('shipping_at')->comment('发货时间');
+            $table->timestamp('receive_at')->comment('签收时间');
+            $table->timestamp('finish_at')->comment('完成时间');
+            $table->timestamps();
         })->append(OrderGoodsEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('order_id');
@@ -68,10 +100,31 @@ class CreateCateringTables extends Migration {
             $table->uint('amount');
             $table->decimal('price', 8, 2);
             $table->decimal('discount', 8, 2);
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
         })->append(PurchaseOrderEntity::tableName(), function(Table $table) {
             $table->comment('采购单');
             $table->id();
-            // TODO
+            $table->uint('store_id');
+            $table->uint('user_id');
+            $table->uint('status', 1)->default(0);
+            $table->decimal('price', 8, 2);
+            $table->string('remark')->default('');
+            $table->uint('execute_id')->default(0)->comment('采购人');
+            $table->uint('check_id')->default(0)->comment('验收人');
+            $table->timestamp('execute_at');
+            $table->timestamp('check_at');
+            $table->timestamps();
+        })->append(PurchaseOrderGoodsEntity::tableName(), function(Table $table) {
+            $table->comment('采购单详情');
+            $table->id();
+            $table->uint('order_id');
+            $table->uint('material_id');
+            $table->decimal('amount', 8, 2);
+            $table->uint('unit', 1);
+            $table->decimal('price', 8, 2);
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
         })->append(MaterialEntity::tableName(), function(Table $table) {
             $table->comment('原材料');
             $table->id();
@@ -97,6 +150,8 @@ class CreateCateringTables extends Migration {
         })->append(RecipeEntity::tableName(), function(Table $table) {
             $table->comment('食谱，库存组成商品的配方');
             $table->id();
+            $table->uint('cat_id');
+            $table->uint('store_id')->default(0);
             $table->uint('user_id');
             $table->string('name');
             $table->string('image')->default('');
@@ -110,7 +165,59 @@ class CreateCateringTables extends Migration {
             $table->uint('material_id');
             $table->decimal('amount', 8, 2);
             $table->uint('unit', 1);
+        })->append(StoreEntity::tableName(), function(Table $table) {
+            $table->comment('店铺');
+            $table->id();
+            $table->uint('name');
+            $table->uint('user_id');
+            $table->string('logo')->default('');
+            $table->string('description')->default('');
+            $table->string('address')->default('');
+            $table->bool('open_status')->default(0);
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(StoreStaffEntity::tableName(), function(Table $table) {
+            $table->comment('店铺员工');
+            $table->id();
+            $table->uint('store_id');
+            $table->uint('user_id');
+            $table->uint('role_id')->default(0);
+            $table->timestamps();
+        })->append(StoreRoleEntity::tableName(), function(Table $table) {
+            $table->comment('店铺员工权限');
+            $table->id();
+            $table->uint('store_id');
+            $table->uint('name');
+            $table->string('description')->default('');
+            $table->string('action')->default('');
+            $table->timestamps();
+        })->append(StoreStockEntity::tableName(), function(Table $table) {
+            $table->comment('店铺库存');
+            $table->id();
+            $table->uint('store_id');
+            $table->uint('cat_id');
+            $table->uint('material_id');
+            $table->decimal('amount', 8, 2);
+            $table->uint('unit', 1);
+            $table->timestamps();
+        })->append(StorePatronEntity::tableName(), function(Table $table) {
+            $table->comment('店铺顾客');
+            $table->id();
+            $table->uint('store_id');
+            $table->uint('user_id');
+            $table->uint('cat_id');
+            $table->uint('amount')->default(0)->comment('光顾次数');
+            $table->string('name', 20)->default('');
+            $table->string('remark')->default('');
+            $table->uint('discount', 2)->default(0);
+            $table->timestamps();
         })->autoUp();
+    }
+
+    public function seed() {
+        RoleRepository::newPermission([
+            'catering_manage' => '餐饮管理'
+        ]);
     }
 
 }

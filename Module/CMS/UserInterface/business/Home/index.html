@@ -10,9 +10,17 @@ var silder = $(".banner .slider").slider({
 });
 $(".partner-floor .slider").slider({
     item: '.slider-box li',
+    auto: true,
+    haspoint: false,
+    align: 'left',
     spacetime: 5000,
-    width: 240,
-    height: 96,
+    width: {
+        480: 2,
+        720: 3,
+        960: 4,
+        1300: 5,
+    },
+    height: .4,
 });
 {/>}
 <div class="banner">        
@@ -179,7 +187,7 @@ $(".partner-floor .slider").slider({
             {__:合作伙伴}
         </div>
         <div class="panel-body partner-floor">
-            <div class="slider" data-auto="true" data-haspoint="false">
+            <div class="slider">
                 <div class="slider-previous">
                     <i class="fa fa-angle-left"></i>
                 </div>
