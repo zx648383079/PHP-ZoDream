@@ -8,13 +8,12 @@ use Domain\Entities\Entity;
  * @property integer $id
  * @property integer $store_id
  * @property integer $user_id
- * @property integer $cat_id
  * @property integer $amount
  * @property string $name
  * @property string $remark
- * @property integer $discount
  * @property integer $updated_at
  * @property integer $created_at
+ * @property integer $group_id
  */
 class StorePatronEntity extends Entity {
     public static function tableName() {
@@ -25,13 +24,12 @@ class StorePatronEntity extends Entity {
         return [
             'store_id' => 'required|int',
             'user_id' => 'required|int',
-            'cat_id' => 'required|int',
             'amount' => 'int',
             'name' => 'string:0,20',
             'remark' => 'string:0,255',
-            'discount' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
+            'group_id' => 'required|int',
         ];
     }
 
@@ -40,13 +38,12 @@ class StorePatronEntity extends Entity {
             'id' => 'Id',
             'store_id' => 'Store Id',
             'user_id' => 'User Id',
-            'cat_id' => 'Cat Id',
             'amount' => 'Amount',
             'name' => 'Name',
             'remark' => 'Remark',
-            'discount' => 'Discount',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
+            'group_id' => 'Group Id',
         ];
     }
 }

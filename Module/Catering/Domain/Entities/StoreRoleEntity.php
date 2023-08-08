@@ -7,7 +7,7 @@ use Domain\Entities\Entity;
  * 店铺员工权限
  * @property integer $id
  * @property integer $store_id
- * @property integer $name
+ * @property string $name
  * @property string $description
  * @property string $action
  * @property integer $updated_at
@@ -21,7 +21,7 @@ class StoreRoleEntity extends Entity {
     protected function rules() {
         return [
             'store_id' => 'required|int',
-            'name' => 'required|int',
+            'name' => 'required|string:0,20',
             'description' => 'string:0,255',
             'action' => 'string:0,255',
             'updated_at' => 'int',

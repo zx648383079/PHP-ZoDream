@@ -8,8 +8,17 @@ use Zodream\Helpers\Str;
 
 class InviteRepository {
 
+    const TYPE_CODE = 0; // 邀请码
+    const TYPE_LOGIN = 5; // 扫码登录
+
+    const STATUS_UN_SCAN = 0;  //未扫码
+    const STATUS_UN_CONFIRM = 1;  // 已扫码待确认
+    const STATUS_SUCCESS = 2;     // 登录成功
+    const STATUS_REJECT = 3;      // 拒绝登录
+
     public static function codeList(string $keywords = '', int $user = 0) {
         return InviteCodeModel::with('user')
+            ->where('type', self::TYPE_CODE)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $query->where('code', $keywords);
             })->when($user > 0, function ($query) use ($user) {
@@ -18,19 +27,13 @@ class InviteRepository {
     }
 
     public static function codeCreate(int $amount = 1, string|int $expiredAt = '') {
-        do {
-            $code = Str::randomNumber(6);
-        } while (static::hasCode($code));
-        return InviteCodeModel::createOrThrow([
-            'user_id' => auth()->id(),
-            'code' => $code,
-            'amount' => $amount,
-            'expired_at' => is_numeric($expiredAt) || empty($expiredAt) ? intval($expiredAt) : strtotime($expiredAt),
-        ]);
+        return [
+            'code' => self::createNew(self::TYPE_CODE, $amount, $expiredAt)
+        ];
     }
 
     private static function hasCode(string $code): bool {
-        return InviteCodeModel::where('code', $code)
+        return InviteCodeModel::where('token', $code)
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
@@ -47,7 +50,7 @@ class InviteRepository {
             return null;
         }
         /** @var InviteCodeModel $model */
-        $model = InviteCodeModel::where('code', $code)
+        $model = InviteCodeModel::where('token', $code)
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
@@ -59,11 +62,11 @@ class InviteRepository {
     }
 
     public static function codeRemove(int $id) {
-        InviteCodeModel::where('id', $id)->delete();
+        InviteCodeModel::where('id', $id)->where('type', self::TYPE_CODE)->delete();
     }
 
     public static function codeClear() {
-        InviteCodeModel::query()->delete();
+        InviteCodeModel::query()->where('type', self::TYPE_CODE)->delete();
     }
 
     public static function logList(string $keywords = '', int $user = 0, int $inviter = 0) {
@@ -86,7 +89,166 @@ class InviteRepository {
         InviteLogModel::create([
             'user_id' => $userId,
             'parent_id' => $model->user_id,
-            'code' => $model->code,
+            'code_id' => $model->id,
+            'status' => self::STATUS_SUCCESS,
         ]);
+    }
+
+    /**
+     * 生成一个邀请码
+     * @param int $type
+     * @param int $amount
+     * @param string|int $expiredAt
+     * @return string
+     * @throws \Exception
+     */
+    public static function createNew(int $type, int $amount = 1, string|int $expiredAt = ''): string {
+        do {
+            $code = self::generateCode($type);
+        } while (static::hasCode($code));
+        InviteCodeModel::createOrThrow([
+            'user_id' => auth()->id(),
+            'type' => $type,
+            'token' => $code,
+            'amount' => $amount,
+            'expired_at' => is_numeric($expiredAt) || empty($expiredAt) ? intval($expiredAt) : strtotime($expiredAt),
+        ]);
+        return $code;
+    }
+
+    /**
+     * 手动失效
+     * @param int $type
+     * @param string $token
+     * @return void
+     * @throws \Exception
+     */
+    public static function cancel(int $type, string $token): void {
+        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+            ->first();
+        if (empty($model)) {
+            return;
+        }
+        if ($model->user_id !== auth()->id()) {
+            throw new \Exception('无权限操作');
+        }
+        $model->expired_at = \time() - 1;
+        $model->save();
+    }
+
+    private static function generateCode(int $type): string {
+        if ($type === self::TYPE_CODE) {
+            return Str::randomNumber(6);
+        }
+        return md5(Str::randomBytes(20).time());
+    }
+
+    public static function loginQr(string $token): string {
+        return url('./qr/authorize', ['token' => $token], true, false);
+    }
+
+    /**
+     * 发起人验证
+     * @param int $type
+     * @param string $token
+     * @return array 返回确认的用户id
+     * @throws \Exception
+     */
+    public static function checkQr(int $type, string $token): array {
+        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+            ->first();
+        if (empty($model)) {
+            throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
+        }
+        if ($model->invite_count < 1) {
+            if ($model->expired_at < time()) {
+                throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
+            }
+            throw new \Exception('QR_UN_SCANNED', 201);
+        }
+        if ($model->amount > 1) {
+            return InviteLogModel::where('code_id', $model->id)
+                ->where('status', self::STATUS_SUCCESS)->pluck('user_id');
+        }
+        $log = InviteLogModel::where('code_id', $model->id)
+            ->first();
+        if ($log->status == self::STATUS_UN_CONFIRM) {
+            throw new \Exception('QR_UN_CONFIRM', 202);
+        }
+        if ($log->status != self::STATUS_REJECT) {
+            throw new \Exception('QR_REJECT', 203);
+        }
+        if ($log->status != self::STATUS_SUCCESS) {
+            return [];
+        }
+        return [$log['user_id']];
+    }
+
+    /**
+     * 获取已授权的用户id
+     * @param int $type
+     * @param string $token
+     * @return array
+     */
+    public static function authorizedUser(int $type, string $token): array {
+        $id = InviteCodeModel::where('type', $type)->where('token', $token)
+            ->value('id');
+        if (empty($id)) {
+            return [];
+        }
+        return InviteLogModel::where('code_id', $id)
+            ->where('status', self::STATUS_SUCCESS)->pluck('user_id');
+    }
+    /**
+     * 接受人授权
+     * @param int $type
+     * @param string $token
+     * @param bool $confirm
+     * @param bool $reject
+     * @return ?bool
+     */
+    public static function authorize(int $type, string $token, bool $confirm = false,
+                                     bool $reject = false): ?bool {
+        if (auth()->guest()) {
+            throw new \Exception('Need Login first', 204);
+        }
+        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+            ->first();
+        if (empty($model)) {
+            throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
+        }
+        if ($model->expired_at < time()) {
+            throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
+        }
+        $userId = auth()->id();
+        $log = InviteLogModel::where('user_id', $userId)
+            ->where('code_id', $model->id)->first();
+        if (empty($log)) {
+            if ($model->invite_count >= $model->amount) {
+                throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
+            }
+            $model->invite_count ++;
+            $model->save();
+            $log = InviteLogModel::createOrThrow([
+                'user_id' => $userId,
+                'parent_id' => $model->user_id,
+                'code_id' => $model->id,
+                'status' => self::STATUS_UN_CONFIRM,
+            ]);
+        }
+        if ($log->status != self::STATUS_UN_CONFIRM) {
+            throw new \Exception('二维码已失效');
+        }
+        if (!empty($confirm)) {
+            $log->status = self::STATUS_SUCCESS;
+            $model->save();
+            return true;
+        }
+        if (!empty($reject)) {
+            $model->status = self::STATUS_REJECT;
+            $model->save();
+            return false;
+        }
+        return null;
     }
 }

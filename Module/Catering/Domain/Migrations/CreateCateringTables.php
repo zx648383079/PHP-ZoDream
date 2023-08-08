@@ -17,7 +17,11 @@ use Module\Catering\Domain\Entities\PurchaseOrderGoodsEntity;
 use Module\Catering\Domain\Entities\RecipeEntity;
 use Module\Catering\Domain\Entities\RecipeMaterialEntity;
 use Module\Catering\Domain\Entities\StoreEntity;
+use Module\Catering\Domain\Entities\StoreFloorEntity;
+use Module\Catering\Domain\Entities\StoreMetaEntity;
 use Module\Catering\Domain\Entities\StorePatronEntity;
+use Module\Catering\Domain\Entities\StorePatronGroupEntity;
+use Module\Catering\Domain\Entities\StorePlaceEntity;
 use Module\Catering\Domain\Entities\StoreRoleEntity;
 use Module\Catering\Domain\Entities\StoreStaffEntity;
 use Module\Catering\Domain\Entities\StoreStockEntity;
@@ -72,14 +76,13 @@ class CreateCateringTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('store_id');
+            $table->uint('waiter_id')->default(0);
             $table->uint('address_type', 1)->default(0);
             $table->string('address_name', 20)->default('');
             $table->string('address_tel', 20)->default('');
             $table->string('address')->default('');
             $table->uint('payment_id')->default(0);
             $table->string('payment_name', 30)->default(0);
-            $table->uint('shipping_id')->default(0);
-            $table->string('shipping_name', 30)->default(0);
             $table->decimal('goods_amount', 8, 2)->default(0);
             $table->decimal('order_amount', 8, 2)->default(0);
             $table->decimal('discount', 8, 2)->default(0);
@@ -168,7 +171,7 @@ class CreateCateringTables extends Migration {
         })->append(StoreEntity::tableName(), function(Table $table) {
             $table->comment('店铺');
             $table->id();
-            $table->uint('name');
+            $table->string('name', 100);
             $table->uint('user_id');
             $table->string('logo')->default('');
             $table->string('description')->default('');
@@ -176,6 +179,11 @@ class CreateCateringTables extends Migration {
             $table->bool('open_status')->default(0);
             $table->uint('status', 1)->default(0);
             $table->timestamps();
+        })->append(StoreMetaEntity::tableName(), function(Table $table) {
+            $table->id();
+            $table->uint('store_id');
+            $table->string('name', 100);
+            $table->text('content');
         })->append(StoreStaffEntity::tableName(), function(Table $table) {
             $table->comment('店铺员工');
             $table->id();
@@ -187,7 +195,7 @@ class CreateCateringTables extends Migration {
             $table->comment('店铺员工权限');
             $table->id();
             $table->uint('store_id');
-            $table->uint('name');
+            $table->string('name', 20);
             $table->string('description')->default('');
             $table->string('action')->default('');
             $table->timestamps();
@@ -205,12 +213,31 @@ class CreateCateringTables extends Migration {
             $table->id();
             $table->uint('store_id');
             $table->uint('user_id');
-            $table->uint('cat_id');
+            $table->uint('group_id');
             $table->uint('amount')->default(0)->comment('光顾次数');
             $table->string('name', 20)->default('');
             $table->string('remark')->default('');
-            $table->uint('discount', 2)->default(0);
             $table->timestamps();
+        })->append(StorePatronGroupEntity::tableName(), function(Table $table) {
+            $table->comment('店铺顾客分组');
+            $table->id();
+            $table->uint('store_id');
+            $table->string('name', 20);
+            $table->string('remark')->default('');
+            $table->uint('discount', 2)->default(100);
+        })->append(StoreFloorEntity::tableName(), function(Table $table) {
+            $table->comment('店铺房间');
+            $table->id();
+            $table->uint('store_id');
+            $table->string('name', 20);
+            $table->text('map')->nullable();
+        })->append(StorePlaceEntity::tableName(), function(Table $table) {
+            $table->comment('店铺房间');
+            $table->id();
+            $table->uint('store_id');
+            $table->uint('floor_id');
+            $table->string('name', 20);
+            $table->uint('user_id')->default(0);
         })->autoUp();
     }
 

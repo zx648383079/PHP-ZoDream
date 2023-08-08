@@ -2,8 +2,12 @@
 declare(strict_types=1);
 namespace Module\Catering\Service\Api;
 
-class CategoryController extends Controller {
-	public function indexAction() {
+use Module\Catering\Domain\Repositories\CategoryRepository;
 
+class CategoryController extends Controller {
+	public function indexAction(int $store) {
+        return $this->renderData(
+            CategoryRepository::getList($store)
+        );
 	}
 }

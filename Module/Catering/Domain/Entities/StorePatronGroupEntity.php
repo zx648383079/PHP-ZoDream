@@ -4,22 +4,24 @@ namespace Module\Catering\Domain\Entities;
 use Domain\Entities\Entity;
 
 /**
- * 店铺楼层布局
+ * 店铺顾客
  * @property integer $id
  * @property integer $store_id
  * @property string $name
- * @property string $map
+ * @property string $remark
+ * @property integer $discount
  */
-class StoreFloorEntity extends Entity {
+class StorePatronGroupEntity extends Entity {
     public static function tableName() {
-        return 'eat_store_floor';
+        return 'eat_store_patron_group';
     }
 
     protected function rules() {
         return [
             'store_id' => 'required|int',
             'name' => 'required|string:0,20',
-            'map' => '',
+            'remark' => 'string:0,255',
+            'discount' => 'int:0,127',
         ];
     }
 
@@ -28,7 +30,8 @@ class StoreFloorEntity extends Entity {
             'id' => 'Id',
             'store_id' => 'Store Id',
             'name' => 'Name',
-            'map' => 'Map',
+            'remark' => 'Remark',
+            'discount' => 'Discount',
         ];
     }
 }

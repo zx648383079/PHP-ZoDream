@@ -5,6 +5,16 @@
 {@jquery.min.js}
 {@jquery.lazyload.min.js}
 {@cms-business.min.js}
+{> $language = option:language}
+
+{if:$language==en}
+{>css}
+.app-header .nav-bar a {
+    font-size: .95rem;
+    min-width: 4rem;
+}
+{/>}
+{/if}
 <!DOCTYPE html>
 <html lang="{$language??'zh-CN'}">
    <head>
@@ -40,12 +50,11 @@
                             {__:收藏}
                         </a>
                         <div class="nav-item with-not-border">
-                            {> $lang = option:language}
                             <select onchange="if (this.value) {
                                 window.location.href=this.value;
                             }">
                                 <option value="{option:zh_site}">中文</option>
-                                <option value="{option:en_site}" {if:$lang=='en',selected}>English</option>
+                                <option value="{option:en_site}" {if:$language=='en',selected}>English</option>
                             </select>
                         </div>
                         <div class="nav-item">
@@ -154,13 +163,15 @@
                         <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}
                         </a>
                     </p>
+                    {$pns_beian=option:pns_beian}
+                    {if:$pns_beian}
                     <p>
-                        {$pns_beian=option:pns_beian}
                         <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,'/\d+/'}">
                             <img src="/assets/images/beian.png" alt="备案图标">
                             {$pns_beian}
                         </a>
                     </p>
+                    {/if}
                 </div>
             </div>
         </footer>

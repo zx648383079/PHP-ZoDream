@@ -6,4 +6,16 @@ class WaiterController extends Controller {
 	public function indexAction() {
 
 	}
+
+    public function orderAction() {
+
+    }
+
+    public function createAction() {
+
+    }
+
+    public function logAction() {
+
+    }
 }

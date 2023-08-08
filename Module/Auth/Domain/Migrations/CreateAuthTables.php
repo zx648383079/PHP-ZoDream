@@ -15,7 +15,6 @@ use Module\Auth\Domain\Model\CreditLogModel;
 use Module\Auth\Domain\Model\InviteCodeModel;
 use Module\Auth\Domain\Model\InviteLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
@@ -25,6 +24,7 @@ use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\InviteRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
@@ -80,14 +80,6 @@ class CreateAuthTables extends Migration {
             $table->uint('item_type', 2)->default(0);
             $table->uint('platform_id')->default(0)->comment('平台id');
             $table->timestamps();
-        })->append(LoginQrModel::tableName(), function(Table $table) {
-            $table->id();
-            $table->uint('user_id')->default(0);
-            $table->string('token', 32);
-            $table->uint('status', 2)->default(0);
-            $table->uint('platform_id')->default(0)->comment('平台id');
-            $table->timestamp('expired_at');
-            $table->timestamps();
         })->append(EquityCardModel::tableName(), function(Table $table) {
             $table->comment('有期限的权益卡');
             $table->id();
@@ -108,11 +100,20 @@ class CreateAuthTables extends Migration {
         })->append(InviteCodeModel::tableName(), function(Table $table) {
             $table->comment('邀请码生成');
             $table->id();
+            $table->uint('type', 1)->default(InviteRepository::TYPE_CODE);
             $table->uint('user_id')->default(0);
-            $table->char('code', 6);
             $table->uint('amount')->default(1);
             $table->uint('invite_count')->default(0);
+            $table->string('token', 32);
             $table->timestamp('expired_at');
+            $table->timestamps();
+        })->append(InviteLogModel::tableName(), function(Table $table) {
+            $table->comment('邀请记录');
+            $table->id();
+            $table->uint('user_id');
+            $table->uint('parent_id')->default(0);
+            $table->uint('code_id')->default(0);
+            $table->uint('status', 1)->default(0);
             $table->timestamps();
         });
         $this->createLog();
@@ -250,13 +251,6 @@ class CreateAuthTables extends Migration {
             $table->string('remark')->default('');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
-        })->append(InviteLogModel::tableName(), function(Table $table) {
-            $table->comment('邀请记录');
-            $table->id();
-            $table->uint('user_id');
-            $table->uint('parent_id')->default(0);
-            $table->string('code', 20)->default('');
-            $table->timestamp('created_at');
         })->append(MailLogModel::tableName(), function (Table $table) {
             $table->comment('发送邮件记录');
             $table->id();

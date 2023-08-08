@@ -6,7 +6,7 @@ use Domain\Entities\Entity;
 /**
  * 店铺
  * @property integer $id
- * @property integer $name
+ * @property string $name
  * @property integer $user_id
  * @property string $logo
  * @property string $description
@@ -23,7 +23,7 @@ class StoreEntity extends Entity {
 
     protected function rules() {
         return [
-            'name' => 'required|int',
+            'name' => 'required|string',
             'user_id' => 'required|int',
             'logo' => 'string:0,255',
             'description' => 'string:0,255',

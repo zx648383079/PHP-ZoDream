@@ -6,8 +6,9 @@ use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Model\InviteCodeModel;
+use Module\Auth\Domain\Model\InviteLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserMetaModel;
@@ -22,6 +23,7 @@ class CancelAccountListener {
         AccountLogModel::where('user_id', $event->getUserId())->delete();
         ActionLogModel::where('user_id', $event->getUserId())->delete();
         LoginLogModel::where('user_id', $event->getUserId())->delete();
-        LoginQrModel::where('user_id', $event->getUserId())->delete();
+        InviteCodeModel::where('user_id', $event->getUserId())->delete();
+        InviteLogModel::where('user_id', $event->getUserId())->delete();
     }
 }

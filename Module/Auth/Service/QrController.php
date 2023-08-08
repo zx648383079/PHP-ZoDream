@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\LoginQrModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\InviteRepository;
 use Zodream\Image\QrCode;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
@@ -17,10 +18,10 @@ class QrController extends Controller {
     }
 
     public function indexAction(Output $output) {
-        $model = LoginQrModel::createNew();
+        $token = InviteRepository::createNew(InviteRepository::TYPE_LOGIN, 1, 300);
         $image = new QrCode();
-        $image->encode($model->url);
-        session()->set('login_qr', $model->id);
+        $image->encode(InviteRepository::loginQr($token));
+        session()->set('login_qr', $token);
         return $output->image($image);
     }
 
@@ -29,57 +30,37 @@ class QrController extends Controller {
         if (empty($id)) {
             return $this->renderFailure('unknow error');
         }
-        $model = LoginQrModel::find($id);
-        if (empty($model)) {
-            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
-        }
-        if ($model->user_id > 0
-            && $model->status == LoginQrModel::STATUS_SUCCESS) {
-            $user = UserModel::findIdentity($model->user_id);
+        try {
+            $items = InviteRepository::checkQr(InviteRepository::TYPE_LOGIN, $id);
+            if (empty($items)) {
+                return $this->renderFailure('unknow error');
+            }
+            $user = UserModel::findIdentity($items[0]);
             $user->login();
             $user->logLogin(true, LoginLogModel::MODE_QR);
             return $this->renderData([
                 'url' => url('/')
             ], '登陆成功');
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage(), $ex->getCode());
         }
-        if ($model->isExpired()) {
-            return $this->renderFailure('USER_TIPS_QR_OVERTIME', 204);
-        }
-        if ($model->status == LoginQrModel::STATUS_UN_SCAN) {
-            return $this->renderFailure('QR_UN_SCANNED', 201);
-        }
-        if ($model->status == LoginQrModel::STATUS_UN_CONFIRM) {
-            return $this->renderFailure('QR_UN_CONFIRM', 202);
-        }
-        return $this->renderFailure('QR_REJECT', 203);
     }
 
     /**
-     * @param $token
+     * @param string $token
      * @param bool $confirm
      * @param bool $reject
+     * @return Output
      * @throws \Exception
      */
-    public function authorizeAction($token, $confirm = false, $reject = false) {
-        $model = LoginQrModel::findIfToken($token);
-        if (empty($model) || $model->isExpired() ||
-            !in_array($model->status, [LoginQrModel::STATUS_UN_SCAN, LoginQrModel::STATUS_UN_CONFIRM])) {
+    public function authorizeAction(string $token, bool $confirm = false, bool $reject = false) {
+        try {
+            $res = InviteRepository::authorize(InviteRepository::TYPE_LOGIN, $token, $confirm, $reject);
+            $user = auth()->user();
+            return is_bool($res) ? $this->redirect('/') :
+                $this->show(compact('user', 'token'));
+        } catch (\Exception $ex) {
             return $this->redirect('/');
         }
-        $model->user_id = auth()->id();
-        if (!empty($confirm) && $model->status == LoginQrModel::STATUS_UN_CONFIRM) {
-            $model->status = LoginQrModel::STATUS_SUCCESS;
-            $model->save();
-            return $this->redirect('/');
-        }
-        if (!empty($reject)) {
-            $model->status = LoginQrModel::STATUS_REJECT;
-            $model->save();
-            return $this->redirect('/');
-        }
-        $model->status = LoginQrModel::STATUS_UN_CONFIRM;
-        $model->save();
-        $user = auth()->user();
-        return $this->show(compact('user', 'token'));
     }
 }

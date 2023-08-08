@@ -235,6 +235,8 @@ a {
             line-height: 2rem;
             display: block;
             text-decoration: none;
+            height: 2rem;
+            overflow: hidden;
         }
         li,
         ul {
@@ -281,6 +283,11 @@ a {
 
 .banner {
     .slider-box {
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
     .slider-point {
         position: absolute;
@@ -316,12 +323,16 @@ a {
     height: 1.5rem;
     border-radius: 50%;
     background-color: gray;
-    color: #fff;
+    color: #fff !important;
 }
 
 .panel {
     .panel-header {
         padding: 1rem 0;
+        color: #266faf;
+        i {
+            color: #666;
+        }
     }
     .panel-body {
         padding: .8rem 0;
