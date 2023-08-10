@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
+use Domain\Model\Model;
+use Module\Auth\Domain\Entities\InviteCodeEntity;
+use Module\Auth\Domain\Entities\InviteLogEntity;
 use Module\Auth\Domain\Model\InviteCodeModel;
 use Module\Auth\Domain\Model\InviteLogModel;
 use Zodream\Helpers\Str;
@@ -33,7 +36,7 @@ class InviteRepository {
     }
 
     private static function hasCode(string $code): bool {
-        return InviteCodeModel::where('token', $code)
+        return InviteCodeEntity::where('token', $code)
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
@@ -62,11 +65,11 @@ class InviteRepository {
     }
 
     public static function codeRemove(int $id) {
-        InviteCodeModel::where('id', $id)->where('type', self::TYPE_CODE)->delete();
+        InviteCodeEntity::where('id', $id)->where('type', self::TYPE_CODE)->delete();
     }
 
     public static function codeClear() {
-        InviteCodeModel::query()->where('type', self::TYPE_CODE)->delete();
+        InviteCodeEntity::query()->where('type', self::TYPE_CODE)->delete();
     }
 
     public static function logList(string $keywords = '', int $user = 0, int $inviter = 0) {
@@ -80,13 +83,13 @@ class InviteRepository {
             })->orderBy('id', 'desc')->page();
     }
 
-    public static function addLog(InviteCodeModel $model, mixed $userId) {
+    public static function addLog(InviteCodeEntity $model, mixed $userId) {
         $model->invite_count ++;
         if ($model->amount > 0 && $model->invite_count == $model->amount) {
             $model->expired_at = \time() - 1;
         }
         $model->save();
-        InviteLogModel::create([
+        InviteLogEntity::create([
             'user_id' => $userId,
             'parent_id' => $model->user_id,
             'code_id' => $model->id,
@@ -106,12 +109,13 @@ class InviteRepository {
         do {
             $code = self::generateCode($type);
         } while (static::hasCode($code));
-        InviteCodeModel::createOrThrow([
+        $at = is_numeric($expiredAt) || empty($expiredAt) ? intval($expiredAt) : strtotime($expiredAt);
+        InviteCodeEntity::createOrThrow([
             'user_id' => auth()->id(),
             'type' => $type,
             'token' => $code,
             'amount' => $amount,
-            'expired_at' => is_numeric($expiredAt) || empty($expiredAt) ? intval($expiredAt) : strtotime($expiredAt),
+            'expired_at' => $at === 0 || strlen((string)$at) > 9 ? $at : (time() + $at),
         ]);
         return $code;
     }
@@ -124,7 +128,7 @@ class InviteRepository {
      * @throws \Exception
      */
     public static function cancel(int $type, string $token): void {
-        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+        $model = InviteCodeEntity::where('type', $type)->where('token', $token)
             ->first();
         if (empty($model)) {
             return;
@@ -155,22 +159,22 @@ class InviteRepository {
      * @throws \Exception
      */
     public static function checkQr(int $type, string $token): array {
-        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+        $model = InviteCodeEntity::where('type', $type)->where('token', $token)
             ->first();
         if (empty($model)) {
             throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
         }
         if ($model->invite_count < 1) {
-            if ($model->expired_at < time()) {
+            if (self::isExpired($model)) {
                 throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
             }
             throw new \Exception('QR_UN_SCANNED', 201);
         }
         if ($model->amount > 1) {
-            return InviteLogModel::where('code_id', $model->id)
+            return InviteLogEntity::where('code_id', $model->id)
                 ->where('status', self::STATUS_SUCCESS)->pluck('user_id');
         }
-        $log = InviteLogModel::where('code_id', $model->id)
+        $log = InviteLogEntity::where('code_id', $model->id)
             ->first();
         if ($log->status == self::STATUS_UN_CONFIRM) {
             throw new \Exception('QR_UN_CONFIRM', 202);
@@ -184,6 +188,11 @@ class InviteRepository {
         return [$log['user_id']];
     }
 
+    private static function isExpired(mixed $model): bool {
+        $at = intval(is_array($model) || $model instanceof Model ? $model['expired_at'] : $model);
+        return $at > 0 && $at <= time();
+    }
+
     /**
      * 获取已授权的用户id
      * @param int $type
@@ -191,12 +200,12 @@ class InviteRepository {
      * @return array
      */
     public static function authorizedUser(int $type, string $token): array {
-        $id = InviteCodeModel::where('type', $type)->where('token', $token)
+        $id = InviteCodeEntity::where('type', $type)->where('token', $token)
             ->value('id');
         if (empty($id)) {
             return [];
         }
-        return InviteLogModel::where('code_id', $id)
+        return InviteLogEntity::where('code_id', $id)
             ->where('status', self::STATUS_SUCCESS)->pluck('user_id');
     }
     /**
@@ -212,16 +221,16 @@ class InviteRepository {
         if (auth()->guest()) {
             throw new \Exception('Need Login first', 204);
         }
-        $model = InviteCodeModel::where('type', $type)->where('token', $token)
+        $model = InviteCodeEntity::where('type', $type)->where('token', $token)
             ->first();
         if (empty($model)) {
             throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
         }
-        if ($model->expired_at < time()) {
+        if (self::isExpired($model)) {
             throw new \Exception('USER_TIPS_QR_OVERTIME', 204);
         }
         $userId = auth()->id();
-        $log = InviteLogModel::where('user_id', $userId)
+        $log = InviteLogEntity::where('user_id', $userId)
             ->where('code_id', $model->id)->first();
         if (empty($log)) {
             if ($model->invite_count >= $model->amount) {
@@ -229,7 +238,7 @@ class InviteRepository {
             }
             $model->invite_count ++;
             $model->save();
-            $log = InviteLogModel::createOrThrow([
+            $log = InviteLogEntity::createOrThrow([
                 'user_id' => $userId,
                 'parent_id' => $model->user_id,
                 'code_id' => $model->id,

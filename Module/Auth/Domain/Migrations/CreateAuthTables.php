@@ -1,6 +1,8 @@
 <?php
 namespace Module\Auth\Domain\Migrations;
 
+use Module\Auth\Domain\Entities\InviteCodeEntity;
+use Module\Auth\Domain\Entities\InviteLogEntity;
 use Module\Auth\Domain\Entities\UserRelationshipEntity;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
@@ -12,8 +14,6 @@ use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\Card\EquityCardModel;
 use Module\Auth\Domain\Model\Card\UserEquityCardModel;
 use Module\Auth\Domain\Model\CreditLogModel;
-use Module\Auth\Domain\Model\InviteCodeModel;
-use Module\Auth\Domain\Model\InviteLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
@@ -97,7 +97,7 @@ class CreateAuthTables extends Migration {
             $table->uint('status', 2)->default(0);
             $table->timestamp('expired_at');
             $table->timestamps();
-        })->append(InviteCodeModel::tableName(), function(Table $table) {
+        })->append(InviteCodeEntity::tableName(), function(Table $table) {
             $table->comment('邀请码生成');
             $table->id();
             $table->uint('type', 1)->default(InviteRepository::TYPE_CODE);
@@ -107,7 +107,7 @@ class CreateAuthTables extends Migration {
             $table->string('token', 32);
             $table->timestamp('expired_at');
             $table->timestamps();
-        })->append(InviteLogModel::tableName(), function(Table $table) {
+        })->append(InviteLogEntity::tableName(), function(Table $table) {
             $table->comment('邀请记录');
             $table->id();
             $table->uint('user_id');

@@ -124,7 +124,6 @@ class FuncHelper {
                 return $item['parent_id'] == $params['parent'];
             });
         } elseif (isset($params['tree'])) {
-
             $data = static::cache()->getOrSet(__FUNCTION__,
                 sprintf('tree-%s', $params['group'] ?? ''),
                 function () use ($data) {
