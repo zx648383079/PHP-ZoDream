@@ -6,8 +6,10 @@
     <div class="panel-body">
         <ul class="menu-bar">
             {if:$root.name == product_center}
+            {$pt=request:'product_type'}
             {linkage:product_type}
-            <li class="menu-item">
+            {> $link=hasLinkageLink:$item,$pt,product_type}
+            <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                 <div class="menu-name">
                     <i class="fa fa-angle-right"></i>
                     <a href="{url:./category?id=product_center&product_type=:$item.id}">{$item.name}</a>
@@ -18,7 +20,8 @@
                 {if:$item.children_count>0}
                 <ul class="menu-children">
                     {for:$item.children,$it}
-                    <li class="menu-item">
+                    {> $link=hasLinkageLink:$it,$pt,product_type}
+                    <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                         <div class="menu-name">
                             <a href="{url:./category?id=product_center&product_type=:$it.id}">{$it.name}</a>
                             {if:$it.children_count>0}
@@ -28,7 +31,8 @@
                         {if:$it.children_count>0}
                         <ul class="menu-children">
                             {for:$it.children,$i}
-                            <li class="menu-item">
+                            {> $link=hasLinkageLink:$i,$pt,product_type}
+                            <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                                 <div class="menu-name">
                                     <a href="{url:./category?id=product_center&product_type=:$i.id}">{$i.name}</a>
                                     {if:$i.children_count>0}
@@ -38,7 +42,8 @@
                                 {if:$i.children_count>0}
                                 <ul class="menu-children">
                                     {for:$i.children,$j}
-                                    <li class="menu-item">
+                                    {> $link=hasLinkageLink:$j,$pt,product_type}
+                                    <li class="menu-item{if:$link==2,' menu-item-active'}">
                                         <div class="menu-name">
                                             <a href="{url:./category?id=product_center&product_type=:$j.id}">{$j.name}</a>
                                         </div>
@@ -58,7 +63,8 @@
             {/linkage}
             {else}
             {channels:parent=>$root.id}
-            <li class="menu-item">
+            {> $link=hasChannelLink:$channel,$cat}
+            <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                 <div class="menu-name">
                     <i class="fa fa-angle-right"></i>
                     <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
@@ -69,7 +75,8 @@
                 {if:$channel.children_count>0}
                 <ul class="menu-children">
                     {channels:parent=>$channel.id}
-                    <li class="menu-item">
+                    {> $link=hasChannelLink:$channel,$cat}
+                    <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                         <div class="menu-name">
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                         </div>

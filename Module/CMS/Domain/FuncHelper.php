@@ -49,7 +49,7 @@ class FuncHelper {
      * @return mixed
      * @throws \Exception
      */
-    public static function translate(string $format, array $data = []) {
+    public static function translate(string $format, array $data = []): mixed {
         if (isset(static::$translateItems[$format])) {
             return trans()->format(static::$translateItems[$format], $data);
         }
@@ -99,7 +99,8 @@ class FuncHelper {
         return intval($map[$type][$name] ?? 0);
     }
 
-    public static function channels(array $params = null) {
+    public static function channels(array $params = null): mixed {
+        /** @var TreeObject $data */
         $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
                 $items = CacheRepository::getChannelCache();
@@ -110,29 +111,30 @@ class FuncHelper {
             return $data;
         }
         if (isset($params['children'])) {
-            return TreeHelper::getTreeChild($data, static::getChannelId($params['children']));
+            return $data->getChildrenId(static::getChannelId($params['children']), false);
         }
         if (isset($params['group'])) {
-            $data = array_filter($data, function ($item) use ($params) {
+            $data = array_filter($data instanceof TreeObject ? $data->all() : $data, function ($item) use ($params) {
                 $groups = is_array($item['groups']) ? $item['groups'] : explode(',', $item['groups']);
                 return in_array($params['group'], $groups);
             });
         }
         if (isset($params['parent'])) {
             $params['parent'] = static::getChannelId($params['parent']);
-            $data = array_filter($data, function ($item) use ($params) {
+            $data = array_filter($data instanceof TreeObject ? $data->all() : $data, function ($item) use ($params) {
                 return $item['parent_id'] == $params['parent'];
             });
         } elseif (isset($params['tree'])) {
             $data = static::cache()->getOrSet(__FUNCTION__,
                 sprintf('tree-%s', $params['group'] ?? ''),
                 function () use ($data) {
-                    return (new Tree($data))->makeIdTree();
+                    return $data instanceof TreeObject ? $data->toIdTree() : (new Tree($data))->makeIdTree();
                 });
         }
         if (isset($params['id'])) {
             $ids = array_map('intval', explode(',', $params['id']));
-            $data = array_filter($data, function ($item) use ($ids) {
+            $data = array_filter($data instanceof TreeObject ? $data->all() : $data,
+                function ($item) use ($ids) {
                 return in_array($item['id'], $ids);
             });
         }
@@ -161,7 +163,7 @@ class FuncHelper {
         });
     }
 
-    protected static function setModel(...$data) {
+    protected static function setModel(...$data): void {
         foreach ($data as $item) {
             static::cache()->trySet('model', $item['id'], $item);
             static::cache()->trySet('model', $item['table'], $item);
@@ -172,7 +174,7 @@ class FuncHelper {
      * @param array|null $params
      * @return Page
      */
-    public static function contents(array $params = null) {
+    public static function contents(array $params = null): Page {
         $data = self::getContentsQuery($params);
         return static::cache()->getOrSet(__FUNCTION__,
             md5(Json::encode($data)),
@@ -254,8 +256,8 @@ class FuncHelper {
                 $item['type'] === 'linkages') {
                 $data[$item['field']] = self::treeChildId(
                     CacheRepository::getLinkageCache(
-                        intval(BaseField::fieldSetting($item,
-                            'option', 'linkage_id'))
+                        static::mapId(BaseField::fieldSetting($item,
+                            'option', 'linkage_id'), 'linkage')
                     ), intval($data[$item['field']]));
             }
         }
@@ -265,11 +267,14 @@ class FuncHelper {
 
     /**
      * 获取自身及子孙id
-     * @param array $data
+     * @param array|TreeObject $data
      * @param int|string $parent
      * @return array
      */
-    protected static function treeChildId(array $data, int|string $parent): array {
+    protected static function treeChildId(array|TreeObject $data, int|string $parent): array {
+        if ($data instanceof TreeObject) {
+            return $data->getChildrenId(intval($parent), true);
+        }
         if (empty($data)) {
             return [$parent];
         }
@@ -284,7 +289,7 @@ class FuncHelper {
      * @return mixed
      * @throws \Exception
      */
-    public static function contentPage(array $params = null) {
+    public static function contentPage(array $params = null): mixed {
         if (empty($params)) {
             $params = [];
         }
@@ -297,7 +302,7 @@ class FuncHelper {
 
     public static function locationPath(): array {
         $path = static::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
-            $path = TreeHelper::getTreeParent(static::channels(), static::$current['channel']);
+            $path = static::channels()->getParentId(static::$current['channel']);
             $path[] = static::$current['channel'];
             return $path;
         });
@@ -339,11 +344,11 @@ class FuncHelper {
         return static::getContentValue($name, $data);
     }
 
-    protected static function getChannelId(string|int $val) {
+    protected static function getChannelId(string|int $val): int {
         return self::mapId($val, 'channel');
     }
 
-    protected static function setChannel(...$data) {
+    protected static function setChannel(...$data): void {
         foreach ($data as $item) {
             if (static::cache()->has('channel', $item['id'])) {
                 return;
@@ -505,9 +510,7 @@ class FuncHelper {
         if (empty($id)) {
             return null;
         }
-        $items = static::channels();
-        $parent = TreeHelper::getTreeParent($items, $id);
-        return static::channel(empty($parent) ? $id : $parent[0], true);
+        return static::channel(static::channels()->getRootId($id), true);
     }
 
     /**
@@ -516,7 +519,7 @@ class FuncHelper {
      * @param string|int $category
      * @return array|string
      */
-    public static function content(mixed $id, mixed $name = null, string|int $category = 0) {
+    public static function content(mixed $id, mixed $name = null, string|int $category = 0): mixed {
         if (is_array($id)) {
             isset($id['name']) && $name = $id['name'];
             $category = static::getVal($id, ['category', 'cat_id', 'cat', 'channel']);
@@ -640,6 +643,23 @@ class FuncHelper {
         return false;
     }
 
+    public static function hasChannelLink(mixed $item, mixed $target): int {
+        return static::channels()->hasLink(is_array($item) ? $item['id'] : $item,
+            is_array($target) ? $target['id'] : $target);
+    }
+
+    public static function hasLinkageLink(mixed $item, mixed $target, int|string $linkageId): int {
+        return static::linkageData($linkageId)->hasLink(is_array($item) ? $item['id'] : $item,
+            is_array($target) ? $target['id'] : intval($target));
+    }
+
+    public static function linkageData(int|string $id): TreeObject {
+        $id = static::mapId($id, 'linkage');
+        return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
+            return CacheRepository::getLinkageCache($id);
+        });
+    }
+
     public static function linkage(int|string $id, int $dataId = 0, string $key = ''): mixed {
         $id = static::mapId($id, 'linkage');
         if (empty($id)) {
@@ -650,8 +670,8 @@ class FuncHelper {
                 return LinkageRepository::dataTree($id);
             });
         }
-        $data = static::cache()->getOrSet('linkageData', $dataId, function () use ($id, $dataId) {
-           $items = CacheRepository::getLinkageCache($id);
+        $data = static::cache()->getOrSet('linkageDataItem', $dataId, function () use ($id, $dataId) {
+           $items = static::linkageData($id);
            foreach ($items as $item) {
                if ($item['id'] === $id) {
                    return $item;
@@ -729,7 +749,7 @@ class FuncHelper {
      * @param mixed ...$fields
      * @throws \Exception
      */
-    public static function extendContent(&$data, ...$fields) {
+    public static function extendContent(&$data, ...$fields): void {
         if (empty($data)) {
             return;
         }
@@ -867,7 +887,7 @@ class FuncHelper {
         return url('./content', $args);
     }
 
-    public static function url(mixed $data) {
+    public static function url(mixed $data): string {
         if (is_array($data)) {
             return self::contentUrl($data);
         }
@@ -881,7 +901,7 @@ class FuncHelper {
         return url($data, $args);
     }
 
-    protected static function getCommentQuery(array $param) {
+    protected static function getCommentQuery(array $param): array {
         $data = [];
         $contentId = static::getVal($param, ['content_id', 'article'], '');
         if (!empty($contentId)) {
@@ -968,7 +988,7 @@ class FuncHelper {
      * @return string
      * @throws \Exception
      */
-    public static function searchActive(string $name, string $val = '') {
+    public static function searchActive(string $name, string $val = ''): string {
         $request = request();
         if ($request->get($name, '') === $val) {
             return ' active';
@@ -981,7 +1001,7 @@ class FuncHelper {
      * @return string
      * @throws \Exception
      */
-    public static function searchHidden() {
+    public static function searchHidden(): string {
         $data = request()->get();
         unset($data['page'], $data['keywords']);
         $html = '';
@@ -1036,7 +1056,7 @@ class FuncHelper {
         });
     }
 
-    public static function registerFunc(ParserCompiler $compiler, $class, $method = null) {
+    public static function registerFunc(ParserCompiler $compiler, $class, $method = null): ParserCompiler {
         if (empty($method)) {
             list($class, $method) = [static::class, $class];
         }
@@ -1046,7 +1066,8 @@ class FuncHelper {
         return $compiler;
     }
 
-    public static function registerBlock(ParserCompiler $compiler, string $method, string $item = 'item') {
+    public static function registerBlock(ParserCompiler $compiler,
+                                         string $method, string $item = 'item'): ParserCompiler {
         return $compiler->registerFunc($method,
             function ($params = null) use ($method, $item, $compiler) {
             if ($params === -1) {
@@ -1061,11 +1082,13 @@ class FuncHelper {
         }, true);
     }
 
-    public static function register(ParserCompiler $compiler) {
+    public static function register(ParserCompiler $compiler): ParserCompiler {
         static::registerFunc($compiler, [
             'channel',
             'channelRoot',
             'channelActive',
+            'hasChannelLink',
+            'hasLinkageLink',
             'content',
             'formContent',
             'field',

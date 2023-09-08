@@ -1,6 +1,8 @@
 $primary: #266faf;
 $primaryText: #fff;
 $linkHoverText: #a40000;
+$navActive: #68ac37;
+$navActiveText: #fff;
 
 @mixin iconFont($size: 1rem) {
     display: inline-block;
@@ -108,8 +110,8 @@ a {
             min-width: 6rem;
             text-align: center;
             &:hover {
-                background-color: #68ac37;
-                color: #fff;
+                background-color: $navActive;
+                color: $navActiveText;
             }
         }
         ul,
@@ -655,6 +657,14 @@ $dialogHeight: 20rem;
             align-items: center;
         }
     }
+    .menu-item-active {
+        >.menu-name {
+            border-color: $primary;
+            a {
+                color: $linkHoverText;
+            }
+        }
+    }
     .menu-item-open {
         >.menu-name {
             .menu-item-arrow {
@@ -1062,6 +1072,9 @@ $dialogHeight: 20rem;
             a {
                 margin: 0 .5rem;
                 word-break: keep-all;
+                &.active {
+                    color: $linkHoverText;
+                }
             }
         }
     }
@@ -1078,8 +1091,8 @@ $dialogHeight: 20rem;
         transform-origin: 0 0;
         top: -9.7rem;
         left: -2.5rem;
-        background-color: #68ac37;
-        color: #fff;
+        background-color: $navActive;
+        color: $navActiveText;
         text-align: center;
         height: 3rem;
         padding-top: 1.2rem;

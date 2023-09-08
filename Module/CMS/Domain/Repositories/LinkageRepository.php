@@ -4,8 +4,10 @@ namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
+use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
+use Zodream\Database\Relation;
 use Zodream\Html\Tree;
 
 class LinkageRepository {
@@ -52,12 +54,26 @@ class LinkageRepository {
 
 
     public static function dataList(int $linkage, string $keywords = '', int $parent = 0) {
-        return LinkageDataModel::query()
+        $data = LinkageDataModel::query()
             ->where('linkage_id', $linkage)
             ->where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->page();
+        if ($data->isEmpty()) {
+            return $data;
+        }
+        $idItems = Relation::columns($data, 'id');
+        $items = LinkageDataModel::query()
+            ->where('linkage_id', $linkage)
+            ->whereIn('parent_id', $idItems)
+            ->groupBy('parent_id')
+            ->selectRaw('COUNT(*) as count,parent_id')
+            ->pluck('count', 'parent_id');
+        return $data->map(function ($item) use ($items) {
+            $item['children_count'] = isset($items[$item['id']]) ? intval($items[$item['id']]) : 0;
+            return $item;
+        });
     }
 
     public static function dataSave(array $data) {
@@ -88,6 +104,6 @@ class LinkageRepository {
         } else {
             $id = intval(LinkageModel::where('language', $lang)->where('code', $id)->value('id'));
         }
-        return (new Tree(CacheRepository::getLinkageCache($id)))->makeIdTree();
+        return FuncHelper::linkageData($id)->toIdTree();
     }
 }

@@ -46,7 +46,7 @@ class HomeController extends Controller {
             ]);
             $model = TaskRepository::save($data, $id, $status);
         } catch (ValidationException $ex) {
-            return $this->renderFailure($ex->validator->firstError());
+            return $this->renderFailure($ex->bag->firstError());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -156,7 +156,7 @@ class HomeController extends Controller {
         return $this->renderData($day, TaskRepository::restTip($day));
     }
 
-    public function batchAddAction(int $id) {
+    public function batchAddAction(array|int $id) {
         $task_list = TaskModel::where('user_id', auth()->id())
             ->whereIn('id', (array)$id)->get();
         if (empty($task_list)) {

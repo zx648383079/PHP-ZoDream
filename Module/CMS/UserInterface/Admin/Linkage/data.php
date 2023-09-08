@@ -22,13 +22,15 @@ $this->title = '联动项列表';
         <thead>
         <tr>
             <th>名称</th>
+            <th>子项个数</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td class="text-left"><?=$item->name?></td>
+                <td class="text-left"><?=$item['name']?></td>
+                <td class="text-center"><?=$item['children_count']?></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-info" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>">下一级</a>

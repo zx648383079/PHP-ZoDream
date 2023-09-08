@@ -51,7 +51,7 @@ class ShareController extends Controller {
             ]);
             $model = ShareRepository::create($data);
         } catch (ValidationException $ex) {
-            return $this->renderFailure($ex->validator->firstError());
+            return $this->renderFailure($ex->bag->firstError());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

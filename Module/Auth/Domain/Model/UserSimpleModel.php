@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Model;
 
 
 use Module\Auth\Domain\Entities\UserEntity;
+use Zodream\Database\Model\Model;
 
 /**
  * Class UserSimpleModel
@@ -23,8 +24,8 @@ class UserSimpleModel extends UserEntity {
         return url()->asset($avatar);
     }
 
-    public static function converterFrom(UserEntity $user) {
-        $data = new UserSimpleModel();
+    public static function converterFrom(Model|array $user) {
+        $data = new static();
         foreach (self::SIMPLE_MODE as $key) {
             $data[$key] = $user[$key];
         }

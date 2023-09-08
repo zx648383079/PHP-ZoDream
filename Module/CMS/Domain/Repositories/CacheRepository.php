@@ -8,6 +8,7 @@ use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
+use Module\CMS\Domain\TreeObject;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\Str;
 
@@ -90,47 +91,26 @@ final class CacheRepository {
         return 'cms_site_rule';
     }
 
-    public static function getLinkageCache(int $id): array {
+    public static function getLinkageCache(int $id): TreeObject {
         if ($id < 1) {
-            return [];
+            return new TreeObject();
         }
         return cache()->getOrSet(self::linkageKey($id), function () use ($id) {
-            return self::treeToArray(LinkageDataModel::query()->where('linkage_id', $id)
+            return new TreeObject(LinkageDataModel::query()->where('linkage_id', $id)
                 ->orderBy('position', 'asc')
                 ->orderBy('id', 'asc')
                 ->get());
         }, 0);
     }
 
-    public static function getChannelCache(): array {
+    public static function getChannelCache(): TreeObject {
         $site = CMSRepository::siteId();
         return cache()->getOrSet(self::channelKey($site), function () {
-            return self::treeToArray(CategoryModel::query()
+            return new TreeObject(CategoryModel::query()
                 ->orderBy('position', 'asc')
                 ->orderBy('id', 'asc')
                 ->get());
         });
-    }
-
-    public static function treeToArray(array $data): array {
-        if (empty($data)) {
-            return [];
-        }
-        $maps = [];
-        foreach ($data as $item) {
-            if (!isset($maps[$item['parent_id']])) {
-                $maps[$item['parent_id']] = 0;
-            }
-            $maps[$item['parent_id']] ++;
-        }
-        $items = [];
-        foreach ($data as $item) {
-            $formatted = $item->toArray();
-            $formatted['children_count'] = $maps[$item['id']] ?? 0;
-            $items[] = $formatted;
-        }
-        unset($data, $maps);
-        return $items;
     }
 
     /**
