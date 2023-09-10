@@ -26,11 +26,11 @@ class AccountLogModel extends Model {
 
     protected array $append = ['type_label', 'status_label'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_account_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'type' => 'int:0,99',
@@ -44,7 +44,7 @@ class AccountLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

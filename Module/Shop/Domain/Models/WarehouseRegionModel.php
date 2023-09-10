@@ -11,20 +11,20 @@ use Domain\Model\Model;
  */
 class WarehouseRegionModel extends Model {
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_warehouse_region';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'warehouse_id' => 'required|int',
             'region_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'warehouse_id' => 'Warehouse Id',
             'region_id' => 'Region Id',

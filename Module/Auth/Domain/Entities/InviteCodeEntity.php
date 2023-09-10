@@ -17,12 +17,12 @@ use Domain\Entities\Entity;
  * @property string $token
  */
 class InviteCodeEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_invite_code';
     }
 
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'amount' => 'int',
@@ -35,7 +35,7 @@ class InviteCodeEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

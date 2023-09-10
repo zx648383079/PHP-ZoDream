@@ -17,11 +17,11 @@ use Domain\Model\Model;
  */
 class EquityCardModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'equity_card';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,32',
             'icon' => 'required|string:0,255',
@@ -32,7 +32,7 @@ class EquityCardModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

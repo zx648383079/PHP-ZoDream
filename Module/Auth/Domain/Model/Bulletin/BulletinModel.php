@@ -26,11 +26,11 @@ class BulletinModel extends Model {
 
     protected array $append = ['user', 'user_name', 'icon'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bulletin';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,100',
             'content' => 'required|string:0,255',
@@ -42,7 +42,7 @@ class BulletinModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

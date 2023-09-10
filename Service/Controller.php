@@ -12,7 +12,8 @@ abstract class Controller extends BaseController {
         $this->middleware(RequestMiddleware::class);
     }
 
-    public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $code = 404) {
+    public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $status = 404) {
+        $code = $status;
         return $this->show('@root/Home/404', compact('url', 'message', 'time', 'code'));
     }
 }

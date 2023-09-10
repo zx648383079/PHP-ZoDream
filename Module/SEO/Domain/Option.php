@@ -21,7 +21,7 @@ class Option {
         $this->boot();
     }
 
-    public function boot() {
+    public function boot(): void {
         if ($this->booted) {
             return;
         }
@@ -31,7 +31,7 @@ class Option {
         });
     }
 
-    private function format() {
+    private function format(): array {
         $data = [];
         /** @var OptionModel[]  $items */
         try {
@@ -45,16 +45,16 @@ class Option {
         return $data;
     }
 
-    public function clearCache() {
+    public function clearCache(): void {
         cache()->delete(self::CACHE_KEY);
     }
 
-    public function reset() {
+    public function reset(): void {
         $this->booted = false;
         cache()->set(self::CACHE_KEY, $this->format());
     }
 
-    public function get($code, $default = null) {
+    public function get(string|int $code, mixed $default = null): mixed {
         return $this->data[$code] ?? $default;
     }
 
@@ -108,7 +108,7 @@ class Option {
         return trim($val);
     }
 
-    public static function group(string|array $name, callable $cb) {
+    public static function group(string|array $name, callable $cb): bool {
         return OptionModel::group($name, $cb);
     }
 

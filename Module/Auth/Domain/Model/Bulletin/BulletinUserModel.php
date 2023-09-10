@@ -18,11 +18,11 @@ class BulletinUserModel extends Model {
 
     protected array $append = ['bulletin'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bulletin_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'bulletin_id' => 'required|int',
             'status' => 'int:0,9',
@@ -32,7 +32,7 @@ class BulletinUserModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'bulletin_id' => 'Bulletin Id',

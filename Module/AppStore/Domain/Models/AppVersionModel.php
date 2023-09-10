@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class AppVersionModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'app_version';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'app_id' => 'required|int',
             'name' => 'required|string:0,20',
@@ -27,7 +27,7 @@ class AppVersionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'app_id' => 'App Id',

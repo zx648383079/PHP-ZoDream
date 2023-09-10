@@ -21,11 +21,11 @@ use Domain\Model\Model;
  */
 class AppFileModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'app_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'app_id' => 'required|int',
             'version_id' => 'required|int',
@@ -41,7 +41,7 @@ class AppFileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'app_id' => 'App Id',

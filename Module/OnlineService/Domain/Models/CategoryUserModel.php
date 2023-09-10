@@ -13,20 +13,20 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $user_id
  */
 class CategoryUserModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_category_user';
     }
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'cat_id' => 'required|int',
             'user_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'cat_id' => 'Cat Id',
             'user_id' => 'User Id',

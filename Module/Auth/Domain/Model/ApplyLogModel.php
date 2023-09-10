@@ -17,11 +17,11 @@ use Domain\Model\Model;
  */
 class ApplyLogModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'user_apply_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'type' => 'int:0,127',
@@ -33,7 +33,7 @@ class ApplyLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

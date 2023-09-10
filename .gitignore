@@ -47,6 +47,7 @@ Service/config/
 /data/*
 
 !/data/languages/
+!/data/plugins/
 
 # composer
 vendor/

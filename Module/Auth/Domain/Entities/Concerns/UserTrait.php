@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Entities\Concerns;
 
 
 trait UserTrait {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'email' => 'required|string:0,200',
@@ -28,7 +29,7 @@ trait UserTrait {
     }
 
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '昵称',

@@ -15,11 +15,11 @@ use Domain\Model\Model;
  */
 class BanAccountModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_ban_account';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'item_key' => 'required|string:0,100',
@@ -30,7 +30,7 @@ class BanAccountModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

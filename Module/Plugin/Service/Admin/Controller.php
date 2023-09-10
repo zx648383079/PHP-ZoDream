@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\OpenPlatform\Service\Admin;
+namespace Module\Plugin\Service\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
@@ -13,7 +13,7 @@ class Controller extends ModuleController {
 
     public File|string $layout = '/Admin/layouts/main';
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl($path, $args = []): string {
         return url('./@admin/'.$path, $args);
     }
 

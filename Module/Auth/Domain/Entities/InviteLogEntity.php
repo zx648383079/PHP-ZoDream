@@ -14,11 +14,11 @@ use Domain\Entities\Entity;
  */
 class InviteLogEntity extends Entity {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_invite_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'parent_id' => 'int',
@@ -29,7 +29,7 @@ class InviteLogEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

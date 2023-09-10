@@ -17,13 +17,13 @@ class ServiceWaiterModel extends Model {
     const STATUS_ALLOW = 1;
     const STATUS_DISALLOW = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_service_waiter';
     }
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'service_id' => 'required|int',
             'user_id' => 'required|int',
@@ -31,7 +31,7 @@ class ServiceWaiterModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'service_id' => 'Service Id',
             'user_id' => 'User Id',

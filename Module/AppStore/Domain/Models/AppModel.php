@@ -29,11 +29,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class AppModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'app_software';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'cat_id' => 'required|int',
@@ -56,7 +56,7 @@ class AppModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

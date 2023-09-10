@@ -12,20 +12,20 @@ use Domain\Model\Model;
  */
 class UserRoleModel extends Model {
 
-    protected $primaryKey = false;
+    protected string $primaryKey = '';
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'rbac_user_role';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'role_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'user_id' => 'User Id',
             'role_id' => 'Role Id',

@@ -16,13 +16,13 @@ class CategoryProviderModel extends Model {
     const STATUS_ALLOW = 1;
     const STATUS_DISALLOW = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_category_provider';
     }
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'cat_id' => 'required|int',
@@ -30,7 +30,7 @@ class CategoryProviderModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'user_id' => 'User Id',
             'cat_id' => 'Cat Id',

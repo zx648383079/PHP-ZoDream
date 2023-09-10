@@ -13,13 +13,13 @@ use Domain\Model\Model;
  */
 class TagRelationshipModel extends Model {
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_tag_relationship';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'tag_id' => 'required|int',
             'blog_id' => 'required|int',
@@ -27,7 +27,7 @@ class TagRelationshipModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'tag_id' => 'Tag Id',
             'blog_id' => 'Blog Id',

@@ -11,20 +11,20 @@ use Domain\Model\Model;
  */
 class ServiceRegionModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_service_region';
     }
 
-    protected $primaryKey = '';
+    protected string $primaryKey = '';
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'service_id' => 'required|int',
             'region_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'service_id' => 'Service Id',
             'region_id' => 'Region Id',

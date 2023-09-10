@@ -17,13 +17,13 @@ use Domain\Model\Model;
  * @property integer $region_id
  */
 class ShippingRegionModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_shipping_region';
     }
 
-    protected $primaryKey = false;
+    protected string $primaryKey = '';
 
-    public function rules() {
+    public function rules(): array {
         return [
             'shipping_id' => 'required|int',
             'group_id' => 'required|int',
@@ -31,7 +31,7 @@ class ShippingRegionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'shipping_id' => 'Id',
             'group_id' => 'Group Id',
