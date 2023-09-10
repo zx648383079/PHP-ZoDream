@@ -27,11 +27,11 @@ class ThreadPostModel extends Model {
 
     protected array $hidden = ['ip'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bbs_thread_post';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'content' => 'required|string',
             'thread_id' => 'required|int',
@@ -47,7 +47,7 @@ class ThreadPostModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => 'Content',

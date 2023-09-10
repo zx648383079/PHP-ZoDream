@@ -31,11 +31,11 @@ class AdModel extends Model {
         self::VIDEO => '视频',
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_ad';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'position_id' => 'required|int',
@@ -49,7 +49,7 @@ class AdModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '广告名',

@@ -16,11 +16,11 @@ use Domain\Entities\Entity;
  * @property integer $group_id
  */
 class StorePatronEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_store_patron';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'store_id' => 'required|int',
             'user_id' => 'required|int',
@@ -33,7 +33,7 @@ class StorePatronEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'store_id' => 'Store Id',

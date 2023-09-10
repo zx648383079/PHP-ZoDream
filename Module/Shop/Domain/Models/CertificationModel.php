@@ -22,11 +22,11 @@ use Domain\Model\Model;
  */
 class CertificationModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_certification';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'required|string:0,20',
@@ -45,7 +45,7 @@ class CertificationModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

@@ -52,11 +52,11 @@ class OrderModel extends Model {
 
     protected array $append = ['service', 'status_label'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_order';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'provider_id' => 'required|int',
             'user_id' => 'required|int',
@@ -77,7 +77,7 @@ class OrderModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'provider_id' => 'Provider Id',

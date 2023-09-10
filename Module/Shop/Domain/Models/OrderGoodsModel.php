@@ -29,11 +29,11 @@ class OrderGoodsModel extends Model {
 
     protected array $append = ['status_label'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_order_goods';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'order_id' => 'required|int',
             'goods_id' => 'required|int',
@@ -52,7 +52,7 @@ class OrderGoodsModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'order_id' => 'Order Id',

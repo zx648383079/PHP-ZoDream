@@ -18,11 +18,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class BookListModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_list';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'title' => 'required|string:0,50',
@@ -35,7 +35,7 @@ class BookListModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

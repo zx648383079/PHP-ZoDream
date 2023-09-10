@@ -16,11 +16,11 @@ use Zodream\Helpers\Json;
  */
 class ProjectVersionModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'doc_project_version';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'project_id' => 'required|int',
             'name' => 'required|string:0,20',
@@ -29,7 +29,7 @@ class ProjectVersionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',

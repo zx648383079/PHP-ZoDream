@@ -23,7 +23,7 @@ class CreateWeChatTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->initEditor();
         $this->initWechatTable();
         $this->initUserTable();
@@ -74,13 +74,13 @@ class CreateWeChatTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'wechat_manage' => '公众号管理'
         ]);
     }
 
-    public function initEditor() {
+    public function initEditor(): void {
         $this->append(EditorTemplateModel::tableName(), function(Table $table) {
             $table->comment('微信图文模板');
             $table->id();
@@ -100,7 +100,7 @@ class CreateWeChatTables extends Migration {
     /**
      * 公众号表
      */
-    public function initWeChatTable() {
+    public function initWeChatTable(): void {
         $this->append(WeChatModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
@@ -129,7 +129,7 @@ class CreateWeChatTables extends Migration {
     /**
      * 粉丝用户表
      */
-    public function initUserTable() {
+    public function initUserTable(): void {
         // 公众号粉丝详情表
         $this->append(UserModel::tableName(), function(Table $table) {
             $table->id()->comment('粉丝ID');
@@ -161,7 +161,7 @@ class CreateWeChatTables extends Migration {
     /**
      * 消息记录表
      */
-    public function initMessageHistoryTable() {
+    public function initMessageHistoryTable(): void {
         $this->append(MessageHistoryModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');
@@ -178,7 +178,7 @@ class CreateWeChatTables extends Migration {
     /**
      * 素材表
      */
-    public function initMediaTable() {
+    public function initMediaTable(): void {
         $this->append(MediaModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('wid')->comment('所属微信公众号ID');

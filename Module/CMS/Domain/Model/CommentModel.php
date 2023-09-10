@@ -25,11 +25,11 @@ class CommentModel extends BaseModel {
 
     use ExtraRule;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_comment_'.CMSRepository::siteId();
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'content' => 'required|string:0,255',
             $this->extraRuleKey => '',
@@ -45,7 +45,7 @@ class CommentModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => 'Content',

@@ -15,11 +15,11 @@ use Module\Counter\Domain\Events\CounterState;
  */
 class VisitorLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_visitor_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'string:0,50',
             'ip' => 'required|string:0,120',
@@ -28,7 +28,7 @@ class VisitorLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

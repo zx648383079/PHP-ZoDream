@@ -24,11 +24,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class ThemeComponentEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'tpl_theme_component';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'description' => 'string:0,200',
@@ -49,7 +49,7 @@ class ThemeComponentEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

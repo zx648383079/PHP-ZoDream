@@ -74,11 +74,11 @@ class OrderModel extends Model {
         self::STATUS_REFUNDED => '已退款'
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_order';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'series_number' => 'required|string:0,100',
             'user_id' => 'required|int',
@@ -103,7 +103,7 @@ class OrderModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'series_number' => 'Series Number',

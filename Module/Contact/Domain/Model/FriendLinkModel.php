@@ -18,11 +18,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class FriendLinkModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cif_friend_link';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'url' => 'required|string:0,50',
@@ -36,7 +36,7 @@ class FriendLinkModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

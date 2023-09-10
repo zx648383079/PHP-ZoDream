@@ -22,11 +22,11 @@ class SiteLogModel extends Model {
     const ACTION_AGREE = 1;
     const ACTION_DISAGREE = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_log_'.CMSRepository::siteId();
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
             'item_id' => 'required|int',
@@ -37,7 +37,7 @@ class SiteLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

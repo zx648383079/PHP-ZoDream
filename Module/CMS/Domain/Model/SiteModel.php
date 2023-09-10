@@ -28,11 +28,11 @@ class SiteModel extends Model {
     const MATCH_TYPE_DOMAIN = 0;
     const MATCH_TYPE_PATH = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_site';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,255',
             'keywords' => 'string:0,255',
@@ -50,7 +50,7 @@ class SiteModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => '站点标题',

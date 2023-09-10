@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class FileModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'log_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,255',
             'md5' => 'required|string:0,32',
@@ -27,7 +27,7 @@ class FileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

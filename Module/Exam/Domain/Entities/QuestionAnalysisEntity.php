@@ -12,11 +12,11 @@ use Domain\Entities\Entity;
  * @property string $content
  */
 class QuestionAnalysisEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'exam_question_analysis';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'question_id' => 'required|int',
             'type' => 'int:0,127',
@@ -24,7 +24,7 @@ class QuestionAnalysisEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'question_id' => 'Question Id',

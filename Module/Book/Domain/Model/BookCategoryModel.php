@@ -12,18 +12,18 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class BookCategoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'created_at' => 'int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '分类',

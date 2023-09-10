@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class ActivityTimeModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_activity_time';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'title' => 'required|string:0,40',
             'start_at' => '',
@@ -26,7 +26,7 @@ class ActivityTimeModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => '名称',

@@ -16,11 +16,11 @@ use Domain\Model\ModelHelper;
  * @property integer $updated_at
  */
 class RoleModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'rbac_role';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'display_name' => 'string:0,100',
@@ -30,7 +30,7 @@ class RoleModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '角色名',

@@ -19,12 +19,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class TrialReportModel extends Model {
 
-    public static function tableName()
-    {
+    public static function tableName(): string {
         return 'shop_trial_report';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'act_id' => 'required|int',
             'user_id' => 'required|int',
@@ -37,7 +36,7 @@ class TrialReportModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'act_id' => 'Act Id',

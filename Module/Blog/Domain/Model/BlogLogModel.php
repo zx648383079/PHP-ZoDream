@@ -25,12 +25,12 @@ class BlogLogModel extends Model {
     const ACTION_REAL_RULE = 3; // 是否能阅读
 
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_log';
     }
 
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
             'item_id' => 'required|int',
@@ -40,7 +40,7 @@ class BlogLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

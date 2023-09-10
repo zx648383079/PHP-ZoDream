@@ -13,11 +13,11 @@ use Domain\Entities\Entity;
  */
 class PluginEntity extends Entity {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_plugin';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'code' => 'required|string:0,20',
             'setting' => 'required',
@@ -27,7 +27,7 @@ class PluginEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'code' => 'Code',

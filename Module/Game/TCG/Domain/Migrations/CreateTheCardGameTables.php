@@ -16,7 +16,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateTheCardGameTables extends Migration {
-    public function up() {
+    public function up(): void {
         $this->append(PlayerModel::tableName(), function (Table $table) {
             $table->comment('角色表');
             $table->id();

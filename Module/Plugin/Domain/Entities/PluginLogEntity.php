@@ -19,7 +19,7 @@ class PluginLogEntity extends Entity {
         return 'plugin_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'plugin_id' => 'required|int',
             'status' => 'int:0,127',
@@ -28,7 +28,7 @@ class PluginLogEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'plugin_id' => 'Plugin Id',

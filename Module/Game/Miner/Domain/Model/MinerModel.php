@@ -14,10 +14,10 @@ use Domain\Model\Model;
  * @property integer $max_money
  */
 class MinerModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_miner_miner';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'string:0,255',
             'earnings' => 'required|int:0,9999',
@@ -27,7 +27,7 @@ class MinerModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

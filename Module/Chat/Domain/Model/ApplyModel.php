@@ -17,11 +17,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class ApplyModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_apply';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
             'item_id' => 'required|int',
@@ -33,7 +33,7 @@ class ApplyModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

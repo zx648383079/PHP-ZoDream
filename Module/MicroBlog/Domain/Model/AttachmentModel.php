@@ -11,11 +11,11 @@ use Domain\Model\Model;
  */
 class AttachmentModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'micro_attachment';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'micro_id' => 'required|int',
             'thumb' => 'required|string:0,255',
@@ -23,7 +23,7 @@ class AttachmentModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'micro_id' => 'Micro Id',

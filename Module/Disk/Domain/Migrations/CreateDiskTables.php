@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Migrations;
 
 use Module\Disk\Domain\Model\ClientFileModel;
@@ -19,7 +20,7 @@ class CreateDiskTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         if (DiskRepository::useDistributed()) {
             $this->append(ServerModel::tableName(), function(Table $table) {
                 $table->id();

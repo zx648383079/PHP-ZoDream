@@ -19,11 +19,11 @@ use Zodream\Helpers\Json;
  * @property integer $created_at
  */
 class AgreementModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'seo_agreement';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'language' => '',
@@ -36,7 +36,7 @@ class AgreementModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

@@ -37,11 +37,11 @@ class MessageModel extends Model {
 
     protected array $append = ['user', 'receive'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_message';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'type' => 'int:0,127',
             'content' => 'required|string:0,400',
@@ -57,7 +57,7 @@ class MessageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'type' => 'Type',

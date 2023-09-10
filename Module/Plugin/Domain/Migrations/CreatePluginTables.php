@@ -11,7 +11,7 @@ use Zodream\Database\Model\Model;
 
 final class CreatePluginTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(PluginEntity::tableName(), function (Table $table) {
             $table->comment('插件表');
             $table->id();

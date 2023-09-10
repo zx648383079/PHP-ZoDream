@@ -13,7 +13,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateChatTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(FriendModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 50)

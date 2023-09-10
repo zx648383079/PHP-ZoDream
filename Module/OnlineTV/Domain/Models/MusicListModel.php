@@ -17,11 +17,11 @@ use Domain\Model\Model;
  */
 class MusicListModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_music_list';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,255',
             'user_id' => 'required|int',
@@ -33,7 +33,7 @@ class MusicListModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

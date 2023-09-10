@@ -27,11 +27,11 @@ class BankLogModel extends Model {
     const STATUS_NONE = 0;
     const STATUS_FINISH = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_bank_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'product_id' => 'required|int',
@@ -45,7 +45,7 @@ class BankLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

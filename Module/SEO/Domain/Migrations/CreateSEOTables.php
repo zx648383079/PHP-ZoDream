@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SEO\Domain\Migrations;
 
 use Domain\Providers\StorageProvider;
@@ -15,7 +16,7 @@ use Module\SEO\Domain\Model\OptionModel;
 
 class CreateSEOTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         StorageProvider::privateStore()->migration($this);
         $this->append(OptionModel::tableName(), function(Table $table) {
             $table->comment('全局设置');
@@ -58,7 +59,7 @@ class CreateSEOTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         if (OptionModel::query()->count() > 0) {
             return;
         }

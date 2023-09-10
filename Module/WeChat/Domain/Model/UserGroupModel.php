@@ -13,11 +13,11 @@ class UserGroupModel extends Model {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_user_group';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'wid' => 'required|int',
@@ -25,7 +25,7 @@ class UserGroupModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

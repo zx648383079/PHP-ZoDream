@@ -19,11 +19,11 @@ class NoteModel extends Model {
 
     protected array $append = ['editable', 'html'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'note';
     }
 
-	protected function rules() {
+	protected function rules(): array {
 		return [
             'content' => 'string:0,255',
             'user_id' => 'required|int',
@@ -32,7 +32,7 @@ class NoteModel extends Model {
         ];
 	}
 
-	protected function labels() {
+	protected function labels(): array {
 		return [
             'id' => 'Id',
             'content' => 'Content',

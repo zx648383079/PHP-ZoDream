@@ -14,7 +14,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateForumTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ForumModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 100);
@@ -93,7 +93,7 @@ class CreateForumTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'forum_manage' => '论坛管理'

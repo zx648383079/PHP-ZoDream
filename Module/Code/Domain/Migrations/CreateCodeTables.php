@@ -13,7 +13,7 @@ class CreateCodeTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         CodeRepository::comment()->migration($this);
         CodeRepository::tag()->migration($this);
         $this->append(CodeModel::tableName(), function(Table $table) {

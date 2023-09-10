@@ -19,11 +19,11 @@ use Zodream\Http\Uri;
  */
 class PGTicketModel extends BaseModel {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cas_proxy_granting_tickets';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'ticket' => 'required|string:0,60',
             'pgt_url' => 'required|string:0,200',
@@ -36,7 +36,7 @@ class PGTicketModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'ticket' => 'Ticket',

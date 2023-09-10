@@ -15,11 +15,11 @@ use Domain\Entities\Entity;
  */
 class ProductEntity extends Entity {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_product';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'goods_id' => 'required|int',
             'price' => 'string',
@@ -31,7 +31,7 @@ class ProductEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

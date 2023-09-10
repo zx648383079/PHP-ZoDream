@@ -18,11 +18,11 @@ use Domain\Model\Model;
  */
 class UserEquityCardModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_equity_card';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'status' => 'int:0,127',
@@ -34,7 +34,7 @@ class UserEquityCardModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

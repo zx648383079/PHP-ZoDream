@@ -21,12 +21,12 @@ use Zodream\Helpers\Tree as TreeHelper;
  * @property integer $updated_at
 */
 class ForumModel extends Model {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bbs_forum';
     }
 
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'thumb' => 'string:0,100',
@@ -41,7 +41,7 @@ class ForumModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

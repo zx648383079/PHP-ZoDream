@@ -32,11 +32,11 @@ class ProjectModel extends Model {
     const TYPE_NONE = 0;
     const TYPE_API = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'doc_project';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'cat_id' => 'int',
@@ -52,7 +52,7 @@ class ProjectModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

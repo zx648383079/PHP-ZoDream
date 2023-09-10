@@ -16,11 +16,11 @@ class MusicFileModel extends Model {
 
     protected array $append = ['url'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_music_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'music_id' => 'required|int',
             'file_type' => 'int:0,127',
@@ -29,7 +29,7 @@ class MusicFileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'music_id' => 'Music Id',

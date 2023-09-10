@@ -32,11 +32,11 @@ class BlogEntity extends Entity {
 
 
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'blog';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'title' => 'required|string:0,200',
             'description' => 'string:0,255',
@@ -61,7 +61,7 @@ class BlogEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => '标题',

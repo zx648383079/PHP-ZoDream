@@ -10,18 +10,18 @@ use Domain\Model\Model;
  * @property integer $type
  */
 class KeywordModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_keyword';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'word' => 'required|string:0,30',
             'type' => 'int:0,127',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'word' => 'Word',

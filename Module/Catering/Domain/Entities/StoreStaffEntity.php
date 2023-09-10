@@ -13,11 +13,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class StoreStaffEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_store_staff';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'store_id' => 'required|int',
             'user_id' => 'required|int',
@@ -27,7 +27,7 @@ class StoreStaffEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'store_id' => 'Store Id',

@@ -24,11 +24,11 @@ class TaskLogEntity extends Entity {
     const STATUS_FINISH = 2; // 完成
     const STATUS_FAILURE = 3; // 中断失败，未完成一个番茄时间
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'task_log';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
@@ -41,7 +41,7 @@ class TaskLogEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

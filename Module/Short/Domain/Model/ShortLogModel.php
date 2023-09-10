@@ -13,11 +13,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class ShortLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'short_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'short_id' => 'int',
             'ip' => 'required|string:0,120',
@@ -25,7 +25,7 @@ class ShortLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'short_id' => 'Short Id',

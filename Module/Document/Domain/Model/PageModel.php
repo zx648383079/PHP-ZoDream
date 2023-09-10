@@ -19,11 +19,11 @@ use Domain\Model\Model;
  */
 class PageModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'doc_page';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,35',
             'type' => 'int:0,10',
@@ -36,7 +36,7 @@ class PageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

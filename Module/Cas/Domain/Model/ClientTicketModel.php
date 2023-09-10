@@ -15,11 +15,11 @@ use Domain\Model\Model;
  */
 class ClientTicketModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cas_client_ticket';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'ticket' => 'required|string:0,60',
             'session_id' => 'required|string:0,60',
@@ -28,7 +28,7 @@ class ClientTicketModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'ticket' => 'Ticket',

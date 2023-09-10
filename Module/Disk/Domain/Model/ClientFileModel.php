@@ -18,11 +18,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class ClientFileModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_client_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'extension' => 'required|string:0,20',
@@ -34,7 +34,7 @@ class ClientFileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

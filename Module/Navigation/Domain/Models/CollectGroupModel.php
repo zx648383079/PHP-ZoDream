@@ -11,11 +11,11 @@ use Domain\Model\Model;
  * @property integer $position
  */
 class CollectGroupModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_collect_group';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'user_id' => 'int',
@@ -23,7 +23,7 @@ class CollectGroupModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

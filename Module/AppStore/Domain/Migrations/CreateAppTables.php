@@ -13,7 +13,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateAppTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         AppRepository::comment()->migration($this);
         AppRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
@@ -63,7 +63,7 @@ class CreateAppTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'app_manage' => '应用商店管理'

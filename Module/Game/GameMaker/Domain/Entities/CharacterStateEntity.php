@@ -13,11 +13,11 @@ use Domain\Entities\Entity;
  * @property integer $end_at
  */
 class CharacterStateEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_character_state';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'project_id' => 'required|int',
             'name' => 'required|string:0,255',
@@ -26,7 +26,7 @@ class CharacterStateEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',

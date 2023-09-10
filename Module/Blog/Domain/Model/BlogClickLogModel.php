@@ -10,11 +10,11 @@ use Domain\Model\Model;
  * @property integer $click_count
  */
 class BlogClickLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'blog_click_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'happen_day' => 'required|string',
             'blog_id' => 'required|int',
@@ -22,7 +22,7 @@ class BlogClickLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'happen_day' => 'Happen Day',

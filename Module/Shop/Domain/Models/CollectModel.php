@@ -13,11 +13,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class CollectModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_collect';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'goods_id' => 'required|int',
@@ -25,7 +25,7 @@ class CollectModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

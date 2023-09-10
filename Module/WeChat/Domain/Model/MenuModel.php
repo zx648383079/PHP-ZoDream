@@ -20,11 +20,11 @@ use Zodream\ThirdParty\WeChat\MenuItem;
  */
 class MenuModel extends EditorModel {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_menu';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'wid' => 'required|int',
             'name' => 'required|string:0,100',
@@ -36,7 +36,7 @@ class MenuModel extends EditorModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'wid' => 'Wid',

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Domain\Migrations;
 
 use Module\Task\Domain\Model\TaskCommentModel;
@@ -13,7 +14,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateTaskTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(TaskModel::tableName(), function (Table $table) {
             $table->comment('任务系统');
             $table->id();

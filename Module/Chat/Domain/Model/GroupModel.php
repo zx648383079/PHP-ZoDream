@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class GroupModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_group';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'logo' => 'required|string:0,100',
@@ -30,7 +30,7 @@ class GroupModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

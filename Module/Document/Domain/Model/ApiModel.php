@@ -26,11 +26,11 @@ class ApiModel extends Model {
         'GET', 'POST', 'PUT', 'DELETE', 'OPTION'
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'doc_api';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,35',
             'type' => 'int:0,10',
@@ -46,7 +46,7 @@ class ApiModel extends Model {
     }
 
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '接口名称',

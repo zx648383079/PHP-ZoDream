@@ -7,7 +7,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateCheckInTables extends Migration {
-    public function up() {
+    public function up(): void {
         $this->append(CheckInModel::tableName(), function(Table $table) {
             $table->comment('签到记录');
             $table->id();

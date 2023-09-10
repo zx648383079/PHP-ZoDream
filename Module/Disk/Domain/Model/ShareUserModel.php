@@ -12,18 +12,18 @@ use Domain\Model\Model;
  */
 class ShareUserModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_share_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'share_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

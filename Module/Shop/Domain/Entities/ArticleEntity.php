@@ -4,11 +4,11 @@ namespace Module\Shop\Domain\Entities;
 use Domain\Entities\Entity;
 
 class ArticleEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_article';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'cat_id' => 'required|int',
             'title' => 'required|string:0,100',
@@ -24,7 +24,7 @@ class ArticleEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'cat_id' => '分类',

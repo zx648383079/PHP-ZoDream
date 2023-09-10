@@ -20,11 +20,11 @@ class FriendModel extends Model {
 
     protected array $append = ['user'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_friend';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'string:0,50',
             'classify_id' => 'int',
@@ -36,7 +36,7 @@ class FriendModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

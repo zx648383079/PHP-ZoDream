@@ -23,11 +23,11 @@ class CodeModel extends Model {
 
     protected array $append = ['is_recommended', 'tags', 'is_collected'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'code_code';
     }
 
-    protected function rules() {
+    protected function rules(): array {
 		return [
             'user_id' => 'int',
             'content' => 'required',
@@ -41,7 +41,7 @@ class CodeModel extends Model {
         ];
 	}
 
-	protected function labels() {
+	protected function labels(): array {
 		return [
             'id' => 'Id',
             'user_id' => 'User Id',

@@ -15,7 +15,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateCmsTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ModelFieldModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100);
@@ -86,7 +86,7 @@ class CreateCmsTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'cms_manage' => 'CMS管理'
         ]);

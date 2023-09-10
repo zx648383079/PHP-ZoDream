@@ -29,11 +29,11 @@ class ThreadLogModel extends Model {
     const ACTION_REWARD = 6; // 打赏
 
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bbs_thread_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
             'item_id' => 'required|int',
@@ -45,7 +45,7 @@ class ThreadLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

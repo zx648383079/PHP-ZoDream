@@ -22,11 +22,11 @@ class TaskDayEntity extends Entity {
     const STATUS_RUNNING = 9;
     const STATUS_PAUSE = 8;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'task_day';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
@@ -41,7 +41,7 @@ class TaskDayEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

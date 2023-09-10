@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class WarehouseGoodsModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_warehouse_goods';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'warehouse_id' => 'required|int',
             'goods_id' => 'required|int',
@@ -27,7 +27,7 @@ class WarehouseGoodsModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'ID',
             'warehouse_id' => 'Warehouse Id',

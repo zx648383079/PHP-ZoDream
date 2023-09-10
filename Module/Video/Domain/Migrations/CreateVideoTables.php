@@ -11,7 +11,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateVideoTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         AppRepository::comment()->migration($this);
         AppRepository::tag()->migration($this);
         $this->append(MusicModel::tableName(), function (Table $table) {
@@ -52,7 +52,7 @@ class CreateVideoTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'video_manage' => '短视频管理'
         ]);

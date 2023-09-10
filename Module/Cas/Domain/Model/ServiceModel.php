@@ -16,11 +16,11 @@ use Zodream\Http\Uri;
  */
 class ServiceModel extends BaseModel {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cas_service';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,60',
             'host' => 'required|string:0,200',
@@ -31,7 +31,7 @@ class ServiceModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

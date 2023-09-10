@@ -35,11 +35,11 @@ class OrderRefundModel extends Model {
     const STATUS_REFUNDING = 30;          // 退款中
     const STATUS_FINISH = 40;          // 已完成
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_order_refund';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'order_id' => 'required|int',
@@ -62,7 +62,7 @@ class OrderRefundModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

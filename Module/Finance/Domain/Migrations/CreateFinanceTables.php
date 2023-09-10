@@ -17,7 +17,7 @@ class CreateFinanceTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append(MoneyAccountModel::tableName(), function(Table $table) {
             $table->comment('资金账户');
             $table->id();

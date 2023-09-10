@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Domain\Migrations;
 
 use Module\Cas\Domain\Model\ClientTicketModel;
@@ -10,7 +11,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateCasTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ServiceModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 60);

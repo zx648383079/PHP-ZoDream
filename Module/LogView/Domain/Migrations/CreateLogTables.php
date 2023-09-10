@@ -9,7 +9,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateLogTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(FileModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name');

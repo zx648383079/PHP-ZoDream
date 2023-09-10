@@ -16,11 +16,11 @@ use Zodream\Helpers\Arr;
  * @property integer $updated_at
  */
 class PlatformOptionModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'open_platform_option';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'platform_id' => 'required|int',
             'store' => 'required|string:0,20',
@@ -31,7 +31,7 @@ class PlatformOptionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'platform_id' => 'Platform Id',

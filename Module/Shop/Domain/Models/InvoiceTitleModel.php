@@ -21,11 +21,11 @@ use Domain\Model\Model;
  */
 class InvoiceTitleModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'shop_invoice_title';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'title_type' => 'int:0,9',
             'type' => 'int:0,9',
@@ -41,7 +41,7 @@ class InvoiceTitleModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title_type' => 'Title Type',

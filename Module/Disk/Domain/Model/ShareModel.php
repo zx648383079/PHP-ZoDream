@@ -27,11 +27,11 @@ class ShareModel extends Model {
     const SHARE_PROTECTED = 1; //密码分享
     const SHARE_PRIVATE = 2;  //分享给个人
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_share';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'mode' => 'int:0,99',
@@ -46,7 +46,7 @@ class ShareModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

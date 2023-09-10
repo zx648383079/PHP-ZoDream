@@ -13,11 +13,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class ConsumptionChannelModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'finance_consumption_channel';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,50',
             'user_id' => 'required|int',
@@ -26,7 +26,7 @@ class ConsumptionChannelModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '渠道名',

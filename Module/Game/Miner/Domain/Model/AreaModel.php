@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class AreaModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_miner_area';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'string:0,255',
             'earnings' => 'required|int:0,9999',
@@ -30,7 +30,7 @@ class AreaModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '矿场名',

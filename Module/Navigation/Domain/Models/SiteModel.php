@@ -22,11 +22,11 @@ use Module\Navigation\Domain\Repositories\SiteRepository;
  * @property integer $created_at
  */
 class SiteModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_site';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'schema' => 'string:0,10',
             'domain' => 'required|string:0,100',
@@ -42,7 +42,7 @@ class SiteModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'schema' => 'Schema',

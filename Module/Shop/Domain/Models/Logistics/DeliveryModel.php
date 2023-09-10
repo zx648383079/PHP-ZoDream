@@ -29,11 +29,11 @@ use Module\Shop\Domain\Models\ShippingModel;
  * @property string $logistics_content
  */
 class DeliveryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_delivery';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'order_id' => 'required|int',
@@ -54,7 +54,7 @@ class DeliveryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

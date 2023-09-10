@@ -14,7 +14,7 @@ use Zodream\Database\Contracts\Table;
 use Zodream\Database\Migrations\Migration;
 
 class CreateOnlineServiceTables extends Migration {
-    public function up() {
+    public function up(): void {
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->id();
             $table->string('name');
@@ -59,7 +59,7 @@ class CreateOnlineServiceTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'service_manage' => '客服管理'

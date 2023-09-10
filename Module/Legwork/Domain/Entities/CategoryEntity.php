@@ -12,11 +12,11 @@ use Domain\Entities\Entity;
  * @property string $description
  */
 class CategoryEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'icon' => 'string:0,200',
@@ -24,7 +24,7 @@ class CategoryEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

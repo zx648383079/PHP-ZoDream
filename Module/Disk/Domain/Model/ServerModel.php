@@ -22,11 +22,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class ServerModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_server';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'token' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
@@ -42,7 +42,7 @@ class ServerModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'token' => 'Token',

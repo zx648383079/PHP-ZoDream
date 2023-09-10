@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
@@ -10,7 +11,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateOpenPlatformTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(PlatformModel::tableName(), function (Table $table) {
             $table->comment('第三方授权信息');
             $table->id();
@@ -49,7 +50,7 @@ class CreateOpenPlatformTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'open_manage' => '开放应用管理'

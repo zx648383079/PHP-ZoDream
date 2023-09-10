@@ -22,11 +22,11 @@ class BookAuthorModel extends Model {
     const STATUS_ALLOW = 1;
     const STATUS_DISALLOW = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_author';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'avatar' => 'string:0,200',
@@ -38,7 +38,7 @@ class BookAuthorModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '笔名',

@@ -16,12 +16,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class BargainLogModel extends Model {
 
-    public static function tableName()
-    {
+    public static function tableName(): string {
         return 'shop_bargain_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'bargain_id' => 'required|int',
             'user_id' => 'required|int',
@@ -31,7 +30,7 @@ class BargainLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'bargain_id' => 'Bargain Id',

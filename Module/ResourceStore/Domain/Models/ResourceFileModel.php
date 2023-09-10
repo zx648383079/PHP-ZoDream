@@ -16,11 +16,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class ResourceFileModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'res_resource_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'res_id' => 'required|int',
@@ -32,7 +32,7 @@ class ResourceFileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

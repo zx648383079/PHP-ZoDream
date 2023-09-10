@@ -14,11 +14,11 @@ use Domain\Model\Model;
  * @property integer $price
  */
 class HouseModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_miner_house';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'string:0,255',
             'amount' => 'required|int:0,9999',
@@ -27,7 +27,7 @@ class HouseModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

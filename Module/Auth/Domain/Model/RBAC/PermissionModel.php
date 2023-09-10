@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class PermissionModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'rbac_permission';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'display_name' => 'string:0,100',
@@ -29,7 +29,7 @@ class PermissionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '权限名',

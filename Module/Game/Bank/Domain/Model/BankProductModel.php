@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $risk
  */
 class BankProductModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_bank_product';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'string:0,255',
             'min_amount' => 'int:0,9999',
@@ -29,7 +29,7 @@ class BankProductModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '产品名',

@@ -21,11 +21,11 @@ use Domain\Model\Model;
  * @property int $is_all
  */
 class ShippingGroupModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_shipping_group';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'shipping_id' => 'required|int',
             'first_step' => '',
@@ -37,7 +37,7 @@ class ShippingGroupModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'shipping_id' => 'Shipping Id',

@@ -22,7 +22,7 @@ class CreateBlogTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append(BlogModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('title', 200);
@@ -103,7 +103,7 @@ class CreateBlogTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'blog_term_edit' => '博客分类管理'

@@ -29,11 +29,11 @@ use Domain\Model\Model;
  */
 class MovieModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_movie';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,255',
             'film_title' => 'string:0,255',
@@ -57,7 +57,7 @@ class MovieModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

@@ -23,7 +23,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateBookTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         BookRepository::tag()->migration($this);
         BookRepository::log()->migration($this);
         BookRepository::clickLog()->migration($this);
@@ -152,7 +152,7 @@ class CreateBookTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'book_manage' => '书籍管理'
         ]);

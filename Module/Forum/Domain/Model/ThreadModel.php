@@ -26,11 +26,11 @@ class ThreadModel extends Model {
 
     protected array $append = ['user'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'bbs_thread';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'forum_id' => 'required|int',
             'classify_id' => 'int',
@@ -49,7 +49,7 @@ class ThreadModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'forum_id' => 'Forum Id',

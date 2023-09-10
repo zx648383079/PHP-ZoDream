@@ -16,11 +16,11 @@ use Domain\Entities\Entity;
  * @property integer $price
  */
 class OrganizationStoreEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_organization_store';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'project_id' => 'required|int',
             'org_id' => 'required|int',
@@ -31,7 +31,7 @@ class OrganizationStoreEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',

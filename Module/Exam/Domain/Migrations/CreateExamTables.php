@@ -26,7 +26,7 @@ class CreateExamTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append(CourseEntity::tableName(), function (Table $table) {
             $table->comment('科目');
             $table->id();
@@ -165,7 +165,7 @@ class CreateExamTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'exam_manage' => '题库管理'

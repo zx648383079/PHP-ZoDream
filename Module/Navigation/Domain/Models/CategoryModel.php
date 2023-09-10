@@ -12,11 +12,11 @@ use Domain\Repositories\FileRepository;
  * @property integer $parent_id
  */
 class CategoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'icon' => 'string:0,255',
@@ -24,7 +24,7 @@ class CategoryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

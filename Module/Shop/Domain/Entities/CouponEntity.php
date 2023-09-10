@@ -38,11 +38,11 @@ class CouponEntity extends Entity {
     const SEND_USER = 4;    // 按用户
 
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_coupon';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'thumb' => 'string:0,255',
@@ -61,7 +61,7 @@ class CouponEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '优惠券名称',

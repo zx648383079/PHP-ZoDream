@@ -16,11 +16,11 @@ use Domain\Entities\Entity;
  * @property string $styles
  */
 class TermEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_term';
     }
 
-	public function rules() {
+	public function rules(): array {
         return [
             'name' => 'required|string:1,200',
             'keywords' => 'string:0,200',
@@ -33,7 +33,7 @@ class TermEntity extends Entity {
         ];
 	}
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '分类',

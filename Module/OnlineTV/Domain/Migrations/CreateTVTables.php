@@ -20,7 +20,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateTVTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         TVRepository::log()->migration($this);
         TVRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
@@ -120,7 +120,7 @@ class CreateTVTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'tv_manage' => 'TV管理'

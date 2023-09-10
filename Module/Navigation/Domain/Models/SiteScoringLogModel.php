@@ -16,11 +16,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class SiteScoringLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_site_scoring_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'site_id' => 'required|int',
             'user_id' => 'required|int',
@@ -31,7 +31,7 @@ class SiteScoringLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'site_id' => 'Site Id',

@@ -23,11 +23,11 @@ class UserMetaModel extends Model {
         'id_card' => '', // 身份证
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_meta';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -35,7 +35,7 @@ class UserMetaModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

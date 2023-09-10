@@ -19,11 +19,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class WarehouseLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_warehouse_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'warehouse_id' => 'required|int',
             'goods_id' => 'required|int',
@@ -36,7 +36,7 @@ class WarehouseLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'warehouse_id' => 'Warehouse Id',

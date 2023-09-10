@@ -11,17 +11,17 @@ use Domain\Model\Model;
  * @property string $name
  */
 class CategoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,255',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

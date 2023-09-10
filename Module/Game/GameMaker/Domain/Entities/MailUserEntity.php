@@ -15,11 +15,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class MailUserEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_mail_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'project_id' => 'required|int',
             'mail_id' => 'required|int',
@@ -30,7 +30,7 @@ class MailUserEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',

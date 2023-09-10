@@ -13,11 +13,11 @@ use Zodream\Helpers\Str;
  * @property integer $order_id
  */
 class GoodsCardModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_goods_card';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'goods_id' => 'required|int',
             'card_no' => 'required|string:0,255',
@@ -26,7 +26,7 @@ class GoodsCardModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

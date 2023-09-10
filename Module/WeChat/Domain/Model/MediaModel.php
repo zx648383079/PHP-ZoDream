@@ -86,11 +86,11 @@ class MediaModel extends Model {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_media';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'wid' => 'required|int',
             'type' => 'required|string:0,10',
@@ -112,7 +112,7 @@ class MediaModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'wid' => 'Wid',

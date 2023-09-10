@@ -13,18 +13,18 @@ use Domain\Model\Model;
  * @property integer $cat_id
  */
 class CategoryWordModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_category_word';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'content' => 'required|string:0,255',
             'cat_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => 'Content',

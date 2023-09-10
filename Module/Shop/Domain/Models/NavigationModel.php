@@ -21,12 +21,12 @@ class NavigationModel extends Model {
         'bottom' => '底部导航栏',
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_navigation';
     }
 
 
-    public function rules() {
+    public function rules(): array {
         return [
             'type' => 'string:0,10',
             'name' => 'required|string:0,100',
@@ -37,7 +37,7 @@ class NavigationModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'type' => 'Type',

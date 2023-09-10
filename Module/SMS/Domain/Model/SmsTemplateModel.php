@@ -14,11 +14,11 @@ use Domain\Model\Model;
  * @property integer $signature_id
  */
 class SmsTemplateModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'sms_template';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,50',
             'type' => 'int:0,127',
@@ -28,7 +28,7 @@ class SmsTemplateModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

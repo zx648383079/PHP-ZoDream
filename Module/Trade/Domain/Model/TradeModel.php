@@ -4,7 +4,7 @@ namespace Module\Trade\Domain\Model;
 use Domain\Model\Model;
 
 class TradeModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'trade';
     }
 }

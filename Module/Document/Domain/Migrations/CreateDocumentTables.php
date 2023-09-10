@@ -19,7 +19,7 @@ class CreateDocumentTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         ProjectRepository::comment()->migration($this);
         $this->append(CategoryModel::tableName(), function(Table $table) {
             $table->comment('分类');
@@ -86,7 +86,7 @@ class CreateDocumentTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newRole('doc_admin', '文档管理员');
     }

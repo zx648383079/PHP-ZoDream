@@ -23,7 +23,7 @@ class BonusModel extends Model {
     const STATUS_END = 1;
     const EXPIRE_TIME = 86400;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_bonus';
     }
 

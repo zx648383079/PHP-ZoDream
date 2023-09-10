@@ -16,7 +16,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateLegworkTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(OrderModel::tableName(), function (Table $table) {
             $table->comment('跑腿订单');
             $table->id();
@@ -103,7 +103,7 @@ class CreateLegworkTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'legwork_manage' => '服务管理'

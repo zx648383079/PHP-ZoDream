@@ -20,11 +20,11 @@ use Zodream\Helpers\Json;
  */
 class OptionModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'seo_option';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'code' => 'string:0,20',
@@ -37,7 +37,7 @@ class OptionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

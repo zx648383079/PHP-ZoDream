@@ -20,10 +20,10 @@ use Domain\Entities\Entity;
  * @property string $remark
  */
 class PageQuestionEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_page_question';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'page_id' => 'required|int',
             'evaluate_id' => 'required|int',
@@ -41,7 +41,7 @@ class PageQuestionEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'page_id' => 'Page Id',

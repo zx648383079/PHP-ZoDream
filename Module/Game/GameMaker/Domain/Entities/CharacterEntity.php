@@ -33,11 +33,11 @@ use Domain\Entities\Entity;
  * @property integer $descent_id
  */
 class CharacterEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_character';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'project_id' => 'required|int',
@@ -66,7 +66,7 @@ class CharacterEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

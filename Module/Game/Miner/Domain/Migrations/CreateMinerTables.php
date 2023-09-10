@@ -10,7 +10,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateMinerTables extends Migration {
-    public function up() {
+    public function up(): void {
         $this->append(PlayerModel::tableName(), function (Table $table) {
             $table->comment('玩家表');
             $table->id();

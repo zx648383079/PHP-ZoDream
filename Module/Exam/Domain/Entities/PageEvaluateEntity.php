@@ -24,10 +24,10 @@ class PageEvaluateEntity extends Entity {
     const STATUS_SCORING = 2; // 阅卷中
     const STATUS_FINISH = 3; // 已完成
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_page_evaluate';
     }
-    public function rules() {
+    public function rules(): array {
         return [
             'page_id' => 'required|int',
             'user_id' => 'required|int',
@@ -43,7 +43,7 @@ class PageEvaluateEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'page_id' => 'Page Id',

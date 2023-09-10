@@ -6,7 +6,7 @@ use Domain\Model\Model;
 
 class RankModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'rank';
     }
 }

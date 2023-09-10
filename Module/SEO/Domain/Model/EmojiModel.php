@@ -20,11 +20,11 @@ class EmojiModel extends Model {
 
     public $timestamps = false;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'seo_emoji';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'cat_id' => 'required|int',
             'name' => 'required|string:0,255',
@@ -33,7 +33,7 @@ class EmojiModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'cat_id' => 'Cat Id',

@@ -12,11 +12,11 @@ use Domain\Model\Model;
  * @property integer $type
  */
 class GoodsGalleryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_goods_gallery';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'goods_id' => 'required|int',
             'type' => 'int:0,100',
@@ -25,7 +25,7 @@ class GoodsGalleryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

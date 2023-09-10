@@ -26,11 +26,11 @@ class TaskEntity extends Entity {
     const STATUS_PAUSE = 8;
     const STATUS_COMPLETE = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'task';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'parent_id' => 'int',
@@ -47,7 +47,7 @@ class TaskEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

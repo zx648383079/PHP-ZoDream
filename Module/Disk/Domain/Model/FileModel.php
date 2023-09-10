@@ -54,11 +54,11 @@ class FileModel extends Model {
         ]
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'extension' => 'string:0,20',
@@ -71,7 +71,7 @@ class FileModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

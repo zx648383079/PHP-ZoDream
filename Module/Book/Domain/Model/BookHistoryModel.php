@@ -20,11 +20,11 @@ class BookHistoryModel extends Model {
 
     protected array $append = ['book', 'chapter'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_history';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'book_id' => 'required|int',
@@ -35,7 +35,7 @@ class BookHistoryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

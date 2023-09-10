@@ -12,11 +12,11 @@ class GroupModel extends BaseModel {
     const TYPE_CATEGORY = 0;
     const TYPE_CONTENT = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_group';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'type' => 'int:0,9',
@@ -24,7 +24,7 @@ class GroupModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

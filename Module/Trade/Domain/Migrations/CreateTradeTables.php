@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Trade\Domain\Migrations;
 
 use Module\Trade\Domain\Model\RefundModel;
@@ -8,7 +9,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateTradeTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(TradeModel::tableName(), function (Table $table) {
             $table->comment('支付系统');
             $table->id();

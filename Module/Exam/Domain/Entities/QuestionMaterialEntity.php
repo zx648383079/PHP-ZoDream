@@ -14,11 +14,11 @@ use Domain\Entities\Entity;
  * @property string $content
  */
 class QuestionMaterialEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'exam_question_material';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'course_id' => 'required|int',
             'title' => 'required|string:0,255',
@@ -28,7 +28,7 @@ class QuestionMaterialEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'course_id' => 'Course Id',

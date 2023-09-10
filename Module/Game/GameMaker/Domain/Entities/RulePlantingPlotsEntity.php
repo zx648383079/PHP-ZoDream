@@ -18,10 +18,10 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class RulePlantingPlotsEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_rule_planting';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'project_id' => 'required|int',
             'index' => 'int:0,127',
@@ -35,7 +35,7 @@ class RulePlantingPlotsEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',

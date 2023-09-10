@@ -24,11 +24,11 @@ class SeckillGoodsModel extends Model {
     const STATUS_BUY = 1;     // 可以买
     const STATUS_WAIT = 2;     // 即将开始
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_seckill_goods';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'act_id' => 'required|int',
             'time_id' => 'required|int',
@@ -39,7 +39,7 @@ class SeckillGoodsModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'act_id' => 'Act Id',

@@ -16,17 +16,17 @@ use Domain\Model\Model;
  * @property string $content
  */
 class BookChapterBodyModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_chapter_body';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'content' => '',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => '内容',

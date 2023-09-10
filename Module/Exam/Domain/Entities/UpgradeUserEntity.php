@@ -13,11 +13,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class UpgradeUserEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_upgrade_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'upgrade_id' => 'required|int',
             'user_id' => 'required|int',
@@ -25,7 +25,7 @@ class UpgradeUserEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'upgrade_id' => 'Upgrade Id',

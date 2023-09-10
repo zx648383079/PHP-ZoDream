@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class CollectModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_collect';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'link' => 'required|string:0,255',
@@ -31,7 +31,7 @@ class CollectModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

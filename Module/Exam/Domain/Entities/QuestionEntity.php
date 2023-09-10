@@ -22,11 +22,11 @@ use Domain\Entities\Entity;
  * @property integer $status
 */
 class QuestionEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'exam_question';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,255',
             'image' => 'string:0,200',
@@ -46,7 +46,7 @@ class QuestionEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'title' => '题目',
             'image' => '图片',

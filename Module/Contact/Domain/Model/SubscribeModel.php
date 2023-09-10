@@ -14,11 +14,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class SubscribeModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cif_subscribe';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'email' => 'required|string:0,50',
             'status' => 'int:0,9',
@@ -27,7 +27,7 @@ class SubscribeModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'email' => 'Email',

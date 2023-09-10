@@ -11,7 +11,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateContactTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(FeedbackModel::tableName(), function (Table $table) {
             $table->comment('留言');
             $table->id();

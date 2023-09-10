@@ -17,11 +17,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class GroupUserModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_group_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'group_id' => 'required|int',
             'user_id' => 'required|int',
@@ -33,7 +33,7 @@ class GroupUserModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'group_id' => 'Group Id',

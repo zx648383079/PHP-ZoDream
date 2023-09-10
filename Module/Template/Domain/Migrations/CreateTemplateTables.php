@@ -21,7 +21,7 @@ class CreateTemplateTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append(ThemeCategoryEntity::tableName(), function(Table $table) {
             $table->comment('主题市场分类');
             $table->id();
@@ -127,7 +127,7 @@ class CreateTemplateTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'visual_manage' => '模板管理'

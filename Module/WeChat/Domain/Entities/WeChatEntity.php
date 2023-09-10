@@ -30,11 +30,11 @@ use Domain\Entities\Entity;
  */
 class WeChatEntity extends Entity {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'token' => 'required|string:0,32',
@@ -61,7 +61,7 @@ class WeChatEntity extends Entity {
     /**
      * @inheritdoc
      */
-    public function labels() {
+    public function labels(): array {
         return [
             'id' => '公众号ID',
             'name' => '公众号名称',

@@ -13,11 +13,11 @@ use Domain\Entities\Entity;
  * @property integer $to_unit
  */
 class MaterialUnitEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_material_unit';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'material_id' => 'required|string:0,255',
             'from_amount' => 'required|string',
@@ -27,7 +27,7 @@ class MaterialUnitEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'material_id' => 'Material Id',

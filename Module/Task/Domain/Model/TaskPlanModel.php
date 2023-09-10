@@ -16,11 +16,11 @@ use Domain\Model\Model;
  */
 class TaskPlanModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'task_plan';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
@@ -33,7 +33,7 @@ class TaskPlanModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

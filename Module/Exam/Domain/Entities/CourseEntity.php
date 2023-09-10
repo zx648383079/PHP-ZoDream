@@ -15,11 +15,11 @@ use Domain\Entities\Entity;
  * @property integer $updated_at
  */
 class CourseEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_course';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'thumb' => 'string:0,200',
@@ -30,7 +30,7 @@ class CourseEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '科目名',

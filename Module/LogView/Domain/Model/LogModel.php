@@ -34,11 +34,11 @@ use Zodream\Database\Model\Query;
  */
 class LogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'log_data';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'id' => 'int',
             'file_id' => 'required|int',
@@ -67,7 +67,7 @@ class LogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'file_id' => 'File Id',

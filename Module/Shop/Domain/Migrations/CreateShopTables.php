@@ -74,7 +74,7 @@ class CreateShopTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->createAd();
 
         $this->createArticle();
@@ -204,7 +204,7 @@ class CreateShopTables extends Migration {
 
 
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newRole('shop_admin', '商城管理员', [
             'shop_manage' => '商城管理'
         ]);

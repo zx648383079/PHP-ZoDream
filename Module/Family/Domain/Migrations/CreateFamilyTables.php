@@ -11,7 +11,7 @@ use Module\Family\Domain\Model\FamilyModel;
 
 class CreateFamilyTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ClanModel::tableName(), function(Table $table) {
             $table->comment('家族表');
             $table->id();

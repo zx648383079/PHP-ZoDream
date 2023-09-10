@@ -15,18 +15,18 @@ class EmojiCategoryModel extends Model {
 
     public $timestamps = false;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'seo_emoji_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,255',
             'icon' => 'string:0,255',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

@@ -19,11 +19,11 @@ use Exception;
  * @property HouseModel $house
  */
 class PlayerModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_miner_player';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'string:0,255',
@@ -33,7 +33,7 @@ class PlayerModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

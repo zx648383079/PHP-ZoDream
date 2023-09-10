@@ -10,11 +10,11 @@ use Domain\Entities\Entity;
  * @property string $content
  */
 class StoreMetaEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_store_meta';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'store_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -22,7 +22,7 @@ class StoreMetaEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'store_id' => 'Store Id',

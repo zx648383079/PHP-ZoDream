@@ -48,7 +48,7 @@ use Zodream\Database\Schema\Table;
 
 final class CreateGameMakerTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ProjectEntity::tableName(), function (Table $table) {
             $table->id();
             $table->uint('user_id');

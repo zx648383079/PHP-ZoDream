@@ -19,11 +19,11 @@ use Domain\Model\Model;
  *
  */
 class CommentImageModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_comment_image';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'comment_id' => 'required|int',
             'image' => 'required|string:0,255',
@@ -32,7 +32,7 @@ class CommentImageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'comment_id' => 'Comment Id',

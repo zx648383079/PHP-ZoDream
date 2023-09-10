@@ -9,7 +9,7 @@ use Domain\Model\Model;
  * @package Module\Game\TCG\Domain\Model
  */
 class JackpotModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_tcg_jackpot';
     }
 }

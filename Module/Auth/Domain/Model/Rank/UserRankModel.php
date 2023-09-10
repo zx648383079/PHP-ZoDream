@@ -6,7 +6,7 @@ use Domain\Model\Model;
 
 class UserRankModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_rank';
     }
 }

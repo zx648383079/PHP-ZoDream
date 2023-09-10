@@ -14,11 +14,11 @@ use Domain\Model\Model;
  * @property integer $position
  */
 class ArticleCategoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_article_category';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'keywords' => 'string:0,200',
@@ -28,7 +28,7 @@ class ArticleCategoryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

@@ -22,11 +22,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class ChapterEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_chapter';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'book_id' => 'int',
             'title' => 'required|string:0,200',
@@ -43,7 +43,7 @@ class ChapterEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'book_id' => '书',

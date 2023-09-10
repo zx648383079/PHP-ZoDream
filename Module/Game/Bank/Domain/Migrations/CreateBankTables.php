@@ -8,7 +8,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 class CreateBankTables extends Migration {
-    public function up() {
+    public function up(): void {
         $this->append(BankProductModel::tableName(), function (Table $table) {
             $table->comment('理财产品表');
             $table->id();

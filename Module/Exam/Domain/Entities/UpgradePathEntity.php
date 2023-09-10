@@ -12,11 +12,11 @@ use Domain\Entities\Entity;
  * @property integer $course_grade
  */
 class UpgradePathEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_upgrade_path';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
             'item_id' => 'required|int',
@@ -24,7 +24,7 @@ class UpgradePathEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

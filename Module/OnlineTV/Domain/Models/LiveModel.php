@@ -16,11 +16,11 @@ use Domain\Model\Model;
  */
 class LiveModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_live';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,255',
             'thumb' => 'string:0,255',
@@ -31,7 +31,7 @@ class LiveModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

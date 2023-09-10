@@ -33,11 +33,11 @@ class MessageHistoryModel extends Model {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_message_history';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'wid' => 'required|int',
             'from' => 'required|string:0,50',
@@ -55,7 +55,7 @@ class MessageHistoryModel extends Model {
     /**
      * @inheritdoc
      */
-    public function labels() {
+    public function labels(): array {
         return [
             'id' => 'ID',
             'wid' => '所属微信公众号ID',

@@ -9,7 +9,7 @@ use Domain\Model\Model;
  * @package Module\Game\TCG\Domain\Model
  */
 class CardGradeRuleModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_tcg_card_grade_rule';
     }
 }

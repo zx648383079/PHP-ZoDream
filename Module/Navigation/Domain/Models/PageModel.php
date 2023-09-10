@@ -19,11 +19,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class PageModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'search_page';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,30',
             'description' => 'string:0,255',
@@ -37,7 +37,7 @@ class PageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

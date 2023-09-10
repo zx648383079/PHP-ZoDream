@@ -50,12 +50,12 @@ class PlatformModel extends Model {
         'DES'
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'open_platform';
     }
 
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'required|string:0,20',
@@ -76,7 +76,7 @@ class PlatformModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

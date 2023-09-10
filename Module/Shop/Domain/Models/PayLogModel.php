@@ -39,11 +39,11 @@ class PayLogModel extends Model {
     const STATUS_FAILURE = 3;
 
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_pay_log';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'payment_id' => 'required|int',
             'payment_name' => 'string:0,30',
@@ -62,7 +62,7 @@ class PayLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'payment_id' => 'Payment Id',

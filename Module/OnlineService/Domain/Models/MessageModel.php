@@ -28,11 +28,11 @@ class MessageModel extends Model {
     const TYPE_EMOJI = 1;
     const TYPE_IMAGE = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_message';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'session_id' => 'required|int',
@@ -46,7 +46,7 @@ class MessageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

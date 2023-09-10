@@ -9,7 +9,7 @@ use Module\Note\Domain\Model\NoteModel;
 
 class CreateNoteTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(NoteModel::tableName(), function(Table $table) {
             $table->comment('便签');
             $table->id();
@@ -20,7 +20,7 @@ class CreateNoteTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'note_manage' => '便签管理'

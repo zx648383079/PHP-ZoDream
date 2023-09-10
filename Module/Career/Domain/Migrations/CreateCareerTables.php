@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Career\Domain\Migrations;
 
 use Module\Career\Domain\Entities\AwardEntity;
@@ -23,10 +24,9 @@ use Module\Career\Domain\Entities\WorkExperienceEntity;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
-
 class CreateCareerTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(PositionEntity::tableName(), function(Table $table) {
             $table->comment('职位');
             $table->id();

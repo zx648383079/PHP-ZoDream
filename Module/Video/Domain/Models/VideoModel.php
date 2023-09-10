@@ -28,11 +28,11 @@ class VideoModel extends Model {
 
     protected array $append = ['is_liked'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'video_video';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'cover' => 'string:0,255',
@@ -51,7 +51,7 @@ class VideoModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

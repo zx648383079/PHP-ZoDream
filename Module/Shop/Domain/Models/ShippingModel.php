@@ -23,11 +23,11 @@ use Domain\Model\Model;
  * @property array $settings
  */
 class ShippingModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_shipping';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'code' => 'required|string:0,30',
@@ -40,7 +40,7 @@ class ShippingModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

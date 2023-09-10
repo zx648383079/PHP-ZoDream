@@ -25,11 +25,11 @@ class OAuthModel extends Model {
     const TYPE_TAOBAO = 'taobao';
     const TYPE_ALIPAY = 'alipay';
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'user_oauth';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'nickname' => 'string:0,30',
@@ -42,7 +42,7 @@ class OAuthModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

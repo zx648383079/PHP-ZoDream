@@ -11,17 +11,17 @@ use Domain\Model\Model;
  */
 class AreaModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_area';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,30',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

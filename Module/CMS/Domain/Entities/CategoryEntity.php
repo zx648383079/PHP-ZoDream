@@ -33,11 +33,11 @@ class CategoryEntity extends Entity {
     const TYPE_PAGE = 1; //单页
     const TYPE_LINK = 2; //外链
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_category_'.CMSRepository::siteId();
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'title' => 'required|string:0,100',
@@ -61,7 +61,7 @@ class CategoryEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '目录名',

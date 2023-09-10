@@ -26,11 +26,11 @@ class PlayerMinerModel extends Model {
     const STATUS_WORK = 1;
 
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'game_miner_player_miner';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'player_id' => 'required|int',
             'miner_id' => 'required|int',
@@ -43,7 +43,7 @@ class PlayerMinerModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'player_id' => 'Player Id',

@@ -20,11 +20,11 @@ use Domain\Model\Model;
  */
 class PaymentModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_payment';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'code' => 'required|string:0,30',
@@ -34,7 +34,7 @@ class PaymentModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

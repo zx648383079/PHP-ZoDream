@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class BookBuyLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_buy_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'book_id' => 'required|int',
             'chapter_id' => 'required|int',
@@ -27,7 +27,7 @@ class BookBuyLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'book_id' => 'Book Id',

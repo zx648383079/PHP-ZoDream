@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Schedule\Domain\Migrations;
 
 use Zodream\Database\Migrations\Migration;
@@ -12,7 +13,7 @@ class CreateScheduleTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append('jobs', function(Table $table) {
             $table->comment('计划任务列表');
             DatabaseQueue::createMigration($table);

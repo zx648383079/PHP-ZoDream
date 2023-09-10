@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\MicroBlog\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
@@ -17,7 +18,7 @@ class CreateMicroBlogTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         MicroRepository::comment()->migration($this);
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
             $table->id();
@@ -50,7 +51,7 @@ class CreateMicroBlogTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'micro_manage' => '微博管理'

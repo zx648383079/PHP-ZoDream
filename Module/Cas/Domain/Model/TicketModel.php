@@ -23,11 +23,11 @@ use Zodream\Http\Uri;
  */
 class TicketModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cas_ticket';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'ticket' => 'required|string:0,60',
             'service_url' => 'required|string:0,200',
@@ -40,7 +40,7 @@ class TicketModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'ticket' => 'Ticket',

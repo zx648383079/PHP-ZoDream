@@ -16,11 +16,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class ProjectEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_project';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'required|string:0,255',
@@ -32,7 +32,7 @@ class ProjectEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

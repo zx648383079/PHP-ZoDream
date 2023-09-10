@@ -23,11 +23,11 @@ class ContentModel extends BaseModel {
 
     protected $extend_data = null;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_content_'.CMSRepository::siteId();
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,100',
             'cat_id' => 'required|int',
@@ -42,7 +42,7 @@ class ContentModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => 'Title',

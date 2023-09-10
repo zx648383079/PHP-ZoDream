@@ -18,11 +18,11 @@ use Domain\Model\Model;
  */
 class ListItemModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_list_item';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'list_id' => 'required|int',
             'book_id' => 'required|int',
@@ -35,7 +35,7 @@ class ListItemModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'list_id' => 'List Id',

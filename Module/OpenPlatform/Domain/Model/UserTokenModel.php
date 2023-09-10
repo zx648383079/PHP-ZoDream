@@ -17,11 +17,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class UserTokenModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'open_user_token';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'platform_id' => 'required|int',
@@ -33,7 +33,7 @@ class UserTokenModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

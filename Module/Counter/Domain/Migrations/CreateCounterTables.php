@@ -14,7 +14,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateCounterTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(PageLogModel::tableName(), function(Table $table) {
             $table->comment('页面访问记录');
             $table->id();

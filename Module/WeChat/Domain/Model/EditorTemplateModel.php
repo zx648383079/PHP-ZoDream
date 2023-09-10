@@ -29,11 +29,11 @@ class EditorTemplateModel extends Model {
         92 => '行业模板'
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_editor_template';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'type' => 'int:0,127',
             'cat_id' => 'int',
@@ -44,7 +44,7 @@ class EditorTemplateModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'type' => '类型',

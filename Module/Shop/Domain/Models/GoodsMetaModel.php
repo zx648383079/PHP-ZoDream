@@ -25,11 +25,11 @@ class GoodsMetaModel extends Model {
         'seo_description' => '', // 'seo 优化描述',
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_goods_meta';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'goods_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -37,7 +37,7 @@ class GoodsMetaModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

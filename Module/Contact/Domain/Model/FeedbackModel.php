@@ -18,11 +18,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class FeedbackModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cif_feedback';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'email' => 'string:0,50',
@@ -36,7 +36,7 @@ class FeedbackModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

@@ -26,11 +26,11 @@ class CommentModel extends Model {
 
     protected array $append = ['user', 'images', 'goods'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_comment';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'item_type' => 'int:0,99',
@@ -43,7 +43,7 @@ class CommentModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

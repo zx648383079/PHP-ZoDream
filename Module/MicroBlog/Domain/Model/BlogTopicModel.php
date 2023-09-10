@@ -12,18 +12,18 @@ use Domain\Model\Model;
  */
 class BlogTopicModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'micro_blog_topic';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'micro_id' => 'required|int',
             'topic_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'micro_id' => 'Micro Id',

@@ -15,11 +15,11 @@ use Zodream\Html\Tree;
  */
 class RegionModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'shop_region';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'parent_id' => 'int',
@@ -27,7 +27,7 @@ class RegionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

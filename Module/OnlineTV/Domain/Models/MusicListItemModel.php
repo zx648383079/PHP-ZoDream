@@ -12,18 +12,18 @@ use Domain\Model\Model;
  */
 class MusicListItemModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_music_list_item';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'list_id' => 'required|int',
             'music_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'list_id' => 'List Id',

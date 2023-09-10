@@ -21,11 +21,11 @@ use Domain\Model\Model;
  */
 class GroupBuyLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_group_buy_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'act_id' => 'required|int',
             'user_id' => 'required|int',
@@ -41,7 +41,7 @@ class GroupBuyLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'act_id' => 'Act Id',

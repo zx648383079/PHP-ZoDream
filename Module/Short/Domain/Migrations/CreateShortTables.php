@@ -10,7 +10,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateShortTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(ShortUrlModel::tableName(), function (Table $table) {
             $table->comment('短链接');
             $table->id();
@@ -32,7 +32,7 @@ class CreateShortTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'short_link_manage' => '短链接管理'
         ]);

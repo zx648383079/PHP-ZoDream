@@ -18,11 +18,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class SmsLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'sms_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'signature_id' => 'int',
             'template_id' => 'int',
@@ -36,7 +36,7 @@ class SmsLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'signature_id' => 'Signature Id',

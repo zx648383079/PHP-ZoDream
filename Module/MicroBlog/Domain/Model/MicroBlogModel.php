@@ -31,11 +31,11 @@ class MicroBlogModel extends Model {
 
     protected array $append = ['editable', 'is_recommended', 'attachment', 'is_collected'];
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'micro_blog';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'content' => 'required|string:0,140',
@@ -52,7 +52,7 @@ class MicroBlogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

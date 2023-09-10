@@ -17,11 +17,11 @@ use Domain\Entities\Entity;
  * @property integer $updated_at
  */
 class AccountEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'finance_money_account';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,35',
             'money' => 'numeric',
@@ -35,7 +35,7 @@ class AccountEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

@@ -38,11 +38,11 @@ class UserModel extends Model {
      */
     const STATUS_SUBSCRIBED = 1;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_user';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'wid' => 'required|int',
             'openid' => 'required|string:0,50',
@@ -68,7 +68,7 @@ class UserModel extends Model {
     /**
      * @inheritdoc
      */
-    public function labels() {
+    public function labels(): array {
         return [
             'id' => '粉丝ID',
             'openid' => '微信ID',

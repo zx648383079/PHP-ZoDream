@@ -15,18 +15,18 @@ class BlackWordModel extends Model {
 
     public $timestamps = false;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'seo_black_word';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'words' => 'required|string:0,255',
             'replace_words' => 'string:0,255',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'words' => 'Words',

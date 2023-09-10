@@ -21,11 +21,11 @@ use Domain\Entities\Entity;
  * @property integer $question_count
  */
 class PageEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'exam_page';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,200',
             'rule_type' => 'int:0,127',
@@ -44,7 +44,7 @@ class PageEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '试卷名',

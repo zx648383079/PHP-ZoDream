@@ -20,11 +20,11 @@ use Module\Counter\Domain\Events\CounterState;
  */
 class ClickLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_click_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
@@ -38,7 +38,7 @@ class ClickLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'url' => 'Url',

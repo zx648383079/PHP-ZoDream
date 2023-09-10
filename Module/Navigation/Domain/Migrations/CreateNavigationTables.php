@@ -16,7 +16,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
 final class CreateNavigationTables extends Migration {
-    public function up() {
+    public function up(): void {
         SiteRepository::tag()->migration($this);
         $this->append(CategoryModel::tableName(), function (Table $table) {
             $table->comment('站点分类表');
@@ -85,7 +85,7 @@ final class CreateNavigationTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'navigation_manage' => '导航管理'
         ]);

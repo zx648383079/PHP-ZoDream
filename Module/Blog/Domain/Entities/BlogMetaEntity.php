@@ -12,11 +12,11 @@ use Domain\Entities\Entity;
  * @property string $content
  */
 class BlogMetaEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_meta';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'blog_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -24,7 +24,7 @@ class BlogMetaEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'blog_id' => 'Blog Id',

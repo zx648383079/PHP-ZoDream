@@ -20,11 +20,11 @@ use Domain\Model\Model;
  */
 class WarehouseModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_warehouse';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'tel' => 'required|string:0,30',
@@ -38,7 +38,7 @@ class WarehouseModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

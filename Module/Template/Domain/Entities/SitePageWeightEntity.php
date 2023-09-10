@@ -15,10 +15,10 @@ use Domain\Entities\Entity;
  * @property integer $position
  */
 class SitePageWeightEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'tpl_site_page_weight';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'page_id' => 'required|int',
             'site_id' => 'required|int',
@@ -29,7 +29,7 @@ class SitePageWeightEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'page_id' => 'Page Id',

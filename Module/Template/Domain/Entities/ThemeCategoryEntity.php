@@ -13,10 +13,10 @@ use Domain\Entities\Entity;
  * @property string $thumb
  */
 class ThemeCategoryEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'tpl_theme_category';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'parent_id' => 'int',
@@ -25,7 +25,7 @@ class ThemeCategoryEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

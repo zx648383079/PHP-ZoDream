@@ -23,11 +23,11 @@ use Zodream\Helpers\Json;
  */
 class ReportModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cif_report';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'email' => 'string:0,50',
             'item_type' => 'int:0,127',
@@ -44,7 +44,7 @@ class ReportModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'email' => 'Email',

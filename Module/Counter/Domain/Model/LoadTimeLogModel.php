@@ -17,11 +17,11 @@ use Module\Counter\Domain\Events\CounterState;
  */
 class LoadTimeLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_load_time_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
@@ -32,7 +32,7 @@ class LoadTimeLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'url' => 'Url',

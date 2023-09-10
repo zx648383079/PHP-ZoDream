@@ -18,11 +18,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  */
 class CouponLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_coupon_log';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'coupon_id' => 'required|int',
             'serial_number' => 'string:0,30',
@@ -34,7 +34,7 @@ class CouponLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'coupon_id' => 'Coupon Id',

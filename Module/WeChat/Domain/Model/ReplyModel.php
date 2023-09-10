@@ -33,11 +33,11 @@ class ReplyModel extends EditorModel {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_reply';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'wid' => 'required|int',
             'event' => 'required|string:0,20',
@@ -54,7 +54,7 @@ class ReplyModel extends EditorModel {
     /**
      * @inheritdoc
      */
-    public function labels() {
+    public function labels(): array {
         return [
             'id' => 'ID',
             'wid' => '所属微信公众号ID',

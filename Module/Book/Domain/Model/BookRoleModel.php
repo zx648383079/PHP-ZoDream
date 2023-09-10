@@ -15,11 +15,11 @@ use Domain\Model\Model;
  */
 class BookRoleModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'book_role';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'book_id' => 'required|int',
             'name' => 'required|string:0,50',
@@ -31,7 +31,7 @@ class BookRoleModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'book_id' => 'Book Id',

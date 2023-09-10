@@ -47,11 +47,11 @@ class ActivityModel extends Model {
     const STATUS_END = 1;
     const STATUS_INVALID = 2;// 流拍
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_activity';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'thumb' => 'string:0,200',
@@ -68,7 +68,7 @@ class ActivityModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

@@ -9,7 +9,7 @@ use Domain\Entities\Entity;
  * 配方
  */
 class FormulaEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'gm_formula';
     }
 

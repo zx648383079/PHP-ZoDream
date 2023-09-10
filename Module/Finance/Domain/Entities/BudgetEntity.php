@@ -21,11 +21,11 @@ class BudgetEntity extends Entity {
     const CYCLE_MONTH = 3;
     const CYCLE_YEAR = 4;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'finance_budget';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,50',
             'budget' => '',
@@ -38,7 +38,7 @@ class BudgetEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

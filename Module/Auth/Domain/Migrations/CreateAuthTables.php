@@ -36,7 +36,7 @@ class CreateAuthTables extends Migration {
      *
      * @return void
      */
-    public function up() {
+    public function up(): void {
         $this->append(UserModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 100);
@@ -122,7 +122,7 @@ class CreateAuthTables extends Migration {
         parent::up();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newRole('administrator', '超级管理员');
         RoleRepository::newPermission([
             'user_manage' => '会员管理'

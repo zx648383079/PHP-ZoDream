@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $create_at
  */
 class AdPositionModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_ad_position';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'width' => 'required|string:0,20',
@@ -30,7 +30,7 @@ class AdPositionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

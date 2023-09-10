@@ -12,11 +12,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class FriendClassifyModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_friend_classify';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'user_id' => 'required|int',
@@ -24,7 +24,7 @@ class FriendClassifyModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

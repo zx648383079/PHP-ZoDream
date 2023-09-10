@@ -8,7 +8,7 @@ use Domain\Entities\Entity;
  * @package Module\Career\Domain\Entities
  */
 class JobLogEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'career_job_log';
     }
 }

@@ -13,7 +13,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateResourceTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         ResourceRepository::comment()->migration($this);
         ResourceRepository::tag()->migration($this);
         ResourceRepository::score()->migration($this);
@@ -60,7 +60,7 @@ class CreateResourceTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'res_manage' => '资源商店管理'

@@ -16,11 +16,11 @@ use Domain\Model\Model;
  * @property string $thumb
  */
 class LinkageDataModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_linkage_data';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'linkage_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -32,7 +32,7 @@ class LinkageDataModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'linkage_id' => 'Link Id',

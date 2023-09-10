@@ -18,10 +18,10 @@ use Domain\Entities\Entity;
  */
 class AttributeEntity extends Entity {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_attribute';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,30',
             'group_id' => 'required|int',
@@ -35,7 +35,7 @@ class AttributeEntity extends Entity {
     }
 
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

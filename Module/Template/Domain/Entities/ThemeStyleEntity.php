@@ -14,11 +14,11 @@ use Domain\Entities\Entity;
  * @property string $path
  */
 class ThemeStyleEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'tpl_theme_style';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'component_id' => 'required|int',
             'name' => 'required|string:0,30',
@@ -28,7 +28,7 @@ class ThemeStyleEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'component_id' => 'Component Id',

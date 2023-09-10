@@ -17,11 +17,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class SessionLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_session_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'session_id' => 'required|int',
@@ -31,7 +31,7 @@ class SessionLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

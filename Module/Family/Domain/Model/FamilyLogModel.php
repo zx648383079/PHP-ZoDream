@@ -14,10 +14,10 @@ use Domain\Model\Model;
  */
 class FamilyLogModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'fy_family_log';
     }
-    protected function rules() {
+    protected function rules(): array {
         return [
             'family_id' => 'required|int',
             'relation_family' => 'string:0,255',
@@ -28,7 +28,7 @@ class FamilyLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'family_id' => 'Family Id',

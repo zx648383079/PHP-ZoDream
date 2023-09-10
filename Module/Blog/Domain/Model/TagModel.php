@@ -14,11 +14,11 @@ use Zodream\Infrastructure\Support\Html;
  * @property integer $blog_count
  */
 class TagModel extends Model {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_tag';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'description' => 'string:0,255',
@@ -26,7 +26,7 @@ class TagModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '标签',

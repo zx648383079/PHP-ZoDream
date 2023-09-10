@@ -18,11 +18,11 @@ use Domain\Model\Model;
  */
 class MusicModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'tv_music';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,255',
             'cover' => 'string:0,255',
@@ -35,7 +35,7 @@ class MusicModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

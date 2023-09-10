@@ -14,11 +14,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class OrderLogModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_order_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'order_id' => 'required|int',
             'user_id' => 'required|int',
@@ -28,7 +28,7 @@ class OrderLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'order_id' => 'Order Id',

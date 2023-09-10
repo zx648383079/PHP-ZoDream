@@ -13,11 +13,11 @@ use Domain\Model\Model;
  * @property string $language
  */
 class LinkageModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_linkage';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'type' => 'int:0,9',
@@ -26,7 +26,7 @@ class LinkageModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

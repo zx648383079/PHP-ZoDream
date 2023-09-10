@@ -20,11 +20,11 @@ class ResourceMetaModel extends Model {
         'file_catalog' => '', // 文件目录缓存
     ];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'res_resource_meta';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'res_id' => 'required|int',
             'name' => 'required|string:0,40',
@@ -32,7 +32,7 @@ class ResourceMetaModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'res_id' => 'Res Id',

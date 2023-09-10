@@ -12,18 +12,18 @@ use Domain\Model\Model;
  */
 class ShareFileModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'disk_share_file';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'disk_id' => 'required|int',
             'share_id' => 'required|int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'disk_id' => 'Disk Id',

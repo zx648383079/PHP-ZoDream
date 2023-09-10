@@ -30,7 +30,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateCateringTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(AddressEntity::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 30);
@@ -241,7 +241,7 @@ class CreateCateringTables extends Migration {
         })->autoUp();
     }
 
-    public function seed() {
+    public function seed(): void {
         RoleRepository::newPermission([
             'catering_manage' => '餐饮管理'
         ]);

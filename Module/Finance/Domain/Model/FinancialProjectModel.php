@@ -28,12 +28,12 @@ use Domain\Model\Model;
  */
 class FinancialProjectModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'finance_financial_project';
     }
 
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,35',
             'alias' => 'required|string:0,50',
@@ -54,7 +54,7 @@ class FinancialProjectModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'ID',
             'name' => '配置项目',

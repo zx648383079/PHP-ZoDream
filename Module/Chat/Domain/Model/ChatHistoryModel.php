@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class ChatHistoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'chat_history';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'item_type' => 'required|int:0,127',
             'item_id' => 'required|int',
@@ -31,7 +31,7 @@ class ChatHistoryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'item_type' => 'Item Type',

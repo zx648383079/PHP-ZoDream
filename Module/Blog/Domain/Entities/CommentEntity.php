@@ -27,11 +27,11 @@ class CommentEntity extends Entity {
 
     use ExtraRule;
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'blog_comment';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'content' => 'required|string:0,255',
             'extra_rule' => 'string:0,255',
@@ -51,7 +51,7 @@ class CommentEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => '内容',

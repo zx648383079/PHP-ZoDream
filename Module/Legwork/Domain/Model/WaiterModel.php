@@ -25,11 +25,11 @@ class WaiterModel extends Model {
     const STATUS_ALLOW = 1;
     const STATUS_DISALLOW = 2;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'leg_waiter';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'required|int',
             'name' => 'required|string:0,100',
@@ -45,7 +45,7 @@ class WaiterModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

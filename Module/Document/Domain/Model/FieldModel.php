@@ -43,11 +43,11 @@ class FieldModel extends Model {
 
     public $children = [];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'doc_field';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,50',
             'title' => 'string:0,50',
@@ -64,7 +64,7 @@ class FieldModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '字段名',

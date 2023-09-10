@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\SMS\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
@@ -10,7 +11,7 @@ use Zodream\Database\Schema\Table;
 
 class CreateSmsTables extends Migration {
 
-    public function up() {
+    public function up(): void {
         $this->append(SmsSignatureModel::tableName(), function (Table $table) {
             $table->comment('短信签名');
             $table->id();
@@ -39,7 +40,7 @@ class CreateSmsTables extends Migration {
         })->autoUp();
     }
 
-    public function seed()
+    public function seed(): void
     {
         RoleRepository::newPermission([
             'sms_manage' => '短信配置'

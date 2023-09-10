@@ -16,11 +16,11 @@ use Domain\Model\Model;
  */
 class JumpLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_jump_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'referrer' => 'string:0,255',
             'url' => 'required|string:0,255',
@@ -31,7 +31,7 @@ class JumpLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'referrer' => 'Referrer',

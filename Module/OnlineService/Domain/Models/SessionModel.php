@@ -22,11 +22,11 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $created_at
  */
 class SessionModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'service_session';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'user_id' => 'int',
             'service_id' => 'int',
@@ -41,7 +41,7 @@ class SessionModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

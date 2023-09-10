@@ -12,11 +12,11 @@ use Domain\Model\Model;
  * @property integer $position
  */
 class ForumClassifyModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'bbs_forum_classify';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'icon' => 'string:0,100',
@@ -25,7 +25,7 @@ class ForumClassifyModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

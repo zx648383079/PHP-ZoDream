@@ -13,11 +13,11 @@ use Domain\Entities\Entity;
  * @property integer $is_right
  */
 class QuestionOptionEntity extends Entity {
-	public static function tableName() {
+	public static function tableName(): string {
         return 'exam_question_option';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'content' => 'required|string:0,255',
             'question_id' => 'required|int',
@@ -26,7 +26,7 @@ class QuestionOptionEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'content' => 'Content',

@@ -10,18 +10,18 @@ use Domain\Model\Model;
  */
 class EditorTemplateCategoryModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'wechat_editor_template_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,20',
             'parent_id' => 'int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

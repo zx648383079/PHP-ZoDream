@@ -5,8 +5,7 @@ namespace Module\Book\Domain\Model;
 use Domain\Model\Model;
 
 class BookSourceSiteModel extends Model {
-    public static function tableName()
-    {
+    public static function tableName(): string {
         return 'book_source_site';
     }
 }

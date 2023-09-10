@@ -15,11 +15,11 @@ use Domain\Model\Model;
  * @property integer $is_hot
  */
 class CategoryModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'res_category';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,40',
             'parent_id' => 'int',
@@ -30,7 +30,7 @@ class CategoryModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '分类名',

@@ -12,11 +12,11 @@ use Domain\Entities\Entity;
  * @property string $file
  */
 class GoodsGalleryEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_goods_gallery';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'goods_id' => 'required|int',
             'thumb' => 'string:0,255',
@@ -25,7 +25,7 @@ class GoodsGalleryEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

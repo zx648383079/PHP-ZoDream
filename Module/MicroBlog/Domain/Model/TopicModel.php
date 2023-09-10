@@ -14,11 +14,11 @@ use Domain\Model\Model;
  */
 class TopicModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'micro_topic';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,200',
             'user_id' => 'required|int',
@@ -27,7 +27,7 @@ class TopicModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',

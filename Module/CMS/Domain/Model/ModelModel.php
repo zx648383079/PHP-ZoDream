@@ -20,11 +20,11 @@ use Zodream\Helpers\Json;
  */
 class ModelModel extends BaseModel {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'cms_model';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'table' => 'required|string:0,100',
@@ -39,7 +39,7 @@ class ModelModel extends BaseModel {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '名称',

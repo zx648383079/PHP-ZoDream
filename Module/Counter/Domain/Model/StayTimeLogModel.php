@@ -18,11 +18,11 @@ use Module\Counter\Domain\Events\CounterState;
  */
 class StayTimeLogModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_stay_time_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'url' => 'required|string:0,255',
             'ip' => 'required|string:0,120',
@@ -34,7 +34,7 @@ class StayTimeLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'url' => 'Url',

@@ -29,11 +29,11 @@ use Domain\Repositories\FileRepository;
  * @property integer $created_at
  */
 class ResourceModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'res_resource';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'title' => 'required|string:0,200',
             'description' => 'string:0,255',
@@ -56,7 +56,7 @@ class ResourceModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'title' => '标题',

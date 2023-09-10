@@ -26,11 +26,11 @@ class AffiliateLogModel extends Model {
     const STATUS_CANCEL = 9;
     const STATUS_ARRIVAL = 5;// 到账
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_affiliate_log';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'item_type' => 'int:0,127',
@@ -44,7 +44,7 @@ class AffiliateLogModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

@@ -16,11 +16,11 @@ use Domain\Entities\Entity;
  * @property integer $updated_at
  */
 class TaskShareEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'task_share';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'task_id' => 'required|int',
@@ -31,7 +31,7 @@ class TaskShareEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

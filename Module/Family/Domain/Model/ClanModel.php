@@ -16,11 +16,11 @@ use Domain\Model\Model;
  */
 class ClanModel extends Model {
 
-	public static function tableName() {
+	public static function tableName(): string {
         return 'fy_clan';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,100',
             'cover' => 'required|string:0,100',
@@ -33,7 +33,7 @@ class ClanModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => '族谱名',

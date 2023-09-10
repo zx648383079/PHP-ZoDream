@@ -18,11 +18,11 @@ use Domain\Model\Model;
  */
 class BankCardModel extends Model {
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_bank_card';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'user_id' => 'required|int',
             'bank' => 'required|string:0,50',
@@ -35,7 +35,7 @@ class BankCardModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'user_id' => 'User Id',

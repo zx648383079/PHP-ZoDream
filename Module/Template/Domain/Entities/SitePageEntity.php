@@ -22,11 +22,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class SitePageEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'tpl_site_page';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'site_id' => 'required|int',
             'component_id' => 'required|int',
@@ -44,7 +44,7 @@ class SitePageEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'site_id' => 'Site Id',

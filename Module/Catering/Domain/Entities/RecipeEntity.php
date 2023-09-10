@@ -17,11 +17,11 @@ use Domain\Entities\Entity;
  * @property integer $created_at
  */
 class RecipeEntity extends Entity {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'eat_recipe';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'cat_id' => 'required|int',
             'store_id' => 'int',
@@ -35,7 +35,7 @@ class RecipeEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'cat_id' => 'Cat Id',

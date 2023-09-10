@@ -11,11 +11,11 @@ class GoodsEntity extends Entity {
 
     protected array $append = ['shop'];
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_goods';
     }
 
-    public function rules() {
+    public function rules(): array {
         return [
             'cat_id' => 'required|int',
             'brand_id' => 'required|int',
@@ -46,7 +46,7 @@ class GoodsEntity extends Entity {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'cat_id' => '分类',

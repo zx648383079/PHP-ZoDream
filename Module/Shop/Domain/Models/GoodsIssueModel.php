@@ -17,11 +17,11 @@ use Domain\Model\Model;
  * @property integer $created_at
  */
 class GoodsIssueModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'shop_goods_issue';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'goods_id' => 'required|int',
             'question' => 'required|string:0,255',
@@ -34,7 +34,7 @@ class GoodsIssueModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'goods_id' => 'Goods Id',

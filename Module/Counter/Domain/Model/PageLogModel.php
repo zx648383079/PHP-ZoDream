@@ -15,18 +15,18 @@ class PageLogModel extends Model {
 
     public $timestamps = false;
 
-    public static function tableName() {
+    public static function tableName(): string {
         return 'ctr_page_log';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'url' => 'required|string:0,255',
             'visit_count' => 'int',
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'url' => 'Url',

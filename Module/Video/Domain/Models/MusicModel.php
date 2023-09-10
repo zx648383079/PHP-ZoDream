@@ -16,11 +16,11 @@ use Domain\Model\Model;
  * @property integer $updated_at
  */
 class MusicModel extends Model {
-    public static function tableName() {
+    public static function tableName(): string {
         return 'video_music';
     }
 
-    protected function rules() {
+    protected function rules(): array {
         return [
             'name' => 'required|string:0,255',
             'singer' => 'string:0,20',
@@ -32,7 +32,7 @@ class MusicModel extends Model {
         ];
     }
 
-    protected function labels() {
+    protected function labels(): array {
         return [
             'id' => 'Id',
             'name' => 'Name',
