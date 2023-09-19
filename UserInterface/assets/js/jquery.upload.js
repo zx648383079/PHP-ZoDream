@@ -1,13 +1,27 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var Eve = /** @class */ (function () {
     function Eve() {
     }
@@ -28,7 +42,7 @@ var Eve = /** @class */ (function () {
         if (!this.hasEvent(event)) {
             return;
         }
-        return (_a = this.options[realEvent]).call.apply(_a, [this].concat(args));
+        return (_a = this.options[realEvent]).call.apply(_a, __spreadArray([this], args, false));
     };
     return Eve;
 }());
@@ -63,7 +77,7 @@ var Upload = /** @class */ (function (_super) {
     }
     Upload.prototype.addEvent = function () {
         var _this = this;
-        this.element.click(function () {
+        this.element.on('click', function () {
             _this.start($(this));
         });
         if (this.options.grid) {
@@ -81,7 +95,7 @@ var Upload = /** @class */ (function (_super) {
             file.multiple = this.options.multiple;
             file.accept = this.options.filter;
             document.body.appendChild(file);
-            element = $(file).bind('change', function () {
+            element = $(file).on('change', function () {
                 _this.uploadFiles(this.files);
             }).hide();
         }
@@ -90,12 +104,12 @@ var Upload = /** @class */ (function (_super) {
             element.attr('multiple', this.options.multiple ? 'true' : 'false');
             element.attr('accept', this.options.filter);
             if (this.options.dynamic) {
-                element.unbind('change').bind('change', function () {
+                element.off('change').on('change', function () {
                     _this.uploadFiles(this.files);
                 });
             }
         }
-        element.click();
+        element.trigger('click');
     };
     Upload.prototype.uploadFiles = function (files) {
         if (this.options.allowMultiple) {
@@ -164,11 +178,14 @@ var Upload = /** @class */ (function (_super) {
             processData: false,
             success: function (data) {
                 data = _this.trigger('after', data, _this.currentElement);
-                if (data == false) {
+                if (data === false) {
                     console.log('after upload is false');
                     return;
                 }
                 cb && cb(data);
+            },
+            error: function (e) {
+                _this.trigger('error', e, _this.currentElement);
             }
         };
         if (this.options.timeout) {
@@ -176,7 +193,7 @@ var Upload = /** @class */ (function (_super) {
         }
         if (_this.options.onprogress) {
             opts['xhr'] = function () {
-                var xhr = $.ajaxSettings.xhr();
+                var xhr = $.ajaxSetup({}).xhr();
                 if (_this.options.onprogress && xhr.upload) {
                     xhr.upload.addEventListener('progress', _this.options.onprogress, false);
                 }
@@ -246,9 +263,9 @@ var Upload = /** @class */ (function (_super) {
             var canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
             // 创建属性节点
             var anw = document.createAttribute("width");
-            anw.nodeValue = w;
+            anw.nodeValue = w + '';
             var anh = document.createAttribute("height");
-            anh.nodeValue = h;
+            anh.nodeValue = h + '';
             canvas.setAttributeNode(anw);
             canvas.setAttributeNode(anh);
             ctx.drawImage(that, 0, 0, w, h);

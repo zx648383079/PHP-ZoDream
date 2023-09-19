@@ -407,9 +407,35 @@ i {
             border: none;
             background-color: $brand-info;
             color: #fff;
-            cursor: auto;
-            &:last-of-type {
+            cursor: pointer;
+            &:nth-child(2n+1) {
                 background-color: $brand-warning;
+            }
+            &:hover {
+                font-weight: bold;
+            }
+        }
+        &.file-uploading {
+            position: relative;
+            display: inline-block;
+            flex: none;
+            input {
+                background-color: transparent;
+                border: none;
+            }
+            button {
+                cursor: not-allowed;
+            }
+            &::after {
+                content: " ";
+                display: block;
+                position: absolute;
+                bottom: 0;
+                width: 20%;
+                height: .1rem;
+                opacity: .6;
+                background-color: #0dcaf0;
+                animation: 1s linear infinite borderLoop alternate;
             }
         }
     }
@@ -482,5 +508,14 @@ i {
     }
     :last-child {
         border-radius: 0 .25rem .25rem 0; 
+    }
+}
+
+@keyframes borderLoop {
+    from {
+        left: 0;
+    }
+    to {
+        left: 80%;
     }
 }

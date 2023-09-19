@@ -131,13 +131,22 @@ $(function() {
             url: UPLOAD_URI,
             name: 'upfile',
             template: '{url}',
+            onbefore: function(data: any, element: JQuery) {
+                element.closest('.file-input').addClass('file-uploading');
+                return data;
+            },
             onafter: function(data: any, element: JQuery) {
                 if (data.state == 'SUCCESS') {
                     element.prev('input').val(data.url);
                 } else if (data.code === 302) {
                     location.href = data.url;
                 }
+                element.closest('.file-input').removeClass('file-uploading');
                 return false;
+            },
+            onerror: function(error: any, element: JQuery) {
+                Dialog.tip(error.status == 413 ? '文件太大，无法上传' :  '上传失败');
+                element.closest('.file-input').removeClass('file-uploading');
             }
         });
     }
@@ -194,6 +203,11 @@ $(function() {
     })
     .on('click', ".file-input [data-type=upload]", function() {
         const that = $(this);
+        const box = that.closest('.file-input');
+        if (box.hasClass('file-uploading')) {
+            Dialog.tip('文件正在上传中。。。');
+            return;
+        }
         const filter: string = that.data('allow') || '';
         file_upload.options.filter = filter;
         if (filter.indexOf('image') < 0) {
@@ -202,13 +216,20 @@ $(function() {
         file_upload.start(that);
     })
     .on('click', ".file-input [data-type=preview]", function() {
-        let img = $(this).parents('.file-input').find('input').val() as any;
-        if (!img) {
-            Dialog.tip('请上传图片！');
+        const box = $(this).closest('.file-input');
+        const filter = box.find('[data-type=upload]').data('allow') || '';
+        const isImage = filter.indexOf('image') >= 0;
+        const fileUrl = box.find('input').val() as any;
+        if (!fileUrl) {
+            Dialog.tip(`请上传${isImage?'图片':'文件'}！`);
+            return;
+        }
+        if (!isImage) {
+            window.open(fileUrl, '_blank');
             return;
         }
         const target = new Image;
-        target.src = img;
+        target.src = fileUrl;
         target.onload = () => {
             const modal = Dialog.box({
                 title: '预览',
