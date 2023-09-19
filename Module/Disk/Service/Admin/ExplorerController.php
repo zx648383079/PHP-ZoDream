@@ -1,20 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Module\Disk\Service\Api\Admin;
+namespace Module\Disk\Service\Admin;
 
 use Domain\Model\ModelHelper;
 use Domain\Repositories\ExplorerRepository;
-use Zodream\Html\Page;
 
 class ExplorerController extends Controller {
 
     public function indexAction(string $path = '', string $keywords = '', string $filter = '', int $page = 1) {
+        $driveItems = ExplorerRepository::driveList();
         $items = ExplorerRepository::search($path, $keywords, $filter, $page);
-        return $items instanceof Page ? $this->renderPage($items) : $this->renderData($items);
-    }
-
-    public function driveAction() {
-        return $this->renderData(ExplorerRepository::driveList());
+        return $this->show(compact('driveItems', 'items', 'path', 'keywords'));
     }
 
     public function deleteAction(string $path) {
@@ -23,11 +19,15 @@ class ExplorerController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData(true);
+        return $this->renderData([
+            'url' => $this->getUrl('explorer'),
+            'no_jax' => true
+        ]);
     }
 
     public function storageAction(string $keywords = '', int $tag = 0) {
-        return $this->renderPage(ExplorerRepository::storageSearch($keywords, $tag));
+        $items = ExplorerRepository::storageSearch($keywords, $tag);
+        return $this->show(compact('items', 'keywords', 'tag'));
     }
 
     public function storageDeleteAction(int|array $id) {
@@ -36,7 +36,10 @@ class ExplorerController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData(true);
+        return $this->renderData([
+            'url' => $this->getUrl('explorer/storage'),
+            'no_jax' => true
+        ]);
     }
 
     public function storageReloadAction(int $tag) {
@@ -45,6 +48,9 @@ class ExplorerController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData(true);
+        return $this->renderData([
+            'url' => $this->getUrl('explorer/storage'),
+            'no_jax' => true
+        ]);
     }
 }

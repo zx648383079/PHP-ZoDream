@@ -2,12 +2,24 @@
 declare(strict_types=1);
 namespace Domain\Repositories;
 
+use Domain\Model\SearchModel;
+use Domain\Providers\StorageProvider;
+use Zodream\Database\DB;
 use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
 final class ExplorerRepository {
+
+    protected static function storage(int|string $tag): StorageProvider|null {
+        $i = is_numeric($tag) ? intval($tag) : (ord(strtolower($tag)) - 96);
+        return match ($i) {
+            1 => StorageProvider::publicStore(),
+            2 => StorageProvider::privateStore(),
+            default => null,
+        };
+    }
 
     public static function driveItems(): array {
         $root = app_path();
@@ -81,17 +93,23 @@ final class ExplorerRepository {
     }
 
     public static function delete(string $path): void {
-        $fileName = static::toFileName($path);
+        list($drive, $path, $fileName) = static::splitPath($path);
         if (empty($fileName)) {
             throw new \Exception(sprintf('Path [%s] is error', $path));
         }
-        if (is_file($fileName)) {
-            FileSystem::delete($fileName);
-            return;
-        }
         if (is_dir($fileName)) {
             FileSystem::deleteDirectory($fileName);
+            return;
         }
+        if (!is_file($fileName)) {
+            return;
+        }
+        FileSystem::delete($fileName);
+        $storage = static::storage($drive);
+        if (empty($storage)) {
+            return;
+        }
+        $storage->removeFile($path);
     }
 
     /**
@@ -110,7 +128,7 @@ final class ExplorerRepository {
      */
     public static function splitPath(string $path): array {
         if ($path === '' || $path === '/') {
-            return ['', ''];
+            return ['', '', ''];
         }
         $args = explode(':', $path);
         $path = end($args);
@@ -175,5 +193,39 @@ final class ExplorerRepository {
             return in_array($ext, FileRepository::config('fileAllowFiles'));
         }
         return false;
+    }
+
+
+    public static function storageSearch(string $keywords = '', int $tag = 0) {
+        return DB::table(StorageProvider::FILE_TABLE)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, 'name', true, '', $keywords);
+            })->when($tag > 0, function ($query) use ($tag) {
+                $query->where('folder', $tag);
+            })->orderBy('id', 'desc')->page();
+    }
+
+    public static function storageRemove(array $id): void {
+        $items = DB::table(StorageProvider::FILE_TABLE)
+            ->whereIn('id', $id)->get();
+        if (empty($items)) {
+            throw new \Exception('file is error');
+        }
+        foreach ($items as $item) {
+            $storage = static::storage($item['folder']);
+            if (empty($storage)) {
+                throw new \Exception('unknown folder');
+            }
+            $storage->remove($item);
+        }
+    }
+
+    public static function storageReload(int $tag): void {
+        $storage = static::storage($tag);
+        if (empty($storage)) {
+            throw new \Exception('unknown folder');
+        }
+        set_time_limit(0);
+        $storage->reload();
     }
 }

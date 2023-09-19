@@ -60,7 +60,7 @@ footer {
     background-color: $dialog;
     position: relative;
     .blue {
-        color: $body;
+        color: $bodySecondaryText;
     }
     ul {
         width: 100%;
@@ -76,12 +76,12 @@ footer {
     .toggle {
         position: absolute;
         right: 0;
-        top: 10px;
-        height: 26px;
-        width: 26px;
+        top: 0.625rem;
+        height: 1.625rem;
+        width: 1.625rem;
         &::before {
             font-family: "Font Awesome 5 Free";
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 900;
             font-size: inherit;
             text-rendering: auto;
@@ -89,7 +89,7 @@ footer {
         }
     }
     &.min {
-        width: 200px;
+        width: 12.5rem;
         ul {
             display: none;
         }
@@ -102,17 +102,17 @@ footer {
 }
 
 .breadcrumb {
-    padding: 8px 15px;
+    padding: 0.5rem 0.9375rem;
     list-style: none;
     background-color: #f5f5f5;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     >li {
         display: inline-block;
         &.active {
             color: #777;
         }
         +li::before {
-            padding: 0 5px;
+            padding: 0 0.3125rem;
             color: #ccc;
             content: "/\00a0";
         }
@@ -120,15 +120,15 @@ footer {
 }
 
 .page-header {
-    height: 30px;
+    height: 1.875rem;
     background: transparent;
     .actions {
-        right: 20px;
+        right: 1.25rem;
         button {
             background: $button;
             color: $buttonText;
-            line-height: 30px;
-            padding: 0 8px;
+            line-height: 1.875rem;
+            padding: 0 0.5rem;
             margin: 0;
             border: none;
             &.active {
@@ -145,26 +145,26 @@ footer {
 }
 
 .column-item {
-    width: 300px;
+    width: 18.75rem;
     display: inline-block;
     position: relative;
-    height: 100px;
+    height: 6.25rem;
     background-color: #fff;
-    margin: 10px;
+    margin: 0.625rem;
     vertical-align: top;
     .icon {
         position: absolute;
-        width: 100px;
-        height: 100px;
+        width: 6.25rem;
+        height: 6.25rem;
         text-align: center;
         background-color: #333;
         color: #fff;
-        padding-top: 20px;
-        font-size: 40px;
+        padding-top: 1.25rem;
+        font-size: 2.5rem;
     }
     .content {
-        margin-left: 100px;
-        padding: 20px 10px;
+        margin-left: 6.25rem;
+        padding: 1.25rem 0.625rem;
     }
 }
 .page-search-bar {

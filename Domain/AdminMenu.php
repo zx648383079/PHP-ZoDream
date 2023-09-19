@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Domain;
 
-use Zodream\Route\Router;
+use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\ModuleRoute;
 
 class AdminMenu {
 
@@ -39,24 +41,26 @@ class AdminMenu {
     }
 
     public static function moduleMenu() {
-        $menuList = [];
-        $modules = config('modules');
-        $oldGlobalModule = url()->getModulePath();
+        $menuItems = [];
+        $modules = config('route.modules');
+        /** @var ModuleRoute $route */
+        $route = app(ModuleRoute::class);
         $exist = [];
         foreach ($modules as $path => $module) {
+            if (empty($module)) {
+                continue;
+            }
             if (in_array($module, $exist)) {
                 continue;
             }
             $exist[] = $module;
-            url()->setModulePath($path);
-            $module = Router::moduleInstance($module);
-            if (!method_exists($module, 'adminMenu')) {
-                continue;
-            }
-            $menuList = array_merge($menuList, $module->adminMenu());
+            $route->module($path, function () use (&$menuItems, $module, $route) {
+                $instance = $route->moduleInstance($module, app(HttpContext::class));
+                if (method_exists($instance, 'adminMenu')) {
+                    $menuItems = array_merge($menuItems, call_user_func([$instance, 'adminMenu']));
+                }
+            }, $modules);
         }
-        url()->setModulePath($oldGlobalModule);
-        return [
-        ];
+        return $menuItems;
     }
 }

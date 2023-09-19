@@ -261,7 +261,10 @@ class StorageProvider {
         if (empty($url)) {
             return;
         }
-        $model = $this->get($url);
+        $this->remove($this->get($url));
+    }
+
+    public function remove(array $model) {
         $this->quoteQuery()->where('file_id', $model['id'])->delete();
         $this->logQuery()->where('file_id', $model['id'])->delete();
         $this->query()->where('id', $model['id'])->delete();
@@ -289,7 +292,8 @@ class StorageProvider {
      * @return void
      */
     public function reload(): void {
-        $this->root->mapDeep(function (FileObject $file) {
+        $folder = $this->isPublic() ? $this->root->directory('upload') : $this->root;
+        $folder->mapDeep(function (FileObject $file) {
             if ($file instanceof Directory) {
                 return;
             }
