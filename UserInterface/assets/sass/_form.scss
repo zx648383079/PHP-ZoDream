@@ -230,6 +230,7 @@ $toggleHeight: $lineHeight * .8;
 
 i {
     &.checkbox {
+        font-style: normal;
         text-align: center;
         line-height: $lineHeight;
         &::before {

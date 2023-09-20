@@ -7,40 +7,31 @@ use Zodream\Route\ModuleRoute;
 
 class AdminMenu {
 
-    public static function all() {
+    public static function all(): array {
+        if (app()->isDebug()) {
+            return static::getAll();
+        }
+        $cacheFile = app_path('data/admin_menu.php');
+        if ($cacheFile->exist()) {
+            $data = require (string)$cacheFile;
+        } else {
+            $data = static::getAll();
+            $cacheFile->write('<?php return '.var_export($data, true).';');
+        }
+        return $data;
+    }
+
+    protected static function getAll(): array {
         $menus = self::moduleMenu();
         array_unshift($menus, [
             '首页',
-            './',
+            '/admin.php',
             'fa fa-home',
-        ] );
-        $menus[] = [
-            '系统管理',
-            false,
-            'fa fa-cogs',
-            [
-                [
-                    '基本设置',
-                    './',
-                    'fa fa-cog'
-                ],
-                [
-                    '清除缓存',
-                    './cache',
-                    'fa fa-trash'
-                ],
-                [
-                    '生成SiteMap',
-                    './sitemap',
-                    'fa fa-map'
-                ]
-            ],
-            true
-        ];
+        ]);
         return $menus;
     }
 
-    public static function moduleMenu() {
+    protected static function moduleMenu(): array {
         $menuItems = [];
         $modules = config('route.modules');
         /** @var ModuleRoute $route */
@@ -62,5 +53,17 @@ class AdminMenu {
             }, $modules);
         }
         return $menuItems;
+    }
+
+    /**
+     * 组成一个菜单项
+     * @param string $name
+     * @param string $icon
+     * @param string $url
+     * @param array $children
+     * @return array
+     */
+    public static function build(string $name, string $icon, string $url = '', array $children = []): array {
+        return [$name, empty($url) ? false : $url, $icon, $children];
     }
 }

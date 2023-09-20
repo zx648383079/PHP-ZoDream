@@ -195,6 +195,52 @@
         },
         {
             "action": "model",
+            "name": "产品样本",
+            "table": "samples",
+            "category_template": "resource",
+            "list_template": "resource_list",
+            "show_template": "resource",
+            "fields": [
+                {
+                    "name": "语言",
+                    "field": "language",
+                    "type": "select",
+                    "setting": {
+                        "option": {
+                            "items": "中文\n英文"
+                        }
+                    }
+                },
+                {
+                    "name": "文件名称",
+                    "field": "file_name",
+                    "type": "text"
+                },
+                {
+                    "name": "文件大小",
+                    "field": "file_size",
+                    "type": "text"
+                },
+                {
+                    "name": "文档类类型",
+                    "field": "file_type",
+                    "type": "text"
+                },
+                {
+                    "name": "产品类型",
+                    "field": "product_type",
+                    "type": "@linkage:product_type",
+                    "is_main": true
+                },
+                {
+                    "name": "附件",
+                    "field": "file",
+                    "type": "file"
+                }
+            ]
+        },
+        {
+            "action": "model",
             "name": "产品",
             "table": "products",
             "category_template": "product",
@@ -234,6 +280,11 @@
                 {
                     "name": "应用范围",
                     "field": "applications",
+                    "type": "editor"
+                },
+                {
+                    "name": "相关产品及附件",
+                    "field": "relationships",
                     "type": "editor"
                 }
             ]
@@ -1536,7 +1587,7 @@
                             "title": "产品样本",
                             "en:title": "Product samples",
                             "name": "product_sample",
-                            "type": "@model:resources",
+                            "type": "@model:samples",
                             "image": "/assets/images/banner.jpg"
                         }, 
                         {

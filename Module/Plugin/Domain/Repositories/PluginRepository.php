@@ -90,7 +90,11 @@ final class PluginRepository {
         $update = [];
         foreach ($items as $item) {
             $data = [
-                // TODO
+                'name' => $item['name'],
+                'description' => $item['description'] ?? '',
+                'author' => $item['author'] ?? '',
+                'version' => $item['version'] ?? '',
+                'path' => $item['path'],
             ];
             if (isset($exist[$item['path']])) {
                 $update[] = $exist[$item['path']];
@@ -98,7 +102,7 @@ final class PluginRepository {
                     ->update($data);
                 continue;
             }
-            $add[] = $add;
+            $add[] = $data;
         }
         if (!empty($add)) {
             PluginEntity::query()->insert($add);

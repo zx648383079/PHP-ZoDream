@@ -40,7 +40,8 @@ class File extends BaseField {
 
 
     public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string($field->length > 10 ? $field->length : 255)->default('')->comment($field->name);
+        $len = intval($field->length);
+        $column->string($len > 10 ? $len : 255)->default('')->comment($field->name);
     }
 
     public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {

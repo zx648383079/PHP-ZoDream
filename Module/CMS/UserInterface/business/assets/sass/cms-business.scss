@@ -1270,14 +1270,19 @@ $dialogHeight: 20rem;
             margin-bottom: -1px;
             width: auto;
             min-width: 6rem;
+            padding: 0 .8rem;
             overflow: hidden;
             &.active {
                 background: linear-gradient(to bottom, $primary, #fff 40%);
                 border-bottom-color: #fff;
                 color: #333;
             }
+            &:first-of-type {
+                margin-left: 3rem;
+            }
             &:not(:last-of-type) {
-                border-right: none;
+                // border-right: none;
+                margin-right: .8rem;
             }
         }
     }
@@ -1424,6 +1429,21 @@ $dialogHeight: 20rem;
                 }
                 .nav-item-arrow {
                     display: inline-block;
+                }
+            }
+        }
+    }
+    .product-panel {
+        .tab-header {
+            .tab-item {
+                min-width: 5rem;
+                padding: 0;
+                &:first-of-type {
+                    margin-left: 0;
+                }
+                &:not(:last-of-type) {
+                    border-right: none;
+                    margin-right: 0;
                 }
             }
         }
