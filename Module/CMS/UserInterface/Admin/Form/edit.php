@@ -7,17 +7,17 @@ $this->title = $model->id > 0 ? '表单编辑' : '新增表单';
 
 <h1><?=$this->title?></h1>
 <form data-type="ajax" action="<?=$this->url('./@admin/form/save')?>" method="post" class="form-table" role="form">
-    <div class="zd-tab">
-        <div class="zd-tab-head">
+    <div class="tab-box">
+        <div class="tab-header">
             <?php foreach($tab_list as $item):?>
-            <div class="zd-tab-item<?=$item['active'] ? ' active' : ''?>">
+            <div class="tab-item<?=$item['active'] ? ' active' : ''?>">
                 <?=$item['name']?>
             </div>
             <?php endforeach;?>
         </div>
-        <div class="zd-tab-body">
+        <div class="tab-body">
         <?php foreach($tab_list as $item):?>
-            <div class="zd-tab-item<?=$item['active'] ? ' active' : ''?>">
+            <div class="tab-item<?=$item['active'] ? ' active' : ''?>">
                 <?php foreach($item['items'] as $item):?>
                     <?=$scene->toInput($item, $data)?>
                 <?php endforeach;?>

@@ -12,6 +12,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
 use Zodream\Database\Query\Builder;
@@ -491,7 +492,7 @@ abstract class BaseScene implements SceneInterface {
         $table->string('keywords')->default('');
         $table->string('thumb')->default('');
         $table->string('description')->default('');
-        $table->bool('status')->default(0);
+        $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_DRAFT);
         $table->uint('view_count')->default(0);
         $table->uint('comment_count')->default(0);
         $table->bool('comment_open')->default(0);

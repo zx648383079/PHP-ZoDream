@@ -13,18 +13,18 @@ $this->registerJs($js);
 
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/family/save')?>
-    <div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+    <div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
-            </div><div class="zd-tab-item">
+            </div><div class="tab-item">
                 生平
-            </div><div class="zd-tab-item">
+            </div><div class="tab-item">
                 配偶
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('name', true)?>
                 <?=Form::text('secondary_name')?>
                 <?=Form::select('sex', ['其他', '女', '男'], true)?>
@@ -57,10 +57,10 @@ $this->registerJs($js);
                     </div>
                 </div>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <textarea id="content-box" name="lifetime" rows="10" style="width: 100%;resize: vertical;"><?=$model->lifetime?></textarea>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?php foreach($spouse_list as $item):?>
                 <div class="spouse-item" data-id="<?=$item->id?>">
                     [妻]<?=$item->spouse->name?>(<?=$item->start_at?>~<?=$item->end_at?>) 

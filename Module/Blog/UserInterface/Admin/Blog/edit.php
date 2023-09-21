@@ -31,16 +31,16 @@ $this->registerJs($js);
     <?php endif;?>
 </div>
 <?=Form::open($model, './@admin/blog/save')?>
-    <div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+    <div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
-            </div><div class="zd-tab-item">
+            </div><div class="tab-item">
                 详情
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('title', true)?>
                 <?php if($model->parent_id < 1):?>
                 <?=Form::select('term_id', [$term_list], true)?>
@@ -76,7 +76,7 @@ $this->registerJs($js);
                 </div>
                 <?php endif;?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <textarea id="editor-container" style="height: 400px;" name="content" required><?=$model->content?></textarea>
             </div>
         </div>

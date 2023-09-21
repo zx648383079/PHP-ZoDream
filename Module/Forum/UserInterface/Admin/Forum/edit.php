@@ -11,16 +11,16 @@ $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/forum/save')?>
-<div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+<div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本设置
-            </div><div class="zd-tab-item">
+            </div><div class="tab-item">
                 主题分类
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('name', true)?>
                 <div class="input-group">
                     <label>上级</label>
@@ -40,7 +40,7 @@ $this->registerJs($js);
                 <?=Form::textarea('description')?>
                 <?=Form::text('position')?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <table id="classify-box">
                     <thead>
                     <tr>

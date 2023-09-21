@@ -6,17 +6,17 @@ use Zodream\Html\Bootstrap\TableWidget;
 $this->title = 'ZoDream Log Viewer';
 ?>
 
-        <div class="zd-tab">
-            <div class="zd-tab-head">
-                <div class="zd-tab-item active">
+        <div class="tab-box">
+            <div class="tab-header">
+                <div class="tab-item active">
                     可疑IP
                 </div>
-                <div class="zd-tab-item">
+                <div class="tab-item">
                     可疑路径
                 </div>
             </div>
-            <div class="zd-tab-body">
-                <div class="zd-tab-item active">
+            <div class="tab-body">
+                <div class="tab-item active">
                     <table class="table table-hover tag-table">
                         <thead>
                             <tr>
@@ -39,7 +39,7 @@ $this->title = 'ZoDream Log Viewer';
                         </tbody>
                     </table>
                 </div>
-                <div class="zd-tab-item">
+                <div class="tab-item">
                     <table class="table table-hover tag-table" style="width:100%">
                         <thead>
                             <tr>

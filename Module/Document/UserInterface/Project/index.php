@@ -13,11 +13,11 @@ $this->title = '项目：'.$project->name;
         <?php endforeach;?>
     </select>
 </div>
-<div class="zd-panel">
-    <div class="zd-panel-head">
+<div class="panel">
+    <div class="panel-header">
         <h3><?=$this->title?></h3>
     </div>
-    <div class="zd-panel-body">
+    <div class="panel-body">
         <p class="text-muted"><label>项目名称：</label><?=$project->name?></p>
         <p class="text-muted"><label>创建时间：</label><?=$project->created_at?></p>
         <p class="text-muted"><label>更新时间：</label><?=$project->updated_at?></p>

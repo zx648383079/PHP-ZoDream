@@ -11,20 +11,20 @@ $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/category/save')?>
-    <div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+    <div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 详情
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 模板
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('title', true)?>
                 <?=Form::text('name', true)?>
                 <?=Form::radio('type', ['内容', '单页', '外链'])?>
@@ -50,13 +50,13 @@ $this->registerJs($js);
                 <?=Form::checkbox('groups', [$group_list, 'name', 'name'])->value(explode(',', (string)$model->groups))?>
                 <?=Form::text('position')?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Form::text('url')?>
                 <script id="container" style="height: 400px" name="content" type="text/plain" required>
                     <?=$model->content?>
                 </script>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Form::text('category_template')->tip('栏目页，默认继承模型，文件夹为Category')?>
                 <?=Form::text('list_template')->tip('栏目文章搜索页，默认继承模型，文件夹为Category')?>
                 <?=Form::text('show_template')->tip('文章详情页，默认继承模型，文件夹为Content')?>

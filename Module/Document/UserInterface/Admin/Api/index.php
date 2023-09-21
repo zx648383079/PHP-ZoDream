@@ -28,11 +28,11 @@ $this->registerJs($js, View::JQUERY_READY);
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="zd-panel panel-default">
-                    <div class="zd-panel-head">
+                <div class="panel panel-default">
+                    <div class="panel-header">
                         接口详情
                     </div>
-                    <div class="zd-panel-body">
+                    <div class="panel-body">
                         <p class="text-muted"><label>接口名称：</label><?=$api->name?></p>
                         <p class="text-muted"><label>所属项目：</label><?=$project->name?></p>
                         <p class="text-muted"><label>请求类型：</label><?=$api->method?></p>
@@ -47,12 +47,12 @@ $this->registerJs($js, View::JQUERY_READY);
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="zd-panel panel-default">
-                    <div class="zd-panel-head">
+                <div class="panel panel-default">
+                    <div class="panel-header">
                         接口地址
                     </div>
                     <!-- /.panel-heading -->
-                    <div class="zd-panel-body">
+                    <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover">
 
@@ -91,12 +91,12 @@ $this->registerJs($js, View::JQUERY_READY);
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="zd-panel panel-default">
-                    <div class="zd-panel-head">
+                <div class="panel panel-default">
+                    <div class="panel-header">
                         Header参数
                     </div>
                     <!-- /.panel-heading -->
-                    <div class="zd-panel-body">
+                    <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -128,12 +128,12 @@ $this->registerJs($js, View::JQUERY_READY);
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="zd-panel panel-default">
-                    <div class="zd-panel-head">
+                <div class="panel panel-default">
+                    <div class="panel-header">
                         请求参数
                     </div>
                     <!-- /.panel-heading -->
-                    <div class="zd-panel-body">
+                    <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -172,12 +172,12 @@ $this->registerJs($js, View::JQUERY_READY);
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="zd-panel panel-default">
-                    <div class="zd-panel-head">
+                <div class="panel panel-default">
+                    <div class="panel-header">
                         响应参数
                     </div>
                     <!-- /.panel-heading -->
-                    <div class="zd-panel-body">
+                    <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -222,11 +222,11 @@ $this->registerJs($js, View::JQUERY_READY);
         <div class="panel-json">
         <div class="row">
     <div class="col-lg-12">
-        <div class="zd-panel panel-default">
-            <div class="zd-panel-head">
+        <div class="panel panel-default">
+            <div class="panel-header">
                 返回示例<a role="button" href="javascript:refreshMock('<?=$this->url('./@admin/api/mock', ['id' => $api->id])?>');" class="btn fa fa-sync" title="刷新数据" ></a>
             </div>
-            <div class="zd-panel-body">
+            <div class="panel-body">
                 <div class="json-box">
                 </div>
             </div>

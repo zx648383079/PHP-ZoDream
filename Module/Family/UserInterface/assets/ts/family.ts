@@ -71,7 +71,7 @@ function bindEdit() {
             this.trigger(FAMILY_SELECT, res.data.id, res.data.name);
         });
     });
-    $('.zd-tab').on('click', '*[data-action="family"]', function() {
+    $('.tab-box').on('click', '*[data-action="family"]', function() {
         let $this = $(this);
         familyDialog.show();
         familyDialog.on(FAMILY_SELECT, function(id, name) {

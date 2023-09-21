@@ -1,4 +1,4 @@
-.zd-panel {
+.panel {
     width: 33.33%;
     position: absolute;
     top: 0;
@@ -6,7 +6,7 @@
     left: 0;
     background: #fff;
     z-index: 899;
-    .zd-panel-head {
+    .panel-header {
         text-align: center;
         line-height: 30px;
         background: $primary;
@@ -17,7 +17,7 @@
             margin-right: 10px;
         }
     }
-    .zd-panel-body {
+    .panel-body {
         height: 100%;
         padding-bottom: 30px;
         box-sizing: border-box;
@@ -28,7 +28,7 @@
     }
     &.min {
         bottom: auto;
-        .zd-panel-body {
+        .panel-body {
             display: none;
         }
     }

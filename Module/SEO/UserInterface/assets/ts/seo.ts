@@ -1,6 +1,6 @@
 function bindSetting() {
-    $('.zd-tab-head .zd-tab-item').eq(0).trigger('click');
-    $("#field_type,#type").change(function() {
+    $('.tab-header .tab-item').eq(0).trigger('click');
+    $("#field_type,#type").on('change', function() {
         $(this).closest('.input-group').next('.group-property').toggle($(this).val() != 'group');
     }).trigger('change');
     let dialog = $('.option-dialog').dialog();

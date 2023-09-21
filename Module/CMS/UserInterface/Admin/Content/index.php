@@ -1,11 +1,12 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\CMS\Domain\Repositories\SiteRepository;
 /** @var $this View */
 $this->title = sprintf('“%s” 的内容列表', $cat['title']);
 ?>
 
-<div class="panel-container">
+<div class="panel-container page-multiple-table">
     <div class="page-search-bar">
         <?php if($parent_id > 0):?>
         <a class="btn btn-success" href="<?=$this->url('./@admin/content',
@@ -21,21 +22,32 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
             <input type="hidden" name="parent_id" value="<?=$parent_id?>">
             <input type="hidden" name="model_id" value="<?=$model->id?>">
         </form>
-        <a class="btn btn-success pull-right no-jax" href="<?=$this->url('./@admin/content/create', ['cat_id' => $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
+        <div class="btn-group pull-right">
+            <a class="btn btn-success no-jax" href="<?=$this->url('./@admin/content/create', ['cat_id' => $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
+            <a class="btn page-multiple-toggle">批量操作</a>
+        </div>
+        
     </div>
     
     <table class="table table-hover">
         <thead>
         <tr>
+            <th class="page-multiple-th">
+                <i class="checkbox"></i>
+            </th>
             <th>ID</th>
             <th>标题</th>
             <th>分类</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($model_list as $item):?>
             <tr>
+                <td class="page-multiple-td" data-id="<?=$item['id']?>">
+                    <i class="checkbox"></i>
+                </td>
                 <td><?=$item['id']?></td>
                 <td class="text-left">
                     <a href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"><?=$this->text($item['title'])?></a>
@@ -50,11 +62,15 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
                     <?php endif;?>
                 </td>
                 <td>
+                    <?= SiteRepository::formatStatus($item['status']) ?>
+                </td>
+                <td>
                     <div class="btn-group  btn-group-xs">
                         <?php if($model->child_model > 0):?>
                         <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/content', ['parent_id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->child_model])?>">分集</a>
                         <?php endif;?>
                         <a class="btn btn-info" href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank">预览</a>
+                        <a class="btn btn-success">属性</a>
                         <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/content/delete', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">删除</a>
                     </div>
@@ -62,6 +78,16 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
             </tr>
         <?php endforeach; ?>
         </tbody>
+        <tfoot class="page-multiple-action">
+            <tr>
+                <td class="page-multiple-th">
+                    <i class="checkbox"></i>
+                </td>
+                <td class="left" colspan="5">
+                    <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/content/delete', ['id' => 0, 'cat_id' => $item['cat_id'], 'model_id' => $model->id], false)?>">删除选中项（<span class="page-multiple-count">0</span>）</a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
     <?php if($model_list->isEmpty()):?>
         <div class="page-empty-tip">

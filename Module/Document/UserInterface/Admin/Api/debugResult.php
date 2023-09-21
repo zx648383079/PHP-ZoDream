@@ -12,12 +12,12 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
 
-                <div class="zd-tab">
-                    <div class="zd-tab-head">
-                        <div class="zd-tab-item active">Body</div><div class="zd-tab-item">Headers</div><div class="zd-tab-item">Cookies</div>
+                <div class="tab-box">
+                    <div class="tab-header">
+                        <div class="tab-item active">Body</div><div class="tab-item">Headers</div><div class="tab-item">Cookies</div>
                     </div>
-                    <div class="zd-tab-body">
-                        <div class="zd-tab-item active">
+                    <div class="tab-body">
+                        <div class="tab-item active">
                             <?php if(isset($body)):?>
                                 <div class="json-box">
                                 </div>
@@ -31,7 +31,7 @@
                             <?php endif;?>
                         
                         </div>
-                        <div class="zd-tab-item">
+                        <div class="tab-item">
                             <?php if(isset($headers)):?>
                             <?php if(isset($headers['request'])):?>
                             <h5>request</h5>
@@ -54,7 +54,7 @@
                             暂无数据
                             <?php endif;?>
                         </div>
-                        <div class="zd-tab-item">
+                        <div class="tab-item">
                             <p>
                                 暂无数据
                             </p>

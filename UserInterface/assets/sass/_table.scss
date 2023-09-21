@@ -107,3 +107,37 @@ table {
         }
     }
 }
+
+.page-multiple-table {
+    .page-multiple-toggle {
+        color: #dc3545;
+        background-color: transparent;
+        border: 1px solid #d43f3a;
+        cursor: pointer;
+    }
+    .page-multiple-th,
+    .page-multiple-td,
+    .page-multiple-action {
+        display: none;
+    }
+
+    .page-multiple-th,
+    .page-multiple-td {
+        font-weight: 500;
+    }
+
+    &.page-multiple-enable {
+        .page-multiple-toggle {
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+        }
+        .page-multiple-th,
+        .page-multiple-td {
+            display: table-cell;
+        }
+        .page-multiple-action {
+            display: table-footer-group;
+        }
+    }
+}

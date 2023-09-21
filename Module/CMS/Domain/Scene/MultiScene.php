@@ -77,6 +77,7 @@ class MultiScene extends BaseScene {
     public function removeTable(): bool {
         CreateCmsTables::dropTable($this->getMainTable());
         CreateCmsTables::dropTable($this->getExtendTable());
+        CreateCmsTables::dropTable($this->getCommentTable());
         return true;
     }
 

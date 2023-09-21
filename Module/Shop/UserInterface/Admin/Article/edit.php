@@ -17,24 +17,24 @@ $this->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/article/save')?>
-<div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+<div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 详情
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('title', true)?>
                 <?=Form::select('cat_id', [$cat_list], true)?>
                 <?=Form::file('thumb')?>
                 <?=Form::text('keywords')?>
                 <?=Form::textarea('description')?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <script id="container" style="height: 400px" name="content" type="text/plain" required>
                     <?=$model->content?>
                 </script>

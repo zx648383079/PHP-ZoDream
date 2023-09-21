@@ -2,6 +2,7 @@
 namespace Module\CMS\Domain\Model;
 
 use Domain\Concerns\ExtraRule;
+use Module\CMS\Domain\Entities\CommentEntity;
 use Module\CMS\Domain\Repositories\CMSRepository;
 
 /**
@@ -21,43 +22,6 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property integer $agree_type {0:无，1:同意 2:不同意}
  * @property integer $created_at
  */
-class CommentModel extends BaseModel {
-
-    use ExtraRule;
-
-    public static function tableName(): string {
-        return 'cms_comment_'.CMSRepository::siteId();
-    }
-
-    protected function rules(): array {
-        return [
-            'content' => 'required|string:0,255',
-            $this->extraRuleKey => '',
-            'parent_id' => 'int',
-            'position' => 'int',
-            'user_id' => 'required|int',
-            'model_id' => 'required|int',
-            'content_id' => 'required|int',
-            'reply_count' => 'int',
-            'agree_count' => 'int',
-            'disagree_count' => 'int',
-            'created_at' => 'int',
-        ];
-    }
-
-    protected function labels(): array {
-        return [
-            'id' => 'Id',
-            'content' => 'Content',
-            'parent_id' => 'Parent Id',
-            'position' => 'Position',
-            'user_id' => 'User Id',
-            'model_id' => 'Model Id',
-            'content_id' => 'Content Id',
-            'agree_count' => 'Agree Count',
-            'disagree_count' => 'Disagree Count',
-            'created_at' => 'Created At',
-        ];
-    }
+class CommentModel extends CommentEntity {
 
 }

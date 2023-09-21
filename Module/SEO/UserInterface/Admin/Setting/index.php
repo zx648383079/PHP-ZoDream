@@ -31,20 +31,20 @@ JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
 <?=Form::open('./@admin/setting/save')?>
-    <div class="zd-tab option-box">
-        <div class="zd-tab-head">
+    <div class="tab-box option-box">
+        <div class="tab-header">
             <?php foreach($group_list as $group):?>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=$group['name']?>
             </div>
             <?php endforeach;?>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 新增设置
             </div>
         </div>
-        <div class="zd-tab-body">
+        <div class="tab-body">
             <?php foreach($group_list as $group):?>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?php foreach($group['children'] as $item):?>
                     <?php $item['label'] = '<i class="fa fa-edit" data-id="'. $item['id'].'"></i>'.$item['name'];
                     if($item['type'] == 'text'):?>
@@ -68,7 +68,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <?php endforeach;?>
             </div>
             <?php endforeach;?>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Theme::text('field[name]', '', '名称(必填)')?>
                 <?=Theme::select('field[type]', $type_list, 'group', '类型')?>
                 <div class="group-property">

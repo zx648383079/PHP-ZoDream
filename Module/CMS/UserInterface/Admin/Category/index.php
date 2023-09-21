@@ -39,7 +39,7 @@ $this->title = '栏目管理';
                 <td class="text-right">
                     <div class="btn-group">
                         <?php if($item['type'] < 1):?>
-                        <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">查看</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">文章</a>
                         <?php endif;?>
                         <a class="btn btn-info" href="<?=$currentSite->url('./category', ['id' => $item['id']])?>" target="_blank">预览</a>
                         <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>

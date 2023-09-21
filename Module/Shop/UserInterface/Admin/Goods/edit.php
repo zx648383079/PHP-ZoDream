@@ -13,26 +13,26 @@ $this->registerJs($js);
 
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/goods/save')?>
-    <div class="zd-tab">
-        <div class="zd-tab-head">
-            <div class="zd-tab-item active">
+    <div class="tab-box">
+        <div class="tab-header">
+            <div class="tab-item active">
                 基本
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 图片
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 详情
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 其他
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 属性
             </div>
         </div>
-        <div class="zd-tab-body">
-            <div class="zd-tab-item active">
+        <div class="tab-body">
+            <div class="tab-item active">
                 <?=Form::text('name', true)?>
                 <?=Form::text('series_number')->after('<a data-action="sn" href="javascript:;">生成</a>')?>
                 <div class="input-group">
@@ -52,7 +52,7 @@ $this->registerJs($js);
                 <?=Form::text('price', true)?>
                 <?=Form::text('market_price')?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Form::file('thumb')->dialog(true)?>
                 <?=Form::file('picture')->dialog(true)?>
                 <div class="multi-image-box">
@@ -68,12 +68,12 @@ $this->registerJs($js);
                     </div>
                 </div>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <script id="container" style="height: 400px" name="content" type="text/plain" required>
                     <?=$model->content?>
                 </script>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Form::text('weight')?>
                 <?=Form::text('stock')?>
                 <?=Form::text('keywords')?>
@@ -84,7 +84,7 @@ $this->registerJs($js);
                 <?=Form::radio('status', [10 => '上架', 0 => '下架'])?>
                 <?=Form::radio('type', ['普通商品', '卡密商品', '充值商品'])?>
             </div>
-            <div class="zd-tab-item">
+            <div class="tab-item">
                 <?=Form::select('attribute_group_id', [$group_list, ['请选择']])?>
                 <div class="attribute-box">
                     <div class="attr-box"></div>

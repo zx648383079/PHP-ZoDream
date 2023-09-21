@@ -474,11 +474,9 @@ table {
 .option-box {
 	display: grid;
 	grid-template-columns: 150px 1fr;
-	.zd-tab-head,
 	.tab-header {
 		border-right: 1px dotted #767676;
 		box-sizing: border-box;
-		.zd-tab-item,
 		.tab-item {
 			width: 100%;
 		}

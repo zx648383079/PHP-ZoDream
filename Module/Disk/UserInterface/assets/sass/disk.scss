@@ -231,12 +231,9 @@
 
 .dialog.dialog-box {
     .dialog-body {
-        &.zd-tab {
+        &.tab-box {
             padding: 0;
-
-            .zd-tab-head {}
-
-            .zd-tab-body {
+            .tab-body {
                 margin-top: 10px;
 
                 .form-control {

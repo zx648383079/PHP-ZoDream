@@ -8,6 +8,15 @@ use Module\CMS\Domain\ThemeManager;
 
 class SiteRepository {
 
+    const TYPE_CATEGORY = 0;
+    const TYPE_ARTICLE = 1;
+    const TYPE_COMMENT = 2;
+    const TYPE_MODEL = 3;
+    const TYPE_MODEL_FIELD = 4;
+    const TYPE_LINKAGE = 5;
+    const TYPE_LINKAGE_DATA = 5;
+    const TYPE_SITE = 6;
+
     const PUBLISH_STATUS_DRAFT = 0; // 草稿
     const PUBLISH_STATUS_POSTED = 5; // 已发布
     const PUBLISH_STATUS_TRASH = 9; // 垃圾箱
@@ -103,5 +112,14 @@ class SiteRepository {
             call_user_func($cb, $scene, $item);
         }
         CMSRepository::site($source);
+    }
+
+    public static function formatStatus(mixed $status): string {
+        return match (intval($status)) {
+            static::PUBLISH_STATUS_DRAFT => '草稿',
+            static::PUBLISH_STATUS_POSTED => '已发布',
+            static::PUBLISH_STATUS_TRASH => '已删除',
+            default => '--',
+        };
     }
 }

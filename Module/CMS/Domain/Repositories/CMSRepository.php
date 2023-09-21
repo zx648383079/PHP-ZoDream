@@ -2,24 +2,24 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Module\CMS\Domain\Entities\CategoryEntity;
+use Module\CMS\Domain\Entities\CommentEntity;
+use Module\CMS\Domain\Entities\ContentEntity;
+use Module\CMS\Domain\Entities\SiteLogEntity;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\CommentModel;
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Domain\Model\SiteLogModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
-use Module\SEO\Domain\Option;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\PinYin;
 use Zodream\Helpers\Str;
-use Zodream\Http\Uri;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
@@ -171,7 +171,7 @@ class CMSRepository {
 
     public static function generateSite(SiteModel $site) {
         self::$cacheSite = $site;
-        CreateCmsTables::createTable(CategoryModel::tableName(), function (Table $table) {
+        CreateCmsTables::createTable(CategoryEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('title', 100);
@@ -192,14 +192,14 @@ class CMSRepository {
             $table->text('setting')->nullable();
             $table->timestamps();
         });
-        CreateCmsTables::createTable(SiteLogModel::tableName(), function (Table $table) {
+        CreateCmsTables::createTable(SiteLogEntity::tableName(), function (Table $table) {
             $table->id();
             $table->uint('model_id');
             $table->uint('item_type', 1)->default(0);
             $table->uint('item_id');
             $table->uint('user_id');
             $table->uint('action');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
         static::scene()->boot();
         (new ThemeManager())->apply($site->theme);
@@ -216,10 +216,10 @@ class CMSRepository {
         $model_list = ModelModel::query()->get();
         $old = self::$cacheSite;
         self::$cacheSite = $site;
-        CreateCmsTables::dropTable(SiteLogModel::tableName());
-        CreateCmsTables::dropTable(CategoryModel::tableName());
-        CreateCmsTables::dropTable(ContentModel::tableName());
-        CreateCmsTables::dropTable(CommentModel::tableName());
+        CreateCmsTables::dropTable(SiteLogEntity::tableName());
+        CreateCmsTables::dropTable(CategoryEntity::tableName());
+        CreateCmsTables::dropTable(ContentEntity::tableName());
+        CreateCmsTables::dropTable(CommentEntity::tableName());
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }

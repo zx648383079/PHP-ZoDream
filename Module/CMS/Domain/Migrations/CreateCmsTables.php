@@ -1,22 +1,26 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;
-use Module\CMS\Domain\Model\GroupModel;
-use Module\CMS\Domain\Model\LinkageDataModel;
-use Module\CMS\Domain\Model\LinkageModel;
-use Module\CMS\Domain\Model\ModelFieldModel;
-use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Entities\GroupEntity;
+use Module\CMS\Domain\Entities\LinkageDataEntity;
+use Module\CMS\Domain\Entities\LinkageEntity;
+use Module\CMS\Domain\Entities\ModelEntity;
+use Module\CMS\Domain\Entities\ModelFieldEntity;
+use Module\CMS\Domain\Entities\RecycleBinEntity;
+use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Schema\Table;
 
 class CreateCmsTables extends Migration {
 
     public function up(): void {
-        $this->append(ModelFieldModel::tableName(), function (Table $table) {
+        $this->append(ModelFieldEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('field', 100);
@@ -36,7 +40,7 @@ class CreateCmsTables extends Migration {
             $table->string('error_message')->default('');
             $table->string('tab_name', 4)->default('')->comment('编辑组名');
             $table->text('setting')->nullable();
-        })->append(ModelModel::tableName(), function (Table $table) {
+        })->append(ModelEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('table', 100);
@@ -48,18 +52,18 @@ class CreateCmsTables extends Migration {
             $table->string('show_template', 20)->default('');
             $table->string('edit_template', 20)->default('');
             $table->text('setting')->nullable();
-        })->append(GroupModel::tableName(), function (Table $table) {
+        })->append(GroupEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 20);
             $table->uint('type', 2)->default(0);
             $table->string('description')->default('');
-        })->append(LinkageModel::tableName(), function (Table $table) {
+        })->append(LinkageEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('name', 100);
             $table->uint('type', 2)->default(0);
             $table->char('code', 20);
             $table->string('language', 10)->default('');
-        })->append(LinkageDataModel::tableName(), function (Table $table) {
+        })->append(LinkageDataEntity::tableName(), function (Table $table) {
             $table->id();
             $table->uint('linkage_id');
             $table->string('name', 100);
@@ -68,7 +72,7 @@ class CreateCmsTables extends Migration {
             $table->string('description')->default('');
             $table->string('thumb')->default('');
             $table->string('full_name', 200)->default('');
-        })->append(SiteModel::tableName(), function (Table $table) {
+        })->append(SiteEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('title');
             $table->string('keywords')->default('');
@@ -83,6 +87,17 @@ class CreateCmsTables extends Migration {
                 ->comment('发布状态');
             $table->text('options')->nullable();
             $table->timestamps();
+        })->append(RecycleBinEntity::tableName(), function (Table $table) {
+            $table->id();
+            $table->uint('site_id')->default(0);
+            $table->uint('model_id')->default(0);
+            $table->uint('item_type',1)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id')->comment('删除者');
+            $table->string('title');
+            $table->string('remark')->default('');
+            $table->text('data');
+            $table->timestamp(Model::CREATED_AT);
         })->autoUp();
     }
 
@@ -90,7 +105,7 @@ class CreateCmsTables extends Migration {
         RoleRepository::newPermission([
             'cms_manage' => 'CMS管理'
         ]);
-        if (SiteModel::query()->count() > 0) {
+        if (SiteEntity::query()->count() > 0) {
             return;
         }
         CMSRepository::generateSite(SiteModel::create([

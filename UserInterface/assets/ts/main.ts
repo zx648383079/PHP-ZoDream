@@ -89,6 +89,85 @@ function parseAjax(data: IResponse) {
     }
 };
 /**
+ * 绑定多选列表
+ * @param doc 
+ */
+function bindMultipleTable(doc: JQuery<Document>) {
+    const updateCount = (parent: JQuery<HTMLDivElement>) => {
+        const target = parent.find('.page-multiple-count');
+        const items = parent.find('.page-multiple-td .checkbox.checked')
+        target.text(items.length);
+        const link = target.closest('a');
+        const idItems = [];
+        items.each(function() {
+            idItems.push($(this).parent().data('id'));
+        });
+        link.attr('href', link.attr('href').replace(/id=[\d,]*/, 'id=' + idItems.join(',')));
+        link.data('tip', `确定要删除选中的 ${items.length} 条数据？`);
+    };
+    doc.on('click', '.page-multiple-table .page-multiple-toggle', function(e) {
+        e.preventDefault();
+        $(this).closest('.page-multiple-table').toggleClass('page-multiple-enable');
+    }).on('click', '.page-multiple-table .page-multiple-td .checkbox', function() {
+        const $this = $(this);
+        const parent = $this.closest('.page-multiple-table');
+        const checked = !$this.hasClass('checked');
+        $this.toggleClass('checked', checked);
+        if (checked) {
+            let isChecked = true;
+            parent.find('.page-multiple-td .checkbox').each(function() {
+                if (!$(this).hasClass('checked')) {
+                    isChecked = false;
+                }
+            });
+            if (isChecked) {
+                parent.find('.page-multiple-th .checkbox').addClass('checked');
+            }
+        } else {
+            parent.find('.page-multiple-th .checkbox').removeClass('checked');
+        }
+        updateCount(parent);
+    }).on('click', '.page-multiple-table .page-multiple-th .checkbox', function() {
+        const $this = $(this);
+        const parent = $this.closest('.page-multiple-table');
+        const checked = !$this.hasClass('checked');
+        parent.find('.page-multiple-th .checkbox').toggleClass('checked', checked);
+        parent.find('.page-multiple-td .checkbox').toggleClass('checked', checked);
+        updateCount(parent);
+    });
+
+}
+
+/**
+ * 绑定后台的导航菜单
+ * @param doc 
+ */
+function bindNavBar(doc: JQuery<Document>) {
+    doc.on('click', '.sidebar-container .sidebar-container-toggle,.app-header-container .sidebar-container-toggle,.app-wrapper .app-mask', function() {
+        let box = $(this).closest('.app-wrapper').toggleClass('wrapper-min');
+        if (box.find('ul').height() < $(window).height() - 100) {
+            box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
+        }
+        $(window).trigger('resize');
+    }).on('click', '.app-header-container .nav-item a', function(e) {
+        const box = $(this).closest('.nav-item');
+        if (box.find('.drop-bar').length > 0) {
+            box.toggleClass('nav-drop-open');
+        }
+    }).on('click', '.sidebar-container li a', function() {
+        let $this = $(this),
+            box = $this.closest('li');
+        if (box.find('ul').length > 0) {
+            box.toggleClass('expand');
+            return;
+        }
+        $('.sidebar-container li').removeClass('active');
+        box.addClass('active');
+        $this.closest('.app-wrapper').removeClass('wrapper-min');
+    });
+}
+
+/**
  * 转化float
  * @param arg 
  */
@@ -150,12 +229,12 @@ $(function() {
             }
         });
     }
-    $(document).on('click', "a[data-type=refresh]", function() {
+    const doc = $(document).on('click', "a[data-type=refresh]", function() {
         window.location.reload();
     })
     .on('click', "a[data-type=del]", function(e) {
         e.preventDefault();
-        let tip = $(this).attr('data-tip') || '确定删除这条数据？';
+        let tip = $(this).data('tip') || '确定删除这条数据？';
         if (!confirm(tip)) {
             return;
         }
@@ -171,9 +250,9 @@ $(function() {
     .on('click', "a[data-type=ajax]", function(e) {
         e.preventDefault();
         let $this = $(this);
-        let successTip = $this.attr('data-success') || '提交成功！';
-        let errorTip = $this.attr('data-error') || '提交失败！';
-        let callback = $this.attr('data-callback');
+        let successTip = $this.data('success') || '提交成功！';
+        let errorTip = $this.data('error') || '提交失败！';
+        let callback = $this.data('callback');
         let loading = Dialog.loading();
         postJson($this.attr('href'), function(data) {
             loading.close();
@@ -244,13 +323,7 @@ $(function() {
             modal.showCenter();
         };
     })
-    .on('click', ".zd-tab .zd-tab-head .zd-tab-item", function() {
-        let $this = $(this);
-        $this.addClass("active").siblings().removeClass("active");
-        let tab = $this.closest(".zd-tab").find(".zd-tab-body .zd-tab-item").eq($this.index()).addClass("active");
-        tab.siblings().removeClass("active");
-        tab.trigger('tabActived', $this.index());
-    }).on('click', ".tab-box .tab-header .tab-item", function() {
+    .on('click', ".tab-box .tab-header .tab-item", function() {
         let $this = $(this);
         $this.addClass("active").siblings().removeClass("active");
         let tab = $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active");
@@ -273,33 +346,11 @@ $(function() {
             next = next.next('.tree-item');
         }
     })
-    .on('click', ".page-tip .toggle", function() {
+    .on('click', '.page-tip .toggle', function() {
         $(this).closest('.page-tip').toggleClass('min');
     });
-    $('.sidebar-container .sidebar-container-toggle,.app-header-container .sidebar-container-toggle,.app-wrapper .app-mask').on('click', function() {
-        let box = $(this).closest('.app-wrapper').toggleClass('wrapper-min');
-        if (box.find('ul').height() < $(window).height() - 100) {
-            box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
-        }
-        $(window).trigger('resize');
-    });
-    $('.app-header-container .nav-item a').on('click', function(e) {
-        const box = $(this).closest('.nav-item');
-        if (box.find('.drop-bar').length > 0) {
-            box.toggleClass('nav-drop-open');
-        }
-    });
-    $('.sidebar-container li a').on('click',function() {
-        let $this = $(this),
-            box = $this.closest('li');
-        if (box.find('ul').length > 0) {
-            box.toggleClass('expand');
-            return;
-        }
-        $('.sidebar-container li').removeClass('active');
-        box.addClass('active');
-        $this.closest('.app-wrapper').removeClass('wrapper-min');
-    });
+    bindMultipleTable(doc);
+    bindNavBar(doc);
     let autoRedirct = function() {
         let ele = $(".autoRedirct");
         if (ele.length < 1) {

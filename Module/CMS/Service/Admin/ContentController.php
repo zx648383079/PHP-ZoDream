@@ -85,12 +85,12 @@ class ContentController extends Controller {
         ]);
     }
 
-    public function deleteAction(int $id, int $cat_id, int $model_id) {
+    public function deleteAction(int|array $id, int $cat_id, int $model_id) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()
             ->setModel($model);
-        $data = $scene->find($id);
+        $data = $scene->find(is_array($id) ? intval(current($id)) : intval($id));
         if (!empty($data)) {
             $scene->remove($id);
         }

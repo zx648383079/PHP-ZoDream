@@ -244,14 +244,14 @@ $this->registerJs($js)
         <div class="dialog-title">分享文件</div>
         <i class="fa fa-close dialog-close"></i>
     </div>
-    <div class="dialog-body zd-tab">
-        <ul class="zd-tab-head">
-            <li class="zd-tab-item" v-bind:class="{active: modeType < 1}" v-on:click="modeType = 0">链接分享</li>
-            <li class="zd-tab-item" v-bind:class="{active: modeType == 2}" v-on:click="modeType = 2">分享给好友</li>
+    <div class="dialog-body tab-box">
+        <ul class="tab-header">
+            <li class="tab-item" v-bind:class="{active: modeType < 1}" v-on:click="modeType = 0">链接分享</li>
+            <li class="tab-item" v-bind:class="{active: modeType == 2}" v-on:click="modeType = 2">分享给好友</li>
         </ul>
 
-        <div class="zd-tab-body">
-            <div class="zd-tab-item" v-bind:class="{active: modeType < 1}">
+        <div class="tab-body">
+            <div class="tab-item" v-bind:class="{active: modeType < 1}">
                 <div class="row" v-if="result">
                     <input type="text" class="form-control" readonly v-model="result">
                 </div>
@@ -272,7 +272,7 @@ $this->registerJs($js)
                     </div>
                 </div>
             </div>
-            <div class="zd-tab-item" v-bind:class="{active: modeType == 2}">
+            <div class="tab-item" v-bind:class="{active: modeType == 2}">
                 <div class="row">
                     <div class="col-md-5">
                         <ul class="zd_listbox" id="users">
