@@ -13,6 +13,7 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Module\CMS\Domain\Scene\BaseScene;
 use Zodream\Database\Query\Builder;
 use Zodream\Helpers\Json;
@@ -261,7 +262,9 @@ class FuncHelper {
                     ), intval($data[$item['field']]));
             }
         }
-
+        if (!CMSRepository::isPreview()) {
+            $data['status'] = SiteRepository::PUBLISH_STATUS_POSTED;
+        }
         return [$keywords, $data, $order, $page, $per_page, $fields, $isPage];
     }
 
@@ -461,7 +464,7 @@ class FuncHelper {
             if ($data['type'] > 1) {
                 return empty($data['url']) ? 'javascript:;' : static::patchUrl($data['url']);
             }
-            return url('./category', ['id' => $id]);
+            return self::urlEncode('./category', ['id' => $id]);
         }
 
         $data['model'] = self::model($data['model_id']);
@@ -478,7 +481,7 @@ class FuncHelper {
      */
     public static function patchUrl(string $path): string {
         if (!str_starts_with($path, './')) {
-            return url($path);
+            return self::urlEncode($path);
         }
         $args = parse_url($path);
         if (empty($args) || !isset($args['path'])) {
@@ -486,7 +489,7 @@ class FuncHelper {
         }
         $path = $args['path'];
         if (empty($args['query'])) {
-            return url($path);
+            return self::urlEncode($path);
         }
         $request = request();
         $data = [];
@@ -502,7 +505,7 @@ class FuncHelper {
             }
             $data[$k] = $value;
         }
-        return url($path, $data);
+        return self::urlEncode($path, $data);
     }
 
     public static function channelRoot(mixed $id) {
@@ -738,7 +741,7 @@ class FuncHelper {
      * @throws \Exception
      */
     public static function formAction(int|string $id): string {
-        return url('./form/save', [
+        return self::urlEncode('./form/save', [
             is_numeric($id) ? 'id' : 'model' => $id
         ]);
     }
@@ -881,10 +884,7 @@ class FuncHelper {
             'category' => $data['cat_id'],
             'model' => $data['model_id']
         ];
-        if (isset($_GET['preview'])) {
-            $args['preview'] = $_GET['preview'];
-        }
-        return url('./content', $args);
+        return self::urlEncode('./content', $args);
     }
 
     public static function url(mixed $data): string {
@@ -896,9 +896,26 @@ class FuncHelper {
             $args['preview'] = $_GET['preview'];
         }
         if (!is_null($data) && Str::endWith($data, ',false')) {
-            return url(substr($data, 0, strlen($data) - 6), $args, null, false);
+            return self::urlEncode(substr($data, 0, strlen($data) - 6), $args, null, false);
         }
-        return url($data, $args);
+        return self::urlEncode($data, $args);
+    }
+
+    /**
+     * 增加传递预览值
+     * @param mixed|null $path
+     * @param array $parameters
+     * @param bool|null $secure
+     * @param bool $encode
+     * @return string
+     * @throws \Exception
+     */
+    protected static function urlEncode(mixed $path = null, array $parameters = [],
+                                        ?bool $secure = null, bool $encode = true): string {
+        if (CMSRepository::isPreview()) {
+            $parameters[CMSRepository::PREVIEW_KEY] = $_GET[CMSRepository::PREVIEW_KEY];
+        }
+        return url($path, $parameters, $secure, $encode);
     }
 
     protected static function getCommentQuery(array $param): array {
@@ -978,7 +995,7 @@ class FuncHelper {
             unset($data[$name]);
         }
         $data[$name] = $val;
-        return url('./category/list', $data);
+        return self::urlEncode('./category/list', $data);
     }
 
     /**

@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Infrastructure\Editor;
 /** @var $this View */
 $this->title = $model->id > 0 ? '栏目编辑' : '新增栏目';
 $js = <<<JS
@@ -52,9 +53,7 @@ $this->registerJs($js);
             </div>
             <div class="tab-item">
                 <?=Form::text('url')?>
-                <script id="container" style="height: 400px" name="content" type="text/plain" required>
-                    <?=$model->content?>
-                </script>
+                <?= Editor::html('content', $model->content) ?>
             </div>
             <div class="tab-item">
                 <?=Form::text('category_template')->tip('栏目页，默认继承模型，文件夹为Category')?>

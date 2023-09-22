@@ -37,13 +37,25 @@ $this->title = '栏目管理';
                 <td><?=$item['groups']?></td>
                 <td><?=intval($item['content_count'])?></td>
                 <td class="text-right">
-                    <div class="btn-group">
+                    <div class="btn-group toggle-icon-text">
                         <?php if($item['type'] < 1):?>
-                        <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>">文章</a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>" title="管理栏目下文章列表">
+                            <span>文章</span>
+                            <i class="fa fa-th-list"></i>
+                        </a>
                         <?php endif;?>
-                        <a class="btn btn-info" href="<?=$currentSite->url('./category', ['id' => $item['id']])?>" target="_blank">预览</a>
-                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' => $item['id']])?>">删除</a>
+                        <a class="btn btn-info" href="<?=$currentSite->url('./category', ['id' => $item['id']])?>" target="_blank" title="预览查实际显示效果">
+                            <span>预览</span>
+                            <i class="fa fa-globe"></i>
+                        </a>
+                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>"  title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/category/delete', ['id' => $item['id']])?>" title="删除此栏目">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

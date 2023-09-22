@@ -64,6 +64,6 @@ class AdminMenu {
      * @return array
      */
     public static function build(string $name, string $icon, string $url = '', array $children = []): array {
-        return [$name, empty($url) ? false : $url, $icon, $children];
+        return [$name, empty($url) ? false : url($url), $icon, $children];
     }
 }

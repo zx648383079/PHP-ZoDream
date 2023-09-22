@@ -84,8 +84,8 @@ footer {
     .sub-nav {
         display: none;
         position: absolute;
-        background-color: #fff;
-        box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.2);
+        // background-color: #fff;
+        box-shadow: 0px 2px 8px 1px $shadow;
         left: 0;
         width: 100%;
         margin-top: -5px;
@@ -270,6 +270,10 @@ footer {
         }
         .item-body {
             padding: .5rem;
+        }
+        .item-meta {
+            height: 3rem;
+            overflow: hidden;
         }
         .item-meta,
         .item-time {
@@ -706,7 +710,7 @@ footer {
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .metro-grid {
         a {
             width: 120px;
@@ -725,13 +729,16 @@ footer {
         }
         ul {
             display: none;
-            background-color: $secondary;
+            // background-color: $panel;
             li {
                 display: block;
                 line-height: 40px;
                 height: auto;
             }
             .sub-nav {
+                background-color: transparent;
+                box-shadow: inset 0px 5px 5px -5px #000,
+                            inset 0px -5px 5px -5px #000;
                 display: block;
                 position: static;
                 margin: 0;

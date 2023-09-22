@@ -9,6 +9,7 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ContentRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ContentController extends Controller {
     public function indexAction(int $cat_id, int $model_id = 0, string $keywords = '', int $parent_id = 0) {
@@ -104,6 +105,19 @@ class ContentController extends Controller {
         return $this->renderData([
             'url' => $this->getUrl('content', $queries)
         ]);
+    }
+
+    public function dialogAction(Input $input, int $id, int $cat_id, int $model_id) {
+        if ($input->isAjax()) {
+            $this->layout = '';
+        }
+        $cat = CategoryModel::find($cat_id);
+        $model = ModelModel::find($model_id);
+        $scene = CMSRepository::scene()->setModel($model);
+        $data = $scene->find($id);
+        return $this->show('dialog', compact('id',
+            'cat_id', 'cat', 'scene', 'model',
+            'data'));
     }
 
     public function searchAction(int $model = 0, string $keywords = '', int $channel = 0,

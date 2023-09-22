@@ -17,7 +17,7 @@ class Controller extends ModuleController {
 
     public function rules() {
         return [
-            '*' => 'cms_manage'
+            '*' => CMSRepository::MANAGE_ROLE
         ];
     }
 

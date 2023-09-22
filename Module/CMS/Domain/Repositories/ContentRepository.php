@@ -54,13 +54,17 @@ class ContentRepository {
     protected static function formatValue(array &$items) {
         foreach ($items as &$item) {
             foreach ([
-                'updated_at', 'created_at'
+                'updated_at', 'created_at',
+                'status'
                      ] as $key) {
-                if (isset($item[$key])) {
-                    $item[$key] = Time::format($item[$key]);
+                if (!isset($item[$key])) {
+                    continue;
                 }
+                $item[$key] = $key === 'status' ? SiteRepository::formatStatus($item[$key])
+                    : Time::format($item[$key]);
             }
         }
+        unset($item);
     }
 
     protected static function searchField(SceneInterface $scene) {

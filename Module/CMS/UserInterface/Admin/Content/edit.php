@@ -44,7 +44,10 @@ $this->title = $model->id > 0 ? '文章编辑' : '新增文章';
     </div>
 
     <div class="btn-group">
+        <?php if($data['status'] != 5):?>
         <button type="submit" class="btn btn-success">确认保存</button>
+        <?php endif;?>
+        <button type="button" class="btn btn-info" data-type="publish">保存并发布</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
     </div>
     <input type="hidden" name="id" value="<?=$id?>">

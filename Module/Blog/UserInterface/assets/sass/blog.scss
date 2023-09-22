@@ -3,11 +3,17 @@
 @mixin active() {
     background: $active;
     color: $activeText;
+    a {
+        color: $hoverText;
+    }
 }
 
 @mixin hover() {
     background: $hover;
     color: $hoverText;
+    a {
+        color: $hoverText;
+    }
 }
 
 @import './markdown';
@@ -69,7 +75,7 @@
                         top: 63px;
                         z-index: 99;
                         line-height: 25px;
-                        background: $bodyText;
+                        background: $panel;
                         width: 100%;
                         display: none;
                         li {
@@ -104,7 +110,7 @@
     }
     .book-body {
         margin-right: 200px;
-        background-color: $bodyText;
+        background-color: $panel;
         padding: 30px 15px;
         min-height: 400px;
         position: relative;
@@ -154,7 +160,7 @@
                 line-height: 30px;
                 text-align: center;
                 position: relative;
-                background: $bodyText;
+                background: $panel;
                 &:after {
                     position: absolute;
                     content: "";
@@ -283,7 +289,7 @@
                     width: 40px;
                     text-align: center;
                     &.active {
-                        background-color: $bodyText;
+                        background-color: $panel;
                         color: $linkText;
                         position: relative;
                         &::after {
@@ -359,7 +365,7 @@
         &.comment {
             margin-top: 50px;
             margin-right: 200px;
-            background: $bodyText;
+            background: $panel;
             padding: 15px;
             position: relative;
         }
@@ -458,7 +464,7 @@
     float: left;
     li {
         list-style: none;
-        background: $bodyText;
+        background: $panel;
         width: 40px;
         line-height: 40px;
         text-align: center;
@@ -578,7 +584,7 @@
             width: 200px;
             text-align: center;
             top: 30px;
-            background: $bodyText;
+            background: $panel;
             font-size: 20px;
             line-height: 40px;
             span {
@@ -628,7 +634,7 @@
     .book-chapter,
     .book-new {
         li {
-            background: $bodyText;
+            background: transparent;
             list-style: none;
             width: 150px;
             line-height: 30px;
@@ -700,7 +706,7 @@
         padding-left: 10px;
     }
     dl {
-        background: $bodyText;
+        background: transparent;
         border-bottom: 1px solid $linkHoverText;
         dt {
             line-height: 30px;
@@ -722,7 +728,7 @@
         }
         &:hover {
             dt {
-                @include active();
+                @include hover();
             }
             dd {
                 display: block;
@@ -734,7 +740,7 @@
 .book-side-nav {
     li {
         font-size: 12px;
-        background: $bodyText;
+        background: transparent;
         list-style: none;
         width: 150px;
         line-height: 30px;

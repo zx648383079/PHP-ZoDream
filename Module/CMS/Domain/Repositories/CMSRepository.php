@@ -25,6 +25,8 @@ use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
 
 class CMSRepository {
+    const MANAGE_ROLE = 'cms_manage';
+    const PREVIEW_KEY = '_preview';
 
     /**
      * @var SiteModel
@@ -38,12 +40,16 @@ class CMSRepository {
 
     private static ?Directory $viewFolder = null;
 
+    public static function isPreview(): bool {
+        return array_key_exists(self::PREVIEW_KEY, $_GET);
+    }
+
     public static function theme() {
         if (!empty(self::$cacheTheme)) {
             return self::$cacheTheme;
         }
-        $preview = request()->get('preview');
-        if (!empty($preview)) {
+        $preview = request()->get(self::PREVIEW_KEY);
+        if (!empty($preview) && !is_numeric($preview)) {
             return self::$cacheTheme = $preview;
         }
         if (empty(static::site()->theme)) {
@@ -128,7 +134,7 @@ class CMSRepository {
     }
 
     protected static function matchSite(string $host, string $path): int {
-        $items = CacheRepository::getSiteCache();
+        $items = self::isPreview() ? SiteRepository::getAll() : CacheRepository::getSiteCache();
         if (empty($items)) {
             return 0;
         }

@@ -28,7 +28,11 @@ $this->title = '基本设置';
 $js = <<<JS
 bindSetting();
 JS;
-$this->registerJs($js, View::JQUERY_READY);
+$this->registerCssFile([
+    '@seo.css'
+])->registerJsFile([
+    '@seo.min.js'
+])->registerJs($js, View::JQUERY_READY);
 ?>
 <?=Form::open('./@admin/setting/save')?>
     <div class="tab-box option-box">

@@ -512,11 +512,31 @@ i {
     }
 }
 
+.toggle-icon-text {
+    span {
+        display: none;
+    }
+    i {
+        display: inline-block;
+    }
+}
+
 @keyframes borderLoop {
     from {
         left: 0;
     }
     to {
         left: 80%;
+    }
+}
+
+@media (min-width: 48rem) {
+    .toggle-icon-text {
+        span {
+            display: inline-block;
+        }
+        i {
+            display: none;
+        }
     }
 }

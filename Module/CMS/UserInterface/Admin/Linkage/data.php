@@ -32,10 +32,19 @@ $this->title = '联动项列表';
                 <td class="text-left"><?=$item['name']?></td>
                 <td class="text-center"><?=$item['children_count']?></td>
                 <td>
-                    <div class="btn-group">
-                        <a class="btn btn-info" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>">下一级</a>
-                        <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit_data', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete_data', ['id' => $item->id])?>">删除</a>
+                    <div class="btn-group toggle-icon-text">
+                        <a class="btn btn-info" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>" title="管理下一级子项列表">
+                            <span>下一级</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/linkage/edit_data', ['id' => $item->id])?>" title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/linkage/delete_data', ['id' => $item->id])?>" title="删除此项">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

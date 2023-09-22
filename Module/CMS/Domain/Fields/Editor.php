@@ -67,20 +67,10 @@ class Editor extends BaseField {
                 'value' => $value
             ];
         }
-        $id = 'editor_'.$field['id'];
-        $js = <<<JS
-$('#{$id}').editor();
-JS;
-        view()
-//            ->registerJsFile('@jquery.editor.min.js')
-//            ->registerCssFile('@editor.css')
-            ->registerJs($js, View::JQUERY_READY);
+        $editor = \Infrastructure\Editor::html($field['field'], $value);
         return <<<HTML
 <div>{$field['name']}</div>
-<script id="{$id}" style="height: 400px" name="{$field['field']}" type="text/plain">
-    {$value}
-</script>
+{$editor}
 HTML;
-
     }
 }

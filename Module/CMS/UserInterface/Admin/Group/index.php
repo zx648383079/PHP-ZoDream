@@ -22,9 +22,16 @@ $this->title = '分组列表';
             <tr>
                 <td><?=$item->name?></td>
                 <td>
-                    <div class="btn-group">
-                        <a class="btn btn-default" href="<?=$this->url('./@admin/group/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/group/delete', ['id' => $item->id])?>">删除</a>
+                    <div class="btn-group toggle-icon-text">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/group/edit', ['id' => $item->id])?>"
+                        title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/group/delete', ['id' => $item->id])?>" title="删除此分组">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

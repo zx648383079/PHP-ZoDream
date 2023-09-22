@@ -29,10 +29,12 @@ use Module\CMS\Domain\Repositories\SiteRepository;
         SiteRepository::PUBLISH_STATUS_POSTED => '发布',
     ], $data['status'], '状态')?>
 
+    <?php if(!request()->isAjax()):?>
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger">取消修改</a>
     </div>
+    <?php endif;?>
     <input type="hidden" name="id" value="<?=$id?>">
     <input type="hidden" name="cat_id" value="<?=$cat_id?>">
     <input type="hidden" name="model_id" value="<?=$model->id?>">

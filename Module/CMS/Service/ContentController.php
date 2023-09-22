@@ -4,7 +4,7 @@ namespace Module\CMS\Service;
 
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Repositories\CMSRepository;
-use Module\CMS\Module;
+use Module\CMS\Domain\Repositories\SiteRepository;
 
 class ContentController extends Controller {
 
@@ -24,6 +24,9 @@ class ContentController extends Controller {
         $data = $scene->find($id);
         $parent = null;
         if (empty($data)) {
+            return $this->redirect('./');
+        }
+        if (!CMSRepository::isPreview() && $data['status'] != SiteRepository::PUBLISH_STATUS_POSTED) {
             return $this->redirect('./');
         }
         $data['view_count'] ++;

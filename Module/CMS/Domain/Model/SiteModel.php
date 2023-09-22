@@ -3,6 +3,7 @@ namespace Module\CMS\Domain\Model;
 
 use Domain\Model\Model;
 use Module\CMS\Domain\Entities\SiteEntity;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Helpers\Json;
 use Zodream\Http\Uri;
 
@@ -58,12 +59,13 @@ class SiteModel extends SiteEntity {
     public function getPreviewUrlAttribute() {
         if ($this->match_type < 1) {
             $uri = new Uri(url('./'));
-            return (string)$uri->setHost($this->match_rule);
+            return (string)$uri->setHost($this->match_rule)->addData(CMSRepository::PREVIEW_KEY, 1);
         }
-        return url(sprintf('/%s', $this->match_rule));
+        return url(sprintf('/%s', $this->match_rule), [CMSRepository::PREVIEW_KEY => 1]);
     }
 
     public function url(string $path, array $data = []) {
+        $data[CMSRepository::PREVIEW_KEY] = 1;
         $rule = $this->match_rule;
         if ($this->match_type < 1) {
             $uri = new Uri(url($path, $data));

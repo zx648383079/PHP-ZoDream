@@ -35,14 +35,29 @@ $this->title = '站点列表';
                         <?php else:?>
                             <a class="active" href="javascript:;">管理中</a>
                         <?php endif;?>
-                    <div class="btn-group">
+                    <div class="btn-group toggle-icon-text">
                         <?php if(!$item->is_default):?>
-                            <a class="btn btn-success" data-type="ajax" href="<?=$this->url('./@admin/site/default', ['id' => $item->id])?>">设为默认</a>
+                            <a class="btn btn-success" data-type="ajax" href="<?=$this->url('./@admin/site/default', ['id' => $item->id])?>" title="设置此站点为前后台默认显示站点">
+                                <span>设为默认</span>
+                                <i class="fa fa-anchor"></i>
+                            </a>
                         <?php endif;?>
-                        <a class="btn btn-info" href="<?= $item->preview_url ?>" target="_blank">预览</a>
-                        <a class="btn btn-primary" href="<?=$this->url('./@admin/site/option', ['id' => $item->id])?>">配置</a>
-                        <a class="btn btn-default" href="<?=$this->url('./@admin/site/edit', ['id' => $item->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/site/delete', ['id' => $item->id])?>">删除</a>
+                        <a class="btn btn-info" href="<?= $item->preview_url ?>" target="_blank" title="预览查实际显示效果">
+                            <span>预览</span>
+                            <i class="fa fa-globe"></i>
+                        </a>
+                        <a class="btn btn-primary" href="<?=$this->url('./@admin/site/option', ['id' => $item->id])?>" title="配置站点特殊信息">
+                            <span>配置</span>
+                            <i class="fa fa-cog"></i>
+                        </a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/site/edit', ['id' => $item->id])?>" title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/site/delete', ['id' => $item->id])?>" title="删除此站点">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

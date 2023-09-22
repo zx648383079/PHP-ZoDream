@@ -122,4 +122,25 @@ class SiteRepository {
             default => '--',
         };
     }
+
+    public static function getAll(): array {
+        if (auth()->guest()) {
+            return CacheRepository::getSiteCache();
+        }
+        $user = auth()->user();
+        if (!$user->isAdministrator() && !$user->hasRole(CMSRepository::MANAGE_ROLE)) {
+            return CacheRepository::getSiteCache();
+        }
+        $data = SiteModel::query()->asArray()
+            ->orderBy('id', 'asc')
+            ->get('id', 'is_default', 'match_type', 'match_rule');
+        return array_map(function ($item) {
+            return [
+                'id' => intval($item['id']),
+                'is_default' => $item['is_default'] > 0,
+                'match_type' => intval($item['match_type']),
+                'match_rule' => empty($item['match_rule']) ? '' : ltrim($item['match_rule'], '/')
+            ];
+        }, $data);
+    }
 }

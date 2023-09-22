@@ -33,9 +33,15 @@ $this->title = sprintf('“%s” 的表单列表', $model['name']);
                     <?=$item['title']?>
                 </td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/form/edit', ['id' => $item['id'], 'model_id' => $item['model_id']])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/form/delete', ['id' => $item['id'], 'model_id' => $item['model_id']])?>">删除</a>
+                    <div class="btn-group toggle-icon-text">
+                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/form/edit', ['id' => $item['id'], 'model_id' => $item['model_id']])?>" title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/form/delete', ['id' => $item['id'], 'model_id' => $item['model_id']])?>" title="删除此表单">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

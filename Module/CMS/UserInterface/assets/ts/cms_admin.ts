@@ -124,5 +124,23 @@ $(function() {
         <div class="item-label">${label}</div>
         <input type="hidden" name="${name}[]" value="${val}">
     </div>`);
+    }).on('click', 'a[data-type=form]', function(e) {
+        e.preventDefault();
+        Dialog.box({
+            url: $(this).attr('href'), 
+            title: '快速编辑属性', 
+            ondone: function() {
+                const form = this.find('form') as JQuery<HTMLFormElement>;
+                ajaxForm(form.attr('action'), form.serialize(), res => {
+                    this.close();
+                    parseAjax(res);
+                });
+            }
+        });
+    }).on('click', 'button[data-type=publish]', function(e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        form.append('<input type="hidden" name="status" value="5">');
+        form.trigger('submit');
     });
 });

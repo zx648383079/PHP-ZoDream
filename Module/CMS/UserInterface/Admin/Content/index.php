@@ -65,14 +65,29 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
                     <?= SiteRepository::formatStatus($item['status']) ?>
                 </td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
+                    <div class="btn-group toggle-icon-text">
                         <?php if($model->child_model > 0):?>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/content', ['parent_id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->child_model])?>">分集</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/content', ['parent_id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->child_model])?>" title="管理分集列表">
+                            <span>分集</span>
+                            <i class="fa fa-th-list"></i>
+                        </a>
                         <?php endif;?>
-                        <a class="btn btn-info" href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank">预览</a>
-                        <a class="btn btn-success">属性</a>
-                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">编辑</a>
-                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/content/delete', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>">删除</a>
+                        <a class="btn btn-info" href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"  title="预览查实际显示效果">
+                            <span>预览</span>
+                            <i class="fa fa-globe"></i>
+                        </a>
+                        <a class="btn btn-success" data-type="form" href="<?=$this->url('./@admin/content/dialog', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="快速编辑发布">
+                            <span>属性</span>
+                            <i class="fa fa-cog"></i>
+                        </a>
+                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="编辑详细信息">
+                            <span>编辑</span>
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/content/delete', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="删除此文章">
+                            <span>删除</span>
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

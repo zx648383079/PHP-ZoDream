@@ -103,7 +103,7 @@ class CreateCmsTables extends Migration {
 
     public function seed(): void {
         RoleRepository::newPermission([
-            'cms_manage' => 'CMS管理'
+            CMSRepository::MANAGE_ROLE => 'CMS管理'
         ]);
         if (SiteEntity::query()->count() > 0) {
             return;
