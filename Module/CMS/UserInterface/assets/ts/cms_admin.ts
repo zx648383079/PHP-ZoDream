@@ -47,7 +47,7 @@ function bindCat() {
     $('#title').on('blur', function() {
         pinyinIfEmpty(name, $(this).val() as any);
     });
-    $('#container').editor();
+    // $('#container').editor();
 }
 
 function pinyinIfEmpty(ele: JQuery, val: string) {

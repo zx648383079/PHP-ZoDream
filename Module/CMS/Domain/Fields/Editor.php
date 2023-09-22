@@ -67,7 +67,13 @@ class Editor extends BaseField {
                 'value' => $value
             ];
         }
-        $editor = \Infrastructure\Editor::html($field['field'], $value);
+        $option = static::filterData(static::fieldSetting($field, 'option'), [
+            'width' => '',
+            'height' => '',
+            'is_mb_auto' => 1,
+            'editor_mode' => 0
+        ]);
+        $editor = \Infrastructure\Editor::html($field['field'], $value, $option);
         return <<<HTML
 <div>{$field['name']}</div>
 {$editor}

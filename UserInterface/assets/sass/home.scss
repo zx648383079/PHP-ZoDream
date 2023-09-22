@@ -219,7 +219,7 @@ footer {
             text-decoration: none;
             word-break: break-all;
             .item-time {
-                color: #ccc;
+                color: $bodySecondaryText;
                 font-size: 14px;
                 text-align: right;
             }
@@ -235,7 +235,7 @@ footer {
             flex: 1;
         }
         .time {
-            color: $secondaryText;
+            color: $bodySecondaryText;
             font-size: .8rem;
             height: 2.5rem;
             word-break: keep-all;
@@ -248,7 +248,7 @@ footer {
         }
         .item-meta {
             padding: 0 .5rem .5rem;
-            color: #767676;
+            color: $bodySecondaryText;
             font-size: .8rem;
         }
         &:hover {
@@ -277,7 +277,7 @@ footer {
         }
         .item-meta,
         .item-time {
-            color: #767676;
+            color: $bodySecondaryText;
             font-size: .8rem;
             padding-top: .5rem;
         }

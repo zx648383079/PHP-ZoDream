@@ -12,20 +12,25 @@ final class Editor {
 HTML;
     }
 
-    public static function html(string $name, mixed $content): string {
-        return config('view.editor') === 'ueditor' ? self::ueditor($name, $content) : self::editor($name, $content);
+    public static function html(string $name, mixed $content, array $option = []): string {
+        if (!isset($option['height']) || $option['height'] < 100) {
+            $option['height'] = 400;
+        }
+        return config('view.editor') === 'ueditor' ?
+            self::ueditor($name, $content, $option) :
+            self::editor($name, $content, $option);
     }
 
-    public static function ueditor(string $name, mixed $content): string {
+    public static function ueditor(string $name, mixed $content, array $option = []): string {
         $id = 'editor_'.substr(md5($name), 0, 6);
-        $options = self::getUEditorOptions(false);
+        $options = self::getUEditorOptions(isset($option['editor_mode']) && $option['editor_mode'] > 0);
         $js = <<<JS
 var ue = UE.getEditor('{$id}', {$options});
 JS;
         view()->registerJsFile('/assets/ueditor/ueditor.config.js')
             ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
         return <<<HTML
-<script id="{$id}" style="height: 400px" name="{$name}" type="text/plain">{$content}</script>
+<script id="{$id}" style="height: {$option['height']}px" name="{$name}" type="text/plain">{$content}</script>
 HTML;
     }
 
@@ -52,7 +57,7 @@ HTML;
         ]);
     }
 
-    public static function editor(string $name, mixed $content): string {
+    public static function editor(string $name, mixed $content, array $option = []): string {
         $id = 'editor_'.substr(md5($name), 0, 6);
         $js = <<<JS
 $('#{$id}').editor();
@@ -62,7 +67,7 @@ JS;
             ->registerCssFile('@editor.css')
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
-<script id="{$id}" style="height: 400px" name="{$name}" type="text/plain">{$content}</script>
+<script id="{$id}" style="height: {$option['height']}px" name="{$name}" type="text/plain">{$content}</script>
 HTML;
     }
 }

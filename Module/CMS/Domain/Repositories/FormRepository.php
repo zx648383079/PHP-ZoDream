@@ -4,10 +4,10 @@ namespace Module\CMS\Domain\Repositories;
 
 use Exception;
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelModel;
-use Zodream\Image\Captcha;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
@@ -45,8 +45,7 @@ class FormRepository {
         $id = 0;
         $captcha = $input->string('captcha');
         if (!empty($captcha)) {
-            $verifier = new Captcha();
-            if (!$verifier->verify($captcha)) {
+            if (!CaptchaRepository::verify($captcha)) {
                 throw new Exception('验证码错误');
             }
         } elseif (BaseField::fieldSetting($model, 'open_captcha')) {

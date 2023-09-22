@@ -10,4 +10,15 @@ class HomeController extends Controller {
         $items = PluginRepository::getList($keywords);
         return $this->show(compact('items'));
     }
+
+    public function syncAction() {
+        try {
+            PluginRepository::sync();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData([
+            'refresh' => true
+        ]);
+    }
 }

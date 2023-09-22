@@ -145,6 +145,7 @@ class ContentRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $scene = static::apply($site, $category, $modelId);
+        // $data = $scene->validate($data);
         if ($id > 0) {
             $scene->update($id, $data);
         } else {
@@ -152,9 +153,6 @@ class ContentRepository {
         }
         if ($id) {
             event(new ManageAction('cms_content_edit', '', 33, $id));
-        }
-        if ($scene->hasError()) {
-            throw new \Exception($scene->getFirstError());
         }
         $data['id'] = $id;
         return $data;

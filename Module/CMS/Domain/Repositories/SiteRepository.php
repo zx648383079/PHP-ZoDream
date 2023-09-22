@@ -14,8 +14,9 @@ class SiteRepository {
     const TYPE_MODEL = 3;
     const TYPE_MODEL_FIELD = 4;
     const TYPE_LINKAGE = 5;
-    const TYPE_LINKAGE_DATA = 5;
-    const TYPE_SITE = 6;
+    const TYPE_LINKAGE_DATA = 6;
+    const TYPE_GROUP = 7;
+    const TYPE_SITE = 8;
 
     const PUBLISH_STATUS_DRAFT = 0; // 草稿
     const PUBLISH_STATUS_POSTED = 5; // 已发布

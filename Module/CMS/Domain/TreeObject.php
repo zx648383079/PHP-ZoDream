@@ -30,8 +30,8 @@ class TreeObject implements \IteratorAggregate {
             if ($i === false) {
                 continue;
             }
-            for (;$i < count($path) - 1; ++ $i) {
-                $id = $path[$i];
+            for ($j = count($path) - 1; $j > $i; $j --) {
+                $id = $path[$j];
                 if (in_array($id, $items)) {
                     continue;
                 }
@@ -73,6 +73,9 @@ class TreeObject implements \IteratorAggregate {
     public function hasLink(int|string $itemId, int|string $targetId): int {
         $itemId = intval($itemId);
         $targetId = intval($targetId);
+        if (empty($itemId) || empty($targetId)) {
+            return 0;
+        }
         if ($itemId === $targetId) {
             return 2;
         }

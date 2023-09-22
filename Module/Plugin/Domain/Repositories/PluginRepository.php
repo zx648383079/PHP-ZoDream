@@ -79,11 +79,11 @@ final class PluginRepository {
             }
             $data = require (string)$file;
             if (empty($data) || !is_array($data)) {
-                return false;
+                return true;
             }
             $data['path'] = $item->getRelative($root);
             $items[] = $data;
-            return false;
+            return true;
         });
         $exist = PluginEntity::query()->pluck('id', 'path');
         $add = [];
