@@ -32,8 +32,9 @@ class Controller extends ModuleController {
         $cat_menu = array_filter($cat_menu, function ($item) {
             return $item['type'] < 1;
         });
-        $form_list = ModelModel::where('type', 1)->get('id,name');
-        $this->send(compact('cat_menu', 'form_list', 'currentSite'));
+        $model_menu = ModelModel::query()->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')->get('id', 'name', 'type');
+        $this->send(compact('cat_menu', 'model_menu', 'currentSite'));
     }
 
     protected function getUrl(mixed $path, array $args = []): string {

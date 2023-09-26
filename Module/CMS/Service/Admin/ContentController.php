@@ -4,7 +4,6 @@ namespace Module\CMS\Service\Admin;
 
 use Module\Auth\Domain\Events\ManageAction;
 use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ContentRepository;
@@ -12,23 +11,32 @@ use Module\CMS\Domain\Repositories\ModelRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ContentController extends Controller {
-    public function indexAction(int $cat_id, int $model_id = 0, string $keywords = '', int $parent_id = 0) {
-        $cat = CategoryModel::find($cat_id);
-        if ($model_id < 1) {
-            $model_id = $cat->model_id;
+    public function indexAction(int $cat_id = 0, int $model_id = 0,
+                                string $keywords = '', int $parent_id = 0, int $page = 1) {
+        if ($cat_id <= 0 && $model_id <= 0) {
+            return $this->redirectWithMessage('./@admin', '参数错误');
+        }
+        $cat = null;
+        if ($cat_id > 0) {
+            $cat = CategoryModel::find($cat_id);
+            if ($model_id < 1) {
+                $model_id = $cat->model_id;
+            }
         }
         $model = ModelModel::find($model_id);
         if (empty($model)) {
             return $this->redirectWithMessage('./@admin', '栏目模型配置错误');
         }
-        $scene = CMSRepository::scene()->setModel($model);
-        $model_list = $scene->search($keywords,
-            compact('cat_id', 'parent_id'), 'id desc');
+        try {
+            $model_list = ContentRepository::getList(CMSRepository::siteId(), $cat_id, $keywords, $parent_id, $model_id, $page);
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage('./@admin', $ex->getMessage());
+        }
         return $this->show(compact('model_list', 'cat', 'keywords', 'parent_id', 'model'));
     }
 
-    public function createAction(int $cat_id, int $model_id, int $parent_id = 0) {
-        return $this->editAction(0, $cat_id, $model_id, $parent_id);
+    public function createAction(int $model_id, int $cat_id = 0, int $parent_id = 0) {
+        return $this->editAction(0, $model_id, $cat_id, $parent_id);
     }
 
     /**
@@ -40,9 +48,12 @@ class ContentController extends Controller {
      * @return \Zodream\Infrastructure\Contracts\Http\Output
      * @throws \Exception
      */
-    public function editAction(int $id, int $cat_id, int $model_id, int $parent_id = 0) {
-        $cat = CategoryModel::find($cat_id);
+    public function editAction(int $id, int $model_id, int $cat_id = 0, int $parent_id = 0) {
+        $cat = $cat_id > 0 ? CategoryModel::find($cat_id) : null;
         $model = ModelModel::find($model_id);
+        if (empty($model)) {
+            return $this->redirectWithMessage('./@admin', '栏目模型配置错误');
+        }
         $scene = CMSRepository::scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [
             'parent_id' => $parent_id
@@ -86,7 +97,7 @@ class ContentController extends Controller {
         ]);
     }
 
-    public function deleteAction(int|array $id, int $cat_id, int $model_id) {
+    public function deleteAction(int|array $id, int $model_id, int $cat_id = 0) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()

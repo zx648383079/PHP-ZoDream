@@ -3,8 +3,11 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
+
+$content_mode = config('view.cms_menu_mode', 0);
+
 $menus = [];
-if (isset($cat_menu)){
+if ($content_mode < 1 && isset($cat_menu)){
     foreach ($cat_menu as $item) {
         $menus[] = [
             sprintf('%s %s', $item['level'] > 0 ? 'ￂ'.
@@ -16,13 +19,23 @@ if (isset($cat_menu)){
 }
 
 $form_menu = [];
-if (isset($form_list)) {
-    foreach ($form_list as $item) {
-        $form_menu[] = [
-            $item['name'],
-            ['./@admin/form', 'id' => $item['id']],
-            'fa fa-paint-brush'
-        ];
+if (isset($model_menu)) {
+    foreach ($model_menu as $item) {
+        if ($item['type'] > 0) {
+            $form_menu[] = [
+                $item['name'],
+                ['./@admin/form', 'id' => $item['id']],
+                'fa fa-paint-brush'
+            ];
+            continue;
+        }
+        if ($content_mode > 0) {
+            $menus[] = [
+                $item['name'],
+                ['./@admin/content', 'model_id' => $item['id']],
+                'fa fa-file'
+            ];
+        }
     }
 }
 

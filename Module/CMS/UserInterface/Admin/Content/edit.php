@@ -44,7 +44,7 @@ $this->title = $model->id > 0 ? '文章编辑' : '新增文章';
     </div>
 
     <div class="btn-group">
-        <?php if($data['status'] != 5):?>
+        <?php if(empty($data['status']) || $data['status'] != 5):?>
         <button type="submit" class="btn btn-success">确认保存</button>
         <?php endif;?>
         <button type="button" class="btn btn-info" data-type="publish">保存并发布</button>

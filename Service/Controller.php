@@ -13,6 +13,7 @@ abstract class Controller extends BaseController {
 
     public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $status = 404) {
         $code = $status;
+        $url = url($url);
         return $this->show('@root/Home/404', compact('url', 'message', 'time', 'code'));
     }
 }

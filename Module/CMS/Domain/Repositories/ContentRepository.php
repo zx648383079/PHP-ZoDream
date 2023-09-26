@@ -13,8 +13,11 @@ use Zodream\Helpers\Time;
 
 class ContentRepository {
     public static function getList(
-        int $site, int $category, string $keywords = '',
+        int $site, int $category = 0, string $keywords = '',
         int $parent = 0, int $modelId = 0, int $page = 1, int $perPage = 20) {
+        if ($category <= 0 && $modelId <= 0) {
+            throw new Exception('参数不正确');
+        }
         SiteRepository::apply($site);
         if ($modelId < 1) {
             $modelId = intval(CategoryModel::where('id', $category)
@@ -25,11 +28,15 @@ class ContentRepository {
         }
         $modelModel = ModelRepository::get($modelId);
         $scene = CMSRepository::scene()->setModel($modelModel, $site);
+        if (!$scene->initializedModel()) {
+            throw new Exception('当前站点未初始化模型');
+        }
         $column = static::searchField($scene);
-        $page = $scene->search($keywords, [
-            'cat_id' => $category,
-            'parent_id' => $parent
-        ], 'id desc', $page, $perPage, implode(',', array_column($column, 'name')));
+        $queries = ['parent_id' => $parent];
+        if ($category > 0) {
+            $queries['cat_id'] = $category;
+        }
+        $page = $scene->search($keywords, $queries, 'id desc', $page, $perPage, implode(',', array_column($column, 'name')));
         $data = $page->toArray();
         if (!empty($data['data'])) {
             static::formatValue($data['data']);
@@ -83,13 +90,13 @@ class ContentRepository {
             ]
         ];
         foreach ($scene->fieldList() as $item) {
-            if ($item->is_disable) {
+            if ($item['is_disable']) {
                 continue;
             }
-            if (($item->is_system && $item->field === 'title') || $item->is_search) {
+            if (($item['is_system'] && $item['field'] === 'title') || $item['is_search']) {
                 $column[] = [
-                    'name' => $item->field,
-                    'label' => $item->name,
+                    'name' => $item['field'],
+                    'label' => $item['name'],
                 ];
             }
         }
