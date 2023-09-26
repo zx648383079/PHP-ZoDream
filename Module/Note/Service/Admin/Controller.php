@@ -12,11 +12,13 @@ class Controller extends ModuleController {
 
     public File|string $layout = '/Admin/layouts/main';
 
-    protected function getUrl(string $path, array $args = []) {
+    protected function getUrl(mixed $path, array $args = []): string {
         return url('./@admin/'.$path, $args);
     }
-
-   public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $status = 40) {
-       return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
-   }
+    public function findLayoutFile(): File|string {
+        if ($this->layout === '') {
+            return '';
+        }
+        return app_path()->file('UserInterface/Admin/layouts/main.php');
+    }
 }

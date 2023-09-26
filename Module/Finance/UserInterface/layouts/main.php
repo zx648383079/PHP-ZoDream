@@ -18,6 +18,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@jquery.datetimer.min.js',
         '@main.min.js',
+        '@admin.min.js',
         '@finance.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./', false)), View::HTML_HEAD);
 ?>

@@ -7,8 +7,7 @@ use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware(RequestMiddleware::class);
     }
 

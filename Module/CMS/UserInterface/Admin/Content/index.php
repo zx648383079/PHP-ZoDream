@@ -76,7 +76,7 @@ $this->title = sprintf('“%s” 的内容列表', $cat['title']);
                             <span>预览</span>
                             <i class="fa fa-globe"></i>
                         </a>
-                        <a class="btn btn-success" data-type="form" href="<?=$this->url('./@admin/content/dialog', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="快速编辑发布">
+                        <a class="btn btn-success" data-type="form" href="<?=$this->url('./@admin/content/dialog', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="快速编辑发布" data-title="快速编辑属性">
                             <span>属性</span>
                             <i class="fa fa-cog"></i>
                         </a>

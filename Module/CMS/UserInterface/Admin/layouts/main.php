@@ -47,6 +47,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@jquery.pjax.min.js',
         '@main.min.js',
+        '@admin.min.js',
         '@cms_admin.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>

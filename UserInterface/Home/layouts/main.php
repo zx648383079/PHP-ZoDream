@@ -25,7 +25,6 @@ $pns_beian_no = '';
 if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
     $pns_beian_no = $match[0];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="<?=trans()->getLanguage()?>">

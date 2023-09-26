@@ -20,6 +20,7 @@ $this->registerCssFile([
         '@select2.min.js',
         '@jquery.editor.min.js',
         '@main.min.js',
+        '@admin.min.js',
         '@blog_admin.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>

@@ -34,6 +34,7 @@ $this->registerCssFile([
 ])->registerJsFile([
     '@jquery.min.js',
     '@main.min.js',
+    '@admin.min.js',
     '@log.min.js'
 ]);
 ?>

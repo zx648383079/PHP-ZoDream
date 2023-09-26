@@ -18,6 +18,7 @@ $this->registerCssFile([
         '@jquery.datetimer.min.js',
         '@jquery.lazyload.min.js',
         '@main.min.js',
+        '@admin.min.js',
         '@counter.min.js'
     ]);
 ?>

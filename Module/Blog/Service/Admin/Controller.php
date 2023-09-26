@@ -17,11 +17,8 @@ class Controller extends ModuleController {
         ];
     }
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(mixed$path, array $args = []) {
         return url('./@admin/'.$path, $args);
     }
 
-   public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $status = 404) {
-       return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
-   }
 }

@@ -14,6 +14,7 @@ $this->registerCssFile([
     '@jquery.dialog.min.js',
     '@jquery.datetimer.min.js',
     '@main.min.js',
+    '@admin.min.js',
     '@template.min.js'
 ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>

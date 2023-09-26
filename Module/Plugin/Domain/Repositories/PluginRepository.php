@@ -22,18 +22,44 @@ final class PluginRepository {
 
     public static function setting(int $id) {
         $model = PluginModel::findOrThrow($id);
+        return self::settingForm($model);
+    }
+
+    private static function settingForm(PluginModel $model) {
         $data = self::loadPlugin($model['path']);
         if (empty($data) || !isset($data['configs'])) {
             return [];
         }
+        return self::formatForm($data['configs'], (array)$model->configs);
+    }
+
+    private static function filterForm(array $inputItems, array|Request $data): array {
         $items = [];
-        $configs = $model->configs;
-        foreach ($data['configs'] as $item) {
-            if (!($item instanceof Input) || empty($item->name)) {
+        foreach ($inputItems as $item) {
+            $name = $item->name;
+            if (!($item instanceof Input) || empty($name)) {
                 continue;
             }
-            if (isset($configs[$item->name])) {
-                $item->value($configs[$item->name]);
+            if ($data instanceof Request) {
+                if ($data->has($name)) {
+                    $items[$name] = $item->filter($data->get($name));
+                }
+            } elseif (isset($data[$name])) {
+                $items[$name] = $item->filter($data[$name]);
+            }
+        }
+        return $items;
+    }
+
+    private static function formatForm(array $inputItems, array $data): array {
+        $items = [];
+        foreach ($inputItems as $item) {
+            $name = $item->name;
+            if (!($item instanceof Input) || empty($name)) {
+                continue;
+            }
+            if (isset($data[$name])) {
+                $item->value($data[$name]);
             }
             $items[] = $item;
         }
@@ -46,16 +72,7 @@ final class PluginRepository {
         if (empty($data) || !isset($data['configs'])) {
             return;
         }
-        $configs = $model->configs;
-        foreach ($data['configs'] as $item) {
-            if (!($item instanceof Input) || empty($item->name)) {
-                continue;
-            }
-            if ($input->has($item->name)) {
-                $configs[$item->name] = $item->filter($input->get($item->name));
-            }
-        }
-        $model->configs = $configs;
+        $model->configs = self::filterForm($data['configs'], $input);
         $model->save();
     }
 
@@ -127,6 +144,42 @@ final class PluginRepository {
         if ($file instanceof File && $file->exist()) {
             return require (string)$file;
         }
+        return [];
+    }
+
+    public static function install(int $id, array $postData = []) {
+        $model = PluginModel::findOrThrow($id);
+        $data = self::loadPlugin($model['path']);
+        if (empty($data)) {
+            throw new \Exception('plugin is error');
+        }
+        $inputItems = $data['configs'] ?? [];
+        if (!empty($inputItems)) {
+            $configs = $model->configs;
+            if (!empty($postData)) {
+                $model->configs = self::filterForm($inputItems, $postData);
+            } else if (empty($configs)) {
+                return self::formatForm($inputItems, $configs);
+            }
+        }
+        $model->status = 1;
+        $model->save();
+        return $model;
+    }
+
+    public static function uninstall(int $id) {
+        PluginEntity::where('id', $id)->update([
+            'status' => 0,
+            'configs' => '',
+        ]);
+    }
+
+    public static function execute(int $id) {
+        $model = PluginModel::findOrThrow($id);
+        $root = self::root();
+        $loader = new ClassLoader((string)$root);
+        $loader->register();
+        self::invokePlugin($loader, $root->directory($model->path), $model->configs);
         return [];
     }
 

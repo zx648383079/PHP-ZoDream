@@ -20,4 +20,4 @@ $this->registerCssFile([
     ]);
 ?>
 
-<?= Layout::mainIfPjax($this, AdminMenu::all(), $content, 'ZoDream Admin') ?>
+<?= Layout::mainIfPjax($this, AdminMenu::all(), $content, $this->title ?? 'ZoDream Admin') ?>

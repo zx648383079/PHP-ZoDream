@@ -16,6 +16,7 @@ $this->registerCssFile([
         '@jquery.dialog.min.js',
         '@jquery.datetimer.min.js',
         '@main.min.js',
+        '@admin.min.js',
         '@contact.min.js'
     ]);
 ?>

@@ -36,11 +36,8 @@ class Controller extends ModuleController {
         $this->send(compact('cat_menu', 'form_list', 'currentSite'));
     }
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(mixed $path, array $args = []): string {
         return url('./@admin/'.$path, $args);
     }
 
-    public function redirectWithMessage(mixed $url, string $message, int $time = 4, int $code = 404) {
-        return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
-    }
 }

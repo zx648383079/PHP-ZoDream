@@ -15,13 +15,10 @@ class Controller extends ModuleController {
         ];
     }
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(mixed $path, array $args = []): string {
         return url('./@admin/'.$path, $args);
     }
 
-   public function redirectWithMessage($url, $message, $time = 4, $status = 404) {
-       return $this->show('@root/Admin/prompt', compact('url', 'message', 'time'));
-   }
 
     protected function processCustomRule($role) {
         if (auth()->user()->hasRole($role)) {
