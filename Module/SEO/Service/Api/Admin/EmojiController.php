@@ -42,7 +42,7 @@ class EmojiController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(int|array $id) {
         try {
             EmojiRepository::remove($id);
         } catch (\Exception $ex) {

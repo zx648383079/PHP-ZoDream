@@ -84,8 +84,9 @@ table {
         text-align: left;
     }
     .tree-item-arrow {
-        color: #444;
-        @include icon('\f07b');
+        color: #1890ff;
+        @include icon('\f65e');
+        font-size: 2em;
     }
     .tree-item {
         display: none;
@@ -95,14 +96,14 @@ table {
     }
     .tree-next-level {
         .tree-item-arrow {
-            color: #767676;
+            color: #0dcaf0;
         }
     }
     .tree-item-open {
         .tree-item-arrow {
-            color: #337ab7;
+            color: #dc3545;
             &::before {
-                content: "\f07c";
+                content: "\f65d";
             }
         }
     }

@@ -34,7 +34,7 @@ $this->title = '栏目管理';
                     <?php endif;?>
                     <a href="<?=$currentSite->url('./category', ['id' => $item['id']])?>"><?=$item['title']?></a>
                 </td>
-                <td><?=$item['groups']?></td>
+                <td><?= empty($item['groups']) ? '-' : __($item['groups']) ?></td>
                 <td><?=intval($item['content_count'])?></td>
                 <td class="text-right">
                     <div class="btn-group toggle-icon-text">

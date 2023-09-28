@@ -12,7 +12,7 @@ a {
 
 .container {
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 75rem;
     padding-right: 15px;
     padding-left: 15px;
 }
@@ -35,7 +35,7 @@ header {
     }
 }
 footer {
-    padding: 20px 0;
+    padding: 1.25rem 0;
     .copyright {
         text-align: center;
     }
@@ -495,6 +495,7 @@ footer {
 
 .page-not-found {
     margin-top: 10vh;
+    margin-bottom: 30vh;
     p{
         text-align: center;
         font-size: 20px;

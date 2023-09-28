@@ -39,8 +39,8 @@ class EmojiRepository {
         return $model;
     }
 
-    public static function remove(int $id) {
-        EmojiModel::where('id', $id)->delete();
+    public static function remove(int|array $id) {
+        EmojiModel::whereIn('id', (array)$id)->delete();
     }
 
     public static function catList(string $keywords = '') {

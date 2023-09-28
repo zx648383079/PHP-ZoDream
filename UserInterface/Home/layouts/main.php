@@ -67,7 +67,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
                     <p>
                         <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=<?= $pns_beian_no ?>">
                             <img src="<?=$this->asset('images/beian.png')?>" alt="备案图标">
-                        <?= $pns_beian ?>
+                            <?= $pns_beian ?>
                         </a>
                     </p>
                     <?php endif;?>

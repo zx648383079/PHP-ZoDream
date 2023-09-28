@@ -26,7 +26,7 @@ JS
             <script>
                 setTimeout(function () {
                     window.location.href = '<?= $url ?>';
-                }, <?= $timeOut ?>)
+                }, <?= $timeOut ?>);
             </script>
 			<?php elseif($code === 401):?>
 				<a class="btn btn-primary no-jax" href="<?=$this->url(config('auth.home'), ['redirect_uri' => request()->url()])?>"><?=__('Sign in')?></a>
