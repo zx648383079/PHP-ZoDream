@@ -8,7 +8,7 @@ use Zodream\Disk\File;
 use Zodream\Helpers\Html;
 
 class ToController extends Controller {
-    public File|string $layout = '';
+    protected File|string $layout = '';
 
     /**
      * 跳出链接

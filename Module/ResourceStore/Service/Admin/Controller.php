@@ -11,7 +11,7 @@ class Controller extends ModuleController {
 
     use AdminRole;
 
-    public File|string $layout = '/Admin/layouts/main';
+    protected File|string $layout = '/Admin/layouts/main';
 
     protected function getUrl(mixed $path, array $args = []): string {
         return url('./@admin/'.$path, $args);

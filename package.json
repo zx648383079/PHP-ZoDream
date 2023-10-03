@@ -27,7 +27,7 @@
     "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.19",
+    "@types/jquery": "^3.5.20",
     "@types/js-cookie": "^3.0.4",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",

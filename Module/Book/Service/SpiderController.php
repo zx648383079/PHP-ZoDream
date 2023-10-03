@@ -11,7 +11,7 @@ use Zodream\Spider\Support\Uri;
 
 class SpiderController extends Controller {
 
-    public File|string $layout = '';
+    protected File|string $layout = '';
 
 
 

@@ -1,49 +1,191 @@
-.connect-item {
-    display: grid;
-    grid-template-columns: 8fr 2fr;
-    line-height: 40px;
-    background-color: #fff;
-    padding: 0 0 0 20px;
-}
-
-.bulletin-item {
-    background-color: #fff;
-    margin-bottom: 10px;
-    padding: 20px;
-    .title {
-        font-weight: bold;
-        line-height: 30px;
-        border-bottom: 1px dotted #ccc;
-        cursor: pointer;
+@import 'theme';
+$primary: $nav;
+$primaryText: $navText;
+.login-box {
+    max-width: 18.75rem;
+    margin: 20vh auto 40vh;
+    overflow: hidden;
+    .login-form {
+        position: relative;
+        transition: all .5s;
+    }
+    .input-box {
+        padding-top: 4.375rem;
+    }
+    .input-group {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #767676;
+        }
+        .fa {
+            transition: all .5s;
+            color: $secondary;
+        }
+        &.input-focus {
+            input {
+                padding-left: 0;
+                padding-right: 30px;
+                border-bottom: 2px solid $inputFocusBorder;
+            }
+            .fa {
+                left: 17.5rem;
+                color: #767676;
+            }
+        }
+        &.error {
+            .fa {
+                color: $inputErrorBorder;
+            }
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                border-bottom-color: $inputErrorBorder;
+            }
+        }
+    }
+    .captcha-input {
+        input[type="text"] {
+            padding-right: 5rem;
+        }
         .btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 5rem;
+            height: 1.875rem;
+            padding: 0;
+            background-color: transparent;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        &.input-focus {
+            .fa {
+                left: 12.5rem;
+            }
+        }
+    }
+    .btn {
+        background: $primary;
+        color: $primaryText;
+        width: 100%;
+        margin: 0;
+        &:hover {
+            background: $navHover;
+        }
+    }
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+    .find-link {
+        float: right;
+    }
+    .other-box {
+        line-height: 1.875rem;
+        .fa {
             float: right;
-            font-weight: normal;
-            font-size: 12px;
+            line-height: 1.875rem;
+            margin-right: 0.625rem;
+            color: $secondary;
         }
     }
-    .content {
-        min-height: 60px;
-    }
-    .footer {
-        border-top: 1px dotted #ccc;
-        color: #777;
-        font-size: 12px;
-        span {
-            margin-right: 20px;
-        }
-    }
-    &.min {
-        padding: 0 20px 10px;
-        .title {
-            .btn {
+    .login-qr-box {
+        position: absolute;
+        top: 0;
+        left: 18.75rem;
+        width: 18.75rem;
+        text-align: center;
+        .qr-box {
+            .fa-sync {
+                position: absolute;
+                top: 6.625rem;
+                left: 8.0625rem;
+                font-size: 3.125rem;
+                color: $inputErrorBorder;
                 display: none;
             }
         }
-        .content {
+        .scan-box,
+        .success-box,
+        .failure-box {
             display: none;
+            min-height: 15.625rem;
+            .fa {
+                font-size: 5rem;
+                margin: 5rem 1.875rem 1.25rem;
+            }
         }
-        .footer {
-            border-top: none;
+        .failure-box {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background: rgba(0,0,0,.4);
+            color: #fff;
+        }
+        &.waiting_confirm {
+            .scan-box {
+                display: block;
+            }
+            .qr-box {
+                display: none;
+            }
+        }
+        &.qr_expired {
+            .qr-box {
+                .fa-sync {
+                    display: block;
+                }
+            }
+        }
+        &.qr_reject {
+            .failure-box {
+                display: block;
+            }
+        }
+        &.qr_success {
+            .qr-box {
+                display: none;
+            }
+            .success-box {
+                display: block;
+            }
+        }
+    }
+    .login-oauth-box {
+        text-align: center;
+        margin-top: 1.25rem;
+        .box-title {
+            border-bottom: 1px solid #767676;
+        }
+        a {
+            font-size: 1.875rem;
+            color: $secondary;
+            margin: 0.3125rem;
+        }
+    }
+    &.slided {
+        .login-form {
+            transform: translate(-18.75rem, 0);
+            min-height: 18.75rem;
         }
     }
 }
+.footer {
+    background: $primary;
+    color: $primaryText;
+    font-weight: 400;
+    font-size: 0.875rem;
+    padding: 2rem 1.25rem;
+    position: relative;
+    text-align: center;
+    a {
+        color: $primaryText;
+        text-decoration: none;
+    }
+}
+

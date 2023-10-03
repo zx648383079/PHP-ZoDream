@@ -6,7 +6,6 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\CaptchaRepository;
-use Zodream\Image\Captcha;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Service\Http\Request;
 

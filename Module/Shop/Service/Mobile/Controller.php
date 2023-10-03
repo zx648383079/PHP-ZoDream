@@ -8,7 +8,7 @@ use Zodream\Disk\File;
 
 class Controller extends ModuleController {
 
-    public File|string $layout = '/Mobile/layouts/main';
+    protected File|string $layout = '/Mobile/layouts/main';
     public function __construct() {
         parent::__construct();
         $this->middleware(function ($passable, callable $next) {

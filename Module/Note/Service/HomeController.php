@@ -8,7 +8,7 @@ use Zodream\Disk\File;
 
 class HomeController extends ModuleController {
 
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 	
 	public function indexAction(string $keywords = '', int $id = 0, int $user = 0) {
 	    $model_list = NoteRepository::getList($keywords, $user, $id);

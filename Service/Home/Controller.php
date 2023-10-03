@@ -6,7 +6,7 @@ use Zodream\Route\Controller\Controller as BaseController;
 
 abstract class Controller extends BaseController {
 
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 
 	public function prepare() {
 		$this->send('layout_search_url', url('/blog'));

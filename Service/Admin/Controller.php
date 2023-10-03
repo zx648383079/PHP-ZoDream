@@ -6,7 +6,7 @@ use Zodream\Disk\File;
 
 abstract class Controller extends BaseController {
 
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 	
 	public function rules() {
 		return [

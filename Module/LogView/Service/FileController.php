@@ -10,7 +10,7 @@ use Zodream\Disk\File;
 
 class FileController extends Controller {
 
-    public File|string $layout = '';
+    protected File|string $layout = '';
 
     public function rules() {
         return [

@@ -8,7 +8,7 @@ abstract class Controller extends BaseController {
 
     protected $canCSRFValidate = false;
 
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 
     public function rules() {
         return [

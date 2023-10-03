@@ -7,7 +7,7 @@ use Zodream\Infrastructure\Contracts\HttpContext;
 
 class Controller extends ModuleController {
 
-    public File|string $layout = '/Admin/layouts/main';
+    protected File|string $layout = '/Admin/layouts/main';
 
     public function __construct() {
         parent::__construct();

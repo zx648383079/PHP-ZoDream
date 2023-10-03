@@ -1,4 +1,5 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '注册账号';
@@ -6,52 +7,48 @@ $js = <<<JS
 bindRegister();
 JS;
 
-$this->extend('layouts/header')
-    ->registerJs($js);
+$this->registerJs($js);
 ?>
-    <section class="container">
-        <div class="login-box">
-            <form class="form-ico login-form" action="<?= $this->url('./register/post', false) ?>" method="POST">
-            <div class="input-group error">
-                    <input type="text" name="name"  placeholder="请输入昵称" required>
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </div>
-                <div class="input-group">
-                    <input type="email" name="email" placeholder="请输入邮箱" required>
-                    <i class="fa fa-at" aria-hidden="true"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" placeholder="请输入密码" required>
-                    <i class="fa fa-lock" aria-hidden="true"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="rePassword" placeholder="请确认密码" required>
-                    <i class="fa fa-redo" aria-hidden="true"></i>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="invite_code" placeholder="请输入邀请码">
-                    <i class="fa fa-gift" aria-hidden="true"></i>
-                </div>
+<section class="container">
+    <div class="login-box">
+        <form class="form-ico login-form" action="<?= $this->url('./register/post', false) ?>" method="POST">
+        <div class="input-group error">
+                <input type="text" name="name"  placeholder="请输入昵称" required>
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </div>
+            <div class="input-group">
+                <input type="email" name="email" placeholder="请输入邮箱" required>
+                <i class="fa fa-at" aria-hidden="true"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="请输入密码" required>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" name="rePassword" placeholder="请确认密码" required>
+                <i class="fa fa-redo" aria-hidden="true"></i>
+            </div>
+            <div class="input-group">
+                <input type="text" name="invite_code" placeholder="请输入邀请码">
+                <i class="fa fa-gift" aria-hidden="true"></i>
+            </div>
 
-                <div class="input-group">
-                    <div class="checkbox">
-                        <input type="checkbox" name="agree" value="1" id="checkboxInput"/>
-                        <label for="checkboxInput"></label>
-                    </div>
-                    同意《
-                    <a href="<?=$this->url('/agreement')?>">本站协议</a>
-                    》
+            <div class="input-group">
+                <div class="checkbox">
+                    <input type="checkbox" name="agree" value="1" id="checkboxInput"/>
+                    <label for="checkboxInput"></label>
                 </div>
+                同意《
+                <a href="<?=$this->url('/agreement')?>">本站协议</a>
+                》
+            </div>
 
-                <button type="submit" class="btn">注册</button>
-                <div class="other-box">
-                    <a href="<?=$this->url('./')?>">返回登录</a>
-                </div>
-                
-            </form>
+            <button type="submit" class="btn">注册</button>
+            <div class="other-box">
+                <a href="<?=$this->url('./')?>">返回登录</a>
+            </div>
             
-        </div>
-    </section>
-<?php
-$this->extend('layouts/footer');
-?>
+        </form>
+        
+    </div>
+</section>

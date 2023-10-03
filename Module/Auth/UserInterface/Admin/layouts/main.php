@@ -10,7 +10,7 @@ $this->registerCssFile([
         '@zodream-admin.css',
         '@select2.min.css',
         '@dialog.css',
-        '@auth.css'
+        '@auth_admin.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@jquery.pjax.min.js',
@@ -19,7 +19,7 @@ $this->registerCssFile([
         '@jquery.upload.min.js',
         '@main.min.js',
         '@admin.min.js',
-        '@auth.min.js'
+        '@auth_admin.min.js'
     ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 
 $user = auth()->user();

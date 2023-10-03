@@ -7,7 +7,7 @@ use Zodream\Disk\File;
 
 abstract class Controller extends ModuleController {
 
-    public File|string $layout = '';
+    protected File|string $layout = '';
 
     public function rules() {
         return [

@@ -9,7 +9,7 @@ use Module\Shop\Module;
 use Zodream\Disk\File;
 
 class Controller extends ModuleController {
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 
     public function __construct() {
         parent::__construct();

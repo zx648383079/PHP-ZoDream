@@ -1,8 +1,8 @@
 <?php
+defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '找回密码';
-$this->extend('layouts/header');
 ?>
 <section class="container">
     <div class="login-box">
@@ -26,6 +26,3 @@ $this->extend('layouts/header');
         
     </div>
 </section>
-<?php
-$this->extend('layouts/footer');
-?>

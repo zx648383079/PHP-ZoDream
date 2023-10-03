@@ -13,7 +13,7 @@ class Controller extends ModuleController {
 
     use CheckRole;
 
-    public File|string $layout = '/Admin/layouts/main';
+    protected File|string $layout = '/Admin/layouts/main';
 
     public function rules() {
         return [

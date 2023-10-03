@@ -6,7 +6,7 @@ use Zodream\Disk\File;
 
 class HomeController extends Controller {
 
-    public File|string $layout = 'main';
+    protected File|string $layout = 'main';
 
     public function indexAction() {
         $user = auth()->user();

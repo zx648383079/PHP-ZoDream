@@ -9,6 +9,6 @@ class Controller extends ModuleController {
 
     use AdminRole;
 
-    public File|string $layout = '/Admin/layouts/main';
+    protected File|string $layout = '/Admin/layouts/main';
 
 }

@@ -8,6 +8,7 @@ use Infrastructure\Environment;
 use Module\Disk\Domain\FFmpeg;
 use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
+use Zodream\Disk\StreamFinder;
 use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Domain\Upload\Upload;
 use Zodream\Domain\Upload\UploadBase64;
@@ -153,6 +154,14 @@ class FileRepository {
         if ($isImage && !$upload->validateDimensions()) {
             throw new Exception('图片尺寸有误');
         }
+        // TODO 需要判断病毒文件
+//        $finder = new StreamFinder([
+//            ['<%', '%>'],
+//            '<?php',
+/*            ['<?=', '?>']*/
+//        ]);
+//        $finder->matchFile($upload->getFile());
+
         $fileName = $upload->getRandomName($config['pathFormat']);
         $upload->setFile(public_path($fileName));
         $provider = static::storage();
