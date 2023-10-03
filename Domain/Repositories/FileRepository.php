@@ -54,7 +54,7 @@ class FileRepository {
         return url()->asset(empty($url) ? static::DEFAULT_IMAGE : $url);
     }
 
-    public static function config(string $key = '', $default = null) {
+    public static function config(string $key = '', $default = null): mixed {
         if (empty(static::$configs)) {
             static::$configs = config('ueditor');
         }
@@ -71,7 +71,7 @@ class FileRepository {
      * @return Page<int, array{url: string, thumb: string, mtime: int}>
      * @throws Exception
      */
-    public static function getList(array $allow = ['.*'], string $path = 'assets') {
+    public static function getList(array $allow = ['.*'], string $path = 'assets'): Page {
         $allow = substr(str_replace('.', '|', implode('', $allow)), 1);
         $path = public_path($path)->getFullName();
         $files = Environment::getfiles($path, $allow);
@@ -84,13 +84,13 @@ class FileRepository {
         return $page;
     }
 
-    public static function imageList() {
+    public static function imageList(): Page {
         return static::getList(
             static::config('imageManagerAllowFiles'),
             static::config('imageManagerListPath'));
     }
 
-    public static function fileList() {
+    public static function fileList(): Page {
         return static::getList(
             static::config('fileManagerAllowFiles'),
             static::config('fileManagerListPath'));
@@ -104,7 +104,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function upload(string $fieldName, array $config, string $base64 = 'upload') {
+    public static function upload(string $fieldName, array $config, string $base64 = 'upload'): array {
         $request = request();
         return static::uploadFromData($base64 === 'base64' || $base64 === 'remote' ?
             $request->get($fieldName) :
@@ -119,7 +119,8 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadFromData(array|string|null $data, array $config, string $base64 = 'upload') {
+    public static function uploadFromData(array|string|null $data, array $config,
+                                          string $base64 = 'upload'): array {
         if (is_null($data)) {
             throw new Exception('file error');
         }
@@ -208,7 +209,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadFile(string $fieldName = 'file') {
+    public static function uploadFile(string $fieldName = 'file'): array {
         return static::upload(
             $fieldName, array(
                 'pathFormat' => static::config('filePathFormat'),
@@ -224,7 +225,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadBase64(string $fieldName = 'file') {
+    public static function uploadBase64(string $fieldName = 'file'): array {
         return static::upload(
             $fieldName, array(
             'pathFormat' => static::config('scrawlPathFormat'),
@@ -240,7 +241,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadVideo(string $fieldName = 'file') {
+    public static function uploadVideo(string $fieldName = 'file'): array {
         return static::upload(
             $fieldName, array(
             'pathFormat' => static::config('videoPathFormat'),
@@ -255,7 +256,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadAudio(string $fieldName = 'file') {
+    public static function uploadAudio(string $fieldName = 'file'): array {
         return static::uploadVideo($fieldName);
     }
 
@@ -264,7 +265,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}
      * @throws Exception
      */
-    public static function uploadImage(string $fieldName = 'file') {
+    public static function uploadImage(string $fieldName = 'file'): array {
         $items = static::uploadImages($fieldName, 1);
         if (empty($items)) {
             throw new Exception('图片上传失败');
@@ -279,7 +280,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}[]
      * @throws Exception
      */
-    public static function uploadFiles(string $fieldName = 'file', int $count = 0) {
+    public static function uploadFiles(string $fieldName = 'file', int $count = 0): array {
         $upload = new Upload();
         if (!$upload->upload($fieldName)) {
             throw new Exception('请选择上传文件');
@@ -329,7 +330,7 @@ class FileRepository {
      * @return array{url: string, title: string, original: string, type: string, size: int, thumb: string}[]
      * @throws Exception
      */
-    public static function uploadImages(string $fieldName = 'file', int $count = 0) {
+    public static function uploadImages(string $fieldName = 'file', int $count = 0): array {
         $upload = new Upload();
         if (!$upload->upload($fieldName)) {
             throw new Exception('请选择上传文件');
@@ -361,7 +362,7 @@ class FileRepository {
      * @return void
      * @throws Exception
      */
-    public static function addWater(File $file, string $text, int $position) {
+    public static function addWater(File $file, string $text, int $position): void {
         $image = new WaterMark();
         $image->instance()->loadResource($file);
         $font = new Font(static::fontFile(), 12, '#fff');
