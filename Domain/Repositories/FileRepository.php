@@ -155,14 +155,6 @@ class FileRepository {
         if ($isImage && !$upload->validateDimensions()) {
             throw new Exception('图片尺寸有误');
         }
-        // TODO 需要判断病毒文件
-//        $finder = new StreamFinder([
-//            ['<%', '%>'],
-//            '<?php',
-/*            ['<?=', '?>']*/
-//        ]);
-//        $finder->matchFile($upload->getFile());
-
         $fileName = $upload->getRandomName($config['pathFormat']);
         $upload->setFile(public_path($fileName));
         $provider = static::storage();
@@ -177,6 +169,20 @@ class FileRepository {
             'size' => $res['size'],
             'thumb' => $thumb,
         ];
+    }
+
+    /**
+     * 判断文件是否是危险文件
+     * @param mixed $file
+     * @return bool
+     */
+    public static function isDangerFile(mixed $file): bool {
+        $finder = new StreamFinder([
+            ['<%', '%>'],
+            '<?php',
+            ['<?=', '?>']
+        ]);
+        return $finder->matchFile($file instanceof BaseUpload ? $file->getFile() : $file);
     }
 
     protected static function loadThumb(array $res, string $file, BaseUpload $upload): string {

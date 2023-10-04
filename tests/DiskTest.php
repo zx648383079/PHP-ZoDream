@@ -4,6 +4,7 @@ namespace Tests;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Zodream\Disk\FileSystem;
+use Zodream\Disk\StreamFinder;
 
 final class DiskTest extends TestCase {
 
@@ -28,6 +29,13 @@ final class DiskTest extends TestCase {
         ];
     }
 
+    public static function finderProvider(): array {
+        return [
+            [__FILE__, true],
+            [__DIR__.'/../composer.json', false],
+        ];
+    }
+
     #[DataProvider('combineProvider')]
     public function testCombine(array $items, string $path) {
         $this->assertEquals(FileSystem::combine(...$items), $path);
@@ -36,5 +44,15 @@ final class DiskTest extends TestCase {
     #[DataProvider('filterProvider')]
     public function testFilter(string $input, string $path) {
         $this->assertEquals(FileSystem::filterPath($input, true), $path);
+    }
+
+    #[DataProvider('finderProvider')]
+    public function testFinder(string $file, bool $success) {
+        $finder = new StreamFinder([
+            ['<%', '%>'],
+            '<?php',
+            ['<?=', '?>']
+        ]);
+        $this->assertEquals($finder->matchFile($file), $success);
     }
 }

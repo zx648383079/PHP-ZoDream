@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Domain\Providers;
 
+use Domain\Repositories\FileRepository;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Query\Builder;
@@ -134,6 +135,10 @@ class StorageProvider {
         if (empty($path) || !$upload->save()) {
             // 保存文件位置可能不在目录下
             throw new \Exception('add file error');
+        }
+        if ($this->isPublic() && FileRepository::isDangerFile($file)) {
+            $file->delete();
+            throw new \Exception('error file content');
         }
         return $this->insertFileLog($file, [
             'name' => $upload->getName(),

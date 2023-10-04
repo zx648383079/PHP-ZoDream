@@ -142,6 +142,8 @@ $(function() {
                     element.prev('input').val(data.url);
                 } else if (data.code === 302) {
                     location.href = data.url;
+                } else {
+                    Dialog.tip(data.state ?? '上传失败');
                 }
                 element.closest('.file-input').removeClass('file-uploading');
                 return false;
