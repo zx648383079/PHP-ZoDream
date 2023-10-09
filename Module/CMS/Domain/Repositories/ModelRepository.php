@@ -44,7 +44,8 @@ class ModelRepository {
         $items = ModelModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['title']);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('position', 'asc')
+            ->orderBy('id', 'desc')->page();
         if ($items->isEmpty()) {
             return $items;
         }

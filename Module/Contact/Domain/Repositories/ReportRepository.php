@@ -72,7 +72,7 @@ class ReportRepository {
         return $model;
     }
 
-    public static function remove(int $id) {
-        ReportModel::where('id', $id)->delete();
+    public static function remove(int|array $id) {
+        ReportModel::whereIn('id', (array)$id)->delete();
     }
 }

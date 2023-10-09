@@ -181,7 +181,7 @@ final class AppRepository {
             ->when(!empty($keywords), function($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name'], false, '', $keywords);
             })
-            ->orderBy('id', 'asc')
+            ->orderBy('id', 'desc')
             ->page();
     }
 

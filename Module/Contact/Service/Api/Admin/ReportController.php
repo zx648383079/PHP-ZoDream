@@ -25,7 +25,7 @@ class ReportController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(int|array $id) {
         try {
             ReportRepository::remove($id);
         } catch (\Exception $ex) {
