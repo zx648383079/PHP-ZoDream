@@ -205,9 +205,9 @@ final class ExplorerRepository {
             })->orderBy('id', 'desc')->page();
     }
 
-    public static function storageRemove(array $id): void {
+    public static function storageRemove(int|array $id): void {
         $items = DB::table(StorageProvider::FILE_TABLE)
-            ->whereIn('id', $id)->get();
+            ->whereIn('id', (array)$id)->get();
         if (empty($items)) {
             throw new \Exception('file is error');
         }
@@ -227,5 +227,20 @@ final class ExplorerRepository {
         }
         set_time_limit(0);
         $storage->reload();
+    }
+
+    public static function storageSync(int|array $id): void {
+        $items = DB::table(StorageProvider::FILE_TABLE)
+            ->whereIn('id', (array)$id)->get();
+        if (empty($items)) {
+            throw new \Exception('file is error');
+        }
+        foreach ($items as $item) {
+            $storage = static::storage($item['folder']);
+            if (empty($storage)) {
+                throw new \Exception('unknown folder');
+            }
+            $storage->syncFile($item['path']);
+        }
     }
 }

@@ -51,6 +51,7 @@ $tagItems = ['全部', '公共', '内部'];
                 <td><?=$this->ago($item['created_at'])?></td>
                 <td>
                     <div class="btn-group">
+                        <a class="btn btn-primary" data-type="ajax" href="<?=$this->url('./@admin/explorer/storage_sync', ['id' => $item['id']])?>" title="更新文件信息">更新</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/explorer/storage_delete', ['id' => $item['id']])?>">删除</a>
                     </div>
                 </td>

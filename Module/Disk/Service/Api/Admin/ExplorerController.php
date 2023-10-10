@@ -47,4 +47,13 @@ class ExplorerController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function storageSyncAction(int|array $id) {
+        try {
+            ExplorerRepository::storageSync($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData(true);
+    }
 }

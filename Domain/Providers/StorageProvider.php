@@ -324,11 +324,23 @@ class StorageProvider {
             if ($model['md5'] !== $md5) {
                 static::query()->where('id', $model['id'])
                     ->update([
+                        'size' => $file->size(),
                         'md5' => $md5
                     ]);
             }
-
         });
+    }
+
+    public function syncFile(string $path) {
+        $file = $this->toFile($path);
+        if (!$file->exist()) {
+            throw new \Exception(sprintf('File is error: %s', $path));
+        }
+        static::query()->where('path', $path)->where('folder', $this->tag)
+            ->update([
+                'size' => $file->size(),
+                'md5' => $file->md5()
+            ]);
     }
 
     protected function toFile(string|array $path): File {
