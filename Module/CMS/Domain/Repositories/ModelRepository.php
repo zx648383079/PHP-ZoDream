@@ -117,7 +117,17 @@ class ModelRepository {
         unset($data['id']);
         $model = ModelFieldModel::findOrNew($id);
         if ($model->is_system > 0) {
-            $model->name = $data['name'];
+            if ($model->field === 'title') {
+                $data['is_required'] = 1;
+            }
+            foreach ([
+                'name', 'is_required', 'tip_message', 'error_message',
+                'position'
+                     ] as $key) {
+                if (array_key_exists($key, $data)) {
+                    $model->$key = $data[$key];
+                }
+            }
             $model->save();
             return $model;
         }

@@ -134,6 +134,42 @@ $(function() {
         }
     }).on('click', '.page-tip .toggle', function() {
         $(this).closest('.page-tip').toggleClass('min');
+    }).on('click', 'form *[type=submit]', function(e) {
+        const $this = $(this);
+        const form = $this.closest('form');
+        if (form.find('.tab-body').length === 0) {
+            // form.trigger('submit');
+            return;
+        }
+        let success = true;
+        form.find('*[required]').each(function() {
+            if (!success) {
+                return;
+            }
+            const that = $(this);
+            if (that.val()) {
+                return;
+            }
+            that.closest('.tab-item').trigger('tab:toggle');
+            Dialog.tip('表单未填写完整');
+            success = false;
+        });
+        if (!success) {
+            // form.trigger('submit');
+            // e.preventDefault();
+        }
+    }).on('form:invalid', 'form', function(_, messages) {
+        const $this = $(this);
+        const key = Object.keys(messages)[0];
+        let target = $this.find(`*[name=${key}]`);
+        if (target.length === 0) {
+            target = $this.find(`*[for=${key}]`);
+        }
+        if (target.length === 0) {
+            return;
+        }
+        target.closest('.tab-item').trigger('tab:toggle');
+        target.trigger('focus');
     });
     bindMultipleTable(doc);
     bindNavBar(doc);

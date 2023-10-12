@@ -615,7 +615,7 @@ function bindGoods(goods: number) {
         $this.addClass('active').siblings().removeClass('active');
         $this.closest('.picture-box').find('.view img').attr('src', $this.find('img').attr('src'));
     });
-    $('.detail-box .tab-body .tab-item').on('tabActived', function(_, i) {
+    $('.detail-box .tab-body .tab-item').on('tab:actived', function(_, i) {
         if (i > 0) {
             lazyTab($(this));
         }

@@ -4,10 +4,11 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '账号关联';
 
+$passkeyUri = $this->url('./', false);
 $js = <<<JS
-bindAuth(1);
+bindAuth('{$passkeyUri}');
 JS;
-$this->registerJs($js);
+$this->registerJsFile('@base64.min.js')->registerJs($js);
 ?>
 <div class="panel-container">
     <a class="register-webauth" href="javascript:;">注册生物识别</a>

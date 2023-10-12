@@ -13,6 +13,7 @@ $this->registerCssFile('@font-awesome.min.css')
     ->registerJsFile('@jquery.min.js')
     ->registerJsFile('@jquery.dialog.min.js')
     ->registerJsFile('@main.min.js')
+    ->registerJsFile('@base64.min.js')
     ->registerJsFile('@auth.min.js')
     ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>

@@ -86,9 +86,11 @@ class ContentController extends Controller {
         }
         event(new ManageAction('cms_content_edit', '', 33, $id));
         $queries = [
-            'cat_id' => $cat_id,
             'model_id' => $model_id
         ];
+        if (config('view.cms_menu_mode', 0) < 1) {
+            $queries['cat_id'] = $cat_id;
+        }
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $queries['parent_id'] = $data['parent_id'];
         }
@@ -107,9 +109,11 @@ class ContentController extends Controller {
             $scene->remove($id);
         }
         $queries = [
-            'cat_id' => $cat_id,
             'model_id' => $model_id
         ];
+        if (config('view.cms_menu_mode', 0) < 1) {
+            $queries['cat_id'] = $cat_id;
+        }
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $queries['parent_id'] = $data['parent_id'];
         }

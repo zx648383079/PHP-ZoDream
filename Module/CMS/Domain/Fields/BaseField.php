@@ -113,9 +113,9 @@ abstract class BaseField {
      * @param array|string $items
      * @return string
      */
-    public static function toMultipleValue(array|string $items): string {
+    public static function toMultipleValue(mixed $items): string {
         $items = static::fromMultipleValue($items);
-        return sprintf(',%s,', implode(',', $items));
+        return empty($items) ? '' : sprintf(',%s,', implode(',', $items));
     }
 
     /**

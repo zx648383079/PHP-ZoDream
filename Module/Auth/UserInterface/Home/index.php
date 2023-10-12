@@ -3,11 +3,10 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Module\Auth\Domain\Repositories\AuthRepository;
 /** @var $this View */
-
+$passkeyUri = $this->url('./', false);
 $js = <<<JS
-bindLogin();
+bindLogin('{$passkeyUri}');
 JS;
-
 $this->registerJs($js);
 ?>
 <section class="container">

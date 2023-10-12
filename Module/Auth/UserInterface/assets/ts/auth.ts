@@ -62,7 +62,7 @@ function bindRegister() {
     });
 }
 
-function bindLogin() {
+function bindLogin(baseUri: string) {
     let is_init = false,
         is_checking = false,
         qr_box = $(".login-form .login-qr-box"),
@@ -119,22 +119,31 @@ function bindLogin() {
     qr_box.find(".btn").on('click',function() {
         $(".login-box").removeClass('slided');
     });
-    const credentialCreationOptionsLogin: CredentialRequestOptions = {
-        mediation: 'required',
-        publicKey: {
-            userVerification: 'required',
-            challenge: new Uint8Array(16),
-            timeout: 60 * 1000,
-        },
-    };
     $('.login-webauth').on('click',function() {
         if (!navigator.credentials) {
             return;
         }
-        navigator.credentials.get(credentialCreationOptionsLogin)
-        .then((credentials) => {
-            console.log(credentials);
-        })
-        .catch(console.error);
+        postJson(baseUri + '/passkey', {}, res => {
+            const data = res.data;
+            data.challenge = Base64.toBuffer(data.challenge);
+            navigator.credentials.get({
+                publicKey: data
+            })
+            .then((credential: any) => {
+                const response = credential.response as AuthenticatorAssertionResponse;
+                postJson(baseUri + '/passkey/login', {
+                    credential: {
+                        id: credential.id,
+                        clientDataJSON: Base64.encode(response.clientDataJSON),
+                        authenticatorData: Base64.encode(response.authenticatorData),
+                        userHandle: Base64.encode(response.userHandle),
+                        signature: Base64.encode(response.signature)
+                    },
+                    redirect_uri: $('[name=redirect_uri]').val()
+                });
+            })
+            .catch(console.error);
+        });
+        
     }).toggle(!!navigator.credentials);
 }

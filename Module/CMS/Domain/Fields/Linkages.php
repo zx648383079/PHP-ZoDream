@@ -103,7 +103,12 @@ HTML;
     }
 
     public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
-        return static::toMultipleValue($value);
+        $value = static::toMultipleValue($value);
+        if ($field['is_required'] && empty($value)) {
+            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
+                !empty($field['error_message']) ? $field['error_message'] : '必填项'));
+        }
+        return $value;
     }
 
     public function getItems(mixed $value): array {

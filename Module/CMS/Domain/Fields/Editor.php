@@ -75,7 +75,7 @@ class Editor extends BaseField {
         ]);
         $editor = \Infrastructure\Editor::html($field['field'], $value, $option);
         return <<<HTML
-<div>{$field['name']}</div>
+<div for="{$field['field']}">{$field['name']}</div>
 {$editor}
 HTML;
     }

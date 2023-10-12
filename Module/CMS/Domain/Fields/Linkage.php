@@ -9,6 +9,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
+use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Template\View;
 
 class Linkage extends BaseField {
@@ -70,6 +71,15 @@ JS;
 </div>
 HTML;
 
+    }
+
+    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
+        $value = intval($value);
+        if ($field['is_required'] && $value < 1) {
+            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
+                !empty($field['error_message']) ? $field['error_message'] : '必填项'));
+        }
+        return $value;
     }
 
     public function toText($value, ModelFieldModel|array $field): string {

@@ -586,6 +586,10 @@ class AuthRepository {
         ]);
     }
 
+    public static function loginUserId(int $id): void {
+        static::loginUser(UserModel::findIdentity($id));
+    }
+
     /**
      * @param $user
      * @param mixed $remember
@@ -686,7 +690,7 @@ class AuthRepository {
         if ($userId <= 0 || !$autoLogin) {
             return $userId;
         }
-        static::loginUser(UserModel::findIdentity($userId));
+        static::loginUserId($userId);
         return $userId;
     }
 }

@@ -24,6 +24,7 @@ class OAuthModel extends Model {
     const TYPE_WEIBO = 'weibo';
     const TYPE_TAOBAO = 'taobao';
     const TYPE_ALIPAY = 'alipay';
+    const TYPE_WEBAUTHN = 'web_authn';
 
     public static function tableName(): string {
         return 'user_oauth';
@@ -72,8 +73,8 @@ class OAuthModel extends Model {
      * @return OAuthModel
      */
     public static function bindUser(UserModel $user,
-                                    $identifier, $unionId = '',
-                                    $type = self::TYPE_QQ, $nickname = '', $platform_id = 0) {
+                                    mixed $identifier, mixed $unionId = '',
+                                    string $type = self::TYPE_QQ, mixed $nickname = '', int $platform_id = 0) {
         return static::create([
             'user_id' => $user->id,
             'vendor' => $type,
@@ -84,8 +85,8 @@ class OAuthModel extends Model {
         ]);
     }
 
-    public static function findUserId($identifier,
-                                      $type = self::TYPE_QQ) {
+    public static function findUserId(mixed $identifier,
+                                      string $type = self::TYPE_QQ) {
         return (int)static::where('vendor', $type)
             ->where('identity', $identifier)->value('user_id');
     }
@@ -97,7 +98,7 @@ class OAuthModel extends Model {
      * @param int $platform_id
      * @return mixed
      */
-    public static function findOpenid($user_id, $type = self::TYPE_WX, $platform_id = 0) {
+    public static function findOpenid(int $user_id, string $type = self::TYPE_WX, int $platform_id = 0) {
         return static::where('user_id', $user_id)
             ->where('platform_id', $platform_id)
             ->where('vendor', $type)->value('identity');
@@ -110,8 +111,8 @@ class OAuthModel extends Model {
      * @return bool|UserModel
      * @throws \Exception
      */
-    public static function findUser($identifier,
-                                    $type = self::TYPE_QQ) {
+    public static function findUser(mixed $identifier,
+                                    string $type = self::TYPE_QQ) {
         $user_id = static::findUserId($identifier, $type);
         if ($user_id < 1) {
             return null;
@@ -128,9 +129,9 @@ class OAuthModel extends Model {
      * @return UserModel|null
      * @throws \Exception
      */
-    public static function findUserWithUnion($openid,
-                                            $unionId,
-                                            $type = self::TYPE_QQ, $platform_id = 0) {
+    public static function findUserWithUnion(string $openid,
+                                            mixed $unionId,
+                                            string $type = self::TYPE_QQ, int $platform_id = 0) {
         /** @var OAuthModel $model */
         $model = static::where('vendor', $type)
             ->where('identity', $openid)->first();
@@ -166,8 +167,8 @@ class OAuthModel extends Model {
      * @param int $platform_id
      * @return static
      */
-    public static function findWithUnion($unionId,
-                                         $type = self::TYPE_QQ, $platform_id = 0) {
+    public static function findWithUnion(mixed $unionId,
+                                         string $type = self::TYPE_QQ, int $platform_id = 0) {
         if (empty($unionId)) {
             return null;
         }

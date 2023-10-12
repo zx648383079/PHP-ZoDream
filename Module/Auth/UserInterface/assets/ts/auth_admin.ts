@@ -1,40 +1,30 @@
-function bindAuth(id: number) {
-    const credentialCreationOptionsRegister: CredentialCreationOptions = {
-        publicKey: {
-            rp: {
-                name: 'difi',
-            },
-            user: {
-                name: 'difi',
-                id: new Uint8Array(16),
-                displayName: 'difi',
-            },
-            pubKeyCredParams: [{
-                    type: 'public-key',
-                    alg: -7,
-                },
-                {
-                    type: 'public-key',
-                    alg: -36,
-                },
-                {
-                    type: 'public-key',
-                    alg: -257,
-                },
-            ],
-            challenge: new Uint8Array(16),
-            timeout: 60 * 1000,
-        },
-    };
+function bindAuth(baseUri: string) {
     $('.register-webauth').on('click',function() {
         if (!navigator.credentials) {
             return;
         }
-        navigator.credentials.create(credentialCreationOptionsRegister)
-            .then((credentials) => {
-                console.log(credentials);
+        postJson(baseUri + '/passkey/register_option', {}, res => {
+            const data = res.data;
+            data.challenge = Base64.toBuffer(data.challenge);
+            data.user.id = Base64.toBuffer(data.user.id);
+            navigator.credentials.create({
+                publicKey: data
+            })
+            .then((credential: any) => {
+                const response = credential.response as AuthenticatorAttestationResponse;
+                postJson(baseUri + '/passkey/register', {credential: {
+                    id: credential.id,
+                    clientDataJSON: Base64.encode(response.clientDataJSON),
+                    attestationObject: Base64.encode(response.attestationObject),
+                    publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
+                    publicKey: Base64.encode(response.getPublicKey()),
+                    transports: response.getTransports(),
+                    authenticatorData: Base64.encode(response.getAuthenticatorData())
+                }});
             })
             .catch(console.error);
+        });
+        
     }).toggle(!!navigator.credentials);
 }
 

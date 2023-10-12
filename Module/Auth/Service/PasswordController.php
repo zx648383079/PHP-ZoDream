@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PasswordController extends Controller {
 
-    public function indexAction($code) {
+    public function indexAction(string $code) {
         try {
             AuthRepository::verifyEmailCode($code);
         } catch (\Exception $ex) {
@@ -38,7 +38,7 @@ class PasswordController extends Controller {
         ], '密码重置成功');
     }
 
-    public function sendAction($email) {
+    public function sendAction(string $email) {
         try {
             AuthRepository::sendEmail($email,
                 md5($email. Str::random(). Time::millisecond())

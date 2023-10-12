@@ -124,7 +124,7 @@ $(function() {
         $this.addClass("active").siblings().removeClass("active");
         let tab = $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active");
         tab.siblings().removeClass("active");
-        tab.trigger('tabActived', $this.index());
+        tab.trigger('tab:actived', $this.index());
     }).on('click', '*[modal]', function(e) {
         e.preventDefault();
         e.stopPropagation();

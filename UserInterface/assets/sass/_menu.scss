@@ -142,6 +142,9 @@
         }
         .menu-item {
             line-height: 3rem;
+            span {
+                font-weight: bold;
+            }
             a {
                 padding: 0 1rem;
                 position: relative;
@@ -161,6 +164,9 @@
         .menu-children {
             display: none;
             background-color: $navSecondary;
+            span {
+                font-weight: normal;
+            }
         }
         .expand {
             >a {

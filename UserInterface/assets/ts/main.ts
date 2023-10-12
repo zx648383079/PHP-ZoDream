@@ -15,7 +15,7 @@ interface IResponse {
  * @param data 
  * @param callback 
  */
-function postJson(url: string, data: any, callback?: (data: IResponse)=>any) {
+function postJson(url: string, data: any, callback?: (data: IResponse) => any) {
     if (typeof data == 'function') {
         callback = data;
         data = {};
@@ -94,7 +94,7 @@ function parseAjax(data: IResponse) {
  * 转化float
  * @param arg 
  */
-let toFloat = function (arg: any) {
+const toFloat = function (arg: any) {
     if (!arg) {
         return 0;
     }
@@ -108,7 +108,7 @@ let toFloat = function (arg: any) {
  * 转化数字
  * @param arg 
  */
-let toInt = function (arg: any) {
+const toInt = function (arg: any) {
     if (!arg) {
         return 0;
     }
@@ -119,7 +119,7 @@ let toInt = function (arg: any) {
     return parseInt(arg, 10);
 };
 
-let strFormat = function(arg: string, ...args: any[]) {
+const strFormat = function(arg: string, ...args: any[]) {
     return arg.replace(/\{(\d+)\}/g, function(m,i) {
         return args[i];
     });
@@ -159,7 +159,7 @@ $(function() {
     })
     .on('click', "a[data-type=ajax]", function(e) {
         e.preventDefault();
-        let $this = $(this);
+        const $this = $(this);
         let successTip = $this.data('success') || '提交成功！';
         let errorTip = $this.data('error') || '提交失败！';
         let callback = $this.data('callback');
@@ -175,12 +175,15 @@ $(function() {
             parseAjax(data);
         });
     })
-    .on('submit', "form[data-type=ajax]", function() {
-        let $this = $(this);
-        let loading = Dialog.loading();
+    .on('submit', 'form[data-type=ajax]', function() {
+        const $this = $(this);
+        const loading = Dialog.loading();
         ajaxForm($this.attr('action'), $this.serialize(), res => {
             loading.close();
             parseAjax(res);
+            if (res.code === 400 && typeof res.message === 'object') {
+                $this.trigger('form:invalid', res.message);
+            }
         });
         return false;
     })
@@ -233,11 +236,21 @@ $(function() {
             modal.showCenter();
         };
     })
-    .on('click', ".tab-box .tab-header .tab-item", function() {
-        let $this = $(this);
-        $this.addClass("active").siblings().removeClass("active");
-        let tab = $this.closest(".tab-box").find(".tab-body .tab-item").eq($this.index()).addClass("active");
-        tab.siblings().removeClass("active");
-        tab.trigger('tabActived', $this.index());
+    .on('click', '.tab-box .tab-header .tab-item', function() {
+        const $this = $(this);
+        const index = $this.index();
+        toggleTab($this, $this.closest('.tab-box').find('.tab-body .tab-item').eq(index), index);
+    }).on('tab:toggle', '.tab-box .tab-body .tab-item', function() {
+        const $this = $(this);
+        if ($this.hasClass('active')) {
+            return;
+        }
+        const index = $this.index();
+        toggleTab($this.closest('.tab-box').find('.tab-header .tab-item').eq(index), $this, index);
     });
+    const toggleTab = (tabHeader: JQuery, tabBody: JQuery, index: number) => {
+        tabHeader.addClass('active').siblings().removeClass('active');
+        tabBody.addClass('active').siblings().removeClass('active');
+        tabBody.trigger('tab:actived', index);
+    };
 });

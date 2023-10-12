@@ -17,13 +17,20 @@ $this->registerJs($js);
 <?=Form::open($model, './@admin/model/save_field')?>
     <?=Form::text('name', true)?>
     <?=Form::text('field', true)?>
+    <?php if($model->is_system > 0):?>
+    <?php if($model->field !== 'title'):?>
     <?=Form::radio('is_main', ['否', '是'])?>
-    <?php if($model->is_system < 1):?>
+    <?=Form::radio('is_required', ['非必填', '必填'])?>
+    <?php endif;?>
+    <?=Form::text('tip_message')?>
+    <?=Form::text('error_message')?>
+    <?php else: ?>
+    <?=Form::radio('is_main', ['否', '是'])?>
     <?=Form::select('type', ModelRepository::FIELD_TYPE_ITEMS)?>
     <div class="option-box">
 
     </div>
-    <?=Form::radio('is_required', ['非必填', '必填'])?>
+    
     <?=Form::radio('is_search', ['否', '是'])?>
     <?=Form::text('length')?>
     <?=Form::text('match')?>
@@ -46,8 +53,8 @@ $this->registerJs($js);
             <?php endif;?>
         </div>
     </div>
-    <?=Form::text('position')?>
     <?php endif;?>
+    <?=Form::text('position')?>
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
