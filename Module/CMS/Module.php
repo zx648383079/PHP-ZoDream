@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS;
 
+use Module\CMS\Domain\Middleware\CMSSeoMiddleware;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ContentModel;
@@ -19,6 +20,28 @@ class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateCmsTables();
+    }
+
+    public function install(): void {
+        parent::install();
+        $routes = config('route');
+        if (empty($routes['middlewares'])) {
+            $routes['middlewares'] = [CMSSeoMiddleware::class];
+        } else {
+            $routes['middlewares'][] = CMSSeoMiddleware::class;
+        }
+        config()->set('route', $routes);
+    }
+
+    public function uninstall(): void {
+        parent::uninstall();
+        $routes = config('route');
+        if (empty($routes['middlewares'])) {
+            $routes['middlewares'] = array_filter($routes['middlewares'], function ($key) {
+                return $key !== CMSSeoMiddleware::class;
+            });
+        }
+        config()->set('route', $routes);
     }
 
     public function openLinks(SiteMap $map) {

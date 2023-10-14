@@ -13,6 +13,7 @@ use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Response\JsonResponse;
 use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
+use Zodream\Route\ModuleRoute;
 use Zodream\Route\Response\Rest;
 use Zodream\Route\Response\RestResponse;
 
@@ -43,11 +44,11 @@ class Module extends BaseModule implements ICustomRouteModule {
             // 参数里指定路径
             $path = $context['request']->get('method');
         }
-        list($nextPath, $modulePath, $module) = $context->make('route')->tryMatchModule($path);
+        list($nextPath, $modulePath, $module) = $context->make(ModuleRoute::class)->tryMatchModule($path);
         if (empty($module)) {
             return null;
         }
-        $context['module_path'] = $modulePath;
+        $context[ModuleRoute::MODULE_PATH] = $modulePath;
         return $this->invokeWithPlatform($module, $nextPath, $path, $context);
     }
 

@@ -8,10 +8,10 @@ use Module\Blog\Domain\Repositories\BlogRepository;
 $html = BlogRepository::renderContent($blog);
 ?>
 <?php if($blog->can_read):?>
-    <?php if(isset($metaItems['audio_url']) && !empty($metaItems['audio_url'])):?>
+    <?php if(!empty($metaItems['audio_url'])):?>
         <?= Player::player($this, $metaItems['audio_url'], 'audio') ?>
     <?php endif;?>
-    <?php if(isset($metaItems['video_url']) && !empty($metaItems['video_url'])):?>
+    <?php if(!empty($metaItems['video_url'])):?>
 
         <?= Player::player($this, $metaItems['video_url']) ?>
     <?php endif;?>

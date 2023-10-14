@@ -3,6 +3,9 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('error page');
+if (empty($code)) {
+    $code = 404;
+}
 if ($code === 401) {
 	$this->layout = __DIR__. '/layouts/main.php';
 }
@@ -17,7 +20,7 @@ JS
 	<div class="content">
 		<div class="error-tag">
 			<span class="tag-cover"></span>
-			<span class="tag-icon"><?=$code ?? 404?></span>
+			<span class="tag-icon"><?=$code?></span>
 		</div>
 		<p style="margin-bottom: 2rem;"><?=__($message ?? 'error page')?></p>
 		<p class="text-center">

@@ -4,7 +4,8 @@ use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 
-$this->title = ($model->id > 0 ? '编辑' : '新增').'模块';
+$isEditable = $model['id'] > 0;
+$this->title = ($isEditable ? '编辑' : '新增').'模块';
 $js = <<<JS
 bindEditModel();
 JS;
@@ -13,9 +14,13 @@ $this->registerJs($js);
 
 <h1><?=$this->title?></h1>
 <?=Form::open($model, './@admin/model/save')?>
+    <?php if($isEditable):?>
+    <?=Form::radio('type', $model['type'] > 0 ? [1 => '表单'] : [0 => '实体'])?>
+    <?php else:?>
     <?=Form::radio('type', [1 => '表单', 0 => '实体'])?>
+    <?php endif;?>
     <?=Form::text('name', true)?>
-    <?=Form::text('table', true)->readonly($model->id > 0)?>
+    <?=Form::text('table', true)->readonly($isEditable)?>
     <div class="content-box">
         <?=Form::select('child_model', [$model_list, ['无分集']])?>
         <?=Form::text('category_template')->tip('栏目页，文件夹为Category')?>

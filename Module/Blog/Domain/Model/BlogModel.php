@@ -4,6 +4,7 @@ namespace Module\Blog\Domain\Model;
 use Domain\Repositories\FileRepository;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Entities\BlogEntity;
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Module\Blog\Domain\Repositories\BlogRepository;
 
 
@@ -54,7 +55,7 @@ class BlogModel extends BlogEntity {
     }
 
 	public function getUrlAttribute() {
-	    return url('./', ['id' => $this->id]);
+	    return BlogSeoMiddleware::encodeUrl($this->id);
     }
 
 	public function getPreviousAttribute() {

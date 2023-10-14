@@ -81,56 +81,53 @@ class UserModel extends BaseModel {
         return LoginLogModel::addLoginLog($this->email, $this->id, $status, $model);
     }
 
-    public static function validateEmail(string $email) {
+    public static function validateEmail(string $email): bool {
 	    return !empty($email) && self::where('email', $email)->count() < 1;
     }
 
-    public static function getRememberTokenName() {
+    public static function getRememberTokenName(): string {
         return 'token';
     }
 
     /**
-     * @param $id
-     * @return UserModel|boolean
-     * @throws \Exception
+     * @param int|string $id
+     * @return UserModel|null
      */
-	public static function findIdentity($id) {
+	public static function findIdentity(int|string $id): ?static {
 		return static::where('id', $id)->first();
 	}
 
     /**
      *
-     * @param $username
-     * @param $password
-     * @return bool|UserModel
+     * @param string $username
+     * @param string $password
+     * @return null|UserModel
      * @throws \Exception
      */
-	public static function findByAccount($username, $password) {
+	public static function findByAccount(string $username, string $password): ?static {
         $user = self::findByEmail($username);
         if (empty($user)) {
-            return false;
+            return null;
         }
         if (!$user->validatePassword($password)) {
-            return false;
+            return null;
         }
         return $user;
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return UserModel|boolean
-     * @throws \Exception
      */
-	public static function findByName(string $name) {
+	public static function findByName(string $name): ?string {
 		return static::where('name', $name)->first();
 	}
 
     /**
-     * @param $email
+     * @param string $email
      * @return UserModel|boolean
-     * @throws \Exception
      */
-	public static function findByEmail(string $email) {
+	public static function findByEmail(string $email): ?string {
 		return static::where('email', $email)->first();
 	}
 

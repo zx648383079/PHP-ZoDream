@@ -10,6 +10,7 @@ use Module\Disk\Domain\WebVTT;
 use Zodream\Image\QrCode;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\HttpContext;
+use Zodream\Route\ModuleRoute;
 
 class FileController extends Controller {
 
@@ -131,7 +132,7 @@ class FileController extends Controller {
         if (strpos($action, '.ts')) {
             return $this->tsAction($action, $context['response']);
         }
-        return $context['route']->tryInvokeAction($this, $action, $vars, $context);
+        return $context->make(ModuleRoute::class)->tryInvokeAction($this, $action, $vars, $context);
     }
 
     public function tsAction($name, Output $response) {

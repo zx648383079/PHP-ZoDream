@@ -133,14 +133,14 @@ class CMSRepository {
         return self::$cacheSite = SiteModel::findOrThrow($site);
     }
 
-    protected static function matchSite(string $host, string $path): int {
+    public static function matchSite(string $host, string $path, bool $isStrict = false): int {
         $items = self::isPreview() ? SiteRepository::getAll() : CacheRepository::getSiteCache();
         if (empty($items)) {
             return 0;
         }
-        $default = $items[0]['id'];
+        $default = $isStrict ? 0 : $items[0]['id'];
         foreach ($items as $item) {
-            if ($item['is_default'] > 0) {
+            if (!$isStrict && $item['is_default'] > 0) {
                 $default = $item['id'];
             }
             $type = intval($item['match_type']);

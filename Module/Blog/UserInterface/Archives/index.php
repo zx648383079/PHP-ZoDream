@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('Archives');
@@ -29,7 +31,7 @@ $this->set([
         </div>
         <div class="time-items">
             <?php foreach ($archives['children'] as $item):?>
-            <a class="time-item" href="<?=$this->url('./', ['id' => $item['id']])?>">
+            <a class="time-item" href="<?=BlogSeoMiddleware::encodeUrl($item['id'])?>">
                 <div class="title"><?=$this->text($item['title'])?></div>
                 <div class="time"><?=$item['date']?></div>
             </a>

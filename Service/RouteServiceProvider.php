@@ -7,13 +7,11 @@ use Zodream\Infrastructure\Support\ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider {
 
-    public function register()
-    {
+    public function register(): void {
         $this->mapWebRoutes($this->app->make(Router::class));
     }
 
-    protected function mapWebRoutes(Router $router)
-    {
+    protected function mapWebRoutes(Router $router) {
         $router->group([
             'namespace' => 'Service\Home',
         ], __DIR__.'/routes.php');

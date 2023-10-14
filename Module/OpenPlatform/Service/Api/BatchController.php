@@ -41,7 +41,7 @@ class BatchController extends Controller {
         /** @var HttpContext $context */
         $context = $this->httpContext();
         /** @var ModuleRoute $route */
-        $route = $context['route'];
+        $route = $context->make(ModuleRoute::class);
         $input->replace($params);
         try {
             list($path, $modulePath, $module) = $route->tryMatchModule($path);

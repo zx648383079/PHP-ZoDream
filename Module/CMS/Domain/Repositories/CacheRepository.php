@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Module\CMS\Domain\Model\CategoryModel;
+use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -25,6 +26,7 @@ final class CacheRepository {
         ['name' => '联动项缓存', 'value' => 'linkage'],
         ['name' => '模型缓存', 'value' => 'model'],
         ['name' => '栏目缓存', 'value' => 'channel'],
+        ['name' => '文章缓存', 'value' => 'article'],
         ['name' => '站点配置缓存', 'value' => 'option'],
     ];
 
@@ -87,6 +89,11 @@ final class CacheRepository {
     public static function mapKey(int $site) {
         return 'cms_map_'.$site;
     }
+
+    public static function seoKey(int $site) {
+        return 'cms_seo_'.$site;
+    }
+
     public static function siteKey() {
         return 'cms_site_rule';
     }
@@ -181,6 +188,16 @@ final class CacheRepository {
         });
     }
 
+    public static function getSeoCache(): array {
+        $site = CMSRepository::siteId();
+        return cache()->getOrSet(self::seoKey($site), function () {
+            return ContentModel::query()
+                ->where('seo_link', '!=', '')
+                ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
+                ->select('id', 'model_id', 'cat_id', 'seo_link')->asArray()->get();
+        });
+    }
+
     /**
      * 获取站点的匹配规则
      * @return array{id: int, is_default: bool, match_type: int, match_rule: string}[]
@@ -226,6 +243,10 @@ final class CacheRepository {
         foreach ($items as $id) {
             cache()->delete(self::modelKey(intval($id)));
         }
+    }
+
+    public static function flushArticleCache() {
+        cache()->delete(self::seoKey(CMSRepository::siteId()));
     }
 
     public static function flushOptionCache() {

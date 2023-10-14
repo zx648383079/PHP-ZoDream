@@ -7,6 +7,7 @@ use Domain\Repositories\FileRepository;
 use Infrastructure\HtmlExpand;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\CMS\Domain\Fields\BaseField;
+use Module\CMS\Domain\Middleware\CMSSeoMiddleware;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -90,7 +91,7 @@ class FuncHelper {
      * @param string $type model|channel|linkage
      * @return int
      */
-    protected static function mapId(string|int $name, string $type = 'model'): int {
+    public static function mapId(string|int $name, string $type = 'model'): int {
         if (is_numeric($name)) {
             return intval($name);
         }
@@ -464,9 +465,8 @@ class FuncHelper {
             if ($data['type'] > 1) {
                 return empty($data['url']) ? 'javascript:;' : static::patchUrl($data['url']);
             }
-            return self::urlEncode('./category', ['id' => $id]);
+            return CMSSeoMiddleware::encodeUrl($id, false);
         }
-
         $data['model'] = self::model($data['model_id']);
         if ($name === true) {
             return $data;
@@ -879,12 +879,7 @@ class FuncHelper {
     }
 
     public static function contentUrl(array $data): string {
-        $args = [
-            'id' => $data['id'],
-            'category' => $data['cat_id'],
-            'model' => $data['model_id']
-        ];
-        return self::urlEncode('./content', $args);
+        return CMSSeoMiddleware::encodeUrl($data, true);
     }
 
     public static function url(mixed $data): string {
@@ -892,9 +887,6 @@ class FuncHelper {
             return self::contentUrl($data);
         }
         $args = [];
-        if (isset($_GET['preview'])) {
-            $args['preview'] = $_GET['preview'];
-        }
         if (!is_null($data) && Str::endWith($data, ',false')) {
             return self::urlEncode(substr($data, 0, strlen($data) - 6), $args, null, false);
         }

@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Zodream\Template\View;
 use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Helpers\Json;
@@ -106,7 +108,7 @@ $this->set([
     <article id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
         <p class="book-copyright"><?=__('Reprint please keep the original link:')?>
-            <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=$this->url('./', ['id' => $blog->id])?></a>
+            <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=BlogSeoMiddleware::encodeUrl($blog->id)?></a>
         </p>
     </article>
     <div class="toggle-open">
@@ -191,7 +193,7 @@ $this->set([
         <?php foreach($relation_list as $item):?>
             <div class="list-item">
                 <div class="item-title">
-                    <a class="name" href="<?=$this->url('./', ['id' => $item->id])?>"><?=$this->text($item->title)?></a>
+                    <a class="name" href="<?=BlogSeoMiddleware::encodeUrl($item->id)?>"><?=$this->text($item->title)?></a>
                     <div class="time"><?=$this->ago($item->getAttributeSource('created_at'))?></div></div>
                 <div class="item-meta"><?=$this->text($item->description)?>
                 </div>

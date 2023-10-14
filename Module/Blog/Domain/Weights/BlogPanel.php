@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Weights;
 
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
 use Module\Template\Domain\Weights\Node;
@@ -23,7 +24,7 @@ class BlogPanel extends Node {
                 0, '', $lang,
                 $tag, $limit);
             return implode('', array_map(function (BlogModel $item) {
-                $url = url('/blog', ['id' => $item->id]);
+                $url = BlogSeoMiddleware::encodeUrl($item->id);
                 $title = Html::text($item->title);
                 $meta = Html::text($item->description);
                 $ago = Time::isTimeAgo($item->getAttributeSource('created_at'), 2678400);

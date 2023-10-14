@@ -12,53 +12,53 @@ final class ParserTest extends TestCase {
     public static function codeProvider(): array
     {
         return [
-           /* ['{>$a=$b}', '\<?php $a=$b; ?>'],
-            ['{>$pns_beian=option:pns_beian}', '\<?php $pns_beian=option(\'pns_beian\'); ?>'],
-            ['{request.host}', '\<?php request()->host(); ?>'],
-            ['{>}',        '\<?php'],
-            ['{>css}', ''],
-            ['{>js}', ''],
-            ['{/>}',  '?>'],
-            ['{> a=b}', '\<?php a = b ?>'],
-            ['{| a==b}', '\<?php if (a==b): ?>'],
-            ['{+ a > c}', '\<?php elseif (a==b): ?>'],
+            ['{if:isset($keywords),$keywords}', '\<?php if (isset($keywords)) { echo $keywords; } ?>'],
+            ['{>$a=$b}', '\<?php $a = $b; ?>'],
+            ['{>$pns_beian=option:pns_beian}', '\<?php $pns_beian = option(\'pns_beian\'); ?>'],
+            ['{request.host}', '\<?= request()->host() ?>'],
+//            ['{>}',        '\<?php'],
+            ['{@style.css}', ''],
+            ['{@main.js}', ''],
+/*            ['{/>}',  '?>'],*/
+            ['{| $a==$b}', '\<?php if ($a == $b): ?>'],
+            ['{+ $a > $c}', '\<?php elseif ($a > $c): ?>'],
             ['{+}', '\<?php else: ?>'],
             ['{-}', '\<?php endif; ?>'],
-            ['{~}', '\<?php for(): ?>'],
-            ['{/~}', '\<?php endfor; ?>'],
+/*            ['{~}', '\<?php for(): ?>'],*/
+/*            ['{/~}', '\<?php endfor; ?>'],*/
 
-            ['{name}', '\<?php echo name; ?>'],
-            ['{name.a}', '\<?php echo name[a]; ?>'],
-            ['{name,hh}', '\<?php echo isset(name) ? name : hh; ?>'],
+            ['{name}', '\<?= \'name\' ?>'],
+            ['{$name.a}', '\<?= $name[\'a\'] ?>'],
+            ['{$name??hh}', '\<?= $name ?? \'hh\' ?>'],
 
-            ['{for:name}', '\<?php while(name):?>'],
-            ['{for:name,value}', '\<?php foreach(name as value): ?>'],
-            ['{for:name,key=>value}', '\<?php foreach(name as key=>value): ?>'],
-            ['{for:name,key=>value,length}', '\<?php $i = 0; foreach(name as key=>value): $i ++; if ($i > length): break; endif;?>'],
-            ['{for:name,key=>value,>=h}', '\<?php foreach(name as key=>value): if (key >=h): ?>'],
-            ['{for:$i,$i>0,$i++}', '\<?php for($i; $i>0; $i++): ?>'],
-            ['{/for}', '\<?php endforeach; ?>'],
+            ['{for:$name}', '\<?php while ($name): ?>'],
+            ['{for:$name,$value}', '\<?php if (!empty($name)): foreach ($name as $value): ?>'],
+            ['{for:$name,$key=>$value}', '\<?php if (!empty($name)): foreach ($name as $key => $value): ?>'],
+            ['{for:$name,$key=>$value,$length}', '\<?php if (!empty($name)):  $i = 0; foreach($name as $key => $value): $i ++; if ($i > $length): break; endif; ?>'],
+            ['{for:$name,$key=>$value,>=10}', '\<?php if (!empty($name)): foreach($name as $key=>$value): if (!($key >= 10)): break; endif; ?>'],
+            ['{for:$i,$i>0,$i++}', '\<?php for($i; $i > 0; $i ++): ?>'],
+/*            ['{/for}', '\<?php endforeach; ?>'],*/
 
-            ['{name=qq?v}', '\<?php name = qq ? qq : v; ?>'],
-            ['{name=qq?v:b}', '\<?php name = qq ? v : b; ?>'],
+            ['{$name=$qq?$v}', '\<?php $name = $qq ? $v; ?>'],
+            ['{$name=$qq?$v:$b}', '\<?php $name = $qq ? $v : $b; ?>'],
 
-            ['{if:name=qq}', '\<?php if (name = qq): ?>'],
-            ['{if:name=qq,hh}', '\<?php if (name = qq){ echo hh; } ?>'],
-            ['{if:name>qq,hh,gg}', '\<?php if (name = qq){ echo hh; } else { echo gg;} ?>'],
+            ['{if:$name=qq}', '\<?php if ($name = \'qq\'): ?>'],
+            ['{if:$name=$qq,hh}', '\<?php if ($name = $qq) { echo \'hh\'; } ?>'],
+            ['{if:$name>$qq,hh,gg}', '\<?php if ($name > $qq) { echo \'hh\'; } else { echo \'gg\';} ?>'],
             ['{/if}', '\<?php endif; ?>'],
             ['{else}', '\<?php else: ?>'],
-            ['{elseif}', '\<?php elseif: ?>'],
+            ['{elseif}', '\<?php elseif (): ?>'],
 
-            ['{switch:name}', '\<?php $this->swi(name); >'],
-            ['{switch:name,value}', '\<?php $this->swi(name, value); >'],
-            ['{case:hhhh>0}', '\<?php case hh>0:; >'],
-            ['{/switch}', '\<?php endswitch; >'],
+/*            ['{switch:name}', '\<?php $this->swi(name); ?>'],*/
+/*            ['{switch:name,value}', '\<?php $this->swi(name, value); ?>'],*/
+            ['{case:hhhh>0}', '\<?php case \'hhhh\' > 0: ?>'],
+            ['{/switch}', '\<?php endswitch; ?>'],
 
            // ['{extend:file,hhh}'],
 
-            ['{name=value}', '\<?php name = value; ?>'],
+            ['{name=value}', '\<?php \'name\' = \'value\'; ?>'],
            // ['{arg,...=value,...}', '\<?php arg = value;. = .;?\>'],
-            */
+
         ];
     }
 
@@ -122,7 +122,8 @@ final class ParserTest extends TestCase {
     #[DataProvider('codeProvider')]
     public function testCode(string $input, string $output) {
         $parser = new ParserCompiler();
-        $this->assertEquals($parser->parse($input), $output);
+        $parser->registerFunc('option');
+        $this->assertEquals($parser->parse($input), str_replace(['\<', '\>'], ['<', '>'], $output));
     }
 
     #[DataProvider('lineProvider')]

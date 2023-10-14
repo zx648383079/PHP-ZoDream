@@ -36,12 +36,12 @@
                             </li>
                             {channels:tree=>1,group=>nav}
                             <li class="{channelActive:$channel.id,true}">
-                                <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
+                                <a href="{=channel:$channel,url}">{$channel.title}</a>
                                 {if:isset($channel.children)}
                                 <ul class="sub-menu">
                                     {for:$channel.children,$item}
                                     <li>
-                                        <a href="{url:./category?id=:$item.id}">{$item.title}</a>
+                                        <a href="{=channel:$item,url}">{$item.title}</a>
                                     </li>
                                     {/for}
                                 </ul>

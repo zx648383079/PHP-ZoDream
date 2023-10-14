@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Zodream\Template\View;
 use Zodream\Helpers\Str;
 /** @var $this View */
@@ -75,7 +77,7 @@ $this->title = '文章列表';
             </td>
             <td>
                 <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./', ['id' => $item->id])?>" target="_blank">预览</a>
+                    <a class="btn btn-default btn-xs" href="<?=BlogSeoMiddleware::encodeUrl($item->id)?>" target="_blank">预览</a>
                     <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/blog/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/blog/delete', ['id' => $item->id])?>">删除</a>
                 </div>

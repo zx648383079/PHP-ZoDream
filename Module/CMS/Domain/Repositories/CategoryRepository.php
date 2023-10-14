@@ -39,6 +39,11 @@ class CategoryRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = CategoryModel::findOrNew($id);
+        if (is_numeric($data['name'])) {
+            $data['name'] = sprintf('%s%d',
+                CMSRepository::generateTableName($data['title']),
+                $data['name']);
+        }
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());

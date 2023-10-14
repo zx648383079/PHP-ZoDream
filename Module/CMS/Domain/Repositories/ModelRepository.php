@@ -65,7 +65,7 @@ class ModelRepository {
             throw new \Exception('');
         }
         if ($id > 0) {
-            unset($data['table']);
+            unset($data['table'], $data['type']);
         } elseif (ModelModel::where('`table`', $data['table'])->count() > 0) {
             throw new \Exception('表名已存在');
         }
@@ -238,7 +238,7 @@ class ModelRepository {
         return $data;
     }
 
-    public static function fieldOption(string $type, int $field) {
+    public static function fieldOption(string $type, int $field): array {
         $model = ModelFieldModel::findOrNew($field);
         $field = SingleScene::newField($type);
         $data = $field->options($model, true);
@@ -266,7 +266,7 @@ class ModelRepository {
         ModelFieldModel::query()->insert($add);
     }
 
-    public static function restart(int $id) {
+    public static function restart(int $id): void {
         $model = ModelModel::findOrThrow($id);
         $scene = CMSRepository::scene()->setModel($model);
         $scene->removeTable();

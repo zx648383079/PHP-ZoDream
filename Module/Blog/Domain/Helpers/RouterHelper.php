@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Helpers;
 
+use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\TagModel;
@@ -50,11 +51,11 @@ class RouterHelper {
         return $data[$id];
     }
 
-    public static function reset() {
+    public static function reset(): void {
         cache()->delete(static::CACHE_KEY);
     }
 
-    public static function openLinks(SiteMap $map) {
+    public static function openLinks(SiteMap $map): void {
         $map->add(url('./'), time());
         $map->add(url('./tag'), time());
         $map->add(url('./category'), time());
@@ -63,7 +64,7 @@ class RouterHelper {
             ->orderBy('id', 'desc')
             ->get('id', 'updated_at');
         foreach ($items as $item) {
-            $map->add($item->url,
+            $map->add(BlogSeoMiddleware::encodeUrl($item['id']),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
         $items = TermModel::orderBy('id', 'desc')

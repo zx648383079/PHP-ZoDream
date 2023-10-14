@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Fields\BaseField;
-use Module\CMS\Domain\Fields\Linkages;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -20,7 +20,6 @@ use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
-use Zodream\Infrastructure\Concerns\ErrorTrait;
 use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Validate\ValidationException;
 
@@ -43,30 +42,54 @@ abstract class BaseScene implements SceneInterface {
         return intval($this->model['id']);
     }
 
+    /**
+     * 是否是文章表单
+     * @return bool
+     */
+    public function isArticleModel(): bool {
+        return empty($this->model) || $this->model['type'] < 1;
+    }
+
     public function remove(int|array|callable $id): bool {
-        $main = null;
+        if (!is_callable($id)) {
+            $this->removeId(ModelHelper::parseArrInt($id));
+            return true;
+        }
+        $idItems = [];
         foreach ([
                      $this->query(),
-                     $this->extendQuery()
+                     $this->extendQuery(),
                  ] as $i => $query) {
             /** @var Builder $query */
-            if (is_array($id)) {
-                $query->whereIn('id', $id)->delete();
-                continue;
-            }
-            if (!is_callable($id)) {
-                $query->where('id', $id)->delete();
-                continue;
-            }
             if ($i < 1) {
                 $query->where('model_id', $this->modelId());
             }
-            if (($main = call_user_func($id, $query, $main, $i)) === false) {
+            if (call_user_func($id, $query, $i < 1) === false) {
                 return true;
             }
-            $query->delete();
+            $idItems = array_merge($idItems, $query->pluck('id'));
         }
+        $this->removeId(array_unique($idItems));
         return true;
+    }
+
+    /**
+     * 根据id删除信息
+     * @param array $idItems
+     * @return void
+     * @throws \Exception
+     */
+    protected function removeId(array $idItems): void {
+        if (empty($idItems)) {
+            return;
+        }
+        foreach ([
+                     $this->query(),
+                     $this->extendQuery(),
+                 ] as $query) {
+            /** @var Builder $query */
+            $query->whereIn('id', $idItems)->delete();
+        }
     }
 
     public function find(int|callable $id): array {
@@ -119,11 +142,7 @@ abstract class BaseScene implements SceneInterface {
     }
 
     public function insert(array $data): bool|int {
-        $count = $this->query()
-            ->where('title', $data['title'])->count();
-        if ($count > 0) {
-            throw new \Exception('标题重复');
-        }
+        $this->validateDataUnique($data);
         list($main, $extend) = $this->filterInput($data);
         $main['updated_at'] = $main['created_at'] = time();
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
@@ -144,14 +163,24 @@ abstract class BaseScene implements SceneInterface {
 
     }
 
-    public function update(int $id, array $data): bool {
-        if (isset($data['title'])) {
-            $count = $this->query()->where('id', '<>', $id)
-                ->where('title', $data['title'])->count();
-            if ($count > 0) {
-                throw new \Exception('标题重复');
-            }
+    protected function validateDataUnique(array $data, int $id = 0) {
+        if (!$this->isArticleModel()) {
+            return;
         }
+        if (empty($data['title'])) {
+            return;
+        }
+        $count = $this->query()->when($id > 0, function ($query) use ($id) {
+                $query->where('id', '<>', $id);
+            })
+            ->where('title', $data['title'])->count();
+        if ($count > 0) {
+            throw new \Exception('标题重复');
+        }
+    }
+
+    public function update(int $id, array $data): bool {
+        $this->validateDataUnique($data);
         list($main, $extend) = $this->filterInput($data, false);
         $main['updated_at'] = time();
         $main['model_id'] = $this->modelId();
@@ -223,9 +252,13 @@ abstract class BaseScene implements SceneInterface {
      * @return string[]
      */
     protected function mainDefaultField(): array {
-        return ['id', 'cat_id', 'model_id', 'user_id',
-            'status', 'view_count', 'comment_count', 'comment_open',
+        $items = ['id', 'cat_id', 'model_id', 'user_id',
+            'status',
             'updated_at', 'created_at', 'parent_id'];
+        if (!$this->isArticleModel()) {
+            return $items;
+        }
+        return array_merge($items, ['view_count', 'comment_count', 'comment_open',]);
     }
 
     protected function getGroupFieldName(): array {
@@ -353,7 +386,7 @@ abstract class BaseScene implements SceneInterface {
         return false;
     }
 
-    private function addWhereIfMultiple(Builder $query, string $key, mixed $value) {
+    private function addWhereIfMultiple(Builder $query, string $key, mixed $value): void {
         $items = BaseField::fromMultipleValue($value);
         if (empty($items)) {
             return;
@@ -464,7 +497,7 @@ abstract class BaseScene implements SceneInterface {
 
     }
 
-    protected function initCommentTable() {
+    protected function initCommentTable(): void {
         CreateCmsTables::createTable($this->getCommentTable(), function (Table $table) {
             $table->id();
             $table->string('content');
@@ -482,24 +515,46 @@ abstract class BaseScene implements SceneInterface {
         });
     }
 
-    protected function initMainTableField(Table $table) {
+    protected function initMainTableField(Table $table): void {
+        $table->id();
+        $table->uint('cat_id');
+        $table->uint('model_id');
+        $table->uint('parent_id')->default(0);
+        $table->uint('user_id')->default(0);
+        if ($this->isArticleModel()) {
+            $table->string('title', 100);
+            $table->string('keywords')->default('');
+            $table->string('thumb')->default('');
+            $table->string('description')->default('');
+            $table->uint('view_count')->default(0);
+            $table->uint('comment_count')->default(0);
+            $table->bool('comment_open')->default(0);
+            $table->string('seo_link')->default('')->comment('优雅链接');
+        }
+        $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_DRAFT);
+        $table->timestamps();
+    }
+
+    /**
+     * 存储优雅所有实体的内容
+     * @param Table $table
+     * @return void
+     */
+    protected function initSeoTableField(Table $table): void {
         $table->id();
         $table->string('title', 100);
         $table->uint('cat_id');
         $table->uint('model_id');
         $table->uint('parent_id')->default(0);
-        $table->uint('user_id')->default(0);
-        $table->string('keywords')->default('');
-        $table->string('thumb')->default('');
-        $table->string('description')->default('');
+        $table->string('seo_link')->default('')->comment('优雅链接');
         $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_DRAFT);
-        $table->uint('view_count')->default(0);
-        $table->uint('comment_count')->default(0);
-        $table->bool('comment_open')->default(0);
-        $table->timestamps();
+        $table->timestamp(ModelModel::CREATED_AT);
     }
 
-    protected function initDefaultModelField() {
+    protected function initDefaultModelField(): void {
+        if (!$this->isArticleModel()) {
+            return;
+        }
         ModelRepository::batchAddField([
             [
                 'name' => '标题',
@@ -545,6 +600,15 @@ abstract class BaseScene implements SceneInterface {
                 'is_system' => 1,
                 'is_required' => 0,
                 'type' => 'switch'
+            ],
+            [
+                'name' => 'SEO优雅链接',
+                'field' => 'seo_link',
+                'model_id' => $this->modelId(),
+                'is_main' => 1,
+                'is_system' => 1,
+                'is_required' => 0,
+                'type' => 'text'
             ],
             [
                 'name' => '内容',
