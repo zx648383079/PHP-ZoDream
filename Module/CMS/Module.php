@@ -6,10 +6,12 @@ use Module\CMS\Domain\Middleware\CMSSeoMiddleware;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ContentModel;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
+use Zodream\Helpers\Time;
 use Zodream\Route\Controller\Module as BaseModule;
 
 class Module extends BaseModule implements ISiteMapModule {
@@ -52,11 +54,13 @@ class Module extends BaseModule implements ISiteMapModule {
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
         }
         $items = ContentModel::query()->where('cat_id', '>', 0)
-            ->get('id', 'cat_id', 'model_id', 'updated_at');
+            ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
+            ->asArray()
+            ->get('id', 'cat_id', 'model_id', 'created_at');
         foreach ($items as $item) {
-            $map->add(url('./content',
-                ['id' => $item->id, 'category' => $item->cat_id, 'model' => $item->model_id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
+            $map->add(CMSSeoMiddleware::encodeUrl($item, true),
+                Time::format(intval($item['created_at'])),
+                SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
         }
     }
 }
