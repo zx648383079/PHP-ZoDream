@@ -586,18 +586,21 @@ class AuthRepository {
         ]);
     }
 
-    public static function loginUserId(int $id): void {
-        static::loginUser(UserModel::findIdentity($id));
+    public static function loginUserId(int $id, string $vendor = LoginLogModel::MODE_WEB): void {
+        static::loginUser(UserModel::findIdentity($id), vendor: $vendor);
     }
 
     /**
-     * @param $user
+     * @param UserModel $user
      * @param mixed $remember
      * @param mixed $replaceToken
+     * @param string $vendor
      * @return bool|null
      * @throws Exception
      */
-    private static function loginUser(UserModel $user, bool $remember = false, bool $replaceToken = true): ?bool {
+    private static function loginUser(UserModel $user,
+                                      bool $remember = false,
+                                      bool $replaceToken = true, string $vendor = LoginLogModel::MODE_WEB): ?bool {
         if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
@@ -605,12 +608,12 @@ class AuthRepository {
             if ($replaceToken) {
                 $user->setRememberToken(Str::random(60));
             }
-            return self::doLogin($user, $remember);
+            return self::doLogin($user, $remember, $vendor);
         }
         if (!$user->save()) {
             throw AuthException::invalidLogin();
         }
-        return self::doLogin($user, $remember);
+        return self::doLogin($user, $remember, $vendor);
     }
 
     private static function quickRegisterMobile(string $mobile, bool $remember) {
@@ -690,7 +693,7 @@ class AuthRepository {
         if ($userId <= 0 || !$autoLogin) {
             return $userId;
         }
-        static::loginUserId($userId);
+        static::loginUserId($userId, LoginLogModel::MODE_TICKET);
         return $userId;
     }
 }

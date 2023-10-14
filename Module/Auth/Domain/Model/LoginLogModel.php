@@ -17,9 +17,11 @@ use Domain\Model\Model;
 class LoginLogModel extends Model {
 
     const MODE_WEB = 'web';
+    const MODE_TICKET = 'ticket'; // 一次性凭证
     const MODE_APP = 'app';     // APP登陆
     const MODE_QR = 'qr';     // 扫描登陆
     const MODE_OAUTH = 'oauth';  //第三方登陆
+    const MODE_WEBAUTHN = 'webauthn'; // passkey 登录
 
 	public static function tableName(): string {
         return 'user_login_log';

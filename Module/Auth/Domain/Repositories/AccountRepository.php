@@ -84,15 +84,15 @@ final class AccountRepository {
 
     private static function getConnectMaps(): array {
         return [
-            'qq' => [
+            OAuthModel::TYPE_QQ => [
                 'name' => 'QQ',
                 'icon' => 'fa-qq',
             ],
-            'wx' => [
+            OAuthModel::TYPE_WX => [
                 'name' => '微信',
                 'icon' => 'fa-wechat',
             ],
-            'wx_mini' => [
+            OAuthModel::TYPE_WX_MINI => [
                 'name' => '微信小程序',
                 'icon' => 'fa-wechat',
             ],
@@ -100,7 +100,7 @@ final class AccountRepository {
                 'name' => '支付宝',
                 'icon' => 'fa-alipay',
             ],
-            'weibo' => [
+            OAuthModel::TYPE_WEIBO => [
                 'name' => '微博',
                 'icon' => 'fa-weibo',
             ],
@@ -115,6 +115,10 @@ final class AccountRepository {
             'google' => [
                 'name' => 'Google',
                 'icon' => 'fa-google',
+            ],
+            OAuthModel::TYPE_WEBAUTHN => [
+                'name' => 'WebAuthn',
+                'icon' => 'fa-fingerprint',
             ],
         ];
     }

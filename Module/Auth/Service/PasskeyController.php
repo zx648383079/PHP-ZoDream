@@ -21,7 +21,7 @@ class PasskeyController extends Controller {
 
     public function loginAction(array $credential, string $redirect_uri = '') {
         try {
-            PassKey::login($credential);
+            PassKey::login($_POST['credential']);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }

@@ -37,7 +37,7 @@ class Base64 {
 
     public static decode(base64: string): ArrayBuffer {
         const len = base64.length;
-        const bufferLength = base64.length * 0.75;
+        const bufferLength = len * 0.75;
         const arraybuffer = new ArrayBuffer(bufferLength);
         const bytes = new Uint8Array(arraybuffer);
       

@@ -15,14 +15,14 @@ $this->registerJsFile('@base64.min.js')->registerJs($js);
 
     <?php foreach($model_list as $item):?>
     <div class="connect-item">
-        <div class="nmae">
+        <div class="item-name">
             <i class="fab <?=$item['icon']?>"></i>
             <?=$item['name']?>
             <?php if (isset($item['nickname'])):?>
             (<?=$this->text($item['nickname'])?>)
             <?php endif;?>
         </div>
-        <div class="action">
+        <div class="item-action">
             <?php if (isset($item['id'])):?>
                 <a data-type="del" href="<?=$this->url('./@admin/account/delete_connect', ['id' => $item['id']])?>">解绑</a>
             <?php endif;?>

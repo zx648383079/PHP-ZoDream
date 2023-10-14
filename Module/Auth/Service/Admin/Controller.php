@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Admin;
 
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController;
 use Zodream\Disk\File;
-
 
 class Controller extends ModuleController {
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Admin;
 
 
@@ -23,7 +24,7 @@ class AccountController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function deleteConnectAction($id) {
+    public function deleteConnectAction(int $id) {
         if (empty($id) || $id < 1) {
             return $this->renderFailure('请选择解绑的平台');
         }
@@ -34,7 +35,7 @@ class AccountController extends Controller {
         ]);
     }
 
-    public function loginLogAction($keywords = null) {
+    public function loginLogAction(string $keywords = '') {
         $model_list = LoginLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
@@ -43,7 +44,7 @@ class AccountController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function logAction($keywords = null) {
+    public function logAction(string $keywords = '') {
         $model_list = ActionLogModel::where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
@@ -58,7 +59,7 @@ class AccountController extends Controller {
 
     public function updateAction(Request $request) {
         try {
-            $user = AuthRepository::updateProfile($request);
+            $user = AuthRepository::updateProfile($request->get());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

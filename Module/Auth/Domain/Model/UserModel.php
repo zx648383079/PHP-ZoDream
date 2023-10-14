@@ -117,17 +117,17 @@ class UserModel extends BaseModel {
 
     /**
      * @param string $name
-     * @return UserModel|boolean
+     * @return UserModel|null
      */
-	public static function findByName(string $name): ?string {
+	public static function findByName(string $name): ?static {
 		return static::where('name', $name)->first();
 	}
 
     /**
      * @param string $email
-     * @return UserModel|boolean
+     * @return UserModel|null
      */
-	public static function findByEmail(string $email): ?string {
+	public static function findByEmail(string $email): ?static {
 		return static::where('email', $email)->first();
 	}
 

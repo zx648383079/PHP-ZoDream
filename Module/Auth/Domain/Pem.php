@@ -8,8 +8,8 @@ use Zodream\Infrastructure\Error\StopException;
 
 class Pem {
 
-    public static function parsePublicKey(string $val, int $type): string {
-        return static::derToPublicKey(static::parseDer($val, $type));
+    public static function parsePublicKey(string $val, int $type, bool $isEncode = true): string {
+        return static::derToPublicKey(static::parseDer($val, $type, $isEncode));
     }
 
     public static function derToPublicKey(string $val): string {
@@ -19,16 +19,16 @@ class Pem {
         return $pem;
     }
 
-    public static function parseDer(string $val, int $type): string {
+    public static function parseDer(string $val, int $type, bool $isEncode = true): string {
+        $enc = $isEncode ? CBOR::decode($val) : CBOR::decodeByte($val);
         return match ($type) {
-            2 => static::parseEC2Der($val),
-            3 => static::parseRSADer($val),
+            2 => static::parseEC2Der($enc),
+            3 => static::parseRSADer($enc),
             default => throw new \Exception('unsupport'),
         };
     }
 
-    public static function parseEC2Der(string $val): string {
-        $enc = CBOR::decode($val);
+    public static function parseEC2Der(mixed $enc): string {
         $x = $enc[-2];
         $y = $enc[-3];
         return static::derSequence(
@@ -40,8 +40,7 @@ class Pem {
         );
     }
 
-    public static function parseRSADer(string $val): string {
-        $enc = CBOR::decode($val);
+    public static function parseRSADer(mixed $enc): string {
         $n = $enc[-1];
         $e = $enc[-2];
         return static::derSequence(

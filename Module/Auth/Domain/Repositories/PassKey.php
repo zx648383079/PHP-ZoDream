@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Exception;
+use Module\Auth\Domain\CBOR;
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Pem;
 use Module\SEO\Domain\Option;
-use OutOfBoundsException;
 use Zodream\Helpers\BinaryReader;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Error\StopException;
 
 final class PassKey {
     const REGISTER_KEY = 'passkey:registration';
@@ -68,17 +68,23 @@ final class PassKey {
         }
         // $attestationObject = Json::decode(base64_decode($credential['attestationObject']));
         // dr(base64_decode($credential['attestationObject']));
-        self::saveCredential($credential['id'], $credential['publicKey'],
+        $obj = static::parseAuthenticatorData($credential['attestationObject']);
+        if (empty($obj) || empty($obj['publicKey'])) {
+            throw new Exception('attestation is error');
+        }
+        self::saveCredential($credential['id'], $obj['publicKey'],
             intval($credential['publicKeyAlgorithm']));
     }
 
     protected static function saveCredential(string $credentialId, string $publicKey,
                                              int $alg = -7): void {
-        // $userId = auth()->id();
-        AuthRepository::updateOAuthData(OAuthModel::TYPE_WEBAUTHN, $credentialId, Json::encode([
-            'key' => $publicKey,
-            'alg' => $alg
-        ]));
+        $key = Pem::parsePublicKey($publicKey, $alg === -7 ? 2 : 3, false);
+        OAuthModel::create([
+            'user_id' => auth()->id(),
+            'vendor' => OAuthModel::TYPE_WEBAUTHN,
+            'identity' => $credentialId,
+            'data' => $key,
+        ]);
     }
 
     /**
@@ -102,15 +108,14 @@ final class PassKey {
 
     public static function login(array $credential): void {
         // {"type":"webauthn.get","challenge":"LtNTg","origin":"https://webauthn.io","crossOrigin":false,"other_keys_can_be_added_here":"do not compare clientDataJSON against a template. See https://goo.gl/yabPex"}
-        $credential['clientDataJSON'] = base64_decode($credential['clientDataJSON']);
-        $clientDataJSON = Json::decode($credential['clientDataJSON']);
+        $clientDataJSON = Json::decode(base64_decode($credential['clientDataJSON']));
         $challenge = base64_decode($clientDataJSON['challenge']);
         $key = sprintf('%s-%s', self::REGISTER_KEY, $challenge);
         if (!cache()->has($key)) {
             throw new \Exception('challenge is expired');
         }
         $userId = base64_decode($credential['userHandle']);
-        $signature = base64_decode($credential['signature']);
+        $signature = $credential['signature'];
         self::loadCredential(intval($userId), $credential['id'], $signature, $credential);
     }
 
@@ -124,20 +129,23 @@ final class PassKey {
      * @throws \Exception
      */
     protected static function loadCredential(int $userId, string $credentialId,  string $signature, array $credential) {
-        $data = OAuthModel::where('user_id', $userId)
+        $key = OAuthModel::where('user_id', $userId)
             ->where('identity', $credentialId)
             ->where('vendor', OAuthModel::TYPE_WEBAUTHN)
             ->value('data');
-        if (empty($publicKey)) {
+        if (empty($key)) {
             throw new \Exception('验证失败');
         }
-        $data = Json::decode($data);
-        if (!openssl_verify(base64_decode($credential['authenticatorData']).
-            self::hash($credential['clientDataJSON']),
-            $signature, Pem::parsePublicKey($data['key'], $data['alt'] === -257 ? 3 : 2), \OPENSSL_ALGO_SHA256)) {
+        $data = CBOR::decodeBase64($credential['authenticatorData']);
+        $pkey = openssl_get_publickey($key);
+        if (empty($pkey)) {
+            throw new Exception('public key is error');
+        }
+        if (!openssl_verify($data.self::hash(CBOR::decodeBase64($credential['clientDataJSON'])),
+            CBOR::decodeBase64($signature), $pkey, \OPENSSL_ALGO_SHA256)) {
             throw new \Exception('signature is error');
         }
-        AuthRepository::loginUserId($userId);
+        AuthRepository::loginUserId($userId, LoginLogModel::MODE_WEBAUTHN);
     }
 
     private static function hash(string $val): string {
@@ -147,10 +155,11 @@ final class PassKey {
     /**
      * 转化 AuthenticatorData
      * @param string $val
-     * @return array
+     * @return array{rpIdHash: string, isUserPresent: bool, isUserVerified: bool,signCount: int, aaguid: string, credentialId: string, publicKey: string}
      */
-    private static function parseAuthenticatorData(string $val): array {
-        $reader = new BinaryReader(base64_decode($val));
+    public static function parseAuthenticatorData(string $val): array {
+        $data = CBOR::decode($val);
+        $reader = new BinaryReader($data['authData']);
         $rpIdHash = $reader->read(32);
 
         $flags = $reader->readUint8();
@@ -181,6 +190,5 @@ final class PassKey {
 
         return $authData;
     }
-
 
 }

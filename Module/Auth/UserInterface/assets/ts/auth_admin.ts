@@ -17,9 +17,8 @@ function bindAuth(baseUri: string) {
                     clientDataJSON: Base64.encode(response.clientDataJSON),
                     attestationObject: Base64.encode(response.attestationObject),
                     publicKeyAlgorithm: response.getPublicKeyAlgorithm(),
-                    publicKey: Base64.encode(response.getPublicKey()),
-                    transports: response.getTransports(),
-                    authenticatorData: Base64.encode(response.getAuthenticatorData())
+                    // transports: response.getTransports(),
+                    // authenticatorData: Base64.encode(response.getAuthenticatorData())
                 }});
             })
             .catch(console.error);

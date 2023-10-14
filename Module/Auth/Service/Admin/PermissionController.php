@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Admin;
-
 
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
@@ -16,7 +16,7 @@ class PermissionController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $permission_list = PermissionModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->page();
@@ -43,7 +43,7 @@ class PermissionController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         PermissionModel::where('id', $id)->delete();
         RolePermissionModel::where('permission_id', $id)->delete();
         return $this->renderData([

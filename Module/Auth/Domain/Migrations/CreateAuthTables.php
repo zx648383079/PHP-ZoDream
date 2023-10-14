@@ -28,6 +28,7 @@ use Module\Auth\Domain\Repositories\InviteRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Schema\Table;
 
 class CreateAuthTables extends Migration {
@@ -58,10 +59,10 @@ class CreateAuthTables extends Migration {
             $table->uint('platform_id')->default(0)->comment('平台id');
             $table->string('nickname', 30)->default('')->comment('昵称');
             $table->string('vendor', 20)->default(OAuthModel::TYPE_QQ);
-            $table->string('unionid', 100)->default('联合id');
+            $table->string('unionid', 100)->default('')->comment('联合id');
             $table->string('identity', 100);
             $table->text('data')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(UserMetaModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
@@ -72,7 +73,7 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->uint('link_id')->comment('被联系的人');
             $table->uint('type', 1)->default(0)->comment('具体关系');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(BanAccountModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id')->default(0);
@@ -223,7 +224,7 @@ class CreateAuthTables extends Migration {
             $table->bool('status')->default(0);
             $table->string('mode', 20)->default(LoginLogModel::MODE_WEB);
             $table->uint('platform_id')->default(0)->comment('平台id');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(ActionLogModel::tableName(), function (Table $table) {
             $table->comment('操作记录');
             $table->id();
@@ -231,7 +232,7 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->string('action', 30);
             $table->string('remark')->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(AdminLogModel::tableName(), function (Table $table) {
             $table->comment('管理员操作记录');
             $table->id();
@@ -241,7 +242,7 @@ class CreateAuthTables extends Migration {
             $table->uint('item_id')->default(0);
             $table->string('action', 30);
             $table->string('remark')->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(ApplyLogModel::tableName(), function (Table $table) {
             $table->comment('用户申请记录');
             $table->id();
@@ -259,7 +260,7 @@ class CreateAuthTables extends Migration {
             $table->uint('type', 1)->default(0);
             $table->string('code', 40);
             $table->uint('amount', 2)->default(10);
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 }
