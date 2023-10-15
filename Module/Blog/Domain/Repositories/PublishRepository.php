@@ -102,7 +102,7 @@ final class PublishRepository {
      * @param int $id
      * @return array
      */
-    public static function languageAll(int $id) {
+    public static function languageAll(int $id): array {
         $items = BlogModel::query()
             ->where('parent_id', $id)
             ->orWhere('id', $id)

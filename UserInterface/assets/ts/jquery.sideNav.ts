@@ -26,7 +26,7 @@ class SideNav {
      * init
      */
     public init() {
-        this._window = $(window);
+        this._window = $(window) as any;
         this._initBox();
         this.getHeaders();
         if (this.headers.length < 1) {
@@ -47,20 +47,20 @@ class SideNav {
                 that.scrollTo('#'+id);
             }
         });
-        this._window.scroll(function(){
+        this._window.on('scroll', function(){
             that.setActive();
             that.fixed();
         });
     }
 
     private _getScrollTop() {
-        return window.pageYOffset;
+        return this._window.scrollTop();
     }
   
     private _getScrollHeight() {
-        return window.scrollHeight || Math.max(
-          document.body.scrollHeight,
-          document.documentElement.scrollHeight
+        return (window as any).scrollHeight || Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight
         );
     }
   

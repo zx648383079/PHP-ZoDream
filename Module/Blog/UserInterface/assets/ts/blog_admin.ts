@@ -13,23 +13,12 @@ let autoDraft = () => {
 };
 
 function bindEdit(configs: any) {
-    let editor: any,
-        box = $('#editor-container');
-    UE.delEditor('editor-container');
+    let editor: any = $('#editor-container').editor();
     $('select[name=type]').on('change', function () { 
         $('.if_type_1').toggle($(this).val() == 1);
     }).trigger('change');
-    $("#edit_type").on('change',function() {
-        if ($(this).val() == 1) {
-            if (editor) {
-                editor.destroy();
-                box.css({
-                    width: '100%'
-                });
-            }
-            return;
-        }
-        editor = UE.getEditor('editor-container', configs);
+    $("#edit_type").on('change', function() {
+        editor.toggleEditor($(this).val() == 1);
     }).trigger('change');
     $('#open_type').on('change', function() {
         let val = $(this).val() as number;

@@ -160,7 +160,7 @@ function bindBlog(id: number, type: number, langs = {}) {
         };
     const bookBody = $('.book-body');
     checkSize();
-    $(window).resize(function () {
+    $(window).on('resize', function () {
         checkSize();
     });
     bindCopy();

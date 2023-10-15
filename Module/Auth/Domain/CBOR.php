@@ -61,7 +61,7 @@ class CBOR {
                 $lookup[ord(substr($chars, $i, 1))] = $i;
             }
         }
-        $len = \mb_strlen($base64, '8bit');
+        $len = strlen($base64);
         $maxLen = (int)floor($len * .75);
         $buffer = [];
         for ($i = 0; $i < $len; $i += 4) {

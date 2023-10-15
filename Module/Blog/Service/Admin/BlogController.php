@@ -28,7 +28,7 @@ class BlogController extends Controller {
         }
         $term_list = TermModel::select('id', 'name')->all();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
-        $metaItems = BlogMetaModel::getMetaWithDefault($id);
+        $metaItems = BlogMetaModel::getOrDefault($id);
         return $this->show('edit', compact('model', 'term_list', 'tags', 'metaItems'));
     }
 

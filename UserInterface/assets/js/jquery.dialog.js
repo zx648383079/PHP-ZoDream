@@ -13,10 +13,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 /**
  * 缓存数据
@@ -106,7 +110,7 @@ var Eve = /** @class */ (function () {
         if (!this.hasEvent(event)) {
             return;
         }
-        return (_a = this.options[realEvent]).call.apply(_a, __spreadArray([this], args));
+        return (_a = this.options[realEvent]).call.apply(_a, __spreadArray([this], args, false));
     };
     return Eve;
 }());
@@ -750,7 +754,7 @@ var Dialog = /** @class */ (function () {
         var instance = this;
         if (!this._dialogBg) {
             this._dialogBg = $('<div class="dialog-bg"></div>');
-            this._dialogBg.click(function (e) {
+            this._dialogBg.on('click', function (e) {
                 e.stopPropagation();
                 instance.remove();
             });
@@ -858,7 +862,7 @@ var DialogPlugin = /** @class */ (function () {
         this.element = element;
         this.option = option;
         var instance = this;
-        this.element.click(function () {
+        this.element.on('click', function () {
             instance.getDialog($(this)).show();
         });
     }
@@ -991,11 +995,11 @@ var DialogTip = /** @class */ (function (_super) {
      * 绑定事件
      */
     DialogTip.prototype.bindEvent = function () {
-        this.box.click(function (e) {
+        this.box.on('click', function (e) {
             e.stopPropagation();
         });
         var instance = this;
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             if (instance.box) {
                 instance.resize();
                 return;
@@ -1414,7 +1418,7 @@ var DialogContent = /** @class */ (function (_super) {
     DialogContent.prototype.bindEvent = function () {
         this.trigger('init', this);
         var that = this;
-        this.box.click(function (e) {
+        this.box.on('click', function (e) {
             e.stopPropagation();
         }).on(DIALOG_DONE, function (event, data, cb) {
             if (that.hasEvent(_DIALOG_DONE)) {
@@ -1578,14 +1582,14 @@ var DialogBox = /** @class */ (function (_super) {
         var instance = this;
         var isMove = false;
         var x, y;
-        this.box.find(".dialog-header .dialog-title").mousedown(function (e) {
+        this.box.find(".dialog-header .dialog-title").on('mousedown', function (e) {
             isMove = true;
             x = e.pageX - parseInt(instance.box.css('left'));
             y = e.pageY - parseInt(instance.box.css('top'));
             instance.box.fadeTo(20, .5);
         });
         //这里可能导致 突然显示出来
-        $(document).mousemove(function (e) {
+        $(document).on('mousemove', function (e) {
             if (!isMove || instance.status != DialogStatus.show) {
                 return;
             }
@@ -1593,13 +1597,13 @@ var DialogBox = /** @class */ (function (_super) {
                 top: e.pageY - y,
                 left: e.pageX - x
             });
-        }).mouseup(function () {
+        }).on('mouseup', function () {
             isMove = false;
             if (instance.box && instance.status == DialogStatus.show) {
                 instance.box.fadeTo('fast', 1);
             }
         });
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             if (instance.box) {
                 instance.resize();
                 return;
@@ -1839,7 +1843,7 @@ var DialogPage = /** @class */ (function (_super) {
      * 绑定事件
      */
     DialogPage.prototype.bindEvent = function () {
-        this.box.click(function (e) {
+        this.box.on('click', function (e) {
             e.stopPropagation();
         });
         this.onClick(".dialog-header .fa-arrow-left", function () {
@@ -1861,6 +1865,8 @@ var DialogImage = /** @class */ (function (_super) {
     function DialogImage(option, id) {
         var _this = _super.call(this, option, id) || this;
         _this._index = -1;
+        _this._imageWidth = 0;
+        _this._imageHeight = 0;
         return _this;
     }
     Object.defineProperty(DialogImage.prototype, "src", {
@@ -1868,11 +1874,30 @@ var DialogImage = /** @class */ (function (_super) {
             return this._src;
         },
         set: function (img) {
+            var _this = this;
             if (!img) {
                 img = this.options.content;
             }
+            if (this._src === img) {
+                return;
+            }
             this._src = img;
-            this._img.attr('style', '').attr('src', img);
+            var target = new Image;
+            target.src = img;
+            var isLoaded = false;
+            var loadImage = function () {
+                isLoaded = true;
+                _this._target.empty();
+                _this._target.append(target);
+                _this.resetWithImage($(target), _this._imageWidth = target.width, _this._imageHeight = target.height);
+            };
+            target.onload = loadImage;
+            setTimeout(function () {
+                if (isLoaded || target.width <= 0) {
+                    return;
+                }
+                loadImage();
+            }, 50);
         },
         enumerable: false,
         configurable: true
@@ -1881,67 +1906,67 @@ var DialogImage = /** @class */ (function (_super) {
         Dialog.addItem(this);
         this.createCore().createContent()
             .appendParent().setProperty().bindEvent();
+        if (!this.options.content) {
+            this.src = this.trigger('request', ++this._index);
+        }
+        else {
+            this.src = this.options.content;
+        }
         if (this.status == DialogStatus.show) {
             this.showBox();
         }
     };
     DialogImage.prototype.createContent = function () {
         this.box.html(this.getContentHtml());
-        this._img = this.box.find('.dialog-body img');
+        this._target = this.box.find('.dialog-body');
         return this;
     };
     DialogImage.prototype.setProperty = function () {
-        if (!this._img) {
+        var img = this._target.find('img');
+        if (img.length === 0) {
             return this;
         }
+        if (this._imageHeight <= 0) {
+            this._imageHeight = img.height();
+        }
+        if (this._imageWidth <= 0) {
+            this._imageWidth = img.width();
+        }
+        this.resetWithImage(img, this._imageWidth, this._imageHeight);
+        return this;
+    };
+    DialogImage.prototype.resetWithImage = function (img, width, height) {
         var target = this.options.target || Dialog.$window;
         var maxWidth = target.width();
-        var width = this._img.width();
         var maxHeight = target.height();
-        var height = this._img.height();
-        if (width <= maxWidth && height <= maxHeight) {
-            this.css({
-                left: (maxWidth - width) / 2 + 'px',
-                top: (maxHeight - height) / 2 + 'px',
-                height: height,
-                width: width
-            });
-            return this;
+        if (width > maxWidth || height > maxHeight) {
+            var wScale = width / maxWidth;
+            var hScale = height / maxHeight;
+            if (wScale >= hScale) {
+                height /= wScale;
+                width = maxWidth;
+            }
+            else {
+                width /= hScale;
+                height = maxHeight;
+            }
         }
-        var wScale = width / maxWidth;
-        var hScale = height / maxHeight;
-        if (wScale >= hScale) {
-            height /= wScale;
-            this.css({
-                left: 0,
-                top: (maxHeight - height) / 2 + 'px',
-                height: height,
-                width: maxWidth
-            });
-            this._img.css({
-                height: height,
-                width: maxWidth
-            });
-            return this;
-        }
-        width /= hScale;
         this.css({
             left: (maxWidth - width) / 2 + 'px',
-            top: 0,
-            height: maxHeight,
+            top: (maxHeight - height) / 2 + 'px',
+            height: height,
             width: width
         });
-        this._img.css({
+        img.css({
             height: height,
-            width: maxWidth
+            width: width
         });
-        return this;
     };
     /**
      * 绑定事件
      */
     DialogImage.prototype.bindEvent = function () {
-        this.box.click(function (e) {
+        this.box.on('click', function (e) {
             e.stopPropagation();
         });
         this.onClick(".dialog-close", function () {
@@ -1954,18 +1979,18 @@ var DialogImage = /** @class */ (function (_super) {
             this.next();
         });
         var instance = this;
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             if (instance.box) {
                 instance.resize();
                 return;
             }
         });
-        this.box.find('.dialog-body img').bind("load", function () {
-            if (instance.box) {
-                instance.resize();
-                return;
-            }
-        });
+        // this.box.find('.dialog-body img').on("load", function() {
+        //     if (instance.box) {
+        //         instance.resize();
+        //         return;
+        //     }
+        // });
         return this;
     };
     DialogImage.prototype.showIndex = function (index) {
@@ -1990,10 +2015,7 @@ var DialogImage = /** @class */ (function (_super) {
         this.src = this.trigger('request', ++this._index);
     };
     DialogImage.prototype.getContentHtml = function () {
-        if (!this.options.content) {
-            this.options.content = this.trigger('request', ++this._index);
-        }
-        return '<i class="fa fa-chevron-left dialog-previous"></i><div class="dialog-body"><img src="' + this.options.content + '"></div><i class="fa fa-chevron-right dialog-next"></i><i class="fa fa-close dialog-close"></i>';
+        return '<i class="fa fa-chevron-left dialog-previous"></i><div class="dialog-body"></div><i class="fa fa-chevron-right dialog-next"></i><i class="fa fa-close dialog-close"></i>';
     };
     return DialogImage;
 }(DialogContent));

@@ -76,9 +76,9 @@ $this->title = '文章列表';
                 </a>
             </td>
             <td>
-                <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=BlogSeoMiddleware::encodeUrl($item->id)?>" target="_blank">预览</a>
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/blog/edit', ['id' => $item->id])?>">编辑</a>
+                <div class="btn-group">
+                    <a class="btn btn-info" href="<?=BlogSeoMiddleware::encodeUrl($item->id)?>" target="_blank">预览</a>
+                    <a class="btn btn-default" href="<?=$this->url('./@admin/blog/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/blog/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>

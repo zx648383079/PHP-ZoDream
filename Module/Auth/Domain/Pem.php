@@ -2,10 +2,6 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain;
 
-
-use Zodream\Helpers\BinaryReader;
-use Zodream\Infrastructure\Error\StopException;
-
 class Pem {
 
     public static function parsePublicKey(string $val, int $type, bool $isEncode = true): string {
