@@ -18,7 +18,7 @@ class EmojiModel extends Model {
     const TYPE_IMAGE = 0;
     const TYPE_TEXT = 1;
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'seo_emoji';

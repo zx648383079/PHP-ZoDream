@@ -696,7 +696,7 @@ class FuncHelper {
             return '';
         }
         return static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
-            return LinkageDataModel::where('id', $id)->value('full_name');
+            return (string)LinkageDataModel::where('id', $id)->value('full_name');
         });
     }
 

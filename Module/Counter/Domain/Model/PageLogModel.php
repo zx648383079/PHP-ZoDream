@@ -13,7 +13,7 @@ use Module\Counter\Domain\Events\CounterState;
  */
 class PageLogModel extends Model {
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'ctr_page_log';

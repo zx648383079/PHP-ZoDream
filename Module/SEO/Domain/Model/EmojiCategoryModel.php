@@ -13,7 +13,7 @@ use Domain\Model\Model;
  */
 class EmojiCategoryModel extends Model {
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'seo_emoji_category';

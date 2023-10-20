@@ -28,6 +28,9 @@ class CategoryController extends Controller {
     public function listAction(Request $request, int $id) {
         FuncHelper::$current['channel'] = $id;
         $cat = FuncHelper::channel($id, true);
+        if (empty($cat)) {
+            return $this->redirect('./');
+        }
         $queries = $request->get();
         unset($queries['id']);
         if (!isset($queries['field'])) {
@@ -36,7 +39,7 @@ class CategoryController extends Controller {
         $page = FuncHelper::contents($queries);
         $title = $cat['title'].'列表页';
         $keywords = isset($queries['keywords']) ? Html::text($queries['keywords']) : '';
-        return $this->show($cat->list_template,
+        return $this->show($cat['list_template'],
             compact('cat', 'page',  'title', 'keywords'));
     }
 }

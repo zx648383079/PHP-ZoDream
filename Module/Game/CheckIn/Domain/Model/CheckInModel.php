@@ -27,7 +27,7 @@ class CheckInModel extends Model {
     const METHOD_APP = 2;
     const METHOD_WX = 3;
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'check_in';

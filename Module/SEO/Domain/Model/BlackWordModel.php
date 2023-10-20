@@ -13,7 +13,7 @@ use Domain\Model\Model;
  */
 class BlackWordModel extends Model {
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'seo_black_word';

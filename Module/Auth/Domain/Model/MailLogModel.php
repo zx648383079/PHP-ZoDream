@@ -19,7 +19,7 @@ class MailLogModel extends Model {
 
     const TYPE_FIND = 1;
 
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     public static function tableName(): string {
         return 'user_mail_log';
