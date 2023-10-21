@@ -8,7 +8,11 @@ $this->title = '签到设置';
 $js = <<<JS
 bindCheckIn();
 JS;
-$this->registerJs($js);
+$this->registerCssFile(
+    '@checkin.css'
+)->registerJsFile(
+    '@checkin.min.js'
+)->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open('./@admin/setting/save')?>
@@ -41,10 +45,10 @@ $this->registerJs($js);
                     <?php endforeach;?>
                     <tr>
                         <td>
-                            <input type="text" name="option[checkin][day][]">
+                            <input type="text" class="form-control" name="option[checkin][day][]">
                         </td>
                         <td>
-                            <input type="text" name="option[checkin][plus][]">
+                            <input type="text" class="form-control" name="option[checkin][plus][]">
                         </td>
                         <td>
                             <i class="fa fa-times"></i>
@@ -64,6 +68,8 @@ $this->registerJs($js);
         </div>
     </div>
 
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close() ?>

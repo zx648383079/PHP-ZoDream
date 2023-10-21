@@ -13,7 +13,7 @@ use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\SEO\Domain\Option;
-use Module\SMS\Domain\Sms;
+use Module\MessageService\Domain\Sms;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;

@@ -1,23 +1,27 @@
-$inputPadding: 0 .5rem;
-$inputTypeMaps: (text, email, tel, password, url, search);
+$inputPadding: .3rem .5rem;
+$radius: .375rem;
 
 .form-control {
-    height: $lineHeight;
-    padding: 0 .3rem;
+    padding: $inputPadding;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    appearance: none;
+    border-radius: $radius;
+    border-width: 1px;
 }
 
 .form-ico {
+    .form-control {
+        border-radius: 0;
+        padding-left: $lineHeight;
+        height: $lineHeight;
+        width: 100%;
+        box-sizing: border-box;
+    }
     .input-group {
         position: relative;
         line-height: $lineHeight;
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}] {
-                padding-left: $lineHeight;
-                height: $lineHeight;
-                width: 100%;
-                box-sizing: border-box;
-            }
-        }
         
         .fa {
             position: absolute;
@@ -250,24 +254,18 @@ i {
 }
 .form-horizontal {
     line-height: $lineHeight;
+    .form-control {
+        border: none;
+        background: transparent;
+        height: $lineHeight;
+        box-sizing: border-box;
+    }
     .input-group {
         display: inline-block;
         border-bottom: 1px solid #777;
         height: $lineHeight;
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            select {
-                border: none;
-                background: transparent;
-                height: $lineHeight;
-                box-sizing: border-box;
-            }
-        }
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            textarea {
-                padding: $inputPadding;
-            }
+        textarea {
+            padding: .5rem;
         }
     }
     .btn {
@@ -276,29 +274,19 @@ i {
 }
 
 .form-inline {
+    .form-control {
+        border: none;
+        background: transparent;
+        height: $lineHeight;
+        box-sizing: border-box;
+        &.height-auto {
+            height: auto;
+        }
+    }
     .input-group {
         display: block;
         border-bottom: 1px solid #777;
         min-height: $lineHeight;
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            select,
-            textarea {
-                border: none;
-                background: transparent;
-                height: $lineHeight;
-                box-sizing: border-box;
-                &.height-auto {
-                    height: auto;
-                }
-            }
-        }
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            textarea {
-                padding: $inputPadding;
-            }
-        }
     }
     .btn {
         line-height: $lineHeight;
@@ -307,25 +295,16 @@ i {
 }
 
 .form-default {
+    .form-control {
+        border: none;
+        background: transparent;
+        box-sizing: border-box;
+        height: $lineHeight;
+        display: block;
+    }
     .input-group {
         display: block;
         border-bottom: 1px solid #777;
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            select {
-                border: none;
-                background: transparent;
-                box-sizing: border-box;
-                height: $lineHeight;
-                display: block;
-            }
-        }
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            textarea {
-                padding: $inputPadding;
-            }
-        }
         textarea {
             width: 100%;
             display: block;
@@ -341,26 +320,19 @@ i {
 }
 
 .form-table {
+    .form-control {
+        height: $lineHeight;
+        min-width: 12.5rem;
+        padding: 0 .3rem;
+    }
     .input-group {
         display: flex;
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}] {
-                height: $lineHeight;
-                min-width: 12.5rem;
-                padding: 0 .3rem;
-            }
-        }
-        @each $type in $inputTypeMaps {
-            input[type=#{$type}],
-            textarea {
-                padding: $inputPadding;
-            }
-        }
         select {
             height: $lineHeight;
             min-width: 6.25rem;
         }
         textarea {
+            padding: .5rem;
             min-width: 12.5rem;
             min-height: $lineHeight * 3;
         }
@@ -400,46 +372,6 @@ i {
             clear: both;
         }
     }
-    .file-input {
-        display: flex;
-        button {
-            padding: 0 .8rem;
-            line-height: $lineHeight;
-            border: none;
-            background-color: $brand-info;
-            color: #fff;
-            cursor: pointer;
-            &:nth-child(2n+1) {
-                background-color: $brand-warning;
-            }
-            &:hover {
-                font-weight: bold;
-            }
-        }
-        &.file-uploading {
-            position: relative;
-            display: inline-block;
-            flex: none;
-            input {
-                background-color: transparent;
-                border: none;
-            }
-            button {
-                cursor: not-allowed;
-            }
-            &::after {
-                content: " ";
-                display: block;
-                position: absolute;
-                bottom: 0;
-                width: 20%;
-                height: .1rem;
-                opacity: .6;
-                background-color: #0dcaf0;
-                animation: 1s linear infinite borderLoop alternate;
-            }
-        }
-    }
     .actions {
         text-align: center;
         &.fixed {
@@ -450,6 +382,54 @@ i {
         }
         .btn {
             line-height: $lineHeight;
+        }
+    }
+}
+
+.file-input {
+    display: flex;
+    .form-control {
+        border-radius: 0;
+        &:first-of-type {
+            border-top-left-radius: $radius;
+            border-bottom-left-radius: $radius;
+        }
+    }
+    button {
+        padding: 0 .8rem;
+        line-height: $lineHeight;
+        border: none;
+        background-color: $brand-info;
+        color: #fff;
+        cursor: pointer;
+        &:nth-child(2n+1) {
+            background-color: $brand-warning;
+        }
+        &:hover {
+            font-weight: bold;
+        }
+    }
+    &.file-uploading {
+        position: relative;
+        display: inline-block;
+        flex: none;
+        input {
+            background-color: transparent;
+            border: none;
+        }
+        button {
+            cursor: not-allowed;
+        }
+        &::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            bottom: 0;
+            width: 20%;
+            height: .1rem;
+            opacity: .6;
+            background-color: #0dcaf0;
+            animation: 1s linear infinite borderLoop alternate;
         }
     }
 }

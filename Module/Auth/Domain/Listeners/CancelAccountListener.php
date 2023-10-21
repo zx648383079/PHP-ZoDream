@@ -19,7 +19,6 @@ class CancelAccountListener {
         BulletinUserModel::where('user_id', $event->getUserId())->delete();
         OAuthModel::where('user_id', $event->getUserId())->delete();
         UserMetaModel::where('user_id', $event->getUserId())->delete();
-        MailLogModel::where('user_id', $event->getUserId())->delete();
         AccountLogModel::where('user_id', $event->getUserId())->delete();
         ActionLogModel::where('user_id', $event->getUserId())->delete();
         LoginLogModel::where('user_id', $event->getUserId())->delete();

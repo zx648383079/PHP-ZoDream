@@ -1,5 +1,5 @@
 <?php
-namespace Module\SMS\Service\Api;
+namespace Module\MessageService\Service\Api;
 
 class HomeController extends Controller {
 

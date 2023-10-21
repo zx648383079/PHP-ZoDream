@@ -5,17 +5,9 @@ function bindCheckIn() {
         }
         $(this).closest('tr').remove();
     }).on('click', '.fa-plus', function() {
-        box.find('tbody').append(`<tr>
-        <td>
-            <input type="text" name="option[checkin][day][]">
-        </td>
-        <td>
-            <input type="text" name="option[checkin][plus][]">
-        </td>
-        <td>
-            <i class="fa fa-times"></i>
-        </td>
-    </tr>`);
+        const tr = box.find('tbody tr').eq(0).clone(true, true);
+        box.find('tbody').append(tr);
+        tr.find('.form-control').val('');
     });
 }
 $(function() {

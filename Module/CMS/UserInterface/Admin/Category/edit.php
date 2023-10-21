@@ -32,7 +32,7 @@ $this->registerJs($js);
                 <?=Form::select('model_id', [$model_list, ['-- 无 --']])?>
                 <div class="input-group">
                     <label>上级</label>
-                    <select name="parent_id">
+                    <select name="parent_id" class="form-control">
                         <option value="0">-- 无上级分类 --</option>
                         <?php foreach($cat_list as $item):?>
                         <option value="<?=$item['id']?>" <?=$model->parent_id == $item['id'] ? 'selected': '' ?>>

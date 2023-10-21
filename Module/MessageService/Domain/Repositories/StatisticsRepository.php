@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\SMS\Domain\Repositories;
+namespace Module\MessageService\Domain\Repositories;
 
 final class StatisticsRepository {
 

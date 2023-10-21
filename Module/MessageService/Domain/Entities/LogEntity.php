@@ -1,54 +1,59 @@
 <?php
-namespace Module\SMS\Domain\Model;
+namespace Module\MessageService\Domain\Entities;
 
-use Domain\Model\Model;
+
+use Domain\Entities\Entity;
 
 /**
- * Class SmsLogModel
- * @package Module\SMS\Domain\Model
+ *
  * @property integer $id
- * @property integer $signature_id
  * @property integer $template_id
- * @property string $mobile
+ * @property integer $target_type
+ * @property string $target
+ * @property string $template_name
  * @property integer $type
  * @property string $content
  * @property integer $status
+ * @property string $message
  * @property string $ip
- * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $created_at
  */
-class SmsLogModel extends Model {
+class LogEntity extends Entity {
     public static function tableName(): string {
-        return 'sms_log';
+        return 'ms_log';
     }
 
     protected function rules(): array {
         return [
-            'signature_id' => 'int',
             'template_id' => 'int',
-            'mobile' => 'string:0,20',
+            'target_type' => 'required|int:0,127',
+            'target' => 'required|string:0,100',
+            'template_name' => 'required|string:0,20',
             'type' => 'int:0,127',
-            'content' => 'string:0,255',
+            'content' => 'required',
             'status' => 'int:0,127',
+            'message' => 'string:0,255',
             'ip' => 'string:0,120',
-            'created_at' => 'int',
             'updated_at' => 'int',
+            'created_at' => 'int',
         ];
     }
 
     protected function labels(): array {
         return [
             'id' => 'Id',
-            'signature_id' => 'Signature Id',
             'template_id' => 'Template Id',
-            'mobile' => 'Mobile',
+            'target_type' => 'Target Type',
+            'target' => 'Target',
+            'template_name' => 'Template Name',
             'type' => 'Type',
             'content' => 'Content',
             'status' => 'Status',
+            'message' => 'Message',
             'ip' => 'Ip',
-            'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'created_at' => 'Created At',
         ];
     }
-
 }

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\SMS\Service\Api\Admin;
+namespace Module\MessageService\Service\Api\Admin;
 
-use Module\SMS\Domain\Repositories\StatisticsRepository;
+use Module\MessageService\Domain\Repositories\StatisticsRepository;
 
 final class StatisticsController extends Controller {
 

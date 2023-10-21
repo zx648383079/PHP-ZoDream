@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Plugin\Domain\Repositories;
 
 use Composer\Autoload\ClassLoader;
@@ -7,7 +8,7 @@ use Module\Plugin\Domain\IPlugin;
 use Module\Plugin\Domain\Models\PluginModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
-use Zodream\Html\Input;
+use Zodream\Html\InputHelper;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 final class PluginRepository {
@@ -30,40 +31,7 @@ final class PluginRepository {
         if (empty($data) || !isset($data['configs'])) {
             return [];
         }
-        return self::formatForm($data['configs'], (array)$model->configs);
-    }
-
-    private static function filterForm(array $inputItems, array|Request $data): array {
-        $items = [];
-        foreach ($inputItems as $item) {
-            $name = $item->name;
-            if (!($item instanceof Input) || empty($name)) {
-                continue;
-            }
-            if ($data instanceof Request) {
-                if ($data->has($name)) {
-                    $items[$name] = $item->filter($data->get($name));
-                }
-            } elseif (isset($data[$name])) {
-                $items[$name] = $item->filter($data[$name]);
-            }
-        }
-        return $items;
-    }
-
-    private static function formatForm(array $inputItems, array $data): array {
-        $items = [];
-        foreach ($inputItems as $item) {
-            $name = $item->name;
-            if (!($item instanceof Input) || empty($name)) {
-                continue;
-            }
-            if (isset($data[$name])) {
-                $item->value($data[$name]);
-            }
-            $items[] = $item;
-        }
-        return $items;
+        return InputHelper::patch($data['configs'], (array)$model->configs);
     }
 
     public static function settingSave(int $id, Request $input) {
@@ -72,7 +40,7 @@ final class PluginRepository {
         if (empty($data) || !isset($data['configs'])) {
             return;
         }
-        $model->configs = self::filterForm($data['configs'], $input);
+        $model->configs = InputHelper::value($data['configs'], $input);
         $model->save();
     }
 
@@ -157,9 +125,9 @@ final class PluginRepository {
         if (!empty($inputItems)) {
             $configs = $model->configs;
             if (!empty($postData)) {
-                $model->configs = self::filterForm($inputItems, $postData);
+                $model->configs = InputHelper::value($inputItems, $postData);
             } else if (empty($configs)) {
-                return self::formatForm($inputItems, $configs);
+                return InputHelper::patch($inputItems, $configs);
             }
         }
         $model->status = 1;

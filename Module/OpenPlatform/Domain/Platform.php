@@ -51,17 +51,17 @@ class Platform implements IAuthPlatform {
     /**
      * 获取设置
      * @param string $store
-     * @param string|null $name
+     * @param string|null $code
      * @return array|string
      */
-    public function option(string $store, ?string $name = null): mixed {
+    public function option(string $store, ?string $code = null): mixed {
         if (!isset($this->options[$store])) {
             $this->options[$store] = PlatformOptionModel::options($this->id(), $store);
         }
-        if (empty($name)) {
+        if (empty($code)) {
             return $this->options[$store];
         }
-        return $this->options[$store][$name] ?? '';
+        return $this->options[$store][$code] ?? '';
     }
 
     public function getCookieTokenKey(): string {
@@ -245,7 +245,7 @@ class Platform implements IAuthPlatform {
      * 使用临时生成的token
      * @throws \Exception
      */
-    public function useCustomToken() {
+    public function useCustomToken(): void {
         if ($this->app['allow_self'] < 1) {
             return;
         }
@@ -267,20 +267,17 @@ class Platform implements IAuthPlatform {
      * @param string $token
      * @return bool
      */
-    public function verifyToken(string $token): bool
-    {
+    public function verifyToken(string $token): bool {
         $count = UserTokenModel::where('platform_id', $this->id())
             ->where('token', $token)->where('expired_at', '>', time())->count();
         return $count > 0;
     }
 
-    public function __sleep(): array
-    {
+    public function __sleep(): array {
         return ['app', 'options'];
     }
 
-    public function __wakeup(): void
-    {
+    public function __wakeup(): void {
         $this->request = request();
     }
 
@@ -292,15 +289,15 @@ class Platform implements IAuthPlatform {
         return new static($platform);
     }
 
-    public static function createAuto(string $key = self::APPID_KEY) {
-        $appId = isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] :  request()->get($key);
+    public static function createAuto(string $key = self::APPID_KEY): static {
+        $appId = !empty($_GET[$key]) ? $_GET[$key] :  request()->get($key);
         if (empty($appId)) {
             throw new \Exception(__('APP ID error'));
         }
         return static::create($appId);
     }
 
-    public static function createId(string|int $id) {
+    public static function createId(string|int $id): static {
         $platform = PlatformModel::find($id);
         if (empty($platform)) {
             throw new \Exception(__('id error'));
@@ -313,16 +310,16 @@ class Platform implements IAuthPlatform {
      * @return int
      * @throws \Exception
      */
-    public static function platformId() {
+    public static function platformId(): int|string {
         return static::isPlatform() ? app(static::PLATFORM_KEY)->id() : 0;
     }
 
     /**
      * 进入场景
-     * @param $platform
+     * @param string|int|Platform $platform
      * @throws \Exception
      */
-    public static function enterPlatform($platform) {
+    public static function enterPlatform(string|int|Platform $platform): void {
         if (is_int($platform)) {
             $platform = static::createId($platform);
         } elseif (is_string($platform)) {

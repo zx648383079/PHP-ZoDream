@@ -5,7 +5,7 @@ namespace Module\Auth\Domain\Repositories;
 use Exception;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\UserModel;
-use Module\SMS\Domain\Sms;
+use Module\MessageService\Domain\Sms;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Mailer\Mailer;

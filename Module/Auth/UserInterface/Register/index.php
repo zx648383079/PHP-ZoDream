@@ -13,23 +13,23 @@ $this->registerJs($js);
     <div class="login-box">
         <form class="form-ico login-form" action="<?= $this->url('./register/post', false) ?>" method="POST">
         <div class="input-group error">
-                <input type="text" name="name"  placeholder="请输入昵称" required>
+                <input type="text" name="name" class="form-control" placeholder="请输入昵称" required>
                 <i class="fa fa-user" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="email" name="email" placeholder="请输入邮箱" required>
+                <input type="email" name="email" class="form-control" placeholder="请输入邮箱" required>
                 <i class="fa fa-at" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" name="password" placeholder="请输入密码" required>
+                <input type="password" name="password" class="form-control" placeholder="请输入密码" required>
                 <i class="fa fa-lock" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" name="rePassword" placeholder="请确认密码" required>
+                <input type="password" name="rePassword" class="form-control" placeholder="请确认密码" required>
                 <i class="fa fa-redo" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="text" name="invite_code" placeholder="请输入邀请码">
+                <input type="text" name="invite_code" class="form-control" placeholder="请输入邀请码">
                 <i class="fa fa-gift" aria-hidden="true"></i>
             </div>
 

@@ -172,7 +172,8 @@
                     border-top-color: rgba($linkHoverText, .6);
                 }
                 &.active {
-                    @include active();
+                    background-color: $primary;
+                    color: $primaryText;
                     &:after {
                         border-top-color: $linkHoverText;
                     }
@@ -462,11 +463,12 @@
 
 .book-pager {
     float: left;
+    margin-bottom: 2rem;
     li {
         list-style: none;
         background: $panel;
-        width: 40px;
-        line-height: 40px;
+        width: 2.5rem;
+        line-height: 2.5rem;
         text-align: center;
         float: left;
         border-top: 1px dotted $linkHoverText;
@@ -475,12 +477,13 @@
         }
         
         &.active {
-            @include active();
+            background-color: $primary;
+            color: $primaryText;
         }
         &:hover {
             font-weight: 700;
             a {
-                color: #af5d0d;
+                color: $linkHoverText;
             }
         }
     }

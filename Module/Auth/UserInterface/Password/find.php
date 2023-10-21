@@ -8,7 +8,7 @@ $this->title = '找回密码';
     <div class="login-box">
         <form class="form-ico login-form" action="<?= $this->url('./password/send', false) ?>" method="POST">
             <div class="input-group">
-                <input type="email" name="email" placeholder="请输入邮箱" required>
+                <input type="email" name="email" class="form-control" placeholder="请输入邮箱" required>
                 <i class="fa fa-at" aria-hidden="true"></i>
             </div>
 

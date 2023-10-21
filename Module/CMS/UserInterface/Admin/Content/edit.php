@@ -23,7 +23,7 @@ $this->title = $model->id > 0 ? '文章编辑' : '新增文章';
                     <?php if($item['field'] === 'title'):?>
                     <div class="input-group">
                         <label>栏目</label>
-                        <select name="cat_id">
+                        <select name="cat_id" class="form-control">
                             <?php foreach($cat_menu as $item):?>
                             <?php if($item['model_id'] == $model->id):?>
                             <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>
