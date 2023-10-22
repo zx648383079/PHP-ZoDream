@@ -12,6 +12,7 @@ use Domain\Entities\Entity;
  * @property string $target
  * @property string $template_name
  * @property integer $type
+ * @property string $title
  * @property string $content
  * @property integer $status
  * @property string $message
@@ -29,8 +30,9 @@ class LogEntity extends Entity {
             'template_id' => 'int',
             'target_type' => 'required|int:0,127',
             'target' => 'required|string:0,100',
-            'template_name' => 'required|string:0,20',
+            'template_name' => 'string:0,20',
             'type' => 'int:0,127',
+            'title' => 'required|string:0,255',
             'content' => 'required',
             'status' => 'int:0,127',
             'message' => 'string:0,255',
