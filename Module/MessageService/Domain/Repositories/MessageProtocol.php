@@ -126,7 +126,7 @@ class MessageProtocol {
             throw new \Exception('无效接受者');
         }
         $optionKey = $type === static::RECEIVE_TYPE_MOBILE ? static::OPTION_SMS_KEY : static::OPTION_MAIL_KEY;
-        $option = Option::value($optionKey);
+        $option = Json::decode(Option::value($optionKey));
         if (empty($option)) {
             throw new \Exception(sprintf('未配置相关参数[%s]', $optionKey));
         }
@@ -179,10 +179,22 @@ class MessageProtocol {
 
     protected static function sendMail(array $option, string $target,
                                        array|Model $template, array $data): bool|string {
+        return static::sendMailOrThrow($option, $target,
+            $data['name'] ?? $target, $template['title'],
+            static::renderTemplate($template['content'], $data),
+            $template['type'] > MessageProtocol::TYPE_TEXT);
+    }
+
+    protected static function sendMailOrThrow(array $option, string $target, string $targetName,
+                                              string $title, string $content, bool $isHtml = true): bool {
         $mail = new Mailer($option);
-        return $mail->isHtml($template['type'] > 0)
-            ->addAddress($target, $data['name'] ?? $target)
-            ->send($template['title'], static::renderTemplate($template['content'], $data));
+        $res = $mail->isHtml($isHtml)
+            ->addAddress($target, $targetName)
+            ->send($title, $content);
+        if (!$res) {
+            throw new \Exception($mail->getError() ?? 'smtp send error');
+        }
+        return true;
     }
 
     protected static function renderTemplate(string $content, array $data): string {
@@ -227,10 +239,7 @@ class MessageProtocol {
                 }
                 $res = $api->send($target, $content, [], $option['sign_name'] ?? '');
             } else {
-                $mail = new Mailer($option);
-                $res = $mail->isHtml($isHtml)
-                    ->addAddress($target, $target)
-                    ->send($title, $content);
+                $res = static::sendMailOrThrow($option, $target, $target, $title, $content, $isHtml);
             }
             $log->status = $res === false ? static::STATUS_SENT : static::STATUS_SEND_FAILURE;
             $log->message = is_string($res) ? $res : '';

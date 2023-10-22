@@ -15,7 +15,7 @@ $radius: .375rem;
     .form-control {
         border-radius: 0;
         padding-left: $lineHeight;
-        height: $lineHeight;
+        min-height: $lineHeight;
         width: 100%;
         box-sizing: border-box;
     }
@@ -257,7 +257,7 @@ i {
     .form-control {
         border: none;
         background: transparent;
-        height: $lineHeight;
+        min-height: $lineHeight;
         box-sizing: border-box;
     }
     .input-group {
@@ -275,18 +275,20 @@ i {
 
 .form-inline {
     .form-control {
+        flex: 1;
         border: none;
         background: transparent;
-        height: $lineHeight;
+        min-height: $lineHeight;
         box-sizing: border-box;
         &.height-auto {
             height: auto;
         }
     }
     .input-group {
-        display: block;
+        display: flex;
         border-bottom: 1px solid #777;
         min-height: $lineHeight;
+        align-items: center;
     }
     .btn {
         line-height: $lineHeight;
@@ -299,7 +301,7 @@ i {
         border: none;
         background: transparent;
         box-sizing: border-box;
-        height: $lineHeight;
+        min-height: $lineHeight;
         display: block;
     }
     .input-group {

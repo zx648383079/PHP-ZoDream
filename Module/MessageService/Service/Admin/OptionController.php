@@ -33,4 +33,22 @@ class OptionController extends Controller {
         }
         return $this->renderData(true, '保存成功');
     }
+
+    public function debugAction(Input $input) {
+        if ($input->isGet()) {
+            return $this->show();
+        }
+        try {
+            $data = $input->validate([
+                'target' => 'required|string',
+                'title' => 'required|string',
+                'content' => 'required|string',
+                'type' => 'int',
+            ]);
+            MessageRepository::debug($data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true, '发送成功');
+    }
 }

@@ -161,4 +161,10 @@ final class MessageRepository {
             'content' => $content,
         ]);
     }
+
+    public static function debug(array $data) {
+        MessageProtocol::sendCustom($data['target'],
+            $data['title'] ?? 'Debug', $data['content'] ?? 'Debug',
+        !empty($data['type']) && $data['type'] > 0 );
+    }
 }
