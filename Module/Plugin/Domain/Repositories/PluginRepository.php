@@ -135,8 +135,8 @@ final class PluginRepository {
         return $model;
     }
 
-    public static function uninstall(int $id) {
-        PluginEntity::where('id', $id)->update([
+    public static function uninstall(int|array $id) {
+        PluginEntity::where('id', (array)$id)->update([
             'status' => 0,
             'configs' => '',
         ]);

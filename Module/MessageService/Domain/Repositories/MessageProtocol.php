@@ -7,6 +7,7 @@ use Module\MessageService\Domain\Entities\TemplateEntity;
 use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Model\Model;
+use Zodream\Helpers\Html;
 use Zodream\Helpers\Json;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\ThirdParty\SMS\ALiDaYu;
@@ -70,18 +71,7 @@ class MessageProtocol {
     }
 
     public static function send(string $target, string $templateName, array $data): bool {
-        if (Validator::email()->validate($target)) {
-            $type = static::RECEIVE_TYPE_EMAIL;
-        } else if (Validator::phone()->validate($target)) {
-            $type = static::RECEIVE_TYPE_MOBILE;
-        } else {
-            throw new \Exception('无效接受者');
-        }
-        $optionKey = $type === static::RECEIVE_TYPE_MOBILE ? static::OPTION_SMS_KEY : static::OPTION_MAIL_KEY;
-        $option = Option::value($optionKey);
-        if (empty($option)) {
-            throw new \Exception(sprintf('未配置相关参数[%s]', $optionKey));
-        }
+        list($type, $option, $optionKey) = static::targetOption($target);
         $template = TemplateEntity::where('name', $templateName)
             ->when($type === static::RECEIVE_TYPE_MOBILE, function ($query) {
                 $query->where('type', static::TYPE_TEXT);
@@ -100,6 +90,7 @@ class MessageProtocol {
             'target' => $target,
             'template_name' => $templateName,
             'type' => $template['type'],
+            'title' => $template['title'],
             'content' => static::renderTemplate($template['content'], $data),
             'status' => static::STATUS_SENDING,
             'ip' => request()->ip(),
@@ -117,9 +108,34 @@ class MessageProtocol {
         return $res;
     }
 
+    /**
+     * 根据目标获取配置信息
+     * @param string $target
+     * @return array
+     * @throws \Exception
+     */
+    protected static function targetOption(string $target): array {
+        if (empty($target)) {
+            throw new \Exception('无效接受者');
+        }
+        if (Validator::email()->validate($target)) {
+            $type = static::RECEIVE_TYPE_EMAIL;
+        } else if (Validator::phone()->validate($target)) {
+            $type = static::RECEIVE_TYPE_MOBILE;
+        } else {
+            throw new \Exception('无效接受者');
+        }
+        $optionKey = $type === static::RECEIVE_TYPE_MOBILE ? static::OPTION_SMS_KEY : static::OPTION_MAIL_KEY;
+        $option = Option::value($optionKey);
+        if (empty($option)) {
+            throw new \Exception(sprintf('未配置相关参数[%s]', $optionKey));
+        }
+        return [$type, $option, $optionKey];
+    }
+
     protected static function filterData(array $data, mixed $filterKeys): array {
         if (!is_array($filterKeys)) {
-            $filterKeys =  Json::decode($filterKeys);
+            $filterKeys = Json::decode($filterKeys);
         }
         if (empty($filterKeys)) {
             return $data;
@@ -172,6 +188,59 @@ class MessageProtocol {
     protected static function renderTemplate(string $content, array $data): string {
         return trans()->format($content, $data);
     }
+
+    /**
+     * 自定义方式内容
+     * @param string $target
+     * @param string $title
+     * @param string|callable $content
+     * @param bool $isHtml
+     * @return void
+     */
+    public static function sendCustom(string $target,
+                                      string $title,
+                                      string|callable $content, bool $isHtml = true): void {
+        list($type, $option) = static::targetOption($target);
+        if (is_callable($content)) {
+            $content = call_user_func($content);
+        }
+        if (empty($content)) {
+            throw new \Exception('发送内容不能为空');
+        }
+        $log = LogEntity::createOrThrow([
+            'target_type' => $type,
+            'target' => $target,
+            'type' => $isHtml ? MessageProtocol::TYPE_HTML : MessageProtocol::TYPE_TEXT,
+            'title' => $title,
+            'content' => $content,
+            'status' => static::STATUS_SENDING,
+            'ip' => request()->ip(),
+        ]);
+        try {
+            if ($type === static::RECEIVE_TYPE_MOBILE) {
+                if ($isHtml) {
+                    $content = Html::toText($content);
+                }
+                $api = static::SMSProtocol($option);
+                if (!$api->isOnlyTemplate()) {
+                    throw new \Exception('不支持自定义内容');
+                }
+                $res = $api->send($target, $content, [], $option['sign_name'] ?? '');
+            } else {
+                $mail = new Mailer($option);
+                $res = $mail->isHtml($isHtml)
+                    ->addAddress($target, $target)
+                    ->send($title, $content);
+            }
+            $log->status = $res === false ? static::STATUS_SENT : static::STATUS_SEND_FAILURE;
+            $log->message = is_string($res) ? $res : '';
+        } catch (\Exception $ex) {
+            $log->status = static::STATUS_SEND_FAILURE;
+            $log->message = $ex->getMessage();
+        }
+        $log->save();
+    }
+
     protected static function renderTemplateFile(string $fileName, array $data): string {
         return view()->render('@root/Template/'.$fileName, $data);
     }

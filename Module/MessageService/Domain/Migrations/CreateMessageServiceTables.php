@@ -38,9 +38,10 @@ class CreateMessageServiceTables extends Migration {
             $table->uint('template_id')->default(0)->comment('模板id');
             $table->uint('target_type', 1)->comment('接受者类型');
             $table->string('target', 100)->comment('接受者，手机号/邮箱');
-            $table->string('template_name', 20)->comment('调用代码');
+            $table->string('template_name', 20)->default('')->comment('调用代码');
             $table->uint('type', 1)->default(MessageProtocol::TYPE_TEXT)
                 ->comment('内容的类型');
+            $table->string('title')->comment('发送的标题');
             $table->text('content')->comment('发送的内容');
             $table->uint('status', 1)->default(0)->comment('发送状态');
             $table->string('message')->default('')->comment('发送结果，成功为消息id,否则为错误信息');

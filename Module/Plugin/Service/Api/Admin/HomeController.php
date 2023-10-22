@@ -18,4 +18,30 @@ class HomeController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function installAction(int $id, array $data = []) {
+        try {
+            $res = PluginRepository::install($id, $data);
+            return $this->renderData(is_array($res) ? $res : true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+    }
+
+    public function uninstallAction(int|array $id) {
+        try {
+            PluginRepository::uninstall($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData(true);
+    }
+
+    public function executeAction(int $id) {
+        try {
+            return $this->renderData(PluginRepository::execute($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+    }
 }

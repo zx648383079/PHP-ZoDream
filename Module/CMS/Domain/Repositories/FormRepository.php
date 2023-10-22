@@ -8,8 +8,8 @@ use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Zodream\Infrastructure\Contracts\Http\Input;
-use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
 class FormRepository {
@@ -83,18 +83,15 @@ class FormRepository {
             throw new Exception('表单填写有误');
         }
         $notifyMail = BaseField::fieldSetting($model, 'notify_mail');
-        if (!empty($notifyMail) && Validator::email()->validate($notifyMail)) {
+        if (!empty($notifyMail)) {
             // TODO 发送邮件通知对方
-            $content = FuncHelper::formRender($model, $id);
-            if (!empty($content)) {
-                try {
-                    $mail = new Mailer();
-                    $res = $mail->isHtml()
-                        ->addAddress($notifyMail)
-                        ->send(sprintf('CMS新表单【%s】', $model['name']), $content);
-                } catch (Exception $ex) {
-                    logger()->error($ex->getMessage());
-                }
+            try {
+                MessageProtocol::sendCustom($notifyMail, sprintf('CMS新表单【%s】',
+                    $model['name']), function () use ($model, $id) {
+                    return FuncHelper::formRender($model, $id);
+                });
+            } catch (Exception $ex) {
+                logger()->error($ex->getMessage());
             }
         }
         return $res;
