@@ -1,15 +1,3 @@
-function bindCheckIn() {
-    let box = $('.plus-table').on('click', '.fa-times', function() {
-        if (box.find('tbody tr').length === 1) {
-            return;
-        }
-        $(this).closest('tr').remove();
-    }).on('click', '.fa-plus', function() {
-        const tr = box.find('tbody tr').eq(0).clone(true, true);
-        box.find('tbody').append(tr);
-        tr.find('.form-control').val('');
-    });
-}
 $(function() {
     $('.check-btn').on('click',function(e) {
         e.preventDefault();

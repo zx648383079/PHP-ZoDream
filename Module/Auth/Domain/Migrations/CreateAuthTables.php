@@ -15,7 +15,6 @@ use Module\Auth\Domain\Model\Card\EquityCardModel;
 use Module\Auth\Domain\Model\Card\UserEquityCardModel;
 use Module\Auth\Domain\Model\CreditLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
@@ -252,15 +251,6 @@ class CreateAuthTables extends Migration {
             $table->string('remark')->default('');
             $table->uint('status', 2)->default(0);
             $table->timestamps();
-        })->append(MailLogModel::tableName(), function (Table $table) {
-            $table->comment('发送邮件记录');
-            $table->id();
-            $table->string('ip', 120);
-            $table->uint('user_id');
-            $table->uint('type', 1)->default(0);
-            $table->string('code', 40);
-            $table->uint('amount', 2)->default(10);
-            $table->timestamp(Model::CREATED_AT);
         });
     }
 }

@@ -1,3 +1,4 @@
+@import 'theme';
 .tab-box {
     iframe {
         border: none;
@@ -27,5 +28,57 @@
         text-align: left;
         padding: 10px;
         word-break: break-word;
+    }
+}
+
+.plus-table {
+	width: auto;
+	td {
+		.form-control {
+			min-width: 3.75rem;
+			width: 3.75rem;
+			text-align: center;
+		}
+		.fa-times {
+			display: block;
+			width: 1.875rem;
+			line-height: 1.875rem;
+		}
+	}
+	tfoot {
+		background-color: #fff;
+		.fa-plus {
+			display: block;
+			line-height: 1.875rem;		
+		}
+	}
+}
+
+.tab-header-bar {
+    min-height: 2.5rem;
+    .tab-item {
+        line-height: 2rem;
+        font-size: 1rem;
+        margin-bottom: 0.3125rem;
+        background-color: $tag;
+        color: $tagText;
+        border-radius: 0.125rem;
+        margin-right: 0.3125rem;
+        white-space: nowrap;
+        display: inline-flex;
+        user-select: none;
+        .fa {
+            line-height: 2rem;
+            border-left: 1px solid $border;
+            opacity: .7;
+        }
+        span,
+        .fa {
+            display: inline-block;
+            padding: 0 0.3125rem;
+        }
+        &:hover {
+            box-shadow: 0 .3rem .5rem rgba($color: #000000, $alpha: .1);
+        }
     }
 }

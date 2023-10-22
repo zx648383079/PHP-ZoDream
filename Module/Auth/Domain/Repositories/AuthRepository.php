@@ -8,16 +8,14 @@ use Module\Auth\Domain\Events\Register;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Module\SEO\Domain\Option;
-use Module\MessageService\Domain\Sms;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
 class AuthRepository {
@@ -138,8 +136,7 @@ class AuthRepository {
         if (!Validator::phone()->validate($mobile)) {
             throw AuthException::invalidLogin();
         }
-        $sms = new Sms();
-        if (!$sms->verifyCode($mobile, $code)) {
+        if (!MessageProtocol::verifyCode($mobile, MessageProtocol::EVENT_LOGIN_CODE, $code)) {
             throw new Exception('验证码错误');
         }
         if (BanRepository::isBan($mobile, self::ACCOUNT_TYPE_MOBILE)) {
@@ -216,8 +213,7 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
-        $sms = new Sms();
-        if (!$sms->verifyCode($mobile, $code)) {
+        if (!MessageProtocol::verifyCode($mobile, MessageProtocol::EVENT_REGISTER_CODE, $code)) {
             throw new Exception('验证码错误');
         }
         $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($mobile, $name, $password) {
@@ -290,15 +286,13 @@ class AuthRepository {
         return $user;
     }
 
-    private static function doLogin(UserModel $user, bool $remember = false, string $vendor = LoginLogModel::MODE_WEB) {
-        $res = $user->login($remember);
-        if (!$res) {
-            return $res;
-        }
+    private static function doLogin(UserModel $user, bool $remember = false,
+                                    string $vendor = LoginLogModel::MODE_WEB): bool {
+        $user->login($remember);
         $request = request();
         event(new Login($user, $request->server('HTTP_USER_AGENT', ''), $request->ip(), time()));
         auth()->user()->logLogin(true, $vendor);
-        return $res;
+        return true;
     }
 
     public static function logout(bool $cancelRemember = false) {
@@ -396,26 +390,6 @@ class AuthRepository {
         return true;
     }
 
-
-    /**
-     * @param $code
-     * @return MailLogModel
-     * @throws Exception
-     */
-    public static function verifyEmailCode(string $code) {
-        if (empty($code)) {
-            throw new Exception('重置码错误');
-        }
-        $log = MailLogModel::where('type', MailLogModel::TYPE_FIND)
-            ->where('code', $code)
-            ->where('created_at', '>', time() - 1800)
-            ->first();
-        if (empty($log)) {
-            throw new Exception('安全代码已过期或不存在');
-        }
-        return $log;
-    }
-
     public static function sendEmail(string $email, string $code) {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入有效邮箱');
@@ -427,38 +401,16 @@ class AuthRepository {
         if (empty($user)) {
             throw new Exception('邮箱未注册');
         }
-        $count = MailLogModel::where('type', MailLogModel::TYPE_FIND)
-            ->where('user_id', $user->id)
-            ->where('created_at', '>', time() - 120)
-            ->count();
-        if ($count > 0) {
-            throw new Exception('发送过于频繁，请稍后再试');
-        }
-        $html = view()->render('@root/Template/mail', [
+        return MessageProtocol::sendCode($email, MessageProtocol::EVENT_FIND_CODE, $code, [
             'name' => $user->name,
             'time' => Time::format(),
             'code' => $code,
-            'url' => url('./password', compact('code'), true,false)
+            'url' => url('./password', compact('code', 'email'), true,false)
         ]);
-        $mail = new Mailer();
-        $res = $mail->isHtml()
-            ->addAddress($email, $user->name)
-            ->send('密码重置邮件', $html);
-        if (!$res) {
-            throw new Exception($mail->getError());//'邮件发送失败');
-        }
-        MailLogModel::create([
-            'ip' => request()->ip(),
-            'user_id' => $user->id,
-            'type' => MailLogModel::TYPE_FIND,
-            'code' => $code,
-            'amount' => 10,
-            'created_at' => time(),
-        ]);
-        return $res;
     }
 
-    public static function resetPassword(string $code, string $password, string $confirmPassword, string $email) {
+    public static function resetPassword(string $code, string $password, string $confirmPassword,
+                                         string $email) {
         if (empty($email) || !Validator::email()->validate($email)) {
             throw new Exception('请输入有效邮箱');
         }
@@ -468,8 +420,10 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
-        $log = self::verifyEmailCode($code);
-        $user = UserModel::find($log->user_id);
+        if (!MessageProtocol::verifyCode($email, MessageProtocol::EVENT_FIND_CODE, $code)) {
+            throw new Exception('邮箱或安全码不正确');
+        }
+        $user = UserModel::findByEmail($email);
         if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
@@ -479,9 +433,6 @@ class AuthRepository {
         if ($user->validatePassword($password)) {
             throw AuthException::samePassword();
         }
-        MailLogModel::where('user_id', $log->user_id)
-            ->where('type', MailLogModel::TYPE_FIND)
-            ->delete();
         $user->setPassword($password);
         if (!$user->save()) {
             throw new Exception($user->getFirstError());

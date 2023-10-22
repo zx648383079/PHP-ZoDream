@@ -9,7 +9,6 @@ use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\InviteCodeModel;
 use Module\Auth\Domain\Model\InviteLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\MailLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 

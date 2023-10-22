@@ -134,6 +134,22 @@ $(function() {
         }
     }).on('click', '.page-tip .toggle', function() {
         $(this).closest('.page-tip').toggleClass('min');
+    }).on('click', '.plus-table tbody .fa-times', function() {
+        const $this = $(this);
+        const box = $this.closest('.plus-table');
+        if (box.find('tbody tr').length === 1) {
+            return;
+        }
+        $this.closest('tr').remove();
+    }).on('click', '.plus-table tfoot .fa-plus', function() {
+        const $this = $(this);
+        const box = $this.closest('.plus-table');
+        const tr = box.find('tbody tr').eq(0).clone(true, true);
+        box.find('tbody').append(tr);
+        tr.find('.form-control').val('');
+    }).on('click', '.tab-header-bar .tab-item .fa-times', function(e) {
+        e.preventDefault();
+        $(this).closest('.tab-item').remove();
     }).on('click', 'form *[type=submit]', function(e) {
         const $this = $(this);
         const form = $this.closest('form');

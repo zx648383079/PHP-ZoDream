@@ -5,14 +5,6 @@ use Zodream\Html\Dark\Form;
 use Zodream\Html\Dark\Theme;
 /** @var $this View */
 $this->title = '签到设置';
-$js = <<<JS
-bindCheckIn();
-JS;
-$this->registerCssFile(
-    '@checkin.css'
-)->registerJsFile(
-    '@checkin.min.js'
-)->registerJs($js);
 ?>
 <h1><?=$this->title?></h1>
 <?=Form::open('./@admin/setting/save')?>

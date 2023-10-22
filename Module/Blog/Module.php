@@ -1,7 +1,6 @@
 <?php
 namespace Module\Blog;
 
-use Module\Auth\Domain\Pem;
 use Module\Blog\Domain\Helpers\RouterHelper;
 use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Module\Blog\Domain\Migrations\CreateBlogTables;

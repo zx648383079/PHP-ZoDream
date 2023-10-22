@@ -29,8 +29,8 @@ class TemplateController extends Controller {
                 'title' => 'required|string:0,100',
                 'name' => 'required|string:0,20',
                 'type' => 'int:0,127',
-                'data' => 'required|string:0,255',
-                'content' => 'required',
+                'data' => '',
+                'content' => 'required|string',
                 'target_no' => 'string:0,32',
             ]);
             MessageRepository::templateSave($data);

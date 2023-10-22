@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain;
+namespace Module\Auth\Domain\WebAuthn;
 
 class Pem {
 

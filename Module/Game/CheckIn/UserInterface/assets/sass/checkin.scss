@@ -73,29 +73,6 @@
     }
 }
 
-.plus-table {
-	width: auto;
-	td {
-		input[type="text"] {
-			min-width: 60px !important;
-			width: 60px;
-			text-align: center;
-		}
-		.fa-times {
-			display: block;
-			width: 30px;
-			line-height: 30px;
-		}
-	}
-	tfoot {
-		background-color: #fff;
-		.fa {
-			display: block;
-			line-height: 30px;		
-		}
-	}
-}
-
 @keyframes circle {
     0% {
         opacity: 1;

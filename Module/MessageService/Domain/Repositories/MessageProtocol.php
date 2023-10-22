@@ -4,6 +4,7 @@ namespace Module\MessageService\Domain\Repositories;
 
 use Module\MessageService\Domain\Entities\LogEntity;
 use Module\MessageService\Domain\Entities\TemplateEntity;
+use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Option;
 use Zodream\Database\Model\Model;
 use Zodream\Helpers\Json;
@@ -15,6 +16,8 @@ use Zodream\ThirdParty\SMS\IShortMessageProtocol;
 use Zodream\Validate\Validator;
 
 class MessageProtocol {
+
+    const SESSION_KEY = 'ms_code';
 
     const OPTION_MAIL_KEY = 'mail_protocol';
     const OPTION_SMS_KEY = 'sms_protocol';
@@ -32,6 +35,10 @@ class MessageProtocol {
     const STATUS_SENT = 6;
     const STATUS_SENT_USED = 7;
     const STATUS_SENT_EXPIRED = 9;
+
+    const EVENT_LOGIN_CODE = 'login_code';
+    const EVENT_REGISTER_CODE = 'register_code';
+    const EVENT_FIND_CODE = 'find_code';
 
     private static array $configs = [
         'space' => 120,    // 发送间隔
@@ -51,6 +58,13 @@ class MessageProtocol {
                 ->update([
                     'status' => static::STATUS_SENT_EXPIRED
                 ]);
+        }
+        if ($res && !Platform::isPlatform()) {
+            session()->set(self::SESSION_KEY, [
+                'at' => time(),
+                'to' => $target,
+                'code' => $code
+            ]);
         }
         return $res;
     }
@@ -79,6 +93,7 @@ class MessageProtocol {
             throw new \Exception(sprintf('未配置相关模板[%s:%s]', $optionKey, $templateName));
         }
         // TODO 根据模板值过滤
+        $data = static::filterData($data, $template['data']);
         $log = LogEntity::createOrThrow([
             'template_id' => $template['id'],
             'target_type' => $type,
@@ -89,6 +104,7 @@ class MessageProtocol {
             'status' => static::STATUS_SENDING,
             'ip' => request()->ip(),
         ]);
+        $res = false;
         try {
             $res = $type === static::RECEIVE_TYPE_MOBILE ? static::sendSMS($option, $target, $template, $data) : static::sendMail($option, $target, $template, $data);
             $log->status = $res === false ? static::STATUS_SENT : static::STATUS_SEND_FAILURE;
@@ -101,7 +117,31 @@ class MessageProtocol {
         return $res;
     }
 
+    protected static function filterData(array $data, mixed $filterKeys): array {
+        if (!is_array($filterKeys)) {
+            $filterKeys =  Json::decode($filterKeys);
+        }
+        if (empty($filterKeys)) {
+            return $data;
+        }
+        $items = [];
+        foreach ($data as $key => $val) {
+            if (in_array($key, $filterKeys) || isset($key, $filterKeys)) {
+                $items[$key] = $val;
+            }
+        }
+        return $items;
+    }
+
     public static function verifyCode(string $target, string $templateName, string $code, bool $once = true): bool {
+        if (!Platform::isPlatform()) {
+            $log = session(self::SESSION_KEY);
+            if (empty($log) || empty($log['code'])
+                || $log['to'] !== $target
+                || $log['code'] !== $code) {
+                return false;
+            }
+        }
         $log = LogEntity::where('target', $target)->where('template_name', $templateName)
             ->where('status', static::STATUS_SENT)
             ->first();
@@ -113,6 +153,9 @@ class MessageProtocol {
         if ($once) {
             $log->status = self::STATUS_SENT_USED;
             $log->save();
+        }
+        if ($once && !Platform::isPlatform()) {
+            session()->delete(self::SESSION_KEY);
         }
         return $res;
     }
@@ -167,6 +210,10 @@ class MessageProtocol {
     }
 
     protected static function verifySpace(string $target): bool {
+        if (!Platform::isPlatform()) {
+            $log = session(self::SESSION_KEY);
+            return empty($log) || (time() - $log['at']) > self::$configs['space'];
+        }
         $last = LogEntity::where('target', $target)->where('status', '!=', static::STATUS_SEND_FAILURE)
             ->max('created_at');
         if (empty($last)) {

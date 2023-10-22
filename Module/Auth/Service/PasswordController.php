@@ -3,15 +3,16 @@ declare(strict_types=1);
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
+use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PasswordController extends Controller {
 
-    public function indexAction(string $code) {
+    public function indexAction(string $code, string $email) {
         try {
-            AuthRepository::verifyEmailCode($code);
+            MessageProtocol::verifyCode($email, MessageProtocol::EVENT_FIND_CODE, $code, false);
         } catch (\Exception $ex) {
             return $this->redirectWithMessage('/', '密码找回失败');
         }

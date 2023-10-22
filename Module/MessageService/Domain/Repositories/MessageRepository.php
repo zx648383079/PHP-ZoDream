@@ -13,6 +13,11 @@ use Zodream\Html\InputHelper;
 
 final class MessageRepository {
 
+    protected static function isSystemTemplate(string $name): bool {
+        return in_array($name, [MessageProtocol::EVENT_LOGIN_CODE,
+            MessageProtocol::EVENT_FIND_CODE, MessageProtocol::EVENT_REGISTER_CODE]);
+    }
+
     public static function optionInput(bool $isMail = true): array {
         if ($isMail) {
             return [
@@ -71,7 +76,8 @@ final class MessageRepository {
                 SearchModel::searchWhere($query, ['name', 'title']);
             })->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', 'desc')->select('id', 'type', 'name', 'title', 'target_no', 'created_at')
+            ->page();
     }
 
     public static function template(int $id): mixed {
@@ -82,6 +88,9 @@ final class MessageRepository {
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = TemplateEntity::findOrNew($id);
+        if (!empty($data['data'])) {
+            $data['data'] = is_array($data['data']) ? Json::encode($data['data']) : $data['data'];
+        }
         $model->load($data);
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
@@ -94,7 +103,22 @@ final class MessageRepository {
         if (empty($items)) {
             return;
         }
-        TemplateEntity::whereIn('id', $items)->delete();
+        $items = TemplateEntity::whereIn('id', $items)->get('id', 'name');
+        $del = [];
+        foreach ($items as $item) {
+            if (!self::isSystemTemplate($item['name'])) {
+                $del[] = $item['id'];
+                continue;
+            }
+            if (TemplateEntity::where('id', '<>', $item['id'])->where('name', $item['name'])->count() > 0) {
+                $del[] = $item['id'];
+                continue;
+            }
+        }
+        if (empty($del)) {
+            return;
+        }
+        TemplateEntity::whereIn('id', $del)->delete();
     }
 
     public static function logList(string $keywords = '', int $status = -1) {
@@ -103,7 +127,8 @@ final class MessageRepository {
                 SearchModel::searchWhere($query, ['target', 'template_name']);
             })->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', 'desc')->select('id', 'target', 'template_name', 'status', 'message',
+                'created_at')->page();
     }
 
     public static function logRemove(array|int $id): void {
@@ -116,5 +141,24 @@ final class MessageRepository {
 
     public static function logClear() {
         LogEntity::query()->delete();
+    }
+
+    public static function insertIf(string $name, string $title, string $content,
+                                    int $type = MessageProtocol::TYPE_TEXT): void {
+        if (TemplateEntity::where('name', $name)->count() > 0 ||
+            empty($content)) {
+            return;
+        }
+        $data = '';
+        if (preg_match_all('/\{(\w+)\}/', $content, $match)) {
+            $data = Json::encode($match[1]);
+        }
+        TemplateEntity::create([
+            'title' => $title,
+            'name' => $name,
+            'type' => $type,
+            'data' => $data,
+            'content' => $content,
+        ]);
     }
 }

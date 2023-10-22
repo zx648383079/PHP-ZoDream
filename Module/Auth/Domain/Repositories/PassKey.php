@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Exception;
-use Module\Auth\Domain\CBOR;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
-use Module\Auth\Domain\Pem;
+use Module\Auth\Domain\WebAuthn\CBOR;
+use Module\Auth\Domain\WebAuthn\Pem;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\BinaryReader;
 use Zodream\Helpers\Json;

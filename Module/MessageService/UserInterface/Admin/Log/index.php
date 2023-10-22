@@ -21,9 +21,10 @@ $this->title = '发送记录';
         <thead>
         <tr>
             <th>ID</th>
-            <th>操作</th>
-            <th>备注</th>
-            <th>IP</th>
+            <th>收件人</th>
+            <th>模板编号</th>
+            <th>状态</th>
+            <th>回执</th>
             <th>操作时间</th>
         </tr>
         </thead>
@@ -31,9 +32,15 @@ $this->title = '发送记录';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->action?></td>
-                <td><?=$item->remark?></td>
-                <td><?=$item->ip?></td>
+                <td><?=$item->target?></td>
+                <td><?=$item->template_name?></td>
+                <td><?=$item->status == 4 ? '失败' : '成功'?></td>
+                <td>
+                    <?php if($item->status == 4):?>
+                    错误信息：
+                    <?php endif;?>
+                    <?=$item->message?>
+                </td>
                 <td><?=$item->created_at?></td>
             </tr>
         <?php endforeach; ?>

@@ -6,6 +6,7 @@ use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\MessageService\Domain\Entities\LogEntity;
 use Module\MessageService\Domain\Entities\TemplateEntity;
 use Module\MessageService\Domain\Repositories\MessageProtocol;
+use Module\MessageService\Domain\Repositories\MessageRepository;
 use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Schema\Table;
 
@@ -48,10 +49,12 @@ class CreateMessageServiceTables extends Migration {
         })->autoUp();
     }
 
-    public function seed(): void
-    {
-        RoleRepository::newPermission([
-            'sms_manage' => '短信配置'
-        ]);
+    public function seed(): void {
+        MessageRepository::insertIf(MessageProtocol::EVENT_LOGIN_CODE,
+            '登录验证码', '登录验证码{code}');
+        MessageRepository::insertIf(MessageProtocol::EVENT_REGISTER_CODE,
+            '注册验证码', '注册验证码{code}');
+        MessageRepository::insertIf(MessageProtocol::EVENT_FIND_CODE,
+            '重置密码验证码', '重置密码验证码{code}');
     }
 }
