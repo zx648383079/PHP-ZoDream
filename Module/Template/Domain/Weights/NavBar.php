@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Domain\Weights;
 
 use Zodream\Helpers\Html;
@@ -9,7 +10,7 @@ class NavBar extends Node implements INode {
     const KEY = 'nav-bar';
     const OS_VERSION = 'win_version';
 
-    protected function registerAsync() {
+    protected function registerAsync(): void {
         $this->page->on(self::KEY, function () {
            return [
                 [
@@ -42,7 +43,7 @@ class NavBar extends Node implements INode {
 
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $data = $this->page->trigger(self::KEY);
         $js = <<<JS
 $('.nav-bar .nav-bar-toggle').on('click', function() {
@@ -55,7 +56,7 @@ JS;
         }, $data)), $this->renderRight());
     }
 
-    private function renderRight() {
+    private function renderRight(): string {
         $html = $this->renderAccount();
         $version = $this->page->trigger(self::OS_VERSION);
         $uwp_url = ($version >= 6.2 ? 'ms-windows-store://pdp/?ProductId=' : 'https://www.microsoft.com/store/apps/'). '9MT2DR6PDFG9';
@@ -83,7 +84,7 @@ JS;
 HTML;
     }
 
-    private function renderAccount() {
+    private function renderAccount(): string {
         if (auth()->guest()) {
             return '';
         }

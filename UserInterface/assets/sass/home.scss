@@ -1,9 +1,7 @@
 @import "scrollbar";
 @import "theme";
 @import "mixin";
-body {
-    background-color: $body;
-}
+@import 'cookie';
 
 a {
     color: $bodyText;
@@ -18,10 +16,10 @@ a {
 }
 header,
 footer {
-    background-color: $primary;
-    color: $primaryText;
+    background-color: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text);
     a {
-        color: $primaryText;
+        color: var(--#{$prefix}-primary-text);
     }
     ul,
     li {
@@ -42,25 +40,25 @@ footer {
 }
 .friend-link {
     position: relative;
-    padding-left: 100px;
+    padding-left: 6.25rem;
     >div:first-child {
         position: absolute;
         left: 0;
-        width: 90px;
+        width: 5.625rem;
         border-right: 5px solid #fff;
         text-align: center;
     }
     a {
-        margin-right: 20px;
+        margin-right: 1.25rem;
     }
 }
 
 .nav-bar {
     li {
-        line-height: 60px;
-        height: 60px;
+        line-height: 3.75rem;
+        height: 3.75rem;
         display: inline-block;
-        padding: 0 20px;
+        padding: 0 1.25rem;
         position: relative;
         &:hover {
             border-bottom: 3px solid #fff;
@@ -106,8 +104,8 @@ footer {
             display: block;
             padding: 0;
             text-align: center;
-            height: 40px;
-            line-height: 40px;
+            height: 2.5rem;
+            line-height: 2.5rem;
         }
     }
     .nav-bar-toggle {
@@ -115,18 +113,18 @@ footer {
     }
     .new-tip {
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 0.625rem;
+        height: 0.625rem;
         background-color: yellow;
         border-radius: 50%;
         position: absolute;
-        top: 10px;
+        top: 0.625rem;
     }
 }
 
 
 .metro-grid {
-    margin: 50px 0;
+    margin: 3.125rem 0;
     display: flex;
     align-items: baseline;
     justify-items: center;
@@ -139,7 +137,7 @@ footer {
         width: 18.75rem;
         font-size: 1.875rem;
         text-align: center;
-        background-color: $bodyHeader;
+        background-color: var(--#{$prefix}-panel);
         margin: 0.5rem;
         box-shadow: $shadow 0 0 0.625rem;
         position: relative;
@@ -174,26 +172,26 @@ footer {
 }
 
 .panel {
-    background-color: $bodyHeader;
-    margin-bottom: 20px;
+    background-color: var(--#{$prefix}-panel);
+    margin-bottom: 1.25rem;
     .panel-header {
-        line-height: 50px;
-        padding-left: 20px;
-        border-left: 5px solid $primary;
-        font-size: 20px;
+        line-height: 3.125rem;
+        padding-left: 1.25rem;
+        border-left: 5px solid var(--#{$prefix}-primary);
+        font-size: 1.25rem;
         font-weight: 700;
         small {
-            font-size: 12px;
+            font-size: 0.75rem;
             font-weight: 200;
-            color: #767676;
+            color: var(--#{$prefix}-secondary-text);
         }
         .panel-menu {
-            font-size: 14px;
+            font-size: 0.875rem;
             float: right;
             font-weight: 500;
-            padding-right: 10px;
+            padding-right: 0.625rem;
             a {
-                margin-left: 10px;
+                margin-left: 0.625rem;
             }
         }
     }
@@ -202,25 +200,25 @@ footer {
             margin: 0;
         }
         &.scoll-box {
-            max-height: 300px;
+            max-height: 18.75rem;
             overflow-y: auto;
             @include scrollbar();
             .more {
                 text-align: center;
-                line-height: 30px;
+                line-height: 1.875rem;
                 display: block;
             }
         }
         .note-item {
             border-bottom: rgba($border, .1) solid 1px;
             box-sizing: border-box;
-            padding: 10px;
+            padding: 0.625rem;
             counter-increment: item-counter;
             text-decoration: none;
             word-break: break-all;
             .item-time {
-                color: $bodySecondaryText;
-                font-size: 14px;
+                color: var(--#{$prefix}-secondary-text);
+                font-size: 0.875rem;
                 text-align: right;
             }
         }
@@ -235,7 +233,7 @@ footer {
             flex: 1;
         }
         .time {
-            color: $bodySecondaryText;
+            color: var(--#{$prefix}-secondary-text);
             font-size: .8rem;
             height: 2.5rem;
             word-break: keep-all;
@@ -248,7 +246,7 @@ footer {
         }
         .item-meta {
             padding: 0 .5rem .5rem;
-            color: $bodySecondaryText;
+            color: var(--#{$prefix}-secondary-text);
             font-size: .8rem;
         }
         &:hover {
@@ -277,7 +275,7 @@ footer {
         }
         .item-meta,
         .item-time {
-            color: $bodySecondaryText;
+            color: var(--#{$prefix}-secondary-text);
             font-size: .8rem;
             padding-top: .5rem;
         }
@@ -327,8 +325,8 @@ footer {
 
 
 .contact-box {
-    padding: 20px;
-    margin-bottom: 50px;
+    padding: 1.25rem;
+    margin-bottom: 3.125rem;
     .heading {
         p {
             color: rgb(179, 177, 177);
@@ -349,22 +347,20 @@ footer {
         color: #808080;
         outline: none;
         font-weight: 400;
-        font-family: 'Play-Regular';
     }
     textarea {
         resize: none;
-        height: 192px;
+        height: 12rem;
     }
     button {
-        width: 100px;
-        border: 1px solid $border;
+        width: 6.25rem;
         border-radius: 0;
     }
 }
 
 .about-box,
 .contact-box {
-    background-color: $bodyHeader;
+    background-color: var(--#{$prefix}-panel);
     padding: 1.25rem;
     .heading {
         h3, 
@@ -380,13 +376,13 @@ footer {
 }
 
 .about-header {
-    margin-top: 50px;
-    margin-bottom: 30px;
+    margin-top: 3.125rem;
+    margin-bottom: 1.875rem;
 }
 
 .person-box {
-    background-color: #fff;
-    padding: 20px 10px;
+    background-color: var(--#{$prefix}-panel);
+    padding: 1.25rem 0.625rem;
     color: #555;
     .avatar {
         text-align: center;
@@ -400,7 +396,7 @@ footer {
     .name {
         text-align: center;
         color: #222;
-        line-height: 40px;
+        line-height: 2.5rem;
         font-weight: 600;
     }
     .desc {
@@ -438,7 +434,7 @@ footer {
             font-family: 'Play-Regular';
         }
         p {
-            color: $bodySecondaryText;
+            color: var(--#{$prefix}-secondary-text);
             font-size: 15px;
             margin: 5px 0px 0px;
             font-family: 'Play-Regular';
@@ -447,14 +443,14 @@ footer {
     }
     .autograph {
         line-height: 30px;
-        color: $bodyText;
+        color: var(--#{$prefix}-body-text);
         text-align: right;
     }
 }
 
 .friend-box {
     margin: 3.125rem 0;
-    background-color: $bodyHeader;
+    background-color: var(--#{$prefix}-panel);
     min-height: 18.75rem;
     line-height: 2.5rem;
     padding: 1.25rem 0.625rem;
@@ -462,7 +458,7 @@ footer {
         padding-left: 9.375rem;
         > div:first-child {
             width: 8.75rem;
-            border-right: 5px solid $primary;
+            border-right: 5px solid var(--#{$prefix}-primary);
             font-size: 1.25rem;
         }
     }
@@ -479,40 +475,16 @@ footer {
 
 .friend-apply {
     text-align: right;
-    margin-bottom: 30px;
-    .btn {
-        border: 1px solid $border;
-        background-color: $body;
-    }
+    margin-bottom: 1.875rem;
 }
 
 .apply-dialog {
     input {
-        height: 30px;
-        width: 300px;
+        height: 1.875rem;
+        width: 18.75rem;
     }
 }
 
-.dialog-cookie-tip {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: $body;
-    box-shadow: $shadow 0 0 10px;
-    padding: 40px 20px;
-    .dialog-footer {
-        text-align: right;
-        .btn {
-            background-color: $button;
-            color: $buttonText;
-        }
-    }
-    a {
-        color: $linkText;
-    }
-}
 
 .dialog-search {
     display: none;

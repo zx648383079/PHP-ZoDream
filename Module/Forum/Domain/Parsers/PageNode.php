@@ -6,12 +6,11 @@ use Module\Template\Domain\Weights\Node;
 
 class PageNode extends Node {
 
-    public function isGlobe(): bool
-    {
+    public function isGlobe(): bool {
         return true;
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $blocks = explode('<page/>', $this->attr('content'));
         if ($type === 'json') {
             return [

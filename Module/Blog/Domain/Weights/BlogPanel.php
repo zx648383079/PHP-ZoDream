@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Domain\Weights;
 
 use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
@@ -12,7 +13,7 @@ class BlogPanel extends Node {
 
     const KEY = 'home_blog';
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $limit = intval($this->attr('limit'));
         $category = intval($this->attr('category'));
         $tag = (string)$this->attr('tag');

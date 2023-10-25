@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Auth\Domain\Model\UserModel;
@@ -15,7 +16,7 @@ class AtNode extends Node {
 
     protected bool $isJson = false;
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $this->isJson = $type === 'json';
         $parent = intval($this->attr('parent'));
         $name = $this->attr('content');

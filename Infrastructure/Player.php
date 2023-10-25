@@ -4,10 +4,11 @@ namespace Infrastructure;
 
 use Zodream\Helpers\Json;
 use Zodream\Template\View;
+use Zodream\Template\ViewFactory;
 
 class Player {
 
-    public static function player(View $view, string $src, string $type = 'video') {
+    public static function player(View|ViewFactory $view, string $src, string $type = 'video') {
         static $guid = 0;
         if ($type === 'video' && static::isFrame($src)) {
             $type = 'iframe';
@@ -40,7 +41,7 @@ HTML;
 HTML;
     }
 
-    public static function audioPlayer(string|array $url, View $view): string {
+    public static function audioPlayer(string|array $url, View|ViewFactory $view): string {
         if (!is_array($url)) {
             $url = compact('url');
         }
@@ -60,7 +61,7 @@ HTML;
 
     }
 
-    public static function videoPlayer(string|array $url, View $view): string {
+    public static function videoPlayer(string|array $url, View|ViewFactory $view): string {
         $cover = '';
         if (is_array($url)) {
             $cover = $url['cover'] ?? '';
@@ -85,7 +86,7 @@ HTML;
         ]);
     }
 
-    protected static function createVideo(string $url, string $cover, View $view): string {
+    protected static function createVideo(string $url, string $cover, View|ViewFactory $view): string {
         $js = <<<JS
 var player = videojs('video-player');
 JS;

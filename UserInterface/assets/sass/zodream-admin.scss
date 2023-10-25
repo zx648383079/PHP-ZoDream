@@ -1,10 +1,13 @@
+@import 'function';
 @import 'theme';
+
+$primary: #2f4156;
+$isFullyTheme: false;
+
+@import 'root';
 @import 'menu';
 @import 'scroll';
 
-body {
-    background: $body;
-}
 
 a {
     text-decoration: none;
@@ -12,10 +15,10 @@ a {
 
 footer,
 header {
-    background: $primary;
-    color: $primaryText; 
+    background: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text); 
     a {
-        color: $primaryText;
+        color: var(--#{$prefix}-primary-text);
         text-decoration: none;
     }
 }
@@ -47,13 +50,13 @@ footer {
 
 
 .page-tip {
-    border: 1px dashed $body;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: $dialog;
+    border: 1px dashed var(--#{$prefix}-primary);
+    padding: 0.625rem;
+    border-radius: 0.3125rem;
+    background-color: var(--#{$prefix}-panel);
     position: relative;
     .blue {
-        color: $bodySecondaryText;
+        color: var(--#{$prefix}-secondary-text);
     }
     ul {
         width: 100%;
@@ -62,7 +65,7 @@ footer {
             padding-left: 10px;
             list-style: inside;
             a {
-                color: $dialogText;
+                color: var(--#{$prefix}-panel-text);
             }
         }
     }
@@ -118,15 +121,10 @@ footer {
     .actions {
         right: 1.25rem;
         button {
-            background: $button;
-            color: $buttonText;
             line-height: 1.875rem;
             padding: 0 0.5rem;
             margin: 0;
             border: none;
-            &.active {
-                background: #888;
-            }
         }
     }
 }

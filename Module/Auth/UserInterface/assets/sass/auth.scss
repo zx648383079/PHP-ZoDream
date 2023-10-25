@@ -1,6 +1,4 @@
 @import 'theme';
-$primary: $nav;
-$primaryText: $navText;
 .login-box {
     max-width: 18.75rem;
     margin: 20vh auto 40vh;
@@ -22,7 +20,7 @@ $primaryText: $navText;
         }
         .fa {
             transition: all .5s;
-            color: $secondary;
+            color: var(--#{$prefix}-secondary-text);
         }
         &.input-focus {
             input {
@@ -70,13 +68,8 @@ $primaryText: $navText;
         }
     }
     .btn {
-        background: $primary;
-        color: $primaryText;
         width: 100%;
         margin: 0;
-        &:hover {
-            background: $navHover;
-        }
     }
     a {
         color: #333;
@@ -91,7 +84,6 @@ $primaryText: $navText;
             float: right;
             line-height: 1.875rem;
             margin-right: 0.625rem;
-            color: $secondary;
         }
     }
     .login-qr-box {
@@ -164,7 +156,6 @@ $primaryText: $navText;
         }
         a {
             font-size: 1.875rem;
-            color: $secondary;
             margin: 0.3125rem;
         }
     }
@@ -176,15 +167,15 @@ $primaryText: $navText;
     }
 }
 .footer {
-    background: $primary;
-    color: $primaryText;
+    background: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text);
     font-weight: 400;
     font-size: 0.875rem;
     padding: 2rem 1.25rem;
     position: relative;
     text-align: center;
     a {
-        color: $primaryText;
+        color: var(--#{$prefix}-primary-text);
         text-decoration: none;
     }
 }

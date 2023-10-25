@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Infrastructure\HtmlExpand;
@@ -9,7 +10,7 @@ class LinkNode extends Node {
 
     protected bool $isJson = false;
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $this->isJson = $type === 'json';
         $href = $this->attr('href');
         $content = $this->attr('content');

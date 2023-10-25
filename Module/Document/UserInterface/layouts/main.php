@@ -84,6 +84,7 @@ $this->registerCssFile([
         '@jquery.dialog.min.js',
         '@prism.js',
         '@main.min.js',
+        '@admin.min.js',
         '@doc.min.js'
     ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>

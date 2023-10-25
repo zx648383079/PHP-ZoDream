@@ -12,7 +12,7 @@ class AppPanel extends Node {
 
     const KEY = 'home_app_store';
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $limit = intval($this->attr('limit'));
         $category = intval($this->attr('category'));
         $keywords = (string)$this->attr('keywords');

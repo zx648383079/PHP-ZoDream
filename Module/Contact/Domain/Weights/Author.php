@@ -10,13 +10,13 @@ class Author extends Node implements INode {
 
     const KEY = 'zd_profile';
 
-    protected function registerAsync() {
+    protected function registerAsync(): void {
         $this->page->on(self::KEY, function () {
            return UserModel::find(1);
         });
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         return $this->cache()->getOrSet(self::KEY, function () {
             $user = $this->page->trigger(self::KEY);
             $rss = url('/blog/rss');

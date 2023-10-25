@@ -20,7 +20,7 @@ class HideNode extends Node {
         return true;
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $this->isJson = $type === 'json';
         $this->price = floatval($this->attr('price'));
         if ($this->isHide()) {

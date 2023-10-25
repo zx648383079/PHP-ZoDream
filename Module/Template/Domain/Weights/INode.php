@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Template\Domain\Weights;
 
 
@@ -16,11 +17,11 @@ interface INode {
     public function isGlobe(): bool;
 
     /**
-     * @param $key
-     * @param null $value
+     * @param mixed $key
+     * @param mixed $value
      * @return static|mixed
      */
-    public function attr($key, $value = null);
+    public function attr(mixed $key, mixed $value = null): mixed;
 
-    public function render($type = null);
+    public function render(string $type = ''): mixed;
 }

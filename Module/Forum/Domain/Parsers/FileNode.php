@@ -19,7 +19,7 @@ class FileNode extends Node {
     protected float $price = 0;
     protected bool $isJson = false;
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $this->isJson = $type === 'json';
         $content = $this->attr('content');
         $this->price = floatval($this->attr('price'));

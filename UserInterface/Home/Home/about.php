@@ -47,7 +47,7 @@ $this->set([
                 </div>
                 <div class="col-md-6">
                     <textarea name="content" placeholder="<?=__('Feedback Content')?>"></textarea>
-                    <button type="submit" class="btn btn-show"><?=__('Send')?></button>
+                    <button type="submit" class="btn btn-default"><?=__('Send')?></button>
                 </div>
             <?= Form::close() ?>
             <div class="clearfix"> </div>

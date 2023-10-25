@@ -1,3 +1,5 @@
+$prefix: 'zre-' !default;
+
 // 黑白配
 // $primary: #333;
 // $headerFg: #fff;
@@ -38,71 +40,66 @@
 // $secondaryFg: #b3b1b1;
 // $primary: #dff0d8;
 
-$primary: #bb0b0b;
+
+
+// 中国红
+$primary: #A10000;
 $primaryText: #fff;
-$primarySubText: #ccc;
-
-$secondary: #13171c;
-$secondaryText: #fff;
-
+$secondary: #CC2525;
+$disabledText: #FF9787;
+$strongText: red;
+$shadow: rgba(51, 51, 51, 0.7);
+$border: $primary;
 $body: #f4f4f4;
-$bodyText: #0a0a0a;
-$bodySecondaryText: #666;
-
-$panel: #fff;
-
-$bodyHeader: #fff;
-
-$third: #ebebeb;
-$thirdText: #333;
-
-$hover: #404040;
-$hoverText: white;
-
-$active: #454545;
-$activeText: white;
-
-$dialog: #fff;
+$bodyText: #333;
+$panel: white;
+$third: #fff;
+$thirdText: $bodyText;
+$secondaryText: #b3b1b1;
+$dialog: rgba(255, 255, 255, .9);
+$dialogMask: rgba(0, 0, 0, .3);
 $dialogText: #333;
-
-$border: #dee2e6;
-
-$button: #bb0b0b;
-$buttonText: #fff;
-$buttonBorder: #bb0b0b;
-$buttonHoverText:  white;
-$buttonHover: #c43434;
 
 $linkText: #0a0a0a;
 $linkHoverText: #bb0b0b;
 
-$shadow: rgba(0, 0, 0, .25);
-$disable: #ababaa;
-
 $input: #fff;
-$inputTextIcon: white;
 $inputText: #333;
-$inputLabel: #929292;
 $inputBorder: #ced4da;
-$inputFocusBorder: rgb(47, 65, 86);
-$inputFocusShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
+$inputHoverBorder: rgb(47, 65, 86);
+$inputHoverShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
 $inputErrorBorder: #d9534f;
 
-$nav: rgb(47, 65, 86);
-$navText: rgb(191, 203, 217);
-$navActiveText: #1890ff;
-$navHover: #263445;
-$navPop: #04b4e0;
-$navPopText: white;
-$navSecondary: #1f2d3d;
 
-$titleText: #333;
-$titleStrongText: #bb0b0b;
+// 黑暗模式
+$dark-primary: #333;
+$dark-primaryText: #fff;
+$dark-secondary: #767676;
+$dark-disabledText: #ccc;
+$dark-strongText: red;
+$dark-shadow: rgba(51, 51, 51, 0.7);
+$dark-border: $primary;
+$dark-third: #fff;
+$dark-body: #333;
+$dark-panel: #222;
+$dark-bodyText: #fff;
+$dark-secondaryText: #b3b1b1;
+$dark-dialog: rgba(0, 0, 0, .9);
+$dark-dialogText: #fff;
+$dark-dialogMask: rgba(0, 0, 0, .3);
 
-$copyright: #000;
-$copyrightText: #fff;
 
-$icon: #bb0b0b;
+$dark-linkText: #0a0a0a;
+$dark-linkHoverText: #bb0b0b;
 
-$tag: #04b4e0;
-$tagText: #fff;
+$dark-input: #fff;
+$dark-inputText: #333;
+$dark-inputBorder: #ced4da;
+$dark-inputHoverBorder: rgb(47, 65, 86);
+$dark-inputHoverShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
+$dark-inputErrorBorder: #d9534f;
+
+
+$danger: #dc3545;
+$colorHoverOffset: 12%; // Hover 颜色加深程度
+$colorActiveOffset: 20%; // 点击后 颜色加深程度

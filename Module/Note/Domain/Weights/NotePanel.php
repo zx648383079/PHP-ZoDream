@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note\Domain\Weights;
 
 use Module\Note\Domain\Model\NoteModel;
@@ -9,7 +10,7 @@ class NotePanel extends Node {
 
     const KEY = 'home_note';
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         return $this->cache()->getOrSet(self::KEY, function () {
             $data = NoteRepository::getNewList(intval($this->attr('limit')));
             return implode('', array_map(function (NoteModel $item) {

@@ -1,9 +1,8 @@
-@import "theme";
 .navbar {
-    width: 300px;
+    width: 18.75rem;
     height: 100%;
-    background-color: $nav;
-    color: $navText;
+    background-color: var(--#{$prefix}-primary);
+    color:  var(--#{$prefix}-primary-text);
     position: relative;
     .navicon {
         width: 2rem;
@@ -11,8 +10,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $navText;
-        background: $nav;
+        color: var(--#{$prefix}-primary-text);
+        background-color: var(--#{$prefix}-primary);
     }
     
     ul {
@@ -32,16 +31,16 @@
                 box-sizing: border-box;
                 .fa {
                     position: absolute;
-                    left: 10px;
+                    left: 0.625rem;
                     top: .7rem;
                     &.image-icon {
-                        width: 21px;
-                        height: 21px;
+                        width: 1.3125rem;
+                        height: 1.3125rem;
                         background-size: 100%;
                         border-radius: 50%;
                         background-repeat: no-repeat;
-                        top: 5px;
-                        left: 8px;
+                        top: 0.3125rem;
+                        left: 0.5rem;
                     }
                 }
             }
@@ -56,7 +55,7 @@
             &.active {
                 @include active();
                 >a {
-                    background: $primary;
+                    background: var(--#{$prefix}-primary);
                 }
                 ul {
                     display: block;
@@ -69,7 +68,7 @@
             }
             &:hover {
                 >a {
-                    background: $primary;
+                    background: var(--#{$prefix}-primary);
                 }
             }
         }
@@ -79,12 +78,12 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            max-height: 300px;
+            max-height: 18.75rem;
         }
     }
 
     &.min {
-        width: 30px;
+        width: 1.875rem;
         >ul {
             >li {
                 >a {
@@ -110,12 +109,12 @@
                 &:hover {
                     >a {
                         span {
-                            width: 270px;
+                            width: 16.875rem;
                             display: block;
                             position: absolute;
-                            background: $primary;
+                            background: var(--#{$prefix}-primary);
                             top: 0;
-                            left: 30px;
+                            left: 1.875rem;
                         }
                     }
                 }

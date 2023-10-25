@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Template\Domain\Weights\Node;
@@ -6,9 +7,9 @@ use Zodream\Template\View;
 
 class AudioNode extends Node {
 
-    private $booted = false;
+    private bool $booted = false;
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $content = $this->attr('content');
         if ($type === 'json') {
             return [

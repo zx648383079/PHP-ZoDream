@@ -1,0 +1,70 @@
+$isFullyTheme: true !default;
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --#{$prefix}-primary: #{$dark-primary};
+        --#{$prefix}-primary-hover: #{tint-color($dark-primary, $colorHoverOffset)};
+        --#{$prefix}-primary-active: #{tint-color($dark-primary, $colorActiveOffset)};
+        @if $isFullyTheme {
+            --#{$prefix}-body: #{$dark-body};
+            --#{$prefix}-body-text: #{$dark-bodyText};
+            --#{$prefix}-panel: #{$dark-panel};
+            --#{$prefix}-panel-text: #{$dark-bodyText};
+            --#{$prefix}-primary-text: #{$dark-primaryText};
+            --#{$prefix}-dialog: #{$dark-dialog};
+            --#{$prefix}-dialog-text: #{$dark-dialogText};
+            --#{$prefix}-dialog-mask: #{$dark-dialogMask};
+            --#{$prefix}-shadow: #{$dark-shadow};
+    
+            --#{$prefix}-secondary-text: #{$dark-secondaryText};
+    
+            --#{$prefix}-link-text: #{$dark-linkText};
+            --#{$prefix}-link-hover-text: #{$dark-linkHoverText};
+    
+            
+            --#{$prefix}-input: #{$dark-input};
+            --#{$prefix}-input-text: #{$dark-inputText};
+    
+            --#{$prefix}-input-border: #{$dark-inputBorder};
+            --#{$prefix}-input-error-border: #{$dark-inputErrorBorder};
+            --#{$prefix}-input-hover-border: #{$dark-inputHoverBorder};
+            --#{$prefix}-input-hover-shadow: #{$dark-inputHoverShadow};
+        }
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --#{$prefix}-primary: #{$primary};
+        --#{$prefix}-primary-hover: #{shade-color($primary, $colorHoverOffset)};
+        --#{$prefix}-primary-active: #{shade-color($primary, $colorActiveOffset)};
+
+        @if $isFullyTheme {
+            --#{$prefix}-body: #{$body};
+            --#{$prefix}-body-text: #{$bodyText};
+            --#{$prefix}-panel: #{$panel};
+            --#{$prefix}-panel-text: #{$bodyText};
+    
+            --#{$prefix}-primary-text: #{$primaryText};
+            --#{$prefix}-dialog: #{$dialog};
+            --#{$prefix}-dialog-text: #{$dialogText};
+            --#{$prefix}-dialog-mask: #{$dialogMask};
+    
+            --#{$prefix}-secondary-text: #{$secondaryText};
+    
+            --#{$prefix}-shadow: #{$shadow};
+    
+            --#{$prefix}-link-text: #{$linkText};
+            --#{$prefix}-link-hover-text: #{$linkHoverText};
+    
+            
+            --#{$prefix}-input: #{$input};
+            --#{$prefix}-input-text: #{$inputText};
+    
+            --#{$prefix}-input-border: #{$inputBorder};
+            --#{$prefix}-input-error-border: #{$inputErrorBorder};
+            --#{$prefix}-input-hover-border: #{$inputHoverBorder};
+            --#{$prefix}-input-hover-shadow: #{$inputHoverShadow};
+        }
+    }
+}

@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Template\Domain\Weights\Node;
 
 class CodeNode extends Node {
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $lang = $this->attr('lang');
         $content = $this->attr('content');
         if ($type === 'json') {

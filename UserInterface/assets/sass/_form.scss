@@ -1,3 +1,5 @@
+@import 'button';
+
 $inputPadding: .3rem .5rem;
 $radius: .375rem;
 
@@ -47,7 +49,7 @@ $radius: .375rem;
                     &+label {
                         &::before {
                             content: "\f14a";
-                            color: $primary;
+                            color: var(--#{$prefix}-primary);
                         }
                     }
                 }
@@ -67,51 +69,7 @@ $radius: .375rem;
         }
     }
 }
-.btn {
-    padding: 0 .8rem;
-    background: $primary;
-    border: none;
-    display: inline-block;
-    text-decoration: none;
-    line-height: $lineHeight;
-    margin: 0 0.5rem;
-    vertical-align:middle;
-    border-radius: .25rem;
-    &.btn-full {
-        width: 100%;
-        margin: 0;
-    }
-}
 
-.btn-default {
-    background-color: #0dcaf0;
-    color: #fff;
-}
-
-.btn-danger {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #d43f3a;
-}
-.btn-primary {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
-}
-.btn-success {
-    background-color: #198754;
-    color: #fff;
-}
-
-.btn-info {
-    background-color: #5bc0de;
-    color: #fff;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
 
 .checkbox {
     position: relative;
@@ -124,7 +82,7 @@ $radius: .375rem;
             &+label {
                 &::before {
                     content: "\f14a";
-                    color: $primary;
+                    color:  var(--#{$prefix}-primary);
                 }
             }
         }
@@ -137,7 +95,7 @@ $radius: .375rem;
             -webkit-font-smoothing: antialiased;
             content: "\f0c8";
             position: absolute;
-            left: 10px;
+            left: 0.625rem;
             top: 0;
         }
     }
@@ -247,7 +205,7 @@ i {
         &.checked {
             &::before {
                 content: "\f14a";
-                color: $primary;
+                color: var(--#{$prefix}-primary);
             }
         }
     }
@@ -360,7 +318,7 @@ i {
             .input-desc {
                 display: block;
                 font-size: 0.75rem;
-                color: #767676;
+                color: var(--#{$prefix}-secondary-text);
                 margin-bottom: 0.5rem;
             }
             // label {
@@ -400,13 +358,7 @@ i {
     button {
         padding: 0 .8rem;
         line-height: $lineHeight;
-        border: none;
-        background-color: $brand-info;
-        color: #fff;
         cursor: pointer;
-        &:nth-child(2n+1) {
-            background-color: $brand-warning;
-        }
         &:hover {
             font-weight: bold;
         }
@@ -430,29 +382,15 @@ i {
             width: 20%;
             height: .1rem;
             opacity: .6;
-            background-color: #0dcaf0;
+            background-color: var(--#{$prefix}-primary);
             animation: 1s linear infinite borderLoop alternate;
-        }
-    }
-}
-
-.btn-group {
-    display: inline-flex;
-    .btn {
-        border-radius: 0;
-        margin: 0;
-        &:first-child {
-            border-radius: .25rem 0 0 .25rem;
-        }
-        &:last-child {
-            border-radius: 0 .25rem .25rem 0;
         }
     }
 }
 
 .input-group {
     .input-tip {
-        color: #767676;
+        color: var(--#{$prefix}-secondary-text);
         font-size: 0.75rem;
         padding: 0 0 0.625rem 0.625rem;
     }
@@ -494,14 +432,7 @@ i {
     }
 }
 
-.toggle-icon-text {
-    span {
-        display: none;
-    }
-    i {
-        display: inline-block;
-    }
-}
+
 
 @keyframes borderLoop {
     from {
@@ -512,13 +443,3 @@ i {
     }
 }
 
-@media (min-width: 48rem) {
-    .toggle-icon-text {
-        span {
-            display: inline-block;
-        }
-        i {
-            display: none;
-        }
-    }
-}

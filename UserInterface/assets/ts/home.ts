@@ -5,13 +5,14 @@ $(function() {
     if (diff > 0) {
         footer.css('margin-top', diff + 'px');
     }
-    if (!window.localStorage.getItem('c_t')) {
-        $('.dialog-cookie-tip').show();
-    }
-    $('.dialog-cookie-tip .btn').on('click',function() {
-        window.localStorage.setItem('c_t', '1');
-        $(this).closest('.dialog-cookie-tip').hide();
-    });
+    $('.dialog-cookie-bar').on('click', '.accept-btn', function() {
+        window.localStorage.setItem('cookie_policy', '1');
+        $(this).closest('.dialog-cookie-bar').hide();
+    }).on('click', '.more-btn', function() {
+        $(this).closest('.dialog-cookie-bar').addClass('cookie-fully');
+    }).on('click', '.expand-card .card-header', function() {
+        $(this).closest('.expand-card').toggleClass('open');
+    }).toggle(!window.localStorage.getItem('cookie_policy'));
     if (typeof SUGGESTION_URI === 'undefined' && typeof BASE_URI !== 'undefined') {
         SUGGESTION_URI = BASE_URI + 'suggestion';
     }

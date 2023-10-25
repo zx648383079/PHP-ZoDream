@@ -25,7 +25,7 @@ class Node implements INode {
         return $this->page->cache();
     }
 
-    protected function registerAsync() {
+    protected function registerAsync(): void {
 
     }
 
@@ -33,12 +33,11 @@ class Node implements INode {
         return false;
     }
 
-    public function isGlobe(): bool
-    {
+    public function isGlobe(): bool {
         return false;
     }
 
-    public function attr($key, $value = null) {
+    public function attr(mixed $key, mixed $value = null): mixed {
         if (is_array($key)) {
             $this->attributes = array_merge($this->attributes, $key);
             return $this;
@@ -50,7 +49,7 @@ class Node implements INode {
         return $this->attributes[$key] ?? null;
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         return '';
     }
 

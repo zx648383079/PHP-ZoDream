@@ -6,12 +6,11 @@ use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\Template\Domain\Weights\Node;
 class EmojiNode extends Node {
 
-    public function isGlobe(): bool
-    {
+    public function isGlobe(): bool {
         return true;
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $content = $this->attr('content');
         if ($type === 'json') {
             return [

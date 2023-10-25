@@ -86,16 +86,8 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
                 </ul>
             </div>        
         </div>
-        <?php if(date('d') === 1 && auth()->guest()):?>
-        <div class="dialog-cookie-tip">
-            <div class="dialog-body">
-                <?=__('cookie tip')?>
-                <a href="<?=$this->url('about')?>"><?=__('READ MORE')?></a>
-            </div>
-            <div class="dialog-footer">
-                <button class="btn">OK</button>
-            </div>
-        </div>
+        <?php if(auth()->guest()):?>
+        <?=$this->node('cookie-bar')?>
         <?php endif;?>
         <?=$this->footer()?>
    </body>

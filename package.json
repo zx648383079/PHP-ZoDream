@@ -24,11 +24,11 @@
   "dependencies": {
     "bourbon": "^7.3.0",
     "bourbon-neat": "^4.0.0",
-    "vue": "^3.3.4"
+    "vue": "^3.3.7"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.20",
-    "@types/js-cookie": "^3.0.4",
+    "@types/jquery": "^3.5.25",
+    "@types/js-cookie": "^3.0.5",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",

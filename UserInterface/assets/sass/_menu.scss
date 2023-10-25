@@ -1,4 +1,3 @@
-@import 'theme';
 @import "scrollbar";
 
 .app-wrapper {
@@ -22,7 +21,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba($color: #000000, $alpha: .3);
+        background-color: var(--#{$prefix}-dialog-mask);
         z-index: 78;
         display: none;
     }
@@ -40,8 +39,8 @@
         width: 8rem;
         margin-left: -5rem;
         line-height: 2.25rem;
-        background-color: $bodyHeader;
-        box-shadow: 0 0.125rem 0.75rem 0 rgba(0,0,0,.1);
+        background-color: var(--#{$prefix}-panel);
+        box-shadow: 0 0.125rem 0.75rem 0 var(--#{$prefix}-shadow);
         display: none;
         &,
         ul,
@@ -53,7 +52,7 @@
             user-select: none;
             padding: .2rem .8rem;
             &:hover {
-                background-color: #ccc;
+                background-color: var(--#{$prefix}-body);
             }
         }
     }
@@ -66,7 +65,7 @@
     .app-header-container {
         line-height: 3.25rem;
         display: flex;
-        background-color: $bodyHeader;
+        background-color: var(--#{$prefix}-panel);
         .sidebar-container-toggle {
             display: block;
             padding: 0 .8rem;
@@ -75,7 +74,7 @@
                 content: "\f0c9";
             }
             &:hover {
-                background-color: rgba($color: $navHover, $alpha: .1);
+                background-color: var(--#{$prefix}-body);
             }
         }
         .header-body {
@@ -120,8 +119,8 @@
         transition: left 1s;
         // padding: 20px 12px 60px 36px;
         overflow-y: auto;
-        background-color: $nav;
-        color: $navText;
+        background-color: var(--#{$prefix}-primary);
+        color: var(--#{$prefix}-primary-text);
         @include scrollbar();
         .sidebar-container-toggle {
             display: none;
@@ -149,9 +148,9 @@
                 padding: 0 1rem;
                 position: relative;
                 display: block;
-                color: $navText;
+                color: var(--#{$prefix}-primary-text);
                 &:hover {
-                    background-color: $navHover;
+                    background-color: var(--#{$prefix}-primary-hover);
                 }
             }
             .menu-icon {
@@ -163,7 +162,7 @@
         }
         .menu-children {
             display: none;
-            background-color: $navSecondary;
+            background-color: var(--#{$prefix}-primary-active);
             span {
                 font-weight: normal;
             }
@@ -191,7 +190,7 @@
     .main-container {
         transition: all 1s;
         position: relative;
-        background-color: $body;
+        background-color: var(--#{$prefix}-body);
         flex-grow: unset;
         top: 0;
         min-height: 18.75rem;
@@ -206,9 +205,9 @@
     }
     &.search-mode {
         transform-origin: 50vw 50vh;
-        transform: perspective(1000px) translate3d(0,50vh,0) rotate3d(1,0,0,30deg);
+        transform: perspective(62.5rem) translate3d(0,50vh,0) rotate3d(1,0,0,30deg);
         pointer-events: none;
-        max-width: 1920px;
+        max-width: 120rem;
         margin: 0 auto;
         overflow: auto;
         height: 100vh;
@@ -241,7 +240,7 @@
         &.expand {
             box-shadow: none;
             &+.main-container {
-                transform: translateX(208px);
+                transform: translateX(13rem);
             }
         }
     }
@@ -309,7 +308,7 @@
                             position: fixed;
                             display: block;
                             width: 10rem;
-                            background-color: $nav;
+                            background-color: var(--#{$prefix}-primary);
                             margin-left: 1.7rem;
                             top: 0;
                             padding: 0 .8rem;

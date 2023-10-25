@@ -19,7 +19,7 @@ class VoteNode extends Node {
     protected int $max = 1;
     protected bool $isJson = false;
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         $this->isJson = $type === 'json';
         $content = htmlspecialchars_decode($this->attr('content'));
         $this->max = max(intval($this->attr('max')), 1);

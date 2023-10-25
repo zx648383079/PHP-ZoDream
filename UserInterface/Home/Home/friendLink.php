@@ -49,7 +49,7 @@ $this->registerJs($js, View::JQUERY_READY);
             </div>
             <div class="friend-apply">
                 <p><?=__('friend link tip')?></p>
-                <a href="javascript:;" class="btn btn-show"><?=__('Apply Excharge Link')?></a>
+                <a href="javascript:;" class="btn btn-default"><?=__('Apply Excharge Link')?></a>
             </div>
         </div>
     </div>

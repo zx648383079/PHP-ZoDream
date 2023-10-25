@@ -86,6 +86,7 @@ class MultiScene extends BaseScene {
         CreateCmsTables::dropTable($this->getMainTable());
         CreateCmsTables::dropTable($this->getExtendTable());
         CreateCmsTables::dropTable($this->getCommentTable());
+        $this->seoQuery()->where('model_id', $this->modelId())->delete();
         return true;
     }
 

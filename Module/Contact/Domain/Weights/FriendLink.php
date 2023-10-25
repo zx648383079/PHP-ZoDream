@@ -10,13 +10,13 @@ class FriendLink extends Node implements INode {
 
     const KEY = 'friend_link';
 
-    protected function registerAsync() {
+    protected function registerAsync(): void {
         $this->page->on(self::KEY, function () {
            return ContactRepository::friendLink();
         });
     }
 
-    public function render($type = null) {
+    public function render(string $type = ''): mixed {
         return $this->cache()->getOrSet(sprintf('%s-%s', self::KEY, trans()->getLanguage()), function () {
             $data = $this->page->trigger(self::KEY);
             return sprintf('<div class="friend-link"><div>%s</div><div>%s</div></div>', __('friend link'), implode('', array_map(function ($item) {

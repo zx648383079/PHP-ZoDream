@@ -63,6 +63,7 @@ class SingleScene extends BaseScene {
      */
     public function removeTable(): bool {
         CreateCmsTables::dropTable($this->getExtendTable());
+        $this->query()->where('model_id', $this->modelId())->delete();
         return true;
     }
 
