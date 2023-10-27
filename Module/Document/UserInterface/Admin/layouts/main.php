@@ -96,4 +96,4 @@ $this->registerCssFile([
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
-<?= Layout::main($this, $menus, $content, 'ZoDream Document Admin') ?>
+<?= Layout::main($this, $menus, $this->contents(), 'ZoDream Document Admin') ?>

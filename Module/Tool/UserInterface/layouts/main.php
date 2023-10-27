@@ -134,4 +134,4 @@ $this->registerCssFile([
          ],
          true
      ],
-], $content, 'ZoDream Tools') ?>
+], $this->contents(), 'ZoDream Tools') ?>

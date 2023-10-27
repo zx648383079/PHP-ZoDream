@@ -1,3 +1,4 @@
+@import 'theme';
 $primary: #266faf;
 $primaryText: #fff;
 $linkHoverText: #a40000;
@@ -11,6 +12,12 @@ $navActiveText: #fff;
     font-size: inherit;
     text-rendering: auto;
     font-style: normal;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --#{$prefix}-body: #fff;
+    }
 }
 
 body {

@@ -126,14 +126,14 @@ class CMSRepository {
             return self::$cacheSite;
         }
         $request = request();
-        $site = static::matchSite($request->host(), ltrim($request->path(), '/'));
+        $site = static::matchSite($request->scheme(), $request->host(), ltrim($request->path(), '/'));
         if ($site < 1) {
             throw new \Exception('无任何站点');
         }
         return self::$cacheSite = SiteModel::findOrThrow($site);
     }
 
-    public static function matchSite(string $host, string $path, bool $isStrict = false): int {
+    public static function matchSite(string $scheme, string $host, string $path, bool $isStrict = false): int {
         $items = self::isPreview() ? SiteRepository::getAll() : CacheRepository::getSiteCache();
         if (empty($items)) {
             return 0;
@@ -143,25 +143,23 @@ class CMSRepository {
             if (!$isStrict && $item['is_default'] > 0) {
                 $default = $item['id'];
             }
-            $type = intval($item['match_type']);
-            if ($type === SiteModel::MATCH_TYPE_DOMAIN) {
-                if ($item['match_rule'] === $host) {
-                    return $item['id'];
-                }
+            $rules = parse_url((string)$item['match_rule']);
+            if (!empty($rules['scheme']) && $rules['scheme'] !== $scheme) {
                 continue;
             }
-            if ($type === SiteModel::MATCH_TYPE_PATH) {
-                $rule = ltrim($item['match_rule'], '/');
-                if ($rule === $path) {
-                    return $item['id'];
-                }
-                if ($rule === '') {
-                    $default = $item['id'];
-                    continue;
-                }
-                if (str_starts_with($path, $rule)) {
-                    return $item['id'];
-                }
+            if (!empty($rules['host']) && $rules['host'] !== $host) {
+                continue;
+            }
+            $rule = trim($rules['path'], '/');
+            if ($rule === $path) {
+                return $item['id'];
+            }
+            if ($rule === '') {
+                $default = $item['id'];
+                continue;
+            }
+            if (str_starts_with($path, $rule.'/')) {
+                return $item['id'];
             }
         }
         return $default;

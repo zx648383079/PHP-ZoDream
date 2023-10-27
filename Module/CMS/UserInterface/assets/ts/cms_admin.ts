@@ -1,15 +1,15 @@
 declare const UE: any;
 function bindField(baseUri: string) {
-    let field = $('#field');
-    $('#name').on('blur', function() {
+    let field = $('input[name=field]');
+    $('input[name=name]').on('blur', function() {
         pinyinIfEmpty(field, $(this).val() as string);
     });
-    $("#type").on('change', function() {
+    $('input[name=type]').on('change', function() {
         $.get(baseUri, {
-            id: $("[name=id]").val(),
+            id: $('[name=id]').val(),
             type: $(this).val()
         }, function(html) {
-            $(".option-box").html(html);
+            $('.option-box').html(html);
         });
     }).trigger('change');
     $('.add-box button').on('click',function() {
@@ -21,11 +21,11 @@ function bindField(baseUri: string) {
         input.val('');
         let box = $(this).closest('.tab-group');
         let num = box.find('.radio-label').length;
-        box.find('[name="tab_name"]').removeAttr('checked');
+        box.find('[name=tab_name]').removeAttr('checked');
         let addBox = $(this).closest('.add-box');
-        addBox.before(`<span class="radio-label">
-        <input type="radio" id="tab_name${num}" name="tab_name" value="${val}" checked>
-        <label for="tab_name${num}">${val}</label>
+        addBox.before(`<span class='radio-label'>
+        <input type='radio' id='tab_name${num}' name='tab_name' value='${val}' checked>
+        <label for='tab_name${num}'>${val}</label>
     </span>`);
         if (num >= 4) {
             addBox.remove();
@@ -35,7 +35,7 @@ function bindField(baseUri: string) {
 
 function bindSite() {
     $(document).on('change', 'select[name=theme]', function(e) {
-        const siteId = $(this).closest('form').find('[name="id"]').val() as any;
+        const siteId = $(this).closest('form').find('[name=id]').val() as any;
         if (siteId && siteId > 0) {
             confirm('你正在更改主题，更改主题将删除站点数据！');
         }
@@ -43,11 +43,18 @@ function bindSite() {
 }
 
 function bindCat() {
-    let name = $('#name');
-    $('#title').on('blur', function() {
-        pinyinIfEmpty(name, $(this).val() as any);
+    $('input[name=title]').on('blur', function() {
+        pinyinIfEmpty($('input[name=name]'), $(this).val() as any);
     });
-    // $('#container').editor();
+    $('input[name=type]').on('click', function() {
+        const val = toInt($(this).val());
+        $('input[name=url]').closest('.input-group').toggle(val > 1);
+        $('.editor-box').data('_instance')?.toggle(val === 1);
+    }).each(function(this: HTMLInputElement) {
+        if (this.checked) {
+            $(this).trigger('click');
+        }
+    });
 }
 
 function pinyinIfEmpty(ele: JQuery, val: string) {
@@ -70,31 +77,27 @@ function bindEditModel() {
             ele.val(val);
         }
     },
-    table = $('#table').on('blur', function() {
+    table = $('input[name=table]').on('blur', function() {
         let val = $(this).val();
         if (!val) {
             return;
         }
-        valIfEmpty($('#category_template'), val + '');
-        valIfEmpty($('#list_template'), val + '_list');
-        valIfEmpty($('#show_template'), val + '_detail');
+        valIfEmpty($('input[name=category_template]'), val + '');
+        valIfEmpty($('input[name=list_template]'), val + '_list');
+        valIfEmpty($('input[name=show_template]'), val + '_detail');
     });
-    $('#name').on('blur', function() {
+    $('input[name=name]').on('blur', function() {
         pinyinIfEmpty(table, $(this).val() as any);
     });
-    let type0 = $("#type0").on('click',function() {
-        $(".content-box").hide();
-        $(".form-box").show();
+    $('input[name=type]').on('click', function() {
+        const val = toInt($(this).val())
+        $('.content-box').toggle(val > 0);
+        $('.form-box').toggle(val < 1);
+    }).each(function(this: HTMLInputElement) {
+        if (this.checked) {
+            $(this).trigger('click');
+        }
     });
-    let type1 = $("#type1").on('click',function() {
-        $(".content-box").show();
-        $(".form-box").hide();
-    });
-    if (type0.is(':checked')) {
-        type0.trigger('click');
-    } else {
-        type1.trigger('click');
-    }
 }
 
 function bindEditOption() {
@@ -119,10 +122,10 @@ $(function() {
             label = ele.options[ele.selectedIndex].text;
         }
         const name = input.attr('name').substring(4);
-        target.append(`<div class="selected-item">
-        <span class="item-close">&times;</span>
-        <div class="item-label">${label}</div>
-        <input type="hidden" name="${name}[]" value="${val}">
+        target.append(`<div class='selected-item'>
+        <span class='item-close'>&times;</span>
+        <div class='item-label'>${label}</div>
+        <input type='hidden' name='${name}[]' value='${val}'>
     </div>`);
     }).on('click', 'button[data-type=publish]', function(e) {
         e.preventDefault();

@@ -32,7 +32,7 @@ $this->registerCssFile([
             ZoDream Chat
         </div>
     </header>
-   <?=$content?>
+   <?=$this->contents()?>
    <?=$this->footer()?>
    </body>
 </html>

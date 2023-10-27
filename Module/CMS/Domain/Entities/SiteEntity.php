@@ -11,7 +11,6 @@ use Domain\Entities\Entity;
  * @property string $description
  * @property string $logo
  * @property string $theme
- * @property integer $match_type
  * @property string $match_rule
  * @property integer $is_default
  * @property integer $status
@@ -32,7 +31,6 @@ class SiteEntity extends Entity {
             'description' => 'string:0,255',
             'logo' => 'string:0,255',
             'theme' => 'required|string:0,100',
-            'match_type' => 'int:0,127',
             'match_rule' => 'string:0,100',
             'is_default' => 'int:0,127',
             'status' => 'int:0,127',
@@ -51,7 +49,6 @@ class SiteEntity extends Entity {
             'description' => '简介',
             'logo' => 'Logo',
             'theme' => '主题',
-            'match_type' => '匹配类型',
             'match_rule' => '匹配规则',
             'is_default' => '是否为默认站点',
             'status' => '状态',

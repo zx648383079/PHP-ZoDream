@@ -1,7 +1,7 @@
-<div class="shortcut-weight {=$property->formatClass()}"{=$property->weightStyle()}>
-    {if:$model->title}
-    <div class="title"{=$property->titleStyle()}>
-        {=$model->title}
+<div class="shortcut-weight {=$property.formatClass:}"{=$property.weightStyle:}>
+    {if:$model.title}
+    <div class="title"{=$property.titleStyle:}>
+        {=$model.title}
     </div>
     {/if}
     {for:$key_items,$group}

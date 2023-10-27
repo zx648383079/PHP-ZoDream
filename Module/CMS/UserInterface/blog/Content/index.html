@@ -1,0 +1,94 @@
+{layout:main}
+
+<div class="detail-box">
+    <div class="item-header">
+        <h2 class="item-title">
+            {$data.title}
+        </h2>
+        <div class="item-tag-bar">
+            <div>
+                <a href="{channel:$cat,url}" class="tag-item-block">{$cat.title}</a>
+                <a href="#">
+                    <i class="fa fa-clock"></i>
+                    {this.ago:$data.updated_at}
+                </a>
+            </div>
+            <div>
+                <a href="#">
+                    <i class="fa fa-eye"></i>
+                    {__:view_count,0=>$data.view_count}
+                </a>
+                <a href="#comments">
+                    <i class="fa fa-comments"></i>
+                    {__:comment_count,0=>$data.comment_count}
+                </a>
+                <a class="drop-container">
+                    <span class="drop-toggle-arrow">
+                        <i class="fa fa-share"></i>
+                        {__:Share}
+                    </span>
+                    <ul class="drop-bar">
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Google
+                        </li>
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Bing
+                        </li>
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Facebook
+                        </li>
+                    </ul>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="item-body">
+        <div class="item-thumb">
+            <a href="#">
+                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$data.thumb}" alt="{$data.title}">
+            </a>
+        </div>
+        <article id="content" class="content">
+            <div>
+                {$data.content}
+            </div>
+            <p class="book-copyright">{__:Reprint please keep the original link:}
+                <a href="https://zodream.cn">{request.url:}</a>
+            </p>
+        </article>
+        <div class="tags-box">
+            <a href="https://zodream.cn">Tag1</a>
+            <a href="https://zodream.cn">Tag2</a>
+        </div>
+    </div>
+    {$prev=previous:}
+    {$next=next:}
+    {if:$prev || $next}
+    <div class="further-box">
+        <div class="previous">
+            <span>{__:Previous}</span>
+            {if:$prev}
+            <a href="{url:$prev}">{$prev.title}</a>
+            {else}
+            <a href="#">{__:Nothing}</a>
+            {/if}
+        </div>
+        <div class="next">
+            <span>{__:Next} </span>
+            {if:$next}
+            <a href="{url:$next}">{$next.title}</a>
+            {else}
+            <a href="#">{__:Nothing}</a>
+            {/if}
+        </div>
+    </div>
+    {/if}
+
+</div>
+
+{if:$data.comment_open}
+{tpl:Comment/load}
+{/if}

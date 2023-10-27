@@ -38,7 +38,7 @@ function bindRegister() {
         let name = _this.attr('name');
         let val = _this.val().toString().trim();
         if (val.length < 1) {
-            box.addClass('error');
+            box.addClass('is-invalid');
             return;
         }
         if (name === 'name' || name === 'email') {
@@ -47,7 +47,7 @@ function bindRegister() {
                 value: val
             }, data => {
                 if (data.code == 200 && data.data) {
-                    box.addClass('error');
+                    box.addClass('is-invalid');
                     Dialog.tip((name == 'name' ? '昵称' : '邮箱') + '已注册');
                     return;
                 }
@@ -55,7 +55,7 @@ function bindRegister() {
             return;
         }
         if (name === 'rePassword' && val !== $('.login-form input[name="password"]').val()) {
-            box.addClass('error');
+            box.addClass('is-invalid');
             Dialog.tip('两次密码不一致');
             return;
         }

@@ -82,4 +82,4 @@ $this->registerCssFile([
             ],
         ]
     ],
-], $content, 'ZoDream Exam Admin') ?>
+], $this->contents(), 'ZoDream Exam Admin') ?>

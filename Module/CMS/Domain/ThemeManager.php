@@ -386,13 +386,13 @@ class ThemeManager {
     protected function runActionChannel(array $data): void {
         $data = $this->formatI18n($data);
         $type = $data['type'] ?? null;
-        if ($type === 'page') {
-            $data['type'] = CategoryEntity::TYPE_PAGE;
-        } elseif ($type === 'link') {
+        if ($type === 'link') {
             $data['type'] = CategoryEntity::TYPE_LINK;
         } else if (!empty($type)) {
             $data['model_id'] = $this->getCacheId($type);
             $data['type'] = CategoryEntity::TYPE_CONTENT;
+        } else {
+            $data['type'] = CategoryEntity::TYPE_PAGE;
         }
         $children = $data['children'] ?? [];
         if (isset($data['setting']) && is_array($data['setting'])) {

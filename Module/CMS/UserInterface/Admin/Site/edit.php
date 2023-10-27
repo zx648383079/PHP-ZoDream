@@ -16,8 +16,7 @@ $this->registerJs($js);
 <?=Form::open($model, './@admin/site/save')?>
     <?=Form::text('title', true)?>
     <?=Form::select('theme', [$themes, 'description', 'name'])?>
-    <?=Form::select('match_type', ['域名', '路径'])?>
-    <?=Form::text('match_rule')?>
+    <?=Form::text('match_rule')->tip('结构：“[https]://[host]/[path]” 指定域名必须在域名前加 “//”, 其他都为路径形式')?>
     <?=Form::text('language')->tip('具体语言请查看模板')?>
     <?=Form::file('logo')?>
     <?=Form::text('keywords')?>

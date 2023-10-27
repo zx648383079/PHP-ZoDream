@@ -121,4 +121,4 @@ $this->registerCssFile([
         ],
         true
     ],
-], $content, 'ZoDream Counter Admin') ?>
+], $this->contents(), 'ZoDream Counter Admin') ?>

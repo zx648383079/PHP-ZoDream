@@ -27,7 +27,7 @@ $this->registerCssFile([
 </head>
 <body>
     <div id="game-box">
-    <?=$content?>
+    <?=$this->contents()?>
     </div>
 
     <?=$this->footer()?>

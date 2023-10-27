@@ -529,7 +529,7 @@ function bindNavigation(data?: any) {
 }
 
 function bindTheme() {
-    $('.theme-list .item').mouseenter(function() {
+    $('.theme-list .item').on('mouseenter', function() {
         let img = $(this).find('.thumb img');
         let height = img.closest('.thumb').innerHeight();
         let h = img.height();
@@ -537,7 +537,7 @@ function bindTheme() {
             return;
         }
         img.css('top', (height - h) + 'px');
-    }).mouseleave(function() {
+    }).on('mouseleave', function() {
         $(this).find('.thumb img').css('top', 0);
     });
 }

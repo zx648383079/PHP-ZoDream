@@ -80,7 +80,6 @@ class CreateCmsTables extends Migration {
             $table->string('logo')->default('');
             $table->string('language', 10)->default('');
             $table->string('theme', 100);
-            $table->uint('match_type', 2)->default(0);
             $table->string('match_rule', 100)->default('');
             $table->bool('is_default')->default(0);
             $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_POSTED)

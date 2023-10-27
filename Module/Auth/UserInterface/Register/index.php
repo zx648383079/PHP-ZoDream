@@ -12,7 +12,7 @@ $this->registerJs($js);
 <section class="container">
     <div class="login-box">
         <form class="form-ico login-form" action="<?= $this->url('./register/post', false) ?>" method="POST">
-        <div class="input-group error">
+        <div class="input-group">
                 <input type="text" name="name" class="form-control" placeholder="请输入昵称" required>
                 <i class="fa fa-user" aria-hidden="true"></i>
             </div>

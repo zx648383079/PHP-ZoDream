@@ -89,4 +89,4 @@ $this->registerCssFile([
     ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 
-<?= Layout::main($this, $menus, $content, $this->title ?? 'ZoDream Document') ?>
+<?= Layout::main($this, $menus, $this->contents(), $this->title ?? 'ZoDream Document') ?>

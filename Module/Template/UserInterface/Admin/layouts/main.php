@@ -59,4 +59,4 @@ $this->registerCssFile([
             ]
         ],
     ],
-], $content, 'ZoDream Template Admin') ?>
+], $this->contents(), 'ZoDream Template Admin') ?>

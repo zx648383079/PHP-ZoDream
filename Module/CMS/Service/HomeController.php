@@ -7,7 +7,7 @@ use Module\CMS\Domain\FuncHelper;
 class HomeController extends Controller {
 
     public function indexAction() {
-        $title = FuncHelper::translate('首页');
+        $title = FuncHelper::translate('Home');
         return $this->show(compact('title'));
     }
 }

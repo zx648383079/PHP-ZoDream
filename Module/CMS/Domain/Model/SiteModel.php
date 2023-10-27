@@ -16,7 +16,6 @@ use Zodream\Http\Uri;
  * @property string $description
  * @property string $logo
  * @property string $theme
- * @property integer $match_type
  * @property string $match_rule
  * @property integer $is_default
  * @property integer $status
@@ -26,9 +25,6 @@ use Zodream\Http\Uri;
  * @property integer $updated_at
  */
 class SiteModel extends SiteEntity {
-
-    const MATCH_TYPE_DOMAIN = 0;
-    const MATCH_TYPE_PATH = 1;
 
     public function getLogoAttribute() {
         $cover = $this->getAttributeSource('logo');
@@ -57,27 +53,27 @@ class SiteModel extends SiteEntity {
     }
 
     public function getPreviewUrlAttribute() {
-        if ($this->match_type < 1) {
-            $uri = new Uri(url('./'));
-            return (string)$uri->setHost($this->match_rule)->addData(CMSRepository::PREVIEW_KEY, 1);
-        }
-        return url(sprintf('/%s', $this->match_rule), [CMSRepository::PREVIEW_KEY => 1]);
+        return $this->url('');
     }
 
     public function url(string $path, array $data = []) {
-        $data[CMSRepository::PREVIEW_KEY] = 1;
-        $rule = $this->match_rule;
-        if ($this->match_type < 1) {
-            $uri = new Uri(url($path, $data));
-            return empty($rule) ? $uri : $uri->setHost($this->match_rule);
-        }
+        $uri = new Uri($this->match_rule);
         if (str_starts_with($path, './')) {
             $path = substr($path, 2);
         }
-        if (empty($rule)) {
-            return url(sprintf('/%s', $path), $data);
+        if (!empty($path)) {
+            $uri->appendPath($path);
         }
-        return url(sprintf('/%s/%s', $this->match_rule, $path), $data);
+        $uri->addData($data)
+            ->addData(CMSRepository::PREVIEW_KEY, 1);
+        $request = request();
+        if (empty($uri->getScheme())) {
+            $uri->setScheme($request->scheme());
+        }
+        if (empty($uri->getHost())) {
+            $uri->setHost($request->host());
+        }
+        return (string)url()->encode($uri);
     }
 
     public function saveOption(array $data) {

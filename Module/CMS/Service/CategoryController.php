@@ -37,7 +37,7 @@ class CategoryController extends Controller {
             $queries['field'] = FuncHelper::searchField($cat['id']);
         }
         $page = FuncHelper::contents($queries);
-        $title = $cat['title'].'列表页';
+        $title = FuncHelper::translate('{0} list page', [$cat['title']]);
         $keywords = isset($queries['keywords']) ? Html::text($queries['keywords']) : '';
         return $this->show($cat['list_template'],
             compact('cat', 'page',  'title', 'keywords'));

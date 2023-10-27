@@ -159,4 +159,4 @@ $this->registerCssFile([
             // ],
         ]
     ]
-], $content, $this->title ?? 'ZoDream CMS Admin', $navCurrent.$this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>
+], $this->contents(), $this->title ?? 'ZoDream CMS Admin', $navCurrent.$this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>

@@ -5,38 +5,44 @@ namespace Module\Template\Domain\Weights;
 class CookieBar extends Node implements INode {
 
     private function getCookieData(): array {
+        $items = (array)__('cookie_setting');
         return [
             [
                 'name' => __('Indispensable'),
-                'description' => 'Essential Cookies are absolutely necessary for the proper functioning of a website. These cookies are anonymous to ensure the basic functionality and security features of the website.',
+                'description' => $items['indispensable'] ?? '',
                 'required' => true,
                 'items' => [
                     [
                         'name' => 'cookie_policy',
-                        'time' => '11 months',
-                        'description' => 'Cookies are set by the Cookie Plugin to store the user\'s consent to the use of cookies; it does not store any personal data.'
+                        'time' => __('{0} months', [11]),
+                        'description' => $items['cookie_policy'] ?? ''
+                    ],
+                    [
+                        'name' => 'PHPSESSID',
+                        'time' => __('{0} months', [11]),
+                        'description' => $items['sessid'] ?? ''
                     ]
                 ]
             ],
             [
                 'name' => __('Functional'),
-                'description' => 'Functionality Cookies help perform certain functions, such as sharing website content on social media platforms, collecting feedback and other third-party functions.',
+                'description' => $items['functional'] ?? '',
             ],
             [
                 'name' => __('Performances'),
-                'description' => 'Performance cookies are used to understand and analyze key performance indicators of a website, which helps provide a better user experience for visitors.',
+                'description' => $items['performances'] ?? '',
             ],
             [
                 'name' => __('Analytics'),
-                'description' => 'Analytics cookies are used to understand how visitors interact with a website. These cookies help provide information on metrics such as the number of visitors, bounce rates, traffic sources, and more.',
+                'description' => $items['analytics'] ?? '',
             ],
             [
                 'name' => __('Advertising'),
-                'description' => 'Advertising cookies are used to provide visitors with relevant advertising and marketing campaigns. These cookies track visitors across websites and collect information to deliver customized advertisements.',
+                'description' => $items['advertising'] ?? '',
             ],
             [
                 'name' => __('Others'),
-                'description' => 'Other unclassified cookies are those that are being analyzed but not yet classified.',
+                'description' => $items['others'] ?? '',
             ],
         ];
     }
@@ -46,15 +52,19 @@ class CookieBar extends Node implements INode {
             return $this->getCookieData();
         }
         $html = $this->renderDetail($this->getCookieData());
+        $tooltip = __('cookie_tooltip');
+        $moreBtn = __('Cookie Settings');
+        $accept = __('Save And Accept');
+        $acceptAll = __('Accept All');
+        $more = __('Learn more');
+        $moreUrl = url('/agreement');
         return <<<HTML
-
 <div class="dialog-cookie-bar">
-    <div class="dialog-cookie-mask"></div>
     <div class="dialog-cookie-body">
-        <div class="dialog-header">Cookie Settings</div>
+        <div class="dialog-header">{$moreBtn}</div>
         <div class="dialog-body">
-            Our website uses some cookies and records your IP address for the purposes of accessibility, security, and managing your access to the telecommunication network. You can disable data collection and cookies by changing your browser settings, but it may affect how this website functions.
-            <a href="">Learn more</a>
+            {$tooltip}
+            <a href="{$moreUrl}" target="_blank">{$more}</a>
             <div class="cookie-detail">
                 {$html}
             </div>
@@ -62,12 +72,12 @@ class CookieBar extends Node implements INode {
         <div class="dialog-footer">
             <div class="cookie-simple">
                 <div class="btn-group">
-                    <button class="btn btn-secondary more-btn">Cookie Settings</button>
-                    <button class="btn btn-primary accept-btn">Accept All</button>
+                    <button class="btn btn-secondary more-btn">{$moreBtn}</button>
+                    <button class="btn btn-primary accept-btn">{$acceptAll}</button>
                 </div>
             </div>
             <div class="cookie-detail">
-                <button class="btn btn-primary accept-btn">Save And Accept</button>
+                <button class="btn btn-primary accept-btn">{$accept}</button>
             </div>
         </div>
     </div>
@@ -103,7 +113,7 @@ HTML;
 
     private function renderInput(array $item): string {
         if (!empty($item['required'])) {
-            return 'Always active';
+            return __('Always active');
         }
         return <<<HTML
 <div class="check-toggle">
@@ -123,17 +133,19 @@ HTML;
 <tr>
     <td>{$item['name']}</td>
     <td>{$item['time']}</td>
-    <td>{$item['description']}</td>
+    <td class="left">{$item['description']}</td>
 </tr>
 HTML;
         }
+        $dateTip = __('Date');
+        $descTip = __('Description');
         return <<<HTML
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Cookie</th>
-            <th>Date</th>
-            <th>Description</th>
+            <th>{$dateTip}</th>
+            <th>{$descTip}</th>
         </tr>
     </thead>
     <tbody>

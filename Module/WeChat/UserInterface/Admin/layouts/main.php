@@ -145,4 +145,4 @@ $this->registerCssFile([
         ],
         true
     ]
-], $content, 'ZoDream WeChat') ?>
+], $this->contents(), 'ZoDream WeChat') ?>

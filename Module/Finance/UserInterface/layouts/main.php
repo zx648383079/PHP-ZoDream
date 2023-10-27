@@ -84,4 +84,4 @@ $this->registerCssFile([
         './budget',
         'fa fa-tasks'
     ]
-], $content, 'ZoDream Finance') ?>
+], $this->contents(), 'ZoDream Finance') ?>

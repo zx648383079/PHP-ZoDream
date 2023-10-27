@@ -54,7 +54,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
                 <?=$this->node('nav-bar')?>
             </div>
         </header>
-        <?=$content?>
+        <?=$this->contents()?>
         <footer>
             <div class="container">
                 <?=$this->node('friend-link')?>

@@ -37,7 +37,7 @@ $this->title = 'ZoDream';
             </div>
         </div>
         <div class="col-md-9">
-            <?php if($mode < 1):?>
+            <?php if(!isset($mode) || $mode < 1):?>
             <div class="row">
             <?php foreach($book_list as $item):?>
             <div class="col-md-6">
@@ -109,7 +109,7 @@ $this->title = 'ZoDream';
             </table>
             <?php endif;?>
 
-            <?= $book_list->pageLink() ?>
+            <?= $book_list->getLink() ?>
         </div>
     </div>
 </div>

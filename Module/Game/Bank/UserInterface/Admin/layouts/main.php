@@ -42,4 +42,4 @@ $this->registerCssFile([
             ],
         ]
     ],
-], $content, 'ZoDream Bank Admin') ?>
+], $this->contents(), 'ZoDream Bank Admin') ?>

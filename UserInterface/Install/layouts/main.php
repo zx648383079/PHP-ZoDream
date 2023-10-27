@@ -27,7 +27,7 @@ $this->registerCssFile([
    </head>
    <body>
     <div class="container full-page">
-        <?=$content?>
+        <?=$this->contents()?>
     </div>
    <?=$this->footer()?>
    </body>

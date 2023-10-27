@@ -73,4 +73,4 @@ $this->registerCssFile([
             ]
         ]
     ]
-], $content, 'ZoDream Log Viewer') ?>
+], $this->contents(), 'ZoDream Log Viewer') ?>

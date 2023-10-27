@@ -153,7 +153,7 @@ $isAdministrator = $user && $user->isAdministrator()
         ],
         true
     ]
-], $content, $this->title ?? 'ZoDream Account Admin',  $this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>
+], $this->contents(), $this->title ?? 'ZoDream Account Admin',  $this->renderPart( $this->getCompleteFile('@root/Admin/navDrop.php') )) ?>
 
 
 

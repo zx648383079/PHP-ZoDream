@@ -24,7 +24,7 @@ class VisualFactory {
      * 清除锁定数据
      * @return void
      */
-    public static function unlock() {
+    public static function unlock(): void {
         static::$lockData = [];
     }
 
@@ -35,21 +35,21 @@ class VisualFactory {
      * @return void
      * @throws \Exception
      */
-    public static function lock(int $parentId, int $index) {
+    public static function lock(int $parentId, int $index): void {
         if (isset(static::$lockData[$parentId][$index])) {
             throw new \Exception(sprintf('weight[%d-%d] is loop die', $parentId, $index));
         }
         static::$lockData[$parentId][$index] = 1;
     }
 
-    public static function newViewFactory(?bool $cacheable = null) {
+    public static function newViewFactory(?bool $cacheable = null): ViewFactory {
         $factory = new ViewFactory();
         $factory->setEngine(ParserCompiler::class, $cacheable)
             ->setConfigs([
                 'suffix' => VisualPage::EXT
             ])
             ->getEngine()
-            ->registerFunc('weight', '<?=$'.VisualPage::ENGINE_KEY.'->weight(%s)?>');
+            ->registerFunc('weight', '$'.VisualPage::ENGINE_KEY.'->weight');
         return $factory;
     }
 

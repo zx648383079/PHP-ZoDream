@@ -12,6 +12,7 @@ use Module\CMS\Service\ContentController;
 use Module\CMS\Service\HomeController;
 use Zodream\Helpers\Str;
 use Zodream\Http\Uri;
+use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Route;
 use Zodream\Route\OnlyRoute;
@@ -27,13 +28,18 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         if (str_starts_with($path, 'open/') || str_contains($path, '/admin/')) {
             return $next($context);
         }
-        $site = CMSRepository::matchSite($context['request']->host(), $path, true);
+        /** @var Input $request */
+        $request = $context['request'];
+        $site = CMSRepository::matchSite($request->scheme(), $request->host(), $path, true);
         if ($site < 1) {
             return $next($context);
         }
         $site = SiteModel::findOrThrow($site);
         CMSRepository::site($site);
-        $modulePath = $site['match_type'] > 0 ? $site['match_rule'] : '';
+        if ($site->language) {
+            trans()->setLanguage($site->language)->reset();
+        }
+        $modulePath = trim(parse_url((string)$site['match_rule'], PHP_URL_PATH), '/');
         if ($modulePath !== '') {
             $path = trim(substr($path, strlen($modulePath)), '/');
         }
@@ -158,20 +164,29 @@ class CMSSeoMiddleware implements MiddlewareInterface{
     }
 
     protected static function formatUrl(string $path, array $data = []): string {
-        $site = CMSRepository::site();
-        if ($site['match_type'] < 1) {
-            $uri = new Uri();
-            $uri->setScheme(request()->isSSL() ? 'https' : 'http')
-                ->setHost($site['match_rule'])->setPath($path)
-            ->setData($data);
+        /** @var Uri $uri */
+        $uri = clone FuncHelper::cache()->getOrSet(__FUNCTION__, CMSRepository::siteId(), function () {
+            $site = CMSRepository::site();
+            $uri = new Uri($site['match_rule']);
+            $request = request();
+            if (empty($uri->getScheme())) {
+                $uri->setScheme($request->scheme());
+            }
+            if (empty($uri->getHost())) {
+                $uri->setHost($request->host());
+            }
             if (CMSRepository::isPreview()) {
                 $uri->addData(CMSRepository::PREVIEW_KEY, $_GET[CMSRepository::PREVIEW_KEY]);
             }
-            return (string)url()->encode($uri);
+            return $uri;
+        });
+        if (str_starts_with($path, './')) {
+            $path = substr($path, 2);
         }
-        if (CMSRepository::isPreview()) {
-            $data[CMSRepository::PREVIEW_KEY] = $_GET[CMSRepository::PREVIEW_KEY];
+        if (!empty($path)) {
+            $uri->addPath($path);
         }
-        return url(sprintf('/%s/%s', $site['match_rule'], $path), $data);
+        $uri->addData($data);
+        return (string)url()->encode($uri);
     }
 }

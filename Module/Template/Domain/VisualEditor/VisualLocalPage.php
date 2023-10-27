@@ -132,8 +132,7 @@ class VisualLocalPage implements IVisualEngine {
         return $this->renderRow(0, $index);
     }
 
-    public function renderRow(int $parent_id, int $index = 0): string
-    {
+    public function renderRow(int $parent_id, int $index = 0): string {
         VisualFactory::lock($parent_id, $index);
         $args = [];
         $renderer = $this->renderer();

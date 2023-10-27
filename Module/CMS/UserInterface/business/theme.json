@@ -13,12 +13,6 @@
             "action": "option",
             "data": [
                 {
-                    "name": "主题",
-                    "code": "theme",
-                    "type": "text",
-                    "value": "business"
-                },
-                {
                     "name": "公司名",
                     "code": "company_name",
                     "type": "text"

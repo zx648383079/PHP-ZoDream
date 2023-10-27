@@ -23,7 +23,7 @@ $this->registerCssFile([
        <?=$this->header();?>
    </head>
    <body>
-   <?=$content?>
+   <?=$this->contents()?>
    <?=$this->footer()?>
    </body>
 </html>

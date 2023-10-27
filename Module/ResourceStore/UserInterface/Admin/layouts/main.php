@@ -72,4 +72,4 @@ $this->registerCssFile([
          ],
          true
      ],
-], $content, 'ZoDream Demo管理平台') ?>
+], $this->contents(), 'ZoDream Demo管理平台') ?>

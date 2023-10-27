@@ -2,7 +2,7 @@ $theme-colors: (
     'primary': #337ab7,
     'success': #198754,
     'info': #5bc0de,
-    'danger': $danger,
+    'danger': $invalid,
     'warning': #f0ad4e,
     'secondary': #6c757d
 );
@@ -13,19 +13,19 @@ $enable-flex: false !default;
 
 $grid-breakpoints: (
     xs: 0,
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px,
-    xxl: 1400px,
+    sm: 36rem,
+    md: 48rem,
+    lg: 62rem,
+    xl: 75rem,
+    xxl: 87.5rem,
 ) !default;
 
 $container-max-widths: (
-    sm: 540px,
-    md: 720px,
-    lg: 960px,
-    xl: 1140px,
-    xxl: 1320px,
+    sm: 33.75rem,
+    md: 45rem,
+    lg: 60rem,
+    xl: 71.25rem,
+    xxl: 82.5rem,
 ) !default;
 
 $grid-columns: 12 !default;

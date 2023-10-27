@@ -10,6 +10,7 @@ use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\VisualEditor\VisualLocalPage;
 use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Infrastructure\Contracts\Http\Output;
+use Zodream\Infrastructure\Error\TemplateException;
 
 final class VisualController extends ModuleController {
     use CheckRole;
@@ -32,7 +33,7 @@ final class VisualController extends ModuleController {
             }
             return $this->show(compact('model'));
         } catch (\Exception $ex) {
-            return $this->showContent($ex->getMessage());
+            return $this->renderException($ex);
         }
     }
 
@@ -49,7 +50,7 @@ final class VisualController extends ModuleController {
             $renderer = new VisualPage($siteModel, $pageModel, false);
             return $output->html($renderer->render());
         } catch (\Exception $ex) {
-            return $this->showContent($ex->getMessage());
+            return $this->renderException($ex);
         }
     }
 
@@ -64,7 +65,7 @@ final class VisualController extends ModuleController {
             $renderer = new VisualPage($siteModel, $pageModel, true);
             return $output->html($renderer->render());
         } catch (\Exception $ex) {
-            return $this->showContent($ex->getMessage());
+            return $this->renderException($ex);
         }
     }
 
@@ -74,10 +75,24 @@ final class VisualController extends ModuleController {
         }
         app('debugger')->setShowBar(false);
         try {
-            $renderer = new VisualLocalPage('default', 'default/weights/shortcut', true);
+            $renderer = new VisualLocalPage('default',
+                'default/weights/shortcut', true);
             return $output->html($renderer->render());
         } catch (\Exception $ex) {
-            return $this->showContent($ex->getMessage());
+            return $this->renderException($ex);
         }
+    }
+
+    private function renderException(\Exception $ex) {
+        if ($ex instanceof TemplateException) {
+            return $this->showContent(sprintf('%s [%s -> %s]',
+                $ex->getMessage(),
+                $ex->getSourceFile(),
+                $ex->getCompiledFile()));
+        }
+        return $this->showContent(sprintf('%s [%s:%d]',
+            $ex->getMessage(),
+            $ex->getFile(),
+            $ex->getLine()));
     }
 }

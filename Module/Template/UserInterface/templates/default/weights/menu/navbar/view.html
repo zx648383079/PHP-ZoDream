@@ -10,12 +10,12 @@
 }
 {/if}
 </style>
-<div class="navbar-weight {=$property->formatClass()}"{=$property->weightStyle()}>
+<div class="navbar-weight {=$property->formatClass()}"{=$property.weightStyle:}>
     <span class="nav-bar-toggle"></span>
-    <div class="brand"{=$property->titleStyle()}>
-        {=$model->title}
+    <div class="brand"{=$property.titleStyle:}>
+        {=$model.title}
     </div>
-    <div class="nav-bar"{=$property->contentStyle()}>
+    <div class="nav-bar"{=$property.contentStyle:}>
         <ul>
             {for:$items,$item}
                 <li>

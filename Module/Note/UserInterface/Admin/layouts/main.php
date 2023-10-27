@@ -30,4 +30,4 @@ $this->registerCssFile([
         './@admin/note',
         'fa fa-comment',
     ],
-], $content, 'ZoDream 便签管理平台') ?>
+], $this->contents(), 'ZoDream 便签管理平台') ?>

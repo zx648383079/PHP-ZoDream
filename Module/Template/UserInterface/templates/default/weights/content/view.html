@@ -1,8 +1,10 @@
-<div class="content-weight {=$property->formatClass()}"{=$property->weightStyle()}>
-    <div class="title"{=$property->titleStyle()}>
-        {=$model->title}
+<div class="content-weight {=$property.formatClass:}"{=$property.weightStyle:}>
+    {if:$model.title}
+    <div class="title"{=$property.titleStyle:}>
+        {=$model.title}
     </div>
-    <div class="contnet"{=$property->contentStyle()}>
-        {=$model->content}
+    {/if}
+    <div class="contnet"{=$property.contentStyle:}>
+        {=$model.content}
     </div>
 </div>

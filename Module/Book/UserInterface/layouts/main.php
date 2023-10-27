@@ -57,7 +57,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
                     <div class="col-md-4">
                         <form class="search-bar" action="<?=$this->url('./search')?>">
                             <input type="text" class="form-control" name="keywords">
-                            <button class="btn btn-primary">搜索</button>
+                            <button class="btn btn-default">搜索</button>
                         </form>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
         </div>
     </header>
 
-    <?=$content?>
+    <?=$this->contents()?>
 
     <footer class="footer">
         <div class="container">

@@ -3,7 +3,6 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
 /** @var $this View */
-$this->content = $content;
 $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.css',
@@ -79,4 +78,4 @@ $this->registerCssFile([
         './trash',
         'fa fa-trash'
     ]
-], $content) ?>
+], $this->contents()) ?>

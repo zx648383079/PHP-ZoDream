@@ -24,17 +24,17 @@
     --#{$prefix}-btn-hover: var(--#{$prefix}-primary-hover);
     --#{$prefix}-btn-border: var(--#{$prefix}-primary-active);
     --#{$prefix}-btn-hover-text: var(--#{$prefix}-btn-text);
-    padding: 0 .8rem;
+    padding: $inputPadding;
     background: var(--#{$prefix}-btn);
     color: var(--#{$prefix}-btn-text);
     border: none;
     border-color: var(--#{$prefix}-btn-border);
     display: inline-block;
     text-decoration: none;
-    line-height: $lineHeight;
+    line-height: $inputLineHeight;
     margin: 0 0.5rem;
     vertical-align:middle;
-    border-radius: .25rem;
+    border-radius: $radius;
     &.btn-full {
         width: 100%;
         margin: 0;
@@ -63,10 +63,10 @@
         border-radius: 0;
         margin: 0;
         &:first-child {
-            border-radius: .25rem 0 0 .25rem;
+            border-radius: $radius 0 0 $radius;
         }
         &:last-child {
-            border-radius: 0 .25rem .25rem 0;
+            border-radius: 0 $radius $radius 0;
         }
     }
 }

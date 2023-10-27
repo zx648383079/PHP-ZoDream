@@ -12,13 +12,6 @@
             "action": "option",
             "data": [
                 {
-                    "name": "主题",
-                    "code": "theme",
-                    "type": "text",
-                    "value": "default",
-                    "default": ""
-                },
-                {
                     "name": "ICP备案号",
                     "code": "icp_beian",
                     "type": "text",
@@ -45,7 +38,7 @@
                 },
                 {
                     "name": "是否原创",
-                    "field": "is_new",
+                    "field": "is_forward",
                     "type": "switch"
                 },
                 {

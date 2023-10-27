@@ -53,11 +53,25 @@
                 
             </div>
         </header>
-        {$content}
+        {this.contents:}
         <footer>
             <div class="container">
                 <div class="copyright">
-                    <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}</a>
+                    Copyright ©{request.host:}, All Rights Reserved.
+                    {$icp_beian=option:icp_beian}
+                    {if:$icp_beian}
+                    <a href="https://beian.miit.gov.cn/" target="_blank">{$icp_beian}
+                    </a>
+                    {/if}
+                    {$pns_beian=option:pns_beian}
+                    {if:$pns_beian}
+                    <p>
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,'/\d+/'}">
+                            <img src="/assets/images/beian.png" alt="备案图标">
+                            {$pns_beian}
+                        </a>
+                    </p>
+                    {/if}
                 </div>
             </div>
         </footer>

@@ -1,0 +1,67 @@
+{
+    "name": "blog",
+    "description": "个人博客主题",
+    "author": "zodream",
+    "cover": "assets/images/screenshot.png",
+    "script": [{
+            "action": "copy",
+            "src": "assets",
+            "dist": "assets"
+        },
+        {
+            "action": "option",
+            "data": [
+                {
+                    "name": "ICP备案号",
+                    "code": "icp_beian",
+                    "type": "text",
+                    "value": "",
+                    "default": ""
+                }
+            ]
+        },
+        {
+            "action": "group",
+            "name": "nav"
+        },
+        {
+            "action": "model",
+            "name": "新闻",
+            "table": "news",
+            "category_template": "page",
+            "list_template": "list",
+            "show_template": "index",
+            "fields": [
+                {
+                    "name": "作者",
+                    "field": "author",
+                    "type": "text"
+                },
+                {
+                    "name": "是否原创",
+                    "field": "is_forward",
+                    "type": "switch"
+                },
+                {
+                    "name": "源网址",
+                    "field": "source_url",
+                    "type": "text"
+                },
+                {
+                    "name": "显示灰色",
+                    "field": "is_gray",
+                    "type": "switch",
+                    "is_main": true
+                }
+            ]
+        },
+        {
+            "action": "channel",
+            "title": "关于我们",
+            "en:title": "About Us",
+            "name": "about_us",
+            "category_template": "index",
+            "image": "/assets/images/banner.jpg"
+        }
+    ]
+}

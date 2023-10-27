@@ -9,7 +9,7 @@ use Module\CMS\Domain\Repositories\SiteRepository;
 <form data-type="ajax" action="<?=$this->url('./@admin/content/save')?>" method="post" class="form-table" role="form">
     <div class="input-group">
         <label>栏目</label>
-        <select name="cat_id">
+        <select name="cat_id" class="form-control">
             <?php foreach($cat_menu as $item):?>
             <?php if($item['model_id'] == $model->id):?>
             <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>

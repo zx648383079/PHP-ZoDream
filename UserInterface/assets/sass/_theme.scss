@@ -67,8 +67,7 @@ $input: #fff;
 $inputText: #333;
 $inputBorder: #ced4da;
 $inputHoverBorder: rgb(47, 65, 86);
-$inputHoverShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
-$inputErrorBorder: #d9534f;
+$inputHoverShadow: #0d6efd40;
 
 
 // 黑暗模式
@@ -96,10 +95,11 @@ $dark-input: #fff;
 $dark-inputText: #333;
 $dark-inputBorder: #ced4da;
 $dark-inputHoverBorder: rgb(47, 65, 86);
-$dark-inputHoverShadow: 0 0 0 0.25rem rgb(#bb0b0b, .5);
-$dark-inputErrorBorder: #d9534f;
+$dark-inputHoverShadow: #0d6efd40;
+
+$invalid: #dc3545;
+$valid: #198754;
 
 
-$danger: #dc3545;
 $colorHoverOffset: 12%; // Hover 颜色加深程度
 $colorActiveOffset: 20%; // 点击后 颜色加深程度

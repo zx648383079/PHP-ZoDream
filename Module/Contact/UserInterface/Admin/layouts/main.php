@@ -42,4 +42,4 @@ $this->registerCssFile([
         './@admin/subscribe',
         'fa fa-rss'
     ],
-], $content, 'ZoDream Contact Admin') ?>
+], $this->contents(), 'ZoDream Contact Admin') ?>

@@ -58,4 +58,4 @@ $this->registerCssFile([
          ],
          true
      ],
-], $content, 'ZoDream 论坛管理平台') ?>
+], $this->contents(), 'ZoDream 论坛管理平台') ?>

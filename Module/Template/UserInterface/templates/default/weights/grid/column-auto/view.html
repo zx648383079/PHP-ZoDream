@@ -1,7 +1,7 @@
-<div class="grid-column-weight {=$property->formatClass()}"{=$property->weightStyle()}>
-    {if:$model->title}
-    <div class="title"{=$property->titleStyle()}>
-        {=$model->title}
+<div class="grid-column-weight {=$property.formatClass:}"{=$property.weightStyle:}>
+    {if:$model.title}
+    <div class="title"{=$property.titleStyle:}>
+        {=$model.title}
     </div>
     {/if}
   

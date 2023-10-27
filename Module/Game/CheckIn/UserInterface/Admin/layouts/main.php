@@ -30,4 +30,4 @@ $this->registerCssFile([
         './@admin/setting',
         'fa fa-calendar-check'
     ],
-], $content, 'ZoDream Check In Admin') ?>
+], $this->contents(), 'ZoDream Check In Admin') ?>

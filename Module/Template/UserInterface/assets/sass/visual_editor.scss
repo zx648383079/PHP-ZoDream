@@ -301,15 +301,18 @@ $ruleBarColor: gray;
                 padding: 0 .5rem 0 0;
                 word-break: keep-all;
             }
-            input[type="text"],
-            select {
+            .form-control {
                 min-width: 2.5rem;
+                padding: 0;
             }
         }
     }
     .side-input {
         position: relative;
         height: 6.25rem;
+        .form-control {
+            width: 3rem;
+        }
         >input,
         >.check-label {
             position: absolute;

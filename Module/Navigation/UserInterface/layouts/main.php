@@ -38,7 +38,7 @@ $this->registerCssFile([
     </head>
 <body>
     
-    <?=$content?>
+    <?=$this->contents()?>
     <footer>
         <div class="container">
             <?=$this->node('friend-link')?>

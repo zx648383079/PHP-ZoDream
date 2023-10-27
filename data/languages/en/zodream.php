@@ -55,4 +55,16 @@ return [
         1 => 'Done',
         9 => 'Refund',
     ],
+    'cookie_setting' => [
+        'indispensable' => 'Essential Cookies are absolutely necessary for the proper functioning of a website. These cookies are anonymous to ensure the basic functionality and security features of the website.',
+        'functional' => 'Functionality Cookies help perform certain functions, such as sharing website content on social media platforms, collecting feedback and other third-party functions.',
+        'performances' => 'Performance cookies are used to understand and analyze key performance indicators of a website, which helps provide a better user experience for visitors.',
+        'analytics' => 'Analytics cookies are used to understand how visitors interact with a website. These cookies help provide information on metrics such as the number of visitors, bounce rates, traffic sources, and more.',
+        'advertising' => 'Advertising cookies are used to provide visitors with relevant advertising and marketing campaigns. These cookies track visitors across websites and collect information to deliver customized advertisements.',
+        'others' => 'Other unclassified cookies are those that are being analyzed but not yet classified.',
+
+        'cookie_policy' => 'Cookies are set by the Cookie Plugin to store the user\'s consent to the use of cookies; it does not store any personal data.',
+        'sessid' => 'PHP Session ID with auth',
+    ],
+    'cookie_tooltip' => 'Our website uses some cookies and records your IP address for the purposes of accessibility, security, and managing your access to the telecommunication network. You can disable data collection and cookies by changing your browser settings, but it may affect how this website functions.',
 ];

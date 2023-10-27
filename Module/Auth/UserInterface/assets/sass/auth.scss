@@ -14,33 +14,23 @@
         input[type="text"],
         input[type="email"],
         input[type="password"] {
-            border: none;
+            box-shadow: none;
             outline: none;
-            border-bottom: 1px solid #767676;
+            border-top: none;
+            border-left: none;
+            border-right: none;
         }
         .fa {
             transition: all .5s;
-            color: var(--#{$prefix}-secondary-text);
         }
         &.input-focus {
             input {
-                padding-left: 0;
-                padding-right: 30px;
-                border-bottom: 2px solid $inputFocusBorder;
+                padding-left: .5rem;
+                padding-right: 1.875rem;
+                border-bottom: 2px solid var(--#{$prefix}-input-hover-border);
             }
             .fa {
                 left: 17.5rem;
-                color: #767676;
-            }
-        }
-        &.error {
-            .fa {
-                color: $inputErrorBorder;
-            }
-            input[type="text"],
-            input[type="email"],
-            input[type="password"] {
-                border-bottom-color: $inputErrorBorder;
             }
         }
     }
@@ -98,7 +88,7 @@
                 top: 6.625rem;
                 left: 8.0625rem;
                 font-size: 3.125rem;
-                color: $inputErrorBorder;
+                color: $invalid;
                 display: none;
             }
         }

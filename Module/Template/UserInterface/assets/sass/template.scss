@@ -1,13 +1,16 @@
+@import 'theme';
 $top: 40px;
 $left: 5px;
 
-$sizes: (320: 568,
-360: 640,
-370: 640,
-375: 812,
-412: 732,
-414: 736,
-768: 1024) !default;
+$sizes: (
+    320: 568,
+    360: 640,
+    370: 640,
+    375: 812,
+    412: 732,
+    414: 736,
+    768: 1024
+) !default;
 
 @import 'scrollbar';
 
@@ -17,7 +20,7 @@ $sizes: (320: 568,
         height: $height + $top * 2;
         padding: $top $left;
         background: #47f;
-        border-radius: 20px;
+        border-radius: 1.25rem;
 
         &.rotate {
             height: $width + $left * 2;
@@ -38,8 +41,16 @@ $sizes: (320: 568,
     }
     .app-wrapper {
         margin: 0 auto;
-        &.wrapper-min.sidebar-fixed .sidebar-container {
-            top: 0;
+        .app-header-container,
+        .sidebar-container {
+            display: none;
+        }
+        .main-container {
+            width: 100%;
+            margin-left: 0;
+        }
+        .app-main {
+            padding: 0;
         }
     }
 }
@@ -120,27 +131,27 @@ $sizes: (320: 568,
 
 
 .top-nav {
-    background: #767766;
-    color: #fff;
-    margin: -8px -8px 0 0;
+    background: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text);
+    // margin: -8px -8px 0 0;
     .navbar {
         font-size: 1.5rem;
     }
 }
 
 .card {
-    width: 150px;
-    height: 200px;
+    width: 9.375rem;
+    height: 12.5rem;
     float: left;
-    margin: 5px;
+    margin: 0.3125rem;
     position: relative;
     border: 1px solid;
     overflow: hidden;
 
     .card-logo {
         img {
-            width: 150px;
-            height: 200px;
+            width: 9.375rem;
+            height: 12.5rem;
         }
     }
 
@@ -149,7 +160,7 @@ $sizes: (320: 568,
         bottom: 0;
         left: 0;
         right: 0;
-        min-height: 80px;
+        min-height: 5rem;
         background: rgba(255, 255, 255, .6);
 
         h3 {
@@ -168,11 +179,11 @@ $sizes: (320: 568,
         .card-logo {
             border-radius: 50%;
             border: 1px solid rgba(0, 0, 0, .1);
-            width: 100px;
-            height: 100px;
-            margin: 50px auto 0;
+            width: 6.25rem;
+            height: 6.25rem;
+            margin: 3.125rem auto 0;
             text-align: center;
-            font-size: 75px;
+            font-size: 4.6875rem;
         }
 
         &:hover {
@@ -203,8 +214,8 @@ $sizes: (320: 568,
         text-align: center;
         margin: 5px;
         .thumb {
-            height: 80px;
-            width: 80px;
+            height: 5rem;
+            width: 5rem;
             img {
                 width: 100%;
                 height: 100%;
@@ -219,7 +230,7 @@ $sizes: (320: 568,
     }
 }
 .theme-select {
-    max-height: 600px;
+    max-height: 37.5rem;
     overflow-y: auto;
 }
 
@@ -232,8 +243,8 @@ $sizes: (320: 568,
 .dialog-body-box {
 	overflow-y: auto;
 	background-color: #eee;
-	max-width: 600px;
-	max-height: 400px;
+	max-width: 37.5rem;
+	max-height: 25rem;
 	.item {
 		text-align: center;
 		display: inline-block;
@@ -241,30 +252,30 @@ $sizes: (320: 568,
 		margin: 3px;
 		position: relative;
 		.thumb {
-			width: 100px;
-			height: 100px;
+			width: 6.25rem;
+			height: 6.25rem;
 			img {
 				width: 100%;
 				height: 100%;
 			}
 		}
 		.name {
-			width: 100px;
+			width: 6.25rem;
 			overflow: hidden;
 			color: #333;
-			font-size: 12px;
-			height: 16px;
+			font-size: 0.75rem;
+			height: 1rem;
 		}
 		&.selected {
 			background-color: rgb(174, 255, 238);
 			&::after {
 				position: absolute;
-				font-size: 100px;
+				font-size: 6.25rem;
 				color: rgba(red, .3);
 				font-family: "Font Awesome 5 Free";
 				content: "\f00c";
 				font-weight: 900;
-				top: 10px;
+				top: 0.625rem;
 				left: 0;
 			}
 		}
@@ -288,12 +299,12 @@ $sizes: (320: 568,
                 position: absolute;
                 top: 0;
                 right: 0;
-                width: 20px;
-                height: 20px;
+                width: 1.25rem;
+                height: 1.25rem;
                 border-radius: 50%;
                 background-color: red;
                 color: white;
-                line-height: 20px;
+                line-height: 1.25rem;
                 text-align: center;
             }
         }

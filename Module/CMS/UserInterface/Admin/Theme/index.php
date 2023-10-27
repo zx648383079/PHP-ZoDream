@@ -4,6 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '本地主题';
 ?>
+<?php if(!empty($current)):?>
 <div class="panel">
     <div class="panel-header">当前主题</div>
     <div class="panel-body">
@@ -18,6 +19,7 @@ $this->title = '本地主题';
         </div>
     </div>
 </div>
+<?php endif;?>
 
 <div class="panel">
     <div class="panel-header">本地主题</div>
@@ -30,8 +32,10 @@ $this->title = '本地主题';
             </div>
             <div class="name"><?=$item['name']?></div>
             <div class="desc"><?=$item['description']?></div>
+            <?php if(empty($current['name']) || $current['name'] !== $item['name']):?>
             <a data-type="del" data-tip="是否确定清空数据并使用此主题？" href="<?=$this->url('./@admin/theme/apply',
                 ['theme' => $item['name']], false)?>" class="btn btn-default">使用</a>
+            <?php endif;?>
         </div>
         <?php endforeach;?>
     </div>

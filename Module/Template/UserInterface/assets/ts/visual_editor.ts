@@ -2088,7 +2088,7 @@ class EditorHtmlHelper {
             absolute: '绝对定位',
             fixed: '固定定位'
         }, data?.type);
-        return EditorHtmlHelper.input('', '悬浮', `<select name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`, 'position-input');
+        return EditorHtmlHelper.input('', '悬浮', `<select class="form-control" name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`, 'position-input');
     }
 
     public static positionSide(type: string, value?: any) {
@@ -2100,7 +2100,7 @@ class EditorHtmlHelper {
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
         let html = EditorHtmlHelper.checkbox(id, name + '[side][]', ['上', '右', '下', '左'], data?.side)
         const option = EditorHtmlHelper.option(['实线', '虚线'], data && data.value && data.value[1] == 1 ? 1 : 0)
-        return EditorHtmlHelper.input(id, '边框', EditorHtmlHelper.join('<input type="text" class="form-control" name="', name, '[value][]" value="', data?.value[0], '" placeholder="粗细" size="4"><select name="', name, '[value][]">',option, '</select><input type="color" name="', name, '[value][]" value="', data?.value[2], '"><div class="side-input">', html, '</div>'));
+        return EditorHtmlHelper.input(id, '边框', EditorHtmlHelper.join('<input type="text" class="form-control" name="', name, '[value][]" value="', data?.value[0], '" placeholder="粗细" size="4"><select  class="form-control" name="', name, '[value][]">',option, '</select><input type="color"  class="form-control" name="', name, '[value][]" value="', data?.value[2], '"><div class="side-input">', html, '</div>'));
     }
 
     public static radius(name?: string, data?: string[]) {
@@ -2116,7 +2116,7 @@ class EditorHtmlHelper {
     public static color(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[color]';
         const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '字体颜色', EditorHtmlHelper.join(EditorHtmlHelper.radio(id, name + '[type]', ['无', '有'], data?.type),  '<input type="color" name="', name,'[value]" value="',data?.value,'">'));
+        return EditorHtmlHelper.input(id, '字体颜色', EditorHtmlHelper.join(EditorHtmlHelper.radio(id, name + '[type]', ['无', '有'], data?.type),  '<input type="color"  class="form-control" name="', name,'[value]" value="',data?.value,'">'));
     }
 
     public static background(name?: string, data?: any) {
@@ -2136,7 +2136,7 @@ class EditorHtmlHelper {
             <button type="button" data-type="upload">上传</button>
         </div>`;
         };
-        return `<input type="color" name="${name}[value]">`;
+        return `<input type="color" class="form-control" name="${name}[value]">`;
     }
 
     public static visibility(name: string, val: string|number) {

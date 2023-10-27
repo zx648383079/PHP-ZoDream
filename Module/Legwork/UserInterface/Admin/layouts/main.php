@@ -55,4 +55,4 @@ $this->registerCssFile([
         './@admin/order',
         'fa fa-cubes',
     ],
-], $content, 'ZoDream 跑腿管理平台') ?>
+], $this->contents(), 'ZoDream 跑腿管理平台') ?>

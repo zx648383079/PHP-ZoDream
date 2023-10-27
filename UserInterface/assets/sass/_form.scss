@@ -1,70 +1,29 @@
-@import 'button';
-
-$inputPadding: .3rem .5rem;
+$inputLineHeight: 1.5;
+$inputPadding: .375rem .75rem;
 $radius: .375rem;
 
-.form-control {
-    padding: $inputPadding;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    appearance: none;
-    border-radius: $radius;
-    border-width: 1px;
-}
+@import 'button';
+@import 'input';
 
 .form-ico {
     .form-control {
         border-radius: 0;
         padding-left: $lineHeight;
-        min-height: $lineHeight;
         width: 100%;
         box-sizing: border-box;
     }
     .input-group {
         position: relative;
         line-height: $lineHeight;
-        
         .fa {
             position: absolute;
-            left: 10px;
-            top: 9px;
+            left: .8rem;
+            top: .6rem;
+            color: var(--#{$prefix}-secondary-text);
         }
-        &.error {
-            input {
-                border: 1px solid $danger;
-            }
+        &.is-invalid {
             .fa {
-                color: $danger;
-            }
-        }
-        .checkbox {
-            position: relative;
-            display: inline-block;
-            width: $lineHeight;
-            height: $lineHeight;
-            input[type=checkbox] {
-                visibility: hidden;
-                &:checked {
-                    &+label {
-                        &::before {
-                            content: "\f14a";
-                            color: var(--#{$prefix}-primary);
-                        }
-                    }
-                }
-            }
-            label {
-                &::before {
-                    font-family: "Font Awesome 5 Free";
-                    font-size: inherit;
-                    text-rendering: auto;
-                    -webkit-font-smoothing: antialiased;
-                    content: "\f0c8";
-                    position: absolute;
-                    left: 10px;
-                    top: 0;
-                }
+                color: $invalid;
             }
         }
     }
@@ -215,7 +174,6 @@ i {
     .form-control {
         border: none;
         background: transparent;
-        min-height: $lineHeight;
         box-sizing: border-box;
     }
     .input-group {
@@ -226,9 +184,6 @@ i {
             padding: .5rem;
         }
     }
-    .btn {
-        line-height: $lineHeight;
-    }
 }
 
 .form-inline {
@@ -236,7 +191,6 @@ i {
         flex: 1;
         border: none;
         background: transparent;
-        min-height: $lineHeight;
         box-sizing: border-box;
         &.height-auto {
             height: auto;
@@ -245,50 +199,33 @@ i {
     .input-group {
         display: flex;
         border-bottom: 1px solid #777;
-        min-height: $lineHeight;
+        min-height: $inputLineHeight;
         align-items: center;
     }
     .btn {
-        line-height: $lineHeight;
         margin-top: 8px;
     }
 }
 
 .form-default {
     .form-control {
-        border: none;
-        background: transparent;
-        box-sizing: border-box;
-        min-height: $lineHeight;
         display: block;
+        width: 100%;
     }
     .input-group {
         display: block;
-        border-bottom: 1px solid #777;
-        textarea {
-            width: 100%;
-            display: block;
-            border: none;
-            background: transparent;
-            box-sizing: border-box;
-        }
-    }
-    .btn {
-        line-height: $lineHeight;
-        margin-top: 8px;
+        margin-bottom: .3rem;
     }
 }
 
 .form-table {
     .form-control {
-        height: $lineHeight;
         min-width: 12.5rem;
-        padding: 0 .3rem;
     }
     .input-group {
         display: flex;
+        margin-bottom: .3rem;
         select {
-            height: $lineHeight;
             min-width: 6.25rem;
         }
         textarea {
@@ -301,7 +238,7 @@ i {
             display: block;
             text-align: right;
             line-height: $lineHeight;
-            padding: 0 10px;
+            padding: 0 0.625rem;
         }        
         >div {
             flex: 1;
@@ -310,16 +247,9 @@ i {
                 resize: vertical;
             }
             .inline {
-                line-height: $lineHeight;
-                min-width: 100px;
+                line-height: $inputLineHeight;
+                min-width: 6.25rem;
                 display: inline-block;
-            }
-
-            .input-desc {
-                display: block;
-                font-size: 0.75rem;
-                color: var(--#{$prefix}-secondary-text);
-                margin-bottom: 0.5rem;
             }
             // label {
             //     padding: 0 8px;
@@ -340,9 +270,6 @@ i {
             top: 0;
             z-index: 99;
         }
-        .btn {
-            line-height: $lineHeight;
-        }
     }
 }
 
@@ -355,23 +282,27 @@ i {
             border-bottom-left-radius: $radius;
         }
     }
-    button {
-        padding: 0 .8rem;
-        line-height: $lineHeight;
+    .btn {
+        margin: 0;
         cursor: pointer;
+        border-radius: 0;
         &:hover {
             font-weight: bold;
+        }
+        &:last-of-type {
+            border-top-right-radius: $radius;
+            border-bottom-right-radius: $radius;
         }
     }
     &.file-uploading {
         position: relative;
         display: inline-block;
         flex: none;
-        input {
+        .form-control {
             background-color: transparent;
             border: none;
         }
-        button {
+        .btn {
             cursor: not-allowed;
         }
         &::after {
@@ -385,14 +316,6 @@ i {
             background-color: var(--#{$prefix}-primary);
             animation: 1s linear infinite borderLoop alternate;
         }
-    }
-}
-
-.input-group {
-    .input-tip {
-        color: var(--#{$prefix}-secondary-text);
-        font-size: 0.75rem;
-        padding: 0 0 0.625rem 0.625rem;
     }
 }
 

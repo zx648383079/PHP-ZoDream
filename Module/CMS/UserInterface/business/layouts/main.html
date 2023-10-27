@@ -119,7 +119,7 @@
                 </div>
             </div>
         </header>
-        {$content}
+        {this.contents:}
         <footer class="app-footer">
             <div class="map-bar">
                 <div class="container">
@@ -160,8 +160,11 @@
                     <p>Copyright © 2011-{.time:Y} {request.host:}. All Rights Reserved</p>
                     <p>
                         {option:company_name}
-                        <a href="https://beian.miit.gov.cn/" target="_blank">{option:icp_beian}
+                        {$icp_beian=option:icp_beian}
+                        {if:$icp_beian}
+                        <a href="https://beian.miit.gov.cn/" target="_blank">{$icp_beian}
                         </a>
+                        {/if}
                     </p>
                     {$pns_beian=option:pns_beian}
                     {if:$pns_beian}

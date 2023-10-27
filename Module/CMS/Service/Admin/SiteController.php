@@ -33,7 +33,6 @@ class SiteController extends Controller {
                 'description' => 'string:0,255',
                 'logo' => 'string:0,255',
                 'theme' => 'required|string:0,100',
-                'match_type' => 'int:0,127',
                 'match_rule' => 'string:0,100',
                 'is_default' => 'int:0,127',
                 'status' => 'int:0,127',

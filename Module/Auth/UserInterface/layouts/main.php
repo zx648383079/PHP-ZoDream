@@ -26,7 +26,7 @@ $this->registerCssFile('@font-awesome.min.css')
     <?=$this->header()?>
 </head>
 <body class="login-page">
-    <?=$content?>
+    <?=$this->contents()?>
 
     <?php if($icp_beian):?>
     <div class="footer">
