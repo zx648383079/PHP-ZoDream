@@ -3,24 +3,24 @@
 <div class="detail-box">
     <div class="item-header">
         <h2 class="item-title">
-            {$data.title}
+            {$article.title}
         </h2>
         <div class="item-tag-bar">
             <div>
-                <a href="{channel:$cat,url}" class="tag-item-block">{$cat.title}</a>
+                <a href="{channel:$channel,url}" class="tag-item-block">{$channel.title}</a>
                 <a href="#">
                     <i class="fa fa-clock"></i>
-                    {this.ago:$data.updated_at}
+                    {this.ago:$article.updated_at}
                 </a>
             </div>
             <div>
                 <a href="#">
                     <i class="fa fa-eye"></i>
-                    {__:view_count,0=>$data.view_count}
+                    {__:view_count,0=>$article.view_count}
                 </a>
                 <a href="#comments">
                     <i class="fa fa-comments"></i>
-                    {__:comment_count,0=>$data.comment_count}
+                    {__:comment_count,0=>$article.comment_count}
                 </a>
                 <a class="drop-container">
                     <span class="drop-toggle-arrow">
@@ -48,21 +48,21 @@
     <div class="item-body">
         <div class="item-thumb">
             <a href="#">
-                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$data.thumb}" alt="{$data.title}">
+                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$article.thumb}" alt="{$article.title}">
             </a>
         </div>
         <article id="content" class="content">
             <div>
-                {$data.content}
+                {$article.content}
             </div>
             <p class="book-copyright">{__:Reprint please keep the original link:}
                 <a href="https://zodream.cn">{request.url:}</a>
             </p>
         </article>
-        <div class="tags-box">
+        <!-- <div class="tags-box">
             <a href="https://zodream.cn">Tag1</a>
             <a href="https://zodream.cn">Tag2</a>
-        </div>
+        </div> -->
     </div>
     {$prev=previous:}
     {$next=next:}
@@ -89,6 +89,6 @@
 
 </div>
 
-{if:$data.comment_open}
+{if:$article.comment_open}
 {tpl:Comment/load}
 {/if}

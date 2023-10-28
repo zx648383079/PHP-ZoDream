@@ -8,6 +8,7 @@ namespace Module\Book\Domain\Model;
  * Time: 21:00
  */
 use Domain\Model\Model;
+use Zodream\Helpers\Html;
 
 /**
  * Class BookChapterModel
@@ -34,13 +35,7 @@ class BookChapterBodyModel extends Model {
     }
 
     public function getHtmlAttribute() {
-        $args = explode("\n", $this->content);
-        return implode('', array_map(function ($line) {
-            if (empty($line)) {
-                return '<p></p>';
-            }
-            return sprintf('<p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>', $line);
-        }, $args));
+        return Html::fromText($this->content);
     }
 
 

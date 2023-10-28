@@ -1,6 +1,5 @@
 {layout:main}
-{this.title=$data.title}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -13,13 +12,13 @@
             </div>
             <div id="content">
                 <div class="title">
-                    {$data.title}
+                    {$article.title}
                 </div>
                 <div class="tags">
-                    <span>时间：{this.time:$data.created_at}</span>
+                    <span>时间：{this.time:$article.created_at}</span>
                 </div>
                 <article class="content">
-                    <img src="{$data.image}" alt="">
+                    <img src="{$article.image}" alt="">
                 </article>
             </div>
         </div>

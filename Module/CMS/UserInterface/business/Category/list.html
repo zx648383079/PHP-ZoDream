@@ -1,5 +1,5 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container m-30">
@@ -15,7 +15,7 @@
             </div>
             
             <div class="page-body">
-                {for:$page,$item}
+                {for:$items,$item}
                 <div class="link-line-item">
                     <a href="{url:$item}" class="item-title">
                         <i class="fa fa-caret-right"></i>
@@ -26,12 +26,12 @@
                     </div>
                 </div>
                 {/for}
-                {if:$page}
+                {if:$items}
                 <div class="page-link-bar">
-                    {$page.getLink:}
+                    {$items.getLink:}
                     <div class="page-info">
-                        {> $count=$page.getPageTotal:}
-                        {> $total=$page.getTotal:}
+                        {> $count=$items.getPageTotal:}
+                        {> $total=$items.getTotal:}
                         {=__:pagination,pages=>$count,total=>$total}
                     </div>
                 </div>

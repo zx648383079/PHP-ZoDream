@@ -1,13 +1,12 @@
 {layout:main}
-{this.title=$data.title}
-{if:$data.is_gray}
+{if:$article.is_gray}
 {>css}
 html {
     filter: grayscale(100%);
 }
 {/>}
 {/if}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -20,20 +19,20 @@ html {
             </div>
             <div id="content">
                 <div class="title">
-                    {$data.title}
+                    {$article.title}
                 </div>
                 <div class="tags">
-                    <span>时间：{this.time:$data.created_at}</span>
+                    <span>时间：{this.time:$article.created_at}</span>
                     <span>作者：
-                        <a href="{redirect:$data.source_url}" target="_blank" rel="noopener noreferrer">{$data.author}</a>
+                        <a href="{redirect:$article.source_url}" target="_blank" rel="noopener noreferrer">{$article.author}</a>
                     </span>
                 </div>
                 <article class="content">
-                    {$data.content}
+                    {$article.content}
                 </article>
             </div>
 
-            {if:$data.comment_open}
+            {if:$article.comment_open}
             {tpl:Comment/load}
             {/if}
         </div>

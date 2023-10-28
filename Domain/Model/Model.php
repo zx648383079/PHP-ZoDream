@@ -20,15 +20,15 @@ abstract class Model extends BaseModel {
      * @param string $key
      * @throws \Exception
      */
-    public static function refreshPk(callable $cb, string $key = 'id') {
-        $data = static::orderBy($key, 'asc')->pluck($key);
+    public static function refreshPk(callable $cb, string $key = 'id'): void {
+        $data = static::query()->orderBy($key, 'asc')->pluck($key);
         $i = 1;
         foreach ($data as $id) {
             if ($id == $i) {
                 $i ++;
                 continue;
             }
-            static::where('id', $id)->update([
+            static::query()->where('id', $id)->update([
                 'id' => $i
             ]);
             call_user_func($cb, $id, $i);

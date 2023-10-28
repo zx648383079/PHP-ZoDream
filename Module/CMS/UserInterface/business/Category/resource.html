@@ -1,5 +1,5 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container m-30">
@@ -50,7 +50,7 @@
                     </thead>
                     <tbody>
                         {> $keywords=request:keywords}
-                        {contentPage:category=>$cat.id,keywords=$keywords,field=>'id,cat_id,model_id,title,language,file_name,product_type,file_size,file_type,created_at,file'}
+                        {contentPage:category=>$channel.id,keywords=$keywords,field=>'id,cat_id,model_id,title,language,file_name,product_type,file_size,file_type,created_at,file'}
                         <tr>
                             <td>
                                 {if:authGuest:}
@@ -74,11 +74,11 @@
                     </tbody>
                 </table>
                 <div class="page-link-bar">
-                    {> $page=$_last_contentPage}
-                    {$page.getLink:}
+                    {> $items=$_last_contentPage}
+                    {$items.getLink:}
                     <div class="page-info">
-                        {> $count=$page.getPageTotal:}
-                        {> $total=$page.getTotal:}
+                        {> $count=$items.getPageTotal:}
+                        {> $total=$items.getTotal:}
                         {=__:pagination,pages=>$count,total=>$total}
                     </div>
                 </div>

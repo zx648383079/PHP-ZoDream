@@ -1,7 +1,5 @@
 {layout:main}
-{this.title=$data.title}
-
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container m-30">
@@ -17,20 +15,20 @@
             </div>
             <div id="content" class="article-panel">
                 <h3 class="title-bar">
-                    {$data.title}
+                    {$article.title}
                 </h3>
                 <article class="content">
-                    {$data.content}
+                    {$article.content}
                 </article>
 
                 <div class="file-panel m-30">
-                    {if:$data.file}
+                    {if:$article.file}
                     <div class="solution-file-item">
-                        <a href="{url:$data.file}" class="item-icon">
+                        <a href="{url:$article.file}" class="item-icon">
                             <i class="fa fa-file-pdf"></i>
                         </a>
-                        <a href="{url:$data.file}" class="item-title">
-                            {fileName:$data.file}
+                        <a href="{url:$article.file}" class="item-title">
+                            {fileName:$article.file}
                         </a>
                     </div>
                     {/if}

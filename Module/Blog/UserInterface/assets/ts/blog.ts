@@ -308,7 +308,7 @@ function bindBlogComment(id: number, langs = {}) {
         form_box.find('.btn-submit').text(langs['comment_btn']);
         form_box.find('input[name=parent_id]').val(0);
     });
-    $('#comment-form').submit(function () {
+    $('#comment-form').on('submit', function () {
         let $this = $(this);
         $.post($this.attr('action'), $this.serialize(), function (data) {
             if (data.code == 200) {

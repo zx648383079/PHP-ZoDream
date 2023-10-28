@@ -1,5 +1,5 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -35,11 +35,11 @@
         <div class="col-md-9">
             <div class="panel">
                 <div class="panel-header">
-                    {$cat.description}</small>
+                    {$channel.description}</small>
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        {for:$page,$item}
+                        {for:$items,$item}
                         <div class="col-md-4 app-item">
                             <div class="thumb">
                                 <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            {page:$page}
+            {page:$items}
         </div>
     </div>
     

@@ -57,8 +57,10 @@ final class ParserTest extends TestCase {
            // ['{extend:file,hhh}'],
 
             ['{name=value}', '\<?php \'name\' = \'value\'; ?>'],
+            ['{== $a }', '\<?= $this->text($a) ?>'],
            // ['{arg,...=value,...}', '\<?php arg = value;. = .;?\>'],
 
+            ['{$channelid = isset($channel) ? $channel.id : product_center}', '\<?php $channelid = isset($channel)? $channel[\'id\'] : \'product_center\'; ?>']
         ];
     }
 

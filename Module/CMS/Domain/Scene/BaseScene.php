@@ -11,6 +11,7 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\CommentRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Database\Contracts\Column;
@@ -225,14 +226,19 @@ abstract class BaseScene implements SceneInterface {
         })->when(!empty($order), function ($query) use ($order) {
             $query->orderBy($order);
         })->page($perPage, 'page', $page);
-        $linkItems = [
-            'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
-        ];
-        if (!empty($extra) && str_contains($extra, 'children')) {
-            $linkItems['children'] = Relation::make($this->commentQuery(), 'id', 'parent_id');
+        if (empty($extra) || !str_contains($extra, 'children')) {
+            return $items->setPage(Relation::create($items->getPage(), [
+                'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
+            ]));
         }
-        $items->setPage(Relation::create($items->getPage(), $linkItems));
-        return $items;
+        $data = Relation::create($items->getPage(), [
+            'children' => Relation::make($this->commentQuery(), 'id',
+                'parent_id', Relation::TYPE_MANY)
+        ]);
+        return $items->setPage(ModelHelper::bindTwoRelation($data,
+            [
+                'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
+            ]));
     }
     public function insertComment(array $data): bool|int {
         $id = $this->commentQuery()->insert($data);
@@ -506,7 +512,12 @@ abstract class BaseScene implements SceneInterface {
             $table->uint('parent_id')->default(0);
             $table->uint('position')->default(1);
             $table->uint('reply_count')->default(0);
-            $table->uint('user_id');
+            $table->uint('user_id')->default(0);
+            if (CommentRepository::ALLOW_GUEST_COMMENT) {
+                $table->string('name', 30)->default('');
+                $table->string('email', 50)->default('');
+                $table->string('url', 50)->default('');
+            }
             $table->uint('model_id');
             $table->uint('content_id');
             $table->uint('agree_count')->default(0);

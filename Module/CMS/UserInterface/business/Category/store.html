@@ -42,7 +42,7 @@ loadJScript();
 <script>
     var MAPAPIKEY = '{option:mapApiKey}';
 </script>
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container m-30">
@@ -57,7 +57,7 @@ loadJScript();
                 </ul>
             </div>
             <article id="content">
-                {$cat.content}
+                {$channel.content}
             </article>
             <div class="map-container">
                 <div class="row">
@@ -66,7 +66,7 @@ loadJScript();
                     </div>
                     <div class="col-md-4">
                         <div class="map-bar">
-                            {contentPage:category=>$cat.id,field=>'id,cat_id,model_id,title,description,content,location'}
+                            {contentPage:category=>$channel.id,field=>'id,cat_id,model_id,title,description,content,location'}
                             <div class="map-item" data-location="{$content.location}" data-address="{$content.description}">
                                 <span>{$content.title}</span>
                                 <script type="text/plain">

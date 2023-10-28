@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Domain\Model;
 
+use IteratorAggregate;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Database\Relation;
 use Zodream\Helpers\Json;
@@ -101,7 +102,7 @@ class ModelHelper {
         return $items;
     }
 
-    public static function updateField(Model $model, array $checkMap, array $data) {
+    public static function updateField(Model $model, array $checkMap, array $data): Model {
         foreach ($data as $action => $val) {
             if (is_int($action)) {
                 if (empty($val)) {
@@ -127,10 +128,10 @@ class ModelHelper {
      * @param string $dataKey
      * @param string $foreignKey
      * @param string $countKey
-     * @return array|Page
+     * @return array|IteratorAggregate
      */
-    public static function bindCount(array|Page $items, SqlBuilder $builder, string $dataKey,
-                                     string $foreignKey, string $countKey = 'data_count'): array|Page {
+    public static function bindCount(array|IteratorAggregate $items, SqlBuilder $builder, string $dataKey,
+                                     string $foreignKey, string $countKey = 'data_count'): array|IteratorAggregate {
         $keyItems = Relation::columns($items, $dataKey);
         if (empty($keyItems)) {
             return $items;
@@ -143,5 +144,88 @@ class ModelHelper {
         }
         unset($item);
         return $items;
+    }
+
+    /**
+     * 绑定下一级
+     * @param array|Page $items
+     * @param array $relations [key => {query: Sql, link:array}]
+     * @param string $childrenKey
+     * @return array|Page
+     */
+    public static function bindTwoRelation(array|IteratorAggregate $items,
+                                           array $relations, string $childrenKey = 'children'): array|IteratorAggregate {
+        static::eachTwoLevel($items, function ($item) use (&$relations) {
+            foreach ($relations as $key => $relation) {
+                if (empty($relation['link'])) {
+                    unset($relations[$key]);
+                    continue;
+                }
+                if (!isset($relation['linkData'])) {
+                    $relation['linkData'] = [];
+                }
+                foreach ($relation['link'] as $k => $_) {
+                    if ($item[$k] && !in_array($item[$k], $relation['linkData'])) {
+                        $relation['linkData'][] = $item[$k];
+                    }
+                }
+                $relations[$key] = $relation;
+            }
+        }, $childrenKey);
+        $hasData = false;
+        foreach ($relations as $key => $relation) {
+            if (empty($relation['linkData'])) {
+                continue;
+            }
+            /** @var SqlBuilder $query */
+            $query = $relation['query'];
+            $relation['dataKey'] = key($relation['link']);
+            $relation['linkKey'] = $relation['link'][$relation['dataKey']];
+            $query->whereIn($relation['linkKey'], $relation['linkData']);
+            $relation['items'] = $query->pluck(null, $relation['linkKey']);
+            if (!$hasData && !empty($relation['items'])) {
+                $hasData = true;
+            }
+            $relations[$key] = $relation;
+        }
+        if (!$hasData) {
+            return $items;
+        }
+        $bindingFn = function ($item) use ($relations) {
+            foreach ($relations as $key => $relation) {
+                if (empty($relation['items'])) {
+                    continue;
+                }
+                $val = $item[$relation['dataKey']];
+                $item[$key] = !empty($val) && !empty($relation['items'][$val]) ?
+                    $relation['items'][$val] : null;
+            }
+            return $item;
+        };
+        foreach ($items as &$item) {
+            $item = call_user_func($bindingFn, $item);
+            if (!$item[$childrenKey]) {
+                continue;
+            }
+            foreach ($item[$childrenKey] as $i => $it) {
+                $item[$childrenKey][$i] = call_user_func($bindingFn, $it);
+            }
+        }
+        unset($item);
+        return $items;
+    }
+
+    protected static function eachTwoLevel(array|IteratorAggregate $items,
+                                          callable $cb,
+                                          string $childrenKey = 'children'): void {
+        foreach ($items as $item) {
+            call_user_func($cb, $item);
+            if (!$item[$childrenKey]) {
+                continue;
+            }
+            foreach ($item[$childrenKey] as $it) {
+                call_user_func($cb, $it);
+            }
+        }
     }
 }

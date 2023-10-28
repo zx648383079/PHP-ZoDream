@@ -9,37 +9,37 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class CategoryController extends Controller {
 
     public function indexAction(Request $request, int|string $id) {
-        $cat = FuncHelper::channel($id, true);
-        if (empty($cat)) {
+        $channel = FuncHelper::channel($id, true);
+        if (empty($channel)) {
             return $this->redirect('./');
         }
-        FuncHelper::$current['channel'] = $cat['id'];
-        $page = null;
-        if ($cat['type'] < 1) {
+        FuncHelper::$current['channel'] = $channel['id'];
+        $items = null;
+        if ($channel['type'] < 1) {
             $queries = $request->get();
             unset($queries['id']);
-            $page = FuncHelper::contents($queries);
+            $items = FuncHelper::contents($queries);
         }
-        $title = $cat['title'];
-        return $this->show((string)$cat['category_template'],
-            compact('cat', 'page', 'title'));
+        $title = $channel['title'];
+        return $this->show((string)$channel['category_template'],
+            compact('channel', 'items', 'title'));
     }
 
     public function listAction(Request $request, int $id) {
         FuncHelper::$current['channel'] = $id;
-        $cat = FuncHelper::channel($id, true);
-        if (empty($cat)) {
+        $channel = FuncHelper::channel($id, true);
+        if (empty($channel)) {
             return $this->redirect('./');
         }
         $queries = $request->get();
         unset($queries['id']);
         if (!isset($queries['field'])) {
-            $queries['field'] = FuncHelper::searchField($cat['id']);
+            $queries['field'] = FuncHelper::searchField($channel['id']);
         }
-        $page = FuncHelper::contents($queries);
-        $title = FuncHelper::translate('{0} list page', [$cat['title']]);
+        $items = FuncHelper::contents($queries);
+        $title = FuncHelper::translate('{0} list page', [$channel['title']]);
         $keywords = isset($queries['keywords']) ? Html::text($queries['keywords']) : '';
-        return $this->show($cat['list_template'],
-            compact('cat', 'page',  'title', 'keywords'));
+        return $this->show($channel['list_template'],
+            compact('channel', 'items',  'title', 'keywords'));
     }
 }

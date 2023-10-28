@@ -1,6 +1,6 @@
 {layout:main}
 <div>
-    {for:$page,$content}
+    {for:$items,$content}
     <article class="post-item">
         <div class="item-header">
             <h2 class="item-title">
@@ -66,5 +66,5 @@
 </div>
 
 <div class="page-link-bar">
-    {$page.getLink:}
+    {$items.getLink:}
 </div>

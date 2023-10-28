@@ -2,35 +2,35 @@
 
 <div class="info-header">
     <div class="thumb">
-        <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$data.thumb}" alt="">
+        <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$article.thumb}" alt="">
         <span class="play-icon"></span>
-        <span class="tag">{$data.definition}</span>
+        <span class="tag">{$article.definition}</span>
     </div>
     <div class="header-detail">
-        <div class="title">{$data.title}</div>
+        <div class="title">{$article.title}</div>
         <p>
             <span class="tag">导演:</span>
-            <span>{$data.director}</span>
+            <span>{$article.director}</span>
         </p>
         <p>
             <span class="tag">主演:</span>
-            <span>{$data.leader}</span>
+            <span>{$article.leader}</span>
         </p>
         <p>
             <span class="tag">类型:</span>
-            <span>{$cat.name}</span>
+            <span>{$channel.name}</span>
             <span class="split-line"></span>
             <span class="tag">地区:</span>
-            <span>{$data.area}</span>
+            <span>{$article.area}</span>
             <span class="split-line"></span>
             <span class="tag">年份:</span>
-            <span>{$data.age}</span>
+            <span>{$article.age}</span>
         </p>
         <p>
             <span class="tag">简介:</span>
-            <span>{$data.description}</span>
+            <span>{$article.description}</span>
         </p>
-        {contents:category=>$cat.id,parent=>$data.id,num=>100}
+        {contents:category=>$channel.id,parent=>$article.id,num=>100}
         <a href="{url:$content}" class="btn btn-primary">立即播放</a>
         {break:}
         {/contents}
@@ -38,13 +38,13 @@
     </div>
 </div>
 
-{contents:category=>$cat.id,parent=>$data.id,num=>100}
+{contents:category=>$channel.id,parent=>$article.id,num=>100}
 <div class="panel">
     <div class="panel-header">
         分集
     </div>
     <div class="panel-body">
-        {contents:category=>$cat.id,parent=>$data.id,num=>100}
+        {contents:category=>$channel.id,parent=>$article.id,num=>100}
         <a class="play-item" href="{url:$content}">{$content.title}</a>
         {/contents}
     </div>
@@ -57,11 +57,11 @@
         <i class="fa fa-file"></i>
         详细剧情
         <div class="tip">
-                更新时间：{this.time:$data.updated_at}
+                更新时间：{this.time:$article.updated_at}
         </div>
     </div>
     <div class="panel-body">
-        {$data.content}
+        {$article.content}
     </div>
 </div>
 
@@ -69,13 +69,13 @@
     <div class="panel-header">
         <i class="fa fa-heart"></i>
         猜你喜欢
-        <a href="{channel:$cat.id,url}" class="more">
+        <a href="{channel:$channel.id,url}" class="more">
             <i class="fa fa-refresh"></i>
             换一换
         </a>
     </div>
     <div class="panel-body">
-            {contents:category=>$cat.id,num=>10}
+            {contents:category=>$channel.id,num=>10}
             <a class="video-item" href="{url:$content}">
                 <div class="thumb">
                     <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">

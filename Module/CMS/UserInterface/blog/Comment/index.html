@@ -1,5 +1,20 @@
-<div class="comment-list">
+{if:!isAjax:}
+{layout:main}
+<div class="router-bar mb-30">
+    <a class="tool-item" href="{url:$article}">
+        <i class="fa fa-arrow-left"></i>
+    </a>
+    <div class="title-bar">
+        {$article.title}
+    </div>
+</div>
+{/if}
+<div class="comment-scroll-container">
     {for:$items,$item}
     {tpl:./item,item=>$item}
     {/for}
+
+    <div class="page-link-bar">
+        {$items.getLink:}
+    </div>
 </div>

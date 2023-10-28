@@ -1,9 +1,9 @@
 <div class="comment-item">
     <article class="comment">
         <div class="comment-author">
-            <img src="{$item.user.avatar}" alt="">
+            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.user.avatar}" alt="{$item.user.name??$item.name}">
             <div class="comment-meta">
-                <span class="name">{$item.user.name}</span>
+                <span class="name">{$item.user.name??$item.name}</span>
                 <div class="date">{this.ago:$item.created_at}</div>
             </div>
         </div>
@@ -20,10 +20,10 @@
         <div class="comment-item">
             <article class="comment">
                 <div class="comment-author">
-                    <img src="{$reply.user.avatar}" alt="">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$reply.user.avatar}" alt="{$reply.user.name??$reply.name}">
                     <div class="comment-meta">
-                        <span class="name">{$reply.user.name}</span>
-                        <div class="date">{$reply.created_at}</div>
+                        <span class="name">{$reply.user.name??$reply.name}</span>
+                        <div class="date">{this.ago:$reply.created_at}</div>
                     </div>
                 </div>
                 <div class="comment-content">

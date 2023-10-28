@@ -88,7 +88,7 @@ class FuncHelper {
     /**
      * 转化为内容使用的id
      * @param string|int $name
-     * @param string $type model|channel|linkage
+     * @param 'model'|'channel'|'linkage' $type
      * @return int
      */
     public static function mapId(string|int $name, string $type = 'model'): int {
@@ -1058,6 +1058,10 @@ class FuncHelper {
         return auth()->guest();
     }
 
+    public static function isAjax(): bool {
+        return request()->isAjax();
+    }
+
     public static function authUser(): ?array {
         return self::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
             // 获取拓展表单的信息
@@ -1121,6 +1125,7 @@ class FuncHelper {
             'authGuest',
             'authUser',
             'fileName',
+            'isAjax',
         ]);
         $compiler->registerFunc('__', sprintf('%s::%s', static::class, 'translate'));
         static::registerBlock($compiler, 'comments', 'comment');

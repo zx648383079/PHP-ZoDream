@@ -9,6 +9,25 @@ use Module\CMS\Domain\Model\SiteLogModel;
 use Module\CMS\Domain\Scene\SceneInterface;
 
 class CommentRepository {
+
+    const ALLOW_GUEST_COMMENT = true;
+
+    public static function checkArticle(int $article, int|string $category, int|string $model): array {
+        FuncHelper::$current['channel'] = FuncHelper::mapId($category, 'channel');
+        FuncHelper::$current['content'] = $article;
+        $model = FuncHelper::model($model);
+        if (empty($model)) {
+            throw new Exception('article is error');
+        }
+        FuncHelper::$current['model'] = $model['id'];
+        $scene = CMSRepository::scene()->setModel($model);
+        $article = $scene->query()->where('id', $article)->first();
+        if (!CMSRepository::isPreview() && $article['status'] != SiteRepository::PUBLISH_STATUS_POSTED) {
+            throw new Exception('article is error');
+        }
+        return $article;
+    }
+
     public static function getList(int $article, int|string $category, int|string $model,
                                    string $keywords = '',
                                    int $parent_id = 0, string $sort = 'created_at',
@@ -24,9 +43,20 @@ class CommentRepository {
     }
 
     public static function create(string $content,
-                                  int $article, int|string $category, int|string $model,
+                                  int $article, int|string $category,
+                                  int|string $model,
                                   int $parent_id = 0)
     {
+        $data = [];
+        if (static::ALLOW_GUEST_COMMENT && auth()->guest()) {
+            $data = request()->validate([
+                'name' => 'required|string:1-30',
+                'email' => 'email',
+                'url' => 'string'
+            ]);
+        } else if (auth()->guest()) {
+            throw new Exception(__('Please login in first'), 401);
+        }
         /** @var SceneInterface $scene */
         list($scene, $modelId) = static::scene($article, $category, $model);
         $maxFloor = $scene->commentQuery()->where('model_id', $modelId)
@@ -38,7 +68,7 @@ class CommentRepository {
                 $parent_id = $pa_id;
             }
         }
-        $res = $scene->insertComment([
+        $res = $scene->insertComment(array_merge($data, [
             'content' => $content,
             'parent_id' => $parent_id,
             'position' => intval($maxFloor) + 1,
@@ -46,7 +76,7 @@ class CommentRepository {
             'model_id' => $modelId,
             'content_id' => $article,
             'created_at' => time()
-        ]);
+        ]));
         if (!$res) {
             return [];
         }
@@ -66,9 +96,9 @@ class CommentRepository {
         if (empty($data)) {
             throw new \Exception('评论不存在');
         }
-        $res = self::toggleLog($modelId, SiteLogModel::TYPE_COMMENT,
-            SiteLogModel::ACTION_DISAGREE, $id,
-            [SiteLogModel::ACTION_AGREE, SiteLogModel::ACTION_DISAGREE]);
+        $res = self::toggleLog($modelId, SiteRepository::TYPE_COMMENT,
+            SiteRepository::ACTION_DISAGREE, $id,
+            [SiteRepository::ACTION_AGREE, SiteRepository::ACTION_DISAGREE]);
         if ($res < 1) {
             $data['disagree_count'] --;
             $data['agree_type'] = 0;
@@ -87,17 +117,16 @@ class CommentRepository {
         return $data;
     }
 
-    public static function agree(int $id, int $article, int|string $category, int|string $model)
-    {
+    public static function agree(int $id, int $article, int|string $category, int|string $model) {
         /** @var SceneInterface $scene */
         list($scene, $modelId) = static::scene($article, $category, $model);
         $data = $scene->commentQuery()->where('id', $id)->first();
         if (empty($data)) {
             throw new \Exception('评论不存在');
         }
-        $res = self::toggleLog($modelId, SiteLogModel::TYPE_COMMENT,
-            SiteLogModel::ACTION_AGREE, $id,
-            [SiteLogModel::ACTION_AGREE, SiteLogModel::ACTION_DISAGREE]);
+        $res = self::toggleLog($modelId, SiteRepository::TYPE_COMMENT,
+            SiteRepository::ACTION_AGREE, $id,
+            [SiteRepository::ACTION_AGREE, SiteRepository::ACTION_DISAGREE]);
         if ($res < 1) {
             $data['agree_count'] --;
             $data['agree_type'] = 0;
@@ -159,8 +188,7 @@ class CommentRepository {
         return 2;
     }
 
-    public static function remove(int $id, int $article, int|string $category, int|string $model)
-    {
+    public static function remove(int $id, int $article, int|string $category, int|string $model): void {
         /** @var SceneInterface $scene */
         list($scene, $_) = static::scene($article, $category, $model);
         $count = $scene->commentQuery()->where('id', $id)->where('user_id', auth()->id())
@@ -182,14 +210,14 @@ class CommentRepository {
      */
     public static function scene(int $article, int|string $category, int|string $modelId): array {
         $cat = FuncHelper::channel($category, true);
-        FuncHelper::$current['channel'] = $cat->id;
+        FuncHelper::$current['channel'] = $cat['id'];
         FuncHelper::$current['content'] = $article;
         $model = FuncHelper::model($modelId);
         if (empty($model)) {
             throw new Exception('model error');
         }
-        FuncHelper::$current['model'] = $model->id;
-        return [CMSRepository::scene()->setModel($model), $model->id];
+        FuncHelper::$current['model'] = $model['id'];
+        return [CMSRepository::scene()->setModel($model), $model['id']];
     }
 
     public static function getManageList(int $site, int $article, int|string $category, int|string $model,

@@ -1,6 +1,5 @@
 {layout:main}
-{this.title=$data.title}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -19,21 +18,21 @@
                     <div class="tab-body row">
                         <div class="col-md-8">
                             <div class="title">
-                                {$data.title}
+                                {$article.title}
                             </div>
                             <div class="desc">
-                                    {$data.description}
+                                    {$article.description}
                             </div>
                             <div class="tags">
-                                <span>收藏时间：{this.time:$data.created_at}</span>
+                                <span>收藏时间：{this.time:$article.created_at}</span>
                             </div>
                             <div class="links">
-                                网址：{$data.uri}<a href="{redirect:$data.uri}"  target="_blank">进入网站</a>
+                                网址：{$article.uri}<a href="{redirect:$article.uri}"  target="_blank">进入网站</a>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="thumb">
-                                    <img src="{$data.thumb}" alt="" width="100%">
+                                    <img src="{$article.thumb}" alt="" width="100%">
                             </div>
                         </div>
                     </div>
@@ -43,7 +42,7 @@
                         <div class="tab-item active">网站介绍</div>
                     </div>
                     <div class="tab-body content">
-                        <article>{$data.content}</article>
+                        <article>{$article.content}</article>
                         
                     </div>
                 </div>

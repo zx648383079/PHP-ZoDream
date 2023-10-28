@@ -1,12 +1,12 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
     <div class="row">
         <div class="col-md-3 left-bar">
             <div class="site-header">
-                <h2>{$cat.title}</h2>
+                <h2>{$channel.title}</h2>
             </div>
 
             <ul class="site-menu">
@@ -15,7 +15,7 @@
                         签到
                     </a>
                 </li>
-                {channels:parent=>$cat.id}
+                {channels:parent=>$channel.id}
                 <li>
                     <a href="">
                         {$channel.title}
@@ -25,7 +25,7 @@
             </ul>
         </div>
         <div class="col-md-9">
-                {channels:parent=>$cat.id}
+                {channels:parent=>$channel.id}
                 <div class="panel site-panel">
                     <div class="panel-header">
                         <i class="{$channel.thumb}"></i>

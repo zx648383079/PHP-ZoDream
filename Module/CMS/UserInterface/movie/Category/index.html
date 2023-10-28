@@ -1,13 +1,13 @@
 {layout:main}
-{extendContent:$page,definition}
+{extendContent:$items,definition}
 
 <div class="screen-box">
     <div class="screen-grid">
         <div class="screen-line">
             <div class="line-title">分类</div>
             <div class="line-body">
-                <a href="{search:id,$cat.id}" class="{searchActive:id,$cat.id}">全部</a>
-                {channels:parent=>$cat.id}
+                <a href="{search:id,$channel.id}" class="{searchActive:id,$channel.id}">全部</a>
+                {channels:parent=>$channel.id}
                 <a href="{search:id,$channel.id}" class="{searchActive:id,$channel.id}">{$channel.title}</a>
                 {/channels}
             </div>
@@ -44,7 +44,7 @@
 </div>
 
 <div>
-    {for:$page,$item}
+    {for:$items,$item}
     <a class="video-item" href="{url:$item}">
         <div class="thumb">
             <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
@@ -57,5 +57,5 @@
 </div>
 
 <div>
-    {$page.getLink:}
+    {$items.getLink:}
 </div>

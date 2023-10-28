@@ -9,11 +9,11 @@ use Module\CMS\Domain\Repositories\SiteRepository;
 class ContentController extends Controller {
 
     public function indexAction(int $id, int|string $category, int|string $model) {
-        $cat = FuncHelper::channel($category, true);
-        if (empty($cat)) {
+        $channel = FuncHelper::channel($category, true);
+        if (empty($channel)) {
             return $this->redirect('./');
         }
-        FuncHelper::$current['channel'] = $cat['id'];
+        FuncHelper::$current['channel'] = $channel['id'];
         FuncHelper::$current['content'] = $id;
         $model = FuncHelper::model($model);
         if (empty($model)) {
@@ -21,30 +21,30 @@ class ContentController extends Controller {
         }
         FuncHelper::$current['model'] = $model['id'];
         $scene = CMSRepository::scene()->setModel($model);
-        $data = $scene->find($id);
+        $article = $scene->find($id);
         $parent = null;
-        if (empty($data)) {
+        if (empty($article)) {
             return $this->redirect('./');
         }
-        if (!CMSRepository::isPreview() && $data['status'] != SiteRepository::PUBLISH_STATUS_POSTED) {
+        if (!CMSRepository::isPreview() && $article['status'] != SiteRepository::PUBLISH_STATUS_POSTED) {
             return $this->redirect('./');
         }
-        $data['view_count'] ++;
-        $scene->update($id, ['view_count' => $data['view_count']]);
-        $catModel = FuncHelper::model($cat['model_id']);
-        if ($data['parent_id'] > 0 && $catModel) {
+        $article['view_count'] ++;
+        $scene->update($id, ['view_count' => $article['view_count']]);
+        $catModel = FuncHelper::model($channel['model_id']);
+        if ($article['parent_id'] > 0 && $catModel) {
             $parent = CMSRepository::scene()
-                ->setModel($catModel)->find($data['parent_id']);
+                ->setModel($catModel)->find($article['parent_id']);
         }
         CMSRepository::scene()->setModel($model);
-        $title = $data['title'];
+        $title = $article['title'];
         if (!empty($parent)) {
-            $title = sprintf('%s %s', $parent['title'], $data['title']);
+            $title = sprintf('%s %s', $parent['title'], $article['title']);
         }
         return $this->show(
-            $cat['model_id'] === $model['id']
-                ? $cat['show_template']
+            $channel['model_id'] === $model['id']
+                ? $channel['show_template']
                 : $model['show_template'],
-            compact('cat', 'data', 'title', 'model', 'parent'));
+            compact('channel', 'article', 'title', 'model', 'parent'));
     }
 }

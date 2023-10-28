@@ -1,10 +1,10 @@
 {layout:main}
 
 <ul>
-    {for:$page,$item}
+    {for:$items,$item}
     <li>
         <a href="{url:$item}">{$item.title}</a>
     </li>
     {/for}
 </ul>
-{$page.getLink:}
+{$items.getLink:}

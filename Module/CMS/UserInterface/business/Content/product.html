@@ -1,6 +1,5 @@
 {layout:main}
-{this.title=$data.title}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container m-30">
@@ -17,16 +16,16 @@
             <div id="content" class="product-panel">
                 <div class="gallery-panel">
                     <div class="item-thumb">
-                        {if:$data.image}
-                        <img src="{$data.image}" alt="{$data.title}">
+                        {if:$article.image}
+                        <img src="{$article.image}" alt="{$article.title}">
                         {else}
-                        <img src="{$data.thumb}" alt="{$data.title}">
+                        <img src="{$article.thumb}" alt="{$article.title}">
                         {/if}
                     </div>
                     <div class="item-row">
                         <div class="item-title-bar">
-                            <span class="item-title">{$data.title}</span>
-                            <span class="item-no">{__:订购编号：}{$data.product_no}</span>
+                            <span class="item-title">{$article.title}</span>
+                            <span class="item-no">{__:订购编号：}{$article.product_no}</span>
                         </div>
                         <a modal="inquiryDialog"><i class="fa fa-edit"></i> {__:点击这里发送询价}</a>
                     </div>
@@ -41,13 +40,13 @@
                         <div class="tab-item">{__:技术资料}</div>
                     </div>
                     <div class="tab-body">
-                        <div class="tab-item active">{$data.content}</div>
+                        <div class="tab-item active">{$article.content}</div>
                         <div class="tab-item">
-                            {$data.relationships}
+                            {$article.relationships}
                         </div>
-                        <div class="tab-item">{$data.applications}</div>
+                        <div class="tab-item">{$article.applications}</div>
                         <div class="tab-item">
-                            {contents:category=>product_cert,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            {contents:category=>product_cert,product_id=>$article.id,field=>'id,cat_id,model_id,title,file',num=>5}
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}
@@ -65,7 +64,7 @@
                             {/contents}
                         </div>
                         <div class="tab-item">
-                            {contents:category=>product_information,product_id=>$data.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            {contents:category=>product_information,product_id=>$article.id,field=>'id,cat_id,model_id,title,file',num=>5}
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}

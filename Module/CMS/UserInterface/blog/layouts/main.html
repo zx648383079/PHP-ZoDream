@@ -1,9 +1,12 @@
 {@font-awesome.min.css}
 {@animate.min.css}
 {@zodream.css}
+{@dialog.css}
 {@cms-blog.css}
 {@jquery.min.js}
 {@jquery.lazyload.min.js}
+{@jquery.dialog.min.js}
+{@main.min.js}
 {@cms-blog.min.js}
 <!DOCTYPE html>
 <html lang="{$language??'zh-CN'}">
@@ -17,6 +20,14 @@
         <meta name="author" content="zodream" />
         <link rel="icon" href="{option:logo}">
        {header:}
+       <script>
+        var transLangs = {
+            reply_title: '{__:Reply Comment}',
+            reply_btn: '{__:Reply}',
+            comment_title: '{__:Leave A Comment}',
+            comment_btn: '{__:Comment}',
+        };
+       </script>
    </head>
    <body>
         <div class="container">

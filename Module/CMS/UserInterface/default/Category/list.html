@@ -6,7 +6,7 @@
         搜索 “{$keywords}” 的结果
     </div>
     <ul class="search-body">
-        {for:$page,$item}
+        {for:$items,$item}
         <li class="article-item" title="{$item.title}-{$item.description}">
             <div class="thumb">
                 <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="">
@@ -26,6 +26,6 @@
         {/for}
     </ul>
 
-    {page:$page}
+    {page:$items}
 </div>
 

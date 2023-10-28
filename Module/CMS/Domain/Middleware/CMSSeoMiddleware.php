@@ -52,7 +52,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         return match ($args[0]) {
             'category' => $this->findChannel($args, $modulePath),
             'content' => $this->findArticle($args, $modulePath),
-            'comment' or 'home' or 'form' => new OnlyRoute(sprintf('Module\\CMS\\Service\\%sController',
+            'comment', 'home', 'form' => new OnlyRoute(sprintf('Module\\CMS\\Service\\%sController',
                 Str::studly($args[0])), empty($args[1]) ? 'indexAction' :
                 sprintf('%sAction', lcfirst(Str::studly($args[1]))), [], [
                 $modulePath => Module::class

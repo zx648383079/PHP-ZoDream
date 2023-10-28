@@ -1,5 +1,5 @@
 {layout:main}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -11,7 +11,7 @@
                 </ul>
             </div>
             <div id="content-list">
-                    {for:$page,$item}
+                    {for:$items,$item}
                 <div class="article-item">
                     <div class="thumb">
                         <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="">

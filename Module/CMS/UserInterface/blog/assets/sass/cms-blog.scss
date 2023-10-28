@@ -7,6 +7,9 @@ a {
 .mt-10 {
     margin-top: 1rem;
 }
+.mb-30 {
+    margin-bottom: 2rem;
+}
 
 header {
     position: fixed;
@@ -103,6 +106,29 @@ footer {
 
 .page-link {
     background-color: transparent;
+}
+
+.router-bar {
+    display: flex;
+    background-color: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text);
+    align-items: center;
+    .tool-item {
+        background-color: var(--#{$prefix}-primary-active);
+        width: 3rem;
+        height: 3rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--#{$prefix}-primary-text);
+        &:hover {
+            background-color: var(--#{$prefix}-primary-hover);
+        }
+    }
+    .title-bar {
+        flex: 1;
+        padding-left: .8rem;
+    }
 }
 
 .panel {
@@ -231,6 +257,12 @@ footer {
     }
 }
 
+.comment-floor {
+    .title-bar {
+        font-size: 2rem;
+        line-height: 3rem;
+    }
+}
 
 .comment-item {
     position: relative;
@@ -280,6 +312,7 @@ footer {
 }
 
 .detail-box {
+    margin-bottom: 3rem;
     img {
         max-width: 100%;
     }

@@ -18,6 +18,9 @@ class SiteRepository {
     const TYPE_GROUP = 7;
     const TYPE_SITE = 8;
 
+    const ACTION_AGREE = 1;
+    const ACTION_DISAGREE = 2;
+
     const PUBLISH_STATUS_DRAFT = 0; // 草稿
     const PUBLISH_STATUS_POSTED = 5; // 已发布
     const PUBLISH_STATUS_TRASH = 9; // 垃圾箱

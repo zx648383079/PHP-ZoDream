@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Model;
 
-use Domain\Model\Model;
-use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Entities\SiteLogEntity;
 
 /**
  * @property integer $id
@@ -13,10 +13,6 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property integer $action
  * @property integer $created_at
  */
-class SiteLogModel extends Model {
-
-    const ACTION_AGREE = 1;
-    const ACTION_DISAGREE = 2;
-
+class SiteLogModel extends SiteLogEntity {
 
 }

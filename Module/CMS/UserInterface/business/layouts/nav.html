@@ -1,4 +1,4 @@
-{$root=channelRoot:$cat.id}
+{$root=channelRoot:$channel.id}
 <div class="card-panel mb-30">
     <div class="panel-header">
         {$root.title}
@@ -62,8 +62,9 @@
             </li>
             {/linkage}
             {else}
+            {$current=$channel}
             {channels:parent=>$root.id}
-            {> $link=hasChannelLink:$channel,$cat}
+            {> $link=hasChannelLink:$channel,$current}
             <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                 <div class="menu-name">
                     <i class="fa fa-angle-right"></i>
@@ -75,7 +76,7 @@
                 {if:$channel.children_count>0}
                 <ul class="menu-children">
                     {channels:parent=>$channel.id}
-                    {> $link=hasChannelLink:$channel,$cat}
+                    {> $link=hasChannelLink:$channel,$current}
                     <li class="menu-item{if:$link==2,' menu-item-active'}{if:$link==1,' menu-item-open'}">
                         <div class="menu-name">
                             <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
@@ -103,7 +104,7 @@
     </div>
 </div>
 
-<form class="search-bar mb-30" action="{search:id,$cat.id}">
+<form class="search-bar mb-30" action="{search:id,$channel.id}">
     {searchHidden:}
     <div class="search-input">
         <input type="text" name="keywords" required>

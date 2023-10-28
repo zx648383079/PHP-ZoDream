@@ -1,38 +1,45 @@
-<div class="comment-floor">
-    <div class="panel">
+<div class="comment-floor mt-10">
+    <div class="panel comment-form">
         <div class="panel-header">
             <h3>{__:Leave a comment}</h3>
         </div>
         <div class="panel-body">
             <form class="form-default" data-type="ajax" action="{url:./comment/create}" method="post">
                 <div class="input-group">
-                    <label for="">{__:Comment Content}</label>
-                    <textarea class="form-control" name="" id="" rows="3"></textarea>
+                    <label for="content">{__:Comment Content}*</label>
+                    <textarea class="form-control" name="content" rows="3" id="content" required></textarea>
                 </div>
                 {if:authGuest:}
                 <div class="input-group input-line-group">
-                    <label for="">{__:Your name}</label>
-                    <input type="text" class="form-control" name="" id="" placeholder="">
+                    <label for="your_name">{__:Your name}*</label>
+                    <input type="text" class="form-control" name="name" id="your_name" required>
                 </div>
                 <div class="input-group input-line-group">
-                    <label for="">{__:Your email}</label>
-                    <input type="text" class="form-control" name="" id="" placeholder="">
+                    <label for="your_email">{__:Your email}</label>
+                    <input type="text" class="form-control" name="email" id="your_email">
                 </div>
                 <div class="input-group input-line-group">
-                    <label for="">{__:Your website}</label>
-                    <input type="text" class="form-control" name="" id="" placeholder="">
+                    <label for="your_url">{__:Your website}</label>
+                    <input type="text" class="form-control" name="url" id="your_url">
                 </div>
                 {/if}
-                <button class="btn btn-default mt-10">{__:Comment}</button>
+                <div class="btn-group mt-10">
+                    <button type="submit" class="btn btn-default">{__:Comment}</button>
+                    <button type="reset" class="btn btn-danger">{__:Cancel}</button>
+                </div>
+                <input type="hidden" name="parent_id" value="0">
                 {commentHidden:}
             </form>
         </div>
     </div>
     
-    <div id="comments" class="title-bar">
-        {__:comment_count,0=>$data.comment_count}
-    </div>
-    <div class="template-lazy comment-page" data-url="{url:./comment?extra=children&article=:$data.id:&model=:$data.model_id:&category=:$data.cat_id}">
+    <div id="comments" class="panel mt-10">
+        <div class="panel-header">
+            <h3>{__:comment_count,0=>$article.comment_count}</h3>
+        </div>
+        <div class="template-lazy comment-page" data-url="{url:./comment?extra=children&article=:$article.id:&model=:$article.model_id:&category=:$article.cat_id}">
         
+        </div>
     </div>
+
 </div>

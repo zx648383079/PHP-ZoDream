@@ -10,7 +10,7 @@ player.play();
     <div class="play-body">
         <video id="example-video" width="100%" class="video-js vjs-default-skin vjs-fluid" controls>
             <source
-                src="{$data.thumb}"
+                src="{$article.thumb}"
                 type="application/x-mpegURL">
         </video>
     </div>
@@ -18,18 +18,18 @@ player.play();
         <div class="title">{$parent.title}</div>
         <div class="tags">
             <span class="tag">分类:</span>
-            <span>{$cat.title}</span>
+            <span>{$channel.title}</span>
             <span class="split-line"></span>
             <span class="tag">地区:</span>
             <span>{$parent.area}</span>
         </div>
         <div class="play-action">
             <a href="" class="btn">刷新重试</a>
-            {$previous=previous:url,$data}
+            {$previous=previous:url,$article}
             {if:$previous}
             <a href="{$previous}" class="btn">上一集</a>
             {/if}
-            {$next=next:url,$data}
+            {$next=next:url,$article}
             {if:$next}
             <a href="{$next}" class="btn">下一集</a>
             {/if}
@@ -42,7 +42,7 @@ player.play();
         分集
     </div>
     <div class="panel-body">
-        {contents:category=>$cat.id,parent=>$data.parent_id,num=>100}
+        {contents:category=>$channel.id,parent=>$article.parent_id,num=>100}
         <a class="play-item" href="{url:$content}">{$content.title}</a>
         {/contents}
     </div>

@@ -1,6 +1,5 @@
 {layout:main}
-{this.title=$data.title}
-<div class="banner-bg" style="background-image:url({$cat.image});">
+<div class="banner-bg" style="background-image:url({$channel.image});">
 
 </div>
 <div class="container">
@@ -14,36 +13,36 @@
             <div id="content">
                 <div class="header">
                     <div class="thumb">
-                        <img src="{$data.thumb}" alt="{$data.title}">
+                        <img src="{$article.thumb}" alt="{$article.title}">
                     </div>
                     <div class="info">
                         <div class="title">
-                            {$data.title}
+                            {$article.title}
                         </div>
                         <div class="desc">
-                            {$data.description}
+                            {$article.description}
                         </div>
                     </div>
                 </div>
                 <div class="tags">
-                    <span>更新时间：{this.time:$data.created_at}</span>
-                    <span>当前版本：{$data.version}</span>
+                    <span>更新时间：{this.time:$article.created_at}</span>
+                    <span>当前版本：{$article.version}</span>
                 </div>
                 <div class="links">
-                    {if:$data.win}
-                    <a href="{redirect:$data.win}">EXE</a>
+                    {if:$article.win}
+                    <a href="{redirect:$article.win}">EXE</a>
                     {/if}
-                    {if:$data.linux}
-                    <a href="{redirect:$data.linux}">Linux</a>
+                    {if:$article.linux}
+                    <a href="{redirect:$article.linux}">Linux</a>
                     {/if}
-                    {if:$data.apk}
-                    <a href="{redirect:$data.apk}">安卓</a>
+                    {if:$article.apk}
+                    <a href="{redirect:$article.apk}">安卓</a>
                     {/if}
-                    {if:$data.ipa}
-                    <a href="{redirect:$data.ipa}">IOS</a>
+                    {if:$article.ipa}
+                    <a href="{redirect:$article.ipa}">IOS</a>
                     {/if}
-                    {if:$data.uwp}
-                    <a href="{redirect:$data.uwp}">UWP</a>
+                    {if:$article.uwp}
+                    <a href="{redirect:$article.uwp}">UWP</a>
                     {/if}
                 </div>
                 <div class="tab-box">
@@ -52,7 +51,7 @@
                         <div class="tab-item">使用教程</div>
                     </div>
                     <div class="tab-body">
-                        <div class="tab-item active">{$data.content}</div>
+                        <div class="tab-item active">{$article.content}</div>
                         <div class="tab-item">使用教程</div>
                     </div>
                 </div>
@@ -64,7 +63,7 @@
                     开发者简介
                 </div>
                 <div class="panel-body">
-                    {markdown:$data.author}
+                    {markdown:$article.author}
                 </div>
             </div>
         </div>

@@ -180,8 +180,8 @@
         </footer>
 
         <div id="searchDialog" class="dialog search-dialog">
-            {$catid = isset($cat) ? $cat.id : 'product_center'}
-            <form class="dialog-body flat-input" action="{search:id,$catid}">
+            {$channelId = isset($channel) ? $channel.id : 'product_center'}
+            <form class="dialog-body flat-input" action="{search:id,$channelId}">
                 <input type="text" class="form-control" name="keywords" required>
                 <button class="btn btn-default">{__:搜索}</button>
                 {searchHidden:}

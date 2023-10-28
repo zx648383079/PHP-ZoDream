@@ -1,6 +1,6 @@
 {layout:main}
 <!-- 产品维修页面 -->
-<div class="banner-bg" style="background-image: url({$cat.image})"></div>
+<div class="banner-bg" style="background-image: url({$channel.image})"></div>
 <div class="container m-30">
     <div class="row">
         <div class="col-md-3">{tpl:layouts/nav}</div>
@@ -11,7 +11,7 @@
                     {location:}
                 </ul>
             </div>
-            <article id="content">{$cat.content}</article>
+            <article id="content">{$channel.content}</article>
             {extendForm:maintenance_form}
         </div>
     </div>
