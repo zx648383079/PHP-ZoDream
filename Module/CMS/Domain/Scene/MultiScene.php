@@ -194,13 +194,15 @@ class MultiScene extends BaseScene {
         return $id;
     }
 
-    public function update(int $id, array $data): bool {
+    public function update(int $id, array $data, bool $updateTime = true): bool {
         if (!$this->isArticleModel()) {
             return parent::update($id, $data);
         }
         $this->validateDataUnique($data, $id);
         list($main, $extend) = $this->filterInput($data, false);
-        $main['updated_at'] = time();
+        if ($updateTime) {
+            $main['updated_at'] = time();
+        }
 //        $main['model_id'] = $this->modelId();
         $this->query()
             ->where('id', $id)->update($main);

@@ -1,0 +1,61 @@
+<article class="post-item">
+    <div class="item-header">
+        <h2 class="item-title">
+            <a href="{url:$content}">{$content.title}</a>
+        </h2>
+        <div class="item-tag-bar">
+            <div>
+                <a href="{channel:$content.cat_id,url}" class="tag-item-block">{channel:$content.cat_id,title}</a>
+                <a class="item-time">
+                    <i class="fa fa-clock"></i>
+                    <span>{this.time:$content.created_at}</span>
+                </a>
+            </div>
+            <div>
+                <a>
+                    <i class="fa fa-eye"></i>
+                    {__:view_count,0=>$content.view_count}
+                </a>
+                <a>
+                    <i class="fa fa-comments"></i>
+                    {__:comment_count,0=>$content.comment_count}
+                </a>
+                <a class="drop-container">
+                    <span class="drop-toggle-arrow">
+                        <i class="fa fa-share"></i>
+                        {__:Share}
+                    </span>
+                    <ul class="drop-bar">
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Google
+                        </li>
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Bing
+                        </li>
+                        <li>
+                            <i class="fa fa-share"></i>
+                            Facebook
+                        </li>
+                    </ul>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="item-body">
+        <div class="item-thumb">
+            <a href="{url:$content}">
+                <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+            </a>
+        </div>
+        <div class="item-meta">
+            <p>
+                {$content.description}...
+            </p>
+        </div>
+        <div class="item-more">
+            <a href="{url:$content}">{__:Continue Reading} ...</a>
+        </div>
+    </div>
+</article>

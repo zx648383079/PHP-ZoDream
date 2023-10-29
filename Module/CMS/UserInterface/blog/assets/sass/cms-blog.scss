@@ -1,9 +1,31 @@
 @use 'sass:math';
 @import 'theme';
+@import 'function';
+$primary: #222;
+$primaryText: #fff;
+$isFullyTheme: false;
+
+@import 'root';
+
+$linkMask: #eee;
 
 a {
     text-decoration: none;
 }
+
+.item-tag-bar,
+.comment-item,
+.friend-link {
+    a {
+        color: var(--#{$prefix}-secondary-text);
+        &:hover {
+            color: var(--#{$prefix}-body-text);
+        }
+    }
+}
+
+
+
 .mt-10 {
     margin-top: 1rem;
 }
@@ -101,6 +123,7 @@ footer {
     }
     a {
         display: block;
+        line-height: 1.5rem;
     }
 }
 
@@ -196,6 +219,54 @@ footer {
     }
 }
 
+.post-item,
+.detail-box {
+    .item-time {
+        span {
+            border-bottom: 1px dotted;
+        }
+    }
+    .item-header {
+        text-align: center;
+    }
+    .item-title {
+        margin: 1rem 0;
+        a {
+            background-color: $linkMask;
+            color: var(--#{$prefix}-body-text);
+        }
+    }
+    .item-tag-bar {
+        margin-bottom: 1rem;
+        font-size: .8rem;
+        line-height: 1.5rem;
+        a {
+            display: inline-block;
+            padding: 0 .8rem;
+        }
+    }
+
+    .item-thumb {
+        img {
+            width: 100%;
+        }
+    }
+    .tag-item-block {
+        border-radius: .25rem;
+        border: 1px solid var(--#{$prefix}-secondary-text);
+     }
+     .item-more {
+         text-align: center;
+         margin: 2rem 0;
+         a {
+             padding: 0.25rem .8rem;
+             display: inline-block;
+             background-color: $linkMask;
+             color: var(--#{$prefix}-body-text);
+         }
+     }
+}
+
 .post-item {
     position: relative;
     padding-bottom: 2rem;
@@ -205,43 +276,16 @@ footer {
     p {
         margin: 0;
     }
-    .item-header {
-        text-align: center;
-    }
-    .item-title {
-        margin: 1rem 0;
-    }
-    .item-tag-bar {
-        margin-bottom: 1rem;
-        a {
-            display: inline-block;
-            padding: .4rem .8rem;
-        }
-    }
-
-    .item-thumb {
-        img {
-            width: 100%;
-        }
-    }
+    
 
     .item-meta {
         margin: 1rem 0;
+        font-size: .8rem;
+        line-height: 1.5rem;
+        word-spacing: 0.0625rem;
     }
     
-    .tag-item-block {
-       border-radius: .25rem;
-       border: 1px solid #ccc;
-    }
-    .item-more {
-        text-align: center;
-        margin: 2rem 0;
-        a {
-            padding: .4rem .8rem;
-            display: inline-block;
-            background-color: #ccc;
-        }
-    }
+   
     &:not(:last-of-type) {
         margin-bottom: 4rem;
         &::after {
@@ -316,29 +360,7 @@ footer {
     img {
         max-width: 100%;
     }
-    .item-thumb {
-        img {
-            width: 100%;
-        }
-    }
-    .item-header {
-        text-align: center;
-    }
-    .item-title {
-        margin: 1rem 0;
-    }
-    .item-tag-bar {
-        margin-bottom: 1rem;
-        a {
-            display: inline-block;
-            padding: .4rem .8rem;
-        }
-    }
-
-    .tag-item-block {
-       border-radius: .25rem;
-       border: 1px solid #ccc;
-    }
+    
     .book-copyright {
         clear: both;
         background-color: var(--#{$prefix}-secondary);
@@ -405,26 +427,31 @@ footer {
 }
 
 .nav-panel {
+    width: 16rem;
     left: -30rem;
     transition: left 500ms;
     background-color: var(--#{$prefix}-primary);
     color: var(--#{$prefix}-primary-text);
-    .nav-brand,
+    text-align: center;
+    .nav-bar,
     .social-bar,
     .copyright {
-        padding-right: .8rem;
+        line-height: 1.5rem;
+        font-weight: 300;
+    }
+    .copyright {
+        font-size: .8rem;
     }
     a {
         color: var(--#{$prefix}-primary-text);
     }
     .nav-bar {
-        text-align: center;
         max-height: 14rem;
         overflow-y: auto;
-        a {
-            padding-right: .8rem;
-        }
+        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
+ 
     .nav-sub-bar {
         position: static;
         width: 100%;
@@ -491,7 +518,25 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
     }
 }
 
+.logo-bar {
+    box-sizing: content-box;
+    text-align: center;
+    height: 6rem;
+    font-size: 2.5rem;
+    color: var(--#{$prefix}-primary);
+    padding-bottom: 1.875rem;
+    padding-top: 1.25rem;
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+}
+
 @media only screen and (min-width: 48rem) {
+    .logo-bar {
+        display: none;
+    }
     .app-wrapper {
         display: flex;
         .sidebar-container {
@@ -502,6 +547,7 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
         }
     }
     .nav-panel {
+        text-align: right;
         width: 20rem;
         left: auto;
         background-color: transparent;
@@ -513,6 +559,17 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
         }
         a {
             color: var(--#{$prefix}-body-text);
+        }
+        .nav-bar {
+            a {
+                color: var(--#{$prefix}-secondary-text);
+                &:hover {
+                    color: var(--#{$prefix}-body-text);
+                }
+            }
+        }
+        .copyright {
+            color: var(--#{$prefix}-secondary-text);
         }
         .nav-bar {
             text-align: right;

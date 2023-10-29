@@ -78,12 +78,17 @@
                         </form>
                         <div class="copyright">
                             <p>
-                                Copyright ©{request.host:}, All Rights Reserved.
+                                Copyright ©{request.host:}
                             </p>
                         </div>
                     </header>
                 </div>
                 <div class="main-container">
+
+                    <div class="logo-bar">
+                        <img src="{option:logo}" alt="{option:title}">
+                    </div>
+
                     {this.contents:}
 
                     <footer class="footer">
@@ -106,10 +111,7 @@
                                         <span>{__:Contact Us}</span>
                                     </div>
                                     <div class="panel-body">
-                                        <p>Tel: +13233</p>
-                                        <p>Tel: +13233</p>
-                                        <p>Tel: +13233</p>
-                                        <p>Tel: +13233</p>
+                                        {channel:about_us,content}
                                     </div>
                                 </div>
                             </div>

@@ -30,7 +30,7 @@ class ContentController extends Controller {
             return $this->redirect('./');
         }
         $article['view_count'] ++;
-        $scene->update($id, ['view_count' => $article['view_count']]);
+        $scene->update($id, ['view_count' => $article['view_count']], false);
         $catModel = FuncHelper::model($channel['model_id']);
         if ($article['parent_id'] > 0 && $catModel) {
             $parent = CMSRepository::scene()

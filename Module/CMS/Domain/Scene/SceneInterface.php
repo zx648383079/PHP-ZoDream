@@ -84,7 +84,7 @@ interface SceneInterface {
 
     public function insert(array $data): bool|int;
 
-    public function update(int $id, array $data): bool;
+    public function update(int $id, array $data, bool $updateTime = true): bool;
 
     public function remove(int|array|callable $id): bool;
 

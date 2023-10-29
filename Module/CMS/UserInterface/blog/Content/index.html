@@ -8,9 +8,9 @@
         <div class="item-tag-bar">
             <div>
                 <a href="{channel:$channel,url}" class="tag-item-block">{$channel.title}</a>
-                <a href="#">
+                <a class="item-time">
                     <i class="fa fa-clock"></i>
-                    {this.ago:$article.updated_at}
+                    <span>{this.ago:$article.created_at}</span>
                 </a>
             </div>
             <div>
