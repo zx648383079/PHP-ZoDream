@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Module\Template\Domain\Weights;
 
+use Zodream\Service\Middleware\CSRFMiddleware;
+
 class CookieBar extends Node implements INode {
 
     private function getCookieData(): array {
@@ -21,6 +23,11 @@ class CookieBar extends Node implements INode {
                         'name' => 'PHPSESSID',
                         'time' => __('{0} months', [11]),
                         'description' => $items['sessid'] ?? ''
+                    ],
+                    [
+                        'name' => CSRFMiddleware::COOKIE_KEY,
+                        'time' => __('{0} months', [11]),
+                        'description' => $items['csrf'] ?? ''
                     ]
                 ]
             ],

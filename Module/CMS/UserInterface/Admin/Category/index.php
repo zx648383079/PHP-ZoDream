@@ -7,7 +7,11 @@ $this->title = '栏目管理';
 
 <div class="panel-container">
     <div class="page-search-bar">
-        <a class="btn btn-success pull-right no-jax" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
+
+        <div class="btn-group pull-right">
+            <a data-type="form" href="<?=$this->url('./@admin/category/quickly')?>" data-title="批量添加实体模型栏目" class="btn btn-primary">快速添加</a>
+            <a class="btn btn-success no-jax" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
+        </div>
     </div>
 
     <table class="table table-hover tree-table">

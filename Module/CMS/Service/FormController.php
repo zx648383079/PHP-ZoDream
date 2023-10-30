@@ -7,7 +7,6 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\FormRepository;
 use Module\CMS\Domain\Repositories\LinkageRepository;
-use Zodream\Html\VerifyCsrfToken;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class FormController extends Controller {
@@ -17,7 +16,7 @@ class FormController extends Controller {
         $scene = CMSRepository::scene()->setModel($model);
         $field_list = FuncHelper::formData($model['id']);
         $form_action = FuncHelper::formAction($model['id']);
-        $token = VerifyCsrfToken::get();
+        $token = session()->token();
         return $this->show(compact('model', 'field_list', 'scene', 'form_action', 'token'));
     }
 

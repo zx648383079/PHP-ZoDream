@@ -22,7 +22,6 @@ use Zodream\Helpers\Str;
 use Zodream\Html\Form;
 use Zodream\Html\Page;
 use Zodream\Html\Tree;
-use Zodream\Html\VerifyCsrfToken;
 use Zodream\Infrastructure\Support\Html;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Helpers\Tree as TreeHelper;
@@ -794,7 +793,7 @@ class FuncHelper {
         return CMSRepository::viewTemporary(function (ViewFactory $factory) use ($fileName, $id) {
             $form_action = self::formAction($id);
             $field_list = self::formData($id);
-            $token = VerifyCsrfToken::get();
+            $token = session()->token();
             $factory->setLayout('');
             return $factory->render(sprintf('Form/%s', $fileName),
                 compact('form_action',
@@ -970,7 +969,9 @@ class FuncHelper {
 
     public static function commentHidden(): string {
         return sprintf('%s%s%s%s', Form::hidden('model', static::$current['model']),
-            Form::hidden('article', static::$current['content']), Form::hidden('category', static::$current['channel']), Form::token());
+            Form::hidden('article', static::$current['content']),
+            Form::hidden('category', static::$current['channel']),
+            Form::token());
     }
 
     /**

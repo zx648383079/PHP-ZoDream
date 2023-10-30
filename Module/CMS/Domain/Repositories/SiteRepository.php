@@ -98,7 +98,7 @@ class SiteRepository {
     }
 
     public static function themeList() {
-        return (new ThemeManager)->getAllThemes();
+        return (new ThemeManager)->loadThemes();
     }
 
     /**

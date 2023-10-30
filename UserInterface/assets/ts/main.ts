@@ -20,6 +20,13 @@ function postJson(url: string, data: any, callback?: (data: IResponse) => any) {
         callback = data;
         data = {};
     }
+    $.ajaxSetup({
+        beforeSend(jqXHR, settings) {
+            if (settings.type === 'POST') {
+                jqXHR.setRequestHeader("X-CSRFToken", Cookies.get('XSRF-TOKEN'));
+            }
+        },
+    })
     $.post(url, data, callback || parseAjax, 'json');
 };
 function ajaxForm(url, data, callback?: (data: IResponse)=>any) {

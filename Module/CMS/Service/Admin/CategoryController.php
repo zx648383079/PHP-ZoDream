@@ -8,6 +8,8 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\ThemeManager;
+use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
     public function indexAction() {
@@ -25,7 +27,7 @@ class CategoryController extends Controller {
             $model->position = 99;
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
-        $group_list = GroupModel::where('type', 0)->all();
+        $group_list = GroupModel::where('type', 0)->get();
         $cat_list = CategoryRepository::all(CMSRepository::siteId());
         if (!empty($id)) {
             $excludes = [$id];
@@ -40,7 +42,10 @@ class CategoryController extends Controller {
                 return true;
             });
         }
-        return $this->show('edit', compact('model', 'model_list', 'cat_list', 'group_list'));
+        $template_list = $this->getThemeTemplate();
+        return $this->show('edit', compact('model', 'model_list',
+            'cat_list',
+            'group_list', 'template_list'));
     }
 
     public function saveAction() {
@@ -84,5 +89,50 @@ class CategoryController extends Controller {
             'url' => $this->getUrl('category'),
             'no_jax' => true
         ]);
+    }
+
+    public function quicklyAction(Input $input) {
+        if ($input->isAjax()) {
+            $this->layout = '';
+        }
+        $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
+        $group_list = GroupModel::where('type', 0)->get();
+        $cat_list = CategoryRepository::all(CMSRepository::siteId());
+        $template_list = $this->getThemeTemplate(true);
+        return $this->show('quickly', compact('cat_list',
+            'template_list', 'group_list', 'model_list'));
+    }
+
+    public function batchSaveAction(Input $input) {
+        try {
+            CategoryRepository::batchSave($input->validate([
+                'parent_id' => 'int',
+                'model_id' => 'int',
+                'groups' => '',
+                'category_template' => '',
+                'list_template' => '',
+                'show_template' => '',
+                'open_comment' => 'int',
+                'content' => 'required|string'
+            ]));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData([
+            'url' => $this->getUrl('category')
+        ], '添加成功');
+    }
+
+    protected function getThemeTemplate(bool $hasParent = false): array {
+        $template_list = (new ThemeManager())->loadTemplates(CMSRepository::site()->theme);
+        $prefix = ['' => '--继承模型--'];
+        if ($hasParent) {
+            $prefix['@parent'] = '--继承父级栏目--';
+        }
+        foreach ($template_list as $key => $items) {
+            $template_list[$key] = array_merge($prefix, array_column($items, 'name',
+                'value'));
+        }
+        return $template_list;
     }
 }

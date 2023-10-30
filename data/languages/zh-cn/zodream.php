@@ -214,6 +214,7 @@ return [
 
         'cookie_policy' => 'Cookie 插件设置 Cookie 的目的是存储用户对使用 Cookie 的同意；它不会存储任何个人数据。',
         'sessid' => '用于绑定用户登录凭证的 Cookie 标识',
+        'csrf' => '用于防止跨站脚本攻击的 Cookie 标识',
     ],
     'Indispensable' => '必要的',
     'Functional' => '功能要求',

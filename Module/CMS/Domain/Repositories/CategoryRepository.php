@@ -75,4 +75,80 @@ class CategoryRepository {
         return CMSRepository::scene()->setModel(ModelRepository::get(intval($modelId)), $site);
     }
 
+    public static function batchSave(array $data): void {
+        $parent = null;
+        if (!empty($data['parent_id'])) {
+            $parent = CategoryModel::findOrThrow($data['parent_id']);
+        }
+        foreach ([
+                     'category_template',
+                     'list_template',
+                     'show_template',
+                 ] as $key) {
+            if (!empty($data[$key]) && $data[$key] === '@parent') {
+                $data[$key] = empty($parent) ? '' : $parent[$key];
+            }
+        }
+        if (!empty($data['open_comment'])) {
+            $data['setting'] = [
+                'open_comment' => true
+            ];
+        }
+        if (empty($data['model_id'])) {
+            if (empty($parent)) {
+                $data['type'] = 1;
+            } else {
+                $data['type'] = $parent['type'];
+                $data['model_id'] = $parent['model_id'];
+            }
+        }
+        unset($data['open_comment']);
+        $levelItems = [intval($data['parent_id'])];
+        $orderItems = [];
+        $last = -1;
+        $level = -1;
+        foreach (explode("\n", $data['content']) as $line) {
+            list($c, $title) = self::splitTitleTag($line);
+            if (empty($title)) {
+                continue;
+            }
+            if ($c > $last) {
+                $orderItems[] = $last;
+                $last = $c;
+                $level ++;
+            } elseif ($c < $last) {
+                for ($i = count($orderItems) - 1; $i >= 0; $i --) {
+                    if ($orderItems[$i] < $c) {
+                        $last = $orderItems[$i];
+                        array_splice($orderItems, $i, count($orderItems) - $i);
+                        $level = count($orderItems);
+                        break;
+                    }
+                }
+            }
+            $parentId = $levelItems[$level];
+            $model = CategoryModel::createOrThrow(array_merge($data, [
+                'parent_id' => $parentId,
+                'title' => $title,
+                'name' => sprintf('%s%d', CMSRepository::generateTableName($title), $level)
+            ]));
+            $levelItems[$level + 1] = $model->id;
+        }
+    }
+
+
+
+
+    protected static function splitTitleTag(string $val): array {
+        $val = trim($val);
+        $count = 0;
+        for ($i = 0; $i < strlen($val); $i ++) {
+            if (substr($val, $i, 1) !== '-') {
+                break;
+            }
+            $count ++;
+        }
+        return [$count, ltrim(substr($val, $count))];
+    }
+
 }

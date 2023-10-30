@@ -56,9 +56,9 @@ $this->registerJs($js);
                 <?= Editor::html('content', $model->content) ?>
             </div>
             <div class="tab-item">
-                <?=Form::text('category_template')->tip('栏目页，默认继承模型，文件夹为Category')?>
-                <?=Form::text('list_template')->tip('栏目文章搜索页，默认继承模型，文件夹为Category')?>
-                <?=Form::text('show_template')->tip('文章详情页，默认继承模型，文件夹为Content')?>
+                <?=Form::select('category_template', $template_list['channel'])->tip('栏目页，默认继承模型，文件夹为Category')?>
+                <?=Form::select('list_template', $template_list['channel'])->tip('栏目文章搜索页，默认继承模型，文件夹为Category')?>
+                <?=Form::select('show_template', $template_list['content'])->tip('文章详情页，默认继承模型，文件夹为Content')?>
                 <?=Form::switch('setting.open_comment')?>
             </div>
         </div>

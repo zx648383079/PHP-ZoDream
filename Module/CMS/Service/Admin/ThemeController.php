@@ -10,7 +10,7 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 class ThemeController extends Controller {
     public function indexAction() {
         $current = CMSRepository::theme();
-        $themes = (new ThemeManager)->getAllThemes();
+        $themes = (new ThemeManager)->loadThemes();
         foreach ($themes as $key => $item) {
             if ($item['name'] === $current) {
                 $current = $item;

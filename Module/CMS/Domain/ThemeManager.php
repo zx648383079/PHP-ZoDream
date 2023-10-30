@@ -17,6 +17,7 @@ use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\DB;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
+use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
@@ -489,7 +490,11 @@ class ThemeManager {
         return intval(OptionModel::where('code', $code)->value('id'));
     }
 
-    public function getAllThemes(): array {
+    /**
+     * 获取主题
+     * @return array{name: string, description: string, author: string, cover: string}[]
+     */
+    public function loadThemes(): array {
         $data = [];
         $this->src->map(function ($file) use (&$data) {
             if (!$file instanceof Directory) {
@@ -508,6 +513,41 @@ class ThemeManager {
             ];
         });
         return $data;
+    }
+
+    /**
+     * 获取主题下的模板
+     * @param string $theme
+     * @return array{content: string[], channel: string[], form: string[]}
+     * @throws \Exception
+     */
+    public function loadTemplates(string $theme): array {
+        $folder = static::themeRootFolder()->directory($theme);
+        if (!$folder->exist()) {
+            return [];
+        }
+        $cb = function (Directory $root) {
+            if (!$root->exist()) {
+                return [];
+            }
+            $items = [];
+            $root->mapDeep(function ($file) use ($root, &$items) {
+                if (!($file instanceof File)) {
+                    return;
+                }
+                if ($file->getExtension() !== 'html') {
+                    return;
+                }
+                $name = substr($file->getRelative($root), 0, -5);
+                $items[] = ['name' => $name, 'value' => $name];
+            });
+            return $items;
+        };
+        return [
+            'content' => $cb($folder->directory('Content')),
+            'channel' => $cb($folder->directory('Category')),
+            'form' => $cb($folder->directory('form')),
+        ];
     }
 
     public static function clear(): void {

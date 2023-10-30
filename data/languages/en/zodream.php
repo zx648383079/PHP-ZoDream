@@ -65,6 +65,7 @@ return [
 
         'cookie_policy' => 'Cookies are set by the Cookie Plugin to store the user\'s consent to the use of cookies; it does not store any personal data.',
         'sessid' => 'PHP Session ID with auth',
+        'csrf' => 'Cookie identifiers to prevent cross-site scripting attacks',
     ],
     'cookie_tooltip' => 'Our website uses some cookies and records your IP address for the purposes of accessibility, security, and managing your access to the telecommunication network. You can disable data collection and cookies by changing your browser settings, but it may affect how this website functions.',
 ];

@@ -2,6 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Theme;
+use Zodream\Html\Form;
 use Module\CMS\Domain\Repositories\SiteRepository;
 /** @var $this View */
 ?>
@@ -38,4 +39,5 @@ use Module\CMS\Domain\Repositories\SiteRepository;
     <input type="hidden" name="id" value="<?=$id?>">
     <input type="hidden" name="model_id" value="<?=$model->id?>">
     <input type="hidden" name="parent_id" value="<?=$data['parent_id']?>">
+    <?= Form::token() ?>
 </form>
