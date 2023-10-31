@@ -45,23 +45,28 @@ $prefix: 'zre-' !default;
 // 中国红
 $primary: #A10000;
 $primaryText: #fff;
-$secondary: #CC2525;
+
 $disabledText: #FF9787;
 $strongText: red;
 $shadow: rgba(51, 51, 51, 0.7);
 $border: $primary;
 $body: #f4f4f4;
 $bodyText: #333;
+
 $panel: white;
-$third: #fff;
-$thirdText: $bodyText;
+
+$gray: #6c757d;
+$grayText: #fff;
+
+$secondary: #ccc;
 $secondaryText: #b3b1b1;
+
 $dialog: rgba(255, 255, 255, .9);
 $dialogMask: rgba(0, 0, 0, .3);
 $dialogText: #333;
 
-$linkText: #0a0a0a;
-$linkHoverText: #bb0b0b;
+$linkText: #0d6efd;
+$linkHoverText: #0a58ca;
 
 $input: #fff;
 $inputText: #333;
@@ -71,29 +76,32 @@ $inputHoverShadow: #0d6efd40;
 
 
 // 黑暗模式
-$dark-primary: #333;
+$dark-primary: #000;
 $dark-primaryText: #fff;
 $dark-secondary: #767676;
 $dark-disabledText: #ccc;
 $dark-strongText: red;
-$dark-shadow: rgba(51, 51, 51, 0.7);
+$dark-shadow: rgba(200, 200, 200, 0.7);
 $dark-border: $primary;
-$dark-third: #fff;
+
+$dark-gray: #6c757d;
+$dark-grayText: #fff;
+
 $dark-body: #333;
 $dark-panel: #222;
 $dark-bodyText: #fff;
 $dark-secondaryText: #b3b1b1;
-$dark-dialog: rgba(0, 0, 0, .9);
+$dark-dialog: #333;
 $dark-dialogText: #fff;
-$dark-dialogMask: rgba(0, 0, 0, .3);
+$dark-dialogMask: rgba(255,255,255, .3);
 
 
-$dark-linkText: #0a0a0a;
-$dark-linkHoverText: #bb0b0b;
+$dark-linkText: #0d6efd;
+$dark-linkHoverText: #0a58ca;
 
-$dark-input: #fff;
-$dark-inputText: #333;
-$dark-inputBorder: #ced4da;
+$dark-input: #23222b;
+$dark-inputText: #fff;
+$dark-inputBorder: #7c7b82;
 $dark-inputHoverBorder: rgb(47, 65, 86);
 $dark-inputHoverShadow: #0d6efd40;
 

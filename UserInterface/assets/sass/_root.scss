@@ -17,7 +17,11 @@ $isFullyTheme: true !default;
             --#{$prefix}-dialog-mask: #{$dark-dialogMask};
             --#{$prefix}-shadow: #{$dark-shadow};
     
+            --#{$prefix}-secondary: #{$dark-secondary};
             --#{$prefix}-secondary-text: #{$dark-secondaryText};
+
+            --#{$prefix}-gray: #{$dark-gray};
+            --#{$prefix}-gray-text: #{$dark-grayText};
     
             --#{$prefix}-link-text: #{$dark-linkText};
             --#{$prefix}-link-hover-text: #{$dark-linkHoverText};
@@ -44,11 +48,16 @@ $isFullyTheme: true !default;
             --#{$prefix}-panel: #{$panel};
             --#{$prefix}-panel-text: #{$bodyText};
     
- 
+
+
             --#{$prefix}-dialog: #{$dialog};
             --#{$prefix}-dialog-text: #{$dialogText};
             --#{$prefix}-dialog-mask: #{$dialogMask};
+
+            --#{$prefix}-gray: #{$gray};
+            --#{$prefix}-gray-text: #{$grayText};
     
+            --#{$prefix}-secondary: #{$secondary};
             --#{$prefix}-secondary-text: #{$secondaryText};
     
             --#{$prefix}-shadow: #{$shadow};

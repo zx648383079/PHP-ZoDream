@@ -5,12 +5,12 @@ use Zodream\Template\View;
 ?>
 <?php foreach ($comment_list as $reply) :?>
 <div class="comment-item" data-id="<?=$parent_id?>">
-    <div class="info">
+    <div class="item-header">
         <span class="user"><?=$this->text($reply['name'])?></span>
         <span class="time"><?=$reply['created_at']?></span>
         <span class="floor"><?=$reply->position?>#</span>
     </div>
-    <div class="content">
+    <div class="item-body">
         <p><?=$this->text($reply['content'])?></p>
         <span>&nbsp;</span>
         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>

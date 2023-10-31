@@ -6,6 +6,7 @@
  * Copyright (c) 2017 ZoDream
  */
 
+@import "theme";
 @import "prefix";
 @import "loading";
 
@@ -25,7 +26,7 @@ $dialogIndex: 1200;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, .4);
+    background: var(--#{$prefix}-dialog-mask);
     z-index: $dialogIndex - 10;
     display: none;
     &.dialog-bg-private {
@@ -44,8 +45,8 @@ $dialogIndex: 1200;
     }
     &.dialog-tip,
     &.dialog-pop {
-        background: rgba(0, 0, 0, .6);
-        color: #fff;
+        background: var(--#{$prefix}-dialog-mask);;
+        color: var(--#{$prefix}-primary-text);
         max-width: 66.66%;
         min-width: 6.25rem;
         padding: 0.3125rem 0.625rem;
@@ -54,8 +55,8 @@ $dialogIndex: 1200;
         @include prefix-content(transition, top 1s);
     }
     &.dialog-message {
-        background: rgba(0, 0, 0, .6);
-        color: #fff;
+        background: var(--#{$prefix}-dialog-mask);;
+        color: var(--#{$prefix}-primary-text);
         max-width: 33.33%;
         min-width: 6.25rem;
         padding: 0.3125rem 0.625rem;
@@ -117,15 +118,16 @@ $dialogIndex: 1200;
     &.dialog-box,
     &.dialog-form,
     &.dialog-disk {
-        background: #fff;
+        background: var(--#{$prefix}-dialog);
+        color: var(--#{$prefix}-dialog-text);
         min-width: 16.25rem;
         display: none;
         box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.2);
         @include prefix-animation(dialog-box 0.5s);
         .dialog-header {
             position: relative;
-            background: #333;
-            color: #fff;
+            background: var(--#{$prefix}-primary);
+            color: var(--#{$prefix}-primary-text);
             height: 40px;
             line-height: 1.875rem;
             text-align: center;
@@ -151,8 +153,8 @@ $dialogIndex: 1200;
             }
             .dialog-close {
                 right: 0;
-                background: #333;
-                color: #fff;
+                background: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
                 top: 6px;
                 &:hover {
                     @include prefix-content(transform, rotateZ(180deg));
@@ -169,30 +171,29 @@ $dialogIndex: 1200;
                 width: 50%;
                 border: none;
                 line-height: 1.875rem;
-                background: #333;
-                color: #fff;
+                background: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
                 padding: 0;
                 margin: 0;
                 &:focus {
                     outline: -webkit-focus-ring-color auto 0px;
                 }
             }
-            .dialog-yes {
-                width: 30%;
-                background: #333;
-                color: #fff;
-                padding: 3px;
+            .dialog-yes,
+            .dialog-close {
                 border: none;
-                margin-right: 0.3125rem;
                 line-height: 1.875rem;
+                width: 30%;
+            }
+            .dialog-yes {
+                background: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
+                margin-right: 0.3125rem;
             }
             .dialog-close {
-                width: 30%;
-                background: #333;
-                color: #fff;
-                padding: 3px;
-                border: none;
-                line-height: 1.875rem;
+                background: var(--#{$prefix}-gray);
+                color: var(--#{$prefix}-gray-text);
+              
             }
         }
     }

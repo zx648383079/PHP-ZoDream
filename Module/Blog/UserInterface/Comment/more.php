@@ -5,7 +5,7 @@ use Zodream\Template\View;
 ?>
 <?php foreach ($comment_list as $item) :?>
 <div class="comment-item"  data-id="<?=$item->id?>">
-    <div class="info">
+    <div class="item-header">
         <?php if($item->url):?>
         <a href="<?=$this->url($item->url)?>" class="user" target="_blank" rel="noopener noreferrer"><?=$this->text($item['name'])?></a>
         <?php else:?>
@@ -14,7 +14,7 @@ use Zodream\Template\View;
         <span class="time"><?=$item['created_at']?></span>
         <span class="floor"><?=$item->position?><?=__('floor')?></span>
     </div>
-    <div class="content">
+    <div class="item-body">
         <p><?=$this->text($item['content'])?></p>
         <span>&nbsp;</span>
         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>
@@ -29,12 +29,12 @@ use Zodream\Template\View;
         <?php if ($item->replies):?>
             <?php foreach ($item->replies as $reply) :?>
                 <div class="comment-item" data-id="<?=$item->id?>">
-                    <div class="info">
+                    <div class="item-header">
                         <span class="user"><?=$this->text($reply['name'])?></span>
                         <span class="time"><?=$reply['created_at']?></span>
                         <span class="floor"><?=$reply->position?>#</span>
                     </div>
-                    <div class="content">
+                    <div class="item-body">
                         <p><?=$this->text($reply['content'])?></p>
                         <span>&nbsp;</span>
                         <span class="comment" data-type="reply"><i class="fa fa-comment"></i></span>

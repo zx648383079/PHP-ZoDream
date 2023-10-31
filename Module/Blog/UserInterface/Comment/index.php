@@ -19,12 +19,12 @@ $lang = Json::encode($lang);
     </div>
     <?php foreach ($hot_comments as $item) :?>
     <div class="comment-item" data-id="<?=$item->id?>">
-        <div class="info">
+        <div class="item-header">
             <span class="user"><?=$this->text($item['name'])?></span>
             <span class="time"><?=$item['created_at']?></span>
             <span class="floor"><?=$item->position?><?=__('floor')?></span>
         </div>
-        <div class="content">
+        <div class="item-body">
             <p><?=$this->text($item['content'])?></p>
             <?php if ($item->reply_count > 0):?>
             <span class="expand"><?=__('Expand ({count})', ['count' => $item->reply_count])?></span>

@@ -1,18 +1,18 @@
 @import 'theme';
 
 @mixin active() {
-    background: $active;
-    color: $activeText;
+    background-color: var(--#{$prefix}-primary-active);
+    color: var(--#{$prefix}-primary-text);
     a {
-        color: $hoverText;
+        color: var(--#{$prefix}-primary-text);
     }
 }
 
 @mixin hover() {
-    background: $hover;
-    color: $hoverText;
+    background-color: var(--#{$prefix}-primary-hover);
+    color: var(--#{$prefix}-primary-text);
     a {
-        color: $hoverText;
+        color: var(--#{$prefix}-primary-text);
     }
 }
 
@@ -26,12 +26,12 @@
 
 .book-skin {
     position: relative;
-    width: 1200px;
+    width: 75rem;
     margin: 0 auto;
-    min-height: 300px;
+    min-height: 18.75rem;
     a {
         text-decoration: none;
-        color: $linkText;
+        color: var(--#{$prefix}-body-text);
     }
     .book-title {
         // line-height: 100px;
@@ -43,8 +43,8 @@
                 display: none;
                 &.active {
                     display: inline-block;
-                    font-size: 30px;
-                    line-height: 40px;
+                    font-size: 1.875rem;
+                    line-height: 2.5rem;
                 }
                 &.book-back {
                     position: absolute;
@@ -58,16 +58,16 @@
                     right: 0;
                     .fa {
                         position: absolute;
-                        top: 40px;
-                        left: 5px;
-                        font-size: 20px;
-                        color: $bodyText;
+                        top: 2.5rem;
+                        left: 0.3125rem;
+                        font-size: 1.25rem;
+                        color: var(--#{$prefix}-body-text);
                     }
                     input {
-                        font-size: 20px;
-                        padding-left: 25px;
+                        font-size: 1.25rem;
+                        padding-left: 1.5625rem;
                         background: transparent;
-                        border: 1px solid $bodyText;
+                        border: 1px solid var(--#{$prefix}-body-text);
                         display: none;
                     }
                     .search-tip {
@@ -75,7 +75,7 @@
                         top: 63px;
                         z-index: 99;
                         line-height: 25px;
-                        background: $panel;
+                        background: var(--#{$prefix}-panel);
                         width: 100%;
                         display: none;
                         li {
@@ -83,7 +83,7 @@
                             &:hover {
                                 @include active();
                                 a {
-                                    color: $hoverText;
+                                    color: var(--#{$prefix}-primary);
                                 }
                             }
                         }
@@ -109,14 +109,14 @@
         }
     }
     .book-body {
-        margin-right: 200px;
-        background-color: $panel;
-        padding: 30px 15px;
-        min-height: 400px;
+        margin-right: 12.5rem;
+        background-color: var(--#{$prefix}-panel);
+        padding: 1.875rem 0.9375rem;
+        min-height: 25rem;
         position: relative;
         .book-header {
-            font-size: 16px;
-            line-height: 40px;
+            font-size: 1rem;
+            line-height: 2.5rem;
             border-bottom: 1px solid #eee;
             color: #484848;
             font-weight: normal;
@@ -160,7 +160,7 @@
                 line-height: 1.875rem;
                 text-align: center;
                 position: relative;
-                background: $panel;
+                background: var(--#{$prefix}-panel);
                 &:after {
                     position: absolute;
                     content: "";
@@ -208,7 +208,7 @@
             }
             a {
                 text-decoration: none;
-                color: #333;
+                color: var(--#{$prefix}-body-text);
             }
             dt {
                 font-size: 1.25rem;
@@ -242,17 +242,17 @@
                 }
             }
             &:hover {
-                box-shadow: rgba(51,51,51,.7) 0 0 10px;
+                box-shadow: 0 0 0.625rem var(--#{$prefix}-shadow);
             }
             &:not(:last-child) {
-                border-bottom: 1px solid #a10000;
+                border-bottom: 1px solid var(--#{$prefix}-primary);
             }
             &.fade-pre-item {
                 visibility: hidden;
             }
             &.fade-item {
                 animation-name: fadeInLeft;
-                background: #fff;
+                background: var(--#{$prefix}-panel);
                 border-bottom: none;
                 visibility: visible;
             }
@@ -260,7 +260,7 @@
         .cat-item {
             line-height: 40px;
             .count {
-                color: #bbb;
+                color: var(--#{$prefix}-secondary-text);
             }
         }
         .tag-item {
@@ -270,88 +270,53 @@
                 border-bottom: 1px solid #333;
             }
         }
-        .info {
-            border-bottom: 1px dotted $linkHoverText;
-            line-height: 40px;
-            span,
-            a {
-                margin-right: 20px;
-                color: $linkText;
-            }
-            .language-toggle {
-                display: inline-block;
-                margin-right: 20px;
-                border: 1px solid $linkHoverText;
-                border-bottom: none;
-                a {
-                    display: inline-block;
-                    background-color: $linkHoverText;
-                    color: var(--#{$prefix}-primary-text);
-                    margin: 0;
-                    width: 40px;
-                    text-align: center;
-                    &.active {
-                        background-color: $panel;
-                        color: $linkText;
-                        position: relative;
-                        &::after {
-                            position: absolute;
-                            content: "";
-                            display: block;
-                            background-color: #fff;
-                            width: 40px;
-                            height: 3px;
-                        }
-                    }
-                }
-            }
-        }
+        
         .content {
-            margin-bottom: 40px;
-            max-height: 300px;
+            margin-bottom: 2.5rem;
+            max-height: 18.75rem;
             overflow-y: hidden;
             a {
-                color: #06a;
+                color: var(--#{$prefix}-link-text);
             }
         }
         .toggle-open {
-            background-color: rgba(249, 249, 249, .9);
-            line-height: 40px;
+            background-color: var(--#{$prefix}-dialog-mask);
+            line-height: 2.5rem;
             text-align: center;
             position: absolute;
             left: 0;
             right: 0;
-            margin-top: -40px;
-            color: #777;
+            margin-top: -2.5rem;
+            color: var(--#{$prefix}-secondary-text);
             cursor: pointer;
         }
         .tools {
-            border-top: 1px dotted $linkHoverText;
-            line-height: 40px;
+            border-top: 1px dotted var(--#{$prefix}-primary-text);
+            line-height: 2.5rem;
             position: absolute;
             bottom: 0;
-            right: 15px;
-            left: 15px;
-            font-size: 20px;
+            right: 0.9375rem;
+            left: 0.9375rem;
+            font-size: 1.25rem;
             span {}
             .agree,
             .disagree {
                 float: right;
-                margin-left: 20px;
+                margin-left: 1.25rem;
             }
         }
         .book-source,
         .book-tags {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 100;
-            margin-top: 10px;
+            margin-top: 0.625rem;
             a {
-                color: #0474c8;
+                color: var(--#{$prefix}-link-text);
                 font-weight: 600;
             }
         }
         .book-bottom {
-            margin-bottom: 20px;
+            margin-bottom: 1.25rem;
         }
         &.open {
             .content {
@@ -362,13 +327,50 @@
             }
         }
     }
+    .book-info {
+        border-bottom: 1px dotted var(--#{$prefix}-body-text);
+        line-height: 40px;
+        span,
+        a {
+            margin-right: 1.25rem;
+            color: var(--#{$prefix}-body-text);
+        }
+        
+    }
+    .language-toggle {
+        display: inline-block;
+        margin-right: 1.25rem;
+        border: 1px solid var(--#{$prefix}-primary);
+        border-bottom: none;
+        a {
+            display: inline-block;
+            background-color: var(--#{$prefix}-primary);
+            color: var(--#{$prefix}-primary-text);
+            margin: 0;
+            width: 2.5rem;
+            text-align: center;
+            &.active {
+                background-color: var(--#{$prefix}-panel);
+                color: var(--#{$prefix}-body-text);
+                position: relative;
+                &::after {
+                    position: absolute;
+                    content: "";
+                    display: block;
+                    background-color: var(--#{$prefix}-panel);
+                    width: 2.5rem;
+                    height: 0.1875rem;
+                }
+            }
+        }
+    }
     .book-footer {
         
         &.comment {
-            margin-top: 50px;
-            margin-right: 200px;
-            background: $panel;
-            padding: 15px;
+            margin-top: 3.125rem;
+            margin-right: 12.5rem;
+            background: var(--#{$prefix}-panel);
+            padding: 0.9375rem;
             position: relative;
         }
         
@@ -379,13 +381,13 @@
 .time-axis {
     position: relative;
     z-index: 1010;
-    margin-left: 55px;
+    margin-left: 3.4375rem;
     .time-title {
         position: relative;
-        margin: 60px 0;
+        margin: 3.75rem 0;
         .time-year {
-            margin-left: 20px;
-            font-size: 20px;
+            margin-left: 1.25rem;
+            font-size: 1.25rem;
             font-weight: 700;
             line-height: 1.5;
         }
@@ -394,16 +396,16 @@
             position: absolute;
             left: 0;
             top: 50%;
-            margin-left: -4px;
-            margin-top: -4px;
-            width: 8px;
-            height: 8px;
+            margin-left: -0.25rem;
+            margin-top: -0.25rem;
+            width: 0.5rem;
+            height: 0.5rem;
             background: #bbb;
             border-radius: 50%;
         }
     }
     .time-items {
-        margin: 30px 0;
+        margin: 1.875rem 0;
         .time-item {
             display: block;
             position: relative;
@@ -412,27 +414,27 @@
             transition-delay: 0s;
             transition-property: border;
             border-bottom: 1px dashed #ccc;
-            line-height: 40px;
+            line-height: 2.5rem;
             .title {
-                margin-left: 60px;
-                font-size: 16px;
+                margin-left: 3.75rem;
+                font-size: 1rem;
                 font-weight: 400;
                 line-height: inherit;
             }
             .time {
                 position: absolute;
-                font-size: 12px;
-                left: 20px;
-                top: 0px;
+                font-size: 0.75rem;
+                left: 1.25rem;
+                top: 0rem;
             }
             &::before {
                 content: " ";
                 position: absolute;
                 left: 0;
-                top: 17px;
-                width: 6px;
-                height: 6px;
-                margin-left: -4px;
+                top: 1.0625rem;
+                width: 0.375rem;
+                height: 0.375rem;
+                margin-left: -0.25rem;
                 background: #bbb;
                 border-radius: 50%;
                 border: 1px solid #fff;
@@ -452,10 +454,10 @@
     &:after {
         content: " ";
         position: absolute;
-        top: 20px;
+        top: 1.25rem;
         left: 0;
-        margin-left: -2px;
-        width: 4px;
+        margin-left: -0.125rem;
+        width: 0.25rem;
         height: 100%;
         background: #f5f5f5;
         z-index: -1;
@@ -467,12 +469,12 @@
     margin-bottom: 2rem;
     li {
         list-style: none;
-        background: $panel;
+        background: var(--#{$prefix}-panel);
         width: 2.5rem;
         line-height: 2.5rem;
         text-align: center;
         float: left;
-        border-top: 1px dotted $linkHoverText;
+        border-top: 1px dotted var(--#{$prefix}-primary);
         a {
             display: block;
         }
@@ -484,26 +486,26 @@
         &:hover {
             font-weight: 700;
             a {
-                color: $linkHoverText;
+                color: var(--#{$prefix}-primary);
             }
         }
     }
 }
 
 .book-navigation {
-    padding: 30px 0;
+    padding: 1.875rem 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
+    grid-gap: 0.625rem;
     .prev,
     .next {
         display: grid;
-        grid-template-columns: 30px 1fr;
+        grid-template-columns: 1.875rem 1fr;
         white-space: nowrap;
         .fa {
-            padding: 13px 0 0 10px;
-            color: #7a7a7a;
-            font-size: 20px;
+            padding: 0.8125rem 0 0 0.625rem;
+            color: var(--#{$prefix}-secondary-text);
+            font-size: 1.25rem;
             display: inline-block;
         }
         .prev-text,
@@ -518,8 +520,8 @@
         .prev-title,
         .next-title {
             display: block;
-            color: #0c0c0c;
-            font-size: 18px;
+            color: var(--#{$prefix}-body-text);
+            font-size: 1.125rem;
             font-weight: 400;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -527,9 +529,9 @@
     }
     .next {
         text-align: right;
-        grid-template-columns: 1fr 30px;
+        grid-template-columns: 1fr 1.875rem;
         .fa {
-            padding: 13px 10px 0 0;
+            padding: 0.8125rem 0.625rem 0 0;
         }
     }
 }
@@ -539,73 +541,73 @@
         display: none;
     }
     .title {
-        font-size: 20px;
-        border-left: 5px solid $linkHoverText;
-        padding-left: 10px;
-        margin-top: 15px;
+        font-size: 1.25rem;
+        border-left: 0.3125rem solid var(--#{$prefix}-primary);
+        padding-left: 0.625rem;
+        margin-top: 0.9375rem;
         .order {
             float: right;
-            font-size: 12px;
+            font-size: 0.75rem;
             cursor: pointer;
             .active {
-                color: #f00;
+                color: var(--#{$prefix}-primary);
             }
         }
     }
     .comment-item {
-        padding: 8px 0;
+        padding: 0.5rem 0;
         
         position: relative;
-        .info {
-            line-height: 30px;
+        .item-header {
+            line-height: 1.875rem;
             .user {
                 font-weight: 600;
             }
             .time {
-                margin-left: 20px;
-                color: $bodySecondaryText;
+                margin-left: 1.25rem;
+                color: var(--#{$prefix}-secondary-text);
             }
             .floor {
                 float: right;
             }
         }
-        .content {
+        .item-body {
             p {
-                margin: 5px 0;
+                margin: 0.3125rem 0;
             }
             .expand {
-                font-size: 12px;
+                font-size: 0.75rem;
             }
             .comment,
             .report {
                 float: right;
-                margin-left: 20px;
+                margin-left: 1.25rem;
             }
         }
         .actions {
             position: absolute;
-            right: -215px;
-            width: 200px;
+            right: -13.4375rem;
+            width: 12.5rem;
             text-align: center;
-            top: 30px;
-            background: $panel;
-            font-size: 20px;
-            line-height: 40px;
+            top: 1.875rem;
+            background: var(--#{$prefix}-panel);
+            font-size: 1.25rem;
+            line-height: 2.5rem;
             span {
-                padding: 0 3px;
+                padding: 0 0.1875rem;
             }
         }
         .comments {
-            padding-left: 100px;
-            margin-top: 8px;
-            border-top: 1px solid $linkHoverText;
+            padding-left: 6.25rem;
+            margin-top: 0.5rem;
+            border-top: 0.0625rem solid var(--#{$prefix}-primary);
             .comment-item:last-child {
                 border: none;
                 padding-bottom: 0;
             }
         }
         &:not(:last-child) {
-            border-bottom: 1px solid $linkHoverText;
+            border-bottom: 1px solid var(--#{$prefix}-primary);
         }
     }
     &.hot-comments {
@@ -632,20 +634,20 @@
 
 .book-sidebar {
     position: absolute;
-    width: 200px;
+    width: 12.5rem;
     right: 0;
-    top: 130px;
+    top: 8.125rem;
     .book-chapter,
     .book-new {
         li {
             background: transparent;
             list-style: none;
-            width: 150px;
-            line-height: 30px;
-            padding-left: 20px;
+            width: 9.375rem;
+            line-height: 1.875rem;
+            padding-left: 1.25rem;
             box-sizing: border-box;
             .fa {
-                margin-right: 5px;
+                margin-right: 0.3125rem;
             }
             .count {
                 position: absolute;
@@ -653,20 +655,20 @@
                 background-color: var(--#{$prefix}-primary);
                 border-radius: 50%;
                 display: inline-block;
-                width: 25px;
-                height: 25px;
-                line-height: 25px;
+                width: 1.5625rem;
+                height: 1.5625rem;
+                line-height: 1.5625rem;
                 text-align: center;
-                left: 11px;
-                margin-top: 2px;
-                font-size: 10px;
+                left: 0.6875rem;
+                margin-top: 0.125rem;
+                font-size: 0.625rem;
                 overflow: hidden;
             }
             &.active {
                 @include active();
-                width: 200px;
+                width: 12.5rem;
                 &:hover {
-                    width: 200px;
+                    width: 12.5rem;
                 }
                 a {
                     color: var(--#{$prefix}-primary-text);
@@ -679,24 +681,24 @@
                 }
             }
             &:hover {
-                width: 175px;
+                width: 10.9375rem;
             }
             &:not(:last-child) {
-                border-bottom: 1px solid $linkHoverText;
+                border-bottom: 1px solid var(--#{$prefix}-primary);
             }
         }
     }
     .book-new {
-        margin-top: 50px;
+        margin-top: 3.125rem;
         h3 {
-            padding-left: 10px;
+            padding-left: 0.625rem;
         }
         li {
             width: 100%;
-            padding: 3px 0 3px 20px;
-            line-height: 20px;
+            padding: 0.1875rem 0 0.1875rem 1.25rem;
+            line-height: 1.25rem;
             a {
-                font-size: 14px;
+                font-size: 0.875rem;
             }
         }
     }
@@ -705,18 +707,18 @@
 }
 
 .book-dynamic {
-    margin-top: 50px;
+    margin-top: 3.125rem;
     h3 {
-        padding-left: 10px;
+        padding-left: 0.625rem;
     }
     dl {
         background: transparent;
-        border-bottom: 1px solid $linkHoverText;
+        border-bottom: 1px solid var(--#{$prefix}-primary);
         dt {
-            line-height: 30px;
-            font-size: 12px;
+            line-height: 1.875rem;
+            font-size: 0.75rem;
             a {
-                font-size: 16px;
+                font-size: 1rem;
                 font-weight: 600;
             }
         }
@@ -727,7 +729,7 @@
                 display: block;
             }
             p {
-                margin: 5px 0;
+                margin: 0.3125rem 0;
             }
         }
         &:hover {
@@ -743,25 +745,25 @@
 
 .book-side-nav {
     li {
-        font-size: 12px;
+        font-size: 0.75rem;
         background: transparent;
         list-style: none;
-        width: 150px;
-        line-height: 30px;
-        border-bottom: 1px solid $linkHoverText;
-        padding-left: 20px;
+        width: 9.375rem;
+        line-height: 1.875rem;
+        border-bottom: 0.0625rem solid var(--#{$prefix}-primary);
+        padding-left: 1.25rem;
         box-sizing: border-box;
         &.nav-level-0 {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 600;
         }
         &.nav-level-1 {
-            width: 175px;
-            color: $bodySecondaryText;
+            width: 10.9375rem;
+            color: var(--#{$prefix}-secondary-text);
         }
         &.nav-level-2 {
-            color: $bodySecondaryText;
-            width: 200px;
+            color: var(--#{$prefix}-secondary-text);
+            width: 12.5rem;
         }
         &.active {
             @include active();
@@ -772,15 +774,15 @@
         &.nav-title {
             text-align: center;
             padding: 0;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 700;
-            border-bottom-width: 3px;
+            border-bottom-width: 0.1875rem;
         }
     }
 }
 
 .rule-box {
-    margin-top: 40px;
+    margin-top: 2.5rem;
     .rule-header {
         text-align: center;
         font-weight: 700;
@@ -790,15 +792,15 @@
     }
     .rule-tip {
         text-align: center;
-        line-height: 40px;
-        color: $bodySecondaryText;
+        line-height: 2.5rem;
+        color: var(--#{$prefix}-secondary-text);
         
     }
     button {
-        height: 30px;
-        width: 80px;
-        background: $secondary;
-        color: $secondaryText;
+        height: 1.875rem;
+        width: 5rem;
+        background-color: var(--#{$prefix}-primary);
+        color: var(--#{$prefix}-primary-text);
         border: 0;
         outline: 0;
     }
@@ -808,11 +810,11 @@
     &.rule-password {
         text-align: center;
         input {
-            height: 30px;
+            height: 1.875rem;
             border: 0;
             outline: 0;
-            background: $body;
-            padding: 0 10px;
+            background: var(--#{$prefix}-body);
+            padding: 0 0.625rem;
         }
     }
     &.rule-buy {
@@ -822,10 +824,10 @@
 
 .book-comment-form {
     .title {
-        font-size: 20px;
-        border-left: 5px solid $linkHoverText;
-        padding-left: 10px;
-        margin-top: 15px;
+        font-size: 1.25rem;
+        border-left: 0.3125rem solid var(--#{$prefix}-primary);
+        padding-left: 0.625rem;
+        margin-top: 0.9375rem;
     }
     .form-table {
         display: table;
@@ -843,25 +845,25 @@
                 display: table-cell;
                 background: transparent;
                 border: none;
-                border-bottom: 1px solid $linkHoverText;
-                font-size: 20px;
+                border-bottom: 1px solid var(--#{$prefix}-primary);
+                font-size: 1.25rem;
                 width: 100%;
             }
         }
     }
     textarea {
         width: 100%;
-        height: 100px;
+        height: 6.25rem;
         resize: none;
         background: transparent;
-        border: 1px solid $linkHoverText;
-        font-size: 20px;
+        border: 1px solid var(--#{$prefix}-primary);
+        font-size: 1.25rem;
     }
     button {
-        line-height: 30px;
-        background: $linkHoverText;
+        line-height: 1.875rem;
+        background: var(--#{$prefix}-primary);
         color: var(--#{$prefix}-primary-text);
-        padding: 0 20px;
+        padding: 0 1.25rem;
         border: none;
     }
     .btn-cancel {
@@ -871,13 +873,13 @@
 
 .book-copyright {
     clear: both;
-    background-color: #f2f2f2;
-    font-size: 12px;
-    color: #999;
-    padding: 6px 15px 5px;
-    border-radius: 2px;
+    background-color: var(--#{$prefix}-body);
+    font-size: 0.75rem;
+    color: var(--#{$prefix}-secondary-text);
+    padding: 0.375rem 0.9375rem 0.3125rem;
+    border-radius: 0.125rem;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 0.625rem;
 }
 
 .book-clear {
@@ -885,8 +887,8 @@
 }
 
 .footer {
-    margin-top: 50px;
-    padding: 20px;
+    margin-top: 3.125rem;
+    padding: 1.25rem;
     text-align: center;
 }
 
@@ -894,10 +896,10 @@
     overflow: hidden;
     position: relative;
     .book-fork {
-        background-color: #af5d0d;
+        background-color: var(--#{$prefix}-primary);
         line-height: 1.5rem;
         display: block;
-        padding: 2px 0;
+        padding: 0.125rem 0;
         transform: rotateZ(45deg) scale(.8);
         position: absolute;
         right: -5rem;
@@ -905,12 +907,12 @@
         z-index: 999;
         font-size: .8rem;
         span {
-            color: #f8f0e9;
+            color: var(--#{$prefix}-primary-text);
             display: block;
             width: 16rem;
             text-align: center;
-            border-top: 1px dotted #f8f0e9;
-            border-bottom: 1px dotted #f8f0e9;
+            border-top: 1px dotted var(--#{$prefix}-primary-text);
+            border-bottom: 1px dotted var(--#{$prefix}-primary-text);
         }
     }
 }
@@ -918,22 +920,22 @@
 .copy-btn {
     position: absolute;
     display: none;
-    background-color: #fff;
-    color: #4d4d4d;
-    padding: 2px 8px;
-    margin: 8px;
-    border-radius: 4px;
+    background-color: var(--#{$prefix}-primary);
+    color: var(--#{$prefix}-primary-text);
+    padding: 0.125rem 0.5rem;
+    margin: 0.5rem;
+    border-radius: 0.25rem;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgb(0 0 0 / 5%), 0 2px 4px rgb(0 0 0 / 5%);
+    box-shadow: 0 2px 4px var(--#{$prefix}-shadow), 0 2px 4px var(--#{$prefix}-shadow);
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 75rem) {
     .book-skin {
         width: 100%;
     }
 }
 
-@media screen and (max-width: 769px) {
+@media screen and (max-width: 48.0625rem) {
     .book-skin {
         .book-title {
             .book-nav {
@@ -943,31 +945,31 @@
                         display: inline-block;
                         position: absolute;
                         left: 0;
-                        font-size: 30px;
-                        padding: 0 10px;
+                        font-size: 1.875rem;
+                        padding: 0 0.625rem;
                     }
                     &.book-search {
                         position: relative;
                         left: 0;
-                        line-height: 30px;
+                        line-height: 1.875rem;
                         .fa {
-                            left: 5px;
-                            top: 5px;
+                            left: 0.3125rem;
+                            top: 0.3125rem;
                         }
                         input {
                             width: 100%;
                             box-sizing: border-box;
                             display: block;
-                            line-height: 30px;
+                            line-height: 1.875rem;
                         }
                         .search-tip {
                             position: static;
                         }
                     }
                     &.active {
-                        font-size: 20px;
-                        padding-left: 50px;
-                        line-height: 34px;
+                        font-size: 1.25rem;
+                        padding-left: 3.125rem;
+                        line-height: 2.125rem;
                     }
                 }
                 &.hover,
@@ -984,7 +986,7 @@
         }
         .book-body {
             margin-right: 0;
-            padding: 30px 8px;
+            padding: 1.875rem 0.5rem;
             .book-item {
                 margin: 0 -0.5rem;
                 .item-cover {
@@ -1015,9 +1017,9 @@
                     width: 4.375rem;
                 }
             }
-            .info,
+            .book-info,
             .tools {
-                font-size: 12px;
+                font-size: 0.75rem;
             }
             .content {
                 word-wrap: break-word;
@@ -1038,7 +1040,7 @@
         .book-sidebar {
             .book-chapter {
                 position: static;
-                margin-bottom: 30px;
+                margin-bottom: 1.875rem;
                 width: 100%;
                 display: none;
                 li {
@@ -1074,19 +1076,19 @@
                     .content {
                         .report,
                         .comment {
-                            margin-left: 8px;
+                            margin-left: 0.5rem;
                         }
                     }
                     .actions {
                         position: static;
                         width: auto;
                         float: right;
-                        line-height: 20px;
-                        font-size: 16px;
+                        line-height: 1.25rem;
+                        font-size: 1rem;
                     }
                     .time,
                     .floor {
-                        font-size: 12px;
+                        font-size: 0.75rem;
                     }
                 }
             }
@@ -1131,20 +1133,20 @@
                     .book-nav {
                         >li {
                             display: block;
-                            line-height: 30px;
+                            line-height: 1.875rem;
                             &.book-back {
                                 position: static;
-                                font-size: 20px;
+                                font-size: 1.25rem;
                                 font-weight: 700;
                                 text-align: right;
-                                padding-right: 20px;
+                                padding-right: 1.25rem;
                             }
                         }
                     }
                 }
             }
             .book-body {
-                margin-top: 40px;
+                margin-top: 2.5rem;
             }
             .book-sidebar {
                 position: static;
@@ -1160,7 +1162,7 @@
         .form-table {
             .form-group {
                 label {
-                    width: 100px;
+                    width: 6.25rem;
                 }
             }
         }

@@ -81,10 +81,11 @@ $this->set([
     <a class="book-fork" href="https://github.com/zx648383079/PHP-ZoDream">
         <span>Fork Me On Github</span>
     </a>
-    <div class="info">
+    <div class="book-info">
         <?php if(count($languages) > 1):?>
+        
         <div class="language-toggle">
-            <?php foreach($languages as $item):?><?php if($blog->id == $item['id']):?><a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$item['name']?></a><?php else:?><a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$item['name']?></a><?php endif;?><?php endforeach;?>
+            <?php foreach($languages as $item):?><?php if($blog->id == $item['id']):?><a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$item['language']?></a><?php else:?><a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$item['language']?></a><?php endif;?><?php endforeach;?>
         </div>
         <?php endif;?>
         <?php if($blog->user):?>

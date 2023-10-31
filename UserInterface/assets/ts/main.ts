@@ -20,16 +20,18 @@ function postJson(url: string, data: any, callback?: (data: IResponse) => any) {
         callback = data;
         data = {};
     }
-    $.ajaxSetup({
-        beforeSend(jqXHR, settings) {
-            if (settings.type === 'POST') {
-                jqXHR.setRequestHeader("X-CSRFToken", Cookies.get('XSRF-TOKEN'));
-            }
-        },
-    })
+    if (typeof Cookies !== 'undefined') {
+        $.ajaxSetup({
+            beforeSend(jqXHR, settings) {
+                if (settings.type === 'POST') {
+                    jqXHR.setRequestHeader("X-CSRFToken", Cookies.get('XSRF-TOKEN'));
+                }
+            },
+        });
+    }
     $.post(url, data, callback || parseAjax, 'json');
 };
-function ajaxForm(url, data, callback?: (data: IResponse)=>any) {
+function ajaxForm(url: string, data: any, callback?: (data: IResponse)=>any) {
     postJson(url, data, function(data) {
         if (callback) {
             callback(data);

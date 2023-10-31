@@ -1,6 +1,6 @@
 .style-type-1 {
     font: 1.3em "Vollkorn", "Microsoft YaHei", 微软雅黑, 宋体;
-    color: #333;
+    color: var(--#{$prefix}-body-text);
     line-height: 1.4;
     text-align: justify;
 
@@ -80,51 +80,39 @@
         margin: 2em 0;
         border: 1px solid #ddd;
     }
-    h1 {
-        margin-top: 0;
+    h1,
+    h2,
+    h3 {
         font-weight: normal;
-        font-size: 2.5rem;
         font-weight: normal;
-        color: #111;
+        color: var(--#{$prefix}-body-text);
         line-height: 1.2;
         margin: 1em 0 0.6em;
-        border-bottom: 2px solid rgb(248,57,41);
+        border-bottom: 1px solid var(--#{$prefix}-primary);
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+    h1 {
+        margin-top: 0;
+        font-size: 2.5rem;
+        border-bottom-width: 2px;
         a {
-            color: #333;
+            color: var(--#{$prefix}-body-text);
             text-decoration: none;
             &:hover {
-                color: #333;
+                color: var(--#{$prefix}-body-text);
                 text-decoration: none;
             }
         }
-        &:first-child {
-            margin-top: 0;
-        }
     }
     h2 {
-        font-weight: normal;
         font-size: 2rem;
-        font-weight: normal;
-        color: #111;
-        line-height: 1.2;
-        margin: 1em 0 0.6em;
-        border-bottom: 1px solid rgb(248,57,41);
-        &:first-child {
-            margin-top: 0;
-        }
     }
     h3 {
-        font-weight: normal;
         margin-top: 3em;
         font-size: 1.5rem;
-        font-weight: normal;
-        color: #111;
-        line-height: 1.2;
-        margin: 1em 0 0.6em;
-        border-bottom: 1px solid rgb(248,57,41);
-        &:first-child {
-            margin-top: 0;
-        }
+        
     }
     p {
         margin-top: 0;
@@ -279,8 +267,7 @@
     }
     code {
         font-family: Menlo, Monaco, Consolas, Droid Sans Mono, Courier New, monospace, Microsoft YaHei, 微软雅黑, 宋体;
-        background: rgba(127, 127, 127, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.18);
+        background: var(--#{$prefix}-body);
         border-radius: 0.25rem;
         font-size: .9em;
     }
@@ -289,8 +276,7 @@
         word-wrap: normal !important;
         overflow-x: auto;
         margin: 0;
-        background: rgba(127, 127, 127, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.18);
+        background: var(--#{$prefix}-body);
         > code {
             white-space: pre !important;
             display: block;
