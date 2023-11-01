@@ -32,10 +32,10 @@ $this->title = '发送记录';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->target?></td>
-                <td><?=$item->template_name?></td>
+                <td class="left"><?=$item->target?></td>
+                <td class="left"><?=$item->template_name?></td>
                 <td><?=$item->status == 4 ? '失败' : '成功'?></td>
-                <td>
+                <td class="left">
                     <?php if($item->status == 4):?>
                     错误信息：
                     <?php endif;?>

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain;
 
+use Domain\Repositories\ExplorerRepository;
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
@@ -62,6 +63,29 @@ class ThemeManager {
         return $this->src;
     }
 
+    public function packFiles(array $maps): array {
+        $items = ExplorerRepository::bakFiles('cms_');
+        foreach ($items as &$item) {
+            $name = $this->splitThemeName($item['name']);
+            $item['description'] = empty($maps[$name]) ?
+                $name : $maps[$name];
+        }
+        unset($item);
+        return $items;
+    }
+
+    private function splitThemeName(string $name): string {
+        $i = strrpos($name, '.');
+        if ($i > 0) {
+            $name = substr($name, 0, $i);
+        }
+        $i = strrpos($name, '_');
+        if ($i === false) {
+            return $name;
+        }
+        return $i > 4 ? substr($name, 4, $i - 4) : substr($name, 0, $i);
+    }
+
     public function pack(): void {
         set_time_limit(0);
         $site = CMSRepository::site();
@@ -74,11 +98,10 @@ class ThemeManager {
         if (!$themeRoot->exist()) {
             throw new \Exception('theme folder is not found');
         }
-        $fileName = sprintf('%s_%d.zip', $theme, time());
+        $fileName = sprintf('cms_%s_%d.zip', $theme, time());
         $file = $themeRoot->file('theme.json');
         if (!$file->exist()) {
             $data = [
-                'name' => $theme,
                 'description' => '默认主题',
                 'author' => 'zodream',
                 'cover' => 'assets/images/screenshot.png',
@@ -87,6 +110,7 @@ class ThemeManager {
             $data = Json::decode($file->read());
             unset($data['script']);
         }
+        $data['name'] = $theme;
         $scene = CMSRepository::scene();
         $data['script'] = array_merge([
             [
@@ -97,7 +121,7 @@ class ThemeManager {
         ], $this->packOption($site), $this->packModel($scene, $siteId),
             $this->packChannel(), $this->packContent($scene, $siteId));
 
-        $zip = ZipStream::create(app_path('data/sql/'.$fileName));
+        $zip = ZipStream::create(ExplorerRepository::bakPath($fileName));
         $themeRoot->map(function ($file) use ($zip) {
                 if ($file instanceof Directory) {
                     $zip->addDirectory($file->getName(), $file);
@@ -237,25 +261,42 @@ class ThemeManager {
         return $data;
     }
 
-    public function unpack(): void {
-        $zip = new ZipStream($this->src->file('theme.zip'));
-        $zip->extractTo($this->src);
-        $this->apply('theme');
+    public function unpack(string $fileName): void {
+        $file = ExplorerRepository::bakPath($fileName);
+        if (!$file->exist()) {
+            throw new \Exception('备份不存在');
+        }
+        $zip = new ZipStream($file);
+        $res = $zip->readFile('theme.json');
+        $zip->close();
+        if (empty($res)) {
+            throw new \Exception('读取失败');
+        }
+        $data = Json::decode($res);
+        if (empty($data)) {
+            throw new \Exception('读取失败');
+        }
+        $this->applyTheme($data, static::themeRootFolder()->directory($data['name']));
     }
 
-    public function apply(string $theme = ''): void {
-        if (!empty($theme)) {
-            $this->src = $this->src->directory($theme);
-        }
-        $file = $this->src->file('theme.json');
+    public function apply(string $theme): void {
+        $root = static::themeRootFolder()->directory($theme);
+        $file = $root->file('theme.json');
         if (!$file->exist()) {
             return;
         }
+        $this->applyTheme(Json::decode($file->read()), $root);
+    }
+
+    protected function applyTheme(array $themeOption, Directory $themeRoot): void {
+        if (empty($themeOption) || !$themeRoot->exist()) {
+            return;
+        }
+        $this->src = $themeRoot;
         $this->setCache(GroupModel::pluck('id', 'name'), 'group');
         $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
         $this->setCache(CategoryModel::pluck('id', 'name'), 'channel');
-        $configs = Json::decode($file->read());
-        $this->runScript($configs['script']);
+        $this->runScript($themeOption['script']);
     }
 
     protected function setCache(array $data, string $prefix): void {

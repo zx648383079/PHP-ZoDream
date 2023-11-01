@@ -29,8 +29,8 @@ $this->title = '联动项列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td class="text-left"><?=$item['name']?></td>
-                <td class="text-center"><?=$item['children_count']?></td>
+                <td class="left"><?=$item['name']?></td>
+                <td><?=$item['children_count']?></td>
                 <td>
                     <div class="btn-group toggle-icon-text">
                         <a class="btn btn-info" href="<?=$this->url('./@admin/linkage/data', ['id' => $model->id, 'parent_id' => $item->id])?>" title="管理下一级子项列表">

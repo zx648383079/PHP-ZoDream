@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Module\WeChat\Domain\Model\MediaTemplateModel;
+use Module\WeChat\Domain\Model\EditorTemplateModel;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑图文';
@@ -28,7 +28,7 @@ $this->registerJs($js);
     <div class="editor-box">
         <div class="editor-template-box">
             <ul class="template-menu">
-                <?php foreach(MediaTemplateModel::$type_list as $key => $item):?>
+                <?php foreach(EditorTemplateModel::$type_list as $key => $item):?>
                     <li data-url="<?=$this->url('./@admin/template', ['type' => $key])?>"><?=$item?></li>
                 <?php endforeach;?>
             </ul>

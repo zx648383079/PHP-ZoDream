@@ -39,7 +39,7 @@
 }
 
 .panel-container {
-    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    box-shadow: 0 0 1px var(--#{$prefix}-shadow), 0 1px 3px var(--#{$prefix}-shadow);
     margin-bottom: 1rem;
     margin-top: 1rem;
     background-color: var(--#{$prefix}-panel);

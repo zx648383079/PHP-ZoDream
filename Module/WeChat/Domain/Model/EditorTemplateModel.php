@@ -14,7 +14,7 @@ use Domain\Model\Model;
  */
 class EditorTemplateModel extends Model {
 
-    public static $type_list = [
+    public static array $type_list = [
         '标题样式',
         '正文样式',
         '图文样式',

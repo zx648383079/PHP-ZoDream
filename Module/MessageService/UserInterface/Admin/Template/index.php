@@ -42,10 +42,10 @@ $this->title = '模板管理';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td><?=$item->title?></td>
+                <td class="left"><?=$item->name?></td>
+                <td class="left"><?=$item->title?></td>
                 <td><?=$item->type > MessageProtocol::TYPE_TEXT ? 'HTML' : 'TEXT'?></td>
-                <td><?=$item->target_no?></td>
+                <td class="left"><?=$item->target_no?></td>
                 <td>
                     <div class="btn-group toggle-icon-text">
                         <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/template/edit', ['id' => $item['id']])?>"  title="编辑详细信息">

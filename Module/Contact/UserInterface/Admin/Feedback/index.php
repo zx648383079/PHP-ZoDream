@@ -22,11 +22,11 @@ $this->title = '留言反馈列表';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td>
+                <td class="left"><?=$item->name?></td>
+                <td class="right">
                     <?=$item->email?>
                 </td>
-                <td>
+                <td class="right">
                     <?=$item->phone?>
                 </td>
                 <td>

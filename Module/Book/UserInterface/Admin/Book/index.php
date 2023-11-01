@@ -4,6 +4,8 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '小说列表';
 ?>
+
+<div class="panel-container">
    <div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
@@ -12,7 +14,7 @@ $this->title = '小说列表';
             </div>
             <div class="input-group">
                 <label>分类</label>
-                <select name="cat_id">
+                <select name="cat_id" class="form-control">
                     <option value="">请选择</option>
                     <?php foreach($cat_list as $item):?>
                     <option value="<?=$item->id?>" <?=$cat_id == $item->id ? 'selected' : ''?>><?=$item->real_name?></option>
@@ -21,7 +23,7 @@ $this->title = '小说列表';
             </div>
             <div class="input-group">
                 <label>作者</label>
-                <select name="author_id">
+                <select name="author_id" class="form-control">
                     <option value="">请选择</option>
                     <?php foreach($author_list as $item):?>
                     <option value="<?=$item->id?>" <?=$author_id == $item->id ? 'selected' : ''?>><?=$item->name?></option>
@@ -30,7 +32,7 @@ $this->title = '小说列表';
             </div>
             <div class="input-group">
                 <label>分级</label>
-                <select name="classify">
+                <select name="classify" class="form-control">
                     <?php foreach([
                                       '无分级',
                                       '成人级',
@@ -41,11 +43,13 @@ $this->title = '小说列表';
             </div>
             <button type="submit" class="btn btn-default">搜索</button>
         </form>
-       <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/book/create')?>">新增小说</a>
-       <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./@admin/book/refresh')?>">整理小说</a>
+       <div class="btn-group pull-right">
+        <a class="btn btn-success" href="<?=$this->url('./@admin/book/create')?>">新增小说</a>
+        <a class="btn btn-danger" data-type="ajax" href="<?=$this->url('./@admin/book/refresh')?>">整理小说</a>
+       </div>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -85,9 +89,9 @@ $this->title = '小说列表';
                     <?=$item->format_size?>
                 </td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book/chapter', ['book' => $item->id])?>">章节</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book/edit', ['id' => $item->id])?>">编辑</a>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/book/chapter', ['book' => $item->id])?>">章节</a>
+                        <a class="btn btn-info" href="<?=$this->url('./@admin/book/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/book/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
@@ -95,6 +99,12 @@ $this->title = '小说列表';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($model_list->isEmpty()):?>
+        <div class="page-empty-tip">
+            空空如也~~
+        </div>
+    <?php endif;?>
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
+</div>

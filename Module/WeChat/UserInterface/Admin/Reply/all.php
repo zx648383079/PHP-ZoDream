@@ -22,6 +22,8 @@ $this->title = '群发消息';
     <?php $this->extend('../layouts/editor', [
             'model' => new ReplyModel(),
     ]); ?>
-    <button type="submit" class="btn btn-success">确认发送</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消发送</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认发送</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消发送</a>
+    </div>
 <?= Form::close() ?>

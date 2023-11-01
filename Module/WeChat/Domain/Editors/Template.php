@@ -16,13 +16,13 @@ class Template implements InputInterface {
         return <<<HTML
 <div class="input-group">
     <label for="template_id">模板ID</label>
-    <input type="text" id="template_id" name="editor[template_id]" value="{$editor['template_id']}" placeholder="示例：模板ID" size="100">
+    <input type="text" id="template_id" class="form-control" name="editor[template_id]" value="{$editor['template_id']}" placeholder="示例：模板ID" size="100">
 </div>
 <div class="input-group">
     <label for="template_id">链接</label>
-    <input type="text" id="template_url" name="editor[template_url]" value="{$editor['template_url']}" placeholder="" size="100">
+    <input type="text" id="template_url" class="form-control" name="editor[template_url]" value="{$editor['template_url']}" placeholder="" size="100">
 </div>
-<textarea name="editor[template_data]" placeholder="模板参数：key=value 换行">{$editor['template_data']}</textarea>
+<textarea name="editor[template_data]" class="form-control" placeholder="模板参数：key=value 换行">{$editor['template_data']}</textarea>
 <div class="template-preview"></div>
 HTML;
     }

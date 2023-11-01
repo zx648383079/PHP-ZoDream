@@ -5,12 +5,68 @@ namespace Domain\Repositories;
 use Domain\Model\SearchModel;
 use Domain\Providers\StorageProvider;
 use Zodream\Database\DB;
+use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Contracts\Http\Output;
 
 final class ExplorerRepository {
+
+    /**
+     * 备份的文件夹
+     * @return Directory|File
+     * @throws \Exception
+     */
+    public static function bakPath(string $fileName = ''): Directory|File {
+        $base = 'data/bak';
+        if (empty($fileName)) {
+            return app_path()->directory($base);
+        }
+        return app_path(sprintf('%s/%s', $base, $fileName));
+    }
+
+    /**
+     * 获取备份的文件
+     * @param string $prefix
+     * @return array{name: string, size: int, created_at: int}[]
+     * @throws \Exception
+     */
+    public static function bakFiles(string $prefix): array {
+        $root = self::bakPath();
+        if (!$root->exist()) {
+            return [];
+        }
+        $items = [];
+        $root->map(function ($file) use ($prefix, &$items) {
+            if ($file instanceof File && str_starts_with($file->getName(), $prefix)) {
+                $items[] = [
+                    'name' => $file->getName(),
+                    'size' => $file->size(),
+                    'created_at' => $file->createTime(),
+                ];
+            }
+        });
+        return $items;
+    }
+
+    /**
+     * 删除一些备份文件
+     * @param string $prefix
+     * @return void
+     * @throws \Exception
+     */
+    public static function removeBakFiles(string $prefix): void {
+        $root = self::bakPath();
+        if (!$root->exist()) {
+            return;
+        }
+        $root->map(function ($file) use ($prefix) {
+            if ($file instanceof File && str_starts_with($file->getName(), $prefix)) {
+                $file->delete();
+            }
+        });
+    }
 
     protected static function storage(int|string $tag): StorageProvider|null {
         $i = is_numeric($tag) ? intval($tag) : (ord(strtolower($tag)) - 96);

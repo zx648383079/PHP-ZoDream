@@ -1,5 +1,3 @@
-/// <reference path="MediumEditor.d.ts/>
-
 function bindEditorInput(baseUri: string) {
     let box = $('.editor-input-box').on('change', 'select[name="type"]', function() {
         $.get(window.location.href, {
@@ -65,14 +63,8 @@ function bindEditorInput(baseUri: string) {
 }
 
 function bindEditor(tag: string) {
-    UE.delEditor('container');
-    let editor = UE.getEditor('container', {
-        scaleEnabled: true,
-        toolbars: [
-            ['fullscreen', 'source', 'undo', 'redo', 'bold', 'italic', 'underline', 'customstyle', 'link','simpleupload', 'insertvideo']
-        ],
-    }),
-        tplURI: string,
+    const editor = $('#container').editor();
+    let tplURI: string,
         tplPage = 1,
         tplBox = $(".template-box .templdate-list"),
         loadTpl = function() {
@@ -92,7 +84,7 @@ function bindEditor(tag: string) {
         loadTpl();
     }).eq(0).trigger('click');
     tplBox.on('click', '.rich_media_content', function() {
-        editor.execCommand('insertHtml', $(this).html());
+        editor.insert($(this).html());
     });
 }
 
@@ -155,14 +147,14 @@ function bindEmulate(wid: number) {
         }
         $this.toggleClass('active');
     }).on('keydown', '.input-box textarea', function(e) {
-        if (e.keyCode == 13) {
+        if (e.code == 'Enter') {
             sendMsg(this.value.trim());
             this.value = '';
             e.preventDefault();
         }
     });
 
-    $(window).resize(resize);
+    $(window).on('resize', resize);
     resize();
 }
 

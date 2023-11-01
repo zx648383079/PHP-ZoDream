@@ -22,12 +22,12 @@ $this->title = '友情链接申请列表';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$this->text($item->name)?></td>
-                <td>
+                <td class="left"><?=$this->text($item->name)?></td>
+                <td class="left">
                     <code><?=$item->url?></code>
                     <a href="<?=$item->url?>" target="_blank" rel="noopener noreferrer" class="fa fa-globe"></a>
                 </td>
-                <td class="auto-hide">
+                <td class="auto-hide left">
                     <?=$this->text($item->brief)?>
                 </td>
                 <td>

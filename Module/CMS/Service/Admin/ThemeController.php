@@ -10,15 +10,17 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 class ThemeController extends Controller {
     public function indexAction() {
         $current = CMSRepository::theme();
-        $themes = (new ThemeManager)->loadThemes();
-        foreach ($themes as $key => $item) {
+        $provider = new ThemeManager;
+        $themes = $provider->loadThemes();
+        foreach ($themes as $item) {
             if ($item['name'] === $current) {
                 $current = $item;
                 //unset($themes[$key]);
                 break;
             }
         }
-        return $this->show(compact('themes', 'current'));
+        $bakItems = $provider->packFiles(array_column($themes, 'description', 'name'));
+        return $this->show(compact('themes', 'current', 'bakItems'));
     }
 
     public function marketAction() {
@@ -36,13 +38,22 @@ class ThemeController extends Controller {
         ]);
     }
 
-    public function backAction() {
+    public function bakAction() {
         try {
             (new ThemeManager())->pack();
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData(true, '已备份到 data/sql 文件夹下');
+        return $this->renderData(true, '已备份到 data/bak 文件夹下');
+    }
+
+    public function bakRestoreAction(string $file) {
+        try {
+            (new ThemeManager())->unpack($file);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData(true, '回滚成功');
     }
 
     public function installAction() {

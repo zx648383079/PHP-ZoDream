@@ -22,7 +22,7 @@
     font-weight: 400;
     line-height: $inputLineHeight;
     appearance: none;
-    border-radius: $radius;
+    border-radius: $formRadius;
     border-width: 1px;
     border-color: var(--#{$prefix}-input-border);
     background-color: var(--#{$prefix}-input);

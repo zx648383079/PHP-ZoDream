@@ -42,7 +42,7 @@ class SearchModel {
     public static function search(SqlBuilder $query, string|array $columns, bool $saveLog = true,
                                   string $key = 'keywords', string $value = '') {
         $columns = (array)$columns;
-        $wordItems = static::splitWord(empty($key) ? $value : request()->get($key), ['%' => '']);
+        $wordItems = static::splitWord(empty($key) ? $value : (string)request()->get($key), ['%' => '']);
         unset($keywords);
         if (empty($wordItems) || empty($columns)) {
             return $query;

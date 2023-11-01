@@ -1,11 +1,7 @@
-
-
-table {
-    .text-left {
-        text-align: left;
-    }
-    .text-right {
-        text-align: right;
+.flex-panel {
+    display: flex;
+    .bak-panel {
+        flex: 1;
     }
 }
 

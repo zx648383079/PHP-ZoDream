@@ -36,8 +36,8 @@ $this->title = '用户列表';
         <?php foreach($user_list as $item):?>
             <tr>
                 <td><?=$item['id']?></td>
-                <td><?=$this->text($item['name'])?></td>
-                <td class="auto-hide"><?=$this->text($item['email'])?></td>
+                <td class="left"><?=$this->text($item['name'])?></td>
+                <td class="left auto-hide"><?=$this->text($item['email'])?></td>
                 <td class="auto-hide"><?=$item['sex_label']?></td>
                 <td><?=$item['money']?></td>
                 <td><?=$item['status']?></td>

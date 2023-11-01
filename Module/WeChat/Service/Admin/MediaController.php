@@ -14,7 +14,7 @@ class MediaController extends Controller {
     }
 
     public function indexAction(string $keywords = '', string $type = '') {
-        $model_list = MediaRepository::getList($keywords, $type);
+        $model_list = MediaRepository::getList($this->weChatId(), $keywords, $type);
         if (request()->isAjax() && !request()->isPjax()) {
             return $this->renderData($model_list);
         }

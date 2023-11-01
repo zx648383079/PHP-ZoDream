@@ -11,7 +11,8 @@ class Media implements InputInterface {
         $mediaId = intval($model->getAttributeSource('content'));
         $preview = $mediaId > 0 ? MediaModel::where('id', $mediaId)->value('title') : '<img src="/assets/images/upload.png" alt="" >';
         $mediaType = Html::select(MediaModel::$types, null, [
-            'id' => 'media_type'
+            'id' => 'media_type',
+            'class' => 'form-control'
         ]);
         return <<<HTML
 <div class="row media-box">
@@ -23,7 +24,7 @@ class Media implements InputInterface {
     <div class="col-xs-6">
         <div class="input-group inline-input-group">
             {$mediaType}
-            <input type="text" placeholder="搜索媒体素材" size="20">
+            <input type="text" class="form-control" placeholder="搜索媒体素材" size="20">
         </div>
         <div class="media-grid">
             <ul>

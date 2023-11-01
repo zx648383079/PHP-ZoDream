@@ -1,3 +1,4 @@
+@import 'theme';
 .page-action {
     text-align: right;
     a {
@@ -58,15 +59,15 @@ table {
     }
 }
 
-.tree {
+.tree-box {
     .tree-item {
         position: relative;
-        line-height: 30px;
+        line-height: 1.875rem;
         .tree-action {
             float: right;
         }
         .tree-children {
-            padding-left: 25px;
+            padding-left: 1.5625rem;
             .tree-item {
 
             }
@@ -82,17 +83,22 @@ table {
         .upload-box {
             text-align: center;
         }
-        .input-group {
-            input {
-                width: 100%;
+        .inline-input-group {
+            .form-control {
+                border-radius: 0;
+                flex: 1;
             }
-            &.inline-input-group {
-                select {
-                    width: 20%;
-                }
-                input {
-                    width: 70%;
-                }
+            :first-child {
+                border-top-left-radius: $formRadius;
+                border-bottom-left-radius: $formRadius;
+            }
+            :last-child {
+                border-top-right-radius: $formRadius;
+                border-bottom-right-radius: $formRadius;
+            }
+            select {
+                width: 4rem;
+                flex: none !important;
             }
         }
         .media-grid {

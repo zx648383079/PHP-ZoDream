@@ -53,7 +53,7 @@ $this->title = sprintf('“%s” 的内容列表', empty($cat) ? $model['name'] 
                     <i class="checkbox"></i>
                 </td>
                 <td><?=$item['id']?></td>
-                <td class="text-left">
+                <td class="left">
                     <a href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"><?=$this->text($item['title'])?></a>
                 </td>
                 <td>

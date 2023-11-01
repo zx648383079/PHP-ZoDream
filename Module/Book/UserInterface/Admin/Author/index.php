@@ -2,8 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream';
+$this->title = '作者管理';
 ?>
+<div class="panel-container">
    <div class="page-search-bar">
         <form class="form-horizontal" role="form">
             <div class="input-group">
@@ -15,7 +16,7 @@ $this->title = 'ZoDream';
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/author/create')?>">新增作者</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -36,9 +37,9 @@ $this->title = 'ZoDream';
                     
                 </td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/book', ['author_id' => $item->id])?>" target="_blank">查看</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/author/edit', ['id' => $item->id])?>">编辑</a>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/book', ['author_id' => $item->id])?>" target="_blank">查看</a>
+                        <a class="btn btn-info" href="<?=$this->url('./@admin/author/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/author/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
@@ -46,6 +47,12 @@ $this->title = 'ZoDream';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($model_list->isEmpty()):?>
+        <div class="page-empty-tip">
+            空空如也~~
+        </div>
+    <?php endif;?>
     <div align="center">
         <?=$model_list->getLink()?>
     </div>
+</div>

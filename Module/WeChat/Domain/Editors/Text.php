@@ -8,7 +8,8 @@ use Zodream\Infrastructure\Support\Html;
 class Text implements InputInterface {
     public function form(EditorModel $model) {
         return Html::tag('textarea', $model->getAttributeSource('content'), [
-            'name' => 'content'
+            'name' => 'content',
+            'class' => 'form-control'
         ]);
     }
 

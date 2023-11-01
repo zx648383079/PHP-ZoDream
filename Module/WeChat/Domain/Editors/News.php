@@ -23,7 +23,7 @@ class News implements InputInterface {
     </div>
     <div class="col-xs-6">
         <div class="input-group">
-            <input type="text" placeholder="搜索图文素材" size="20">
+            <input type="text" class="form-control" placeholder="搜索图文素材" size="20">
         </div>
         <div class="media-list">
             <ul>

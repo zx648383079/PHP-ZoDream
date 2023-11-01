@@ -12,35 +12,45 @@ $this->title = '微信模板消息模板';
     </ul>
     <span class="tooltip-toggle"></span>
 </div>
-<div class="page-action">
-    <a data-type="ajax" href="<?=$this->url('./@admin/reply/refresh_template')?>">同步</a>
+<div class="panel-container">
+    <div class="page-search-bar">
+        <a class="btn btn-primary pull-right" data-type="ajax" href="<?=$this->url('./@admin/reply/refresh_template')?>">同步</a>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>内容</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($model_list as $item):?>
+            <tr>
+                    <td><?=$item->template_id?></td>
+                    <td><?=$item->title?></td>
+                    <td>
+                        <div class="rich_media_content" style="width: 320px">
+                            <?=$item->content?>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="javascript:;" data-text="<?=$item->example?>" class="btn btn-info">预览</a>
+                            <a data-type="del" href="<?=$this->url('./@admin/reply/delete_template', ['id' => $item->id])?>" class="btn btn-danger">删除</a>
+                        </div>
+                    </td>
+            </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+    <?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
+    <div align="center">
+        <?=$model_list->getLink()?>
+    </div>
 </div>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>内容</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($model_list as $item):?>
-           <tr>
-                <td><?=$item->template_id?></td>
-                <td><?=$item->title?></td>
-                <td>
-                    <div class="rich_media_content" style="width: 320px">
-                        <?=$item->content?>
-                    </div>
-                </td>
-                <td>
-                    <a href="javascript" data-text="<?=$item->example?>">预览</a>
-                    <a data-type="del" href="<?=$this->url('./@admin/reply/delete_template', ['id' => $item->id])?>">删除</a>
-                </td>
-           </tr>
-        <?php endforeach;?>
-    </tbody>
-</table>
-
-<?=$model_list->getLink()?>

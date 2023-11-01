@@ -10,7 +10,7 @@ class LogRepository {
         AccountRepository::isSelf($wid);
         return MessageHistoryModel::with('to_user', 'from_user')->where('wid', $wid)
             ->when($mark !== false, function ($query) use ($mark) {
-                $query->where('mark', intval($mark));
+                $query->where('is_mark', intval($mark));
             })->orderBy('id', 'desc')
             ->page();
     }
@@ -21,7 +21,7 @@ class LogRepository {
                 $query->where('wid', $wid);
             })
             ->when($mark !== false, function ($query) use ($mark) {
-                $query->where('mark', intval($mark));
+                $query->where('is_mark', intval($mark));
             })->orderBy('id', 'desc')
             ->page();
     }

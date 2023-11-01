@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
-use Module\WeChat\Domain\Model\MediaTemplateModel;
+use Module\WeChat\Domain\Model\EditorTemplateModel;
 use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑图文模板';
@@ -16,10 +16,12 @@ $this->title = '编辑图文模板';
 
 <?=Form::open($model, './@admin/template/save')?>
     <?=Form::text('name', true)?>
-    <?=Form::select('type', MediaTemplateModel::$type_list)?>
+    <?=Form::select('type', EditorTemplateModel::$type_list)?>
     <?=Form::select('category', ['不限'])?>
     <?=Form::textarea('content', true)?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

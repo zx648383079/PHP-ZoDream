@@ -1,6 +1,5 @@
 $inputLineHeight: 1.5;
 $inputPadding: .375rem .75rem;
-$radius: .375rem;
 
 @import 'button';
 @import 'input';
@@ -282,8 +281,8 @@ i {
     .form-control {
         border-radius: 0;
         &:first-of-type {
-            border-top-left-radius: $radius;
-            border-bottom-left-radius: $radius;
+            border-top-left-radius: $formRadius;
+            border-bottom-left-radius: $formRadius;
         }
     }
     .btn {
@@ -294,8 +293,8 @@ i {
             font-weight: bold;
         }
         &:last-of-type {
-            border-top-right-radius: $radius;
-            border-bottom-right-radius: $radius;
+            border-top-right-radius: $formRadius;
+            border-bottom-right-radius: $formRadius;
         }
     }
     &.file-uploading {
@@ -338,24 +337,30 @@ i {
         flex: 1 1 auto;
         width: 1%;
         margin-bottom: 0;
-        border-radius: .25rem 0 0 .25rem;
+        border-top-left-radius: $formRadius;
+        border-bottom-left-radius: $formRadius;
     }
     .btn:last-child {
         display: flex;
-        border-radius: 0 .25rem .25rem 0;
+        border-top-right-radius: $formRadius;
+        border-bottom-right-radius: $formRadius;
     }
 }
 
 .flat-group {
-    .form-control {
+    .form-control
+    .btn {
+        border-radius: 0;
         width: auto;
         display: inline-block;
     }
     :first-child {
-        border-radius: .25rem 0 0 .25rem;
+        border-top-left-radius: $formRadius;
+        border-bottom-left-radius: $formRadius;
     }
     :last-child {
-        border-radius: 0 .25rem .25rem 0; 
+        border-top-right-radius: $formRadius;
+        border-bottom-right-radius: $formRadius;
     }
 }
 

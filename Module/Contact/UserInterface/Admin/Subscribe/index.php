@@ -20,7 +20,7 @@ $this->title = '订阅列表';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->email?></td>
+                <td class="left"><?=$item->email?></td>
                 <td>
                     <?php if($item->status < 1):?>
                     待审核

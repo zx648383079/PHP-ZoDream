@@ -22,8 +22,8 @@ $this->title = '模块字段列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td><?=$item->name?></td>
-                <td>
+                <td class="left"><?=$item->name?></td>
+                <td class="left">
                     <?=$item->field?>
                 </td>
                 <td>

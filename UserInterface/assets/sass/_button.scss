@@ -34,7 +34,7 @@
     line-height: $inputLineHeight;
     margin: 0 0.5rem;
     vertical-align:middle;
-    border-radius: $radius;
+    border-radius: $formRadius;
     &.btn-full {
         width: 100%;
         margin: 0;
@@ -63,10 +63,12 @@
         border-radius: 0;
         margin: 0;
         &:first-child {
-            border-radius: $radius 0 0 $radius;
+            border-top-left-radius: $formRadius;
+            border-bottom-left-radius: $formRadius;
         }
         &:last-child {
-            border-radius: 0 $radius $radius 0;
+            border-top-right-radius: $formRadius;
+            border-bottom-right-radius: $formRadius;
         }
     }
 }

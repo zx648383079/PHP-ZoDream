@@ -29,7 +29,7 @@ $this->title = sprintf('“%s” 的表单列表', $model['name']);
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item['id']?></td>
-                <td>
+                <td class="left">
                     <?=$item['title']?>
                 </td>
                 <td>

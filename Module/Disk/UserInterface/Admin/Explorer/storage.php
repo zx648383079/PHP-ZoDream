@@ -45,7 +45,7 @@ $tagItems = ['全部', '公共', '内部'];
             <tr>
                 <td><?=$item['id']?></td>
                 <td class="auto-hide">[<?=$tagItems[$item['folder']]?>]</td>
-                <td title="<?=$item['path']?>"><?=$item['name']?></td>
+                <td class="left" title="<?=$item['path']?>"><?=$item['name']?></td>
                 <td><?=Disk::size(intval($item['size']))?></td>
                 <td title="<?=$item['path']?>"><?=$item['md5']?></td>
                 <td><?=$this->ago($item['created_at'])?></td>
