@@ -107,7 +107,7 @@ class ThemeManager {
                     $zip->addFile($file->getName(), $file);
                 }
             });
-        $zip->addFile('theme.json', Json::encode($data));
+        $zip->addString('theme.json', Json::encode($data));
         $zip->comment($data['description'])->close();
     }
 
@@ -128,14 +128,14 @@ class ThemeManager {
         $data = [];
         $model_list = ModelModel::query()->asArray()->get();
         foreach ($model_list as $item) {
-            if (!$scene->setModel($item, $siteId)->initializedModel()) {
-                continue;
-            }
             $this->setCache([
                 $item['id'] => '@model:'.$item['table']
             ], 'model');
         }
         foreach ($model_list as $item) {
+            if (!$scene->setModel($item, $siteId)->initializedModel()) {
+                continue;
+            }
             $item['action'] = 'model';
             $item['setting'] = Json::decode($item['setting']);
             $item['fields'] = $this->packFields($item['id']);

@@ -42,9 +42,7 @@ class ThemeController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData([
-            'url' => $this->getUrl('theme')
-        ]);
+        return $this->renderData(true, '已备份到 data/sql 文件夹下');
     }
 
     public function installAction() {
