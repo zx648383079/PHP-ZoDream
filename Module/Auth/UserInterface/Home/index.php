@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Form;
 use Module\Auth\Domain\Repositories\AuthRepository;
 /** @var $this View */
 $passkeyUri = $this->url('./', false);
@@ -65,6 +66,8 @@ $this->registerJs($js);
                 </div>
                 <button type="button" class="btn">返回登录</button>
             </div>
+
+            <?= Form::token() ?>
         </form>
         <?php if(AuthRepository::openOAuth()):?>
         <div class="login-oauth-box">

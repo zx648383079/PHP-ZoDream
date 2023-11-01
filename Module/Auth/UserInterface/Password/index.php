@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Form;
 /** @var $this View */
 $this->title = '找回密码';
 ?>
@@ -22,6 +23,7 @@ $this->title = '找回密码';
 
             <button type="submit" class="btn btn-full">确定修改</button>
             <input type="hidden" name="code" value="<?=$code?>">
+            <?= Form::token() ?>
         </form>
         
     </div>

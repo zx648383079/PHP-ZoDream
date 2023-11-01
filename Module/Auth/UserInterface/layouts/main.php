@@ -6,15 +6,18 @@ use Module\SEO\Domain\Option;
 
 $icp_beian = Option::value('site_icp_beian');
 
-$this->registerCssFile('@font-awesome.min.css')
-    ->registerCssFile('@dialog.css')
-    ->registerCssFile('@zodream.css')
-    ->registerCssFile('@auth.css')
-    ->registerJsFile('@jquery.min.js')
-    ->registerJsFile('@jquery.dialog.min.js')
-    ->registerJsFile('@main.min.js')
-    ->registerJsFile('@base64.min.js')
-    ->registerJsFile('@auth.min.js')
+$this->registerCssFile([
+    '@font-awesome.min.css',
+    '@dialog.css',
+    '@zodream.css',
+    '@auth.css'])
+    ->registerJsFile([
+        '@js.cookie.min.js',
+        '@jquery.min.js',
+        '@jquery.dialog.min.js',
+        '@main.min.js',
+        '@base64.min.js',
+        '@auth.min.js'])
     ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>

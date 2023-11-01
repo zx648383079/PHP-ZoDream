@@ -12,6 +12,7 @@ $this->registerCssFile([
         '@dialog.css',
         '@tool.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@codemirror.js',
         '@css.js',
         '@xml.js',

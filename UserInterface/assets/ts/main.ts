@@ -20,16 +20,33 @@ function postJson(url: string, data: any, callback?: (data: IResponse) => any) {
         callback = data;
         data = {};
     }
-    if (typeof Cookies !== 'undefined') {
-        $.ajaxSetup({
-            beforeSend(jqXHR, settings) {
-                if (settings.type === 'POST') {
-                    jqXHR.setRequestHeader("X-CSRFToken", Cookies.get('XSRF-TOKEN'));
-                }
-            },
-        });
-    }
-    $.post(url, data, callback || parseAjax, 'json');
+    const fn = callback || parseAjax;
+    $.ajax({
+        method: 'POST',
+        url,
+        beforeSend(jqXHR, settings) {
+            if (settings.type !== 'POST' || typeof Cookies === 'undefined') {
+                return;
+            }
+            const token = Cookies.get('XSRF-TOKEN');
+            if (token) {
+                jqXHR.setRequestHeader('X-CSRF-TOKEN', token);
+            }
+        },
+        data,
+        dataType: 'json',
+        success: fn,
+        error(err) {
+            if (err.responseJSON) {
+                fn(err.responseJSON);
+                return;
+            }
+            fn({
+                code: err.status,
+                message: err.statusText
+            } as any);
+        }
+    });
 };
 function ajaxForm(url: string, data: any, callback?: (data: IResponse)=>any) {
     postJson(url, data, function(data) {

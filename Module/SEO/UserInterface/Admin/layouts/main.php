@@ -11,6 +11,7 @@ $this->registerCssFile([
     '@zodream-admin.css',
     '@seo.css'
 ])->registerJsFile([
+    '@js.cookie.min.js',
     '@jquery.min.js',
     '@jquery.pjax.min.js',
     '@jquery.dialog.min.js',

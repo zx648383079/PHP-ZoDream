@@ -11,6 +11,7 @@ $this->registerCssFile([
         '@datetimer.css',
         '@finance.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@echarts.min.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',

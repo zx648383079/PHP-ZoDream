@@ -24,16 +24,16 @@ $(".partner-floor .slider").slider({
     <div class="slider" data-auto="true" data-haspoint="false">
         <div class="slider-box">
             <ul>
-                {contents:category=>banner,num=>4}
+                {contents:category=>banner,num=>20}
                 <li><img src="{$content.thumb}" width="100%" alt=""></li>
                 {/contents}
             </ul>
         </div>
         <div class="slider-point">
             <ul>
-                {contents:category=>banner,num=>4}
-                <li><img src="{$content.thumb}" width="100" height="45"></li>
-                {/contents}
+                {for:$_last_contents,$content}
+                <li><img src="{$content.thumb}"></li>
+                {/for}
             </ul>
         </div>
     </div>

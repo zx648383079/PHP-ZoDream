@@ -8,6 +8,7 @@ $this->registerCssFile([
     '@zodream.css',
     '@wechat.css'
 ])->registerJsFile([
+    '@js.cookie.min.js',
     '@jquery.min.js',
     '@wechat.min.js'
 ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);

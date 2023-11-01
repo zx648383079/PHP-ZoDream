@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Zodream\Html\Form;
 /** @var $this View */
 $this->title = '授权登录';
 ?>
@@ -17,6 +18,7 @@ $this->title = '授权登录';
             <button type="submit" class="btn" name="confirm" value="1">确认登录电脑端</button>
             <button type="submit" class="btn" name="reject" value="1">取消登录</button>
             <input type="hidden" name="token" value="<?=$token?>">
+            <?= Form::token() ?>
         </form>
         
     </div>

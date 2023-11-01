@@ -32,6 +32,7 @@ $this->registerCssFile([
     '@zodream-admin.css',
     '@log.css'
 ])->registerJsFile([
+    '@js.cookie.min.js',
     '@jquery.min.js',
     '@main.min.js',
     '@admin.min.js',

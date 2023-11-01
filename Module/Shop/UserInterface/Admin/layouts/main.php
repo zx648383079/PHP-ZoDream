@@ -14,6 +14,7 @@ $this->registerCssFile([
         '@shop_admin.css',
         '@select2.min.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',

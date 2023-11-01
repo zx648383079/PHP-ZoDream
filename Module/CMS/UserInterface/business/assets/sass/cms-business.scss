@@ -307,6 +307,10 @@ a {
             padding: .3rem 0;
             background-color: rgba($color: #000000, $alpha: .5);
             text-align: center;
+            img {
+                width: 100%;
+                height: 100%;
+            }
             li {
                 width: 6.25rem;
                 height: 2.8125rem;
@@ -1353,22 +1357,21 @@ $dialogHeight: 20rem;
 
 @media (max-width: 48rem) {
     .banner {
-        .slider-box {
-            img {
-                object-fit: cover;
-                width: 100%;
-                height: 100%;
+        .slider {
+            .slider-box {
+                img {
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                }
             }
-        }
-        .slider-point {
-            li {
-                width: 3.75rem;
-                height: 1.6875rem;
-                overflow: hidden;
-                border-radius: 0;
-            }
-            img {
-                height: 1.6875rem;
+            .slider-point {
+                li {
+                    width: 3.75rem;
+                    height: 1.6875rem;
+                    overflow: hidden;
+                    border-radius: 0;
+                }
             }
         }
     }

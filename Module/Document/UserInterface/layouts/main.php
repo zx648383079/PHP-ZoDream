@@ -79,6 +79,7 @@ $this->registerCssFile([
         '@dialog.css',
         '@doc.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@clipboard.min.js',
         '@jquery.dialog.min.js',

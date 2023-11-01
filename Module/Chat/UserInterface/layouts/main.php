@@ -9,6 +9,7 @@ $this->registerCssFile([
         '@dialog.css',
         '@chat.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@jquery.datetimer.min.js',

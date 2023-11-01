@@ -8,6 +8,7 @@ $this->registerCssFile([
     '@zodream.css',
     '@legwork.css'
 ])->registerJsFile([
+    '@js.cookie.min.js',
     '@jquery.min.js',
     '@jquery.dialog.min.js',
     '@jquery.lazyload.min.js',

@@ -10,6 +10,7 @@ $this->registerCssFile([
         '@dialog.css',
         '@disk.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',

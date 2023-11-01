@@ -1,4 +1,5 @@
 <?php
+
 use Zodream\Service\Application;
 
 require_once dirname(__DIR__).'/Service/Bootstrap.php';

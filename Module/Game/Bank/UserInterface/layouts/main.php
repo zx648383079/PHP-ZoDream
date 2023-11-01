@@ -9,6 +9,7 @@ $this->registerCssFile([
         '@dialog.css',
         '@game_bank.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@main.min.js',

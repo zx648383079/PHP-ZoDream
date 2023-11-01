@@ -55,6 +55,7 @@ $this->registerCssFile([
         '@zodream-admin.css',
         '@cms_admin.css'
     ])->registerJsFile([
+        '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
