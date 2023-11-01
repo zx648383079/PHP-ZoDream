@@ -256,6 +256,10 @@ i {
             //     line-height: 30px;
             // }
         }
+        .file-input {
+            display: inline-flex;
+            flex: none;
+        }
         &:after {
             content: "";
             display: table;

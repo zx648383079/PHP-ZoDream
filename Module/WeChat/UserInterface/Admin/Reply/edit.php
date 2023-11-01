@@ -13,12 +13,12 @@ JS;
 $this->registerJs($js, View::JQUERY_READY);
 ?>
 
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>无任何关键词时自动回复</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 
 <?=Form::open($model, './@admin/reply/save')?>

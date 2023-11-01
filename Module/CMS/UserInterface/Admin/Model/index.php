@@ -5,6 +5,16 @@ use Zodream\Template\View;
 $this->title = '模块列表';
 ?>
 
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>模型分为两类：实体、表单</li>
+        <li>实体模型：定义由管理者在后台添加的文章的字段，同时与栏目进行绑定</li>
+        <li>表单模型：定义前台访问者填写的表单字段，可以用于拓展用户注册，同时可以添加表单提交通知管理者邮箱</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
 <div class="panel-container">
     <div class="page-search-bar">
 
@@ -24,8 +34,8 @@ $this->title = '模块列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td><?=$item->name?></td>
-                <td>
+                <td class="left"><?=$item->name?></td>
+                <td class="left">
                     <?=$item->table?>
                 </td>
                 <td>

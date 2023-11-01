@@ -5,12 +5,12 @@ use Zodream\Template\View;
 $this->title = '资源管理';
 ?>
 
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>图文及媒体素材</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <?php if(!$type || $type == 'news'):?>

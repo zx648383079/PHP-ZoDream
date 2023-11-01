@@ -19,7 +19,7 @@ class FormController extends Controller {
             ], 'id desc');
             return $this->show(compact('model_list', 'keywords', 'model'));
         } catch (\Exception $ex) {
-            return $this->redirectWithMessage('./', '此表单不存在于当前站点');
+            return $this->redirectWithMessage($this->getUrl(''), '此表单不存在于当前站点');
         }
     }
 
@@ -46,13 +46,14 @@ class FormController extends Controller {
         $model = ModelModel::find($model_id);
         $scene = CMSRepository::scene()->setModel($model);
         $data = request()->get();
-        if ($id > 0) {
-            $scene->update($id, $data);
-        } else {
-            $scene->insert($data);
-        }
-        if ($scene->hasError()) {
-            return $this->renderFailure($scene->getFirstError());
+        try {
+            if ($id > 0) {
+                $scene->update($id, $data);
+            } else {
+                $scene->insert($data);
+            }
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
         }
         return $this->renderData([
             'url' => $this->getUrl('form', ['id' => $model_id])

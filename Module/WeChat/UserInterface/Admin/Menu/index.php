@@ -4,12 +4,12 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '菜单管理';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>第一级只能添加3个菜单，第二级只能添加五个</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <a data-type="ajax" href="<?=$this->url('./@admin/menu/apply')?>">应用</a>

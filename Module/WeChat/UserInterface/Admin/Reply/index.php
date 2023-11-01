@@ -7,12 +7,12 @@ use Zodream\Template\View;
 $this->title = '消息管理';
 ?>
 
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>关注公众号时自动回复</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <a href="<?=$this->url('./@admin/reply/add')?>">添加</a>

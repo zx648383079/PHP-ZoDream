@@ -30,7 +30,7 @@ class ContentController extends Controller {
         try {
             $model_list = ContentRepository::getList(CMSRepository::siteId(), $cat_id, $keywords, $parent_id, $model_id, $page);
         } catch (\Exception $ex) {
-            return $this->redirectWithMessage('./@admin', $ex->getMessage());
+            return $this->redirectWithMessage($this->getUrl(''), $ex->getMessage());
         }
         return $this->show(compact('model_list', 'cat', 'keywords', 'parent_id', 'model'));
     }

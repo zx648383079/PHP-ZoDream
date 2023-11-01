@@ -132,8 +132,8 @@ $(function() {
             next.toggleClass('tree-level-open', open && nextLevel === level + 1);
             next = next.next('.tree-item');
         }
-    }).on('click', '.page-tip .toggle', function() {
-        $(this).closest('.page-tip').toggleClass('min');
+    }).on('click', '.page-tooltip-bar .tooltip-toggle', function() {
+        $(this).closest('.page-tooltip-bar').toggleClass('tooltip-min');
     }).on('click', '.plus-table tbody .fa-times', function() {
         const $this = $(this);
         const box = $this.closest('.plus-table');

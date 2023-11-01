@@ -15,6 +15,10 @@ a {
     text-decoration: none;
 }
 
+.mt {
+    margin-top: 1rem;
+}
+
 footer,
 header {
     background: var(--#{$prefix}-primary);
@@ -51,13 +55,13 @@ footer {
 
 
 
-.page-tip {
+.page-tooltip-bar {
     border: 1px dashed var(--#{$prefix}-primary);
     padding: 0.625rem;
     border-radius: 0.3125rem;
     background-color: var(--#{$prefix}-panel);
     position: relative;
-    .blue {
+    .tooltip-header {
         color: var(--#{$prefix}-secondary-text);
     }
     ul {
@@ -71,7 +75,7 @@ footer {
             }
         }
     }
-    .toggle {
+    .tooltip-toggle {
         position: absolute;
         right: 0;
         top: 0.625rem;
@@ -86,12 +90,12 @@ footer {
             content: "\f068";
         }
     }
-    &.min {
+    &.tooltip-min {
         width: 12.5rem;
         ul {
             display: none;
         }
-        .toggle {
+        .tooltip-toggle {
             &::before {
                 content: "\f067";
             }

@@ -7,12 +7,12 @@ use Module\MessageService\Domain\Repositories\MessageProtocol;
 $this->title = '模板管理';
 ?>
 
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>一些特殊的必须保留</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 
 <div class="panel-container">

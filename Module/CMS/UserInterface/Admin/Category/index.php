@@ -5,6 +5,15 @@ use Zodream\Template\View;
 $this->title = '栏目管理';
 ?>
 
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>栏目分为三类：有文章的、单个页面、外链</li>
+        <li>分组表示在前台模板中指定位置显示，默认 “nav” 分组指显示在前台导航栏</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
 <div class="panel-container">
     <div class="page-search-bar">
 
@@ -32,7 +41,7 @@ $this->title = '栏目管理';
                     <i class="tree-item-arrow" title="点击展开/隐藏子项"></i>
                 </td>
                 <td><?=$item['id']?></td>
-                <td class="text-left">
+                <td class="left">
                     <?php if($item['level'] > 0):?>
                     <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
                     <?php endif;?>
@@ -40,7 +49,7 @@ $this->title = '栏目管理';
                 </td>
                 <td><?= empty($item['groups']) ? '-' : __($item['groups']) ?></td>
                 <td><?=intval($item['content_count'])?></td>
-                <td class="text-right">
+                <td class="right">
                     <div class="btn-group toggle-icon-text">
                         <?php if($item['type'] < 1):?>
                         <a class="btn btn-primary" href="<?=$this->url('./@admin/content', ['cat_id' => $item['id']])?>" title="管理栏目下文章列表">

@@ -5,12 +5,12 @@ use Module\WeChat\Domain\Model\TemplateModel;
 /** @var $this View */
 $this->title = '微信模板消息模板';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>微信模板消息模板</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <a data-type="ajax" href="<?=$this->url('./@admin/reply/refresh_template')?>">同步</a>

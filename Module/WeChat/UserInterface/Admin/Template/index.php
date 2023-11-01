@@ -5,12 +5,12 @@ use Module\WeChat\Domain\Model\MediaTemplateModel;
 /** @var $this View */
 $this->title = '图文模板管理';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>图文模板管理</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <a href="<?=$this->url('./@admin/template/create')?>">添加</a>

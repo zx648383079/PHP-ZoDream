@@ -4,6 +4,17 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '站点列表';
 ?>
+
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>站点管理，绑定访问站点域名、路径</li>
+        <li>可以更改不同主题，但请注意：更改主题会导致栏目、文章、表单数据清空</li>
+        <li>管理不同站点的栏目、文章、表单，只需点击列表中具体站点“操作 -> 管理”即可，显示“管理中”则表示当前管理的站点</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
 <div class="panel-container">
     <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/site/create')?>">新增站点</a>
@@ -21,15 +32,15 @@ $this->title = '站点列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td class="text-left">
+                <td class="left">
                     <?php if($item->is_default):?>
                        <strong>[默认]</strong>
                     <?php endif;?>
                     <?=$item->title?>
                 </td>
                 <td><?=$item['language']?></td>
-                <td class="text-left">[<?=$item->match_type < 1 ? '域名' : '路径'?>]<?=$item->match_rule ?: '(空)'?></td>
-                <td>
+                <td class="left">[<?=$item->match_type < 1 ? '域名' : '路径'?>]<?=$item->match_rule ?: '(空)'?></td>
+                <td class="right">
                     <?php if(empty($currentSite) || $item->id != $currentSite['id']):?>
                             <a href="<?=$this->url('./@admin/site/change', ['id' => $item->id])?>" data-type="ajax" class="no-jax">管理</a>
                         <?php else:?>

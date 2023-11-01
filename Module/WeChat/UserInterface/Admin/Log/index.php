@@ -3,12 +3,12 @@ defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
 $this->title = '历史记录';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>关注公众号时自动回复</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <table>
     <thead>

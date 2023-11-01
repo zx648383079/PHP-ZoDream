@@ -6,12 +6,12 @@ use Zodream\Html\Dark\Form;
 /** @var $this View */
 $this->title = '编辑图文模板';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>编辑图文模板</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 
 <?=Form::open($model, './@admin/template/save')?>

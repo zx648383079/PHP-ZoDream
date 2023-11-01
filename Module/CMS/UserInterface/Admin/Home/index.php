@@ -6,7 +6,15 @@ use Zodream\Html\Dark\Layout;
 $this->title = $currentSite['title'] ?? 'CMS Admin';
 ?>
 
-<div class="row">
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>请先确认需要管理的站点是否为当前站点，否则请去“站点管理”页面切换</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
+<div class="row mt">
     <div class="col-md-4">
         <div class="column-full-item">
             <?php if(!Layout::isPjax()):?>

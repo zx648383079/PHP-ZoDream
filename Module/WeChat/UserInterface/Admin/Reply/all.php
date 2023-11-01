@@ -9,12 +9,12 @@ use Zodream\Html\Dark\Form;
 $this->title = '群发消息';
 ?>
 
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>群发消息，支持群发所有或但用户</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 
 <?=Form::open('./@admin/reply/send_all')?>

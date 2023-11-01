@@ -4,13 +4,13 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '公众号管理';
 ?>
-<div class="page-tip">
-    <p class="blue">操作提示</p>
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
     <ul>
         <li>公众号管理</li>
         <li>必须先选择公众号，才能管理公众下面的其他内容</li>
     </ul>
-    <span class="toggle"></span>
+    <span class="tooltip-toggle"></span>
 </div>
 <div class="page-action">
     <a href="<?=$this->url('./@admin/manage/create')?>">添加</a>

@@ -5,6 +5,16 @@ use Zodream\Template\View;
 $this->title = '联动菜单列表';
 ?>
 
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>联动菜单的别名可以相同，通过不同语言自动调用</li>
+        <li>语言需跟对应站点的“本地化语言”一样才能正确切换</li>
+        <li>当前列表数据都是后台管理用，具体前台页面显示的内容在 “联动项” 里管理添加</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
 <div class="panel-container">
     <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/linkage/create')?>">新增联动菜单</a>
@@ -21,7 +31,7 @@ $this->title = '联动菜单列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td><?=$item['name']?></td>
+                <td class="left" title="<?=$item['code']?>"><?=$item['name']?></td>
                 <td><?=$item['language']?></td>
                 <td><?=$item['data_count']?></td>
                 <td>
