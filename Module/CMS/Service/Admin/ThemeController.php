@@ -26,14 +26,22 @@ class ThemeController extends Controller {
     }
 
     public function applyAction(string $theme) {
-        (new ThemeManager())->apply($theme);
+        try {
+            (new ThemeManager())->apply($theme);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
         return $this->renderData([
             'url' => $this->getUrl('theme')
         ]);
     }
 
     public function backAction() {
-        (new ThemeManager())->pack();
+        try {
+            (new ThemeManager())->pack();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
         return $this->renderData([
             'url' => $this->getUrl('theme')
         ]);

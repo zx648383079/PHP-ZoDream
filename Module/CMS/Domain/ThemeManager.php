@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain;
 
 use Module\CMS\Domain\Entities\CategoryEntity;
+use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
@@ -12,8 +13,8 @@ use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
+use Module\CMS\Domain\Scene\SceneInterface;
 use Module\Forum\Domain\Model\ForumModel;
-use Module\SEO\Domain\Model\OptionModel;
 use Zodream\Database\DB;
 use Zodream\Database\Relation;
 use Zodream\Disk\Directory;
@@ -62,54 +63,74 @@ class ThemeManager {
     }
 
     public function pack(): void {
-        $this->src = $this->src->directory('default_'.time());
-        $data = [
-            'name' => 'default',
-            'description' => '默认主题',
-            'author' => 'zodream',
-            'cover' => 'assets/images/screenshot.png',
-            'script' => [
-                [
-                    'action' => 'copy',
-                    'src' => 'assets',
-                    'dist' => 'assets'
-                ],
-            ]
-        ];
-        $data[] = $this->packOption();
-        $data['script'] = array_merge($data['script'], $this->packModel(), $this->packChannel(), $this->packContent());
-        $this->src->create();
-        $this->src->addFile('theme.json', Json::encode($data));
-        $zip = ZipStream::create($this->dist->file('theme.zip'));
-        $zip->addDirectory($data['name'], $this->src);
+        set_time_limit(0);
+        $site = CMSRepository::site();
+        $siteId = intval($site['id']);
+        $theme = $site['theme'];
+        if (empty($theme)) {
+            $theme = 'default';
+        }
+        $themeRoot = static::themeRootFolder()->directory($theme);
+        if (!$themeRoot->exist()) {
+            throw new \Exception('theme folder is not found');
+        }
+        $fileName = sprintf('%s_%d.zip', $theme, time());
+        $file = $themeRoot->file('theme.json');
+        if (!$file->exist()) {
+            $data = [
+                'name' => $theme,
+                'description' => '默认主题',
+                'author' => 'zodream',
+                'cover' => 'assets/images/screenshot.png',
+            ];
+        } else {
+            $data = Json::decode($file->read());
+            unset($data['script']);
+        }
+        $scene = CMSRepository::scene();
+        $data['script'] = array_merge([
+            [
+                'action' => 'copy',
+                'src' => 'assets',
+                'dist' => 'assets'
+            ],
+        ], $this->packOption($site), $this->packModel($scene, $siteId),
+            $this->packChannel(), $this->packContent($scene, $siteId));
+
+        $zip = ZipStream::create(app_path('data/sql/'.$fileName));
+        $themeRoot->map(function ($file) use ($zip) {
+                if ($file instanceof Directory) {
+                    $zip->addDirectory($file->getName(), $file);
+                    return;
+                }
+                if ($file instanceof File && $file->getName() !== 'theme.json') {
+                    $zip->addFile($file->getName(), $file);
+                }
+            });
+        $zip->addFile('theme.json', Json::encode($data));
         $zip->comment($data['description'])->close();
     }
 
-    protected function packOption(): array {
-        $data = [];
-        $args = OptionModel::query()->orderBy('parent_id', 'asc')->all();
-        foreach ($args as $item) {
-            if ($item['parent_id'] < 1) {
-                unset($item['parent_id']);
-            } else {
-                $item['parent_id'] = $this->getCacheId($item['parent_id'], 'option');
-            }
-            $this->setCache([
-                $item['id'] => '@option:'.$item['code']
-            ], 'option');
-            unset($item['id']);
-            $data[] = $item;
+    protected function packOption(SiteEntity|array $site): array {
+        $args = $site->options;
+        if (empty($args)) {
+            return [];
         }
         return [
-            'action' => 'option',
-            'data' => $data
+            [
+                'action' => 'option',
+                'data' => is_array($args) ? $args : (array)Json::decode($args)
+            ]
         ];
     }
 
-    protected function packModel(): array {
+    protected function packModel(SceneInterface $scene, int $siteId): array {
         $data = [];
-        $model_list = ModelModel::query()->asArray()->all();
+        $model_list = ModelModel::query()->asArray()->get();
         foreach ($model_list as $item) {
+            if (!$scene->setModel($item, $siteId)->initializedModel()) {
+                continue;
+            }
             $this->setCache([
                 $item['id'] => '@model:'.$item['table']
             ], 'model');
@@ -121,7 +142,6 @@ class ThemeManager {
             $item['child'] = $this->getCacheId($item['child_model'], 'model');
             unset($item['id'], $item['child_model']);
             $data[] = $item;
-
         }
         return $data;
     }
@@ -149,7 +169,7 @@ class ThemeManager {
     protected function packChannel(int $parent_id = 0): array {
         $data = [];
         $model_list = CategoryModel::query()->where('parent_id', $parent_id)
-            ->asArray()->all();
+            ->asArray()->get();
         foreach ($model_list as $item) {
             $item['action'] = 'channel';
             $item['setting'] = Json::decode($item['setting']);
@@ -178,16 +198,23 @@ class ThemeManager {
         return $this->getCacheId($item['model_id'], 'model');
     }
 
-    protected function packContent(): array {
+    protected function packContent(SceneInterface $scene, int $siteId): array {
         $data = [];
         $model_list = ModelModel::query()->get();
         foreach ($model_list as $model) {
-            $scene = CMSRepository::scene()->setModel($model);
-            $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
-            if (empty($cats)) {
+            if (!$scene->setModel($model, $siteId)->initializedModel()) {
                 continue;
             }
-            $args = $scene->query()->whereIn('cat_id', $cats)->all();
+            if ($model['type'] < 1) {
+                $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
+                if (empty($cats)) {
+                    continue;
+                }
+                $query = $scene->query()->whereIn('cat_id', $cats);
+            } else {
+                $query = $scene->query();
+            }
+            $args = $query->get();
             $args = Relation::create($args, [
                 'extend' => [
                     'query' => $scene->extendQuery(),
@@ -485,10 +512,6 @@ class ThemeManager {
         return $res;
     }
 
-    protected function getOptionParent(string $code): int {
-        $code = substr($code, 8);
-        return intval(OptionModel::where('code', $code)->value('id'));
-    }
 
     /**
      * 获取主题

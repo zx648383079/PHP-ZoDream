@@ -9,13 +9,13 @@ use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\CommentRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Database\DB;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
@@ -29,11 +29,11 @@ abstract class BaseScene implements SceneInterface {
     protected int $site = 1;
 
     /**
-     * @var ModelModel|array
+     * @var Model|array
      */
     protected mixed $model = null;
 
-    public function setModel(ModelModel|array $model, int $site = 0) {
+    public function setModel(Model|array $model, int $site = 0): static {
         $this->model = $model;
         $this->site = $site > 0 ? $site : CMSRepository::siteId();
         return $this;
@@ -561,7 +561,7 @@ abstract class BaseScene implements SceneInterface {
         $table->uint('parent_id')->default(0);
         $table->string('seo_link')->default('')->comment('优雅链接');
         $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_DRAFT);
-        $table->timestamp(ModelModel::CREATED_AT);
+        $table->timestamp(Model::CREATED_AT);
     }
 
     protected function initDefaultModelField(): void {
