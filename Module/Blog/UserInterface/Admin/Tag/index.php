@@ -29,8 +29,8 @@ $canDo = auth()->user()->isAdministrator();
                 <td><?=$item->blog_count?></td>
                 <td>
                     <?php if($canDo):?>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/tag/edit', ['id' => $item->id])?>">编辑</a>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/tag/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/tag/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                     <?php endif;?>

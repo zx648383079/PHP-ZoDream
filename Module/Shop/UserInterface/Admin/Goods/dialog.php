@@ -12,7 +12,7 @@ use Zodream\Template\View;
         </div>
         <div class="input-group">
             <label>分类</label>
-            <select name="cat_id">
+            <select name="cat_id" class="form-control">
                 <option value="0">请选择</option>
                 <?php foreach($cat_list as $item):?>
                 <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>
@@ -26,7 +26,7 @@ use Zodream\Template\View;
         </div>
         <div class="input-group">
             <label>品牌</label>
-            <select name="brand_id">
+            <select name="brand_id" class="form-control">
                 <option value="0">请选择</option>
                 <?php foreach($brand_list as $item):?>
                 <option value="<?=$item->id?>" <?=$brand_id == $item['id'] ? 'selected': '' ?>><?=$item->name?></option>

@@ -5,28 +5,30 @@ use Module\Shop\Domain\Models\OrderModel;
 /** @var $this View */
 $this->title = '订单列表';
 ?>
-<div class="page-search-bar">
-    <form class="form-horizontal" role="form">
-        <div class="input-group">
-            <label class="sr-only" for="series_number">订单号</label>
-            <input type="text" class="form-control" name="series_number" id="series_number" placeholder="订单号" value="<?=$this->text($series_number)?>">
-        </div>
-        <div class="input-group">
-            <label class="sr-only" for="log_id">支付流水号</label>
-            <input type="text" class="form-control" name="log_id" id="log_id" placeholder="支付流水号" value="<?=$this->text($log_id)?>">
-        </div>
-        <div class="input-group">
-            <label>状态</label>
-            <select name="status">
-                <option value="0">全部</option>
-                <?php foreach($status_list as $key => $item):?>
-                <option value="<?=$key?>" <?=$status == $key ? 'selected': '' ?>><?=$item?></option>
-                <?php endforeach;?>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
-    </form>
-    <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./@admin/order/cron')?>" title="未支付订单释放库存">整理订单</a>
+<div class="panel-container">
+    <div class="page-search-bar">
+        <form class="form-horizontal" role="form">
+            <div class="input-group">
+                <label class="sr-only" for="series_number">订单号</label>
+                <input type="text" class="form-control" name="series_number" id="series_number" placeholder="订单号" value="<?=$this->text($series_number)?>">
+            </div>
+            <div class="input-group">
+                <label class="sr-only" for="log_id">支付流水号</label>
+                <input type="text" class="form-control" name="log_id" id="log_id" placeholder="支付流水号" value="<?=$this->text($log_id)?>">
+            </div>
+            <div class="input-group">
+                <label>状态</label>
+                <select name="status" class="form-control">
+                    <option value="0">全部</option>
+                    <?php foreach($status_list as $key => $item):?>
+                    <option value="<?=$key?>" <?=$status == $key ? 'selected': '' ?>><?=$item?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+        <a class="btn btn-success pull-right" data-type="ajax" href="<?=$this->url('./@admin/order/cron')?>" title="未支付订单释放库存">整理订单</a>
+    </div>
 </div>
 
 <div class="order-box">
@@ -85,6 +87,11 @@ $this->title = '订单列表';
     <?php endforeach; ?>
 </div>
 
+<?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+<?php endif;?>
 <div align="center">
     <?=$model_list->getLink()?>
 </div>

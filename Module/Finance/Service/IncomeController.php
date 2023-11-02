@@ -36,8 +36,8 @@ class IncomeController extends Controller {
                               int $budget = 0, string $start_at = '', string $end_at = '') {
         $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at);
         $account_list = AccountRepository::getItems();
-        $log_list = Relation::bindRelation($log_list, $account_list, 'account', ['account_id' => 'id']);
-        return $this->show(compact('log_list', 'account_list', 'keywords', 'type', 'account'));
+        $items = Relation::bindRelation($log_list, $account_list, 'account', ['account_id' => 'id']);
+        return $this->show(compact('items', 'account_list', 'keywords', 'type', 'account'));
     }
 
     public function addLogAction(Request $request) {
@@ -147,8 +147,8 @@ class IncomeController extends Controller {
     }
 
     public function channelAction(){
-        $model_list = ConsumptionChannelModel::auth()->orderBy('id', 'desc')->all();
-        return $this->show(compact('model_list'));
+        $items = ConsumptionChannelModel::auth()->orderBy('id', 'desc')->all();
+        return $this->show(compact('items'));
     }
 
     public function saveChannelAction(Request $request) {

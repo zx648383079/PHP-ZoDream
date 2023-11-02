@@ -24,8 +24,8 @@ class MoneyController extends Controller {
     }
 
     public function accountAction() {
-        $account_list = MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
-        return $this->show(compact('account_list'));
+        $items = MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
+        return $this->show(compact('items'));
     }
 
     public function addAccountAction() {
@@ -67,8 +67,8 @@ class MoneyController extends Controller {
     }
 
     public function projectAction() {
-        $model_list = FinancialProjectModel::auth()->with('product')->orderBy('id', 'desc')->all();
-        return $this->show(compact('model_list'));
+        $items = FinancialProjectModel::auth()->with('product')->orderBy('id', 'desc')->all();
+        return $this->show(compact('items'));
     }
 
     public function addProjectAction() {
@@ -126,8 +126,8 @@ class MoneyController extends Controller {
     }
 
     public function productAction() {
-        $model_list = FinancialProductModel::auth()->orderBy('id', 'desc')->all();
-        return $this->show(compact('model_list'));
+        $items = FinancialProductModel::auth()->orderBy('id', 'desc')->all();
+        return $this->show(compact('items'));
     }
 
     public function addProductAction() {

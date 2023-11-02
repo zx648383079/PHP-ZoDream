@@ -5,11 +5,12 @@ use Module\Shop\Domain\Models\AttributeModel;
 /** @var $this View */
 $this->title = '属性';
 ?>
-   <div class="page-search-bar">
+<div class="panel-container">
+    <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/attribute/create', ['group_id' => $group_id])?>">新增属性</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table  table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -33,8 +34,8 @@ $this->title = '属性';
                 <td><?=$item->default_value?></td>
                 <td><?=$item->position?></td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/attribute/edit', ['id' => $item->id])?>">编辑</a>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/attribute/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/attribute/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
@@ -42,3 +43,12 @@ $this->title = '属性';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
+    <div align="center">
+        <?=$model_list->getLink()?>
+    </div>
+</div>

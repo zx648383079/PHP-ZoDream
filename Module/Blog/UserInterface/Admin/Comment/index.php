@@ -29,7 +29,7 @@ $this->title = '评论列表';
         </tr>
         </thead>
         <tbody>
-        <?php foreach($comment_list as $item):?>
+        <?php foreach($items as $item):?>
             <tr>
                 <td><?=$item->id?></td>
                 <td class="left">
@@ -57,12 +57,12 @@ $this->title = '评论列表';
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php if($comment_list->isEmpty()):?>
+    <?php if($items->isEmpty()):?>
         <div class="page-empty-tip">
             空空如也~~
         </div>
     <?php endif;?>
     <div align="center">
-        <?=$comment_list->getLink()?>
+        <?=$items->getLink()?>
     </div>
 </div>

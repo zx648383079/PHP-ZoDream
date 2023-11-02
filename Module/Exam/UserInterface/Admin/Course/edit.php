@@ -10,7 +10,7 @@ $this->title = '科目';
     <?=Form::text('name', true)?>
     <div class="input-group">
         <label>上级</label>
-        <select name="parent_id">
+        <select name="parent_id" class="form-control">
             <option value="0">-- 无上级科目 --</option>
             <?php foreach($cat_list as $item):?>
             <option value="<?=$item['id']?>" <?=$model->parent_id == $item['id'] ? 'selected': '' ?>>
@@ -24,6 +24,9 @@ $this->title = '科目';
     </div>
     <?=Form::file('thumb')?>
     <?=Form::textarea('description')?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

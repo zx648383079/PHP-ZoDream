@@ -15,7 +15,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Form::text('title', true)?>
     <div class="input-group">
         <label>上级</label>
-        <select name="course_id">
+        <select name="course_id" class="form-control">
             <?php foreach($cat_list as $item):?>
             <option value="<?=$item['id']?>" <?=$model->course_id == $item['id'] ? 'selected': '' ?>>
                 <?php if($item['level'] > 0):?>
@@ -36,6 +36,9 @@ $this->registerJs($js, View::JQUERY_READY);
     <div class="option-box">
         <?php $this->extend('./option', compact('model', 'option_list'));?>
     </div>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

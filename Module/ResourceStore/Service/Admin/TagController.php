@@ -7,11 +7,11 @@ use Module\ResourceStore\Domain\Repositories\ResourceRepository;
 class TagController extends Controller {
 
     public function indexAction(string $keywords = '') {
-        $model_list = ResourceRepository::tag()->getList($keywords);
+        $items = ResourceRepository::tag()->getList($keywords);
         if (request()->isAjax() && !request()->header('X-PJAX')) {
-            return $this->renderData($model_list);
+            return $this->renderData($items);
         }
-        return $this->show(compact('model_list'));
+        return $this->show(compact('items'));
     }
 
     public function deleteAction(int $id) {

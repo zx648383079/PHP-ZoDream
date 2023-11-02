@@ -9,10 +9,10 @@ use Module\Task\Domain\Repositories\TaskRepository;
 class TaskController extends Controller {
 
     public function indexAction() {
-        $model_list = TaskModel::where('user_id', auth()->id())
+        $items = TaskModel::where('user_id', auth()->id())
             ->orderBy('status', 'desc')
             ->orderBy('id', 'desc')->page();
-        return $this->show(compact('model_list'));
+        return $this->show(compact('items'));
     }
 
     public function createAction() {
@@ -72,13 +72,13 @@ class TaskController extends Controller {
                 './task/create', '请先添加任务'
             );
         }
-        $model_list = TaskDayModel::with('task')
+        $items = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
             ->where('today', $time)
             ->orderBy('status', 'desc')
             ->orderBy('id', 'desc')
             ->page();
-        return $this->show(compact('model_list', 'task_list'));
+        return $this->show(compact('items', 'task_list'));
     }
 
     public function createDayAction() {

@@ -50,6 +50,8 @@ $this->registerJs($js);
     <?=Form::text('configure[deposit]')->label('定金')?>
     <?=Form::radio('configure[deposit_scale]', [1 => '无', '1.5' => '1.5倍', 2 => '2倍', 99 => '自定义'])->label('定金膨胀系数')->after('<input type="text" class="form-control " name="configure[deposit_scale_other]" placeholder="自定义" style="display: none">')?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

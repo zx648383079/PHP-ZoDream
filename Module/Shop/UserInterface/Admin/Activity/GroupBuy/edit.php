@@ -28,14 +28,16 @@ $this->registerJs($js);
     <div class="input-group">
         <label for="money">价格阶梯</label>
         <div class="">
-            <p class="step-item">数量达到<input type="text" size="10" name="configure[step][amount][]">
-            享受价格<input type="text" size="10" name="configure[step][price][]"></p>
+            <p class="step-item">数量达到<input type="text" size="10"  class="form-control" name="configure[step][amount][]">
+            享受价格<input type="text" class="form-control" size="10" name="configure[step][price][]"></p>
             <a href="javascript:;" class="btn" data-action="add">
                 <i class="fa fa-plus"></i>
             </a>
         </div>
     </div>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

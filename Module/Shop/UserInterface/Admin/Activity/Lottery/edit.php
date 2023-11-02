@@ -27,14 +27,14 @@ $this->registerJs($js);
         <table>
             <tr>
                 <td>未中奖
-                    <input type="text" name="configure[items][name][]" >
+                    <input type="text" class="form-control" name="configure[items][name][]" >
                 </td>
                 <td>
                     获奖概率
-                    <input type="text" name="configure[items][chance][]" size="10">%
+                    <input type="text" class="form-control" name="configure[items][chance][]" size="10">%
                 </td>
                 <td>
-                    <input type="color" name="configure[items][color][]">
+                    <input type="color" class="form-control" name="configure[items][color][]">
                 </td>
                 <td>
                     <i class="fa fa-arrow-up" data-action="up"></i>
@@ -48,11 +48,13 @@ $this->registerJs($js);
     <div class="input-group">
         <label for="start_at">起止时间</label>
         <div class="">
-            <input type="text" id="start_at" class="form-control " name="start_at" autocomplete="off" placeholder="请输入开始时间" value="<?=$this->time($model->start_at)?>">
+            <input type="text" id="start_at" class="form-control" name="start_at" autocomplete="off" placeholder="请输入开始时间" value="<?=$this->time($model->start_at)?>">
             ~
-            <input type="text" id="end_at" class="form-control " name="end_at" placeholder="请输入结束时间" autocomplete="off" value="<?=$this->time($model->end_at)?>">
+            <input type="text" id="end_at" class="form-control" name="end_at" placeholder="请输入结束时间" autocomplete="off" value="<?=$this->time($model->end_at)?>">
         </div>
     </div>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

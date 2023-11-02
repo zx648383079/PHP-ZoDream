@@ -9,8 +9,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class BudgetController extends Controller {
 
     public function indexAction() {
-        $model_list = BudgetRepository::getList();
-        return $this->show(compact('model_list'));
+        $items = BudgetRepository::getList();
+        return $this->show(compact('items'));
     }
 
     public function addAction() {

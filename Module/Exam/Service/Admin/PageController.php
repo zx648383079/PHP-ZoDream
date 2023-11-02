@@ -13,8 +13,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class PageController extends Controller {
 
     public function indexAction(string $keywords = '') {
-        $model_list = PageRepository::getList($keywords);
-        return $this->show(compact('model_list', 'keywords'));
+        $items = PageRepository::getList($keywords);
+        return $this->show(compact('items', 'keywords'));
     }
 
     public function createAction() {
@@ -48,8 +48,8 @@ class PageController extends Controller {
 
     public function evaluateAction(int $id, string $keywords = '') {
         $page = PageModel::find($id);
-        $model_list = PageRepository::evaluateList($id, $keywords);
-        return $this->show(compact('model_list', 'page', 'keywords'));
+        $items = PageRepository::evaluateList($id, $keywords);
+        return $this->show(compact('items', 'page', 'keywords'));
     }
 
     public function questionAction($id) {

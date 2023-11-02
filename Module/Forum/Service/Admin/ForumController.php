@@ -9,8 +9,8 @@ use Module\Forum\Domain\Repositories\ForumRepository;
 class ForumController extends Controller {
 
     public function indexAction() {
-        $forum_list = ForumModel::tree()->makeTreeForHtml();
-        return $this->show(compact('forum_list'));
+        $items = ForumModel::tree()->makeTreeForHtml();
+        return $this->show(compact('items'));
     }
 
     public function createAction() {

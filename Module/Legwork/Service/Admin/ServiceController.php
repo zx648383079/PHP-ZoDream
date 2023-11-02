@@ -9,13 +9,13 @@ use Module\Legwork\Domain\Model\ServiceModel;
 class ServiceController extends Controller {
 
     public function indexAction($keywords = '', $cat_id = 0) {
-        $model_list = ServiceModel::with('category')->when(!empty($keywords), function ($query) {
+        $items = ServiceModel::with('category')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
             })->when($cat_id > 0, function ($query) use ($cat_id) {
                 $query->where('cat_id', $cat_id);
         })->orderBy('id', 'desc')->page();
         $cat_list = CategoryModel::query()->get();
-        return $this->show(compact('model_list', 'keywords', 'cat_list', 'cat_id'));
+        return $this->show(compact('items', 'keywords', 'cat_list', 'cat_id'));
     }
 
     public function createAction() {

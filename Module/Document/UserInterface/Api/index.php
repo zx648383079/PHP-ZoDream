@@ -60,7 +60,7 @@ $this->registerJs($js, View::JQUERY_READY);
                             <td style="width: 20%;"><?=$item['title']?>(<?=$item['name']?>)</td>
                             <td style="width: 50%;"><code><?=$api->getUri($item['domain'])?></code></td>
                             <td style="width: 15%;">
-                                <button type="button" class="btn btn-xs btn-success btn-copy" data-clipboard-text="<?=$api->getUri($item['domain'])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                <button type="button" class="btn btn-success btn-copy" data-clipboard-text="<?=$api->getUri($item['domain'])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                             </td>
                         </tr>
                         <?php endforeach;?>

@@ -16,6 +16,8 @@ $this->registerJs($js);
     <?=Theme::text('start_time', '', '开始时间', '', true)?>
     <?=Theme::text('end_time', '', '开始时间', '', true)?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close() ?>

@@ -13,14 +13,14 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class QuestionController extends Controller {
 
     public function indexAction($keywords = null, $course = 0) {
-        $model_list = QuestionModel::with('course')
+        $items = QuestionModel::with('course')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->when(!empty($course), function ($query) use ($course) {
                 $query->where('course_id', intval($course));
             })->where('parent_id', 0)->orderBy('id', 'desc')->page();
         $cat_list = CourseModel::tree()->makeTreeForHtml();
-        return $this->show(compact('model_list', 'cat_list', 'course', 'keywords'));
+        return $this->show(compact('items', 'cat_list', 'course', 'keywords'));
     }
 
     public function createAction() {

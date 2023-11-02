@@ -15,8 +15,11 @@ $this->title = '淘宝客商品';
         </div>
         <button type="submit" class="btn btn-default">搜索</button>
     </form>
-    <a href="<?=$this->url('./@admin/plugin/tbk/setting')?>" class="btn pull-right">账户设置</a>
-    <a href="<?=$this->url('./@admin/plugin/tbk/import')?>" class="btn pull-right">导入商品</a>
+    <div class="btn-group pull-right">
+        <a href="<?=$this->url('./@admin/plugin/tbk/setting')?>" class="btn btn-default">账户设置</a>
+        <a href="<?=$this->url('./@admin/plugin/tbk/import')?>" class="btn btn-info">导入商品</a>
+    </div>
+
 </div>
 
 <?php if($data):?>
@@ -76,8 +79,8 @@ $this->title = '淘宝客商品';
                 <?=$item->sales?>
             </td>
             <td>
-                <div class="btn-group  btn-group-xs">
-                    <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/goods/edit', ['id' => $item->id])?>">编辑</a>
+                <div class="btn-group">
+                    <a class="btn btn-default" href="<?=$this->url('./@admin/goods/edit', ['id' => $item->id])?>">编辑</a>
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/goods/delete', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>
@@ -85,4 +88,12 @@ $this->title = '淘宝客商品';
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php if($model_list->isEmpty()):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+<?php endif;?>
+<div align="center">
+    <?=$model_list->getLink()?>
+</div>
 <?php endif;?>

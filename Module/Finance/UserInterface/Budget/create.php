@@ -15,6 +15,8 @@ $this->title = $model->id > 0 ? '编辑' : '新增'.'生活预算';
         <input name="budget" type="text" class="form-control" value="<?=$model->budget ?: 1000?>" />
     </div>
     <?=Form::select('cycle', ['一次', '每天', '每周', '每月', '每年'])?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

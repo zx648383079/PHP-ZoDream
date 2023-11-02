@@ -13,16 +13,16 @@ use Zodream\Template\View;
             <?=$item->goods->price?>
         </td>
         <td>
-            <input type="text" name="price" value="<?=$item->price?>">
+            <input type="text" class="form-control" name="price" value="<?=$item->price?>">
         </td>
         <td>
-            <input type="text" name="amount" value="<?=$item->amount?>">
+            <input type="text" class="form-control" name="amount" value="<?=$item->amount?>">
         </td>
         <td>
-            <input type="text" name="every_amount" value="<?=$item->every_amount?>">
+            <input type="text" class="form-control" name="every_amount" value="<?=$item->every_amount?>">
         </td>
         <td>
-            <div class="btn-group  btn-group-xs">
+            <div class="btn-group">
                 <a class="btn btn-danger" href="<?=$this->url('./@admin/activity/seckill/deleteGoods', ['id' => $item->id])?>">删除</a>
             </div>
         </td>

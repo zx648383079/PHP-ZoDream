@@ -14,6 +14,9 @@ $this->title = '批量编辑流水';
     <?=Form::select('project_id', [$project_list, ['请选择']])->label('项目')?>
     <?=Form::select('channel_id', [$channel_list, ['请选择']])->label('渠道')?>
     <?=Form::select('budget_id', [$budget_list, ['请选择']])->label('预算')?>
-    <button type="submit" class="btn btn-success">确认编辑</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+   
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认编辑</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close() ?>

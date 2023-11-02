@@ -4,6 +4,7 @@ namespace Module\Shop\Service;
 use Module\ModuleController;
 use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Repositories\ArticleRepository;
+use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\ShopRepository;
 use Module\Shop\Module;
 use Zodream\Disk\File;
@@ -27,7 +28,7 @@ class Controller extends ModuleController {
 
     public function sendWithShare() {
         $categories_tree = CategoryModel::cacheTree();
-        $cart = Module::cart();
+        $cart = CartRepository::load();
         $notice_list = ArticleRepository::getNotices();
         $this->send(compact('categories_tree', 'cart', 'notice_list'));
         return $this;

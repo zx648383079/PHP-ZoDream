@@ -34,7 +34,7 @@ $this->title = sprintf('“%s” 的表单列表', $model['name']);
                 </td>
                 <td>
                     <div class="btn-group toggle-icon-text">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/form/edit', ['id' => $item['id'], 'model_id' => $item['model_id']])?>" title="编辑详细信息">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/form/edit', ['id' => $item['id'], 'model_id' => $item['model_id']])?>" title="编辑详细信息">
                             <span>编辑</span>
                             <i class="fa fa-edit"></i>
                         </a>

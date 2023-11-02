@@ -4,11 +4,12 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = '属性类型';
 ?>
-   <div class="page-search-bar">
+<div class="panel-container">
+    <div class="page-search-bar">
         <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/attribute/create_group')?>">新增类型</a>
     </div>
 
-    <table class="table  table-bordered well">
+    <table class="table  table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -25,9 +26,9 @@ $this->title = '属性类型';
                 <td><?=$item->name?></td>
                 <td><?=$item->goods_count?></td>
                 <td>
-                    <div class="btn-group  btn-group-xs">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/attribute', ['group_id' => $item->id])?>">属性列表</a>
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/attribute/edit_group', ['id' => $item->id])?>">编辑</a>
+                    <div class="btn-group">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/attribute', ['group_id' => $item->id])?>">属性列表</a>
+                        <a class="btn btn-info" href="<?=$this->url('./@admin/attribute/edit_group', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/attribute/delete_group', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>
@@ -35,3 +36,9 @@ $this->title = '属性类型';
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if(empty($model_list)):?>
+    <div class="page-empty-tip">
+        空空如也~~
+    </div>
+    <?php endif;?>
+</div>

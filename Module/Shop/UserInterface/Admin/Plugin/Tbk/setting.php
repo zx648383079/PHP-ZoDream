@@ -11,6 +11,8 @@ $this->title = '淘宝客设置';
     <?=Theme::text('option[taobaoke][app_key]', $data['app_key'], 'APP KEY', '', true)?>
     <?=Theme::text('option[taobaoke][secret]', $data['secret'], 'Secret', '', true)?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close() ?>

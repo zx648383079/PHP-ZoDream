@@ -24,7 +24,7 @@ $this->registerJs($js);
                 <?=Form::text('name', true)?>
                 <div class="input-group">
                     <label>上级</label>
-                    <select name="parent_id">
+                    <select name="parent_id" class="form-control">
                         <option value="0">-- 无上级板块 --</option>
                         <?php foreach($forum_list as $item):?>
                         <option value="<?=$item['id']?>" <?=$model->parent_id == $item['id'] ? 'selected': '' ?>>
@@ -54,14 +54,14 @@ $this->registerJs($js);
                     <?php foreach($classify_list as $item):?>
                     <tr>
                         <td>
-                            <input type="text" name="classify[name][]" value="<?=$item->name?>">
+                            <input type="text" class="form-control" name="classify[name][]" value="<?=$item->name?>">
                             <input type="hidden" name="classify[id][]" value="<?=$item->id?>">
                         </td>
                         <td>
-                            <input type="text" name="classify[icon][]" value="<?=$item->icon?>">
+                            <input type="text" class="form-control" name="classify[icon][]" value="<?=$item->icon?>">
                         </td>
                         <td>
-                            <input type="text" name="classify[position][]" value="<?=$item->position?>" size="4">
+                            <input type="text" class="form-control" name="classify[position][]" value="<?=$item->position?>" size="4">
                         </td>
                         <td>
                             <a href="javascript:;" class="del">删除</a>
@@ -70,14 +70,14 @@ $this->registerJs($js);
                     <?php endforeach;?>
                     <tr>
                         <td>
-                            <input type="text" name="classify[name][]">
+                            <input type="text" class="form-control" name="classify[name][]">
                             <input type="hidden" name="classify[id][]" value="0">
                         </td>
                         <td>
-                            <input type="text" name="classify[icon][]">
+                            <input type="text" class="form-control" name="classify[icon][]">
                         </td>
                         <td>
-                            <input type="text" name="classify[position][]" size="4">
+                            <input type="text" class="form-control" name="classify[position][]" size="4">
                         </td>
                         <td>
                             <a href="javascript:;" class="del">删除</a>
@@ -89,6 +89,8 @@ $this->registerJs($js);
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

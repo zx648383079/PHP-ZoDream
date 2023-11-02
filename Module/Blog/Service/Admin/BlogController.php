@@ -11,9 +11,9 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class BlogController extends Controller {
 
     public function indexAction(string $keywords = '', int $term_id = 0, int $type = 0) {
-        $blog_list = PublishRepository::getList($keywords, $term_id, 0, $type);
+        $items = PublishRepository::getList($keywords, $term_id, 0, $type);
         $term_list = TermModel::select('id', 'name')->all();
-        return $this->show(compact('blog_list', 'term_list', 'keywords', 'term_id', 'type'));
+        return $this->show(compact('items', 'term_list', 'keywords', 'term_id', 'type'));
     }
 
     public function createAction() {

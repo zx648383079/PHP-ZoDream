@@ -50,7 +50,7 @@ $this->registerJs($js);
                 <?php endif;?>
             </td>
             <td>
-                <div class="btn-group  btn-group-xs">
+                <div class="btn-group">
                     <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/goods/delete_card', ['id' => $item->id])?>">删除</a>
                 </div>
             </td>

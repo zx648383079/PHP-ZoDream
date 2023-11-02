@@ -9,6 +9,8 @@ $this->title = '属性类型';
 <?=Form::open($model, './@admin/attribute/save_group')?>
     <?=Form::text('name', true)?>
     <?=Form::textarea('attr_group')?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

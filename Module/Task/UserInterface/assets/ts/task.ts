@@ -318,7 +318,7 @@ function stopTask(baseUri: string, element: JQuery) {
 
 function bindRecord() {
     $('#today').datetimer({format: 'yyyy-mm-dd'});
-    $('.search-box form').submit(function() {
+    $('.page-search-bar form').on('submit', function() {
         let $this = $(this);
         $.get($this.attr('action'), $this.serialize(), html => {
             $('.chart-box').html(html);
@@ -329,7 +329,7 @@ function bindRecord() {
 
 function bindReview() {
     $('#today').datetimer({format: 'yyyy-mm-dd'});
-    $('.search-box form').submit(function() {
+    $('.page-search-bar form').on('submit', function() {
         let $this = $(this);
         $.get($this.attr('action'), $this.serialize(), html => {
             $('.review-box').html(html);

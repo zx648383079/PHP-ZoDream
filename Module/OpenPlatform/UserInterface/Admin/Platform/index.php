@@ -43,7 +43,7 @@ $status_list = [0 => '无', 1 => '正常', 9 => '审核中'];
                 </td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/platform/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/platform/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/platform/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>

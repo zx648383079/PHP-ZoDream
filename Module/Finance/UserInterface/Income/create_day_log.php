@@ -19,7 +19,7 @@ $this->registerJs($js, View::JQUERY_READY);
 
 <h1><?=$this->title?></h1>
 <?=Form::open('./income/save_day_log')?>
-    <?=Theme::text('day', date('Y-m-d'), '日期', null, true)?>
+    <?=Theme::text('day', date('Y-m-d'), '日期', '', true)?>
     <?=Theme::select('account_id', [$account_list], null, '账户')?>
     <?=Theme::select('channel_id', [$channel_list, ['请选择']], null, '渠道')?>
     <?=Theme::select('budget_id', [$budget_list, ['请选择']], null, '预算')?>
@@ -35,6 +35,9 @@ $this->registerJs($js, View::JQUERY_READY);
     <?=Theme::text('dinner[time]', '20:00:00', '时间')?>
     <?=Theme::text('dinner[money]', '', '金额')?>
     <?=Theme::textarea('dinner[remark]', '晚餐', '备注')?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消保存</a>
+   
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消保存</a>
+    </div>
 <?= Form::close() ?>

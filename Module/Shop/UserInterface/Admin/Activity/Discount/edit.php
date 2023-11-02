@@ -26,10 +26,10 @@ $this->registerJs($js);
                 <label for="configure_type1">满_件优惠</label>
             </span>
             <div>
-                <p>订单满 <input type="text" name="configure[amount]"><span class="unit">元</span> </p>
-                <p><input type="checkbox" name="configure[discount_type]" value="0">打<input type="text" name="configure[discount_value]" size="10" style="min-width: auto">折</p>
-                <p><input type="checkbox" name="configure[discount_type]" value="1">减<input type="text" name="configure[discount_money]" size="10" style="min-width: auto">元</p>
-                <p><input type="checkbox" name="configure[discount_type]" value="2">送赠品 <input type="text" name="configure[discount_goods]"></p>
+                <p>订单满 <input type="text" class="form-control" name="configure[amount]"><span class="unit">元</span> </p>
+                <p><input type="checkbox" name="configure[discount_type]" value="0">打<input type="text" class="form-control" name="configure[discount_value]" size="10" style="min-width: auto">折</p>
+                <p><input type="checkbox" name="configure[discount_type]" value="1">减<input type="text" class="form-control" name="configure[discount_money]" size="10" style="min-width: auto">元</p>
+                <p><input type="checkbox" name="configure[discount_type]" value="2">送赠品 <input type="text" class="form-control" name="configure[discount_goods]"></p>
                 <p><input type="checkbox" name="configure[discount_type]" value="3">包邮</p>
             </div>
         </div>
@@ -40,11 +40,13 @@ $this->registerJs($js);
     <div class="input-group">
         <label for="start_at">起止时间</label>
         <div class="">
-            <input type="text" id="start_at" class="form-control " name="start_at" autocomplete="off" placeholder="请输入开始时间" value="<?=$this->time($model->start_at)?>">
+            <input type="text" id="start_at" class="form-control" name="start_at" autocomplete="off" placeholder="请输入开始时间" value="<?=$this->time($model->start_at)?>">
             ~
-            <input type="text" id="end_at" class="form-control " name="end_at" placeholder="请输入结束时间" autocomplete="off" value="<?=$this->time($model->end_at)?>">
+            <input type="text" id="end_at" class="form-control" name="end_at" placeholder="请输入结束时间" autocomplete="off" value="<?=$this->time($model->end_at)?>">
         </div>
     </div>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

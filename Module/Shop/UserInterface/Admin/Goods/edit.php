@@ -37,7 +37,7 @@ $this->registerJs($js);
                 <?=Form::text('series_number')->after('<a data-action="sn" href="javascript:;">生成</a>')?>
                 <div class="input-group">
                     <label>分类</label>
-                    <select name="cat_id" required>
+                    <select name="cat_id" class="form-control" required>
                         <?php foreach($cat_list as $item):?>
                         <option value="<?=$item['id']?>" <?=$model->cat_id == $item['id'] ? 'selected': '' ?>>
                             <?php if($item['level'] > 0):?>
@@ -93,19 +93,19 @@ $this->registerJs($js);
                         <div class="form-horizontal batch-box">
                             <label class="am-form-label">批量设置</label>
                             <div class="input-group">
-                                <input type="text" data-type="series_number" placeholder="商家编码">
+                                <input type="text" class="form-control" data-type="series_number" placeholder="商家编码">
                             </div>
                             <div class="input-group">
-                                <input type="number" data-type="price" placeholder="销售价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                                <input type="number" class="form-control" data-type="price" placeholder="销售价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
                             </div>
                             <div class="input-group">
-                                <input type="number" data-type="market_price" placeholder="划线价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                                <input type="number" class="form-control" data-type="market_price" placeholder="划线价" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
                             </div>
                             <div class="input-group">
-                                <input type="number" data-type="stock" placeholder="库存数量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                                <input type="number" class="form-control" data-type="stock" placeholder="库存数量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
                             </div>
                             <div class="input-group">
-                                <input type="number" data-type="weight" placeholder="重量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
+                                <input type="number" class="form-control" data-type="weight" placeholder="重量" pattern="^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$">
                             </div>
                             <button type="button" class="btn">确定</button>
                         </div>
@@ -119,8 +119,10 @@ $this->registerJs($js);
         </div>
     </div>
 
-    <button type="button" class="btn btn-success btn-save">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="button" class="btn btn-success btn-save">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>
 
 

@@ -11,7 +11,7 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class FamilyController extends Controller {
 
     public function indexAction(Request $request, $keywords = null, $clan_id = null) {
-        $model_list = FamilyModel::with('clan')
+        $items = FamilyModel::with('clan')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->when(!empty($clan_id), function ($query) use ($clan_id) {
@@ -22,7 +22,7 @@ class FamilyController extends Controller {
             return $this->show('dialogBody', compact('model_list'));
         }
         $clan_list = ClanModel::select('id', 'name')->all();
-        return $this->show(compact('model_list', 'clan_list', 'clan_id', 'keywords'));
+        return $this->show(compact('items', 'clan_list', 'clan_id', 'keywords'));
     }
 
     public function createAction($mother = 0, $father = 0, $clan_id = 0) {

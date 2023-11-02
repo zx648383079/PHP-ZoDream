@@ -22,8 +22,10 @@ $this->registerJs($js, View::JQUERY_READY);
     </div>
 
 
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
     <input type="hidden" name="project_id" value="<?=$model->project_id?>">
     <input type="hidden" name="version_id" value="<?=$model->version_id?>">
 <?= Form::close('id') ?>

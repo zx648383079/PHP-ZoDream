@@ -15,7 +15,7 @@ $this->registerJs($js, View::JQUERY_READY);
             <div class="col-lg-12">
                 <div class="page-header">
                     <h1>接口主页 </h1>
-                    <div class="opt-btn">
+                    <div class="btn-group opt-btn">
                         <a href="<?=$this->url('./@admin/api/edit', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-edit"></i>编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/api/delete', ['id' => $api->id])?>"><i class="fa fa-fw fa-times"></i>删除</a>
                         <a href="<?=$this->url('./@admin/api/debug', ['id' => $api->id])?>" class="btn btn-default"><i class="fa fa-fw fa-wrench"></i>调试</a>
@@ -62,7 +62,7 @@ $this->registerJs($js, View::JQUERY_READY);
                                     <td style="width: 20%;"><?=$item['title']?>(<?=$item['name']?>)</td>
                                     <td style="width: 50%;"><code><?=$api->getUri($item['domain'])?></code></td>
                                     <td style="width: 15%;">
-                                        <button type="button" class="btn btn-xs btn-success btn-copy" data-clipboard-text="<?=$api->getUri($item['domain'])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                        <button type="button" class="btn btn-success btn-copy" data-clipboard-text="<?=$api->getUri($item['domain'])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -71,7 +71,7 @@ $this->registerJs($js, View::JQUERY_READY);
                                     <td style="width: 20%;">模拟环境(mock)</td>
                                     <td style="width: 50%;"><code><?=$this->url('./api/mock', ['id' => $api->id])?></code></td>
                                     <td style="width: 15%;">
-                                        <button type="button" class="btn btn-xs btn-success btn-copy" data-clipboard-text="<?=$this->url('./api/mock', ['id' => $api->id])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
+                                        <button type="button" class="btn btn-success btn-copy" data-clipboard-text="<?=$this->url('./api/mock', ['id' => $api->id])?>"><i class="fa fa-fw fa-copy"></i>复制链接</button>
                                     </td>
 
                                 </tr>

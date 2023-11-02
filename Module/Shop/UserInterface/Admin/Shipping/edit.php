@@ -42,11 +42,11 @@ $this->registerJs($js);
                         name="shipping[region][]" value="<?=implode(',', $item->region_ids)?>">
                     <input type="hidden" name="shipping[id][]" value="<?=$item->id?>">
                 </td>
-                <td> <input type="number" name="shipping[first_step][]" value="<?=$item->first_step?>" required=""></td>
-                <td> <input type="number" name="shipping[first_fee][]" value="<?=$item->first_fee?>" required=""></td>
-                <td> <input type="number" name="shipping[additional][]" value="<?=$item->additional?>"></td>
-                <td> <input type="number" name="shipping[additional_fee][]" value="<?=$item->additional_fee?>"></td>
-                <td> <input type="number" name="shipping[free_step][]" value="<?=$item->free_step?>"></td>
+                <td> <input type="number" class="form-control" name="shipping[first_step][]" value="<?=$item->first_step?>" required=""></td>
+                <td> <input type="number" class="form-control" name="shipping[first_fee][]" value="<?=$item->first_fee?>" required=""></td>
+                <td> <input type="number" class="form-control" name="shipping[additional][]" value="<?=$item->additional?>"></td>
+                <td> <input type="number" class="form-control" name="shipping[additional_fee][]" value="<?=$item->additional_fee?>"></td>
+                <td> <input type="number" class="form-control" name="shipping[free_step][]" value="<?=$item->free_step?>"></td>
             </tr>
             <?php endforeach;?>
 
@@ -64,8 +64,10 @@ $this->registerJs($js);
     </div>
     <?=Form::textarea('description')?>
     <?=Form::text('position')?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>
 
 <div class="dialog dialog-box regional-choice" data-type="dialog">

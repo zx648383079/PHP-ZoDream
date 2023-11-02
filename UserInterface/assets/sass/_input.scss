@@ -17,6 +17,8 @@
 }
 
 .form-control {
+    --#{$prefix}-input-width: auto;
+    min-width: var(--#{$prefix}-input-width);
     padding: $inputPadding;
     font-size: 1rem;
     font-weight: 400;
@@ -37,6 +39,14 @@
 textarea {
     &.form-control {
         min-height: $lineHeight;
+    }
+}
+
+input[type="color"] {
+    &.form-control {
+        min-width: auto;
+        padding: 0;
+        height: 2.25rem;
     }
 }
 

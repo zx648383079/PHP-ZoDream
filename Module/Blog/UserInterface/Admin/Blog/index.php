@@ -50,7 +50,7 @@ $this->title = '文章列表';
         </tr>
         </thead>
         <tbody>
-        <?php foreach($blog_list as $item):?>
+        <?php foreach($items as $item):?>
             <tr>
                 <td><?=$item->id?></td>
                 <td class="text-left">
@@ -87,12 +87,12 @@ $this->title = '文章列表';
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php if($blog_list->isEmpty()):?>
+    <?php if($items->isEmpty()):?>
         <div class="page-empty-tip">
             空空如也~~
         </div>
     <?php endif;?>
     <div align="center">
-        <?=$blog_list->getLink()?>
+        <?=$items->getLink()?>
     </div>
 </div>

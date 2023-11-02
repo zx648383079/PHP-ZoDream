@@ -26,7 +26,7 @@ class PageRepository {
     }
 
     public static function save(array $data) {
-        $id = isset($data['id']) ? $data['id'] : 0;
+        $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = $id > 0 ? self::getSelf($id) : new PageModel();
         $model->load($data);
@@ -36,7 +36,7 @@ class PageRepository {
         return $model;
     }
 
-    public static function removeSelf(int $id) {
+    public static function removeSelf(int $id): void {
         PageModel::where('id', $id)->orWhere('parent_id', $id)->delete();
     }
 

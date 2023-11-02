@@ -265,14 +265,14 @@ class Attribute {
             item.default_value.forEach((value, i) => {
                 let attr = this.getAttrItem(value, item.attr_items),
                     id = attr ? attr.id : '';
-                html += '<span class="check-label attr-block" data-id="'+id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+id+'][checked]" value="1" '+ (id ? 'checked' : '') +'><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+id+'][value]" value="'+ value +'" readonly><input type="text" name="attr['+item.id+']['+id+'][price]" value="'+ (attr ? attr.price : '') +'" placeholder="价格"></label></span>';
+                html += '<span class="check-label attr-block" data-id="'+id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+id+'][checked]" value="1" '+ (id ? 'checked' : '') +'><label for="attr_'+ item.id +'_'+ i +'"><input type="text" class="form-control" name="attr['+item.id+']['+id+'][value]" value="'+ value +'" readonly><input type="text" class="form-control" name="attr['+item.id+']['+id+'][price]" value="'+ (attr ? attr.price : '') +'" placeholder="价格"></label></span>';
             });
             return html;
         }
         item.attr_items.forEach((attr, i) => {
-            html += '<span class="check-label attr-block" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"><input type="text" name="attr['+item.id+']['+attr.id+'][price]" value="'+ (attr.price ? attr.price : 0) +'" placeholder="价格"></label><i class="fa fa-remove"></i></span>';
+            html += '<span class="check-label attr-block" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" class="form-control" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"><input type="text" class="form-control" name="attr['+item.id+']['+attr.id+'][price]" value="'+ (attr.price ? attr.price : 0) +'" placeholder="价格"></label><i class="fa fa-remove"></i></span>';
         });
-        return html + '<div class="add-box attr-block"><input type="text"><input type="text" placeholder="价格"><button type="button" class="btn">添加</button></div>';
+        return html + '<div class="add-box attr-block"><input type="text" class="form-control"><input type="text" class="form-control" placeholder="价格"><button type="button" class="btn">添加</button></div>';
     }
 
     private getSingleAttr(item) {
@@ -280,14 +280,14 @@ class Attribute {
         if (item.input_type == 1) {
             item.default_value.forEach((value, i) => {
                 let id = this.getAttrId(value, item.attr_items);
-                html += '<span class="check-label" data-id="'+id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+id+'][checked]" value="1" '+ (id ? 'checked' : '') +'><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+id+'][value]" value="'+ value +'" readonly></label></span>';
+                html += '<span class="check-label" data-id="'+id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+id+'][checked]" value="1" '+ (id ? 'checked' : '') +'><label for="attr_'+ item.id +'_'+ i +'"><input type="text" class="form-control" name="attr['+item.id+']['+id+'][value]" value="'+ value +'" readonly></label></span>';
             });
             return html;
         }
         item.attr_items.forEach((attr, i) => {
-            html += '<span class="check-label" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"></label><i class="fa fa-remove"></i></span>';
+            html += '<span class="check-label" data-id="'+attr.id+'"><input type="checkbox" id="attr_'+ item.id +'_'+ i +'" name="attr['+item.id+']['+attr.id+'][checked]" value="1" checked><label for="attr_'+ item.id +'_'+ i +'"><input type="text" class="form-control" name="attr['+item.id+']['+attr.id+'][value]" value="'+ attr.value +'"></label><i class="fa fa-remove"></i></span>';
         });
-        return html + '<div class="add-box"><input type="text"><button type="button" class="btn">添加</button></div>';
+        return html + '<div class="add-box"><input type="text" class="form-control"><button type="button" class="btn">添加</button></div>';
     }
 
     private getAttrId(value, attr_list) {
@@ -413,14 +413,14 @@ class Attribute {
 function bindGoods(goodsId: number) {
     bindEdit();
     let attr = new Attribute($(".attribute-box"), goodsId);
-    $("#attribute_group_id").change(function() {
+    $("#attribute_group_id").on('change', function() {
         attr.refreshByGroup(parseInt($(this).val() + ''));
     }).trigger('change');
     $(".btn-save").on('click',function() {
         $("input[name=product]").val(JSON.stringify(attr.productList));
-        $(this).closest('form').submit();
+        $(this).closest('form').trigger('submit');
     });
-    $("#price").change(function() {
+    $("#price").on('change', function() {
         let target = $('#market_price');
         let price = toFloat($(this).val());
         if (price <= 0) {
@@ -1111,7 +1111,7 @@ class GoodsDailog {
         return this.dialog.find(tag);
     }
 
-    public on(event: string, tag: string | Function, cb?: (event: JQueryEventObject) => void) {
+    public on(event: string, tag: string | Function, cb?: (event: JQuery.Event) => void) {
         if (event === 'done') {
             this._doneCallback = tag as Function;
             return this;
@@ -1195,7 +1195,7 @@ function bindSecKill(actId, timeId) {
 
 function bindShipping() {
     let shipping = new Delivery($('.regional-table'));
-    $('select[name=code]').change(function() {
+    $('select[name=code]').on('change', function() {
         let input = $('[name=name]');
         if ((input.val() as string).trim().length < 1) {
             input.val($(this).find('option:selected').text());
@@ -1205,7 +1205,7 @@ function bindShipping() {
 
 function bindPayment() {
     $('#shipping-box').select2();
-    $('select[name=code]').change(function() {
+    $('select[name=code]').on('change', function() {
         let input = $('[name=name]');
         if ((input.val() as string).trim().length < 1) {
             input.val($(this).find('option:selected').text());
@@ -1215,7 +1215,7 @@ function bindPayment() {
 
 function bindEditAd() {
     let groups = $(".type-group .input-group");
-    $("#type").change(function() {
+    $("#type").on('change', function() {
         groups.eq(parseInt($(this).val() as string) % 2).show().siblings().hide();
     }).trigger('change');
 }
@@ -1236,8 +1236,7 @@ function bindOperate() {
 function bindEdit() {
     $.when(
         $.getScript('/assets/js/jquery.editor.min.js')).then(function() {
-            UE.delEditor('container');
-            UE.getEditor('container');
+            $('#container').editor();
     });
 }
 
@@ -1317,7 +1316,7 @@ function bindMix() {
             }
             html += '<tr><td><span>'+ 
             item.title +'</span><input type="hidden" name="configure[goods_id][]" value="'+ 
-            item.id +'"></td><td><input type="text" name="configure[amount][]" value="1"></td><td><input type="text" name="configure[price][]" value="'+ item.price +'"></td><td>'+ item.price +'</td><td class="subtotal">'+ item.price +'</td><td><a href="javascript:;" data-action="del">删除</a></td></tr>';
+            item.id +'"></td><td><input type="text" class="form-control" name="configure[amount][]" value="1"></td><td><input type="text" class="form-control" name="configure[price][]" value="'+ item.price +'"></td><td>'+ item.price +'</td><td class="subtotal">'+ item.price +'</td><td><a href="javascript:;" data-action="del">删除</a></td></tr>';
         });
         table.find('table tbody').append(html);
         refreshPrice();

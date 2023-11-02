@@ -8,8 +8,8 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 class CourseController extends Controller {
 
     public function indexAction() {
-        $model_list = CourseRepository::all(true);
-        return $this->show(compact('model_list'));
+        $items = CourseRepository::all(true);
+        return $this->show(compact('items'));
     }
 
     public function createAction() {

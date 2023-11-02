@@ -34,10 +34,10 @@ $this->registerJs($js);
             <?php foreach($model->form as $item):?>
             <tr>
                 <td>
-                    <input type="text" name="form[name][]" value="<?=$item['name']?>">
+                    <input type="text" class="form-control" name="form[name][]" value="<?=$item['name']?>">
                 </td>
                 <td>
-                    <input type="text" name="form[label][]" value="<?=$item['label']?>">
+                    <input type="text" class="form-control" name="form[label][]" value="<?=$item['label']?>">
                 </td>
                 <td>
                     <input type="checkbox" name="form[required][]" value="1" <?=isset($item['required']) ? 'checked' : '' ?>>
@@ -52,10 +52,10 @@ $this->registerJs($js);
             <?php endforeach;?>
             <tr>
                 <td>
-                    <input type="text" name="form[name][]">
+                    <input type="text" class="form-control" name="form[name][]">
                 </td>
                 <td>
-                    <input type="text" name="form[label][]">
+                    <input type="text" class="form-control" name="form[label][]">
                 </td>
                 <td>
                     <input type="checkbox" name="form[required][]" value="1">
@@ -77,6 +77,8 @@ $this->registerJs($js);
         </tfoot>
     </table>
 
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

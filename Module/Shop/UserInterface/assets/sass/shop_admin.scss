@@ -472,8 +472,8 @@ table {
 }
 
 .option-box {
-	display: grid;
-	grid-template-columns: 150px 1fr;
+	// display: grid;
+	// grid-template-columns: 150px 1fr;
 	.tab-header {
 		border-right: 1px dotted #767676;
 		box-sizing: border-box;

@@ -1,10 +1,15 @@
 function bindForum() {
-    let box = $("#classify-box").on('click', '.del', function(e) {
+    const box = $("#classify-box").on('click', '.del', function(e) {
         e.preventDefault();
+        if (box.find('tbody tr').length === 1) {
+            return;
+        }
         $(this).closest('tr').remove();
     });
     $(".add-classify").on('click',function(e) {
         e.preventDefault();
-        box.append('<tr><td><input type="text" name="classify[name][]"><input type="hidden" name="classify[id][]" value="0"></td><td><input type="text" name="classify[icon][]"></td><td><input type="text" name="classify[position][]" size="4"></td><td><a href="javascript:;" class="del">删除</a></td></tr>');
+        const tr = box.find('tbody tr').eq(0).clone(true, false);
+        box.append(tr);
+        tr.find('input').val('');
     });
 }

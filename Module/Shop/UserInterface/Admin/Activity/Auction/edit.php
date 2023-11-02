@@ -29,6 +29,8 @@ $this->registerJs($js);
     <?=Form::text('configure[step_price]')->label('加价幅度')?>
     <?=Form::text('configure[deposit]')->label('保证金')?>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

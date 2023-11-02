@@ -168,43 +168,6 @@ i {
         }
     }
 }
-.form-horizontal {
-    line-height: $lineHeight;
-    .form-control {
-        border: none;
-        background: transparent;
-        box-sizing: border-box;
-    }
-    .input-group {
-        display: inline-block;
-        border-bottom: 1px solid #777;
-        height: $lineHeight;
-        textarea {
-            padding: .5rem;
-        }
-    }
-}
-
-.form-inline {
-    .form-control {
-        flex: 1;
-        border: none;
-        background: transparent;
-        box-sizing: border-box;
-        &.height-auto {
-            height: auto;
-        }
-    }
-    .input-group {
-        display: flex;
-        border-bottom: 1px solid #777;
-        min-height: $inputLineHeight;
-        align-items: center;
-    }
-    .btn {
-        margin-top: 8px;
-    }
-}
 
 .form-default {
     .form-control {
@@ -219,17 +182,17 @@ i {
 
 .form-table {
     .form-control {
-        min-width: 12.5rem;
+        --#{$prefix}-input-width: 12.5rem;
     }
     .input-group {
         display: flex;
         margin-bottom: .3rem;
         select {
-            min-width: 6.25rem;
+            --#{$prefix}-input-width: 6.25rem;
         }
         textarea {
             padding: .5rem;
-            min-width: 12.5rem;
+            --#{$prefix}-input-width: 12.5rem;
             min-height: $lineHeight * 3;
         }
         >label:first-child {
@@ -273,6 +236,44 @@ i {
             top: 0;
             z-index: 99;
         }
+    }
+}
+
+.form-horizontal {
+    line-height: $lineHeight;
+    .form-control {
+        border: none;
+        background: transparent;
+        box-sizing: border-box;
+    }
+    .input-group {
+        display: inline-block;
+        border-bottom: 1px solid #777;
+        height: $lineHeight;
+        textarea {
+            padding: .5rem;
+        }
+    }
+}
+
+.form-inline {
+    .form-control {
+        flex: 1;
+        border: none;
+        background: transparent;
+        box-sizing: border-box;
+        &.height-auto {
+            height: auto;
+        }
+    }
+    .input-group {
+        display: flex;
+        border-bottom: 1px solid #777;
+        min-height: $inputLineHeight;
+        align-items: center;
+    }
+    .btn {
+        margin-top: 8px;
     }
 }
 

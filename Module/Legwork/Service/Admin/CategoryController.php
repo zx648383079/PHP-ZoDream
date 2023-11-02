@@ -7,10 +7,10 @@ use Module\Legwork\Domain\Model\CategoryModel;
 class CategoryController extends Controller {
 
     public function indexAction($keywords = '') {
-        $model_list = CategoryModel::when(!empty($keywords), function ($query) {
+        $items = CategoryModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
             })->orderBy('id', 'desc')->page();
-        return $this->show(compact('model_list', 'keywords'));
+        return $this->show(compact('items', 'keywords'));
     }
 
     public function createAction() {

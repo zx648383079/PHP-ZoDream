@@ -7,8 +7,8 @@ class CommentController extends Controller {
 
     public function indexAction(int $blog_id = 0, string $keywords = '', string $email = '',
                                 string $name = '') {
-        $comment_list = CommentRepository::commentList($blog_id, $keywords, $email, $name);
-        return $this->show(compact('comment_list'));
+        $items = CommentRepository::commentList($blog_id, $keywords, $email, $name);
+        return $this->show(compact('items'));
     }
 
     public function deleteAction(int $id) {

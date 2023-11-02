@@ -23,6 +23,8 @@ $this->registerJs($js);
     <?=Form::text('url')?>
     <?=Form::text('start_at', true)?>
     <?=Form::text('end_at', true)?>
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

@@ -11,9 +11,9 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 class PostController extends Controller {
 
     public function indexAction(string $keywords = '', int $cat_id = 0) {
-        $post_list = ResourceRepository::getManageList($keywords, 0, $cat_id);
+        $items = ResourceRepository::getManageList($keywords, 0, $cat_id);
         $cat_list = CategoryRepository::levelTree();
-        return $this->show(compact('post_list', 'cat_list', 'keywords', 'cat_id'));
+        return $this->show(compact('items', 'cat_list', 'keywords', 'cat_id'));
     }
 
     public function createAction() {
@@ -32,7 +32,7 @@ class PostController extends Controller {
 
     public function saveAction(Input $input, array $tag, int $id = 0) {
         try {
-            ResourceRepository::save($input->all(), $tag);
+            ResourceRepository::save($input->all(), $tag, []);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

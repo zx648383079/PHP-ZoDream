@@ -9,11 +9,11 @@ use Module\MicroBlog\Domain\Repositories\MicroRepository;
 class MicroController extends Controller {
 
     public function indexAction(string $keywords = '') {
-        $model_list  = MicroBlogModel::with('user')
+        $items  = MicroBlogModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['content']);
             })->orderBy('id', 'desc')->page();
-        return $this->show(compact('model_list'));
+        return $this->show(compact('items'));
     }
 
     public function deleteAction(int $id) {

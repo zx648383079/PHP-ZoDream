@@ -35,7 +35,7 @@ $this->title = '角色列表';
                 <td><?=$item->display_name?></td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-default btn-xs" href="<?=$this->url('./@admin/role/edit', ['id' => $item->id])?>">编辑</a>
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/role/edit', ['id' => $item->id])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/role/delete', ['id' => $item->id])?>">删除</a>
                     </div>
                 </td>

@@ -33,7 +33,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <?php foreach($model->rule_value as $course_id => $types):?>
                 <tr>
                     <td>
-                        <select name="rule[question][course][]">
+                        <select name="rule[question][course][]" class="form-control">
                         <?php foreach($cat_list as $item):?>
                             <option value="<?=$item['id']?>" <?=$course_id == $item['id'] ? 'selected': '' ?>>
                                 <?php if($item['level'] > 0):?>
@@ -46,7 +46,7 @@ $this->registerJs($js, View::JQUERY_READY);
                     </td>
                     <?php foreach(QuestionModel::$type_list as $i => $item):?>
                     <td>
-                        <input type="text" name="rule[question][type][<?=$i?>][]" value="<?=isset($types[$i]) ? $types[$i] : 0?>">
+                        <input type="text" class="form-control" name="rule[question][type][<?=$i?>][]" value="<?=isset($types[$i]) ? $types[$i] : 0?>">
                     </td>
                     <?php endforeach;?>
                     <td>
@@ -56,7 +56,7 @@ $this->registerJs($js, View::JQUERY_READY);
                 <?php endforeach;?>
                 <tr>
                     <td>
-                        <select name="rule[question][course][]">
+                        <select name="rule[question][course][]" class="form-control">
                         <?php foreach($cat_list as $item):?>
                             <option value="<?=$item['id']?>">
                                 <?php if($item['level'] > 0):?>
@@ -69,7 +69,7 @@ $this->registerJs($js, View::JQUERY_READY);
                     </td>
                     <?php foreach(QuestionModel::$type_list as $i => $item):?>
                     <td>
-                        <input type="text" name="rule[question][type][<?=$i?>][]">
+                        <input type="text" class="form-control" name="rule[question][type][<?=$i?>][]">
                     </td>
                     <?php endforeach;?>
                     <td>
@@ -87,6 +87,8 @@ $this->registerJs($js, View::JQUERY_READY);
         </table>
     </div>
     
-    <button type="submit" class="btn btn-success">确认保存</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-success">确认保存</button>
+        <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
+    </div>
 <?= Form::close('id') ?>

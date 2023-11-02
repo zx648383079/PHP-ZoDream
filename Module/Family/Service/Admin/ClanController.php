@@ -14,16 +14,16 @@ class ClanController extends Controller {
         ];
     }
 
-    public function indexAction($keywords = null) {
-        $clan_list = ClanModel::query()->page();
-        return $this->show(compact('clan_list'));
+    public function indexAction(string $keywords = '') {
+        $items = ClanModel::query()->page();
+        return $this->show(compact('items'));
     }
 
     public function createAction() {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = ClanModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -40,7 +40,7 @@ class ClanController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         ClanModel::where('id', $id)->delete();
         FamilyModel::where('clan_id', $id)->update(['clan_id' => 0]);
         return $this->renderData([
@@ -48,17 +48,17 @@ class ClanController extends Controller {
         ]);
     }
 
-    public function metaAction($clan_id) {
-        $model_list = ClanMetaModel::where('clan_id', $clan_id)
+    public function metaAction(int $clan_id) {
+        $items = ClanMetaModel::where('clan_id', $clan_id)
             ->orderBy('created_at', 'desc')->select('id', 'name')->page();
-        return $this->show(compact('model_list', 'clan_id'));
+        return $this->show(compact('items', 'clan_id'));
     }
 
-    public function createMetaAction($clan_id) {
+    public function createMetaAction(int $clan_id) {
         return $this->editMetaAction(0, $clan_id);
     }
 
-    public function editMetaAction($id, $clan_id = 0) {
+    public function editMetaAction(int $id, int $clan_id = 0) {
         $model = ClanMetaModel::findOrNew($id);
         if ($model->isNewRecord) {
             $model->clan_id = $clan_id;
@@ -79,7 +79,7 @@ class ClanController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteMetaAction($id) {
+    public function deleteMetaAction(int $id) {
         $model = ClanMetaModel::find($id);
         $model->delete();
         return $this->renderData([
