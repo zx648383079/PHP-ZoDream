@@ -4,7 +4,6 @@ namespace Module\SEO\Domain\Repositories;
 
 use Domain\Repositories\ExplorerRepository;
 use Exception;
-use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 use Zodream\Module\Gzo\Domain\GenerateModel;
 
@@ -19,22 +18,27 @@ class SEORepository {
         ExplorerRepository::removeBakFiles('sql_');
     }
 
-    public static function backUpSql(bool $hasZip = false): void {
+    public static function backUpSql(bool $isZip = true): void {
         $root = ExplorerRepository::bakPath();
         $root->create();
         $fileName = sprintf('sql_%s.sql', date('Y-m-d'));
-        $file = $root->file($fileName);
+        $targetFileName = $isZip ? sprintf('sql_%s.zip', date('Y-m-d')) : $fileName;
+        $targetFile = $root->file($targetFileName);
         set_time_limit(0);
-        if ((!$file->exist() || $file->modifyTime() < (time() - 60))
-            && !GenerateModel::schema()
-                ->export($file, [], false)) {
-            throw new Exception('导出失败！');
-        }
-        if (!$hasZip) {
+        if ($targetFile->exist() && $targetFile->modifyTime() > (time() - 60)) {
             return;
         }
-        $zip_file = $root->file($fileName.'.zip');
-        ZipStream::create($zip_file)->addFile($file)->close();
+        $file = $isZip ? $root->file($fileName) : $targetFile;
+        if (!GenerateModel::schema()
+            ->export($file, [], false)) {
+            throw new Exception('导出失败！');
+        }
+        if (!$isZip) {
+            return;
+        }
+        ZipStream::create($targetFile)->addFile($file)
+            ->close();
+        $file->delete();
     }
 
     public static function sqlFiles(): array {
