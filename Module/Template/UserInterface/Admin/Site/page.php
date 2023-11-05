@@ -35,7 +35,7 @@ $this->title = $site->title;
         
     <?= Form::close('id') ?>
     <div class="card-box">
-        <?php foreach($page_list as $item):?>
+        <?php foreach($items as $item):?>
         <div class="card">
             <div class="card-logo">
                 <a href="<?=$this->url('./@admin/page', ['id' => $item->id])?>">
@@ -44,7 +44,7 @@ $this->title = $site->title;
             </div>
             <div class="card-body">
                 <h3><?=$item->title?></h3>
-                <p><?=$item->descriptio ?></p>
+                <p><?=$item->description ?></p>
             </div>
         </div>
         <?php endforeach;?>

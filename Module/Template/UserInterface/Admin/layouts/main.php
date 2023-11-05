@@ -26,7 +26,7 @@ $this->registerCssFile([
         'fa fa-home',
     ],
     [
-        '页面管理',
+        '我的站点',
         false,
         'fa fa-columns',
         [
@@ -39,25 +39,45 @@ $this->registerCssFile([
                 '新增站点',
                 './@admin/site/create',
                 'fa fa-plus'
-            ]
+            ],
         ],
         true,
     ],
     [
-        '模板管理',
+        '模板市场',
         false,
         'fa fa-book',
         [
             [
-                '主题列表',
-                './@admin/theme',
-                'fa fa-list'
+                '组件市场',
+                './@admin/market',
+                'fa fa-cart-plus'
             ],
             [
-                '刷新主题',
-                './@admin/theme/refresh',
-                'fa fa-retweet'
-            ]
+                '共享站点',
+                './@admin/market/site',
+                'fa fa-clone'
+            ],
+            [
+                '上传组件',
+                './@admin/market/my',
+                'fa fa-cloud-upload-alt'
+            ],
+            [
+                '分类管理',
+                './@admin/category',
+                'fa fa-bookmark',
+                [],
+                false,
+                false,
+                auth()->user()->isAdministrator()
+            ],
+            // [
+            //     '刷新主题',
+            //     './@admin/theme/refresh',
+            //     'fa fa-retweet'
+            // ]
         ],
+        true
     ],
-], $this->contents(), 'ZoDream Template Admin') ?>
+], $this->contents(), $this->title ?? 'ZoDream Template Admin') ?>

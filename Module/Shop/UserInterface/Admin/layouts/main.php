@@ -255,4 +255,4 @@ $this->registerCssFile([
             ],
         ],
     ]
-], $this->contents(), 'ZoDream Shop Admin') ?>
+], $this->contents(), $this->title ?? 'ZoDream Shop Admin') ?>

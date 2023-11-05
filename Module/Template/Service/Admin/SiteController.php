@@ -13,8 +13,8 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 class SiteController extends Controller {
 
     public function indexAction() {
-        $site_list = SiteRepository::getList();
-        return $this->show(compact('site_list'));
+        $items = SiteRepository::getList();
+        return $this->show(compact('items'));
     }
 
     /**
@@ -24,8 +24,8 @@ class SiteController extends Controller {
      */
     public function pageAction(int $id) {
         $site = SiteModel::findWithAuth($id);
-        $page_list = PageRepository::getList($id);
-        return $this->show(compact('site', 'page_list'));
+        $items = PageRepository::getList($id);
+        return $this->show(compact('site', 'items'));
     }
 
     public function createAction() {
@@ -80,4 +80,10 @@ class SiteController extends Controller {
         ]);
     }
 
+    public function componentAction(int $site, string $keywords = '', int $type = 0) {
+        $items = SiteRepository::selfGetComponent($site, $keywords, $type);
+        $type_list = ['页面', '组件'];
+        return $this->show(compact('items',
+            'keywords', 'type', 'type_list'));
+    }
 }

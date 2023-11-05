@@ -144,6 +144,8 @@ return [
     'As a draft' => '放入草稿箱',
     'As a publish' => '发布',
     'As a trash' => '放入回收站',
+    'Nothing is here.' => '空空如也~~',
+    'Operating tips' => '操作提示',
     'zh' => '中',
     'en' => 'EN',
     'sex' => [
