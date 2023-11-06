@@ -50,6 +50,12 @@ input[type="color"] {
     }
 }
 
+.form-control-color {
+    &::-webkit-color-swatch {
+        border-radius: $formRadius;
+    }
+}
+
 .input-group {
     .tooltip {
         color: var(--#{$prefix}-secondary-text);

@@ -8,6 +8,7 @@ $isFullyTheme: true !default;
             --#{$prefix}-primary-text: #{$dark-primaryText};
             
             --#{$prefix}-body: #{$dark-body};
+            --#{$prefix}-hover: #{$dark-hover};
             --#{$prefix}-body-text: #{$dark-bodyText};
             --#{$prefix}-panel: #{$dark-panel};
             --#{$prefix}-panel-text: #{$dark-bodyText};
@@ -44,6 +45,7 @@ $isFullyTheme: true !default;
         --#{$prefix}-primary-text: #{$primaryText};
         @if $isFullyTheme {
             --#{$prefix}-body: #{$body};
+            --#{$prefix}-hover: #{$hover};
             --#{$prefix}-body-text: #{$bodyText};
             --#{$prefix}-panel: #{$panel};
             --#{$prefix}-panel-text: #{$bodyText};

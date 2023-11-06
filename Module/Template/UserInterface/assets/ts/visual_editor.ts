@@ -101,6 +101,25 @@ interface IPageModel {
     preview_url: string;
 }
 
+interface IItem {
+    name: string;
+    value: any;
+}
+
+interface IRgbaColor {
+    r: number; // 255
+    g: number; // 255
+    b: number; // 255
+    a: number; // 1
+}
+
+interface IHslColor {
+    h: number; // 360
+    s: number; // 100
+    l: number; // 100
+    a: number; // 1
+}
+
 class VisualEditor {
 
     private listeners: {
@@ -524,7 +543,7 @@ class EditorWeightSoul {
                     return;
                 }
                 const items = this.editor.browser.getElementByPoint(p);
-                if (!items[0]) {
+                if (!items || !items[0]) {
                     this.reset();
                     return;
                 }
@@ -563,6 +582,7 @@ class EditorPanelGroup {
     private children: IEditorPanel[] = [
         new EditorWeightPanel(this.editor),
         new EditorPropertyPanel(this.editor),
+        new EditorLayerPanel(this.editor),
     ];
     private renderedChildren: {
         target: JQuery,
@@ -698,18 +718,49 @@ class EditorPropertyPanel implements IEditorPanel {
             return;
         }
         const that = this;
-        this.box.on('change', '.position-input select', function() {
+        this.box.on('change', '.position-container select', function() {
             const $this = $(this);
             $this.next().html(EditorHtmlHelper.positionSide($this.val() as string));
-        }).on('click', '.background-input input[type="radio"]', function() {
-            const $this = $(this);
-            $this.closest('.background-input').find('.value-input').html(EditorHtmlHelper.backgroundValue($this.attr('name').replace('[type]', ''), $this.val() as number));
         }).on('click', '.switch-input', function() {
             const $this = $(this);
             const checked = !$this.hasClass('checked');
             $this.toggleClass('checked', checked);
             $this.find('.switch-label').text(checked ? $this.data('on') : $this.data('off'));
             $this.find('input').val(checked ? 1 : 0).trigger('change');
+        }).on('click', '.control-popup-target', function() {
+            $(this).next('.control-popup').toggleClass('open');
+        }).on('click', '.select-with-control .control-body .extra-control', function() {
+            $(this).closest('.select-with-control').find('.select-option-bar').toggle();
+        }).on('select:change', '.select-with-control .select-option-bar', function(_, ele: HTMLDivElement) {
+            const $this = $(ele);
+            $this.closest('.select-with-control').find('.control-body .extra-control').text($this.text());
+        }).on('click', '.select-option-bar .option-item', function() {
+            const $this = $(this);
+            $this.addClass('selected').siblings().removeClass('selected');
+            $this.closest('.select-option-bar').hide().trigger('select:change', this);
+        }).on('change', '.hue-bar,.saturation-bar,.lightness-bar,.alpha-bar', function() {
+            const colorPopup = $(this).closest('.control-popup');
+            const hsl = EditorHtmlHelper.colorPopupColor(colorPopup);
+            const rgba = EditorHelper.hslToRgba(hsl);
+            const format = `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
+            colorPopup.find('.saturation-bar').css('background-image', `linear-gradient(to right, gray, ${format})`);
+            colorPopup.find('.lightness-bar').css('background-image', `linear-gradient(to right, black, ${format})`);
+            colorPopup.find('.alpha-bar').css('background-image', `linear-gradient(to right, transparent, ${format})`);
+            colorPopup.find('.tab-bar-target').each(function(i) {
+                const that = $(this);
+                if (i === 0) {
+                    that.find('input').val(EditorHelper.rgbaToHex(rgba));
+                } else {
+                    const items = i === 1 ? [rgba.r, rgba.g, rgba.b, rgba.a] : [hsl.h, hsl.s, hsl.l, hsl.a];
+                    that.find('input').each(function(this: HTMLInputElement, j) {
+                        this.value = items[j].toString();
+                    });
+                }
+            });
+        }).on('click', '.tab-bar .item', function() {
+            const $this = $(this);
+            $this.addClass('active').siblings().removeClass('active');
+            $this.closest('.tab-bar').siblings('.tab-bar-target').removeClass('active').eq($this.index()).addClass('active');
         }).on('change', 'input,textarea', function() {
             that.autoSave();
         }).on('click', '.style-item', function() {
@@ -753,24 +804,24 @@ class EditorPropertyPanel implements IEditorPanel {
                         </div><div class="tab-item">
                             样式
                         </div></div>
-                    <div class="tab-body form-table">
+                    <div class="tab-body">
                         <div class="tab-item active">
                         </div>
                         <div class="tab-item">
                         <div class="expand-box open">
-                                <div class="expand-header">整体<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-header">整体<span class="fa fa-chevron-right"></span></div>
                                 <div class="expand-body">
                                     
                                 </div>
                             </div>
                             <div class="expand-box">
-                                <div class="expand-header">标题<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-header">标题<span class="fa fa-chevron-right"></span></div>
                                 <div class="expand-body">
                                     
                                 </div>
                             </div>
                             <div class="expand-box">
-                                <div class="expand-header">内容<span class="fa fa-chevron-down"></span></div>
+                                <div class="expand-header">内容<span class="fa fa-chevron-right"></span></div>
                                 <div class="expand-body">
                                     
                                 </div>
@@ -806,22 +857,21 @@ class EditorPropertyPanel implements IEditorPanel {
 
     private applyForm(data: any) {
         const styles = data.settings?.style;
-        let items = this.box.find('.form-table .tab-item');
+        let items = this.box.find('.tab-body .tab-item');
         items[0].innerHTML = EditorHtmlHelper.title(data.title) 
                         + EditorHtmlHelper.lazy(data.settings?.lazy) 
                         + EditorHtmlHelper.share(data.is_share)
-                        + EditorHtmlHelper.button('重置', 'reset-btn');
+                        + EditorHtmlHelper.align()
+                        + EditorHtmlHelper.buttonGroup(EditorHtmlHelper.button('重置', 'reset-btn'));
         let boxes = $(items[1]).find('.expand-body');
         boxes[0].innerHTML = EditorHtmlHelper.margin(styles?.margin)
                         + EditorHtmlHelper.position(styles?.position)
-                        + EditorHtmlHelper.border(null, styles?.border) 
-                        + EditorHtmlHelper.radius(null, data.settings ? data.settings['border-radius'] : null)
+                        + EditorHtmlHelper.border(null, styles?.border)
                         + EditorHtmlHelper.color(null, data.settings?.color)
                         + EditorHtmlHelper.background(null, data.settings?.background);
         boxes[1].innerHTML = EditorHtmlHelper.visibility('title', styles?.title?.visibility)
                         + EditorHtmlHelper.padding('title', styles?.title?.padding)
                         + EditorHtmlHelper.border('title', styles?.title?.border) 
-                        + EditorHtmlHelper.radius('title', styles?.title['border-radius'])
                         + EditorHtmlHelper.color('title', styles?.title?.color)
                         + EditorHtmlHelper.fontSize('title', styles?.title['font-size'])
                         + EditorHtmlHelper.fontWeight('title', styles?.title['font-weight'])
@@ -829,8 +879,7 @@ class EditorPropertyPanel implements IEditorPanel {
                         + EditorHtmlHelper.background('title', styles?.title?.background);
         boxes[2].innerHTML = EditorHtmlHelper.visibility('content', styles?.content?.visibility)
                         + EditorHtmlHelper.padding('content', styles?.content?.padding)
-                        + EditorHtmlHelper.border('content', styles?.content?.border) 
-                        + EditorHtmlHelper.radius('content', styles?.content['border-radius'])
+                        + EditorHtmlHelper.border('content', styles?.content?.border)
                         + EditorHtmlHelper.color('content', styles?.content?.color)
                         + EditorHtmlHelper.fontSize('content', styles?.content['font-size'])
                         + EditorHtmlHelper.fontWeight('content', styles?.content['font-weight'])
@@ -931,7 +980,7 @@ class EditorWeightPanel implements IEditorPanel {
                 <li class="expand-box open">
                     <div class="expand-header">
                         ${group.name}
-                        <span class="fa fa-chevron-down"></span>
+                        <span class="fa fa-chevron-right"></span>
                     </div>
                     <div class="expand-body list-view">
                     ${text}
@@ -949,6 +998,85 @@ class EditorWeightPanel implements IEditorPanel {
     public hide() {
         this.box.addClass('min')
     } 
+}
+
+class EditorLayerPanel implements IEditorPanel {
+    private box: JQuery<HTMLDivElement>;
+
+    constructor(
+        private editor: VisualEditor
+    ) {
+        this.editor.on(EditorEventAfterViewInit, () => {
+            this.bindEvent();
+        });
+    }
+
+    private bindEvent() {
+        const that = this.editor;
+        this.box.on('click', '.structure-item .item-open-icon', function() {
+            $(this).closest('.structure-item').toggleClass('open');
+        });
+    }
+
+    public render(): JQuery {
+        this.box = $(`<div class="panel-item" data-panel="layer"></div`);
+        this.box.html(`
+            <div class="panel-header">
+                <span class="title">组件层</span>
+                <a class="fa fa-close"></a>
+            </div>
+            <div class="panel-body">
+            </div>
+        `);
+        return this.box;
+    }
+
+    public show() {
+        this.box.removeClass('min');
+    }
+    public hide() {
+        this.box.addClass('min')
+    }
+
+    private renderItems(items: any[]): string {
+        return items.map(item => {
+            let children = '';
+            let iconArrow = '';
+            if (item.children && item.children.length > 0) {
+                children = `<div class="item-children">${this.renderItems(items)}</div>`;
+                iconArrow = `<div class="item-open-icon">
+                <i class="fa fa-chevron-right"></i>
+            </div>`
+            }
+            return `<div class="structure-item">
+            <div class="item-body">
+                ${iconArrow}
+                <div class="item-icon">
+                    <i class="fa fa-chain"></i>
+                </div>
+                <input type="text" class="item-title" value="${item.name}">
+                <div class="item-action-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                </div>
+                <div class="item-action-bar">
+                    <a>
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <a>
+                        <i class="fa fa-copy"></i>
+                    </a>
+                    <a>
+                        <i class="fa fa-plus"></i>
+                    </a>
+                    <a>
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </div>
+            </div>
+            ${children}
+        </div>`
+        }).join('');
+    }
 }
 
 class EditorDialog {
@@ -1202,7 +1330,7 @@ class EditorBrowser {
             || pos.y < 0 
             || pos.x > this.frame.width() 
             || pos.y > this.frame.height()) {
-            return;
+            return [undefined, undefined];;
         }
         const inBound = (ele: JQuery<HTMLElement>) => {
             const offset = ele.offset();
@@ -2027,12 +2155,105 @@ class EditorHelper {
             }
         }
     }
+
+    public static colorToRgba(color: string): IRgbaColor {
+        const code = color.charAt(0);
+        const matchFunc = (val: string): number[] => {
+            return val.substring(val.indexOf('(') + 1, val.indexOf(')')).split(',').map(i => toFloat(i));
+        };
+        if (code === 'h') {
+            const items = matchFunc(color);
+            return this.hslToRgba({h: items[0], s: items[1], l: items[2], a: 1});
+        } else if (code === 'r') {
+            const items = matchFunc(color);
+            if (items.length > 3) {
+                return {r: items[0], g: items[1], b: items[2], a: items[3]};
+            }
+            return {r: items[0], g: items[1], b: items[2], a: 1};
+        }
+        return this.hexToRgba(color);
+    }
+
+    public static rgbaToHex(color: IRgbaColor): string {
+        return ['#', color.r.toString(16), color.g.toString(16), color.b.toString(16), color.a >= 0 && color.a < 1 ? Math.round(color.a * 255).toString(16) : ''].join('');
+    }
+
+    public static hexToRgba(hex: string): IRgbaColor {
+        if (hex.charAt(0) === '#') {
+            hex = hex.substring(1);
+        }
+        let r: number, g: number, b: number = 0;
+        let a: number = 1;
+        const toHex = (val: string, isDouble = false) => {
+            if (!val) {
+                return 0;
+            }
+            const i = parseInt(val, 16);
+            if (!isDouble) {
+                return i;
+            }
+            return i * 17;
+        };
+        const step = hex.length <= 4 ? 1 : 2;
+        r = toHex(hex.substring(0, step), step === 2);
+        g = toHex(hex.substring(step, step * 2), step === 2);
+        b = toHex(hex.substring(step * 2, step * 3), step === 2);
+        if (hex.length > step * 3) {
+            a = toHex(hex.substring(step * 3, step * 4), step === 2);
+        }
+        return { r, g, b, a };
+    }
+
+    public static rgbaToHsl(color: IRgbaColor): IHslColor {
+        let r = color.r;
+        let g = color.g;
+        let b = color.b;
+        r /= 255, g /= 255, b /= 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h: number, s: number, l: number = (max + min) / 2;
+        if (max == min) {
+            h = s = 0; // achromatic
+        } else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        return { h, s, l, a: color.a};
+    }
+
+    public static hslToRgba(color: IHslColor): IRgbaColor {
+        let h = color.h / 360, s = color.s / 100, l = color.l / 100;
+        let r: number, g: number, b: number;
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        } else {
+            const hue2rgb = (p: number, q: number, t: number) => {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1 / 6) return p + (q - p) * 6 * t;
+                if (t < 1 / 2) return q;
+                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                return p;
+            }
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1 / 3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1 / 3);
+        }
+        return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255), a: color.a };
+    }
 }
 
 class EditorHtmlHelper {
     private static _guid = 0;
     public static guid(): number {
-        return EditorHtmlHelper._guid ++;
+        return this._guid ++;
     }
 
     public static value(val: any, def: any = ''): string {
@@ -2046,7 +2267,7 @@ class EditorHtmlHelper {
     }
 
     public static join(...items: any[]): string {
-        return items.map(val => EditorHtmlHelper.value(val)).join('');
+        return items.map(val => this.value(val)).join('');
     }
 
     public static mapJoinHtml(data: object, cb: (val: any, key?: string|number) => string): string {
@@ -2058,179 +2279,579 @@ class EditorHtmlHelper {
     }
 
     public static title(val: string = '') {
-        const id = 'title_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '标题', EditorHtmlHelper.text(id, 'title', val));
+        const id = 'title_' + this.guid();
+        return this.input(id, '标题', this.text(id, 'title', val), 'control-line-group');
     }
 
     public static lazy(val: number) {
-        const id = 'settings_lazy_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '懒加载', EditorHtmlHelper.switch(id, 'settings[lazy]', val));
+        const id = 'settings_lazy_' + this.guid();
+        return this.input(id, '懒加载', this.switch(id, 'settings[lazy]', val));
+    }
+
+    public static align() {
+        return this.horizontalAlign() + this.verticalAlign();
+    }
+
+    public static horizontalAlign(): string {
+        return this.radioInput('horizontal-align', 'horizontal-align', [
+            {name: '<i class="fa fa-align-left" title="左对齐"></i>', value: 'left'},
+            {name: '<i class="fa fa-align-center" title="水平居中"></i>', value: 'center'},
+            {name: '<i class="fa fa-align-right" title="右对齐"></i>', value: 'right'},
+            {name: '<i class="fa fa-align-justify" title="水平等间距"></i>', value: 'stretch'},
+        ]);
+    }
+
+    public static verticalAlign(): string {
+        return this.radioInput('vertical-align', 'horizontal-align', [
+            {name: '<i class="fa fa-align-left fa-vertical" title="上对齐"></i>', value: 'top'},
+            {name: '<i class="fa fa-align-center fa-vertical" title="垂直居中"></i>', value: 'center'},
+            {name: '<i class="fa fa-align-right fa-vertical" title="下对齐"></i>', value: 'bottom'},
+            {name: '<i class="fa fa-align-justify fa-vertical" title="垂直等间距"></i>', value: 'stretch'},
+        ]);
     }
 
     public static share(val: number) {
-        const id = 'is_share_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '共享', EditorHtmlHelper.switch(id, 'is_share', val));
+        const id = 'is_share_' + this.guid();
+        return this.input(id, '共享', this.switch(id, 'is_share', val));
     }
 
     public static margin(vals: string[] = []) {
-        return EditorHtmlHelper.sideInput('settings[style][margin]', '外边距', vals);
+        return this.sideInput('settings[style][margin]', '外边距', vals);
     }
 
     public static padding(name: string, vals: string[] = []) {
-        return EditorHtmlHelper.sideInput('settings[style][' + name +'][padding]', '内边距', vals);
+        return this.sideInput('settings[style][' + name +'][padding]', '内边距', vals);
     }
 
     public static position(data: any) {
-        const html = EditorHtmlHelper.positionSide(data?.type, data?.value);
-        const option = EditorHtmlHelper.option({
-            static: '无',
-            relative: '相对定位',
-            absolute: '绝对定位',
-            fixed: '固定定位'
-        }, data?.type);
-        return EditorHtmlHelper.input('', '悬浮', `<select class="form-control" name="settings[style][position][type]">${option}</select><div class="side-input">${html}</div>`, 'position-input');
+        return this.input('', '悬浮', this.positionInput('settings[style]', data), 'control-line-group');
     }
 
-    public static positionSide(type: string, value?: any) {
-        return type && type != 'static' ? EditorHtmlHelper.side('settings[style][position][value]', 'settings[style][position][value]', value) : '';
+    public static positionSide(type: string, val?: any) {
+        const name = `settings[style][position][value]`;
+        return type !== 'static' ? this.boundInput(this.nameToId(name), name, val) : '';
     }
 
     public static border(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        let html = EditorHtmlHelper.checkbox(id, name + '[side][]', ['上', '右', '下', '左'], data?.side)
-        const option = EditorHtmlHelper.option(['实线', '虚线'], data && data.value && data.value[1] == 1 ? 1 : 0)
-        return EditorHtmlHelper.input(id, '边框', EditorHtmlHelper.join('<input type="text" class="form-control" name="', name, '[value][]" value="', data?.value[0], '" placeholder="粗细" size="4"><select  class="form-control" name="', name, '[value][]">',option, '</select><input type="color"  class="form-control" name="', name, '[value][]" value="', data?.value[2], '"><div class="side-input">', html, '</div>'));
+        const id = this.nameToId(name) + '_' + this.guid();
+        return this.input(id, '边框', this.borderPopup(id, name, data));
     }
 
     public static radius(name?: string, data?: string[]) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[border-radius]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
+        const id = this.nameToId(name) + '_' + this.guid();
         if (!data) {
             data = [];
         }
-        return EditorHtmlHelper.input(id, '圆角', EditorHtmlHelper.join('<input type="text" id="', id, '_0" class="form-control" name="',name, '[]" value="', data[0],'" size="4" placeholder="左上"><input type="text" id="',id,'_1" class="form-control" name="',name,'[]" value="', data[1],'" size="4" placeholder="右上"><br/><input type="text" id="',id,'_2" class="form-control" name="',name,'[]" value="', data[2],'" size="4" placeholder="左下"><input type="text" id="',id,'_3" class="form-control " name="',name,'[]" value="', data[3],'" size="4" placeholder="右下">'));
+        return this.input(id, '圆角', this.radiusInput(id, name, data), 'control-line-group');
     }
 
 
     public static color(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[color]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, '字体颜色', EditorHtmlHelper.join(EditorHtmlHelper.radio(id, name + '[type]', ['无', '有'], data?.type),  '<input type="color"  class="form-control" name="', name,'[value]" value="',data?.value,'">'));
+        const id = this.nameToId(name) + '_' + this.guid();
+        return this.input(id, '字体颜色', this.colorPopup(id, name, data));
     }
 
     public static background(name?: string, data?: any) {
         name = 'settings[style]'+ (name ? '[' + name +']' : '') +'[background]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        let html = EditorHtmlHelper.radio(id, name+ '[type]', ['无', '颜色', '图片'], '0') + '<div class="value-input">' + EditorHtmlHelper.backgroundValue(name, data?.type)+'</div>';
-        return EditorHtmlHelper.input(id, '背景', html, 'background-input');
-    }
-
-    public static backgroundValue(name: string, type?: number) {
-        if (!type || type < 1) {
-            return '';
-        }
-        if (type == 2) {
-            return `<div class="file-input">
-            <input type="text" class="form-control " name="${name}[value]" value="" size="10">
-            <button type="button" data-type="upload">上传</button>
-        </div>`;
-        };
-        return `<input type="color" class="form-control" name="${name}[value]">`;
+        const id = this.nameToId(name) + '_' + this.guid();
+        return this.input(id, '背景', this.backgroundPopup(id, name, data));
     }
 
     public static visibility(name: string, val: string|number) {
         name = 'settings[style]['+ name +'][visibility]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
+        const id = this.nameToId(name) + '_' + this.guid();
         
-        return EditorHtmlHelper.input(id, '可见', EditorHtmlHelper.switch(id, name, val, '显示', '隐藏'));
+        return this.input(id, '可见', this.switch(id, name, val, '显示', '隐藏'));
     }
 
     public static fontSize(name: string, val?: string) {
         name = 'settings[style]['+ name +'][font-size]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        
-        return EditorHtmlHelper.input(id, '字体大小', EditorHtmlHelper.text(id, name, val, 4));
+        const id = this.nameToId(name) + '_' + this.guid();
+        return this.input(id, '字体大小', this.sizeInput(undefined, id, name, val));
     }
 
     public static textAlign(name: string, val?: string) {
         name = 'settings[style]['+ name +'][text-align]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
+        const id = this.nameToId(name) + '_' + this.guid();
         
-        return EditorHtmlHelper.input(id, '字体位置', EditorHtmlHelper.radio(id, name, ['居左', '居中', '居右'], !val ? 0 : val));
+        return this.input(id, '字体位置', this.radioInput(id, name, [{name: '居左', value: 0}, {name: '居中', value: 1}, {name: '居右', value: 2}], !val ? 0 : val), 'control-line-group');
     }
 
     public static fontWeight(name: string, val?: string) {
         name = 'settings[style]['+ name +'][font-weight]';
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        
-        return EditorHtmlHelper.input(id, '字体粗细', EditorHtmlHelper.text(id, name, val, 4));
-    }
-
-
-
-    private static option(items: any, selected: string| number) {
-        let html = '';
-        $.each(items, function(i: string) {
-            const sld = selected == i ? ' selected' : '';
-            html += `<option value="${i}"${sld}>${this}</option>`;
-        });
-        return html;
+        const id = this.nameToId(name) + '_' + this.guid();
+        const items = [];
+        for (let i = 1; i < 10; i++) {
+            const item = i * 10;
+            items.push({name: item, value: item});
+        }
+        return this.input(id, '字体粗细', `<select class="form-control" name="${name}" id="${id}">
+        ${this.selectOption(items)}
+        </select>`);
     }
 
     private static sideInput(name: string, label: string, vals: string[] = []) {
-        const id = EditorHtmlHelper.nameToId(name) + '_' + EditorHtmlHelper.guid();
-        return EditorHtmlHelper.input(id, label, EditorHtmlHelper.side(id, name, vals), 'side-input');
-    }
-
-    private static side(id: string, name: string, vals: string[] = []) {
-        let html = '';
-        $.each(['上', '右', '下', '左'], function(i: number) {
-            const val = vals && vals.length > i ? vals[i] : '';
-            html += `<input type="text" id="${id}_${i}" class="form-control " name="${name}[]" size="4" value="${val}" placeholder="${this}">`;
-        });
-        return html;
+        const id = this.nameToId(name) + '_' + this.guid();
+        return this.input(id, label, this.boundInput(id, name, vals), 'control-line-group');
     }
 
     public static switch(id: string, name: string, val: string|number|boolean, onLabel = '开启', offLabel = '关闭') {
         val = EditorHelper.parseNumber(val);
-        return EditorHtmlHelper.join('<div id="', id,'" class="switch-input" data-on="',onLabel,'" data-off="', offLabel ,'"><span class="switch-control"></span><span class="switch-label">', val > 0 ? onLabel : offLabel ,'</span><input type="hidden" name="', name,'" value="', val, '"/></div>');
+        return this.join('<div id="', id,'" class="switch-input" data-on="',onLabel,'" data-off="', offLabel ,'"><span class="switch-control"></span><span class="switch-label">', val > 0 ? onLabel : offLabel ,'</span><input type="hidden" name="', name,'" value="', val, '"/></div>');
     }
 
-    private static radio(id: string, name: string, items: any, selected: string| number) {
-        let html = '';
-        let j = 0;
-        $.each(items, function(i: string) {
-            const index = [id, j ++].join('_');
-            const chk = i == selected ? ' checked' : '';
-            html += `<span class="radio-label"><input type="radio" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
-        });
-        return html;
+    private static radioInput(id: string, name: string, items: IItem[], selected?: string| number) {
+        return this.join('<div class="control-row">', ...items.map((item, j) => {
+            const index = [id, j].join('_');
+            const chk = item.value == selected ? ' checked' : '';
+            return `<span class="radio-label radio-control-item"><input type="radio" id="${index}" name="${name}" value="${item.value}"${chk}><label for="${index}">${item.name}</label></span>`;
+        }) ,'</div>');
     }
 
-    private static checkbox(id: string, name: string, items: any, val: string[] = []) {
-        let html = '';
-        let j = 0;
-        $.each(items, function(i: string) {
-            const index = [id, j ++].join('_');
-            const chk = val && val.indexOf(i) >= 0 ? ' checked' : '';
-            html += `<span class="check-label"><input type="checkbox" id="${index}" name="${name}" value="${i}"${chk}><label for="${index}">${this}</label></span>`;
-        });
-        return html;
+    private static checkbox(id: string, name: string, items: IItem[], val: string[] = []) {
+        return this.join('<div class="control-row">', ...items.map((item, j) => {
+            const index = [id, j].join('_');
+            const chk = val && val.indexOf(item.value) >= 0 ? ' checked' : '';
+            return `<span class="check-label radio-control-item"><input type="checkbox" id="${index}" name="${name}" value="${item.value}"${chk}><label for="${index}">${item.name}</label></span>`;
+        }) ,'</div>');
     }
 
     private static text(id: string, name: string, val: string = '', size?: number) {
         const option = size ? ` size="${size}"` : '';
-        val = EditorHtmlHelper.value(val);
-        return `<input type="text" id="${id}" class="form-control" name="${name}" value="${val}"${option}>`;
+        val = this.value(val);
+        return `<input type="text" id="${id}" name="${name}" value="${val}"${option}>`;
     }
 
-    private static input(id: string, name: string, content: string, cls: string = ''): string {
-        return `<div class="input-group"><label for="${id}">${name}</label><div class="${cls}">${content}</div></div>`;
+    private static input(id: string, name: string, content: string, cls: string = 'control-inline-group'): string {
+        return `<div class="${cls}"><label for="${id}">${name}</label>${content}</div>`;
+    }
+
+    public static buttonGroup(...items) {
+        return this.join('<div class="btn-group control-offset">', ...items, '</div>');
     }
 
     public static button(text: string, cls: string) {
         return `<button type="button" class="btn ${cls}">${text}</button>`;
+    }
+
+    private static animationInput() {
+        // 动效名称
+        const animationLabelOptions = [
+            { value: '', name: '无' },
+            { value: 'bounce', name: '弹跳' },
+            { value: 'fadeIn', name: '渐现' },
+            { value: 'fadeOut', name: '渐出' },
+            { value: 'flash', name: '闪烁' },
+            { value: 'pulse', name: '跳动' },
+            { value: 'rubberBand', name: '橡皮筋' },
+            { value: 'shake', name: '抖动' },
+            { value: 'swing', name: '摆动' },
+            { value: 'tada', name: '哒嘟' },
+            { value: 'wobble', name: '摇晃' },
+            { value: 'jello', name: '扭曲抖动' },
+            { value: 'bounceIn', name: '弹入' },
+            { value: 'bounceInDown', name: '上弹入' },
+            { value: 'bounceInLeft', name: '左弹入' },
+            { value: 'bounceInRight', name: '右弹入' },
+            { value: 'bounceInUp', name: '下弹入' },
+            { value: 'flipInX', name: '水平翻转' },
+            { value: 'flipInY', name: '垂直翻转' },
+            { value: 'spinning', name: '旋转（顺时针）' },
+            { value: 'spinning-reverse', name: '旋转（逆时针）' },
+            { value: 'rotateIn', name: '旋入' },
+            { value: 'rotateInDownLeft', name: '左下旋转' },
+            { value: 'rotateInDownRight', name: '右下旋转' },
+            { value: 'rotateInUpLeft', name: '左上旋转' },
+            { value: 'rotateInUpRight', name: '右上旋转' },
+            { value: 'slideInDown', name: '上滑入' },
+            { value: 'slideInLeft', name: '左滑入' },
+            { value: 'slideInRight', name: '右滑入' },
+            { value: 'slideInUp', name: '下滑入' },
+            { value: 'zoomIn', name: '逐渐放大' },
+            { value: 'zoomInDown', name: '从下放大' },
+            { value: 'zoomInLeft', name: '从左放大' },
+            { value: 'zoomInRight', name: '从右放大' },
+            { value: 'zoomInUp', name: '从上放大' },
+            { value: 'rollIn', name: '滚入' },
+            { value: 'lightSpeedIn', name: '闪入' },
+        ];
+
+        // 延时时间
+        const animationLabelDelayOptions = [
+            { value: '', name: '无' },
+            { value: '0.1s', name: '100ms' },
+            { value: '0.2s', name: '200ms' },
+            { value: '0.3s', name: '300ms' },
+            { value: '0.5s', name: '500ms' },
+            { value: '1s', name: '1s' },
+            { value: '2s', name: '2s' },
+            { value: '3s', name: '3s' },
+            { value: '4s', name: '4s' },
+            { value: '5s', name: '5s' },
+            { value: '6s', name: '6s' },
+            { value: '7s', name: '7s' },
+            { value: '8s', name: '8s' },
+            { value: '9s', name: '9s' },
+            { value: '10s', name: '10s' },
+        ];
+
+        // 时长
+        const animationLabelDurationOptions = [
+            { value: '0.25s', name: '250ms' },
+            { value: '0.5s', name: '500ms' },
+            { value: '0.75s', name: '750ms' },
+            { value: '1s', name: '1s' },
+            { value: '2s', name: '2s' },
+            { value: '3s', name: '3s' },
+            { value: '4s', name: '4s' },
+            { value: '5s', name: '5s' },
+        ];
+
+        // 重复次数
+        const animationIterationCountOptions = [
+            { value: '1', name: '1' },
+            { value: '2', name: '2' },
+            { value: '3', name: '3' },
+            { value: '4', name: '4' },
+            { value: '5', name: '5' },
+            { value: '6', name: '6' },
+            { value: '7', name: '7' },
+            { value: '8', name: '8' },
+            { value: '9', name: '9' },
+            { value: '10', name: '10' },
+            { value: 'infinite', name: '无限循环' },
+        ];
+
+        const animationFuncOptions = [
+            { value: 'linear', name: '线性' },
+            { value: 'ease', name: 'ease' },
+            { value: 'ease-in', name: 'ease-in' },
+            { value: 'ease-out', name: 'ease-out' },
+            { value: 'ease-in-out', name: 'ease-in-out' },
+        ];
+        return `<div class="animation-container">
+        <div class="effect-show">效果展示</div>
+        <div class="control-inline-group">
+            <label for="">动效</label>
+            <select class="form-control">
+            ${this.selectOption(animationLabelOptions)}
+            </select>
+        </div>
+        <div class="control-inline-group">
+            <label for="">延时</label>
+            <select class="form-control">
+            ${this.selectOption(animationLabelDelayOptions)}
+            </select>
+        </div>
+        <div class="control-inline-group">
+            <label for="">时长</label>
+            <select class="form-control">
+            ${this.selectOption(animationLabelDurationOptions)}
+            </select>
+        </div>
+        <div class="control-inline-group">
+            <label for="">重复</label>
+            <select class="form-control">
+            ${this.selectOption(animationIterationCountOptions)}
+            </select>
+        </div>
+    </div>`;
+    }
+
+    private static backgroundPopup(id: string, name: string, val?: any) {
+        return `<div class="control-popup-target">
+        <div class="color-icon">
+            <i class="fa fa-edit"></i>
+        </div>
+    </div>
+    <div class="control-popup">
+        <div class="control-inline-group">
+            <label for="">背景色</label>
+            ${this.colorPopup(id, name)}
+        </div>
+        <div class="control-line-group">
+            <label for="">背景图片</label>
+            <label class="drag-control-container" for="fileName">
+                拖放文件
+                <p>(或点击)</p>
+                <input type="file" id="fileName">
+            </label>
+        </div>
+    </div>
+    `;
+    }
+
+    private static shadowPopup(id: string, name: string) {
+        return `<div class="control-popup-target">
+        <div class="color-icon">
+            <i class="fa fa-edit"></i>
+        </div>
+    </div>
+    <div class="control-popup">
+        <div class="control-row">
+            ${this.sizeInput('X',id,name)}
+            ${this.sizeInput('Y',id,name)}
+            ${this.sizeInput('BLUR',id,name)}
+            ${this.sizeInput('SPREAD',id,name)}
+        </div>
+       
+        <div class="control-inline-group">
+            <label for="">Color</label>
+            ${this.colorPopup(id, name)}
+        </div>
+        <div class="control-inline-group">
+            <label for="">Inset</label>
+            ${this.switch(id,name, '')}
+        </div>
+    </div>`;
+    }
+
+    private static selectOption(items: IItem[], selected?: any) {
+        return items.map(item => {
+            const sel = selected === item.value ? ' selected' : '';
+            return `<option value="${item.value}"${sel}>${item.name}</option>`;
+        }).join('');
+    }
+
+    private static borderPopup(id: string, name: string, val?: any) {
+        const styleItems = [
+            {name: '无', value: ''},
+            {name: '横线', value: 'solid'},
+            {name: '点线', value: 'dotted'},
+            {name: '虚线', value: 'double'},
+        ];
+        return `<div class="control-popup-target">
+        <div class="color-icon">
+            <i class="fa fa-edit"></i>
+        </div>
+    </div>
+    <div class="control-popup">
+        <div class="control-line-group">
+            <label for="">Width</label>
+            ${this.boundInput(id,name)}
+        </div>
+        <div class="control-inline-group">
+            <label for="">Style</label>
+            <select>
+                ${this.selectOption(styleItems)}
+            </select>
+        </div>
+        <div class="control-inline-group">
+            <label for="">Color</label>
+            ${this.colorPopup(id,name)}
+        </div>
+        <div class="control-line-group">
+            <label for="">Radius</label>
+            ${this.radiusInput(id,name)}
+        </div>
+    </div>`;
+    }
+
+    private static colorPopup(id: string, name: string, val?: any) {
+        // return `<input type="color" class="form-control-color" id="${id}" name="${name}">`;
+        return `<div class="control-popup-target">
+        <div class="color-icon">
+            <i class="fa fa-edit"></i>
+        </div>
+    </div>
+    <div class="control-popup">
+        <div class="popup-action">
+            <div class="btn btn-danger">清除</div>
+        </div>
+        <div class="control-line-group">
+            <label for="">Hue</label>
+            <input type="range" class="hue-bar" min="0" max="360" step="1" value="0">
+        </div>
+        <div class="control-line-group">
+            <label for="">Saturation</label>
+            <input type="range" class="saturation-bar" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="control-line-group">
+            <label for="">Lightness</label>
+            <input type="range" class="lightness-bar" min="0" max="100" step="1" value="0">
+        </div>
+        <div class="control-line-group alpha-ouline-bar">
+            <label for="">Transparency</label>
+            <input type="range" class="alpha-bar" min="0" max="100" step="1" value="1">
+        </div>
+    
+        <div class="control-row tab-bar-target active">
+            <div class="control-half-group">
+                <input type="text">
+                <label for="">HEX</label>
+            </div>
+        </div>
+        <div class="control-row tab-bar-target">
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">R</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">G</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">B</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">A</label>
+            </div>
+        </div>
+        <div class="control-row tab-bar-target">
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">H</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">S</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">L</label>
+            </div>
+            <div class="control-half-group">
+                <input type="number">
+                <label for="">A</label>
+            </div>
+        </div>
+        <div class="tab-bar">
+            <a class="item active">HEX</a>
+            <a class="item">RGB</a>
+            <a class="item">HSL</a>
+        </div>
+    </div>`;
+    }
+    public static colorPopupColor(popup: JQuery<HTMLDivElement>): IHslColor;
+    public static colorPopupColor(popup: JQuery<HTMLDivElement>, color: string): void;
+    public static colorPopupColor(popup: JQuery<HTMLDivElement>, color?: string): void|IHslColor {
+        const hCtl = popup.find('.hue-bar');
+        const sCtl = popup.find('.saturation-bar');
+        const lCtl = popup.find('.lightness-bar');
+        const tCtl = popup.find('.alpha-bar');
+        if (typeof color === 'undefined') {
+            return {h: toInt(hCtl.val()), s: toInt(sCtl.val()), l: toInt(lCtl.val()), a: toInt(tCtl.val()) / 100};
+        }
+        const format = EditorHelper.colorToRgba(color);
+        const hsl = EditorHelper.rgbaToHsl(format);
+        hCtl.val(hsl.h);
+        sCtl.val(hsl.s);
+        lCtl.val(hsl.l);
+        tCtl.val(hsl.a * 100);
+    }
+
+    private static boundInput(id: string, name: string, items?: any[]) {
+        const html = ['上', '右', '下', '左'].map((label, i) => {
+            return this.sizeInput(label, `${id}_${i}`, `${name}[]`, items && items.length > i ? items[i] : '');
+        }).join('');
+        return `<div class="control-row">${html}</div>`
+    }
+
+
+    private static maskInput() {
+        return `<div class="mark-container">
+        <div class="clip-path-box">
+            <div class="shape" style="clip-path: inset(10%);"></div>
+            <div class="shape" style="clip-path: circle(45% at 50% 50%);"></div>
+            <div class="shape" style="clip-path: ellipse(30% 45% at 50% 50%);"></div>
+            <div class="shape"
+                style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
+            ></div>
+            <div
+                class="shape"
+                style="clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);"
+            ></div>
+            <div
+                class="shape"
+                style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);"
+            ></div>
+            <div
+                class="shape"
+                style="clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);"
+            ></div>
+            <div
+                class="shape"
+                style="clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);"
+            ></div>
+            <div
+                class="shape"
+                style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"
+            ></div>
+        </div>
+        <button class="btn btn-primary">一键取消</button>
+    </div>
+    `;
+    }
+
+    private static positionInput(id: string, data?: any) {
+        const typeItems = [
+            {name: '无', value: 'static'},
+            {name: '相对定位', value: 'relative'},
+            {name: '绝对定位', value: 'absolute'},
+            {name: '固定定位', value: 'fixed'},
+        ];
+        const type = !data.type ? typeItems[0].value : data.type;
+        const name = `${id}[position][value]`;
+        const input = type !== typeItems[0].value ? this.boundInput(this.nameToId(name), name, data.value) : '';
+        return `<div class="position-container">
+        <select name="${id}[position][type]">
+            ${this.selectOption(typeItems,type)}
+        </select>
+        <div>${input}</div>
+    </div>`;
+    }
+
+
+    private static radiusInput(id: string, name: string, items?: any[]) {
+        const html = ['左上', '右上', '右下', '左下'].map((label, i) => {
+            return this.sizeInput(label, `${id}_${i}`, `${name}[]`, items && items.length > i ? items[i] : '');
+        }).join('');
+        return `<div class="control-row">${html}</div>`
+    }
+
+    private static selectInput(items: string[], editable = false, searchable = false) {
+        const body = editable ? `<input type="text" class="input-body">` : `<span class="input-body"></span>`;
+
+        return this.join(`<div class="select-control-container">`, `<div class="select-input-container">
+        ${body}
+        <div class="input-clear">
+            <i class="fa fa-close"></i>
+        </div>
+        <div class="input-arrow">
+            <i class="fa"></i>
+        </div>
+    </div>`, this.selectOptionBar(items, searchable), `</div>`);
+
+    }
+
+    private static sizeInput(label: string|undefined, id?: string, name?: string, val?: any, unit: string = 'px') {
+        val = toFloat(val);
+        const input = `<input type="number" id="${id}" name="${name}" value="${val}">`;
+        const core = label ? `<div class="control-body">
+        <label for="${id}">${label}</label>
+        ${input}
+        <span class="extra-control">${unit}</span>
+    </div>` : `<div class="control-body">
+    <span class="extra-control">${unit}</span>
+    ${input}
+</div>`;
+        return `<div class="select-with-control">` + core + this.selectOptionBar(['px', 'em', 'rem', 'vh', 'vw', '%', 'auto', 'none']) + '</div>';
+    }
+
+    private static selectOptionBar(items: string[], searchable = false) {
+        let option = searchable ? `<div class="search-option-item">
+        <input type="text">
+        <i class="fa fa-search"></i>
+    </div>` : '';
+        option += items.map(item => {
+            return `<div class="option-item">${item}</div>`;
+        }).join('');
+        return `<div class="select-option-bar">${option}</div>`
     }
 
     private static nameToId(name: string) {
