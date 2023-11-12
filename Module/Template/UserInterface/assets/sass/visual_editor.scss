@@ -530,7 +530,6 @@ $iconWidth: 1.5rem;
             }
         }
     }
-
     .select-control-container {
         position: relative;
         line-height: $lineHight;
@@ -556,6 +555,10 @@ $iconWidth: 1.5rem;
             text-align: center;
             font-size: .8rem;
         }
+
+        .input-clear {
+            display: none;
+        }
     
         .search-option-item {
             position: relative;
@@ -567,7 +570,7 @@ $iconWidth: 1.5rem;
                 border: none;
                 padding: 0 $iconWidth;
             }
-            .iconfont {
+            .fa {
                 font-size: .8rem;
                 position: absolute;
                 z-index: 2;
@@ -671,6 +674,35 @@ $iconWidth: 1.5rem;
         }
         &:hover {
             background-color: var(--#{$prefix}-input);
+        }
+    }
+
+    .image-control-item {
+        position: relative;
+        .control-body {
+            display: block;
+            width: 100%;
+            height: $lineHight * 3;
+            img {
+                display: block;
+                object-fit: contain;
+                height: 100%;
+                width: 100%;
+            }
+        }
+        .control-action {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .fa {
+                display: block;
+                background-color: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
+            }
         }
     }
 
@@ -919,6 +951,7 @@ $iconWidth: 1.5rem;
     .control-inline-group {
         display: flex;
         justify-content: space-between;
+        position: relative;
         >label {
             flex-basis: 50%;
         }
@@ -960,10 +993,16 @@ $iconWidth: 1.5rem;
             display: block;
             width: 100%;
         }
+        textarea {
+            width: 100%;
+            min-height: $lineHight * 4;
+        }
         .control-row {
             padding: 0;
         }
     }
+
+
 
     .control-popup {
         --#{$prefix}-popup: var(--#{$prefix}-body);
@@ -1008,6 +1047,51 @@ $iconWidth: 1.5rem;
                 }
             }
         }
+        .search-header-bar {
+            position: relative;
+            input {
+                height: $lineHight;
+                width: 100%;
+                background-color: transparent;
+                outline: 0;
+                border: none;
+                padding: 0 $iconWidth;
+            }
+            .fa {
+                font-size: .8rem;
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 0;
+                display: block;
+                color: var(--#{$prefix}-secondary-text);
+                width: $iconWidth;
+                text-align: center;
+            }
+        }
+        .search-body {
+            max-height: 15rem;
+            overflow-y: auto;
+        }
+        .icon-option-item {
+            display: inline-flex;
+            width: $lineHight * 2;
+            height: $lineHight * 2;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--#{$prefix}-input);
+            color: var(--#{$prefix}-input-text);
+            border-radius: $radius;
+            user-select: none;
+            .fa {
+                line-height: $lineHight;
+            }
+            &.selected {
+                background-color: var(--#{$prefix}-primary-active);
+                color:  var(--#{$prefix}-primary-text);
+            }
+        }
         &::before {
             border: 0.5rem solid transparent;
             content: "";
@@ -1043,6 +1127,33 @@ $iconWidth: 1.5rem;
 
     .fa-vertical {
         transform: rotate(90deg);
+    }
+
+    .control-dialog-body {
+        max-height: 80vh;
+        padding: 0 !important;
+        textarea {
+            padding: .4rem;
+        }
+        .multiple-box {
+            .item {
+                border:  1px dotted #ccc;
+                margin-bottom: 5px;
+                position: relative;
+                .multiple-del-btn {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    border-radius: 50%;
+                    background-color: red;
+                    color: white;
+                    line-height: 1.25rem;
+                    text-align: center;
+                }
+            }
+        }
     }
 }
 

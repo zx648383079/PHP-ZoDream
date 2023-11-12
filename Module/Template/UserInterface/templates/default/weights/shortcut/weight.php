@@ -2,6 +2,7 @@
 
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
+use Module\Template\Domain\VisualEditor\VisualInput;
 
 class ShortcutWeight extends BaseWeight {
 
@@ -27,10 +28,11 @@ class ShortcutWeight extends BaseWeight {
         return $this->show('view', compact('key_items'));
     }
 
-    public function renderForm(SiteWeightModel $model): string {
-        $content = $model->content;
-        $title = $model->title;
-        return $this->show('config', compact('content', 'title'));
+    public function renderForm(SiteWeightModel $model): array {
+        return [
+            VisualInput::text('title', '分组名称', $model->title),
+            VisualInput::textarea('content', '内容', $model->content, '每行一组,示例：保存 ctrl+S')
+        ];
     }
 
     private function splitKeys(?string $line): array {

@@ -59,7 +59,7 @@ final class ParserTest extends TestCase {
             ['{name=value}', '\<?php \'name\' = \'value\'; ?>'],
             ['{== $a }', '\<?= $this->text($a) ?>'],
            // ['{arg,...=value,...}', '\<?php arg = value;. = .;?\>'],
-
+            ['{=$item.active?\'class="active"\':\'\'}', '\<?= $item[\'active\'] ? \'class="active"\' : \'\' ?>'],
             ['{$channelid = isset($channel) ? $channel.id : product_center}', '\<?php $channelid = isset($channel)? $channel[\'id\'] : \'product_center\'; ?>']
         ];
     }

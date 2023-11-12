@@ -9,7 +9,9 @@ use Module\Template\Domain\Model\SitePageModel;
 use Module\Template\Domain\Model\SitePageWeightModel;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\VisualFactory;
+use Module\Template\Domain\VisualEditor\VisualInput;
 use Module\Template\Domain\VisualEditor\VisualWeight;
+use Zodream\Helpers\Arr;
 
 final class PageRepository {
 
@@ -93,11 +95,15 @@ final class PageRepository {
         return $data;
     }
 
-    public static function weight(int $id) {
+    public static function weight(int $id): array {
         $pageModel = SitePageWeightModel::findOrThrow($id);
         $model = SiteWeightModel::findOrThrow($pageModel->weight_id);
         $data = array_merge($model->toArray(), $pageModel->toArray());
         $data['styles'] = ThemeStyleEntity::where('component_id', $model->component_id)->get();
+        $data['form'] = [
+            'basic' => Arr::toArray(VisualInput::basic($model)),
+            'style' => Arr::toArray(VisualInput::style($model)),
+        ];
         return $data;
     }
 
@@ -174,14 +180,15 @@ final class PageRepository {
         return (new VisualWeight($model))->render(true);
     }
 
-    public static function weightRefresh(int $id) {
+    public static function weightRefresh(int $id): array {
         $model = SitePageWeightModel::findOrThrow($id);
         $data = $model->toArray();
         $data['html'] = self::renderWeight($model);
         return $data;
     }
 
-    public static function weightMove(int $id, int $parent_id, int $parent_index = 0, int $position = 0) {
+    public static function weightMove(int $id, int $parent_id, int $parent_index = 0,
+                                      int $position = 0): void {
         $model = SitePageWeightModel::findOrThrow($id);
         if ($model->parent_id === $parent_id
             && $model->parent_index === $parent_index) {
@@ -199,7 +206,7 @@ final class PageRepository {
         $model->save();
     }
 
-    public static function weightSave(int $id) {
+    public static function weightSave(int $id): array {
         $pageModel = SitePageWeightModel::findOrThrow($id);
         // $pageMap = ['parent_id', 'parent_index', 'position'];
         $disable = ['id', 'page_id', 'weight_id', 'component_id',
@@ -234,7 +241,7 @@ final class PageRepository {
         return $data;
     }
 
-    public static function weightRemove(int $id) {
+    public static function weightRemove(int $id): bool {
         if ($id < 1) {
             return true;
         }
@@ -255,11 +262,11 @@ final class PageRepository {
         return true;
     }
 
-    public static function weightForm(int $id) {
-        $model = SitePageWeightModel::find($id);
-        $html = (new VisualWeight($model))->renderForm();
+    public static function weightForm(int $id): array {
+        $model = SitePageWeightModel::findOrThrow($id);
+        $form = (new VisualWeight($model))->renderForm();
         $data = $model->toArray();
-        $data['html'] = $html;
+        $data['form'] = Arr::toArray($form);
         return $data;
     }
 
@@ -269,7 +276,7 @@ final class PageRepository {
      * @param array{id:int,position:int,parent_id:int}[] $weights
      * @return void
      */
-    public static function batchSave(int $id, array $weights) {
+    public static function batchSave(int $id, array $weights): void {
         $pageModel = SitePageModel::findOrThrow($id);
         if (!SiteRepository::isSelf($pageModel->site_id)) {
             throw new \Exception('page is error');

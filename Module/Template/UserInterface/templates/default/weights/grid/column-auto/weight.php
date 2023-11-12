@@ -4,6 +4,7 @@ use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\BaseWeight;
 use Module\Template\Domain\VisualEditor\VisualHelper;
 use Zodream\Helpers\Json;
+use Module\Template\Domain\VisualEditor\VisualInput;
 
 class ColumnAutoWeight extends BaseWeight {
 
@@ -17,17 +18,21 @@ class ColumnAutoWeight extends BaseWeight {
         return $this->show('view', $data);
     }
 
-    public function renderForm(SiteWeightModel $model): string {
+    public function renderForm(SiteWeightModel $model): array {
         $data = VisualHelper::formatFormData($model->content, $this->defaultData());
-        $data['split_items'] = implode(',', $data['split_items']);
-        return $this->show('config', $data);
+        return [
+            VisualInput::switch('split_mode', '启用平均分栏', $data['split_mode'] ?? 0)->attr('data-tab', 'split-tab'),
+            VisualInput::number('split_count', '分栏数', $data['split_count']??'')->class('split_mode-0'),
+            VisualInput::multiple('split_items', '分栏段数', $data['split_items'], [
+                VisualInput::number('value', '比例', 2)
+            ])->class('split_mode-1')
+        ];
     }
 
-    public function parseForm(): array {
-        $request = request();
+    public function validateForm(array $input): array {
         $data = [];
         foreach($this->defaultData() as $key => $value) {
-            $data[$key] = $request->get($key, $value);
+            $data[$key] = $input[$key] ?? $value;
         }
         return [
             'content' => Json::encode($data),

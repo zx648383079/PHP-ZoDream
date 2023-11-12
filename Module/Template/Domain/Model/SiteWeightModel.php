@@ -30,7 +30,7 @@ class SiteWeightModel extends SiteWeightEntity {
         $this->setAttributeSource('settings', is_array($value) ? Json::encode($value) : $value);
     }
 
-    public function setting($key, $default = null) {
+    public function setting(string $key, mixed $default = null): mixed {
         return Arr::get($this->settings, $key, $default);
     }
 }

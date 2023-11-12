@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Infrastructure;
 
 use Zodream\Template\View;
+use Zodream\Template\ViewFactory;
 
 final class Editor {
 
@@ -12,26 +13,52 @@ final class Editor {
 HTML;
     }
 
-    public static function html(string $name, mixed $content, array $option = []): string {
+    private static function isUEditor(): bool {
+        return config('view.editor') === 'ueditor';
+    }
+
+    public static function register(View|ViewFactory $provider): void {
+        if (self::isUEditor()) {
+            $provider->registerJsFile(['/assets/ueditor/ueditor.config.js',
+                '/assets/ueditor/ueditor.all.js']);
+        } else {
+            $provider->registerJsFile('@jquery.editor.min.js')
+                ->registerCssFile('@editor.css');
+        }
+    }
+
+    public static function render(View|ViewFactory|null $provider, string $name, mixed $content,
+                                  array $option = []): string {
         if (!isset($option['height']) || $option['height'] < 100) {
             $option['height'] = 400;
         }
-        return config('view.editor') === 'ueditor' ?
-            self::ueditor($name, $content, $option) :
-            self::editor($name, $content, $option);
+        $id = 'editor_'.substr(md5($name), 0, 6);
+        if (self::isUEditor()) {
+            $options = self::getUEditorOptions(isset($option['editor_mode']) && $option['editor_mode'] > 0);
+            $js = <<<JS
+UE.delEditor('{$id}');
+UE.getEditor('{$id}', {$options});
+JS;
+        } else {
+            $js = <<<JS
+$('#{$id}').editor();
+JS;
+        }
+        if (!empty($provider)) {
+            $provider->registerJs($js, View::JQUERY_READY);
+            $js = '';
+        }
+
+        return <<<HTML
+<textarea id="{$id}" style="height: {$option['height']}px" name="{$name}">{$content}</textarea>
+{$js}
+HTML;
     }
 
-    public static function ueditor(string $name, mixed $content, array $option = []): string {
-        $id = 'editor_'.substr(md5($name), 0, 6);
-        $options = self::getUEditorOptions(isset($option['editor_mode']) && $option['editor_mode'] > 0);
-        $js = <<<JS
-var ue = UE.getEditor('{$id}', {$options});
-JS;
-        view()->registerJsFile('/assets/ueditor/ueditor.config.js')
-            ->registerJsFile('/assets/ueditor/ueditor.all.js')->registerJs($js);
-        return <<<HTML
-<script id="{$id}" style="height: {$option['height']}px" name="{$name}" type="text/plain">{$content}</script>
-HTML;
+    public static function html(string $name, mixed $content, array $option = []): string {
+        $provider = \view();
+        self::register($provider);
+        return self::render($provider, $name, $content, $option);
     }
 
     private static function getUEditorOptions(bool $isSimple): string {
@@ -57,17 +84,4 @@ HTML;
         ]);
     }
 
-    public static function editor(string $name, mixed $content, array $option = []): string {
-        $id = 'editor_'.substr(md5($name), 0, 6);
-        $js = <<<JS
-$('#{$id}').editor();
-JS;
-        view()
-            ->registerJsFile('@jquery.editor.min.js')
-            ->registerCssFile('@editor.css')
-            ->registerJs($js, View::JQUERY_READY);
-        return <<<HTML
-<script id="{$id}" style="height: {$option['height']}px" name="{$name}" type="text/plain">{$content}</script>
-HTML;
-    }
 }

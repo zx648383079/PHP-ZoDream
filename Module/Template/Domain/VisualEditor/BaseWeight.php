@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
 use Exception;
+use Infrastructure\Editor;
 use Module\Template\Domain\Model\SiteWeightModel;
 use Zodream\Disk\Directory;
 use Zodream\Html\Dark\Theme;
@@ -53,22 +54,17 @@ abstract class BaseWeight implements IVisualWeight {
     /**
      * 获取生成的配置视图
      * @param SiteWeightModel $model
-     * @return mixed
+     * @return array
      */
-    public function renderForm(SiteWeightModel $model): string {
-        $html = Theme::text('title', $model->title, '标题');
-        return <<<HTML
-{$html}
-<textarea id="editor-container" style="height: 400px;" name="content" placeholder="请输入内容">{$model->content}</textarea>
-<script>
-UE.delEditor('editor-container');
-UE.getEditor('editor-container');
-</script>
-HTML;
+    public function renderForm(SiteWeightModel $model): array {
+        return [
+            VisualInput::title($model->title),
+            VisualInput::editor('content', $model->content)
+        ];
     }
 
-    public function parseForm(): array {
-        return request()->get();
+    public function validateForm(array $input): array {
+        return $input;
     }
 
     /**
