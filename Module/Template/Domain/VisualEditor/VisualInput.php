@@ -7,6 +7,15 @@ use Zodream\Html\Input;
 
 final class VisualInput {
 
+    /**
+     * 设置触发 tab 的元素上
+     */
+    const TAB_TARGET_KEY = 'data-tab';
+    /**
+     * 设置响应 tab 进行切换的元素
+     */
+    const TAB_GROUP_KEY = 'tab';
+
     public static function title(mixed $value): Input {
         return self::text('title', '标题', $value)->items([
             ['name' => '标题', 'value' => '{$title}'],
@@ -20,25 +29,25 @@ final class VisualInput {
                 ['name' => '刷新部件', 'value' => 'target'],
                 ['name' => '网址', 'value' => 'url'],
                 ['name' => '页面', 'value' => 'page'],
-            ], 0)->attr('data-tab', 'url-type'),
+            ], 0)->attr(self::TAB_TARGET_KEY, 'url-type'),
             self::group([
                 self::text('item_uri', '部件传值', ''),
                 self::select('item_target', '部件id', [], ''),
-            ])->class('url-type-target'),
+            ])->attr(self::TAB_GROUP_KEY, 'url-type-target'),
             self::group([
                 self::text('item_uri', '网址', ''),
                 self::select('item_target', '跳转方式', [
                     ['name' => '当前', 'value' => '_self'],
                     ['name' => '新标签', 'value' => '_blank'],
                 ], ''),
-            ])->class('url-type-url'),
+            ])->attr(self::TAB_GROUP_KEY, 'url-type-url'),
             self::group([
                 self::select('item_id', '跳转页面', [], ''),
                 self::select('item_target', '跳转方式', [
                     ['name' => '当前', 'value' => '_self'],
                     ['name' => '新标签', 'value' => '_blank'],
                 ], ''),
-            ])->class('url-type-url'),
+            ])->attr(self::TAB_GROUP_KEY, 'url-type-page'),
             self::icon('item_icon', '图标', ''),
             self::text('item_title', '标题', ''),
         ];
@@ -49,6 +58,7 @@ final class VisualInput {
             self::title($model->title),
             self::switch('lazy', '懒加载', intval($model->setting('lazy'))),
             self::switch('is_share', '共享', intval($model->is_share)),
+            self::align('align', $model->setting('align'))
         ];
     }
 

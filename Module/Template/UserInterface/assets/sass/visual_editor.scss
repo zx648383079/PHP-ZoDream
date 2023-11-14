@@ -411,71 +411,7 @@ $iconWidth: 1.5rem;
         }
     }
     .hidden {
-        display: none;
-    }
-
-
-    .structure-item {
-        position: relative;
-        .item-icon,
-        .item-action-icon,
-        .item-open-icon {
-            width: $iconWidth;
-            text-align: center;
-            font-size: .8rem;
-            font-weight: 300;
-        }
-        .item-open-icon {
-            position: absolute;
-            left: -$iconWidth;
-        }
-        .item-title {
-            flex: 1;
-            min-width: 0;
-            background-color: transparent;
-            outline: 0;
-            border: none;
-        }
-        .item-action-bar {
-            position: absolute;
-            border-radius: $radius;
-            left: 0;
-            right: 0;
-            top: 0;
-            z-index: 2;
-            display: none;
-            background-color: var(--#{$prefix}-input);
-            a {
-                display: inline-block;
-                flex: 1;
-                text-align: center;
-                &:first-of-type {
-                    border-radius: $radius 0 0 $radius;
-                }
-                &:last-of-type {
-                    border-radius: 0 $radius $radius 0;
-                }
-                &:not(:last-of-type) {
-                    border-right: 1px solid var(--#{$prefix}-primary);
-                }
-                &:hover {
-                    background-color: var(--#{$prefix}-primary);
-                    color: var(--#{$prefix}-primary-text);
-                }
-            }
-        }
-        .item-body {
-            position: relative;
-            margin-left: $iconWidth;
-            margin-bottom: .5rem;
-            border-radius: $radius;
-            line-height: $lineHight;
-            background-color: var(--#{$prefix}-input);
-            display: flex;
-        }
-        .item-children {
-            margin-left: 1rem;
-        }
+        display: none !important;
     }
 
     .color-icon {
@@ -1001,9 +937,6 @@ $iconWidth: 1.5rem;
             padding: 0;
         }
     }
-
-
-
     .control-popup {
         --#{$prefix}-popup: var(--#{$prefix}-body);
         display: none;
@@ -1049,6 +982,7 @@ $iconWidth: 1.5rem;
         }
         .search-header-bar {
             position: relative;
+            margin: .2rem .2rem 0;
             input {
                 height: $lineHight;
                 width: 100%;
@@ -1067,6 +1001,7 @@ $iconWidth: 1.5rem;
                 color: var(--#{$prefix}-secondary-text);
                 width: $iconWidth;
                 text-align: center;
+                line-height: $lineHight;
             }
         }
         .search-body {
@@ -1074,9 +1009,10 @@ $iconWidth: 1.5rem;
             overflow-y: auto;
         }
         .icon-option-item {
+            margin: .2rem;
             display: inline-flex;
-            width: $lineHight * 2;
-            height: $lineHight * 2;
+            width: $lineHight;
+            height: $lineHight;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1084,8 +1020,10 @@ $iconWidth: 1.5rem;
             color: var(--#{$prefix}-input-text);
             border-radius: $radius;
             user-select: none;
+            font-size: .6rem;
+            line-height: 1;
             .fa {
-                line-height: $lineHight;
+                font-size: 1rem;
             }
             &.selected {
                 background-color: var(--#{$prefix}-primary-active);
@@ -1100,9 +1038,173 @@ $iconWidth: 1.5rem;
             right: math.div($lineHight, 2) + .3rem;
             border-bottom-color: var(--#{$prefix}-popup);
         }
+        &.popup-top {
+            transform: translateY(-100%);
+            margin-top: 0;
+            &::before {
+                border: 0.5rem solid transparent;
+                border-top-color: var(--#{$prefix}-popup);
+                top: auto;
+                bottom: -.9rem;
+            }
+        }
         &.open {
             display: block;
         }
+    }
+    .multiple-control-item {
+        display: block;
+        .multiple-control-header {
+            padding-left: .4rem;
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--#{$prefix}-input);
+            user-select: none;
+            .control-action {
+                width: 1.5rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--#{$prefix}-secondary-text);
+            }
+        }
+        .multiple-control-body {
+            display: none;
+            margin: 0 -.8rem;
+        }
+        &:hover {
+            .multiple-control-header {
+                background-color: var(--#{$prefix}-hover);
+            }
+        }
+        &.open {
+            .multiple-control-header {
+                background-color: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
+            }
+            .multiple-control-body {
+                display: block;
+            }
+        }
+    }
+    .multiple-container,
+    .tree-container {
+        .multiple-add-btn,
+        .tree-add-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: $lineHight;
+            border-radius: $radius;
+            border: 1px solid var(--#{$prefix}-gray);
+        }
+    }
+    .fa-vertical {
+        transform: rotate(90deg);
+    }
+
+    .control-dialog-body {
+        max-height: 80vh;
+        padding: 0 !important;
+        overflow: unset !important;
+    }
+
+    .tree-item {
+        position: relative;
+        .item-body {
+            display: flex;
+            position: relative;
+            border-radius: $radius;
+            line-height: $lineHight;
+            background-color: var(--#{$prefix}-input);
+            margin-bottom: .2rem;
+            span {
+                flex: 1;
+            }
+        }
+        .item-children {
+            margin-left: .8rem;
+            display: none;
+        }
+        .item-icon,
+        .item-action-icon,
+        .item-open-icon {
+            width: $iconWidth;
+            text-align: center;
+            font-size: .8rem;
+            font-weight: 300;
+        }
+        .item-open-icon {
+            position: absolute;
+            left: -$iconWidth;
+        }
+        .item-title {
+            flex: 1;
+            min-width: 0;
+            background-color: transparent;
+            outline: 0;
+            border: none;
+        }
+        .item-action-bar {
+            position: absolute;
+            border-radius: $radius;
+            left: 0;
+            right: 0;
+            top: 0;
+            z-index: 2;
+            display: none;
+            background-color: var(--#{$prefix}-input);
+            height: $lineHight;
+            .fa {
+                display: inline-block;
+                flex: 1;
+                text-align: center;
+                line-height: $lineHight;
+                &:first-of-type {
+                    border-radius: $radius 0 0 $radius;
+                }
+                &:last-of-type {
+                    border-radius: 0 $radius $radius 0;
+                }
+                &:not(:last-of-type) {
+                    border-right: 1px solid var(--#{$prefix}-primary);
+                }
+                &:hover {
+                    background-color: var(--#{$prefix}-primary);
+                    color: var(--#{$prefix}-primary-text);
+                }
+            }
+        }
+        .item-action-icon {
+            &:hover {
+                .item-action-bar {
+                    display: flex;
+                }
+            }
+        }
+        &.open {
+            >.item-body {
+                .item-open-icon {
+                    transform: rotateZ(90deg);
+                }
+            }
+            >.item-children {
+                display: block;
+            }
+        }
+    }
+
+    .tree-container {
+        position: relative;
+        border-radius: $radius;
+        padding: .2rem .2rem .2rem 1.2rem;
+        border: 1px dotted var(--#{$prefix}-gray);
+        max-height: 20rem;
+        overflow: auto;
+        margin: 0 -.8rem;
+        
+        
     }
     &.visual-mobile-editor {
         flex-direction: column;
@@ -1124,60 +1226,5 @@ $iconWidth: 1.5rem;
             }
         }
     }
-
-    .fa-vertical {
-        transform: rotate(90deg);
-    }
-
-    .control-dialog-body {
-        max-height: 80vh;
-        padding: 0 !important;
-        textarea {
-            padding: .4rem;
-        }
-        .multiple-box {
-            .item {
-                border:  1px dotted #ccc;
-                margin-bottom: 5px;
-                position: relative;
-                .multiple-del-btn {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 1.25rem;
-                    height: 1.25rem;
-                    border-radius: 50%;
-                    background-color: red;
-                    color: white;
-                    line-height: 1.25rem;
-                    text-align: center;
-                }
-            }
-        }
-    }
 }
 
-.tree-input {
-    position: relative;
-    border-radius: .25rem;
-    padding: .8rem;
-    border: 1px solid gray;
-    max-height: 10rem;
-    overflow: auto;
-    .tree-item {
-        position: relative;
-    }
-    .tree-item-line {
-        display: flex;
-        line-height: 2rem;
-        span {
-            flex: 1;
-        }
-    }
-    .tree-children {
-        margin-left: 2rem;
-    }
-    .tree-item-action {
-        user-select: none;
-    }
-}
