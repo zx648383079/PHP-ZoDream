@@ -12,6 +12,7 @@ use Module\Template\Domain\VisualEditor\VisualFactory;
 use Module\Template\Domain\VisualEditor\VisualInput;
 use Module\Template\Domain\VisualEditor\VisualWeight;
 use Zodream\Helpers\Arr;
+use Zodream\Html\Tree;
 
 final class PageRepository {
 
@@ -212,7 +213,7 @@ final class PageRepository {
         $disable = ['id', 'page_id', 'weight_id', 'component_id',
             'parent_id', 'parent_index', 'position'];
         $maps = ['style_id', 'title', 'content', 'is_share', 'settings'];
-        $data = (new VisualWeight($pageModel))->parseForm();
+        $data = (new VisualWeight($pageModel))->validateForm(request()->get());
         $model = VisualFactory::cache()->getOrSet(SiteWeightModel::class,
             $pageModel->weight_id, function () use ($pageModel) {
                 return SiteWeightModel::where('id', $pageModel->weight_id);
@@ -299,5 +300,18 @@ final class PageRepository {
                 ->where('id', $weight['id'])
                 ->update($data);
         }
+    }
+
+    public static function siteId(int $id): int {
+        return intval(SitePageModel::where('id', $id)->value('site_id'));
+    }
+    public static function search(int $siteId): array {
+        return SitePageModel::where('site_id', $siteId)->get('id', 'title');
+    }
+
+    public static function weightSearch(int $pageId): array {
+        $items = SitePageWeightModel::where('page_id', $pageId)->orderBy('parent_id', 'asc')
+            ->orderBy('parent_index', 'asc')->get();
+        return (new Tree($items))->makeIdTree();
     }
 }

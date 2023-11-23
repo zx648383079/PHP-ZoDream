@@ -98,6 +98,29 @@ final class VisualInput {
         ];
     }
 
+    public static function setting(): array {
+        return [
+            self::group('主题', [
+                self::color('primary', 'Primary Color', ''),
+                self::color('primary', 'Secondary Color', ''),
+                self::color('primary', 'Light Color', ''),
+                self::color('primary', 'Dark Color', ''),
+                self::color('primary', 'Muted Color', ''),
+                self::color('primary', 'Border Color', ''),
+                self::color('primary', 'Info Color', ''),
+                self::color('primary', 'Success Color', ''),
+                self::color('primary', 'Warning Color', ''),
+                self::color('primary', 'Danger Color', ''),
+            ]),
+            self::group('样式', [
+                self::codeEditor('style', '样式', '', 'css')
+            ]),
+            self::group('脚本', [
+                self::codeEditor('script', '脚本', '', 'javascript')
+            ])
+        ];
+    }
+
     public static function tree(string $name, string $label, array $items, array $input): Input {
         $type = __FUNCTION__;
         return new Input(compact('type', 'name',  'label', 'items', 'input'));
@@ -137,6 +160,16 @@ final class VisualInput {
         return Input::html($name, '内容')->value($content);
     }
 
+    public static function codeEditor(string $name, string $label, mixed $value, string $language = ''): Input {
+        return new Input([
+            'type' => 'code',
+            'name' => $name,
+            'label' => $label,
+            'value' => $value,
+            'language' => $language
+        ]);
+    }
+
     public static function text(string $name, string $label, mixed $value, string $placeholder = ''): Input {
         return Input::text($name, $label)->value($value)->placeholder($placeholder);
     }
@@ -172,6 +205,19 @@ final class VisualInput {
 
     public static function select(string $name, string $label, array $items, mixed $value): Input {
         return Input::select($name, $label, $items)->value($value);
+    }
+
+    /**
+     * 生成候选项
+     * @param string $name
+     * @param string|int|null $value
+     * @return array
+     */
+    public static function selectOption(string $name, null|string|int $value = null): array {
+        if (is_null($value)) {
+            $value = $name;
+        }
+        return compact('name', 'value');
     }
 
     public static function group(string|array $label, array $items = []): Input {

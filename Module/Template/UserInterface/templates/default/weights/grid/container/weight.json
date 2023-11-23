@@ -1,0 +1,12 @@
+{
+  "name": "container",
+  "thumb": "./thumb.png",
+  "keywords": "",
+  "description": "简单容器",
+  "author": "zz",
+  "since": "2023-12-12",
+  "version": "v1.0",
+  "copyright": "@zz",
+  "email": "123@12.com",
+  "editable": false
+}

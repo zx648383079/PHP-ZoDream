@@ -113,18 +113,18 @@ class VisualWeight implements IVisualEngine {
     /**
      * @return BaseWeight
      */
-    public function createWeight() {
+    public function createWeight(): BaseWeight {
         return VisualFactory::newWeight($this->weight->alias_name,
             (string)ComponentRepository::root()->file($this->weight->path))
             ->setEngine($this);
     }
 
-    public function renderForm() {
+    public function renderForm(): array {
         return $this->createWeight()->renderForm($this->model);
     }
 
-    public function parseForm() {
-        return $this->createWeight()->parseForm();
+    public function validateForm(array $input): array {
+        return $this->createWeight()->validateForm($input);
     }
 
     public function render(bool $editable = false, bool $asyncable = true): string {

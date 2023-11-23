@@ -22,10 +22,10 @@ class ColumnAutoWeight extends BaseWeight {
         $data = VisualHelper::formatFormData($model->content, $this->defaultData());
         return [
             VisualInput::switch('split_mode', '启用平均分栏', $data['split_mode'] ?? 0)->attr('data-tab', 'split-tab'),
-            VisualInput::number('split_count', '分栏数', $data['split_count']??'')->class('split_mode-0'),
+            VisualInput::number('split_count', '分栏数', $data['split_count']??'')->attr('tab', 'split_mode-0'),
             VisualInput::multiple('split_items', '分栏段数', $data['split_items'], [
                 VisualInput::number('value', '比例', 2)
-            ])->class('split_mode-1')
+            ])->attr('tab', 'split_mode-1')
         ];
     }
 

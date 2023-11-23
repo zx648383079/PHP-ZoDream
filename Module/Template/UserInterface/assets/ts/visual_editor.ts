@@ -8,6 +8,8 @@ const EditorEventWeightForm = 'editor_weight_form';
 const EditorEventRemoveWeight = 'editor_remove_weight';
 const EditorEventSavePage = 'editor_save_page';
 const EditorEventGetPage = 'editor_get_page';
+const EditorEventPageList = 'editor_get_page_list';
+const EditorEventWeightTree = 'editor_get_page_weight';
 
 const EditorEventWindowResize = 'editor_Window_resize';
 const EditorEventResize = 'editor_resize';
@@ -29,12 +31,17 @@ const EditorEventMouseMove = 'editor_mouse_move';
 const EditorEventMouseUp = 'editor_mouse_up';
 const EditorEventTimeLoop = 'editor_time_loop';
 const EditorMobileStyle = 'mobile-style';
+const EditorEventInputChange = 'value:change';
+const EditorEventInputReset = 'value:reset';
+const EditorEventTabToggle = 'tab:toggle';
 
 type FailureCallbackFunc = (message: string, code?: number) => void;
 
 interface EditorListeners {
     [EditorEventGetWeights]: (success: (data: any) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventGetPage]: (success: (data: IPageModel) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventPageList]: (success: (data: IPageModel[]) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventWeightTree]: (success: (data: IPageWeight[]) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventWindowResize]: (width: number, height: number) => void;
     [EditorEventResize]: (width: number, height: number) => void;
     [EditorEventSavePage]: (data: any[], success: (data: any) => void, failure?: FailureCallbackFunc) => void;
@@ -99,6 +106,13 @@ interface IPageModel {
     edit_url: string;
     editable_url: string;
     preview_url: string;
+}
+
+
+interface IPageWeight {
+    id: string;
+    title: string;
+    children: IPageWeight[];
 }
 
 interface IItem {
@@ -600,6 +614,8 @@ class EditorPanelGroup {
         new EditorWeightPanel(this.editor),
         new EditorPropertyPanel(this.editor),
         new EditorLayerPanel(this.editor),
+        new EditorPagePanel(this.editor),
+        new EditorSettingPanel(this.editor)
     ];
     private renderedChildren: {
         target: JQuery,
@@ -736,7 +752,7 @@ class EditorPropertyPanel implements IEditorPanel {
         }
         const that = this;
         EditorHtmlHelper.bindInputEvent(this.box);
-        this.box.on('change', 'input,textarea', function() {
+        this.box.on(EditorEventInputChange, '.control-inline-group,.control-line-group', function() {
             that.autoSave();
         }).on('click', '.style-item', function() {
             $(this).addClass('active').siblings().removeClass('active');
@@ -953,6 +969,7 @@ class EditorWeightPanel implements IEditorPanel {
 
 class EditorLayerPanel implements IEditorPanel {
     private box: JQuery<HTMLDivElement>;
+    private booted = false;
 
     constructor(
         private editor: VisualEditor
@@ -976,7 +993,165 @@ class EditorLayerPanel implements IEditorPanel {
                 <span class="title">组件层</span>
                 <a class="fa fa-close"></a>
             </div>
+            <div class="panel-body tree-container">
+            </div>
+        `);
+        return this.box;
+    }
+
+    public show() {
+        this.box.removeClass('min');
+        if (this.booted) {
+            return;
+        }
+        this.booted = true;
+        this.editor.emit(EditorEventWeightTree, data => {
+            this.box.find('.panel-body').html(this.renderItems(data));
+        });
+    }
+    public hide() {
+        this.box.addClass('min')
+    }
+
+    private renderItems(items: any): string {
+        let html = '';
+        EditorHelper.eachObject(items, item => {
+            let children = '';
+            let iconArrow = '';
+            if (item.children && item.children.length > 0) {
+                children = `<div class="item-children">${this.renderItems(items)}</div>`;
+                iconArrow = `<div class="item-open-icon">
+                <i class="fa fa-chevron-right"></i>
+            </div>`
+            }
+            const name = item.name ?? item.id;
+            html += `<div class="tree-item">
+            <div class="item-body">
+                ${iconArrow}
+                <div class="item-icon">
+                    <i class="fa fa-chain"></i>
+                </div>
+                <input type="text" class="item-title" value="${name}">
+                <div class="item-action-icon">
+                    <i class="fa fa-ellipsis-h"></i>
+                    <div class="item-action-bar">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-copy"></i>
+                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-edit"></i>
+                    </div>
+                </div>
+            </div>
+            ${children}
+        </div>`;
+        });
+        return html;
+    }
+}
+
+class EditorPagePanel implements IEditorPanel {
+    private box: JQuery<HTMLDivElement>;
+    private booted = false;
+
+    constructor(
+        private editor: VisualEditor
+    ) {
+        this.editor.on(EditorEventAfterViewInit, () => {
+            this.bindEvent();
+        });
+    }
+
+    private bindEvent() {
+        const that = this.editor;
+        this.box.on('click', '.list-item .item-title', function() {
+            $(this).closest('.list-item').addClass('active').siblings().removeClass('active');
+        });
+    }
+
+    public render(): JQuery {
+        this.box = $(`<div class="panel-item" data-panel="layer"></div`);
+        this.box.html(`
+            <div class="panel-header">
+                <span class="title">页面</span>
+                <a class="fa fa-close"></a>
+            </div>
+            <div class="panel-body list-container">
+            </div>
+        `);
+        return this.box;
+    }
+
+    public show() {
+        this.box.removeClass('min');
+        if (this.booted) {
+            return;
+        }
+        this.booted = true;
+        this.editor.emit(EditorEventPageList, data => {
+            this.box.find('.panel-body').html(data.map(this.renderItem.bind(this)).join(''));
+        });
+    }
+
+    public hide() {
+        this.box.addClass('min')
+    }
+
+
+    private renderItem(data: any) {
+        return `<div class="list-item">
+        <span class="item-title">${data.title}</span>
+        <div class="item-action-icon">
+            <i class="fa fa-ellipsis-h"></i>
+            <div class="item-action-bar">
+                <i class="fa fa-trash"></i>
+                <i class="fa fa-copy"></i>
+                <i class="fa fa-edit"></i>
+            </div>
+        </div>
+    </div>`;
+    }
+
+}
+
+class EditorSettingPanel implements IEditorPanel {
+    private box: JQuery<HTMLDivElement>;
+
+    constructor(
+        private editor: VisualEditor
+    ) {
+        this.editor.on(EditorEventAfterViewInit, () => {
+            this.bindEvent();
+        });
+    }
+
+    private bindEvent() {
+        const that = this.editor;
+        this.box.on('click', '.tree-item .item-open-icon', function() {
+            $(this).closest('.tree-item').toggleClass('open');
+        });
+    }
+
+    public render(): JQuery {
+        this.box = $(`<div class="panel-item" data-panel="layer"></div`);
+        this.box.html(`
+            <div class="panel-header">
+                <span class="title">配置</span>
+                <a class="fa fa-close"></a>
+            </div>
             <div class="panel-body">
+                <div class="tab-box">
+                    <div class="tab-header"><div class="tab-item active">
+                            页面配置
+                        </div><div class="tab-item">
+                            主题配置
+                        </div></div>
+                    <div class="tab-body">
+                        <div class="tab-item active">
+                        </div>
+                        <div class="tab-item">
+                        </div>
+                    </div>
+                </div>
             </div>
         `);
         return this.box;
@@ -989,37 +1164,6 @@ class EditorLayerPanel implements IEditorPanel {
         this.box.addClass('min')
     }
 
-    private renderItems(items: any[]): string {
-        return items.map(item => {
-            let children = '';
-            let iconArrow = '';
-            if (item.children && item.children.length > 0) {
-                children = `<div class="item-children">${this.renderItems(items)}</div>`;
-                iconArrow = `<div class="item-open-icon">
-                <i class="fa fa-chevron-right"></i>
-            </div>`
-            }
-            return `<div class="tree-item">
-            <div class="item-body">
-                ${iconArrow}
-                <div class="item-icon">
-                    <i class="fa fa-chain"></i>
-                </div>
-                <input type="text" class="item-title" value="${item.name}">
-                <div class="item-action-icon">
-                    <i class="fa fa-ellipsis-h"></i>
-                    <div class="item-action-bar">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-copy"></i>
-                        <i class="fa fa-plus"></i>
-                        <i class="fa fa-edit"></i>
-                    </div>
-                </div>
-            </div>
-            ${children}
-        </div>`
-        }).join('');
-    }
 }
 
 class EditorDialog {
@@ -2251,8 +2395,8 @@ class EditorHtmlHelper {
         return this.join('<div class="control-row">', ...items.map((item, j) => {
             const index = [id, j].join('_');
             const chk = item.value == selected ? ' checked' : '';
-            return `<span class="radio-label radio-control-item"><input type="radio" id="${index}" name="${name}" value="${item.value}"${chk}><label for="${index}">${item.name}</label></span>`;
-        }) ,'</div>');
+            return `<span class="radio-control-item" data-value="${item.value}">${item.name}</span>`;
+        }), `<input type="hidden" name="${name}" value="${selected}">`, '</div>');
     }
 
     private static checkbox(id: string, name: string, items: IItem[], val: string[] = []) {
@@ -2260,7 +2404,7 @@ class EditorHtmlHelper {
             const index = [id, j].join('_');
             const chk = val && val.indexOf(item.value) >= 0 ? ' checked' : '';
             return `<span class="check-label radio-control-item"><input type="checkbox" id="${index}" name="${name}" value="${item.value}"${chk}><label for="${index}">${item.name}</label></span>`;
-        }) ,'</div>');
+        }), '</div>');
     }
 
     private static text(id: string, name: string, val: string = '', size?: number) {
@@ -2270,7 +2414,7 @@ class EditorHtmlHelper {
     }
 
     private static input(id: string, label: string, content: string, cls: string = 'control-inline-group'): string {
-        return `<div class="${cls}"><label for="${id}">${label}</label>${content}</div>`;
+        return `<div class="${cls}"><i class="control-updated-tag hidden"></i><label for="${id}">${label}</label>${content}</div>`;
     }
 
     public static buttonGroup(...items) {
@@ -2410,6 +2554,7 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
+        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup">
         <div class="control-inline-group">
@@ -2443,11 +2588,12 @@ class EditorHtmlHelper {
         </div>`;
     }
 
-    private static shadowPopup(id: string, name: string) {
+    private static shadowPopup(id: string, name: string, val?: any) {
         return `<div class="control-popup-target">
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
+        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup">
         <div class="control-row">
@@ -2486,6 +2632,7 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
+        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup">
         <div class="control-line-group">
@@ -2516,7 +2663,7 @@ class EditorHtmlHelper {
             {name: 'close', value: 'fa-times'},
             {name: 'trash', value: 'fa-trash'},
         ];
-        const html = iconItems.map(item => `<div class="icon-option-item">
+        const html = iconItems.map(item => `<div class="icon-option-item" data-value="${item.value}">
         <i class="fa ${item.value}"></i>
         <span>${item.name}</span>
         </div>`).join('')
@@ -2524,6 +2671,7 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
+        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup">
         <div class="search-header-bar">
@@ -2542,24 +2690,25 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
+        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup">
         <div class="popup-action">
             <div class="btn btn-danger">清除</div>
         </div>
-        <div class="control-line-group">
+        <div class="control-line-group mt-0">
             <label for="">Hue</label>
             <input type="range" class="hue-bar" min="0" max="360" step="1" value="0">
         </div>
-        <div class="control-line-group">
+        <div class="control-line-group mt-0">
             <label for="">Saturation</label>
             <input type="range" class="saturation-bar" min="0" max="100" step="1" value="0">
         </div>
-        <div class="control-line-group">
+        <div class="control-line-group mt-0">
             <label for="">Lightness</label>
             <input type="range" class="lightness-bar" min="0" max="100" step="1" value="0">
         </div>
-        <div class="control-line-group alpha-ouline-bar">
+        <div class="control-line-group alpha-ouline-bar mt-0">
             <label for="">Transparency</label>
             <input type="range" class="alpha-bar" min="0" max="100" step="1" value="1">
         </div>
@@ -3008,20 +3157,73 @@ class EditorHtmlHelper {
         box.on('change', '.position-container select', function() {
             const $this = $(this);
             $this.next().html(EditorHtmlHelper.positionSide($this.val() as string));
-        }).on('click', '.switch-input', function() {
+        })
+        // switch
+        .on('click', '.switch-input', function() {
             const $this = $(this);
             const checked = !$this.hasClass('checked');
             $this.toggleClass('checked', checked);
             $this.find('.switch-label').text(checked ? $this.data('on') : $this.data('off'));
-            $this.find('input').val(checked ? 1 : 0).trigger('change');
+            const val = checked ? 1 : 0;
+            $this.find('input').val(val).trigger('change');
+            const box = $this.closest('.control-inline-group');
+            box.trigger(EditorEventInputChange, val)
             if ($this.data('tab')) {
-                $this.closest('.control-inline-group').trigger('tab:toggle', [$this.data('tab'), $this.val()]);
+                box.trigger(EditorEventTabToggle, [$this.data('tab'), $this.val()]);
             }
-        }).on('click', '.control-popup-target', function() {
+        })
+        .on(EditorEventInputReset, '.switch-input', function() {
+            $(this).trigger('click');
+        })
+        // popup
+        .on('click', '.control-popup-target', function() {
             const $this = $(this);
             const popup = $this.next('.control-popup');
             popup.toggleClass('popup-top', $this.offset().top + $this.height() > window.innerHeight - popup.height()).toggleClass('open');
-        }).on('click', '.select-with-control .control-body .extra-control', function() {
+        })
+        .on(EditorEventInputChange, '.control-popup-target', function(e, val) {
+            e.stopPropagation();
+            $(this).closest('.control-inline-group').trigger(EditorEventInputChange, val);
+            $(this).find('input').val(val);
+        })
+        .on(EditorEventInputChange, '.control-popup', function(e, val) {
+            e.stopPropagation();
+            $(this).prev('.control-popup-targe').trigger(EditorEventInputChange, val);
+        })
+        .on(EditorEventInputReset, '.control-popup-target', function() {
+            $(this).find('input').val('');
+        })
+        .on(EditorEventInputReset, '.control-popup', function() {
+            
+        })
+        // icon
+        .on('click', '.icon-option-item', function() {
+            const $this = $(this);
+            $this.addClass('selected').siblings().removeClass('selected');
+            $this.closest('.control-popup').trigger(EditorEventInputChange, $this.data('value'));
+        })
+        .on('change', '.control-popup .search-header-bar input', function() {
+            const $this = $(this);
+            const val = $this.val();
+            $this.closest('.search-header-bar').next('.search-body').find('.icon-option-item').each(function() {
+                const item = $(this);
+                const text = item.find('span').text();
+                item.toggleClass('hidden', val && text.indexOf(val) < 0);
+            });
+        })
+        // select
+        .on('change', '.select-with-control .control-body input', function() {
+            const $this = $(this);
+            let target = $this.parent();
+            if (!target.hasClass('.control-inline-group')) {
+                target = target.closest('.control-line-group');
+            }
+            target.trigger(EditorEventInputChange, $this.val());
+        })
+        .on(EditorEventInputReset, '.select-with-control', function() {
+            $(this).find('.control-body input').val('');
+        })
+        .on('click', '.select-with-control .control-body .extra-control', function() {
             $(this).closest('.select-with-control').find('.select-option-bar').toggleClass('select-focus');
         }).on('select:change', '.select-with-control .select-option-bar', function(_, ele: HTMLDivElement) {
             const $this = $(ele);
@@ -3030,7 +3232,9 @@ class EditorHtmlHelper {
             const $this = $(this);
             $this.addClass('selected').siblings().removeClass('selected');
             $this.closest('.select-option-bar').trigger('select:change', this);
-        }).on('change', '.hue-bar,.saturation-bar,.lightness-bar,.alpha-bar', function() {
+        })
+        // color
+        .on('change', '.hue-bar,.saturation-bar,.lightness-bar,.alpha-bar', function() {
             const colorPopup = $(this).closest('.control-popup');
             const hsl = EditorHtmlHelper.colorPopupColor(colorPopup);
             const rgba = EditorHelper.hslToRgba(hsl);
@@ -3049,9 +3253,9 @@ class EditorHtmlHelper {
                     });
                 }
             });
-        }).on('click', '.icon-option-item', function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-        }).on('change', '.select-control-container .input-body', function() {
+        })
+        // select
+        .on('change', '.select-control-container .input-body', function() {
             const $this = $(this);
             const val = this instanceof HTMLInputElement ? this.value : $this.text();
             $this.next('.input-clear').toggle(!!val);
@@ -3059,6 +3263,7 @@ class EditorHtmlHelper {
                 const that = $(this);
                 that.toggleClass('selected', val === that.data('value'));
             });
+            $this.closest('.control-line-group').trigger(EditorEventInputChange, val);
         }).on('click', '.select-control-container .input-clear', function() {
             const target = $(this).prev('.input-body');
             if (target[0] instanceof HTMLInputElement) {
@@ -3078,34 +3283,56 @@ class EditorHtmlHelper {
                 target.text($this.data('value'));
             }
             target.trigger('change');
-        }).on('click', '.tab-bar .item', function() {
+        })
+        .on(EditorEventInputReset, '.select-control-container', function() {
+            $(this).find('.input-clear').trigger('click');
+        })
+        // tabbar 
+        .on('click', '.tab-bar .item', function() {
             const $this = $(this);
             $this.addClass('active').siblings().removeClass('active');
             $this.closest('.tab-bar').siblings('.tab-bar-target').removeClass('active').eq($this.index()).addClass('active');
         })
-        .on('change', '.control-popup .search-header-bar input', function() {
-            const $this = $(this);
-            const val = $this.val();
-            $this.closest('.search-header-bar').next('.search-body').find('.icon-option-item').each(function() {
-                const item = $(this);
-                const text = item.find('span').text();
-                item.toggleClass('hidden', val && text.indexOf(val) < 0);
-            });
+        // radio
+        .on(EditorEventInputReset, '.control-row', function(e) {
+            if (!$(e.target).hasClass('control-row')) {
+                return;
+            }
+            $(this).children().trigger(EditorEventInputReset);
         })
-        // tab
-        .on('click', 'input[type="radio"]', function() {
+        .on('click', '.radio-control-item', function() {
             const $this = $(this);
+            const isChecked = !$this.hasClass('checked');
+            $this.toggleClass('checked', isChecked);
+            if (!$this.hasClass('check-label') && isChecked) {
+                $this.siblings().removeClass('checked');
+            }
+            const val = isChecked ? $this.data('value') : undefined;
             const target = $this.closest('.control-row');
+            target.find('input').val(val);
+            const group = target.closest('.control-line-group');
+            group.trigger(EditorEventInputChange, val);
             if (target.data('tab')) {
-                target.closest('.control-line-group').trigger('tab:toggle', [target.data('tab'), $this.val()]);
+                group.trigger(EditorEventTabToggle, [target.data('tab'), val]);
+            }
+        })
+        .on(EditorEventInputReset, '.radio-control-item', function() {
+            const $this = $(this);
+            if ($this.hasClass('checked')) {
+                $this.trigger('click');
             }
         })
         .on('change', 'select', function() {
             const $this = $(this);
+            const val = $this.val();
+            const group = $this.closest('.control-inline-group');
+            group.trigger(EditorEventInputChange, val);
             if ($this.data('tab')) {
-                $this.closest('.control-inline-group').trigger('tab:toggle', [$this.data('tab'), $this.val()]);
+                group.trigger(EditorEventTabToggle, [$this.data('tab'), val]);
             }
-        }).on('tab:toggle', '.control-inline-group,.control-line-group', function(_, tab: string, val: any) {
+        }).on(EditorEventInputReset, 'select', function() {
+            $(this).val('');
+        }).on(EditorEventTabToggle, '.control-inline-group,.control-line-group', function(_, tab: string, val: any) {
             const match = `${tab}-${val}`;
             $(this).siblings().each(function(this: HTMLDivElement) {
                 for (let i = 0; i < this.classList.length; i++) {
@@ -3116,6 +3343,14 @@ class EditorHtmlHelper {
                     }
                 }
             });
+        }).on(EditorEventInputChange, '.control-inline-group,.control-line-group', function(e, val: any) {
+            e.stopPropagation();
+            $(this).find('.control-updated-tag:first').toggleClass('hidden', !val);
+        })
+        .on('click', '.control-updated-tag', function() {
+            const $this = $(this);
+            $this.next().next().trigger(EditorEventInputReset);
+            $this.addClass('hidden');
         })
         // 多项添加
         .on('click', '.multiple-container .multiple-add-btn', function() {
@@ -3168,3 +3403,5 @@ class EditorHtmlHelper {
         });
     }
 }
+
+

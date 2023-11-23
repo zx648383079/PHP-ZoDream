@@ -1,0 +1,15 @@
+<div class="icon-box-weight {=$property.formatClass:}"{=$property.weightStyle:}>
+    <a href="{=$icon_url}" class="node-icon">
+        <i class="fa {=$icon}"></i>
+    </a>
+    <div class="node-body">
+        {if:$title}
+        <div class="title"{=$property.titleStyle:}>
+            {=$title}
+        </div>
+        {/if}
+        <div class="contnet"{=$property.contentStyle:}>
+            {=$content}
+        </div>
+    </div>
+</div>

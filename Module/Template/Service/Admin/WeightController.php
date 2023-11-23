@@ -9,8 +9,7 @@ use Module\Template\Domain\Repositories\SiteRepository;
 class WeightController extends Controller {
 
     public function indexAction(int $id) {
-        $siteId = SitePageModel::where('id', $id)->value('site_id');
-        $weights = SiteRepository::weightGroups($siteId);
+        $weights = SiteRepository::weightGroups(PageRepository::siteId($id));
         return $this->renderData(compact('weights'));
     }
 
@@ -80,4 +79,12 @@ class WeightController extends Controller {
         }
     }
 
+    public function searchAction(int $id) {
+        try {
+            $data = PageRepository::weightSearch($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
+    }
 }

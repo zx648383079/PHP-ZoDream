@@ -1,0 +1,10 @@
+<div class="grid-container-weight {=$property.formatClass:}"{=$property.weightStyle:}>
+    <div class="weight-container">
+        {if:$model.title}
+        <div class="title"{=$property.titleStyle:}>
+            {=$model.title}
+        </div>
+        {/if}
+        {weight:1}
+    </div>
+</div>

@@ -117,8 +117,7 @@ final class ComponentRepository {
         })->where('type', $type)->orderBy('id', 'desc')->page();
     }
 
-    public static function selfGet(int $id)
-    {
+    public static function selfGet(int $id) {
         $model = ThemeComponentModel::findWithAuth($id);
         if (empty($model)) {
             throw new \Exception('不存在');
@@ -235,8 +234,7 @@ final class ComponentRepository {
             ->limit(10)->get();
     }
 
-    public static function selfImport(array $file)
-    {
+    public static function selfImport(array $file): void {
         $data = self::storage()->insertFile($file, true);
         ThemeRepository::importFileLog($data);
     }

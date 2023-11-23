@@ -18,6 +18,14 @@ function bindPage(pageId: number) {
         $.getJSON(BASE_URI + 'page/detail?id=' + pageId, data => {
             postCallback(data, success, failure);
         });
+    }).on(EditorEventPageList, function(success, failure) {
+        $.getJSON(BASE_URI + 'page/search?id=' + pageId, data => {
+            postCallback(data, success, failure);
+        });
+    }).on(EditorEventWeightTree, function(success, failure) {
+        $.getJSON(BASE_URI + 'weight/search?id=' + pageId, data => {
+            postCallback(data, success, failure);
+        });
     }).on(EditorEventGetWeightProperty, function(weightId: number, success, failure) {
         $.getJSON(BASE_URI + 'weight/setting?id=' + weightId, data => {
             postCallback(data, success, failure);
@@ -87,9 +95,6 @@ function bindPage(pageId: number) {
 
     $(".mobile-rotate").on('click',function() {
         editor.rotate();
-    });
-    $(".expand>.head").on('click',function() {
-        $(this).parent().toggleClass("open");
     });
     if ($(window).width() > 769) {
         $('.sidebar-container-toggle').trigger('click');

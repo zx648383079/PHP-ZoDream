@@ -4,6 +4,7 @@ namespace ZoDream\RepairHost;
 
 use Module\Plugin\Domain\IPlugin;
 use Zodream\Database\DB;
+use Zodream\Database\Utils;
 
 final class RepairHostPlugin implements IPlugin {
 
@@ -18,10 +19,36 @@ final class RepairHostPlugin implements IPlugin {
     public function __invoke(array $configs = []): void {
         $original = $this->format($configs['original']);
         $host = $this->format($configs['host']);
+        $schema = empty($configs['schema']) ? DB::engine()->config('database') : $configs['schema'];
         if (empty($original)) {
             return;
         }
-        $keys = ['thumb', 'content'];
+        // $keys = ['thumb', 'content'];
+        $tableItems = DB::information()->tableList($schema);
+        foreach ($tableItems as $table) {
+            $table = Utils::wrapTable($table, $schema);
+            $fieldItems = DB::information()->columnList($table);
+            $keys = [];
+            $primaryKey = '';
+            foreach ($fieldItems as $item) {
+                if ($item['Key'] === 'PRI') {
+                    $primaryKey = $item['Field'];
+                    continue;
+                }
+                if ($this->isStringField($item['Type'])) {
+                    $keys[] = $item['Field'];
+                }
+            }
+            if (empty($primaryKey) || empty($keys)) {
+                continue;
+            }
+            $this->repairTable($original, $host, $table, $keys, $primaryKey);
+        }
+    }
+
+    protected function isStringField(string $type): bool {
+        $type = strtolower(explode('(', $type)[0]);
+        return in_array($type, ['varchar', 'char', 'text', 'tinytext', 'mediumtext', 'longtext', 'json']);
     }
 
     /**
@@ -30,14 +57,16 @@ final class RepairHostPlugin implements IPlugin {
      * @param string $host
      * @param string $table
      * @param array $keys
+     * @param string $primaryKey
      * @return void
      */
-    private function repairTable(string $original, string $host, string $table, array $keys): void {
+    private function repairTable(string $original, string $host,
+                                 string $table, array $keys, string $primaryKey = 'id'): void {
         $size = 30;
         $offset = 0;
         while (true) {
-            $items = DB::table($table)->orderBy('id', 'asc')
-                ->limit($offset, $size)->get('id', ...$keys);
+            $items = DB::table($table)->orderBy($primaryKey, 'asc')
+                ->limit($offset, $size)->get($primaryKey, ...$keys);
             foreach ($items as $item) {
                 $data = [];
                 foreach ($keys as $key) {

@@ -219,6 +219,7 @@ $iconWidth: 1.5rem;
             font-size: 1.5rem;
             line-height: 2rem;
             user-select: none;
+            padding-left: .8rem;
             .fa-close {
                 float: right;
             }
@@ -240,10 +241,11 @@ $iconWidth: 1.5rem;
                 position: static;
                 font-size: 0.75rem;
                 line-height: 1.5;
-                min-height: 4rem;
+                min-height: 3rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                padding-left: 0;
                 .fa-close {
                     display: none;
                 }
@@ -288,8 +290,6 @@ $iconWidth: 1.5rem;
     }
     .tab-box {
         .tab-header {
-            background-color: var(--#{$prefix}-body);
-            user-select: none;
             .tab-item {
                 width: 4.5rem;
             }
@@ -301,12 +301,12 @@ $iconWidth: 1.5rem;
         }
     }
     .style-item {
-        line-height: 60px;
+        line-height: 3.75rem;
         border: 1px dotted var(--#{$prefix}-primary);
         text-align: center;
         color: var(--#{$prefix}-secondary-text);
         font-weight: bold;
-        font-size: 20px;
+        font-size: 1.25rem;
         user-select: none;
         img {
             width: 100%;
@@ -672,6 +672,14 @@ $iconWidth: 1.5rem;
                 display: none;
             }
         }
+        &.checked {
+            background-color: var(--#{$prefix}-primary);
+            color: var(--#{$prefix}-primary-text);
+            label {
+                background-color: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
+            }
+        }
     }
 
     .color-control-icon {
@@ -840,6 +848,10 @@ $iconWidth: 1.5rem;
         }
     }
 
+    .mt-0 {
+        margin-top: 0;
+    }
+
     .control-row {
         display: flex;
         justify-content: space-between;
@@ -884,10 +896,35 @@ $iconWidth: 1.5rem;
         
     }
 
+    .control-inline-group,
+    .control-line-group {
+        position: relative;
+        .control-updated-tag {
+            position: absolute;
+            left: 0;
+            width: .8rem;
+            text-align: center;
+            font-weight: bold;
+            font-style: normal;
+            line-height: $lineHight;
+            color: var(--#{$prefix}-primary);
+            &::before {
+                display: block;
+                content: '·';
+            }
+            &:hover {
+                color: var(--#{$prefix}-danger);
+                &::before {
+                    content: '×';
+                }
+            }
+         
+        }
+    }
+
     .control-inline-group {
         display: flex;
         justify-content: space-between;
-        position: relative;
         >label {
             flex-basis: 50%;
         }
@@ -921,6 +958,9 @@ $iconWidth: 1.5rem;
 
 
     .control-line-group {
+        .control-updated-tag {
+            line-height: 1.5;
+        }
         >label {
             display: block;
             line-height: 1.5;
@@ -1110,23 +1150,9 @@ $iconWidth: 1.5rem;
         overflow: unset !important;
     }
 
-    .tree-item {
+    .tree-item,
+    .list-item {
         position: relative;
-        .item-body {
-            display: flex;
-            position: relative;
-            border-radius: $radius;
-            line-height: $lineHight;
-            background-color: var(--#{$prefix}-input);
-            margin-bottom: .2rem;
-            span {
-                flex: 1;
-            }
-        }
-        .item-children {
-            margin-left: .8rem;
-            display: none;
-        }
         .item-icon,
         .item-action-icon,
         .item-open-icon {
@@ -1134,10 +1160,6 @@ $iconWidth: 1.5rem;
             text-align: center;
             font-size: .8rem;
             font-weight: 300;
-        }
-        .item-open-icon {
-            position: absolute;
-            left: -$iconWidth;
         }
         .item-title {
             flex: 1;
@@ -1183,6 +1205,55 @@ $iconWidth: 1.5rem;
                 }
             }
         }
+    }
+
+    .tree-item .item-body,
+    .list-item {
+        display: flex;
+        position: relative;
+        border-radius: $radius;
+        line-height: $lineHight;
+        background-color: var(--#{$prefix}-input);
+        margin-bottom: .2rem;
+        span {
+            flex: 1;
+        }
+    }
+
+    .list-item {
+        &.active {
+            border: .1rem solid var(--#{$prefix}-primary);
+            .item-title {
+                color: var(--#{$prefix}-primary);
+            }
+            &::after {
+                content: '√';
+                display: block;
+                position: absolute;
+                right: .8rem;
+                top: -.2rem;
+                background-color: var(--#{$prefix}-primary);
+                color: var(--#{$prefix}-primary-text);
+                line-height: 1;
+                font-size: .6rem;
+                min-width: 2rem;
+                padding: .1rem;
+                text-align: center;
+                border-radius: .2rem;
+            }
+        }
+    }
+
+    .tree-item {
+        .item-children {
+            margin-left: .8rem;
+            display: none;
+        }
+        .item-open-icon {
+            position: absolute;
+            left: -$iconWidth;
+        }
+        
         &.open {
             >.item-body {
                 .item-open-icon {
@@ -1195,6 +1266,10 @@ $iconWidth: 1.5rem;
         }
     }
 
+    .list-container {
+        padding: .2rem;
+    }
+
     .tree-container {
         position: relative;
         border-radius: $radius;
@@ -1203,8 +1278,10 @@ $iconWidth: 1.5rem;
         max-height: 20rem;
         overflow: auto;
         margin: 0 -.8rem;
-        
-        
+        &.panel-body {
+            margin: 0;
+            max-height: none;
+        }
     }
     &.visual-mobile-editor {
         flex-direction: column;

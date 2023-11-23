@@ -93,4 +93,12 @@ class PageController extends Controller {
         return $this->renderData($data);
     }
 
+    public function searchAction(int $id) {
+        try {
+            $data = PageRepository::search(PageRepository::siteId($id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
+    }
 }

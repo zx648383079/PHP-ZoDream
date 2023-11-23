@@ -1,0 +1,8 @@
+{
+  "name": "image-gallery",
+  "thumb": "./thumb.png",
+  "keywords": "",
+  "description": "图片墙控件",
+  "since": "2023-11-18",
+  "editable": true
+}

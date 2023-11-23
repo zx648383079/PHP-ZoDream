@@ -2,7 +2,6 @@
 defined('APP_DIR') or exit();
 
 use Infrastructure\Editor;
-use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Template\View;
 /** @var $this View */
 /** @var $page VisualPage */
@@ -11,7 +10,7 @@ $id = $model->id;
 $js = <<<JS
 bindPage('{$id}');
 JS;
-$this->registerJsFile([
+$this->registerJsFile('@visual_control.min.js', ['defer' => true, 'position' => View::HTML_HEAD])->registerJsFile([
     '@jquery.min.js',
     '@jquery.dialog.min.js',
     '@jquery.datetimer.min.js',

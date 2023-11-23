@@ -1,7 +1,6 @@
 <?php
 defined('APP_DIR') or exit();
 
-use Module\Template\Domain\VisualEditor\VisualPage;
 use Zodream\Template\View;
 /** @var $this View */
 /** @var $page VisualPage */
@@ -12,7 +11,7 @@ $id = $model->id;
 $js = <<<JS
 bindPage('{$id}');
 JS;
-$this->registerJsFile([
+$this->registerJsFile('@visual_control.min.js', ['defer' => true, 'position' => View::HTML_HEAD])->registerJsFile([
     '@jquery.editor.min.js',
     '@visual_editor.min.js'
 ])->registerCssFile([
