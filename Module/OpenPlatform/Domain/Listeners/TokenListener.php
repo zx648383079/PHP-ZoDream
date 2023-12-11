@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Domain\Listeners;
 
 
@@ -15,7 +16,7 @@ class TokenListener {
             return;
         }
         UserTokenModel::create([
-            'user_id' => $token->getUser()->id,
+            'user_id' => $token->getUser()->getIdentity(),
             'platform_id' => $platform->id(),
             'token' => $token->getToken(),
             'expired_at' => $token->getExpiredAt(),

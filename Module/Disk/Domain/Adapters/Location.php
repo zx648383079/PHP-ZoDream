@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
+use Domain\Repositories\FileRepository;
 use Exception;
 use Module\Disk\Domain\Model\FileModel;
 use Module\Disk\Domain\Repositories\DiskRepository;
@@ -251,11 +252,11 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
      * @return array
      */
     protected function getSubtitles(File $file) {
-        return $this->getLinkByExtension($file, config('disk.subtitles'));
+        return $this->getLinkByExtension($file, FileRepository::typeExtension('subtitles'));
     }
 
     protected function getLyrics(File $file) {
-        return $this->getLinkByExtension($file, config('disk.lyrics'));
+        return $this->getLinkByExtension($file, FileRepository::typeExtension('lyrics'));
     }
 
     /**

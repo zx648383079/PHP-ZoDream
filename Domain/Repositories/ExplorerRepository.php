@@ -111,6 +111,12 @@ final class ExplorerRepository {
         if (empty($drive)) {
             return static::driveList();
         }
+        if (empty($folder)) {
+            return match ($drive) {
+                'image', 'video', 'document' => static::searchWithType($drive, $keywords, $page),
+                default => [],
+            };
+        }
         if (!is_dir($folder)) {
             return [];
         }
@@ -124,7 +130,7 @@ final class ExplorerRepository {
             }
             $fullName = sprintf('%s/%s', $folder, $name);
             $isFolder = is_dir($fullName);
-            $ext = FileSystem::getExtension($name, true);
+            $ext = FileSystem::getExtension($name);
             if (!static::isFilterFile($filter, $isFolder, $ext)) {
                 return;
             }
@@ -239,16 +245,22 @@ final class ExplorerRepository {
         if ($i !== false) {
             $filter = substr($filter, 0, $i);
         }
-        if ($filter === 'image') {
-            return in_array($ext, FileRepository::config('imageAllowFiles'));
-        }
-        if ($filter === 'video') {
-            return in_array($ext, FileRepository::config('videoAllowFiles'));
-        }
-        if ($filter === 'file') {
-            return in_array($ext, FileRepository::config('fileAllowFiles'));
-        }
-        return false;
+        return FileRepository::isTypeExtension($ext, $filter);
+    }
+
+    public static function searchWithType(string $type, string $keywords, int $page = 1) {
+        $storage = StorageProvider::publicStore();
+        $items = $storage->query(true)
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, 'name', true, '', $keywords);
+            })->whereIn('extension', explode('|', FileRepository::typeExtension($type)))
+            ->orderBy('id', 'desc')->page();
+        return $items->map(function (array $item) use ($type, $storage) {
+            if ($type === 'image') {
+                $item['thumb'] = $storage->toPublicUrl($item['path']);
+            }
+           return $item;
+        });
     }
 
 

@@ -48,6 +48,10 @@ class Platform implements IAuthPlatform {
         return $this->app['type'];
     }
 
+    public function get(string $key): mixed {
+        return $this->app[$key] ?? '';
+    }
+
     /**
      * 获取设置
      * @param string $store
@@ -307,11 +311,15 @@ class Platform implements IAuthPlatform {
 
     /**
      * 全局获取平台id
-     * @return int
+     * @return int|string
      * @throws \Exception
      */
     public static function platformId(): int|string {
         return static::isPlatform() ? app(static::PLATFORM_KEY)->id() : 0;
+    }
+
+    public static function current(): ?static {
+        return static::isPlatform() ? app(static::PLATFORM_KEY) : null;
     }
 
     /**

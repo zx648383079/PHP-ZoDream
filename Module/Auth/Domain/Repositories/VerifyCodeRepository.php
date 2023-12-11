@@ -5,10 +5,9 @@ namespace Module\Auth\Domain\Repositories;
 use Exception;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\UserModel;
-use Module\MessageService\Domain\Sms;
+use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Zodream\Helpers\Str;
 use Zodream\Helpers\Time;
-use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\Validate\Validator;
 
 final class VerifyCodeRepository {
@@ -108,26 +107,18 @@ final class VerifyCodeRepository {
     }
 
     private static function sendSms(string $nickname, string $mobile, string $code): bool {
-        $sms = new Sms();
-        if (!$sms->send($mobile, $code)) {
-            throw new Exception('验证码发送失败');
-        }
-        return true;
-    }
-
-    private static function sendMail(string $nickname, string $email, string $code): bool {
-        $html = view()->render('@root/Template/mail', [
+        return MessageProtocol::sendCode($mobile, MessageProtocol::EVENT_LOGIN_CODE, $code, [
             'name' => $nickname,
             'time' => Time::format(),
             'code' => $code,
         ]);
-        $mail = new Mailer();
-        $res = $mail->isHtml()
-            ->addAddress($email, $nickname)
-            ->send('邮箱验证码', $html);
-        if (!$res) {
-            throw new Exception($mail->getError());//'邮件发送失败');
-        }
-        return true;
+    }
+
+    private static function sendMail(string $nickname, string $email, string $code): bool {
+        return MessageProtocol::sendCode($email, MessageProtocol::EVENT_LOGIN_CODE, $code, [
+            'name' => $nickname,
+            'time' => Time::format(),
+            'code' => $code,
+        ]);
     }
 }

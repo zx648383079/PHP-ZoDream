@@ -12,6 +12,7 @@ use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Exception;
+use Module\OpenPlatform\Domain\Platform;
 
 final class AccountRepository {
 
@@ -68,13 +69,36 @@ final class AccountRepository {
         $map_list = self::getConnectMaps();
         $model_list = OAuthModel::where('user_id', auth()->id())
             ->get('id', 'vendor', 'nickname', 'created_at');
+        $platformId = Platform::platformId();
+        $items = [];
+        $keys = [];
         foreach ($model_list as $item) {
-            $item = $item->toArray();
+            $data = $item->toArray();
             if (isset($map_list[$item['vendor']])) {
-                $map_list[$item['vendor']] = array_merge($map_list[$item['vendor']], $item);
+                $items[] = array_merge($map_list[$item['vendor']], $data, [
+                    'platform' => $item['platform_id'] < 1 ? '主站' : ($item['platform_id'] === $platformId ?
+                        '当前' : '其他')
+                ]);
             }
+            $keys[$item['vendor']][] = $item['platform_id'];
         }
-        return array_values($map_list);
+        if (!empty($keys[OAuthModel::TYPE_WEBAUTHN]) &&
+            !in_array($platformId, $keys[OAuthModel::TYPE_WEBAUTHN])) {
+            $items[] = [
+                'vendor' => OAuthModel::TYPE_WEBAUTHN,
+                'name' => $map_list[OAuthModel::TYPE_WEBAUTHN]['name'],
+                'icon' => $map_list[OAuthModel::TYPE_WEBAUTHN]['icon'],
+                'platform' => '当前'
+            ];
+        }
+        foreach ($map_list as $vendor => $item) {
+            if (isset($keys[$vendor])) {
+                continue;
+            }
+            $item['vendor'] = $vendor;
+            $items[] = $item;
+        }
+        return $items;
     }
 
     public static function getDriver(): array {

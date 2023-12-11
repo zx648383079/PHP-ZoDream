@@ -4,6 +4,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\VerifyCodeRepository;
+use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -37,10 +38,11 @@ class PasswordController extends Controller {
 
     public function sendMobileCodeAction(string $mobile, string $type = 'login') {
         try {
-            AuthRepository::sendSmsCode(
-                $mobile,
-                $type
-            );
+            VerifyCodeRepository::sendCode([
+                'to_type' => 'mobile',
+                'to' => $mobile,
+                'event' => $type,
+            ]);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

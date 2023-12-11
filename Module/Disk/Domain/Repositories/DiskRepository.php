@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Disk\Domain\Repositories;
 
+use Domain\Repositories\FileRepository;
 use Module\Disk\Domain\Adapters\BaseDiskAdapter;
 use Module\Disk\Domain\Adapters\Database;
 use Module\Disk\Domain\Adapters\IDiskAdapter;
@@ -113,10 +114,10 @@ class DiskRepository {
             'bt' => FileModel::TYPE_BT,
             'movie' => FileModel::TYPE_VIDEO,
             'music' => FileModel::TYPE_MUSIC,
-            'doc' => FileModel::TYPE_DOCUMENT,
+            'document' => FileModel::TYPE_DOCUMENT,
             'archive' => FileModel::TYPE_ZIP,
         ];
-        $index = is_numeric($type) ? intval($type) : ($maps[$type] ?? FileModel::TYPE_UNKNOWN);
-        return FileModel::$extensionMaps[$index];
+        return isset($maps[$type]) ? explode('|',
+            FileRepository::typeExtension($maps[$type])) : [];
     }
 }

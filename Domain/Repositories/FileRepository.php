@@ -46,6 +46,48 @@ class FileRepository {
     }
 
     /**
+     * 根据拓展名判断是否是类型
+     * @param string $extension
+     * @param string $type image video audio
+     * @return bool
+     */
+    public static function isTypeExtension(string $extension, string $type): bool {
+        if (str_starts_with($extension, '.')) {
+            $extension = substr($extension, 1);
+        }
+        $items = static::typeExtension($type);
+        if (empty($items)) {
+            return false;
+        }
+        return in_array(strtolower($extension), explode('|', $items));
+    }
+
+    /**
+     * 根据文件类型获取拓展名
+     * @param string $type
+     * @return string 例如 'jpg|gif'
+     */
+    public static function typeExtension(string $type): string {
+        $maps = [
+            'bt' => 'bit_torrents',
+            'image' => 'images',
+            'video' => 'videos',
+            'subtitle' => 'subtitles',
+            'music' => 'musics',
+            'audio' => 'musics',
+            'document' => 'documents',
+            'archive' => 'archives',
+            'app' => 'applications',
+        ];
+        $key = $maps[$type] ?? $type;
+        $configs = config('disk');
+        if (!is_array($configs) || empty($configs[$key])) {
+            return '';
+        }
+        return strtolower((string)$configs[$key]);
+    }
+
+    /**
      * 获取图片网址，为空时获取默认图片
      * @param mixed|null $url
      * @return string

@@ -33,7 +33,7 @@ class DiskController extends Controller {
     }
 
 
-    public function listAction($id = 0, $path = '', $type = '') {
+    public function listAction($id = 0, $path = '', string $type = '') {
         $data = DiskRepository::driver()->catalog($id, $path);
         $data->map(function ($file) {
             if (isset($file['file']) && isset($file['file']['url']) && !empty($file['file']['url'])) {

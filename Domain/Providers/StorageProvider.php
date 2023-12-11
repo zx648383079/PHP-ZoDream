@@ -39,8 +39,10 @@ class StorageProvider {
         $this->root->create();
     }
 
-    protected function query(): Builder {
-        return DB::table(static::FILE_TABLE);
+    public function query(bool $withFolder = false): Builder {
+        return DB::table(static::FILE_TABLE)->when($withFolder, function ($query) {
+            $query->where('folder', $this->tag);
+        });
     }
 
     protected function logQuery(): Builder {

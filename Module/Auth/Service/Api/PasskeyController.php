@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Service;
+namespace Module\Auth\Service\Api;
 
+use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Repositories\PassKey;
+use Module\Auth\Domain\Repositories\UserRepository;
+use Module\OpenPlatform\Domain\Platform;
 
 class PasskeyController extends Controller {
 
@@ -18,15 +21,20 @@ class PasskeyController extends Controller {
         return $this->renderData(PassKey::getLoginOption());
     }
 
-    public function loginAction(array $credential, string $redirect_uri = '') {
+    public function loginAction(array $credential) {
         try {
-            PassKey::login($_POST['credential']);
+            PassKey::login($credential);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
-        return $this->renderData([
-            'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
-        ], '登录成功！');
+        $user = auth()->user();
+        $refreshTTL = 0;
+        $token = auth()->createToken($user, $refreshTTL);
+        event(new TokenCreated($token, $user,
+            $refreshTTL + auth()->getConfigs('refreshTTL')));
+        $data = UserRepository::getCurrentProfile();
+        $data['token'] = $token;
+        return $this->render($data);
     }
 
     public function registerOptionAction() {

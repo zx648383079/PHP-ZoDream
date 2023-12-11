@@ -33,37 +33,37 @@ $this->registerCssFile([
         [
             [
                 '图片',
-                './disk#type/1',
+                './disk#type/image',
                 'fa fa-image'
             ],
             [
                 '文档',
-                './disk#type/2',
+                './disk#type/doc',
                 'fa fa-file-word'
             ],
             [
                 '视频',
-                './disk#type/3',
+                './disk#type/video',
                 'fa fa-file-video'
             ],
             [
                 '种子',
-                './disk#type/4',
+                './disk#type/bt',
                 'fa fa-gift'
             ],
             [
                 '音乐',
-                './disk#type/5',
+                './disk#type/music',
                 'fa fa-music'
             ],
             [
                 'APP',
-                './disk#type/7',
+                './disk#type/app',
                 'fa fa-boxes'
             ],
             [
                 '其他',
-                './disk#type/6',
+                './disk#type/archive',
                 'fa fa-file-archive'
             ],
         ],

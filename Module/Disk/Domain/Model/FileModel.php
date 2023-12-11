@@ -3,6 +3,7 @@ namespace Module\Disk\Domain\Model;
 
 
 use Domain\Model\Model;
+use Domain\Repositories\FileRepository;
 
 /**
  * Class FileModel 文件数据
@@ -21,38 +22,14 @@ use Domain\Model\Model;
  */
 class FileModel extends Model {
 
-    const TYPE_IMAGE = 1;
-    const TYPE_DOCUMENT = 2;
-    const TYPE_VIDEO = 3;
-    const TYPE_BT = 4;
-    const TYPE_MUSIC = 5;
-    const TYPE_ZIP = 6;
-    const TYPE_APP = 7;
-    const TYPE_UNKNOWN = 0;
-
-    public static array $extensionMaps = [
-        self::TYPE_IMAGE => [
-            'png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'
-        ],
-        self::TYPE_DOCUMENT => [
-            'doc', 'docs', 'txt'
-        ],
-        self::TYPE_VIDEO => [
-            'avi', 'mp4', 'rmvb', 'mkv', '3gp', 'm3u8'
-        ],
-        self::TYPE_BT => [
-            'torrent'
-        ],
-        self::TYPE_MUSIC => [
-            'mp3', 'flac', 'ape', 'wav'
-        ],
-        self::TYPE_ZIP => [
-            'rar', 'zip', '7z'
-        ],
-        self::TYPE_APP => [
-            'ipa', 'apk', 'appx'
-        ]
-    ];
+    const TYPE_IMAGE = 'image';
+    const TYPE_DOCUMENT = 'doc';
+    const TYPE_VIDEO = 'video';
+    const TYPE_BT = 'bt';
+    const TYPE_MUSIC = 'music';
+    const TYPE_ZIP = 'archive';
+    const TYPE_APP = 'app';
+    const TYPE_UNKNOWN = 'unknown';
 
     public static function tableName(): string {
         return 'disk_file';
@@ -96,29 +73,24 @@ class FileModel extends Model {
      * @return mixed
      */
     public static function searchType($query, $type) {
-        switch ($type) {
-            case self::TYPE_IMAGE:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_IMAGE]);
-            case self::TYPE_DOCUMENT:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_DOCUMENT]);
-            case self::TYPE_VIDEO:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_VIDEO]);
-            case self::TYPE_MUSIC:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_MUSIC]);
-            case self::TYPE_BT:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_BT]);
-            case self::TYPE_ZIP:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_ZIP]);
-            case self::TYPE_APP:
-                return $query->whereIn('extension', self::$extensionMaps[self::TYPE_APP]);
-            default:
-                return $query;
+        $items = FileRepository::typeExtension($type);
+        if (empty($items)) {
+            return $query;
         }
+        return $query->whereIn('extension', explode('|', $items));
     }
 
     public static function getType($extension) {
-        foreach (self::$extensionMaps as $key => $maps) {
-            if (in_array($extension, $maps)) {
+        foreach ([
+            static::TYPE_DOCUMENT,
+            static::TYPE_IMAGE,
+            static::TYPE_BT,
+            static::TYPE_APP,
+            static::TYPE_MUSIC,
+            static::TYPE_VIDEO,
+            static::TYPE_ZIP,
+                 ] as $key) {
+            if (FileRepository::isTypeExtension($extension, $key)) {
                 return $key;
             }
         }

@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
 
-use Module\Auth\Domain\Model\UserModel;
+use Zodream\Infrastructure\Contracts\UserObject;
 
 class TokenCreated {
 
     protected int $expiredAt;
     public function __construct(
         protected string $token,
-        protected UserModel $user,
+        protected UserObject $user,
         int $tokenExpired = 20160) {
         $this->expiredAt = $tokenExpired + time();
     }
@@ -17,21 +17,23 @@ class TokenCreated {
     /**
      * @return string
      */
-    public function getToken() {
+    public function getToken(): string
+    {
         return $this->token;
     }
 
     /**
      * @return int
      */
-    public function getExpiredAt() {
+    public function getExpiredAt(): int
+    {
         return $this->expiredAt;
     }
 
     /**
-     * @return UserModel
+     * @return UserObject
      */
-    public function getUser(): UserModel {
+    public function getUser(): UserObject {
         return $this->user;
     }
 }

@@ -7,6 +7,7 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\WebAuthn\CBOR;
 use Module\Auth\Domain\WebAuthn\Pem;
+use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\BinaryReader;
 use Zodream\Helpers\Json;
@@ -15,6 +16,10 @@ use Zodream\Helpers\Time;
 final class PassKey {
     const REGISTER_KEY = 'passkey:registration';
     const LOGIN_KEY = 'passkey:assertion';
+
+    private static function host(): string {
+        return Platform::isPlatform() ? Platform::current()->get('domain') : request()->host();
+    }
 
     public static function getRegisterOption(): array {
         $user = auth()->user();
@@ -26,7 +31,7 @@ final class PassKey {
             'challenge' => $challenge,
             'rp' => [
                 'name' => Option::value('site_title'),
-                'id' => request()->host()
+                'id' => self::host()
             ],
             'user' => [
                 'id' => (string)$user->getIdentity(),
@@ -84,6 +89,7 @@ final class PassKey {
             'vendor' => OAuthModel::TYPE_WEBAUTHN,
             'identity' => $credentialId,
             'data' => $key,
+            'platform_id' => Platform::platformId()
         ]);
     }
 
@@ -100,7 +106,7 @@ final class PassKey {
         return [
             'challenge' => $challenge,
             'timeout' => $timeout * 1000,
-            'rpId' => request()->host(),
+            'rpId' => self::host(),
             'allowCredentials' => [],
             'userVerification' => 'preferred'
         ];
@@ -132,6 +138,7 @@ final class PassKey {
         $key = OAuthModel::where('user_id', $userId)
             ->where('identity', $credentialId)
             ->where('vendor', OAuthModel::TYPE_WEBAUTHN)
+            ->where('platform_id', Platform::platformId())
             ->value('data');
         if (empty($key)) {
             throw new \Exception('验证失败');
