@@ -34,9 +34,9 @@ bindBlog('{$blog->id}', {$blog->edit_type}, {$lang});
 JS;
 
 if ($blog->edit_type < 1) {
-    $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css')
-        ->registerJsFile('ueditor/ueditor.parse.min.js')
-        ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
+    // $this->registerCssFile('ueditor/third-party/SyntaxHighlighter/shCoreDefault.css')
+    //     ->registerJsFile('ueditor/ueditor.parse.min.js')
+    //     ->registerJsFile('ueditor/third-party/SyntaxHighlighter/shCore.js');
 }
 $this->set([
     'keywords' => $this->text($blog->keywords),

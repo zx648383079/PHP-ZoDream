@@ -58,7 +58,7 @@ $('[name={$field['field']}]').datetimer({
     format: '{$format}'
 });
 JS;
-        view()->registerCssFile('@datetimer.css')
+        view()->registerCssFile('@datetimer.min.css')
             ->registerJsFile('@jquery.datetimer.min.js')
             ->registerJs($js, View::JQUERY_READY);
         return (string)Theme::text($field['field'], $value, $field['name']);

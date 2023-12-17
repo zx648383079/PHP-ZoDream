@@ -29,7 +29,7 @@ $js = <<<JS
 bindSetting();
 JS;
 $this->registerCssFile([
-    '@seo.css'
+    '@seo.min.css'
 ])->registerJsFile([
     '@seo.min.js'
 ])->registerJs($js, View::JQUERY_READY);

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '族谱';
-$this->registerCssFile('@family.css');
+$this->registerCssFile('@family.min.css');
 ?>
 <div class="book-box">
     <?php $this->extend('./page');?>

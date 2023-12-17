@@ -6,10 +6,10 @@ use Domain\AdminMenu;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
-        '@zodream.css',
-        '@zodream-admin.css',
-        '@dialog.css',
-        '@admin.css'
+        '@zodream.min.css',
+        '@zodream-admin.min.css',
+        '@dialog.min.css',
+        '@admin.min.css'
     ])->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',

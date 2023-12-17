@@ -8,7 +8,7 @@ $js = <<<JS
 bindDoPage('{$url}');
 JS;
 $this->extend('layouts/main')
-    ->registerCssFile('@dialog.css')
+    ->registerCssFile('@dialog.min.css')
     ->registerJsFile('@jquery.dialog.min.js')
     ->registerJsFile('@main.min.js')
     ->registerJs($js);

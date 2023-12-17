@@ -27,10 +27,10 @@ $file_menu[] = [
 
 $this->registerCssFile([
     '@font-awesome.min.css',
-    '@prism.css',
-    '@zodream.css',
-    '@zodream-admin.css',
-    '@log.css'
+    '@prism.min.css',
+    '@zodream.min.css',
+    '@zodream-admin.min.css',
+    '@log.min.css'
 ])->registerJsFile([
     '@js.cookie.min.js',
     '@jquery.min.js',

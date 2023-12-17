@@ -1,30 +1,28 @@
-var loader = require("gulp-vue2mini").PackLoader,
+var loader = require('gulp-vue2mini').PackLoader,
     //@import "bourbon";
-    bourbon    = require("bourbon").includePaths,
+    bourbon    = require('bourbon').includePaths,
     // @import "neat";
-    neat       = require("bourbon-neat").includePaths,
-    moduleRoot = '',
-    jsRoot = moduleRoot + 'UserInterface/assets/js/',
-    tsRoot = moduleRoot + 'UserInterface/assets/ts/',
-    cssRoot = moduleRoot + 'UserInterface/assets/sass/',
-    sassIncludes = [cssRoot].concat(bourbon, neat),
+    neat       = require('bourbon-neat').includePaths,
+    sassIncludes = [].concat(bourbon, neat),
     jsDist = 'html/assets/js/',
-    mo = undefined,
     cssDist = 'html/assets/css/',
-    maps = {
+    moduleMaps = {
         doc: 'Document',
         wx: 'WeChat',
         open: 'OpenPlatform',
         tpl: 'Template'
     };
-mo = loader.taskName;
-if (!mo && mo !== 'default') {
+function loadFolder(module) {
+    if (!module || module === 'default' || module === 'all') {
+        return 'UserInterface/';
+    }
     var prefix = '';
-    var modu = mo;
-    if (mo.indexOf('Game-') === 0) {
-        modu = mo.replace('-', '/');
-    } else if (mo.indexOf('-') > 0) {
-        [modu, prefix] = mo.split('-');
+    var moduleRoot = '';
+    var modu = module;
+    if (module.indexOf('Game-') === 0) {
+        modu = module.replace('-', '/');
+    } else if (module.indexOf('-') > 0) {
+        [modu, prefix] = module.split('-');
     }
     // 暂不考虑大小写转化
     switch (modu) {
@@ -35,27 +33,70 @@ if (!mo && mo !== 'default') {
             moduleRoot = '../zodream/debugger/src/';
             break;
         default:
-            moduleRoot = 'Module/'+ (maps.hasOwnProperty(modu) ? maps[modu] : modu) +'/';
+            moduleRoot = 'Module/'+ (moduleMaps.hasOwnProperty(modu) ? moduleMaps[modu] : modu) +'/';
             break;
     }
     if (prefix && prefix.length > 0) {
         prefix += '/';
     }
-    var baseRoot = moduleRoot + 'UserInterface/' + prefix;
-    jsRoot = baseRoot + 'assets/js/';
-    tsRoot = baseRoot + 'assets/ts/';
-    cssRoot = baseRoot + 'assets/sass/';
+    return moduleRoot + 'UserInterface/' + prefix;
 }
 
-loader.task(loader.taskName, async () => {
-    await loader.input(tsRoot + '*.ts')
+var taskName = loader.taskName || 'default';
+
+async function folderTask(root) {
+    await loader.input(root + 'assets/ts/*.ts')
     .ts('tsconfig.json', !loader.argv.min)
     .output(jsDist);
-    await loader.input(cssRoot + "*.scss")
+    await loader.input(root + 'assets/sass/*.scss')
     .sass({
         sourcemaps: !loader.argv.min,
-        includePaths: sassIncludes  // 引入其他的
+        includePaths: taskName === 'default' ? sassIncludes : ['UserInterface/assets/sass/'].concat(sassIncludes)  // 引入其他的
     }).output(cssDist);
-    await loader.input(jsRoot + '*.js')
+    await loader.input(root + 'assets/js/*.js')
     .output(jsDist);
+} 
+
+loader.task(taskName, async () => {
+    if (taskName !== 'all') {
+        var root = loadFolder(taskName);
+        await folderTask(root);
+        return;
+    }
+    var folderItems = [
+        '',
+        'Auth',
+        'Blog',
+        'Book',
+        'Chat',
+        'CMS',
+        'CMS-default',
+        'Contact',
+        'Counter',
+        'Disk',
+        'Document',
+        'Exam',
+        'Family',
+        'Finance',
+        'Forum',
+        'Legwork',
+        'LogView',
+        'MicroBlog',
+        'Navigation',
+        'Note',
+        'OpenPlatform',
+        'ResourceStore',
+        'SEO',
+        'Shop',
+        'Short',
+        'Task',
+        'Template',
+        'Tool',
+        'WeChat',
+        'gzo',
+        'debugger',
+    ];
+    for (var i = 0; i < folderItems.length; i++) {
+        await folderTask(loadFolder(folderItems[i]));
+    }
 });

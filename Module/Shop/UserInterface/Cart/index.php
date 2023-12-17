@@ -8,7 +8,7 @@ $(".slider-goods").slider({
     haspoint: false
 });
 JS;
-$this->registerCssFile('@slider.css')
+$this->registerCssFile('@slider.min.css')
     ->registerJsFile('@jquery.slider.min.js')
     ->registerJs($js, View::JQUERY_READY);
 ?>

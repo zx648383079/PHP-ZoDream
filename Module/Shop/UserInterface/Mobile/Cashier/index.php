@@ -10,7 +10,7 @@ bindMobileCashier();
 JS;
 
 $this->extend('../layouts/header')
-    ->registerCssFile('@dialog-select.css')
+    ->registerCssFile('@dialog-select.min.css')
     ->registerJsFile('@jquery.selectbox.min.js')
     ->registerJs($js);
 ?>

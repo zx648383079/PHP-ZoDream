@@ -4,7 +4,7 @@ use Zodream\Template\View;
 use Zodream\Helpers\Disk;
 /** @var $this View */
 $this->title = 'DEMO';
-$this->registerCssFile('@demo.css')
+$this->registerCssFile('@demo.min.css')
     ->registerJsFile('@demo.min.js')->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 

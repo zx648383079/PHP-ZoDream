@@ -4,7 +4,7 @@ use Zodream\Template\View;
 /** @var $this View */
 
 $this->title = '便签列表';
-$this->registerCssFile('@note.css')
+$this->registerCssFile('@note.min.css')
 ->registerJsFile('@note.min.js')
     ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./@admin/', false)), View::HTML_HEAD)
 ?>

@@ -7,10 +7,10 @@ $js = <<<JS
 bindCode();
 JS;
 $this->registerCssFile([
-    '@dialog.css',
+    '@dialog.min.css',
     '@animate.min.css',
-    '@prism.css',
-    '@micro.css'])
+    '@prism.min.css',
+    '@micro.min.css'])
     ->registerJsFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',

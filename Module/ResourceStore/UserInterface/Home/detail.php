@@ -5,8 +5,8 @@ use Zodream\Helpers\Disk;
 /** @var $this View */
 $this->title = $post['title'];
 $this->registerCssFile([
-    '@blog.css',
-    '@demo.css',
+    '@blog.min.css',
+    '@demo.min.css',
 ])
     ->registerJsFile([
         '@jquery.lazyload.min.js',

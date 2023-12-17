@@ -13,7 +13,7 @@ defined('APP_DIR') or exit();
     <meta name="author" content="ZoDream" />
     <link rel="icon" href="/assets/images/favicon.png">
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/zodream.css" rel="stylesheet">
+    <link href="/assets/css/zodream.min.css" rel="stylesheet">
     <?=$this->header()?>
 </head>
 <body>

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '预览'.$post->title;
-$this->registerCssFile('@demo.css')
+$this->registerCssFile('@demo.min.css')
     ->registerJsFile('@demo.min.js')
     ->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>

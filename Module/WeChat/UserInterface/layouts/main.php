@@ -5,8 +5,8 @@ use Zodream\Template\View;
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
-    '@zodream.css',
-    '@wechat.css'
+    '@zodream.min.css',
+    '@wechat.min.css'
 ])->registerJsFile([
     '@js.cookie.min.js',
     '@jquery.min.js',

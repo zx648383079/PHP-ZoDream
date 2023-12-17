@@ -1,7 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 /** @var $this \Zodream\Template\View */
-$this->registerCssFile('zodream/error.css');
+$this->registerCssFile('zodream/error.min.css');
 $this->extend('layout/header');
 ?>
 

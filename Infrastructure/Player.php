@@ -20,7 +20,7 @@ class Player {
 $('#player{$id}').player({$data});
 JS;
         $view->registerJs($js, View::JQUERY_READY)
-            ->registerCssFile('@player.css')
+            ->registerCssFile('@player.min.css')
             ->registerJsFile('@jquery.player.min.js');
         return <<<HTML
 <div id="player{$id}">{$html}</div>

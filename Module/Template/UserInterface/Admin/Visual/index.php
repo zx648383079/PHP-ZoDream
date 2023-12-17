@@ -19,11 +19,11 @@ $this->registerJsFile('@visual_control.min.js', ['defer' => true, 'position' => 
     '@visual_editor.min.js'
 ])->registerCssFile([
     '@font-awesome.min.css',
-    '@zodream.css',
-    '@zodream-admin.css',
-    '@dialog.css',
-    '@template.css',
-    '@visual_editor.css',
+    '@zodream.min.css',
+    '@zodream-admin.min.css',
+    '@dialog.min.css',
+    '@template.min.css',
+    '@visual_editor.min.css',
 ])->registerJs(sprintf('var BASE_URI="%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD)->registerJs($js, View::JQUERY_READY);
 Editor::register($this);
 ?>

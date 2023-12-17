@@ -7,11 +7,11 @@ use Zodream\Html\Dark\Layout;
 $this->registerCssFile([
         '@font-awesome.min.css',
         '@select2.min.css',
-        '@zodream.css',
-        '@zodream-admin.css',
-        '@editor.css',
-        '@dialog.css',
-        '@blog_admin.css'
+        '@zodream.min.css',
+        '@zodream-admin.min.css',
+        '@editor.min.css',
+        '@dialog.min.css',
+        '@blog_admin.min.css'
     ])->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',

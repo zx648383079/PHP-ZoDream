@@ -5,9 +5,9 @@ use Zodream\Template\View;
 $this->title = '短链接';
 $this->registerCssFile([
     '@font-awesome.min.css',
-    '@dialog.css',
-    '@zodream.css',
-    '@short.css'
+    '@dialog.min.css',
+    '@zodream.min.css',
+    '@short.min.css'
 ])->registerJsFile([
     '@jquery.min.js',
     '@jquery.dialog.min.js',

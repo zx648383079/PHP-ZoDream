@@ -4,9 +4,9 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->registerCssFile([
     '@font-awesome.min.css',
-    '@zodream.css',
-    '@dialog.css',
-    '@shop_mobile.css'
+    '@zodream.min.css',
+    '@dialog.min.css',
+    '@shop_mobile.min.css'
 ])->registerJsFile([
     '@js.cookie.min.js',
     '@jquery.min.js',

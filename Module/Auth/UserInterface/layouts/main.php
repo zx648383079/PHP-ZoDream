@@ -8,9 +8,9 @@ $icp_beian = Option::value('site_icp_beian');
 
 $this->registerCssFile([
     '@font-awesome.min.css',
-    '@dialog.css',
-    '@zodream.css',
-    '@auth.css'])
+    '@dialog.min.css',
+    '@zodream.min.css',
+    '@auth.min.css'])
     ->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',

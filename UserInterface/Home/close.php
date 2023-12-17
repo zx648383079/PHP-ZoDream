@@ -4,8 +4,8 @@ use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('暂停服务通知');
 $this->registerCssFile([
-    '@zodream.css',
-    '@home.css'
+    '@zodream.min.css',
+    '@home.min.css'
 ]);
 ?>
 <!DOCTYPE html>

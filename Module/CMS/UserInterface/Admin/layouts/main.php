@@ -50,10 +50,10 @@ HTML;
 
 $this->registerCssFile([
         '@font-awesome.min.css',
-        '@zodream.css',
-        '@dialog.css',
-        '@zodream-admin.css',
-        '@cms_admin.css'
+        '@zodream.min.css',
+        '@dialog.min.css',
+        '@zodream-admin.min.css',
+        '@cms_admin.min.css'
     ])->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',

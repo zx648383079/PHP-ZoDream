@@ -7,9 +7,9 @@ use Module\SEO\Domain\Option;
 $this->registerCssFile([
     '@font-awesome.min.css',
     '@animate.min.css',
-    '@zodream.css',
-    '@dialog.css',
-    '@home.css'
+    '@zodream.min.css',
+    '@dialog.min.css',
+    '@home.min.css'
 ])->registerJsFile([
     '@jquery.min.js',
     '@js.cookie.min.js',

@@ -9,8 +9,8 @@ use Zodream\Html\Bootstrap\FormWidget;
 
 $this->registerJs('require(["admin/account"]);');
 $this->registerCssFile('cropper.min.css');
-$this->registerCssFile('sitelogo.css');
-$this->registerCssFile('zodream/account.css');
+$this->registerCssFile('sitelogo.min.css');
+$this->registerCssFile('zodream/account.min.css');
 $this->extend([
     'layout/header',
     'layout/navbar'

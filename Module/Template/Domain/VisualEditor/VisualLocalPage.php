@@ -183,7 +183,7 @@ class VisualLocalPage implements IVisualEngine {
         $renderer = $this->renderer();
         $renderer->set('IS_DEV', $this->editable);
         if ($this->editable) {
-            $renderer->registerCssFile('@template_edit.css');
+            $renderer->registerCssFile('@template_edit.min.css');
         }
         return $renderer->render($this->pageData['entry'], [
             'title' => 'Local Test',

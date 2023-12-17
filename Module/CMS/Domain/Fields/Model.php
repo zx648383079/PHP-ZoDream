@@ -67,7 +67,7 @@ $('#model-{$field['id']}').multiSelect({
 });
 JS;
 
-        view()->registerCssFile('@dialog-select.css')
+        view()->registerCssFile('@dialog-select.min.css')
             ->registerJsFile('@jquery.min.js')
             ->registerJsFile('@jquery.multi-select.min.js')
             ->registerJs($js, View::JQUERY_READY);

@@ -1,46 +1,46 @@
 @import 'theme';
-$success: #337ab7;
+$valid: #337ab7;
 .option-box {
     .option-item {
         .option-value {
             display: inline-block;
         }
         select {
-            min-width: 40px;
+            min-width: 2.5rem;
         }
     }
 }
 .question-item {
-    margin-bottom: 30px;
+    margin-bottom: 1.875rem;
     position: relative;
-    min-height: 60px;
+    min-height: 3.75rem;
     .title {
-        font-size: 16px;
+        font-size: 1rem;
         .order {
             font-weight: bold;
-            font-size: 30px;
-            margin-left: 20px;
+            font-size: 1.875rem;
+            margin-left: 1.25rem;
         }
         .wrong,
         .right {
             display: inline-block;
-            min-width: 30px;
+            min-width: 1.875rem;
             vertical-align: bottom;
-            padding: 0 10px;
+            padding: 0 0.625rem;
             &:hover {
-                border-bottom-width: 3px;
+                border-bottom-width: 0.1875rem;
             }
         }
         .wrong {
-            border-bottom: 1px solid $error;
+            border-bottom: 1px solid $invalid;
         }
         .right {
-            border-bottom: 1px solid $success;
+            border-bottom: 1px solid $valid;
         }
     }
     .option-list {
-        padding-left: 40px;
-        line-height: 30px;
+        padding-left: 2.5rem;
+        line-height: 1.875rem;
         .option-item {
             position: relative;
             .right,
@@ -50,20 +50,20 @@ $success: #337ab7;
                     font-weight: 900;
                     text-rendering: auto;
                     position: absolute;
-                    left: -20px;
+                    left: -1.25rem;
                     top: 0;
                 }
             }
             .wrong {
                 &::before {
                     content: "\f00d";
-                    color: $error;
+                    color: $invalid;
                 }
             }
             .right {
                 &::before {
                     content: "\f00c";
-                    color: $success;
+                    color: $valid;
                 }
             }
             &:hover {
@@ -92,12 +92,12 @@ $success: #337ab7;
         }
         &.wrong {
             textarea {
-                border: 1px solid $error;
+                border: 1px solid $invalid;
             }
         }
         &.right {
             textarea {
-                border: 1px solid $success;
+                border: 1px solid $valid;
             }
         }
     }
@@ -116,13 +116,13 @@ $success: #337ab7;
     &.item-wrong {
         &::before {
             content: "\f00d";
-            color: rgba($error, .5);
+            color: rgba($invalid, .5);
         }
     }
     &.item-right {
         &::before {
             content: "\f00c";
-            color: rgba($success, .5);
+            color: rgba($valid, .5);
         }
     }
 }
@@ -280,13 +280,13 @@ $success: #337ab7;
                 }
             }
             &.active {
-                border: 2px solid $success;
+                border: 2px solid $valid;
             }
             &.right {
-                background-color: $success;
+                background-color: $valid;
             }
             &.wrong {
-                background-color: $error;
+                background-color: $invalid;
             }
             &:hover {
                 border-color: #777;

@@ -14,7 +14,7 @@ $this->registerJsFile([
     '@jquery.editor.min.js',
 ])
 ->registerCssFile([
-    '@editor.css',
+    '@editor.min.css',
 ])
 ->registerJs($js, View::JQUERY_READY);
 ?>

@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = '族谱列表';
-$this->registerCssFile('@family.css');
+$this->registerCssFile('@family.min.css');
 ?>
 
 <?php foreach($clan_list as $item):?>

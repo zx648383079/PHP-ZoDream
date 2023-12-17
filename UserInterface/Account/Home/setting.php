@@ -5,7 +5,7 @@ use Zodream\Infrastructure\Support\Html;
 /** @var $this \Zodream\Template\View */
 /** @var $page \Zodream\Html\Page */
 
-$this->registerCssFile('zodream/blog.css');
+$this->registerCssFile('zodream/blog.min.css');
 $this->extend([
     'layout/header',
     'layout/navbar'

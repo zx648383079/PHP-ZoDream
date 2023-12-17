@@ -79,11 +79,11 @@ if(isset($project_list)) {
 
 $this->registerCssFile([
         '@font-awesome.min.css',
-        '@prism.css',
-        '@zodream.css',
-        '@zodream-admin.css',
-        '@dialog.css',
-        '@doc.css'
+        '@prism.min.css',
+        '@zodream.min.css',
+        '@zodream-admin.min.css',
+        '@dialog.min.css',
+        '@doc.min.css'
     ])->registerJsFile([
         '@jquery.min.js',
         '@js.cookie.min.js',

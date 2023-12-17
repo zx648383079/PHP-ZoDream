@@ -5,9 +5,9 @@ use Zodream\Html\Dark\Layout;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
-        '@zodream.css',
-        '@dialog.css',
-        '@game_bank.css'
+        '@zodream.min.css',
+        '@dialog.min.css',
+        '@game_bank.min.css'
     ])->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',

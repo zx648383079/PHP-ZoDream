@@ -15,8 +15,8 @@ $this->registerJsFile('@visual_control.min.js', ['defer' => true, 'position' => 
     '@jquery.editor.min.js',
     '@visual_editor.min.js'
 ])->registerCssFile([
-    '@editor.css',
-    '@visual_editor.css'
+    '@editor.min.css',
+    '@visual_editor.min.css'
 ])->registerJs($js, View::JQUERY_READY);
 ?>
 

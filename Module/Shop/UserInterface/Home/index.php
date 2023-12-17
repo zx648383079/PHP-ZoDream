@@ -6,7 +6,7 @@ $this->title = 'ZoDream Shop';
 $js = <<<JS
 bindHome();
 JS;
-$this->registerCssFile('@slider.css')
+$this->registerCssFile('@slider.min.css')
     ->registerJsFile('@jquery.slider.min.js')
     ->registerJs($js);
 ?>

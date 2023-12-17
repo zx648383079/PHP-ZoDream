@@ -23,7 +23,7 @@ HTML;
                 '/assets/ueditor/ueditor.all.js']);
         } else {
             $provider->registerJsFile('@jquery.editor.min.js')
-                ->registerCssFile('@editor.css');
+                ->registerCssFile('@editor.min.css');
         }
     }
 
