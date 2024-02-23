@@ -222,7 +222,7 @@ class VisualPage implements IVisualEngine {
         $this->boot();
         $renderer = $this->renderer();
         if ($this->editable) {
-            $renderer->registerCssFile('@template_edit.css');
+            $renderer->registerCssFile('@template_edit.min.css');
         }
         return $renderer->render($this->pageFileName, [
             'title' => $this->page->title,

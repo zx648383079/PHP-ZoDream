@@ -19,6 +19,7 @@ class HomeController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'content' => 'required|string:0,255',
+                'status' => 'int:0,9'
             ]);
             return $this->render(NoteRepository::saveSelf($data));
         } catch (\Exception $ex) {

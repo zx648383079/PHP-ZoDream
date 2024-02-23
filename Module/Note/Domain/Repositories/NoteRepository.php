@@ -8,6 +8,9 @@ use Module\Note\Domain\Model\NoteModel;
 
 final class NoteRepository {
 
+    const STATUS_VISIBLE = 1;
+    const STATUS_HIDE = 0;
+
     public static function getManageList(
         string $keywords = '',
         int $user = 0) {
@@ -36,6 +39,15 @@ final class NoteRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
+            })->where(function ($query) {
+                $query->where('status', self::STATUS_VISIBLE);
+                if (auth()->guest()) {
+                    return;
+                }
+                $query->orWhere(function ($query) {
+                    $query->where('user_id', auth()->id())
+                    ->where('status', self::STATUS_HIDE);
+                });
             })->orderBy('created_at', 'desc')
             ->page($perPage);
     }

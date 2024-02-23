@@ -2,47 +2,34 @@
 declare(strict_types=1);
 namespace Module\Contact\Domain\Weights;
 
-use Module\Auth\Domain\Model\UserModel;
+use Infrastructure\Developer;
 use Module\Template\Domain\Weights\INode;
 use Module\Template\Domain\Weights\Node;
 
 class Author extends Node implements INode {
 
-    const KEY = 'zd_profile';
-
-    protected function registerAsync(): void {
-        $this->page->on(self::KEY, function () {
-           return UserModel::find(1);
-        });
-    }
-
     public function render(string $type = ''): mixed {
-        return $this->cache()->getOrSet(self::KEY, function () {
-            $user = $this->page->trigger(self::KEY);
-            $rss = url('/blog/rss');
-            return <<<HTML
+        $data = Developer::author();
+        $link = '';
+        foreach ($data['links'] as $item) {
+            $link .= <<<HTML
+<a href="{$item['url']}" target="_blank" title="{$item['title']}">
+    <i class="{$item['icon']}"></i>
+    {$item['title']}
+</a>
+HTML;
+        }
+        return <<<HTML
 <div class="person-box">
     <div class="avatar">
-        <img src="{$user->avatar}" alt="{$user->name}">
+        <img src="{$data['avatar']}" alt="{$data['name']}">
     </div>
-    <div class="name">{$user->name}</div>
-    <div class="desc">开心就好！</div>
+    <div class="name">{$data['name']}</div>
+    <div class="desc">{$data['description']}</div>
     <div class="links">
-        <a href="https://github.com/zx648383079" target="_blank" title="Github">
-            <i class="fab fa-github"></i>
-            GitHub
-        </a>
-        <a href="mailto:{$user->email}" title="发送邮件">
-            <i class="fa fa-mail-bulk"></i>
-            Email
-        </a>
-        <a href="{$rss}" target="_blank" title="订阅rss">
-            <i class="fa fa-rss"></i>
-            RSS
-        </a>
+        {$link}
     </div>
 </div>
 HTML;
-        });
     }
 }

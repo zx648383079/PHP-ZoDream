@@ -11,20 +11,22 @@ JS;
 $this->registerJsFile('@base64.min.js')->registerJs($js);
 ?>
 <div class="panel-container">
-    <a class="register-webauth" href="javascript:;">注册生物识别</a>
-
     <?php foreach($model_list as $item):?>
     <div class="connect-item">
         <div class="item-name">
-            <i class="fab <?=$item['icon']?>"></i>
+            <i class="<?=!in_array($item['icon'], ['fa-fingerprint']) ? 'fab' : 'fa'?> <?=$item['icon']?>"></i>
             <?=$item['name']?>
-            <?php if (isset($item['nickname'])):?>
+            <?php if (!empty($item['nickname'])):?>
             (<?=$this->text($item['nickname'])?>)
             <?php endif;?>
         </div>
         <div class="item-action">
             <?php if (isset($item['id'])):?>
                 <a data-type="del" href="<?=$this->url('./@admin/account/delete_connect', ['id' => $item['id']])?>">解绑</a>
+            <?php elseif ($item['vendor'] === 'web_authn'):?>
+            <a class="register-webauth">注册</a>
+            <?php elseif ($item['vendor'] === '2fa'):?>
+            <a class="open_2fa" href="<?=$this->url('./passkey/twofa')?>" data-type="form" data-title="启用两步验证">启用</a>
             <?php endif;?>
         </div>
     </div>

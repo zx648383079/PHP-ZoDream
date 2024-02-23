@@ -144,6 +144,10 @@ final class AccountRepository {
                 'name' => 'WebAuthn',
                 'icon' => 'fa-fingerprint',
             ],
+            OAuthModel::TYPE_2FA => [
+                'name' => '两步验证',
+                'icon' => 'fa-mobile',
+            ],
         ];
     }
 }

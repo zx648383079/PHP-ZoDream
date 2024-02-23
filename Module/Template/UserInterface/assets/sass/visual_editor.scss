@@ -556,6 +556,12 @@ $iconWidth: 1.5rem;
                 text-transform: uppercase;
                 white-space: nowrap;
             }
+            .extra-control {
+                background-color: transparent;
+                outline: none;
+                height: auto;
+                border: none !important;
+            }
         }
         .option-item {
             text-align: center;
@@ -595,6 +601,7 @@ $iconWidth: 1.5rem;
     }
 
     .drag-control-container {
+        position: relative;
         display: block;
         user-select: none;
         border-radius: .25rem;
@@ -609,8 +616,20 @@ $iconWidth: 1.5rem;
             height: 0;
             overflow: hidden;
         }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            margin-left: -2.5rem;
+        }
         &:hover {
             background-color: var(--#{$prefix}-input);
+        }
+        &.is-uploading {
+            .loading {
+                display: block;
+            }
         }
     }
 

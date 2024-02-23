@@ -332,8 +332,7 @@ footer {
         p {
             color: rgb(179, 177, 177);
             font-size: 15px;
-            margin: 1.2% 0px;
-            font-family: 'Play-Regular';
+            margin: 1.2% 0;
             line-height: 1.6em;
         }
     }
@@ -360,11 +359,11 @@ footer {
     }
 }
 
-.about-box,
-.contact-box {
+.simple-panel {
     background-color: var(--#{$prefix}-panel);
+    color: var(--#{$prefix}-body-text);
     padding: 1.25rem;
-    .heading {
+    .panel-header {
         h3, 
         h1, 
         h2 {
@@ -375,56 +374,18 @@ footer {
             text-transform: uppercase;
         }
     }
+    .header-meta {
+        color: #b3b1b1;
+        font-size: 0.9375rem;
+        margin: 1.2% 0;
+        line-height: 1.6em;
+    }
 }
 
 .about-header {
     margin-top: 3.125rem;
     margin-bottom: 1.875rem;
-}
-
-.person-box {
-    background-color: var(--#{$prefix}-panel);
-    padding: 1.25rem 0.625rem;
-    color: var(--#{$prefix}-body-text);
-    .avatar {
-        text-align: center;
-        img {
-            padding: 2px;
-            max-width: 120px;
-            height: auto;
-            border: 1px solid var(--#{$prefix}-secondary-text);
-        }
-    }
-    .name {
-        text-align: center;
-        color: var(--#{$prefix}-body-text);
-        line-height: 2.5rem;
-        font-weight: 600;
-    }
-    .desc {
-        line-height: 30px;
-        text-align: center;
-        border-top: 1px dotted #ccc;
-        border-bottom: 1px dotted #ccc;
-    }
-    .links {
-        margin-top: 10px;
-        line-height: 30px;
-        a {
-            color: var(--#{$prefix}-body-text);
-            display: inline-block;
-            width: 45%;
-            padding: 0 10px;
-            &:hover {
-                border-radius: 4px;
-                background: var(--#{$prefix}-primary-hover);
-            }
-        }
-    }
-}
-
-.about-box {
-    .about-top {
+    .panel-header {
         text-align: center;
     }
     .about-bottom {
@@ -447,6 +408,86 @@ footer {
         line-height: 30px;
         color: var(--#{$prefix}-body-text);
         text-align: right;
+    }
+}
+
+.skill-progress-bar {
+    margin-top: .8rem;
+    .item-name {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    .item-meta {
+        display: block;
+        font-size: .8rem;
+    }
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+    .progress-inner {
+        display: flex;
+        height: .8rem;
+        border-radius: .25rem;
+        background-color: var(--#{$prefix}-primary-text);
+        border: 1px solid var(--#{$prefix}-primary);
+        .inner-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--#{$prefix}-primary-text);
+            text-align: center;
+            white-space: nowrap;
+            background-color: var(--#{$prefix}-primary-hover);
+        }
+    }
+    .skill-meta {
+        color: var(--#{$prefix}-secondary-text);
+        font-size: .8rem;
+    }
+}
+
+.person-box {
+    background-color: var(--#{$prefix}-panel);
+    padding: 1.25rem 0.625rem;
+    color: var(--#{$prefix}-body-text);
+    .avatar {
+        text-align: center;
+        img {
+            padding: 2px;
+            max-width: 7.5rem;
+            height: auto;
+            border: 1px solid var(--#{$prefix}-secondary-text);
+        }
+    }
+    .name {
+        text-align: center;
+        color: var(--#{$prefix}-body-text);
+        line-height: 2.5rem;
+        font-weight: 600;
+    }
+    .desc {
+        line-height: 1.875rem;
+        text-align: center;
+        border-top: 1px dotted #ccc;
+        border-bottom: 1px dotted #ccc;
+    }
+    .links {
+        margin-top: 0.625rem;
+        line-height: 1.875rem;
+        a {
+            color: var(--#{$prefix}-body-text);
+            display: inline-block;
+            width: 45%;
+            padding: 0 10px;
+            &:hover {
+                border-radius: 4px;
+                color: var(--#{$prefix}-primary-text);
+                background: var(--#{$prefix}-primary-hover);
+            }
+        }
     }
 }
 

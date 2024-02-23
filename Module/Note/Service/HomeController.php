@@ -13,6 +13,7 @@ class HomeController extends ModuleController {
 	public function indexAction(string $keywords = '', int $id = 0, int $user = 0) {
 	    $model_list = NoteRepository::getList($keywords, $user, $id);
         if (request()->isAjax()) {
+            $this->layout = '';
             return $this->renderData([
                 'html' => $this->renderHtml('page', compact('model_list', 'keywords')),
                 'has_more' => $model_list->hasMore()

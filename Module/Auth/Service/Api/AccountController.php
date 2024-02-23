@@ -5,6 +5,7 @@ namespace Module\Auth\Service\Api;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 
 class AccountController extends Controller {
@@ -28,6 +29,15 @@ class AccountController extends Controller {
 
     public function connectAction() {
         return $this->renderData(AccountRepository::getConnect());
+    }
+
+    public function connectDeleteAction(int $id) {
+        if (empty($id) || $id < 1) {
+            return $this->renderFailure('请选择解绑的平台');
+        }
+        OAuthModel::where('user_id', auth()->id())
+            ->where('id', $id)->delete();
+        return $this->renderData(true);
     }
 
     public function driverAction() {

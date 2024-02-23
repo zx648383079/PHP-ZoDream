@@ -1,28 +1,36 @@
 function bindNewNote(baseUri: string) {
-    $(".new-item textarea").on('input propertychange', function() {
+    $(".new-item").on('input propertychange', 'textarea', function() {
         let $this = $(this),
             max = $this.attr('max-length'),
-            length = $this.val().length;
+            length = $this.val().toString().length;
         $this.closest('.new-item').find('.item-action .length-box').text(length + '/' + max);
-    }).on('keydown', function(e) {
-        if (e.keyCode === 9) {
+    }).on('keydown', 'textarea', function(this: HTMLTextAreaElement, e) {
+        if (e.code === 'Tab') {
             e.preventDefault();
-            let position = this.selectionStart + 4;
-            this.value = this.value.substr(0, this.selectionStart) + "\t" + this.value.substr(this.selectionStart);
+            const position = this.selectionStart + 1;
+            this.value = this.value.substring(0, this.selectionStart) + "\t" + this.value.substring(this.selectionStart);
             this.selectionStart = position;
             this.selectionEnd = position;
             this.focus();
         }
-    });
-    $(".new-item .item-action .fa-check").on('click',function() {
-        let box = $(this).closest('.new-item').find('textarea'),
+    }).on('click', '.visbile-toggle', function() {
+        const $this = $(this);
+        if ($this.hasClass('fa-eye')) {
+            $this.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            $this.addClass('fa-eye').removeClass('fa-eye-slash');
+        }
+    }).on('click', ' .item-action .fa-check', function() {
+        const target = $(this).closest('.new-item');
+        let box = target.find('textarea'),
             content = box.val();
         if (content.length < 1) {
             Dialog.tip('请输入内容');
             return;
         }
         postJson(baseUri, {
-            content: content
+            content: content,
+            status: target.find('.visbile-toggle').hasClass('fa-eye') ? 1 : 0
         }, function(data: any) {
             if (data.code == 200) {
                 box.val('');

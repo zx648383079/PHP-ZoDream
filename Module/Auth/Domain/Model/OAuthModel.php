@@ -25,6 +25,7 @@ class OAuthModel extends Model {
     const TYPE_TAOBAO = 'taobao';
     const TYPE_ALIPAY = 'alipay';
     const TYPE_WEBAUTHN = 'web_authn';
+    const TYPE_2FA = '2fa';
 
     public static function tableName(): string {
         return 'user_oauth';

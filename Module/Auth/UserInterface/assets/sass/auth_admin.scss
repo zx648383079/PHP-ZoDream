@@ -1,39 +1,39 @@
 .connect-item {
     display: grid;
     grid-template-columns: 8fr 2fr;
-    line-height: 40px;
+    line-height: 2.5rem;
     background-color: #fff;
-    padding: 0 0 0 20px;
+    padding: 0 0 0 1.25rem;
 }
 
 .bulletin-item {
     background-color: #fff;
-    margin-bottom: 10px;
-    padding: 20px;
+    margin-bottom: 0.625rem;
+    padding: 1.25rem;
     .title {
         font-weight: bold;
-        line-height: 30px;
+        line-height: 1.875rem;
         border-bottom: 1px dotted #ccc;
         cursor: pointer;
         .btn {
             float: right;
             font-weight: normal;
-            font-size: 12px;
+            font-size: 0.75rem;
         }
     }
     .content {
-        min-height: 60px;
+        min-height: 3.75rem;
     }
     .footer {
         border-top: 1px dotted #ccc;
         color: #777;
-        font-size: 12px;
+        font-size: 0.75rem;
         span {
-            margin-right: 20px;
+            margin-right: 1.25rem;
         }
     }
     &.min {
-        padding: 0 20px 10px;
+        padding: 0 1.25rem 0.625rem;
         .title {
             .btn {
                 display: none;

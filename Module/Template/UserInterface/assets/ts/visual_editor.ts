@@ -2396,7 +2396,7 @@ class EditorHtmlHelper {
             const index = [id, j].join('_');
             const chk = item.value == selected ? ' checked' : '';
             return `<span class="radio-control-item" data-value="${item.value}">${item.name}</span>`;
-        }), `<input type="hidden" name="${name}" value="${selected}">`, '</div>');
+        }), `<input type="hidden" name="${name}" value="${this.value(selected)}">`, '</div>');
     }
 
     private static checkbox(id: string, name: string, items: IItem[], val: string[] = []) {
@@ -2523,26 +2523,26 @@ class EditorHtmlHelper {
         return `<div class="animation-container">
         <div class="effect-show">效果展示</div>
         <div class="control-inline-group">
-            <label for="">动效</label>
-            <select class="form-control">
+            <label for="animation-type">动效</label>
+            <select class="form-control" id="animation-type" name="animation[type]">
             ${this.selectOption(animationLabelOptions)}
             </select>
         </div>
         <div class="control-inline-group">
-            <label for="">延时</label>
-            <select class="form-control">
+            <label for="animation-delay">延时</label>
+            <select class="form-control" id="animation-delay" name="animation[delay]">
             ${this.selectOption(animationLabelDelayOptions)}
             </select>
         </div>
         <div class="control-inline-group">
-            <label for="">时长</label>
-            <select class="form-control">
-            ${this.selectOption(animationLabelDurationOptions)}
+            <label for="animation-duratio">时长</label>
+            <select class="form-control" id="animation-duration" name="animation[duration]">
+            ${this.selectOption( animationLabelDurationOptions)}
             </select>
         </div>
         <div class="control-inline-group">
-            <label for="">重复</label>
-            <select class="form-control">
+            <label for="animation-count">重复</label>
+            <select class="form-control" id="animation-count" name="animation[count]">
             ${this.selectOption(animationIterationCountOptions)}
             </select>
         </div>
@@ -2554,16 +2554,16 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
-        <input type="hidden" name="${name}" value="${val}">
+        <input type="hidden" name="${name}" value="${this.value(val)}">
     </div>
-    <div class="control-popup">
+    <div class="control-popup" data-popup="background">
         <div class="control-inline-group">
             <label for="">背景色</label>
-            ${this.colorPopup(id, name)}
+            ${this.colorPopup(id, name + '[color]')}
         </div>
         <div class="control-line-group">
             <label for="">背景图片</label>
-            ${this.imageInput(id, name)}
+            ${this.imageInput(id, name + '[image]')}
         </div>
     </div>
     `;
@@ -2574,7 +2574,14 @@ class EditorHtmlHelper {
             return `<label class="drag-control-container" for="${id}">
             拖放文件
             <p>(或点击)</p>
-            <input type="file" id="${id}" name="${name}">
+            <input type="file" id="${id}" name="${name}" accept="image/*">
+            <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </label>`;
         }
         return `<div class="image-control-item">
@@ -2589,27 +2596,27 @@ class EditorHtmlHelper {
     }
 
     private static shadowPopup(id: string, name: string, val?: any) {
+        const html = ['X', 'Y', 'BLUR', 'SPREAD'].map((label, i) => {
+            return this.sizeInput(label, id + '-' + i, `${name}[${i}]`)
+        });
         return `<div class="control-popup-target">
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
         <input type="hidden" name="${name}" value="${val}">
     </div>
-    <div class="control-popup">
+    <div class="control-popup" data-popup="shadow">
         <div class="control-row">
-            ${this.sizeInput('X',id,name)}
-            ${this.sizeInput('Y',id,name)}
-            ${this.sizeInput('BLUR',id,name)}
-            ${this.sizeInput('SPREAD',id,name)}
+            ${html.join('')}
         </div>
        
         <div class="control-inline-group">
             <label for="">Color</label>
-            ${this.colorPopup(id, name)}
+            ${this.colorPopup(id, name + '[color]')}
         </div>
         <div class="control-inline-group">
             <label for="">Inset</label>
-            ${this.switch(id,name, '')}
+            ${this.switch(id,name + '[inset]', '', '内', '外')}
         </div>
     </div>`;
     }
@@ -2634,24 +2641,28 @@ class EditorHtmlHelper {
         </div>
         <input type="hidden" name="${name}" value="${val}">
     </div>
-    <div class="control-popup">
+    <div class="control-popup" data-popup="border">
         <div class="control-line-group">
             <label for="">Width</label>
-            ${this.boundInput(id,name)}
+            ${this.boundInput(id,name+'[width]')}
         </div>
         <div class="control-inline-group">
             <label for="">Style</label>
-            <select>
+            <select name="${name+'[style]'}">
                 ${this.selectOption(styleItems)}
             </select>
         </div>
         <div class="control-inline-group">
             <label for="">Color</label>
-            ${this.colorPopup(id,name)}
+            ${this.colorPopup(id,name+'[color]')}
         </div>
         <div class="control-line-group">
             <label for="">Radius</label>
-            ${this.radiusInput(id,name)}
+            ${this.radiusInput(id,name+'[radius]')}
+        </div>
+        <div class="control-inline-group">
+            <label for="">Shadow</label>
+            ${this.shadowPopup(id,name+'[shadow]')}
         </div>
     </div>`;
     }
@@ -2673,7 +2684,7 @@ class EditorHtmlHelper {
         </div>
         <input type="hidden" name="${name}" value="${val}">
     </div>
-    <div class="control-popup">
+    <div class="control-popup" data-popup="icon">
         <div class="search-header-bar">
             <input>
             <i class="fa fa-search"></i>
@@ -2692,7 +2703,7 @@ class EditorHtmlHelper {
         </div>
         <input type="hidden" name="${name}" value="${val}">
     </div>
-    <div class="control-popup">
+    <div class="control-popup" data-popup="color">
         <div class="popup-action">
             <div class="btn btn-danger">清除</div>
         </div>
@@ -2782,7 +2793,7 @@ class EditorHtmlHelper {
 
     private static boundInput(id: string, name: string, items?: any[]) {
         const html = ['上', '右', '下', '左'].map((label, i) => {
-            return this.sizeInput(label, `${id}_${i}`, `${name}[]`, items && items.length > i ? items[i] : '');
+            return this.sizeInput(label, `${id}_${i}`, `${name}[${i}]`, items && items.length > i ? items[i] : '');
         }).join('');
         return `<div class="control-row">${html}</div>`
     }
@@ -2848,13 +2859,13 @@ class EditorHtmlHelper {
 
     private static sizeInput(label: string|undefined, id?: string, name?: string, val?: any, unit: string = 'px') {
         val = toFloat(val);
-        const input = `<input type="number" id="${id}" name="${name}" value="${val}">`;
+        const input = `<input type="number" id="${id}" name="${name}[value]" value="${val}">`;
         const core = label ? `<div class="control-body">
         <label for="${id}">${label}</label>
         ${input}
-        <span class="extra-control">${unit}</span>
+        <input class="extra-control" name="${name}[unit]" value="${unit}" spellcheck="false">
     </div>` : `<div class="control-body">
-    <span class="extra-control">${unit}</span>
+    <input class="extra-control" name="${name}[unit]" value="${unit}" spellcheck="false">
     ${input}
 </div>`;
         return `<div class="select-with-control">` + core + this.selectOptionBar(['px', 'em', 'rem', 'vh', 'vw', '%', 'auto', 'none']) + '</div>';
@@ -3179,7 +3190,8 @@ class EditorHtmlHelper {
         .on('click', '.control-popup-target', function() {
             const $this = $(this);
             const popup = $this.next('.control-popup');
-            popup.toggleClass('popup-top', $this.offset().top + $this.height() > window.innerHeight - popup.height()).toggleClass('open');
+            popup// .toggleClass('popup-top', $this.offset().top + $this.height() > window.innerHeight - popup.height())
+            .toggleClass('open');
         })
         .on(EditorEventInputChange, '.control-popup-target', function(e, val) {
             e.stopPropagation();
@@ -3188,13 +3200,34 @@ class EditorHtmlHelper {
         })
         .on(EditorEventInputChange, '.control-popup', function(e, val) {
             e.stopPropagation();
-            $(this).prev('.control-popup-targe').trigger(EditorEventInputChange, val);
+            $(this).prev('.control-popup-target').trigger(EditorEventInputChange, val);
         })
-        .on(EditorEventInputReset, '.control-popup-target', function() {
-            $(this).find('input').val('');
+        .on(EditorEventInputReset, '.control-popup-target', function(e) {
+            e.stopPropagation();
+            const $this = $(this);
+            $this.find('input').val('');
         })
-        .on(EditorEventInputReset, '.control-popup', function() {
-            
+        .on(EditorEventInputReset, '.control-popup', function(e) {
+            e.stopPropagation();
+            if (e.target !== this) {
+                return;
+            }
+            const $this = $(this);
+            const popupType = $this.data('popup');
+            if (popupType === 'color') {
+                EditorHtmlHelper.colorPopupColor($this, '#0000');
+                $this.find('.tab-bar-target input').val('');
+                return;
+            }
+            $this.children('.control-inline-group,.control-line-group').children('label').next().trigger(EditorEventInputReset);
+        })
+        .on('click', '.control-popup .popup-action .btn', function() {
+            const $this = $(this);
+            if ($this.hasClass('btn-danger')) {
+                $this.closest('.control-popup').trigger(EditorEventInputReset).prev('.control-popup-target').trigger(EditorEventInputReset).
+                prev().prev('.control-updated-tag').addClass('hidden');
+                return;
+            }
         })
         // icon
         .on('click', '.icon-option-item', function() {
@@ -3224,10 +3257,10 @@ class EditorHtmlHelper {
             $(this).find('.control-body input').val('');
         })
         .on('click', '.select-with-control .control-body .extra-control', function() {
-            $(this).closest('.select-with-control').find('.select-option-bar').toggleClass('select-focus');
+            $(this).closest('.select-with-control').toggleClass('select-focus');
         }).on('select:change', '.select-with-control .select-option-bar', function(_, ele: HTMLDivElement) {
             const $this = $(ele);
-            $this.closest('.select-with-control').removeClass('select-focus').find('.control-body .extra-control').text($this.text());
+            $this.closest('.select-with-control').removeClass('select-focus').find('.control-body .extra-control').val($this.text());
         }).on('click', '.select-option-bar .option-item', function() {
             const $this = $(this);
             $this.addClass('selected').siblings().removeClass('selected');
@@ -3253,6 +3286,7 @@ class EditorHtmlHelper {
                     });
                 }
             });
+            colorPopup.trigger(EditorEventInputChange, EditorHelper.rgbaToHex(rgba))
         })
         // select
         .on('change', '.select-control-container .input-body', function() {
@@ -3293,6 +3327,12 @@ class EditorHtmlHelper {
             $this.addClass('active').siblings().removeClass('active');
             $this.closest('.tab-bar').siblings('.tab-bar-target').removeClass('active').eq($this.index()).addClass('active');
         })
+        // 图片上传
+        .on('change', '.drag-control-container input[type=file]', function(this: HTMLInputElement) {
+            const target = $(this).closest('.drag-control-container');
+            target.addClass('is-uploading');
+            
+        })
         // radio
         .on(EditorEventInputReset, '.control-row', function(e) {
             if (!$(e.target).hasClass('control-row')) {
@@ -3330,7 +3370,8 @@ class EditorHtmlHelper {
             if ($this.data('tab')) {
                 group.trigger(EditorEventTabToggle, [$this.data('tab'), val]);
             }
-        }).on(EditorEventInputReset, 'select', function() {
+        }).on(EditorEventInputReset, 'select', function(e) {
+            e.stopPropagation();
             $(this).val('');
         }).on(EditorEventTabToggle, '.control-inline-group,.control-line-group', function(_, tab: string, val: any) {
             const match = `${tab}-${val}`;
@@ -3345,11 +3386,17 @@ class EditorHtmlHelper {
             });
         }).on(EditorEventInputChange, '.control-inline-group,.control-line-group', function(e, val: any) {
             e.stopPropagation();
-            $(this).find('.control-updated-tag:first').toggleClass('hidden', !val);
+            const $this = $(this);
+            const popup = $this.closest('.control-popup');
+            if (popup.length > 0) {
+                popup.trigger(EditorEventInputChange, val);
+                return;
+            }
+            $this.find('.control-updated-tag:first').toggleClass('hidden', !val);
         })
         .on('click', '.control-updated-tag', function() {
             const $this = $(this);
-            $this.next().next().trigger(EditorEventInputReset);
+            $this.next().next().trigger(EditorEventInputReset).next('.control-popup').trigger(EditorEventInputReset);
             $this.addClass('hidden');
         })
         // 多项添加
@@ -3367,7 +3414,7 @@ class EditorHtmlHelper {
             $this.before(that.renderTreeItem(that.get<IVisualInput>(box.data('cache')).input));
         }).on('click', '.tree-container .item-body', function() {
             const $this = $(this);
-
+            
         }).on('click', '.tree-container .item-action-bar .fa-arrow-up', function(e) {
             e.stopPropagation();
             const item = $(this).closest('.tree-item');

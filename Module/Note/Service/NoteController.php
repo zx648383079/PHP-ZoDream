@@ -17,6 +17,7 @@ class NoteController extends ModuleController {
             $data = $input->validate([
                 'id' => 'int',
                 'content' => 'required|string:0,255',
+                'status' => 'int:0,9'
             ]);
             NoteRepository::saveSelf($data);
         } catch (\Exception $ex) {

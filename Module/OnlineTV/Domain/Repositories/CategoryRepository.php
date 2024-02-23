@@ -8,7 +8,6 @@ use Domain\Repositories\CRUDRepository;
 use Module\OnlineTV\Domain\Models\CategoryModel;
 use Module\OnlineTV\Domain\Models\MovieModel;
 use Zodream\Database\Contracts\SqlBuilder;
-use Zodream\Database\Relation;
 use Zodream\Html\Tree;
 
 final class CategoryRepository extends CRUDRepository {

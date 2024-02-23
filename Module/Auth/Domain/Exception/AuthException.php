@@ -5,7 +5,9 @@ namespace Module\Auth\Domain\Exception;
 use Exception;
 
 class AuthException {
-
+    public static function invalid2FA() {
+        return new Exception(__('2FA authentication code error'), 1015);
+    }
     public static function ipDisallow() {
         return new Exception(__('Too many failures'), 1011);
     }

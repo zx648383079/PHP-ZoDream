@@ -22,6 +22,10 @@ $this->registerJs($js);
                     <input type="password" name="password" class="form-control" placeholder="请输入密码" required autocomplete="off">
                     <i class="fa fa-lock" aria-hidden="true" ></i>
                 </div>
+                <div class="input-group 2fa-input" style="display:none">
+                    <input type="text" name="twofa_code" class="form-control" placeholder="请输入动态码" autocomplete="off">
+                    <i class="fa fa-mobile" aria-hidden="true" ></i>
+                </div>
                 <div class="input-group captcha-input" <?=$isCaptcha ? '' : 'style="display:none"'?>>
                     <input type="text" name="captcha" class="form-control" placeholder="请输入验证码" autocomplete="off">
                     <a href="javascript:;" class="btn" title="点击刷新">

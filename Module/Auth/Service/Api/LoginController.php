@@ -61,8 +61,13 @@ class LoginController extends Controller {
                     'code' => $ex->getCode(),
                     'captcha_token' => CaptchaRepository::token($captchaKey)
                 ]);
+            } elseif ($ex->getCode() === 1015) {
+                return $this->renderFailure([
+                    'message' => $ex->getMessage(),
+                    'code' => $ex->getCode(),
+                ]);
             }
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
         $user = auth()->user();
         $refreshTTL = $remember ? 365 * 86400 : 0;

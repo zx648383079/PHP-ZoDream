@@ -5,7 +5,6 @@ namespace Module\Auth\Service\Api;
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Repositories\PassKey;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Module\OpenPlatform\Domain\Platform;
 
 class PasskeyController extends Controller {
 
@@ -48,5 +47,18 @@ class PasskeyController extends Controller {
             return $this->renderFailure($ex);
         }
         return $this->renderData(true, '注册生物识别成功');
+    }
+
+    public function twofaAction() {
+        return $this->render(PassKey::create2FA());
+    }
+
+    public function twofaSaveAction(string $twofa_code) {
+        try {
+            PassKey::save2FA($twofa_code);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData(true);
     }
 }

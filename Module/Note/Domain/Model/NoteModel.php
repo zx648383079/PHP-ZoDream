@@ -28,6 +28,7 @@ class NoteModel extends Model {
             'content' => 'string:0,255',
             'user_id' => 'required|int',
             'is_notice' => 'int:0,9',
+            'status' => 'int:0,9',
             'created_at' => 'int',
         ];
 	}

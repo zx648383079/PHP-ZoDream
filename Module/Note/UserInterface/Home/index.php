@@ -20,8 +20,11 @@ $this->extend('layouts/main');
             <textarea placeholder="请输入内容" max-length="255"></textarea>
         </div>
         <div class="item-action">
-            <span class="length-box"></span>
-            <i class="fa fa-check"></i>
+            <span class="length-box">0/255</span>
+            <div class="pull-right">
+                <i class="visbile-toggle fa fa-eye"></i>
+                <i class="fa fa-check"></i>
+            </div>
         </div>
     </div>
     <?php endif;?>

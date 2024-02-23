@@ -84,10 +84,13 @@ class AuthRepository {
      * @param string $password
      * @param bool $remember
      * @param bool $replaceToken 是否替换记住我的token
-     * @return bool|mixed
+     * @return bool
      * @throws Exception
      */
-    public static function login(string $email, string $password, bool $remember = false, bool $replaceToken = true) {
+    public static function login(string $email,
+                                 string $password,
+                                 bool $remember = false,
+                                 bool $replaceToken = true): bool {
         if (empty($email) || empty($password)) {
             throw AuthException::invalidLogin();
         }
@@ -104,10 +107,13 @@ class AuthRepository {
         if (!$user->validatePassword($password)) {
             throw AuthException::invalidLogin();
         }
+        PassKey::check2FA($user);
         return static::loginUser($user, $remember, $replaceToken);
     }
 
-    public static function loginMobile(string $mobile, string $password, bool $remember = false, bool $replaceToken = true) {
+    public static function loginMobile(string $mobile, string $password,
+                                       bool $remember = false,
+                                       bool $replaceToken = true): bool {
         if (empty($mobile) || empty($password)) {
             throw AuthException::invalidLogin();
         }
@@ -546,12 +552,13 @@ class AuthRepository {
      * @param mixed $remember
      * @param mixed $replaceToken
      * @param string $vendor
-     * @return bool|null
+     * @return bool
      * @throws Exception
      */
     private static function loginUser(UserModel $user,
                                       bool $remember = false,
-                                      bool $replaceToken = true, string $vendor = LoginLogModel::MODE_WEB): ?bool {
+                                      bool $replaceToken = true,
+                                      string $vendor = LoginLogModel::MODE_WEB): bool {
         if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }

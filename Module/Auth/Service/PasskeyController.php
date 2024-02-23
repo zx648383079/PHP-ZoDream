@@ -41,4 +41,20 @@ class PasskeyController extends Controller {
         }
         return $this->renderData(true, '注册生物识别成功');
     }
+
+    public function twofaAction() {
+        $this->layout = '';
+        return $this->show(PassKey::create2FA());
+    }
+
+    public function twofaSaveAction(string $twofa_code) {
+        try {
+            PassKey::save2FA($twofa_code);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex);
+        }
+        return $this->renderData([
+            'refresh' => true
+        ], '已开启两步验证');
+    }
 }

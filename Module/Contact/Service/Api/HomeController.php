@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Contact\Service\Api;
 
+use Infrastructure\Developer;
 use Module\Contact\Domain\Repositories\ContactRepository;
 use Module\Contact\Domain\Repositories\FeedbackRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -39,5 +40,15 @@ class HomeController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function developerAction() {
+        return $this->render(array_merge(Developer::author(), [
+            'skills' => array_map(function (array $item) {
+                $item['formatted_proficiency'] = Developer::formatProficiency($item['proficiency']);
+                return $item;
+            }, Developer::skill())
+            ])
+        );
     }
 }

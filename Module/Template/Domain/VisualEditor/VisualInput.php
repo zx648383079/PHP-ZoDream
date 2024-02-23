@@ -80,8 +80,17 @@ final class VisualInput {
                 self::color('color', '前景色', ''),
                 self::size('font-size', '字体大小', 16),
                 self::range('font-weight', '字体粗细', 500, 100, 900, 100),
-                self::select('font-style', '字体粗细', [], ''),
-                self::select('font-family', '字体', [], ''),
+                self::select('font-style', '字体样式', [
+                    self::selectOption('normal'),
+                    self::selectOption('italic'),
+                    self::selectOption('oblique'),
+                ], ''),
+                self::select('font-family', '字体', [
+                    self::selectOption('默认'),
+                    self::selectOption('微软雅黑'),
+                    self::selectOption('黑体'),
+                    self::selectOption('宋体'),
+                ], ''),
             ]),
             self::group('内容', [
                 self::switch('visibility', '可见', ''),
@@ -92,8 +101,17 @@ final class VisualInput {
                 self::color('color', '前景色', ''),
                 self::size('font-size', '字体大小', 16),
                 self::range('font-weight', '字体粗细', 500, 100, 900, 100),
-                self::select('font-style', '字体粗细', [], ''),
-                self::select('font-family', '字体', [], ''),
+                self::select('font-style', '字体样式', [
+                    self::selectOption('normal'),
+                    self::selectOption('italic'),
+                    self::selectOption('oblique'),
+                ], ''),
+                self::select('font-family', '字体', [
+                    self::selectOption('默认'),
+                    self::selectOption('微软雅黑'),
+                    self::selectOption('黑体'),
+                    self::selectOption('宋体'),
+                ], ''),
             ]),
         ];
     }

@@ -95,7 +95,7 @@ HTML;
 
     }
 
-    protected static function renderImg(string $line, bool $imgLazy, string $defaultImage) {
+    protected static function renderImg(string $line, bool $imgLazy, string $defaultImage): string {
         if (!preg_match('#^<img[^<>]+?src="([^"<>\s]+)#', $line, $match)) {
             return $line;
         }
@@ -131,12 +131,19 @@ HTML;
         }
         if (!str_contains($url, '//')) {
             $url = url()->to($url);
-        } elseif (str_contains($match[1], $host)) {
+        } elseif (str_contains($match[1], $host) || self::isLocalhost($match[1])) {
             return $line;
         } else {
             $url = HtmlExpand::toUrl($url);
         }
-        return str_replace($match[1], $url, $line);
+        $matchLen = strlen($match[0]);
+        return sprintf('%s%s%s', substr($match[0], 0,
+            $matchLen - strlen($match[1])), $url, substr($line, $matchLen));
+    }
+
+    protected static function isLocalhost(string $url): bool {
+        $host = parse_url($url, PHP_URL_HOST);
+        return empty($host) || str_ends_with($url, 'localhost');
     }
 
 }

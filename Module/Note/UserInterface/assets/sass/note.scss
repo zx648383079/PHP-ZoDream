@@ -95,12 +95,21 @@ $shadow: rgba(33,33,33,.7);
                 line-height: 20px;
             }
             .item-action {
-                padding: 5px 5px 0;
-                height: 20px;
+                padding: 0.325rem 0.325rem 0;
+                height: 1.25rem;
                 color: #777;
+                display: flex;
+                justify-content: space-between;
                 .fa-check {
-                    float: right;
                     color: green;
+                }
+            }
+            .pull-right {
+                display: flex;
+                margin-top: -0.325rem;
+                font-size: 1.5rem;
+                .visbile-toggle {
+                    margin-right: .8rem;
                 }
             }
         }

@@ -23,6 +23,8 @@ $(function() {
             loading.close();
             if (data.code === 1009) {
                 _this.find('.captcha-input').show().find('.btn').trigger('click');
+            } else if (data.code === 1015) {
+                _this.find('.2fa-input').show();
             }
             parseAjax(data);
         });

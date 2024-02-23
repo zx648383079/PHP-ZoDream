@@ -3,10 +3,13 @@ declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
 use Exception;
+use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\WebAuthn\CBOR;
 use Module\Auth\Domain\WebAuthn\Pem;
+use Module\Auth\Domain\WebAuthn\TwoFactorAuth;
 use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\BinaryReader;
@@ -17,8 +20,60 @@ final class PassKey {
     const REGISTER_KEY = 'passkey:registration';
     const LOGIN_KEY = 'passkey:assertion';
 
-    private static function host(): string {
-        return Platform::isPlatform() ? Platform::current()->get('domain') : request()->host();
+    private static function host(bool $withPlatform = true): string {
+        return $withPlatform && Platform::isPlatform()
+            ? Platform::current()->get('domain') : request()->host();
+    }
+
+    public static function isOpen2FA(int $userId): bool {
+        return OAuthModel::where('user_id', $userId)->where('vendor', OAuthModel::TYPE_2FA)->count() > 0;
+    }
+
+    public static function check2FA(UserModel $model) {
+        $data = OAuthModel::where('user_id', $model->id)->where('vendor', OAuthModel::TYPE_2FA)->first();
+        if (empty($data)) {
+            return;
+        }
+        $recoveryCode = request('recovery_code');
+        if (!empty($recoveryCode)) {
+            if ($recoveryCode !== $data['identity']) {
+                throw new Exception('Recovery code error');
+            }
+            OAuthModel::where('user_id', $model->id)->where('vendor', OAuthModel::TYPE_2FA)->delete();
+        }
+        $provider = new TwoFactorAuth(self::host(false));
+        $code = request('twofa_code');
+        if (empty($code) || !$provider->verifyCode($data['data'], $code)) {
+            throw AuthException::invalid2FA();
+        }
+    }
+
+    public static function create2FA() {
+        $user = auth()->user();
+        $recovery_code = md5(sprintf('zre_%s_%d', Time::millisecond(), $user->getIdentity()));
+        $provider = new TwoFactorAuth(self::host(false));
+        $secret_key = $provider->createSecret();
+        $qr = $provider->getQRCodeImageAsDataUri($user->name, $secret_key);
+        $key = sprintf('2fa-%s', $user->getIdentity());
+        cache()->set($key, compact('recovery_code', 'secret_key'), 3600);
+        return compact('recovery_code', 'secret_key', 'qr');
+    }
+
+    public static function save2FA(string $code) {
+        $provider = new TwoFactorAuth(self::host(false));
+        $userId = auth()->id();
+        $key = sprintf('2fa-%s', $userId);
+        $data = cache()->get($key);
+        if (empty($data) || !$provider->verifyCode($data['secret_key'], $code)) {
+            throw new Exception('动态码错误');
+        }
+        OAuthModel::create([
+            'user_id' => $userId,
+            'vendor' => OAuthModel::TYPE_2FA,
+            'identity' => $data['recovery_code'],
+            'data' => $data['secret_key'],
+        ]);
+        cache()->delete($key);
     }
 
     public static function getRegisterOption(): array {
