@@ -5,27 +5,33 @@
     <div class="search-bar">
         搜索 “{$keywords}” 的结果
     </div>
-    <ul class="search-body">
-        {for:$items,$item}
-        <li class="article-item" title="{$item.title}-{$item.description}">
-            <div class="thumb">
-                <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="">
-            </div>
-            <div class="info">
-                <div class="title">
-                        <a href="{url:$item}">{$item.title}</a>
-                </div>
-                <div class="desc">
-                        {this.text:$item.description,80}
-                </div>
-                <div class="tags">
-                    <span><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
-                </div>
-            </div>
-        </li>
-        {/for}
-    </ul>
 
-    {page:$items}
+    <div class="article-panel">
+        <ul class="search-body">
+            {for:$items,$item}
+            <li class="article-item" title="{$item.title}-{$item.description}">
+                <div class="item-thumb">
+                    <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
+                </div>
+                <div class="item-body">
+                    <div class="item-title">
+                        <a href="{url:$item}">{$item.title}</a>
+                    </div>
+                    <div class="tag-bar">
+                        <span class="tag-item"><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
+                        <span class="tag-item"><i class="fa fa-bookmark"></i>{channel:$item.cat_id,name}</span>
+                    </div>
+                    <div class="item-desc">
+                        {this.text:$item.description,80}
+                    </div>
+                    
+                </div>
+            </li>
+            {/for}
+        </ul>
+    
+        {page:$items}
+    </div>
+
 </div>
 

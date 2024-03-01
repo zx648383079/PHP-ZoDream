@@ -5,30 +5,34 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <div class="path">
+            <div class="path-bar">
                     当前位置: 
                 <ul><li><a href="">首页</a></li>{location:}
                 </ul>
             </div>
-            <div id="content-list">
-                    {for:$items,$item}
+            <div class="article-panel">
+                {for:$items,$item}
                 <div class="article-item">
-                    <div class="thumb">
-                        <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="">
+                    <div class="item-thumb">
+                        <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
                     </div>
-                    <div class="info">
-                        <div class="title">
-                                <a href="{url:$item}">{$item.title}</a>
+                    <div class="item-body">
+                        <div class="item-title">
+                            <a href="{url:$item}">{$item.title}</a>
                         </div>
-                        <div class="desc">
-                                {this.text:$item.description,80}
+                        <div class="tag-bar">
+                            <span class="tag-item"><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
+                            <span class="tag-item"><i class="fa fa-bookmark"></i>{channel:$item.cat_id,name}</span>
                         </div>
-                        <div class="tags">
-                            <span><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
+                        <div class="item-desc">
+                            {this.text:$item.description,80}
                         </div>
+                        
                     </div>
                 </div>
                 {/for}
+
+                {page:$items}
             </div>
         </div>
         <div class="col-md-3">

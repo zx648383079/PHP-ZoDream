@@ -5,6 +5,7 @@ namespace Domain\Providers;
 use Domain\Repositories\FileRepository;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 use Zodream\Disk\Directory;
@@ -69,14 +70,14 @@ class StorageProvider {
             $table->uint('item_type')->default(0);
             $table->uint('item_id');
             $table->string('data')->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append(static::FILE_QUOTE_TABLE, function(Table $table) {
             $table->id();
             $table->uint('file_id');
             $table->uint('item_type')->default(0);
             $table->uint('item_id');
             $table->uint('user_id')->default(0);
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 

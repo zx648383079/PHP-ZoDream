@@ -1014,6 +1014,9 @@ class FuncHelper {
     public static function searchHidden(): string {
         $data = request()->get();
         unset($data['page'], $data['keywords']);
+        if (self::$current['channel'] > 0) {
+            $data['category'] = (string)self::$current['channel'];
+        }
         $html = '';
         foreach ($data as $key => $value) {
             if (empty($value)) {

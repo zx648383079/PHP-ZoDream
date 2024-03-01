@@ -4,6 +4,7 @@ namespace Domain\Providers;
 
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Arr;
@@ -40,7 +41,7 @@ class DayLogProvider {
             $table->uint('user_id')->default(0);
             $table->uint('action')->default(0);
             $table->string('ip', 120)->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         })->append($this->dayTableName, function(Table $table) {
             $table->id();
             $table->string('happen_day', 20);
@@ -48,7 +49,7 @@ class DayLogProvider {
             $table->uint('item_id');
             $table->uint('action')->default(0);
             $table->uint('happen_count')->default(0);
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 

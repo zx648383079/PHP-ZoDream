@@ -4,6 +4,7 @@ namespace Domain\Providers;
 
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
 use Zodream\Helpers\Arr;
@@ -30,7 +31,7 @@ class ActionLogProvider {
             $table->uint('user_id');
             $table->uint('action');
             $table->string('ip', 120)->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 

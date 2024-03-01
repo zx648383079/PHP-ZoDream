@@ -25,14 +25,18 @@ class CategoryController extends Controller {
             compact('channel', 'items', 'title'));
     }
 
-    public function listAction(Request $request, int $id) {
+    public function listAction(Request $request) {
+        $id = $request->get('category');
+        if (empty($id)) {
+            $id = $request->get('id');
+        }
         FuncHelper::$current['channel'] = $id;
         $channel = FuncHelper::channel($id, true);
         if (empty($channel)) {
             return $this->redirect('./');
         }
         $queries = $request->get();
-        unset($queries['id']);
+        unset($queries['id'], $queries['category']);
         if (!isset($queries['field'])) {
             $queries['field'] = FuncHelper::searchField($channel['id']);
         }

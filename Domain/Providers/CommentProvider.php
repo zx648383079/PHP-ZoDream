@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
@@ -46,7 +47,7 @@ class CommentProvider {
             $table->uint('agree_count')->default(0);
             $table->uint('disagree_count')->default(0);
             $table->uint('status', 1)->default(0)->comment('审核状态');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 

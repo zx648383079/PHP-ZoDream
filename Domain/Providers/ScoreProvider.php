@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
@@ -38,7 +39,7 @@ class ScoreProvider {
             $table->uint('score', 1)->default(6);
             $table->uint('from_type', 1)->default(0);
             $table->uint('from_id')->default(0);
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 

@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Zodream\Database\DB;
 use Zodream\Database\Migrations\Migration;
+use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
@@ -36,7 +37,7 @@ class CollectProvider {
             $table->uint('item_id');
             $table->uint('user_id');
             $table->string('extra_data')->default('');
-            $table->timestamp('created_at');
+            $table->timestamp(Model::CREATED_AT);
         });
     }
 
