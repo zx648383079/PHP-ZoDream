@@ -12,7 +12,12 @@ return [
         '.' => 'ZoDream\Backup'
     ],
     'configs' => [
-        Input::radio('host', '', ['全部备份', '差异备份']),
-        Input::checkbox('', '', ['数据', '资源', '代码'])
+        Input::radio('type', '备份方式',
+            Input::optionItems([
+                '全部备份',
+                '差异备份'
+            ])
+        ),
+        Input::checkbox('source', '备份内容', Input::optionItems(['数据', '资源', '代码']))
     ]
 ];

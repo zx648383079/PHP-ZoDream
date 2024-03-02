@@ -67,6 +67,10 @@ final class PassKey {
         if (empty($data) || !$provider->verifyCode($data['secret_key'], $code)) {
             throw new Exception('动态码错误');
         }
+        if (OAuthModel::where('user_id', $userId)->where('vendor', OAuthModel::TYPE_2FA)
+        ->count() > 0) {
+            throw new Exception('非法操作');
+        }
         OAuthModel::create([
             'user_id' => $userId,
             'vendor' => OAuthModel::TYPE_2FA,
