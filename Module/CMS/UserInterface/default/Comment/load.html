@@ -2,22 +2,22 @@
     {if:!authGuest:}
     <div class="panel">
         <div class="panel-header">
-            <h3>发表评论</h3>
+            <h3>{__:'Leave a comment'}</h3>
         </div>
         <div class="panel-body">
             <form class="form-default" data-type="ajax" action="{url:./comment/create}" method="post">
                 {commentHidden:}
                 <div class="input-group">
-                    <label for="">评论内容</label>
+                    <label for="">{__:Content}</label>
                     <textarea class="form-control" name="content" rows="3"></textarea>
                 </div>
-                <button class="btn btn-default">评论</button>
+                <button class="btn btn-default">{__:Comment}</button>
             </form>
         </div>
     </div>
     {/if}
     <div class="title-bar">
-        全部评论（{$data.comment_count}）
+        {__:All Comments}({$data.comment_count})
     </div>
     <div class="template-lazy comment-page" data-url="{url:./comment?extra=children&article=:$data.id:&model=:$data.model_id:&category=:$data.cat_id}">
         

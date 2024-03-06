@@ -4,8 +4,8 @@
 </div>
 <div class="container">
     <div class="path-bar">
-            当前位置: 
-        <ul><li><a href="">首页</a></li>{location:}
+            {__:Location}: 
+        <ul><li><a href="{url:./}">{__:Home}</a></li>{location:}
         </ul>
     </div>
 
@@ -13,7 +13,7 @@
         <div class="col-md-3">
             <ul class="tree-box">
                 <li>
-                    <a href="{url:./}">返回所有应用</a>
+                    <a href="{url:./}">{__:Back}</a>
                 </li>
                 {channels:parent=>app_market,tree=>1}
                 <li class="{channelActive:$channel.id,true}">

@@ -22,10 +22,49 @@ var silder = $(".photo .slider").slider({
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="row">
+        {> $i = 0}
+        {channels:group=>recommend}
+        {> $i ++}
+        <div class="col-md-{if:$i%2==1,8,4}">
+            <div class="tab-box mt-2">
+                <div class="tab-header">
+                    <div class="tab-item active"><a href="{=channel:$channel,url}">{$channel.title}</a></div>
+                </div>
+                <div class="tab-body">
+                    {contents:category=>$channel.id,num=>10}
+                    <div class="article-item" title="{$content.title}-{$content.description}">
+                        <div class="item-thumb">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                        </div>
+                        <div class="item-body">
+                            <div class="item-title">
+                                <a href="{url:$content}">{$content.title}</a>
+                            </div>
+                            <div class="tag-bar">
+                                <span class="tag-item"><i class="fa fa-calendar-alt"></i>{this.ago:$content.created_at}</span>
+                                <span class="tag-item"><i class="fa fa-bookmark"></i>{channel:$content.cat_id,title}</span>
+                            </div>
+                            <div class="item-desc">
+                                {this.text:$content.description,80}
+                            </div>
+                            
+                        </div>
+                    </div>
+                    {/contents}
+                </div>
+            </div>
+        </div>
+        {/channels}
+    </div>
+</div>
+
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <div class="tab-box">
+            <div class="tab-box mt-2">
                 <div class="tab-header">
                     <div class="tab-item active">{channel:about_us,title}</div>
                 </div>
@@ -38,22 +77,22 @@ var silder = $(".photo .slider").slider({
                     {/contents}
                 </div>
             </div>
-            <div class="tab-box">
+            <div class="tab-box mt-2">
                 <div class="tab-header">
-                    <div class="tab-item active">联系我们</div>
+                    <div class="tab-item active">{__:'Contact US'}</div>
                 </div>
                 <div class="tab-body p-1">
                     <h3>{option:company}</h3>
                     <ul>
-                        <li>地址：{option:address}</li>
-                        <li>总机：{option:tel}</li>
-                        <li>电邮：{option:email}</li>
+                        <li>{__:Address}: {option:address}</li>
+                        <li>{__:Tel}: {option:tel}</li>
+                        <li>{__:Email}: {option:email}</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="col-md-5">
-            <div class="tab-box">
+            <div class="tab-box mt-2">
                 <div class="tab-header">
                     <div class="tab-item active">{channel:news,title}</div>
                     <div class="tab-item">{channel:web_news,title}</div>
@@ -85,7 +124,7 @@ var silder = $(".photo .slider").slider({
             </div>
         </div>
         <div class="col-md-3">
-            <div class="tab-box">
+            <div class="tab-box mt-2">
                 <div class="tab-header">
                     <div class="tab-item active">{channel:photos,title}</div>
                 </div>

@@ -48,7 +48,7 @@ class CategoryController extends Controller {
             'group_list', 'template_list'));
     }
 
-    public function saveAction() {
+    public function saveAction(array|string $groups = []) {
         $model = new CategoryModel();
         if (!$model->load()) {
             return $this->renderFailure($model->getFirstError());
@@ -56,6 +56,9 @@ class CategoryController extends Controller {
         $model->autoIsNew();
         if ($model->isNewRecord && empty($model->setting)) {
             $model->setting = [];
+        }
+        if (empty($groups)) {
+            $model->groups = $groups;
         }
         if (!$model->save()) {
             return $this->renderFailure($model->getFirstError());

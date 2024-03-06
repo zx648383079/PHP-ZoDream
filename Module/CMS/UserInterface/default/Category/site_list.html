@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="search-bar">
-        搜索 “{$keywords}” 的结果
+        {__:search_title,keywords=>$keywords}
     </div>
     <ul class="search-body">
         {for:$items,$item}
@@ -14,7 +14,7 @@
             </div>
             <div class="item-desc">{this.text:$item.description,20}</div>
             {if:isset($item.uri)}
-            <a class="go-btn" href="{redirect:$item.uri}" target="_blank" rel="noopener noreferrer" title="直接访问">
+            <a class="go-btn" href="{redirect:$item.uri}" target="_blank" rel="noopener noreferrer" title="{__:'Direct access'}">
                 <i class="fa fa-arrow-circle-right"></i>
             </a>
             {/if}

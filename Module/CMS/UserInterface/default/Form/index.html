@@ -1,11 +1,11 @@
 {layout:main}
-{this.title=填写表单}
+{this.title='Form'}
 <form data-type="ajax" action="{url:./form/save}" method="post" class="form-table" role="form">
     {for:$field_list,$item}
         {formInput:$item}
     {/for}
     
-    <button type="submit" class="btn btn-success">确认提交</button>
-    <a class="btn btn-danger" href="javascript:history.go(-1);">取消提交</a>
+    <button type="submit" class="btn btn-success">{__:Submit}</button>
+    <a class="btn btn-danger" href="javascript:history.go(-1);">{__:Cancel}</a>
     <input type="hidden" name="id" value="{$model.id}">
 </form>

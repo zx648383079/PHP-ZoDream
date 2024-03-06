@@ -6,8 +6,8 @@
     <div class="row">
         <div class="col-md-9">
             <div class="path-bar">
-                    当前位置: 
-                <ul><li><a href="{url:./}">首页</a></li>{location:}
+                {__:Location}: 
+                <ul><li><a href="{url:./}">{__:Home}</a></li>{location:}
                 </ul>
             </div>
             <div id="content">
@@ -15,7 +15,7 @@
                     {$article.title}
                 </div>
                 <div class="tag-bar">
-                    <span>时间：{this.time:$article.created_at}</span>
+                    <span>{__:Date}: {this.time:$article.created_at}</span>
                 </div>
                 <article class="content">
                     <img src="{$article.image}" alt="">

@@ -292,14 +292,14 @@ function converter(content: string, type: string): string| number {
             });
             break;
         case 'unicode':
-            result = escape(content).toLocaleLowerCase().replace(/%u/gi,'\\u');
+            result = encodeURIComponent(content).toLocaleLowerCase().replace(/%u/gi,'\\u');
             break;
         case 'deunicode':
             if (/&#\d+;/.test(content)) {
                 result = unicodeDecode(content);
                 break;
             }
-            result = unescape(content.replace(/\\u/gi, '%u'));
+            result = decodeURIComponent(content.replace(/\\u/gi, '%u'));
             break;
         case 'strtotime': 
             result = new Date(content).getTime();
@@ -389,7 +389,7 @@ function registerEditor(mode: string) {
     editor.on('change', function() {
         editor.save();
     });
-    $('#output').change(function() {
+    $('#output').on('change', function() {
         editor2.setValue($(this).val());
     });
 }

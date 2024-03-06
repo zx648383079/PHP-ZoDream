@@ -13,8 +13,8 @@ html {
     <div class="row">
         <div class="col-md-9">
             <div class="path-bar">
-                    当前位置: 
-                <ul><li><a href="{url:./}">首页</a></li>{location:}
+                {__:Location}: 
+                <ul><li><a href="{url:./}">{__:Home}</a></li>{location:}
                 </ul>
             </div>
             <div class="article-inner-panel">
@@ -22,9 +22,11 @@ html {
                     {$article.title}
                 </div>
                 <div class="tag-bar">
-                    <span>时间：{this.time:$article.created_at}</span>
-                    <span>作者：
-                        {if:!empty:$article.source_url}
+                    <span>{__:Date}: {this.time:$article.created_at}</span>
+                    <span>{__:Author}: 
+                        {if:empty:$article.author}
+                        <a href="javascript:;">{content:$article,user_name}</a>
+                        {elseif:!empty:$article.source_url}
                         <a href="{redirect:$article.source_url}" target="_blank" rel="noopener noreferrer">{$article.author}</a>
                         {else}
                         <a href="javascript:;">{$article.author}</a>
@@ -39,7 +41,43 @@ html {
                 <article class="content">
                     {$article.content}
                 </article>
+
+                {if:!empty:$article.keywords}
+                <div class="artilce-tag-bar">
+                    <span class="tag-header">{__:'Tags:'}</span>
+                    {split:$article.keywords}
+                    <a class="tag-item" href="{$item}">
+                        <i class="fa fa-bookmark" aria-hidden="true"></i>
+                        <span>{$item}</span>
+                    </a>
+                    {/split}
+                </div>
+                {/if}
             </div>
+
+            {$prev=previous:}
+            {$next=next:}
+
+            {if:$prev || $next}
+            <div class="navigation-bar">
+                <div class="prev-item">
+                    {__:Previous}:
+                    {if:$prev}
+                    <a href="{url:$prev}">{$prev.title}</a>
+                    {else}
+                    {__:Nothing}
+                    {/if}
+                </div>
+                <div class="next-item">
+                    {__:Next}: 
+                    {if:$next}
+                    <a href="{url:$next}">{$next.title}</a>
+                    {else}
+                    {__:Nothing}
+                    {/if}
+                </div>
+            </div>
+            {/if}
 
             {if:$article.comment_open}
             {tpl:Comment/load}

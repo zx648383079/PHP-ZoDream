@@ -325,7 +325,7 @@ class FuncHelper {
         }, static::locationPath()));
     }
 
-    public static function previous($name = null) {
+    public static function previous(string|bool $name = true) {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $catModel = static::model($cat['model_id']);
@@ -336,7 +336,7 @@ class FuncHelper {
         return static::getContentValue($name, $data);
     }
 
-    public static function next($name = null) {
+    public static function next(string|bool $name = true) {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $catModel = static::model($cat['model_id']);
@@ -601,6 +601,15 @@ class FuncHelper {
         }
         if ($name === 'url') {
             return self::url($data);
+        }
+        if ($name === 'user_name') {
+            if (empty($data['user_id'])) {
+                return '';
+            }
+            $user = self::cache()->getOrSet('user', $data['user_id'], function () use ($data) {
+                return UserRepository::getPublicProfile(intval($data['user_id']));
+            });
+            return empty($user) ? '' : $user['name'];
         }
         return $data[$name] ?? null;
     }
@@ -1058,6 +1067,13 @@ class FuncHelper {
         return '';
     }
 
+    public static function split(mixed $input, string $tag = ','): array {
+        if (empty($input)) {
+            return [];
+        }
+        return explode($tag, (string)$input);
+    }
+
     public static function authGuest(): bool {
         return auth()->guest();
     }
@@ -1138,6 +1154,7 @@ class FuncHelper {
         static::registerBlock($compiler, 'formColumns');
         static::registerBlock($compiler, 'linkage');
         static::registerBlock($compiler, 'range');
+        static::registerBlock($compiler, 'split');
         static::registerBlock($compiler, 'contentPage', 'content')
             ->registerFunc('pager', function ($index = 0) use ($compiler) {
                 if ($index < 1) {

@@ -6,14 +6,14 @@
     <div class="row">
         <div class="col-md-12">
             <div class="path-bar">
-                    当前位置: 
-                <ul><li><a href="{url:./}">首页</a></li>{location:}
+                {__:Location}: 
+                <ul><li><a href="{url:./}">{__:Home}</a></li>{location:}
                 </ul>
             </div>
             <div id="content">
                 <div class="tab-box">
                     <div class="tab-header">
-                        <div class="tab-item active">网站详情</div>
+                        <div class="tab-item active">{__:Website}</div>
                     </div>
                     <div class="tab-body row">
                         <div class="col-md-8">
@@ -24,10 +24,10 @@
                                     {$article.description}
                             </div>
                             <div class="tag-bar">
-                                <span>收藏时间：{this.time:$article.created_at}</span>
+                                <span>{__:Date}: {this.time:$article.created_at}</span>
                             </div>
                             <div class="link-bar">
-                                网址：{$article.uri}<a href="{redirect:$article.uri}"  target="_blank">进入网站</a>
+                                {__:URL}: {$article.uri}<a href="{redirect:$article.uri}"  target="_blank">{__:'Go to website'}</a>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -39,11 +39,10 @@
                 </div>
                 <div class="tab-box">
                     <div class="tab-header">
-                        <div class="tab-item active">网站介绍</div>
+                        <div class="tab-item active">{__:'Website Introduction'}</div>
                     </div>
                     <div class="tab-body content">
                         <article>{$article.content}</article>
-                        
                     </div>
                 </div>
             </div>

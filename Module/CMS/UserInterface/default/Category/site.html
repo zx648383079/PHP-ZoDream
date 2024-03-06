@@ -198,7 +198,7 @@ bindNavigation({$navigation});
         <div class="panel-header">
             <i class="{$channel.thumb}"></i>
             <span>{$channel.title}</span>
-            <a class="more" href="{url:./category?id=:$channel.id}">更多&gt;</a>
+            <a class="more" href="{url:./category?id=:$channel.id}">{__:More}&gt;</a>
         </div>
         <div class="panel-body">
             {contents:category=>$channel.id,num=>20,field=>'id,cat_id,model_id,title,description,thumb,uri'}
@@ -209,7 +209,7 @@ bindNavigation({$navigation});
                 </div>
                 <div class="item-desc">{this.text:$content.description,20}</div>
                 {if:$content.uri}
-                <a class="go-btn" href="{redirect:$content.uri}" target="_blank" rel="noopener noreferrer" title="直接访问">
+                <a class="go-btn" href="{redirect:$content.uri}" target="_blank" rel="noopener noreferrer" title="{__:'Direct access'}">
                     <i class="fa fa-arrow-circle-right"></i>
                 </a>
                 {/if}
@@ -247,8 +247,8 @@ bindNavigation({$navigation});
             </div>
     </div>
     <div class="dialog-footer">
-        <button type="button" class="dialog-yes">确认</button>
+        <button type="button" class="dialog-yes">{__:Submit}</button>
         <button type="button"
-            class="dialog-close">取消</button>
+            class="dialog-close">{__:Cancel}</button>
     </div>
 </div>

@@ -25,6 +25,10 @@
             "name": "nav"
         },
         {
+            "action": "group",
+            "name": "recommend"
+        },
+        {
             "action": "model",
             "name": "新闻",
             "table": "news",
