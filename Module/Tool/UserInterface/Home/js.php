@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'JS 美化';
+$this->title = 'JS 在线美化工具';
 $js = <<<JS
 registerEditor('text/javascript');
 JS;

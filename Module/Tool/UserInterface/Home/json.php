@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'JSON 美化';
+$this->title = 'JSON 在线美化工具';
 ?>
 
 <div class="converter-box large-box">

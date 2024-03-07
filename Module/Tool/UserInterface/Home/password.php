@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'Passsword Hash';
+$this->title = 'Passsword Hash 在线转换工具';
 ?>
 
 <div class="converter-box">

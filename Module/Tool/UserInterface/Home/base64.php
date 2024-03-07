@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'Base64编解码';
+$this->title = 'Base64在线编码解码工具';
+$this->keywords = 'Base64在线工具,Base64编码解码,Base64转换';
+$this->description = 'ZoDream在线工具提供Base64在线工具,Base64编码解码,Base64转换,Unicode Base64 UTF-8编码等在线工具';
 ?>
 
 <div class="converter-box">

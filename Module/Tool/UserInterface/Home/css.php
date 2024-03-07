@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'CSS 美化/css2scss';
+$this->title = 'CSS 美化/css2scss在线工具';
 $this->description = 'css beautify or css2scss';
 $js = <<<JS
 registerEditor('text/css');

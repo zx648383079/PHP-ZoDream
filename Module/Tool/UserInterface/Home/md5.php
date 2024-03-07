@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'MD5';
+$this->title = 'MD5 在线编码工具';
 ?>
 
 <div class="converter-box">

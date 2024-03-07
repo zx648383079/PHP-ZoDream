@@ -25,13 +25,14 @@ $type_list = ['group' => '分组', 'text' => '文本', 'textarea' => '多行文�
 
 
 $this->title = '基本设置';
+$jsFile = $this->getAssetUri('@seo.min.js');
 $js = <<<JS
-bindSetting();
+$.getScript('{$jsFile}', function() {
+    bindSetting();
+});
 JS;
 $this->registerCssFile([
     '@seo.min.css'
-])->registerJsFile([
-    '@seo.min.js'
 ])->registerJs($js, View::JQUERY_READY);
 ?>
 <?=Form::open('./@admin/setting/save')?>
@@ -52,32 +53,32 @@ $this->registerCssFile([
                 <?php foreach($group['children'] as $item):?>
                     <?php $item['label'] = '<i class="fa fa-edit" data-id="'. $item['id'].'"></i>'.$item['name'];
                     if($item['type'] == 'text'):?>
-                   <?=Theme::text(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::text(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'textarea'):?>
-                   <?=Theme::textarea(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::textarea(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'select'):?>
-                   <?=Theme::select(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::select(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'radio'):?>
-                   <?=Theme::radio(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::radio(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'checkbox'):?>
-                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), parseArr($item['default_value']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'switch'):?>
-                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), $item['default_value'], $item['value'], $item['name'])->setLabel($item['label'])->setType('switch')?>
+                   <?=Theme::checkbox(sprintf('option[%s]', $item['id']), $item['default_value'], $item['value'], $item['name'])->label($item['label'])->setType('switch')?>
                    <?php elseif ($item['type'] == 'file' || $item['type'] == 'image'):?>
-                   <?=Theme::file(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::file(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php elseif ($item['type'] == 'hide'):?>
                    <?php else:?>
-                   <?=Theme::text(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->setLabel($item['label'])?>
+                   <?=Theme::text(sprintf('option[%s]', $item['id']), $item['value'], $item['name'])->label($item['label'])?>
                    <?php endif;?>
                 <?php endforeach;?>
             </div>
             <?php endforeach;?>
             <div class="tab-item">
-                <?=Theme::text('field[name]', '', '名称(必填)')?>
+                <?=Theme::text('field[name]', '', '显示名称(必填)')?>
                 <?=Theme::select('field[type]', $type_list, 'group', '类型')?>
                 <div class="group-property">
                     <?=Theme::select('field[parent_id]', [$group_list], '', '分组')?>
-                    <?=Theme::text('field[code]', '', '别名(必填)')?>
+                    <?=Theme::text('field[code]', '', '调用别名(必填)')?>
                     <?=Theme::checkbox('field[visibility]', ['不可见', '可见'], 1, '公开')?>
                     <?=Theme::textarea('field[default_value]', '', '默认值')?>
                 </div>

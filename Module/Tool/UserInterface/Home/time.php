@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '时间戳';
+$this->title = '时间戳在线转换工具';
 ?>
 
 <div class="converter-box">

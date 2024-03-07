@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ZoDream Tool';
+$this->title = 'ZoDream 在线工具';
 $maps = [
     [
         'name' => 'css2scss',

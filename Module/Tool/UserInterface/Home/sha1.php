@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'sha1';
+$this->title = 'sha1 在线转换工具';
 ?>
 
 <div class="converter-box">

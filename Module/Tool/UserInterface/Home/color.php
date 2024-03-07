@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = '颜色值转换';
+$this->title = '颜色值在线转换工具';
+$this->keywords = '颜色在线工具,rgb转换,hex转换,rgba转换,hsl转换';
+$this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex转换,rgba转换,hsl转换等在线工具';
 ?>
 
 <div class="converter-box">

@@ -136,4 +136,4 @@ $this->registerCssFile([
          ],
          true
      ],
-], $this->contents(), 'ZoDream Tools') ?>
+], $this->contents(), $this->title.'-ZoDream 在线工具') ?>

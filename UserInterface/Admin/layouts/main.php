@@ -18,7 +18,7 @@ $this->registerCssFile([
         '@jquery.datetimer.min.js',
         '@main.min.js',
         '@admin.min.js'
-    ]);
+    ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
 <?= Layout::mainIfPjax($this, AdminMenu::all(), $this->contents(), $this->title ?? 'ZoDream Admin',  $this->renderPart(dirname(__DIR__).'/navDrop.php')) ?>

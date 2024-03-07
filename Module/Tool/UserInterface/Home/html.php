@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'HTML 美化';
+$this->title = 'HTML在线美化工具';
 $js = <<<JS
 registerEditor('text/html');
 getAttr();

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'Unicode编码转换';
+$this->title = 'Unicode编码转换工具';
 ?>
 
 <div class="converter-box">

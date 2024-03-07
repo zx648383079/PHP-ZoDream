@@ -2,7 +2,9 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = 'ASCII编解码';
+$this->title = 'ASCII在线编码解码工具';
+$this->keywords = 'ASCII在线工具,ASCII编码解码,ASCII转换,ASCII码表';
+$this->description = 'ZoDream在线工具提供ASCII编码解码工具,ASCII转换,ASCII表,Unicode Base64 UTF-8编码等在线工具';
 ?>
 
 <div class="converter-box">
@@ -20,6 +22,7 @@ $this->title = 'ASCII编解码';
 </div>
 <div class="converter-tip">
 <h3 class="tip-header">ASCII 编码一览表</h3>
+<p>ASCII (American Standard Code for Information Interchange): 美国信息交换标准代码）是基于拉丁字母的一套电脑编码系统，主要用于显示现代英语和其他西欧语言。</p>
 <table class="table">
     <thead>
         <tr>
