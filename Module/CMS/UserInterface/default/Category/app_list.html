@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-3">
             <ul class="tree-box">
-                <li>
+                <li class="back-btn">
                     <a href="{url:./}">{__:Back}</a>
                 </li>
                 {channels:parent=>app_market,tree=>1}
@@ -35,7 +35,12 @@
         <div class="col-md-9">
             <div class="panel">
                 <div class="panel-header">
-                    {$channel.description}</small>
+                    {if:$channel.description}
+                    {$channel.description}
+                    {else:}
+                    {$channel.title}
+                    {/if}
+                </small>
                 </div>
                 <div class="panel-body">
                     <div class="row">

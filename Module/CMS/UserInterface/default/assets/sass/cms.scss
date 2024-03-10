@@ -1,5 +1,12 @@
 @use 'sass:math';
 @import 'theme';
+
+
+:root {
+    --#{$prefix}-primary: rgb(255, 0, 0);
+     --#{$prefix}-primary-hover: rgba(255, 0, 0, .3);
+}
+
 a,
 a:visited, 
 a:focus {
@@ -89,9 +96,9 @@ header {
                 margin: 20px 0;
             }
             &.active {
-                background-color: rgb(255, 0, 0);
+                background-color: var(--#{$prefix}-primary);
                 >a {
-                    color: #fff;
+                    color: var(--#{$prefix}-primary-text);
                 }
             }
             .sub-menu {
@@ -99,9 +106,9 @@ header {
                 width: 100%;
                 display: none;
                 z-index: 9999;
-                background: #FFF;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-                border-top: 2px solid #f00;
+                background: var(--#{$prefix}-panel);
+                box-shadow: 0 0 10px $shadow;
+                border-top: 2px solid var(--#{$prefix}-primary);
                 li {
                     display: block;
                     width: 100%;
@@ -114,9 +121,9 @@ header {
                 }
             }
             &:hover {
-                background-color: rgba($color: #f00, $alpha: .3);
-                >a {
-                    color: #fff;
+                background-color: var(--#{$prefix}-primary-hover);
+                 >a {
+                    color: var(--#{$prefix}-primary-text);
                 }
                 .sub-menu {
                     display: block;
@@ -463,23 +470,33 @@ footer {
 }
 
 .tree-box {
+    background-color: var(--#{$prefix}-panel);
     li {
         line-height: 2.5rem;
         padding: 0 0.625rem;
+        &.active {
+            background-color: var(--#{$prefix}-primary);
+            a {
+                color: var(--#{$prefix}-primary-text);
+            }
+        }
+    }
+    .back-btn {
+        font-weight: bold;
     }
 }
 
 .panel {
+    background-color: var(--#{$prefix}-panel);
+    margin-bottom: .8rem;
     .panel-header {
         line-height: 2.5rem;
-        background-color: #fff;
+        background-color: var(--#{$prefix}-panel);
         padding: 0 0.625rem;
-        border-bottom: 1px solid #f90;
+        border-bottom: 1px solid var(--#{$prefix}-primary);
         .more {
             float: right;
         }
-    }
-    .panel-body {
     }
 }
 

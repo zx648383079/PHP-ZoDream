@@ -452,7 +452,7 @@ class FuncHelper {
             $id = $id['id'];
         }
         if (!is_numeric($id)) {
-            $id = static::getChannelId($id);
+            $id = static::getChannelId((string)$id);
         }
         if ($id < 1) {
             return null;

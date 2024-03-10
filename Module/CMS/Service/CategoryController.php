@@ -30,7 +30,7 @@ class CategoryController extends Controller {
         if (empty($id)) {
             $id = $request->get('id');
         }
-        FuncHelper::$current['channel'] = $id;
+        FuncHelper::$current['channel'] = intval($id);
         $channel = FuncHelper::channel($id, true);
         if (empty($channel)) {
             return $this->redirect('./');
