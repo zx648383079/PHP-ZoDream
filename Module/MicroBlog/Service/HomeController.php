@@ -61,7 +61,7 @@ class HomeController extends Controller {
     }
 
     public function forwardMiniAction(int $id) {
-        $this->layout = false;
+        $this->layout = '';
         $blog = MicroBlogModel::find($id);
         return $this->show(compact('blog'));
     }

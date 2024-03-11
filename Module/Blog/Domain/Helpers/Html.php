@@ -10,6 +10,7 @@ use Zodream\Helpers\Time;
 use Zodream\Html\MarkDown;
 
 class Html {
+    const AD_TAG = '<ad/>';
     public static function render($content, array $tags = [], bool $isMarkDown = false,
         bool $imgLazy = false, bool $useDeeplink = false): string {
         if ($isMarkDown) {
@@ -20,7 +21,8 @@ class Html {
         }
         $host = request()->host();
         $defaultImage = $imgLazy ? url()->asset('assets/images/loading.svg') : '';
-        $replace = [];
+        $replace = [
+        ];
         $i = 0;
         foreach ([
                      '#<code[^<>]*>[\s\S]+?</code>#',
@@ -51,6 +53,9 @@ HTML;
         $content = preg_replace_callback('/catalog:([\d, ]+)+/', function ($match) use ($useDeeplink) {
             return static::renderCatalog(explode(',', $match[1]), $useDeeplink);
         }, $content);
+        if (str_contains($content, static::AD_TAG) && view()->canTheme('ad-sense')) {
+            $replace[static::AD_TAG] = view()->invokeTheme('ad-sense', [['code' => 'blog_inner']]);
+        }
         return str_replace(array_keys($replace), array_values($replace), $content);
     }
 

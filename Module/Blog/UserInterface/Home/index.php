@@ -118,7 +118,13 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
     <?php elseif (!empty($programming_language)):?>
     <h2 class="book-header"><?=$this->text($programming_language)?></h2>
     <?php endif;?>
-    <?php foreach ($blog_list as $item):?>
+    <?php foreach ($blog_list as $i => $item):?>
+
+    <?php if($i === 4):?>
+    <?= $this->node('ad-sense', ['code' => 'blog_list']) ?>
+    <?php endif;?>
+
+
     <div class="book-item">
         <?php if($listView === 1):?>
         <div class="item-cover">
@@ -164,6 +170,6 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
     ])?>
     <div class="book-clear"></div>
 </div>
-<?= $this->node('ad-sense', ['code' => 'blog_list']) ?>
+
     
 <?php $this->extend('layouts/footer');?>

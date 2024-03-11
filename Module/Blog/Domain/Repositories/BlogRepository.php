@@ -57,7 +57,7 @@ class BlogRepository {
         $page = self::bindQuery(BlogSimpleModel::query(), $sort, $category, $keywords,
             $user, $language, $programming_language,
             $tag)
-            ->limit($limit ?? 5)->all();
+            ->limit($limit ?? 5)->get();
         return LocalizeRepository::formatList($page, BlogSimpleModel::query());
     }
 

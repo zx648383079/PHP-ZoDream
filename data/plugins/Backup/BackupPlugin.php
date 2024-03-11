@@ -5,6 +5,7 @@ namespace ZoDream\Backup;
 use Domain\Repositories\ExplorerRepository;
 use Module\Plugin\Domain\IPlugin;
 use Module\SEO\Domain\Repositories\SEORepository;
+use Zodream\Disk\File;
 use Zodream\Disk\ZipStream;
 
 class BackupPlugin implements IPlugin {
@@ -21,7 +22,7 @@ class BackupPlugin implements IPlugin {
         // TODO: Implement __invoke() method.
     }
 
-    private function makeAll() {
+    private function makeAll(): void {
         $root = app_path();
         $includeItems = [
             'data/storage',
@@ -30,7 +31,8 @@ class BackupPlugin implements IPlugin {
         $excludeItems = [
             'data/bak',
             'data/cache',
-            'data/views'
+            'data/views',
+            'data/log'
         ];
         SEORepository::backUpSql(true);
         $zip = ZipStream::create(
@@ -40,5 +42,19 @@ class BackupPlugin implements IPlugin {
             $zip->addDirectory($folder, $root->directory($folder));
         }
         $zip->close();
+    }
+
+    private function makeLog(): void {
+        $zip = ZipStream::create(
+            ExplorerRepository::bakPath(
+                sprintf('log_%s.zip', date('Y-m-d'))));
+        $items = app_path()->directory('data/log')->children();
+        foreach ($items as $item) {
+            $zip->addFile($item->getName(), $item);
+        }
+        $zip->close();
+        foreach ($items as $item) {
+            $item->delete();
+        }
     }
 }
