@@ -5,6 +5,7 @@ use Zodream\Template\View;
 $this->title = sprintf('%s-%s', $chapter->title, $book->name);
 ?>
 <div class="container main-box">
+    <?= $this->node('ad-sense', ['code' => 'book_chapter']) ?>
     <div class="reader-container">
         <div class="title-bar">
             <h2><?= $chapter['title'] ?></h2>

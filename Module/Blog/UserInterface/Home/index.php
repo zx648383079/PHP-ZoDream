@@ -155,15 +155,15 @@ $this->set($data)->extend('layouts/header')->registerJs($js, View::JQUERY_READY)
     
     <?php endforeach;?>
 </div>
+
 <div class="book-footer">
     <?=$blog_list->getLink([
         'template' => '<ul class="book-pager">{list}</ul>',
         'active' => '<li class="active">{text}</li>',
         'common' => '<li><a href="{url}">{text}</a></li>'
     ])?>
-    <div class="book-clear">
-
-    </div>
+    <div class="book-clear"></div>
 </div>
+<?= $this->node('ad-sense', ['code' => 'blog_list']) ?>
     
 <?php $this->extend('layouts/footer');?>

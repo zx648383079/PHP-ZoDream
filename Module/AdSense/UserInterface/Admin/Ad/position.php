@@ -14,7 +14,8 @@ $this->title = '广告位列表';
         <tr>
             <th>ID</th>
             <th>广告位</th>
-            <th>统计</th>
+            <th title="点击数/展示数">统计</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -22,8 +23,9 @@ $this->title = '广告位列表';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td>0</td>
+                <td class="left"><?=$item->name?></td>
+                <td title="点击数/展示数">0/0</td>
+                <td><?= $item->status > 0 ? '显示' : '关闭' ?></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-default" href="<?=$this->url('./@admin/ad', ['position_id' => $item->id])?>">查看</a>

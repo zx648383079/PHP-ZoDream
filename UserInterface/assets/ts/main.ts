@@ -233,6 +233,25 @@ $(function() {
         }
         file_upload.start(that);
     })
+    .on('click', ".file-input [data-type=datetime]", function() {
+        const that = $(this);
+        if (typeof DateTimer !== 'function') {
+            return;
+        }
+        const target = that.prev('input');
+        let picker: DateTimer = that.data('picker');
+        if (!picker) {
+            picker = new DateTimer(that, {
+                format: that.data('format'),
+            });
+            picker.init(target.val());
+            that.data('picker', picker);
+        }
+        picker.on('done', () => {
+            target.val(picker.val());
+        });
+        picker.open();
+    })
     .on('click', ".file-input [data-type=preview]", function() {
         const box = $(this).closest('.file-input');
         const filter = box.find('[data-type=upload]').data('allow') || '';

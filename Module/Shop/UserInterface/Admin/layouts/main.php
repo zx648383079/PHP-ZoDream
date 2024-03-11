@@ -180,33 +180,6 @@ $this->registerCssFile([
         ],
     ],
     [
-        '广告管理',
-        false,
-        'fa fa-ad',
-        [
-            [
-                '广告列表',
-                './@admin/ad',
-                'fa fa-list'
-            ],
-            [
-                '新建广告',
-                './@admin/ad/create',
-                'fa fa-plus'
-            ],
-            [
-                '广告位列表',
-                './@admin/ad/position',
-                'fa fa-list'
-            ],
-            [
-                '新建广告位',
-                './@admin/ad/create_position',
-                'fa fa-plus'
-            ],
-        ],
-    ],
-    [
         '插件',
         false,
         'fa fa-plug',

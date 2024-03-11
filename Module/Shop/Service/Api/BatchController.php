@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
-use Module\Shop\Domain\Repositories\AdRepository;
+use Module\AdSense\Domain\Repositories\AdRepository;
 use Module\Shop\Domain\Repositories\ArticleRepository;
 use Module\Shop\Domain\Repositories\BrandRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
@@ -10,7 +10,6 @@ use Module\Shop\Domain\Repositories\CategoryRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Module\Shop\Domain\Repositories\OrderRepository;
 use Module\Shop\Domain\Repositories\SearchRepository;
-use Module\Shop\Module;
 use Zodream\Route\Controller\Concerns\BatchAction;
 use Module\Shop\Domain\Repositories\AccountRepository as ShopAccount;
 

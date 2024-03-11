@@ -105,8 +105,11 @@ $demo_list = [
                     <?=$this->node('note-panel', ['limit' => 12])?>
                 </div>
             </div>
+            <?= $this->node('ad-sense', ['code' => 'home_notice']) ?>
         </div>
     </div>
+
+    <?= $this->node('ad-sense', ['code' => 'home_floor']) ?>
 
     <div class="row">
         <div class="col-md-4">

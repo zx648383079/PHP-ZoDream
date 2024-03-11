@@ -53,6 +53,8 @@ $this->extend('layouts/header');
         </div>
     </div>
 
+    <?= $this->node('ad-sense', ['code' => 'bbs_list']) ?>
+
     <div class="thread-list">
         <?php $this->extend('./page');?>
     </div>

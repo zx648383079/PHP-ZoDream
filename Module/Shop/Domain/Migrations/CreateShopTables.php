@@ -18,12 +18,9 @@ use Module\Shop\Domain\Models\Activity\SeckillGoodsModel;
 use Module\Shop\Domain\Models\Activity\TrialLogModel;
 use Module\Shop\Domain\Models\Activity\TrialReportModel;
 use Module\Shop\Domain\Models\AddressModel;
-use Module\Shop\Domain\Models\Advertisement\AdModel;
 use Module\Shop\Domain\Models\Advertisement\AdPositionModel;
 use Module\Shop\Domain\Models\ArticleCategoryModel;
 use Module\Shop\Domain\Models\ArticleModel;
-use Module\Shop\Domain\Models\AttributeGroupModel;
-use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\BankCardModel;
 use Module\Shop\Domain\Models\BrandModel;
 use Module\Shop\Domain\Models\CartModel;
@@ -75,8 +72,6 @@ class CreateShopTables extends Migration {
      * @return void
      */
     public function up(): void {
-        $this->createAd();
-
         $this->createArticle();
         $this->append(AddressModel::tableName(), function(Table $table) {
             $table->id();
@@ -244,20 +239,6 @@ class CreateShopTables extends Migration {
                 ],
             ];
         });
-        $this->findOrNewById(AdPositionModel::query(), [
-            'id' => 1,
-            'name' => 'PC 首页 banner',
-            'width' => '100%',
-            'height' => '100%',
-            'template' => '{url}',
-        ]);
-        $this->findOrNewById(AdPositionModel::query(), [
-            'id' => 2,
-            'name' => 'Mobile 首页 banner',
-            'width' => '100%',
-            'height' => '100%',
-            'template' => '{url}',
-        ]);
         $this->findOrNewById(ArticleCategoryModel::query(), [
             'id' => 1,
             'name' => '通知中心',
@@ -277,7 +258,7 @@ class CreateShopTables extends Migration {
     }
 
 
-    public function createPlugin() {
+    public function createPlugin(): void {
         $this->append(PluginEntity::tableName(), function (Table $table) {
             $table->comment('插件列表及配置文件');
             $table->id();
@@ -679,26 +660,6 @@ class CreateShopTables extends Migration {
         });
     }
 
-    protected function createAd(): void {
-        $this->append(AdModel::tableName(), function (Table $table) {
-            $table->id();
-            $table->string('name', 30);
-            $table->uint('position_id');
-            $table->uint('type', 1)->default(1);
-            $table->string('url');
-            $table->string('content');
-            $table->timestamp('start_at');
-            $table->timestamp('end_at');
-            $table->timestamps();
-        })->append(AdPositionModel::tableName(), function (Table $table) {
-            $table->id();
-            $table->string('name', 30);
-            $table->string('width', 20);
-            $table->string('height', 20);
-            $table->string('template')->default('');
-            $table->timestamps();
-        });
-    }
 
     protected function createActivity() {
         $this->append(ActivityModel::tableName(), function (Table $table) {

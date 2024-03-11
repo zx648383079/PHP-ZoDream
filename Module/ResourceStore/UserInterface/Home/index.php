@@ -55,7 +55,7 @@ $this->registerCssFile('@demo.min.css')
             </div>
         </div>
     <?php endforeach;?>
-
+    <?= $this->node('ad-sense', ['code' => 'res_list']) ?>
     <div class="pager">
         <?=$post_list->getLink()?>
     </div>

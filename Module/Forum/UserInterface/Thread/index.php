@@ -53,6 +53,8 @@ $this->extend('layouts/header');
         </div>
         <?php $this->extend('./page');?>
 
+        <?= $this->node('ad-sense', ['code' => 'bbs_thread']) ?>
+
         <?php if(!auth()->guest() && !$thread->is_closed):?>
         <div class="post-item post-new">
             <div class="post-user">

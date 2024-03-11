@@ -58,30 +58,39 @@ JS;
 
     private function renderRight(): string {
         $html = $this->renderAccount();
+        $appHtml = $this->renderApp();
+        return <<<HTML
+<ul class="nav-right">
+    {$appHtml}
+    <li class="search-icon"><i class="fa fa-search"></i></li>
+    
+    {$html}
+</ul>
+HTML;
+    }
+
+    private function renderApp(): string {
+        return '';
         $version = $this->page->trigger(self::OS_VERSION);
         $uwp_url = ($version >= 6.2 ? 'ms-windows-store://pdp/?ProductId=' : 'https://www.microsoft.com/store/apps/'). '9MT2DR6PDFG9';
         $download_tip = __('Client Downloads');
         $download = __('Application client');
         $uwp_tip = __('My Timer');
         return <<<HTML
-<ul class="nav-right">
-    <li>
-        <a href="javascript:;" title="{$download_tip}">{$download}
-            <i class="fa fa-caret-down"></i>
-        </a>
-        <div class="sub-nav">
-            <ul>
-                <li>
-                    <a href="{$uwp_url}" target="_blank" title="{$uwp_tip}">Win10 UWP</a>
-                </li>
-            </ul>
-        </div>
-    </li>
-    <li class="search-icon"><i class="fa fa-search"></i></li>
-    
-    {$html}
-</ul>
+<li>
+    <a href="javascript:;" title="{$download_tip}">{$download}
+        <i class="fa fa-caret-down"></i>
+    </a>
+    <div class="sub-nav">
+        <ul>
+            <li>
+                <a href="{$uwp_url}" target="_blank" title="{$uwp_tip}">Win10 UWP</a>
+            </li>
+        </ul>
+    </div>
+</li>
 HTML;
+
     }
 
     private function renderAccount(): string {

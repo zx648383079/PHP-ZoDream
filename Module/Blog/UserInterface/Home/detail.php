@@ -185,6 +185,8 @@ $this->set([
     <?php endif;?>
 </div>
 
+<?= $this->node('ad-sense', ['code' => 'blog_detail']) ?>
+
 <?php if($relation_list):?>
 <div class="panel">
     <div class="panel-header">

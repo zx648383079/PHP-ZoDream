@@ -23,6 +23,7 @@ return [
     'Upload' => '上传',
     'Preview' => '预览',
     'Online' => '在线',
+    'Select' => '选择',
     'Please input' => '请输入',
     'loading...' => '加载中...',
     'back home' => '返回首页',

@@ -53,6 +53,8 @@ $this->title = $book['name'];
         </div>
     </div>
 
+    <?= $this->node('ad-sense', ['code' => 'book_detail']) ?>
+
     <div class="panel-container chapter-box">
         <div class="catalog-header">
             <a class="right">

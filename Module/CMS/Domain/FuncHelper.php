@@ -1115,7 +1115,7 @@ class FuncHelper {
         }, true);
     }
 
-    public static function register(ParserCompiler $compiler): ParserCompiler {
+    public static function register(ParserCompiler $compiler, ViewFactory $provider): ParserCompiler {
         static::registerFunc($compiler, [
             'channel',
             'channelRoot',
@@ -1165,6 +1165,12 @@ class FuncHelper {
                     return '';
                 }
                 return sprintf('%s->getLink()', $tag);
+            })
+            ->registerFunc('ad', function (string $code) use ($provider) {
+                if (!$provider->canTheme('ad-sense')) {
+                    return '';
+                }
+                return $provider->invokeTheme('ad-sense', [compact('code')]);
             })
             ->registerFunc('redirect', '\Infrastructure\HtmlExpand::toUrl');
         return $compiler;

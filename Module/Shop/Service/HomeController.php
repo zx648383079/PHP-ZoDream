@@ -1,9 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
-
-use Module\Shop\Domain\Models\Advertisement\AdModel;
-use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Repositories\BrandRepository;
 use Module\Shop\Domain\Repositories\CategoryRepository;
 use Module\Shop\Domain\Repositories\CommentRepository;
@@ -15,8 +13,7 @@ class HomeController extends Controller {
         if (request()->isMobile()) {
             return $this->redirect('./mobile');
         }
-        $banners = AdModel::banners(false);
-        return $this->sendWithShare()->show(compact('banners'));
+        return $this->sendWithShare()->show();
     }
 
     public function brandAction() {

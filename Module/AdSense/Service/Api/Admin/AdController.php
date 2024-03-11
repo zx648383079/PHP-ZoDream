@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Module\Shop\Service\Api\Admin;
+namespace Module\AdSense\Service\Api\Admin;
 
-
-use Module\Shop\Domain\Repositories\Admin\AdRepository;
+use Module\AdSense\Domain\Repositories\AdRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AdController extends Controller {
 
-    public function indexAction(string $keywords = '', int|string $position_id = 0) {
+    public function indexAction(string $keywords = '', int $position_id = 0) {
         return $this->renderPage(
-            AdRepository::getList($keywords, $position_id)
+            AdRepository::manageList($keywords, $position_id)
         );
     }
 
@@ -18,7 +17,7 @@ class AdController extends Controller {
     public function detailAction(int $id) {
         try {
             return $this->render(
-                AdRepository::get($id)
+                AdRepository::manageGet($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -39,7 +38,7 @@ class AdController extends Controller {
                 'content_url' => '',
             ]);
             return $this->render(
-                AdRepository::save($data)
+                AdRepository::manageSave($data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -48,7 +47,7 @@ class AdController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            AdRepository::remove($id);
+            AdRepository::manageRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -58,14 +57,14 @@ class AdController extends Controller {
 
     public function positionAction(string $keywords = '') {
         return $this->renderPage(
-            AdRepository::positionList($keywords)
+            AdRepository::managePositionList($keywords)
         );
     }
 
     public function detailPositionAction(int $id) {
         try {
             return $this->render(
-                AdRepository::position($id)
+                AdRepository::managePosition($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -82,7 +81,7 @@ class AdController extends Controller {
                 'template' => 'required|string:0,255',
             ]);
             return $this->render(
-                AdRepository::positionSave($data)
+                AdRepository::managePositionSave($data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -91,7 +90,7 @@ class AdController extends Controller {
 
     public function deletePositionAction(int $id) {
         try {
-            AdRepository::positionRemove($id);
+            AdRepository::managePositionRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

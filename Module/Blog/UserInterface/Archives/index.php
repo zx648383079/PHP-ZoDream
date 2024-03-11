@@ -39,7 +39,5 @@ $this->set([
         </div>
         <?php endforeach;?>
     </div>
-    
 </div>
-    
 <?php $this->extend('layouts/footer');?>

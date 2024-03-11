@@ -82,7 +82,7 @@ $this->registerCssFile([
             </div>
         </div>
     </div>
-
+    <?= $this->node('ad-sense', ['code' => 'res_detail']) ?>
     <div class="detail-body">
         <article id="content" class="style-type-1">
             <?=$post['content']?>

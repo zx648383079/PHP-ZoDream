@@ -9,12 +9,14 @@ $this->registerCssFile([
         '@zodream.min.css',
         '@zodream-admin.min.css',
         '@dialog.min.css',
+        '@datetimer.min.css',
         '@admin.min.css'
     ])->registerJsFile([
         '@js.cookie.min.js',
         '@jquery.min.js',
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
+        '@jquery.upload.min.js',
         '@jquery.datetimer.min.js',
         '@main.min.js',
         '@admin.min.js'

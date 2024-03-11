@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
-namespace Module\Shop\Service\Admin;
+namespace Module\AdSense\Service\Admin;
 
-use Module\Auth\Domain\Concerns\CheckRole;
+use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController;
 use Zodream\Disk\File;
 
-
 class Controller extends ModuleController {
 
-    use CheckRole;
+    use AdminRole;
 
     protected File|string $layout = '/Admin/layouts/main';
-
-    public function rules() {
-        return [
-            '*' => 'shop_admin'
-        ];
-    }
-
     protected function getUrl(mixed $path, array $args = []): string {
         return url('./@admin/'.$path, $args);
+    }
+
+
+    public function findLayoutFile(): File|string {
+        if ($this->layout === '') {
+            return '';
+        }
+        return app_path()->file('UserInterface/Admin/layouts/main.php');
     }
 }

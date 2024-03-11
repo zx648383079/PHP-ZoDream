@@ -91,7 +91,7 @@ class CMSRepository {
             throw new Exception('THEME IS ERROR!');
         }
         $provider->setDirectory($dir)
-            ->setEngine(FuncHelper::register(new ParserCompiler()))
+            ->setEngine(FuncHelper::register(new ParserCompiler(), $provider))
             ->setConfigs([
                 'suffix' => '.html'
             ]);

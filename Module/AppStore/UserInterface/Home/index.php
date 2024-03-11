@@ -54,8 +54,8 @@ $this->registerCssFile('@demo.min.css')
             </div>
         </div>
     <?php endforeach;?>
-
     <div class="pager">
         <?=$app_list->getLink()?>
     </div>
+    <?= $this->node('ad-sense', ['code' => 'app_list']) ?>
 </div>

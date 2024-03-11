@@ -6,7 +6,11 @@ $this->title = '广告列表';
 ?>
 <div class="panel-container">
     <div class="page-search-bar">
-        <a class="btn btn-success pull-right" href="<?=$this->url('./@admin/ad/create')?>">新增广告</a>
+        <div class="btn-group pull-right">
+            <a class="btn btn-primary" href="<?=$this->url('./@admin/ad/position')?>">广告位管理</a>
+            <a class="btn btn-success" href="<?=$this->url('./@admin/ad/create')?>">新增广告</a>
+        </div>
+        
     </div>
 
     <table class="table table-hover">
@@ -14,7 +18,8 @@ $this->title = '广告列表';
         <tr>
             <th>ID</th>
             <th>广告名</th>
-            <th>统计</th>
+            <th title="点击数/展示数">统计</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -22,8 +27,9 @@ $this->title = '广告列表';
         <?php foreach($model_list as $item):?>
             <tr>
                 <td><?=$item->id?></td>
-                <td><?=$item->name?></td>
-                <td><?=$item->goods_count?></td>
+                <td class="left">[<?= $item->position ? $item->position->name : '' ?>]<?=$item->name?></td>
+                <td title="点击数/展示数">0/0</td>
+                <td><?= $item->status > 0 ? '显示' : '关闭' ?></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-default" href="<?=$this->url('./@admin/ad/edit', ['id' => $item->id])?>">编辑</a>

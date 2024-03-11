@@ -1,6 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\AdSense\Domain\Repositories\AdRepository;
 /** @var $this View */
 $this->title = 'ZoDream Shop';
 $js = <<<JS
@@ -37,7 +38,7 @@ $this->registerCssFile('@slider.min.css')
         <div class="slider">
             <div class="slider-box">
                 <ul>
-                    <?php foreach($banners as $item):?>
+                    <?php foreach(AdRepository::mobileBanners() as $item):?>
                     <li><img src="<?=$item['content']?>" width="100%" alt=""></li>
                     <?php endforeach;?>
                 </ul>

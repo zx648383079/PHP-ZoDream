@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Module\Shop\Service\Api;
+namespace Module\AdSense\Service\Api;
 
 use Module\Shop\Domain\Repositories\AdRepository;
+use Module\ModuleController as Controller;
 
 class AdController extends Controller {
 
