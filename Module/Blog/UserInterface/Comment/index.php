@@ -8,7 +8,7 @@ $lang = [
     'reply_btn' => __('Reply'),
     'reply_title' => __('Reply Comment'),
     'comment_btn' => __('Comment'),
-    'comment_title' => __('Leave A Comment')
+    'comment_title' => __('Leave A Comment'),
 ];
 $lang = Json::encode($lang);
 ?>

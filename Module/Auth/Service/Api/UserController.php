@@ -7,6 +7,7 @@ use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\OptionRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
+use Module\Auth\Domain\Repositories\StatisticsRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
@@ -22,6 +23,10 @@ class UserController extends Controller {
 
     public function indexAction(string $extra = '') {
         return $this->render(UserRepository::getCurrentProfile($extra));
+    }
+
+    public function statisticsAction() {
+        return $this->renderData(StatisticsRepository::userCount(auth()->id()));
     }
 
     /**

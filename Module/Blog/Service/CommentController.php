@@ -6,6 +6,7 @@ use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\CommentModel;
 use Module\Blog\Domain\Repositories\CommentRepository;
 use Module\ModuleController;
+use Module\Template\Domain\Pages\Page;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class CommentController extends ModuleController {
@@ -15,6 +16,7 @@ class CommentController extends ModuleController {
             'index' => '*',
             'save' => '*',
             'more' => '*',
+            'commentator' => '?',
             '*' => '@',
         ];
     }
@@ -22,7 +24,7 @@ class CommentController extends ModuleController {
     public function indexAction(int $blog_id) {
         $hot_comments = CommentRepository::getHot($blog_id, 4);
         $comment_status = CommentRepository::blogCommentStatus($blog_id);
-        return $this->show(compact('hot_comments', 'blog_id'));
+        return $this->show(compact('hot_comments', 'blog_id', 'comment_status'));
     }
 
     public function moreAction(int $blog_id, int $parent_id = 0,
@@ -40,7 +42,7 @@ class CommentController extends ModuleController {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData($comment);
+        return $this->renderData($comment, __('Comment successfully!'));
     }
 
     public function disagreeAction(int $id) {
@@ -74,5 +76,13 @@ class CommentController extends ModuleController {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function commentatorAction(string $email) {
+        try {
+            return $this->renderData(CommentRepository::lastCommentator($email));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

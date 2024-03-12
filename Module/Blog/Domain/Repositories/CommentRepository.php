@@ -265,4 +265,19 @@ class CommentRepository {
         $val = BlogMetaModel::where('blog_id', $id)->where('name', 'comment_status')->value('content');
         return static::commentStatus($val);
     }
+
+    /**
+     * 获取用户的最好使用信息
+     * @param string $email
+     * @return array
+     * @throws Exception
+     */
+    public static function lastCommentator(string $email): array {
+        $data = CommentModel::where('email', $email)
+            ->orderBy('created_at', 'desc')->first('name', 'email', 'url');
+        if (empty($data)) {
+            throw new Exception('not found');
+        }
+        return $data;
+    }
 }

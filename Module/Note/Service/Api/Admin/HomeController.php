@@ -19,7 +19,8 @@ class HomeController extends Controller {
                 'content' => 'required|string:0,255',
                 'is_notice' => 'int:0,9'
             ]);
-            return $this->render(NoteRepository::save($data));
+            return $this->render(NoteRepository::save($data,
+                empty($data['id']) ? auth()->id() : 0));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

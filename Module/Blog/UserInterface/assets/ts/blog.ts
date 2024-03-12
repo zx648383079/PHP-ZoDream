@@ -14,9 +14,9 @@ function bindBlogPage() {
     $('.book-nav').on('click',function () {
         $(this).toggleClass('hover');
     });
-    $('.book-search').focus(function () {
+    $('.book-search').on('focus', function () {
         $(this).addClass('focus');
-    }).blur(function () {
+    }).on('blur', function () {
         $(this).removeClass('focus');
     });
     $('.book-search .fa-search').on('click',function () {
@@ -30,7 +30,7 @@ function bindBlogPage() {
     $('.book-navicon').on('click',function () {
         $('.book-skin').toggleClass('book-collapsed');
     });
-    $('.book-search [name=keywords]').keypress(function () {
+    $('.book-search [name=keywords]').on('keypress', function () {
         let keywords = $(this).val();
         if (!keywords) {
             return;
@@ -255,7 +255,7 @@ function bindBlogComment(id: number, langs = {}) {
         form_box.find('.btn-submit').text(langs['reply_btn']);
         form_box.find('input[name=parent_id]').val($this.parents('.comment-item').attr('data-id'));
     }).on('click', '.order span', function() {
-        let $this = $(this);
+        const $this = $(this);
         if ($this.hasClass('active')) {
             return;
         }
@@ -263,10 +263,10 @@ function bindBlogComment(id: number, langs = {}) {
         sort_order = $this.index() < 1;
         getMoreComments(1);
     }).on('click', '.actions .agree', function() {
-        let $this = $(this),
+        const $this = $(this),
             id = $this.closest('.comment-item').data('id');
         $.getJSON(BASE_URI + 'comment/agree', {
-            id: id
+            id
         }, function(data: IResponse) {
             if (data.code == 302) {
                 window.location.href = data.url;
@@ -279,10 +279,10 @@ function bindBlogComment(id: number, langs = {}) {
             $this.find('b').text(data.data);
         });
     }).on('click', '.actions .disagree', function() {
-        let $this = $(this),
+        const $this = $(this),
             id = $this.closest('.comment-item').data('id');
         $.getJSON(BASE_URI + 'comment/disagree', {
-            id: id
+            id
         }, function(data: IResponse) {
             if (data.code == 302) {
                 window.location.href = data.url;
@@ -295,33 +295,78 @@ function bindBlogComment(id: number, langs = {}) {
             $this.find('b').text(data.data);
         });
     });
-    $('.book-comment-form .btn-cancel').on('click',function() {
-        let form_box = $(this).closest('.book-comment-form'),
-            hot_box = $('.hot-comments');
-        if (hot_box.length > 0) {
-            hot_box.after(form_box);
+    const formBox = $('.book-comment-form').on('click', '.btn-cancel', function() {
+        const hotBox = $('.hot-comments');
+        if (hotBox.length > 0) {
+            hotBox.after(formBox);
         } else {
-            all_box.before(form_box);
+            all_box.before(formBox);
         }
-        form_box.find('textarea').val('');
-        form_box.find('.title').text(langs['comment_title']);
-        form_box.find('.btn-submit').text(langs['comment_btn']);
-        form_box.find('input[name=parent_id]').val(0);
+        formBox.find('textarea').val('');
+        formBox.find('.title').text(langs['comment_title']);
+        formBox.find('.btn-submit').text(langs['comment_btn']);
+        formBox.find('input[name=parent_id]').val(0);
+    }).on('change', 'input[name=email]', function() {
+        const email = this.value;
+        if (!email) {
+            return;
+        }
+        const urlEle = formBox.find('input[name=url]');
+        if (urlEle.val()) {
+            return;
+        }
+        postJson(BASE_URI + 'comment/commentator', {
+            email
+        }, res => {
+            if (res.code !== 200) {
+                return;
+            }
+            urlEle.val(res.data.url);
+            formBox.find('input[name=name]').val(res.data.name);
+        });
     });
+    const saveCommentator = () => {
+        const emailEle = formBox.find('input[name=email]');
+        if (emailEle.length === 0) {
+            return;
+        }
+        localStorage.setItem('b_cs', JSON.stringify({
+            e: emailEle.val(),
+            n: formBox.find('input[name=name]').val(),
+            l: formBox.find('input[name=url]').val()
+        }));
+    };
+    const loadCommentator = () => {
+        const emailEle = formBox.find('input[name=email]');
+        if (emailEle.length === 0) {
+            return;
+        }
+        const str = localStorage.getItem('b_cs');
+        if (!str) {
+            return;
+        }
+        const data = JSON.parse(str);
+        emailEle.val(data.e);
+        formBox.find('input[name=name]').val(data.n);
+        formBox.find('input[name=url]').val(data.l);
+    };
+    if (formBox.length > 0) {
+        loadCommentator();
+    }
     $('#comment-form').on('submit', function () {
-        let $this = $(this);
+        const $this = $(this);
         $.post($this.attr('action'), $this.serialize(), function (data) {
             if (data.code == 200) {
                 //window.location.reload();
+                saveCommentator();
                 $this.find('.btn-cancel').trigger('click');
-                return;
             }
             alert(data.message);
         }, 'json');
         return false;
     });
     box.on('click', '.load-more', function() {
-        let $this = $(this);
+        const $this = $(this);
         getMoreComments($this.data('page'));
         $this.remove();
     });

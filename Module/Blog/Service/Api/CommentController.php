@@ -11,6 +11,7 @@ class CommentController extends Controller {
         return [
             'index' => '*',
             'save' => '*',
+            'commentator' => '?',
             '*' => '@',
         ];
     }
@@ -63,5 +64,13 @@ class CommentController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
+    }
+
+    public function commentatorAction(string $email) {
+        try {
+            return $this->render(CommentRepository::lastCommentator($email));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

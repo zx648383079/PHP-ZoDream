@@ -58,6 +58,7 @@ return [
     'You have new Messages' => '您有新的消息',
     'Account Settings' => '账号设置',
     'Client Downloads' => '客户端下载',
+    'Comment successfully!' => '已提交评论！',
     'Logout' => '退出',
     'Document' => '文档',
     'Tool' => '工具',
