@@ -177,7 +177,7 @@ class UserRepository {
         return $model;
     }
 
-    public static function saveIDCard(int $id, string $idCard = '') {
+    public static function saveIDCard(int $id, string $idCard = ''): void {
         UserMetaModel::saveBatch($id, [
             'id_card' => $idCard
         ]);

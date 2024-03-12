@@ -22,4 +22,14 @@ final class StatisticsRepository {
             'resource_today', 'download_today', 'download_count', 'download_yesterday',
             'view_count', 'view_today', 'comment_count', 'comment_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '资源数量',
+                'count' => ResourceModel::where('user_id', $user)->count(),
+                'unit' => '个',
+            ],
+        ];
+    }
 }

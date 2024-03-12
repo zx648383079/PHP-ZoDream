@@ -9,6 +9,9 @@ use Infrastructure\LinkRule;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Auth\Domain\Model\ActionLogModel;
+use Module\Auth\Domain\Model\AdminLogModel;
+use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\UserModel;
 use Exception;
@@ -16,15 +19,49 @@ use Module\OpenPlatform\Domain\Platform;
 
 final class AccountRepository {
 
-    public static function logList(string $keywords = '', string $type = '') {
+    public static function logList(string $keywords = '', string|int $type = '', int $user = 0) {
         $items = ModelHelper::parseArrInt($type);
-        return AccountLogModel::where('user_id', auth()->id())
+        return AccountLogModel::with('user')
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
             ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'remark');
+                SearchModel::searchWhere($query, ['remark']);
             })->when(!empty($items), function ($query) use ($items) {
                 $query->whereIn('type', $items);
             })
             ->orderBy('created_at', 'desc')->page();
+    }
+
+    public static function loginLog(string $keywords = '', int $user = 0) {
+        return LoginLogModel::when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'ip');
+            })
+            ->orderBy('id', 'desc')->page();
+    }
+
+    public static function actionLog(string $keywords = '', int $user = 0) {
+        return ActionLogModel::when($user > 0, function ($query) use ($user) {
+            $query->where('user_id', $user);
+        })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'ip');
+            })
+            ->orderBy('id', 'desc')->page();
+    }
+
+    public static function adminLog(string $keywords = '', int $user = 0) {
+        return AdminLogModel::with('user')
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['action', 'remark']);
+            })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })->orderBy('id', 'desc')
+            ->page();
     }
 
     /**

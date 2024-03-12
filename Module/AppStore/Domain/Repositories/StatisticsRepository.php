@@ -23,4 +23,19 @@ final class StatisticsRepository {
             'app_today', 'download_today', 'download_count', 'download_yesterday',
             'view_count', 'view_today', 'comment_count', 'comment_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '应用数量',
+                'count' => AppModel::where('user_id', $user)->count(),
+                'unit' => '个',
+            ],
+            [
+                'name' => '应用评论',
+                'count' => AppRepository::comment()->query()->where('user_id', $user)->count(),
+                'unit' => '条'
+            ]
+        ];
+    }
 }

@@ -13,4 +13,14 @@ final class StatisticsRepository {
         $note_today = $note_count < 1 ? 0 : NoteModel::where('created_at', '>=', $todayStart)->count();
         return compact('note_count', 'note_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '便签数量',
+                'count' => NoteModel::where('user_id', $user)->count(),
+                'unit' => '条',
+            ],
+        ];
+    }
 }

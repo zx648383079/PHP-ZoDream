@@ -102,7 +102,11 @@ class OptionRepository {
         $end = strtotime(date('Y-m-d').' 23:59:59') + 10;
         $diff = max($end - time(), 4 * 3600);
         $api = new Microsoft();
-        $data = $api->wallpager(1);
+        try {
+            $data = $api->wallpager(1);
+        } catch (Exception $ex) {
+            logger()->error(sprintf('bing wallpager: %s', $ex->getMessage()));
+        }
         if (empty($data)) {
             return [];
         }

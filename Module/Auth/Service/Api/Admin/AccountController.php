@@ -2,20 +2,16 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ApplyLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
-use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Auth\Domain\Repositories\StatisticsRepository;
 
 class AccountController extends Controller {
 
-    public function indexAction(int $user = 0) {
-        $log_list = AccountLogModel::with('user')
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
-            ->page();
-        return $this->renderPage($log_list);
+    public function indexAction(string $keywords = '', int $user = 0) {
+        return $this->renderPage(
+            AccountRepository::logList($keywords, '', $user)
+        );
     }
 
     public function rechargeAction(int $user_id, float $money, string $remark, int $type = 0) {
@@ -46,9 +42,9 @@ class AccountController extends Controller {
         return $this->render($model);
     }
 
-    public function userAction(int $id) {
+    public function userAction(int $id, string $extra = '') {
         try {
-            $model = UserRepository::get($id);
+            $model = StatisticsRepository::user($id, $extra);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

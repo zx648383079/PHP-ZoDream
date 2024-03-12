@@ -22,7 +22,7 @@ class AccountController extends Controller {
 
     public function logAction(string $keywords = '', string $type = '') {
         return $this->renderPage(
-            AccountRepository::logList($keywords, $type)
+            AccountRepository::logList($keywords, $type, auth()->id())
         );
     }
 
@@ -65,11 +65,8 @@ class AccountController extends Controller {
     }
 
     public function loginLogAction(string $keywords = '') {
-        $model_list = LoginLogModel::where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'ip');
-            })
-            ->orderBy('id', 'desc')->page();
-        return $this->renderPage($model_list);
+        return $this->renderPage(
+            AccountRepository::loginLog($keywords, auth()->id())
+        );
     }
 }

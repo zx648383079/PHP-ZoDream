@@ -13,7 +13,7 @@ $this->registerCssFile('@demo.min.css')
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
-            <a href="<?=$this->url('./')?>">Demo首页</a>
+            <a href="<?=$this->url('./')?>">资源商店首页</a>
         </li>
         <li class="active">
             预览 <?=$this->text($post->title)?> 

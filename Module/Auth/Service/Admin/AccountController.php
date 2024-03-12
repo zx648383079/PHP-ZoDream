@@ -36,20 +36,12 @@ class AccountController extends Controller {
     }
 
     public function loginLogAction(string $keywords = '') {
-        $model_list = LoginLogModel::where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'ip');
-            })
-            ->orderBy('id desc')->page();
+        $model_list = AccountRepository::loginLog($keywords, auth()->id());;
         return $this->show(compact('model_list'));
     }
 
     public function logAction(string $keywords = '') {
-        $model_list = ActionLogModel::where('user_id', auth()->id())
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, 'ip');
-            })
-            ->orderBy('id desc')->page();
+        $model_list = AccountRepository::actionLog($keywords, auth()->id());
         return $this->show(compact('model_list'));
     }
 

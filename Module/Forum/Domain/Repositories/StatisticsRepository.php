@@ -19,4 +19,19 @@ final class StatisticsRepository {
         return compact('forum_count', 'thread_count', 'thread_today',
             'post_today', 'post_count', 'view_count', 'view_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '帖子数量',
+                'count' => ThreadModel::where('user_id', $user)->count(),
+                'unit' => '篇',
+            ],
+            [
+                'name' => '回帖数量',
+                'count' => ThreadPostModel::where('user_id', $user)->count(),
+                'unit' => '条',
+            ],
+        ];
+    }
 }

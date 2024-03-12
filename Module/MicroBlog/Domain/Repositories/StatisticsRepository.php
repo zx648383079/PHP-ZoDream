@@ -20,4 +20,19 @@ final class StatisticsRepository {
             'comment_count', 'comment_today',
             'topic_count', 'topic_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '微博文数量',
+                'count' => MicroBlogModel::where('user_id', $user)->count(),
+                'unit' => '篇',
+            ],
+            [
+                'name' => '微博文评论',
+                'count' => MicroRepository::comment()->query()->where('user_id', $user)->count(),
+                'unit' => '条',
+            ],
+        ];
+    }
 }

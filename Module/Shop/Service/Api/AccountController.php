@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
-
 
 use Module\Auth\Domain\Repositories\AccountRepository;
 use Module\Shop\Domain\Repositories\AccountRepository as ShopAccount;
@@ -19,7 +19,7 @@ class AccountController extends Controller {
 
     public function logAction(string $keywords = '', int $type = 0) {
         return $this->renderPage(
-            AccountRepository::logList($keywords, $type)
+            AccountRepository::logList($keywords, $type, auth()->id())
         );
     }
 

@@ -57,4 +57,19 @@ final class StatisticsRepository {
             ],
         ];
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '博文数量',
+                'count' => BlogModel::where('user_id', $user)->count(),
+                'unit' => '篇',
+            ],
+            [
+                'name' => '博文评论',
+                'count' => CommentModel::query()->where('user_id', $user)->count(),
+                'unit' => '条'
+            ]
+        ];
+    }
 }

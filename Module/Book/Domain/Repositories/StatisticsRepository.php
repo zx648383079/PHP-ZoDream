@@ -27,4 +27,14 @@ final class StatisticsRepository {
         'chapter_count', 'chapter_today', 'word_count', 'word_today', 'author_count',
         'list_count', 'list_today', 'view_count', 'view_today');
     }
+
+    public static function userCount(int $user): array {
+        return [
+            [
+                'name' => '书籍数量',
+                'count' => BookModel::where('user_id', $user)->count(),
+                'unit' => '本',
+            ],
+        ];
+    }
 }
