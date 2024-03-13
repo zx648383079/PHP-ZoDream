@@ -86,6 +86,7 @@ final class StatisticsRepository {
             'Module\\Note' => '',
             'Module\\ResourceStore' => '',
             'Module\\Shop' => '',
+            'Module\\Bot' => '',
         ];
         $data = [];
         $modules = config('route.modules');
