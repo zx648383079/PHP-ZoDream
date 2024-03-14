@@ -10,7 +10,6 @@ $this->set([
     'rss_show' => true
 ])->registerJs(sprintf('var SUGGESTION_URI = "%s";', $this->url('./blog/suggestion', false)), View::HTML_HEAD);
 
-$localeModule = ['blog'];
 $module_list = [
     [
         'blog',
@@ -76,7 +75,7 @@ $demo_list = [
 <div class="container">
     <div class="metro-grid">
        <?php foreach($module_list as $item):?>
-       <a href="<?=$this->url($item[0], [], in_array($item[0], $localeModule))?>">
+       <a href="<?=$this->url($item[0])?>">
             <?=$item[1]?>
         </a>
        <?php endforeach;?>
@@ -205,7 +204,7 @@ $demo_list = [
         <div class="panel-body">
             <div class="metro-grid">
             <?php foreach($demo_list as $item):?>
-                <a href="<?=$this->url($item[0], [], in_array($item[0], $localeModule))?>">
+                <a href="<?=$this->url($item[0])?>">
                     <?=$item[1]?>
                 </a>
             <?php endforeach;?>

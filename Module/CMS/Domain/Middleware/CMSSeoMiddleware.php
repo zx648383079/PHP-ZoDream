@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Middleware;
 
+use Domain\Middlewares\UrlRouterMiddleware;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
@@ -37,7 +38,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         }
         $site = SiteModel::findOrThrow($site);
         CMSRepository::site($site);
-        app()->singleton(LocaleURLEncoder::LocaleDisabledKey, true);
+        UrlRouterMiddleware::enable(false);
         if ($site->language) {
             app()->setLocale($site->language);
         }

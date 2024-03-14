@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Module\SEO\Domain\Listeners;
 
+use Domain\Middlewares\UrlRouterMiddleware;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Route\ModuleRoute;
-use Zodream\Route\Router;
 use Zodream\ThirdParty\API\Search;
 
 class SiteMapListener {
@@ -43,6 +43,7 @@ class SiteMapListener {
             config()->set('route.rewrite', $configure['rewrite']);
         }
         url()->useCustomScript();
+        UrlRouterMiddleware::enable(false);
 	    $map = new SiteMap();
         $map->add(url('/'), time());
         $modules = config('route.modules');
