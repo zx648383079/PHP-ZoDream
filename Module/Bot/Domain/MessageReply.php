@@ -59,7 +59,8 @@ class MessageReply {
                 break;
         }
         event(new MessageRequest($this->adapter->platformId(),
-            $this->message['from'], $this->message['to'], 0, $this->message['content']));
+            (string)$this->message['from'], (string)$this->message['to'], 0,
+            (string)$this->message['content']));
     }
 
     protected function replyOnScene() {

@@ -77,7 +77,7 @@ class WxAdapter extends BasePlatformAdapter implements IPlatformAdapter {
         //}
         switch ($messageSdk->getEvent()) {
             case EventEnum::Message:
-                return $this->formatReceive(AdapterEvent::Message, $messageSdk->content, $messageSdk);
+                return $this->formatReceive(AdapterEvent::Message, (string)$messageSdk->content, $messageSdk);
             case EventEnum::Subscribe:
             case EventEnum::ScanSubscribe:
                 return $this->formatReceive(AdapterEvent::Subscribe, $messageSdk->eventKey, $messageSdk);
@@ -87,7 +87,7 @@ class WxAdapter extends BasePlatformAdapter implements IPlatformAdapter {
                 return $this->formatReceive(AdapterEvent::MenuClick, $messageSdk->eventKey, $messageSdk);
             default:
                 // TODO ANY
-                return $this->formatReceive(AdapterEvent::Message, $messageSdk->content, $messageSdk);
+                return $this->formatReceive(AdapterEvent::Message, (string)$messageSdk->content, $messageSdk);
         }
     }
 
@@ -270,9 +270,9 @@ class WxAdapter extends BasePlatformAdapter implements IPlatformAdapter {
     public function sendTemplate(string $openid, array $data) {
         $res = $this->templateSdk()
             ->send($openid, $data['template_id'],
-            isset($data['template_url']) && !empty($data['template_url']) ? url($data['template_url']) : '',
+            !empty($data['template_url']) ? url($data['template_url']) : '',
             $data['template_data'],
-            isset($data['appid']) && !empty($data['appid']) ? [
+            !empty($data['appid']) ? [
                 'appid' => $data['appid'],
                 'pagepath' => $data['path']
             ] : []);

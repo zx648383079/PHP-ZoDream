@@ -26,7 +26,11 @@ class HomeController extends Controller {
 
     public function subscribeAction(Request $request) {
         try {
-            ContactRepository::saveSubscribe($request->get());
+            $data = $request->validate([
+                'email' => 'required|email',
+                'name' => 'string:0,30'
+            ]);
+            ContactRepository::saveSubscribe($data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

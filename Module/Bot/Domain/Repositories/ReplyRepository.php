@@ -81,9 +81,9 @@ class ReplyRepository {
         }
         EditorInput::save($model, $input);
         if (!$model->save()) {
-            throw new \Exception($model->getFirstError());
+            throw new \Exception($model->getFirstError()??'anything is error');
         }
-        ReplyModel::cacheReply($model->bot_id, true);
+        static::cacheReply($model->bot_id, true);
         return $model;
     }
 

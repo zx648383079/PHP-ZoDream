@@ -37,7 +37,8 @@ class CreateContactTables extends Migration {
         })->append(SubscribeModel::tableName(), function (Table $table) {
             $table->comment('邮箱订阅');
             $table->id();
-            $table->string('email', 50);
+            $table->string('email', 50)->unique();
+            $table->string('name', 30)->default('')->comment('称呼');
             $table->bool('status')->default(0);
             $table->timestamps();
         })->append(ReportModel::tableName(), function (Table $table) {

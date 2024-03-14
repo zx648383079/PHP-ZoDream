@@ -11,7 +11,16 @@ class SubscribeController extends Controller {
         );
     }
 
-    public function deleteAction(int $id) {
+    public function changeAction(int|array $id, int $status = 0) {
+        try {
+            SubscribeRepository::change($id, $status);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function deleteAction(int|array $id) {
         try {
             SubscribeRepository::remove($id);
         } catch (\Exception $ex) {

@@ -31,8 +31,16 @@ class ContactRepository {
     }
 
     public static function saveSubscribe(array $data): SubscribeModel {
-        $model = new SubscribeModel();
-        if (!$model->load($data) || !$model->save()) {
+        $model = SubscribeModel::query()->where('email', $data['email'])
+            ->first();
+        if (empty($model)) {
+            $model = new SubscribeModel();
+        }
+        if (!empty($data['name']) && $model->name !== $data['name']) {
+            $model->status = 0;
+        }
+        $model->load($data);
+        if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
         return $model;
