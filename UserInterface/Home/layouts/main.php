@@ -27,7 +27,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?=trans()->getLanguage()?>">
+<html lang="<?=app()->getLocale()?>">
    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">

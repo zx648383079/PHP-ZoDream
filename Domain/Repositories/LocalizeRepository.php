@@ -98,7 +98,7 @@ class LocalizeRepository {
         if (!empty(static::$browserLang)) {
             return static::$browserLang;
         }
-        $lang = strtolower((string)trans()->getLanguage());
+        $lang = strtolower((string)app()->getLocale());
         $hasEn = false;
         $enLang = static::BROWSER_DEFAULT_LANGUAGE;
         $firstLang = '';
@@ -124,7 +124,7 @@ class LocalizeRepository {
         return $items;
     }
 
-    public static function addTableColumn(Table $table) {
+    public static function addTableColumn(Table $table): void {
         $languageItems = array_keys(static::LANGUAGE_MAP);
         $table->enum(static::LANGUAGE_COLUMN_KEY, $languageItems)->default(static::firstLanguage())
             ->comment('多语言配置');

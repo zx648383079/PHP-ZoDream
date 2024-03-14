@@ -58,7 +58,7 @@ JS;
 
     private function renderRight(): string {
         $html = $this->renderAccount();
-        $appHtml = $this->renderApp();
+        $appHtml = $this->renderApp().$this->renderLocale();
         return <<<HTML
 <ul class="nav-right">
     {$appHtml}
@@ -66,6 +66,17 @@ JS;
     
     {$html}
 </ul>
+HTML;
+    }
+
+    private function renderLocale(): string {
+        $locale = app()->getLocale();
+        $toggleUrl = url($locale === 'en' ? '/' : '/en', [], null, false);
+        $toggleLabel = $locale === 'en' ? '中' : 'EN';
+        return <<<HTML
+<li>
+    <a href="{$toggleUrl}">{$toggleLabel}</a>
+</li>
 HTML;
     }
 
@@ -95,7 +106,13 @@ HTML;
 
     private function renderAccount(): string {
         if (auth()->guest()) {
-            return '';
+            $loginUrl = url('/auth');
+            $loginLabel = __('Sign in');
+            return <<<HTML
+<li>
+    <a href="{$loginUrl}">{$loginLabel}</a>
+</li>
+HTML;
         }
         $name = Html::text(auth()->user()->name);
         $bulletin_url = url('/auth/admin/bulletin');

@@ -22,7 +22,7 @@ class ArticlePanel extends Node {
             return $cb();
         }
         return $this->cache()->getOrSet(sprintf('%s-%s-%s-%s-%s-%s-%s-%s',
-            self::KEY, $site, $keywords, $channel, $model, $sort, $limit, trans()->getLanguage()),
+            self::KEY, $site, $keywords, $channel, $model, $sort, $limit, app()->getLocale()),
             $cb, rand(3600, 86400)
         );
     }

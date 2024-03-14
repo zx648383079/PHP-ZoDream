@@ -5,7 +5,7 @@ use Zodream\Template\View;
 
 ?>
 <!DOCTYPE html>
-<html lang="<?=trans()->getLanguage()?>">
+<html lang="<?=app()->getLocale()?>">
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex" />

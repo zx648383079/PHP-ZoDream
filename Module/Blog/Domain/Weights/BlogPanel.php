@@ -41,7 +41,7 @@ HTML;
             return $cb();
         }
         return $this->cache()->getOrSet(sprintf('%s-%s-%s-%s-%s-%s-%s-%s',
-            self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, trans()->getLanguage()),
+            self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, app()->getLocale()),
             $cb, rand(600, 3600)
         );
     }

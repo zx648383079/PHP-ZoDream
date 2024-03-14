@@ -12,18 +12,18 @@ $this->set([
 <div class="container">
     <div class="agreement-box">
         <div class="update-date">
-            发布日期：
+            <?=__('Release Date:')?>
             <span class="date-value"><?= $model->created_at ?></span>
         </div>
         <div class="update-date">
-            生效日期：
+            <?=__('Effective date:')?>
             <span class="date-value"><?= $model->updated_at ?></span>
         </div>
 
         <div class="print-bar">
             <div class="print-btn" onclick="window.print()">
                 <i class="fa fa-print"></i>
-                打印
+                <?=__('Print')?>
             </div>
         </div>
 
@@ -57,9 +57,9 @@ $this->set([
                     </div>
                 </div>
                 <?php endforeach;?>
-                <a class="goto-top" href="#top" title="返回页首">
+                <a class="goto-top" href="#top" title="<?=__('Back to top')?>">
                     <i class="fa fa-arrow-up"></i>
-                    返回页首
+                    <?=__('Back to top')?>
                 </a>
             </div>
         </div>

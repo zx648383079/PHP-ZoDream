@@ -18,7 +18,7 @@ $this->registerCssFile([
 ])->registerJs(sprintf('var BASE_URI = "%s";', $this->url('./', false)), View::HTML_HEAD);
 ?>
 <!DOCTYPE html>
-<html lang="<?=trans()->getLanguage()?>">
+<html lang="<?=app()->getLocale()?>">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">

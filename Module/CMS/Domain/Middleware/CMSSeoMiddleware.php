@@ -16,6 +16,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Route;
 use Zodream\Route\OnlyRoute;
+use Zodream\Route\Rewrite\LocaleURLEncoder;
 use Zodream\Service\Middleware\MiddlewareInterface;
 
 /**
@@ -36,8 +37,9 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         }
         $site = SiteModel::findOrThrow($site);
         CMSRepository::site($site);
+        app()->singleton(LocaleURLEncoder::LocaleDisabledKey, true);
         if ($site->language) {
-            trans()->setLanguage($site->language)->reset();
+            app()->setLocale($site->language);
         }
         $modulePath = trim(parse_url((string)$site['match_rule'], PHP_URL_PATH), '/');
         if ($modulePath !== '') {

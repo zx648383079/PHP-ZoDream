@@ -3,7 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Form;
 /** @var $this View */
-$this->title = '注册账号';
+$this->title = __('Sign up');
 $js = <<<JS
 bindRegister();
 JS;
@@ -14,23 +14,23 @@ $this->registerJs($js);
     <div class="login-box">
         <form class="form-ico login-form" action="<?= $this->url('./register/post', false) ?>" method="POST">
         <div class="input-group">
-                <input type="text" name="name" class="form-control" placeholder="请输入昵称" required>
+                <input type="text" name="name" class="form-control" placeholder="<?=__('Please input nickname')?>" required>
                 <i class="fa fa-user" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="email" name="email" class="form-control" placeholder="请输入邮箱" required>
+                <input type="email" name="email" class="form-control" placeholder="<?=__('Please input email')?>" required>
                 <i class="fa fa-at" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" name="password" class="form-control" placeholder="请输入密码" required>
+                <input type="password" name="password" class="form-control" placeholder="<?=__('Please input the password')?>" required>
                 <i class="fa fa-lock" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="password" name="rePassword" class="form-control" placeholder="请确认密码" required>
+                <input type="password" name="rePassword" class="form-control" placeholder="<?=__('Please confirm your password')?>" required>
                 <i class="fa fa-redo" aria-hidden="true"></i>
             </div>
             <div class="input-group">
-                <input type="text" name="invite_code" class="form-control" placeholder="请输入邀请码">
+                <input type="text" name="invite_code" class="form-control" placeholder="<?=__('Please input the invite code')?>">
                 <i class="fa fa-gift" aria-hidden="true"></i>
             </div>
 
@@ -39,14 +39,14 @@ $this->registerJs($js);
                     <input type="checkbox" name="agree" value="1" id="checkboxInput"/>
                     <label for="checkboxInput"></label>
                 </div>
-                同意《
-                <a href="<?=$this->url('/agreement')?>">本站协议</a>
+                <?=__('I agree to')?>《
+                <a href="<?=$this->url('/agreement')?>"><?=__('terms of service')?></a>
                 》
             </div>
 
-            <button type="submit" class="btn">注册</button>
+            <button type="submit" class="btn"><?=__('Sign up')?></button>
             <div class="other-box">
-                <a href="<?=$this->url('./')?>">返回登录</a>
+                <a href="<?=$this->url('./')?>"><?=__('Back')?></a>
             </div>
             <?= Form::token() ?>
         </form>

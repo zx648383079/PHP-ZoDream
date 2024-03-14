@@ -26,7 +26,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
 
 ?>
 <!DOCTYPE html>
-<html lang="<?=trans()->getLanguage()?>">
+<html lang="<?=app()->getLocale()?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
