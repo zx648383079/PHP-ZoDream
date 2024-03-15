@@ -41,4 +41,15 @@ class RegisterController extends Controller {
             'url' => url(empty($redirect_uri) ? '/' : $redirect_uri)
         ], '注册成功！');
     }
+
+    public function verifyAction(string $email, string $code) {
+        $this->layout = app_path('UserInterface/Home/layouts/main.php');
+        $message = '';
+        try {
+            AuthRepository::verifyEmailAddress($email, $code);
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+        }
+        return $this->show(compact('message'));
+    }
 }

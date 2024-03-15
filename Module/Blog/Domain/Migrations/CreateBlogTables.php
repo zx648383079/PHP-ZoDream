@@ -56,12 +56,11 @@ class CreateBlogTables extends Migration {
             foreach (LocalizeRepository::languageAsColumnPrefix() as $lang) {
                 $table->string($lang.'name', 40)->nullable(!empty($lang));
             }
-            $table->uint('parent_id');
+            $table->uint('parent_id')->default(0);
             $table->string('keywords')->default('');
             $table->string('description')->default('');
             $table->string('thumb')->default('');
             $table->string('styles')->default('')->comment('独立引入样式');
-
         })->append(CommentModel::tableName(), function(Table $table) {
             $table->id();
             $table->string('content');

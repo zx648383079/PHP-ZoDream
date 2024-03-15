@@ -24,6 +24,10 @@ class AuthException {
         return new Exception(__('Email or password is incorrect'), 1003);
     }
 
+    public static function invalidEmail() {
+        return new Exception(__('Please check your email and click on the verification link '), 1012);
+    }
+
     public static function disableRegister() {
         return new Exception(__('Registration not allowed'), 1006);
     }

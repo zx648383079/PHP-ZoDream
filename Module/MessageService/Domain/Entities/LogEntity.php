@@ -14,6 +14,7 @@ use Domain\Entities\Entity;
  * @property integer $type
  * @property string $title
  * @property string $content
+ * @property string $code
  * @property integer $status
  * @property string $message
  * @property string $ip
@@ -34,6 +35,7 @@ class LogEntity extends Entity {
             'type' => 'int:0,127',
             'title' => 'required|string:0,255',
             'content' => 'required',
+            'code' => '',
             'status' => 'int:0,127',
             'message' => 'string:0,255',
             'ip' => 'string:0,120',

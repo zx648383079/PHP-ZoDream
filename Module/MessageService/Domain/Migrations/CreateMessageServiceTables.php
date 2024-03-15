@@ -43,6 +43,7 @@ class CreateMessageServiceTables extends Migration {
                 ->comment('内容的类型');
             $table->string('title')->comment('发送的标题');
             $table->text('content')->comment('发送的内容');
+            $table->string('code', 50)->default('')->comment('发送的验证码');
             $table->uint('status', 1)->default(0)->comment('发送状态');
             $table->string('message')->default('')->comment('发送结果，成功为消息id,否则为错误信息');
             $table->string('ip', 120)->default('')->comment('发送者ip');
@@ -55,6 +56,8 @@ class CreateMessageServiceTables extends Migration {
             '登录验证码', '登录验证码{code}');
         MessageRepository::insertIf(MessageProtocol::EVENT_REGISTER_CODE,
             '注册验证码', '注册验证码{code}');
+        MessageRepository::insertIf(MessageProtocol::EVENT_REGISTER_EMAIL_CODE,
+            '验证你的Email', '<a href="{url}">确认你的Email</a><br/>或复制链接在浏览器中打开：<br/>{url}', MessageProtocol::TYPE_HTML);
         MessageRepository::insertIf(MessageProtocol::EVENT_FIND_CODE,
             '重置密码验证码', '重置密码验证码{code}');
     }

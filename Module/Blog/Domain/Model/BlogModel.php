@@ -55,7 +55,7 @@ class BlogModel extends BlogEntity {
     }
 
 	public function getUrlAttribute() {
-	    return BlogSeoMiddleware::encodeUrl($this->id);
+	    return BlogSeoMiddleware::encodeUrl($this->id, $this->language);
     }
 
 	public function getPreviousAttribute() {

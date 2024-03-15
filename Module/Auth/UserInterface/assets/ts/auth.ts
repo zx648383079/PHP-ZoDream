@@ -61,6 +61,7 @@ function bindRegister() {
             Dialog.tip('两次密码不一致');
             return;
         }
+        box.removeClass('is-invalid');
     });
 }
 

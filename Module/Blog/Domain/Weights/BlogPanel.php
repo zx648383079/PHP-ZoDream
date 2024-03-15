@@ -25,7 +25,7 @@ class BlogPanel extends Node {
                 0, '', $lang,
                 $tag, $limit);
             return implode('', array_map(function (BlogModel $item) {
-                $url = BlogSeoMiddleware::encodeUrl($item->id);
+                $url = BlogSeoMiddleware::encodeUrl($item->id, $item->language);
                 $title = Html::text($item->title);
                 $meta = Html::text($item->description);
                 $ago = Time::isTimeAgo($item->getAttributeSource('created_at'), 2678400);

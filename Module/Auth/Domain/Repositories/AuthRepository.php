@@ -101,10 +101,14 @@ class AuthRepository {
             throw AuthException::disableAccount();
         }
         $user = UserModel::findByEmail($email);
-        if (!UserRepository::isActive($user)) {
+        if (empty($user) || !$user->validatePassword($password)) {
             throw AuthException::invalidLogin();
         }
-        if (!$user->validatePassword($password)) {
+        if ($user['status'] == UserModel::STATUS_UN_CONFIRM) {
+            // TODO 是否需要重新发送验证邮件
+            throw AuthException::invalidEmail();
+        }
+        if (!UserRepository::isActive($user)) {
             throw AuthException::invalidLogin();
         }
         PassKey::check2FA($user);
@@ -186,11 +190,24 @@ class AuthRepository {
         if ($confirmPassword !== $password) {
             throw new Exception('两次密码不一致');
         }
-        $user = static::checkInviteCode($inviteCode, function ($parent_id) use ($email, $name, $password, $extra) {
+        $extra['status'] = UserModel::STATUS_UN_CONFIRM;
+        $user = static::checkInviteCode($inviteCode, function ($parent_id) use
+        ($email, $name, $password, $extra) {
             $extra['parent_id'] = $parent_id;
             return self::createUser($email, $name, $password, $extra);
         });
         event(new Register($user, request()->ip(), time()));
+        $code = MessageProtocol::generateCode(16, false);
+        MessageProtocol::sendCode($email,
+            MessageProtocol::EVENT_REGISTER_EMAIL_CODE,
+            $code, [
+                'name' => $name,
+                'url' => url('./register/verify',
+                    ['email' => $email,
+                    'code' => $code],
+                    null, false)
+            ]);
+        throw new Exception('注册成功，已发送确认邮件到你的邮箱！');
         return self::doLogin($user);
     }
 
@@ -610,6 +627,29 @@ class AuthRepository {
         $user->{$data['name']} = $data['value'];
         $user->save();
         return $user->toArray();
+    }
+
+    /**
+     * 验证Email 是否有效
+     * @param string $email
+     * @param string $code
+     * @return void
+     * @throws Exception
+     */
+    public static function verifyEmailAddress(string $email, string $code) {
+        if (MessageProtocol::verifyCode($email, MessageProtocol::EVENT_REGISTER_EMAIL_CODE, $code)) {
+            UserModel::where('email', $email)
+                ->where('status', UserModel::STATUS_UN_CONFIRM)
+                ->update([
+                    'status' => UserModel::STATUS_ACTIVE
+                ]);
+            return;
+        }
+        if (UserModel::where('email', $email)
+            ->where('status', '>', UserModel::STATUS_UN_CONFIRM)->count()) {
+            return;
+        }
+        throw new Exception('验证邮件已失效');
     }
 
     /**

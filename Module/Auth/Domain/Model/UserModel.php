@@ -34,6 +34,7 @@ class UserModel extends BaseModel {
 
     const STATUS_DELETED = 0; // 已删除
     const STATUS_FROZEN = 2; // 账户已冻结
+    const STATUS_UN_CONFIRM = 9; // 邮箱注册，未确认邮箱
     const STATUS_ACTIVE = 10; // 账户正常
     const STATUS_ACTIVE_VERIFIED = 15; // 账户正常&实名认证了
 

@@ -31,7 +31,7 @@ $this->set([
         </div>
         <div class="time-items">
             <?php foreach ($archives['children'] as $item):?>
-            <a class="time-item" href="<?=BlogSeoMiddleware::encodeUrl($item['id'])?>">
+            <a class="time-item" href="<?=BlogSeoMiddleware::encodeUrl($item['id'], $item['language'])?>">
                 <div class="title"><?=$this->text($item['title'])?></div>
                 <div class="time"><?=$item['date']?></div>
             </a>

@@ -62,9 +62,9 @@ class RouterHelper {
         $map->add(url('./archives'), time());
         $items = BlogModel::where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
             ->orderBy('id', 'desc')
-            ->get('id', 'updated_at');
+            ->get('id', 'language', 'updated_at');
         foreach ($items as $item) {
-            $map->add(BlogSeoMiddleware::encodeUrl($item['id']),
+            $map->add(BlogSeoMiddleware::encodeUrl($item['id'], $item['language']),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
         $items = TermModel::orderBy('id', 'desc')

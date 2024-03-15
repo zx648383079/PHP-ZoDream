@@ -30,6 +30,9 @@ final class UrlRouterMiddleware extends RewriteEncoder {
         $path = trim($url->getPath(), '/');
         $enable = $this->isEnableModule($path);
         $params = $url->getData();
+        if (isset($params['id'])) {
+            $enable = false;
+        }
         list($path, $params) = $this->enRewrite($path, $params);
         if ($enable) {
             $path = $this->encodeLocale($path);

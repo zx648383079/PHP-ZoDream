@@ -9,6 +9,7 @@ use Module\SEO\Domain\Option;
 use Zodream\Database\Model\Model;
 use Zodream\Helpers\Html;
 use Zodream\Helpers\Json;
+use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Mailer\Mailer;
 use Zodream\ThirdParty\SMS\ALiDaYu;
 use Zodream\ThirdParty\SMS\ALiYun;
@@ -39,6 +40,7 @@ class MessageProtocol {
 
     const EVENT_LOGIN_CODE = 'login_code';
     const EVENT_REGISTER_CODE = 'register_code';
+    const EVENT_REGISTER_EMAIL_CODE = 'register_email';
     const EVENT_FIND_CODE = 'find_code';
 
     private static array $configs = [
@@ -47,20 +49,30 @@ class MessageProtocol {
         'everyday' => 2000 // 每天发送数量
     ];
 
+    /**
+     * 发送验证码
+     * @param string $target
+     * @param string $templateName
+     * @param string $code
+     * @param array $extra
+     * @return int|null
+     * @throws \Exception
+     */
     public static function sendCode(string $target, string $templateName,
-                                    string $code, array $extra = []): bool {
+                                    string $code, array $extra = []): ?int {
         if (!static::verifySpace($target) || !static::verifyIp() || !static::verifyCount()) {
             throw new \Exception('发送过于频繁');
         }
         $res = static::send($target, $templateName, array_merge($extra, compact('code')));
         if ($res) {
             LogEntity::where('target', $target)->where('template_name', $templateName)
+                ->where('id', '!=', $res)
                 ->where('status', static::STATUS_SENT)
                 ->update([
                     'status' => static::STATUS_SENT_EXPIRED
                 ]);
         }
-        if ($res && !Platform::isPlatform()) {
+        if ($res && static::enableSession($templateName)) {
             session()->set(self::SESSION_KEY, [
                 'at' => time(),
                 'to' => $target,
@@ -70,7 +82,15 @@ class MessageProtocol {
         return $res;
     }
 
-    public static function send(string $target, string $templateName, array $data): bool {
+    /**
+     * 发送消息
+     * @param string $target
+     * @param string $templateName
+     * @param array $data
+     * @return int|null 返回记录id, 失败则为null
+     * @throws \Exception
+     */
+    public static function send(string $target, string $templateName, array $data): ?int {
         list($type, $option, $optionKey) = static::targetOption($target);
         $template = TemplateEntity::where('name', $templateName)
             ->when($type === static::RECEIVE_TYPE_MOBILE, function ($query) {
@@ -82,9 +102,7 @@ class MessageProtocol {
         if (empty($template)) {
             throw new \Exception(sprintf('未配置相关模板[%s:%s]', $optionKey, $templateName));
         }
-        // TODO 根据模板值过滤
-        $data = static::filterData($data, $template['data']);
-        $log = LogEntity::createOrThrow([
+        $logData = [
             'template_id' => $template['id'],
             'target_type' => $type,
             'target' => $target,
@@ -93,19 +111,23 @@ class MessageProtocol {
             'title' => $template['title'],
             'content' => static::renderTemplate($template['content'], $data),
             'status' => static::STATUS_SENDING,
+            'code' => $data['code'] ?? '',
             'ip' => request()->ip(),
-        ]);
+        ];
+        // TODO 根据模板值过滤
+        $data = static::filterData($data, $template['data']);
+        $log = LogEntity::createOrThrow($logData);
         $res = false;
         try {
             $res = $type === static::RECEIVE_TYPE_MOBILE ? static::sendSMS($option, $target, $template, $data) : static::sendMail($option, $target, $template, $data);
-            $log->status = $res === false ? static::STATUS_SENT : static::STATUS_SEND_FAILURE;
+            $log->status = $res !== false ? static::STATUS_SENT : static::STATUS_SEND_FAILURE;
             $log->message = is_string($res) ? $res : '';
         } catch (\Exception $ex) {
             $log->status = static::STATUS_SEND_FAILURE;
             $log->message = $ex->getMessage();
         }
         $log->save();
-        return $res;
+        return $res ? intval($log->id) : null;
     }
 
     /**
@@ -149,8 +171,28 @@ class MessageProtocol {
         return $items;
     }
 
-    public static function verifyCode(string $target, string $templateName, string $code, bool $once = true): bool {
-        if (!Platform::isPlatform()) {
+    /**
+     * 判断是否可以保存到 SESSION 中
+     * @param string $templateName
+     * @return bool
+     * @throws \Exception
+     */
+    protected static function enableSession(string $templateName): bool {
+        return !Platform::isPlatform() && $templateName !== static::EVENT_REGISTER_EMAIL_CODE;
+    }
+
+    /**
+     * 验证验证码
+     * @param string $target
+     * @param string $templateName
+     * @param string $code
+     * @param bool $once
+     * @return bool
+     * @throws \Exception
+     */
+    public static function verifyCode(string $target, string $templateName,
+                                      string $code, bool $once = true): bool {
+        if (static::enableSession($templateName)) {
             $log = session(self::SESSION_KEY);
             if (empty($log) || empty($log['code'])
                 || $log['to'] !== $target
@@ -158,14 +200,14 @@ class MessageProtocol {
                 return false;
             }
         }
-        $log = LogEntity::where('target', $target)->where('template_name', $templateName)
+        $log = LogEntity::where('target', $target)
+            ->where('template_name', $templateName)
             ->where('status', static::STATUS_SENT)
             ->first();
         if (empty($log)) {
             return false;
         }
-        $data = Json::decode($log['data']);
-        $res = empty($data['code']) && $data['code'] === $code;
+        $res = !empty($code) && $log['code'] === $code;
         if ($once) {
             $log->status = self::STATUS_SENT_USED;
             $log->save();
@@ -307,6 +349,10 @@ class MessageProtocol {
         $time = strtotime(date('Y-m-d'));
         $count = LogEntity::where('ip', request()->ip())->where('created_at', '>=', $time)->count();
         return $count < self::$configs['everyone'];
+    }
+
+    public static function generateCode(int $length, bool $isNumeric = true): string {
+        return $isNumeric ? Str::randomNumber($length) : Str::random($length);
     }
 
 }

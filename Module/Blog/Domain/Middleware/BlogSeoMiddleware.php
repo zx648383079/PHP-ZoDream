@@ -48,11 +48,15 @@ class BlogSeoMiddleware implements MiddlewareInterface{
         ]);
     }
 
-    public static function encodeUrl(int|string $id): string {
+    public static function encodeUrl(int|string $id, ?string $language = ''): string {
         $link = RouterHelper::idLink($id);
-        if (empty($link)) {
-            return url(static::modulePath(), ['id' => $id]);
+        $path = static::modulePath();
+        if (!empty($language) && $language !== 'zh') {
+            $path = $language .'/'.$path;
         }
-        return url(sprintf('%s%s', static::modulePath(), $link));
+        if (empty($link)) {
+            return url($path, ['id' => $id]);
+        }
+        return url(sprintf('%s%s', $path, $link), [], null, false);
     }
 }

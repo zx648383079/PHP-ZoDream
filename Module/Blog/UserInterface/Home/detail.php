@@ -83,9 +83,11 @@ $this->set([
     </a>
     <div class="book-info">
         <?php if(count($languages) > 1):?>
-        
         <div class="language-toggle">
-            <?php foreach($languages as $item):?><?php if($blog->id == $item['id']):?><a href="<?=$this->url('./', ['id' => $item['id']])?>" class="active"><?=$item['language']?></a><?php else:?><a href="<?=$this->url('./', ['id' => $item['id']])?>"><?=$item['language']?></a><?php endif;?><?php endforeach;?>
+            <?php foreach($languages as $item):?>
+            <a href="<?=BlogSeoMiddleware::encodeUrl($item['id'], $item['language'])?>" <?= $blog->id == $item['id'] ? 'class="active"' : '' ?>>
+            <?=$item['language']?></a>
+            <?php endforeach;?>
         </div>
         <?php endif;?>
         <?php if($blog->user):?>
@@ -109,7 +111,7 @@ $this->set([
     <article id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
         <p class="book-copyright"><?=__('Reprint please keep the original link:')?>
-            <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=BlogSeoMiddleware::encodeUrl($blog->id)?></a>
+            <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=BlogSeoMiddleware::encodeUrl($blog->id, $blog->language)?></a>
         </p>
     </article>
     <div class="toggle-open">
@@ -196,7 +198,7 @@ $this->set([
         <?php foreach($relation_list as $item):?>
             <div class="list-item">
                 <div class="item-title">
-                    <a class="name" href="<?=BlogSeoMiddleware::encodeUrl($item->id)?>"><?=$this->text($item->title)?></a>
+                    <a class="name" href="<?=BlogSeoMiddleware::encodeUrl($item->id, $item->language)?>"><?=$this->text($item->title)?></a>
                     <div class="time"><?=$this->ago($item->getAttributeSource('created_at'))?></div></div>
                 <div class="item-meta"><?=$this->text($item->description)?>
                 </div>

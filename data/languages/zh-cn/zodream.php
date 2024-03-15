@@ -180,6 +180,8 @@ return [
     'Retrieve password' => '找回密码',
     'Back' => '返回',
     'Reset Password' => '确定修改',
+    'Verify email address' => '验证Email地址',
+    'Please check your email and click on the verification link' => '请查收你的邮件并点击验证链接',
     'zh' => '中',
     'en' => 'EN',
     'sex' => [

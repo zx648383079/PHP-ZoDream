@@ -13,6 +13,24 @@
     }
 }
 
+.toast-panel {
+    margin: 30vh auto;
+    text-align: center;
+    .panel-icon {
+        font-size: 3rem;
+        color: $invalid;
+        margin-bottom: 1rem;
+    }
+    .panel-body {
+
+    }
+    &.toast-success {
+        .panel-icon {
+            color: $valid;
+        }
+    }
+}
+
 .error-tag {
     position: relative;
     margin-bottom: 2rem;
