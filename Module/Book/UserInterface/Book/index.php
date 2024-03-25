@@ -66,14 +66,14 @@ $this->title = $book['name'];
             <div class="row">
                 
                 <?php foreach($chapter_list as $item):?>
-                <?php if($item['type'] > 0):?>
+                <?php if($item['type'] == 9):?>
                 <div class="col-12 group-header">
                     <div class="title"><?= $item['title'] ?></div>
                 </div>
                 <?php else:?>
                 <a href="<?=$this->url('./book/read', ['id' => $item['id']])?>" class="col-lg-4 col-md-6 item">
                     <div class="title">
-                        <?php if($item['price'] > 0):?>
+                        <?php if($item == 1):?>
                         <i class="fa <?=$item['is_bought'] ? 'fa-lock' : 'fa-lock-open' ?>" title="Fee chapter"></i>
                         <?php endif;?>
                         <?= $item['title'] ?></div>

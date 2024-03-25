@@ -3,10 +3,15 @@ declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
+use Zodream\Html\Page;
 
 class ChapterRepository {
+    const TYPE_FREE_CHAPTER = 0;
+    const TYPE_VIP_CHAPTER = 1;
+    const TYPE_GROUP = 9; // 卷
     public static function getList(int $book, string $keywords = '') {
         return BookChapterModel::where('book_id', $book)
             ->when(!empty($keywords), function ($query) {
@@ -52,7 +57,7 @@ class ChapterRepository {
         if (!BookRepository::isSelf($model->book_id)) {
             throw new \Exception('操作无效');
         }
-        if ($model->type > 0) {
+        if ($model->type == ChapterRepository::TYPE_GROUP) {
             return $model;
         }
         $model->content = $model->body->content;
@@ -70,7 +75,7 @@ class ChapterRepository {
         if ($model->isNewRecord && $model->position < 1) {
             $model->position = intval(BookChapterModel::query()->where('book_id', $model->book_id)->max('position')) + 1;
         }
-        if (!$model->save()) {
+        if (!$model->save(true)) {
             throw new \Exception($model->getFirstError());
         }
         BookRepository::refreshSize($model->book_id);
@@ -95,19 +100,32 @@ class ChapterRepository {
      * @param $items
      * @return mixed
      */
-    public static function applyIsBought($items) {
+    public static function applyIsBought(int $bookId, array|Page $items) {
         $idItems = [];
         foreach ($items as $item) {
-            if ($item['type'] < 1 && $item['price'] > 0) {
+            if ($item['type'] == 1) {
                 $idItems[] = $item['id'];
             }
         }
         // TODO 获取已购买的id
-        $boughtItems = [];
+        $boughtItems = empty($idItems) ? [] : BookBuyLogModel::where('book_id', $bookId)
+            ->where('user_id', auth()->id())->pluck('chapter_id');
         foreach ($items as $item) {
-            $item['is_bought'] = $item['type'] > 0 || $item['price'] <= 0 || in_array($item['id'], $boughtItems);
+            $item['is_bought'] = $item['type'] != 1 || in_array($item['id'], $boughtItems);
         }
         return $items;
+    }
+
+    public static function isBought(int $bookId, int $chapterId, int $chapterType): bool {
+        if ($chapterType === self::TYPE_FREE_CHAPTER || $chapterType === self::TYPE_GROUP) {
+            return true;
+        }
+        if (auth()->guest()) {
+            return false;
+        }
+        return BookBuyLogModel::where('book_id', $bookId)
+            ->where('chapter_id', $chapterId)
+            ->where('user_id', auth()->id())->count() > 0;
     }
 
     public static function move(int $id, int $before = 0, int $after = 0) {

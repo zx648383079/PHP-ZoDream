@@ -72,10 +72,4 @@ class FamilyModel extends Model {
 	    return $this->hasOne(ClanModel::class, 'id', 'clan_id');
     }
 
-    public function saveIgnoreUpdate() {
-        return $this->save() || $this->isNotChangedError();
-    }
-
-
-
 }

@@ -86,8 +86,4 @@ class ResourceModel extends Model {
     public function user() {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
-
-    public function saveIgnoreUpdate() {
-        return $this->save() || $this->isNotChangedError();
-    }
 }

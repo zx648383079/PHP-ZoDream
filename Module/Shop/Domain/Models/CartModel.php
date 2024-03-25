@@ -97,7 +97,7 @@ class CartModel extends CartEntity implements ICartItem {
         return $this->save();
     }
 
-    public function save() {
+    public function save(bool $force = false): mixed {
         if ($this->amount <= 0) {
             return $this->delete();
         }
@@ -126,7 +126,7 @@ class CartModel extends CartEntity implements ICartItem {
     }
 
     public static function deleteAll() {
-        self::where('user_id', auth()->id)
+        self::where('user_id', auth()->id())
             ->delete();
     }
 
@@ -140,7 +140,7 @@ class CartModel extends CartEntity implements ICartItem {
         if (empty($ids)) {
             return;
         }
-        self::where('user_id', auth()->id)
+        self::where('user_id', auth()->id())
             ->whereIn('id', is_array($ids) ? $ids : [intval($ids)])
             ->delete();
     }
@@ -154,7 +154,7 @@ class CartModel extends CartEntity implements ICartItem {
         if (empty($ids)) {
             return;
         }
-        self::where('user_id', auth()->id)
+        self::where('user_id', auth()->id())
             ->whereIn('goods_id', is_array($ids) ? $ids : [intval($ids)])
             ->delete();
     }

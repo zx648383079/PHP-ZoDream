@@ -9,6 +9,7 @@ namespace Module\Book\Domain\Model;
  */
 use Domain\Model\Model;
 use Module\Book\Domain\Entities\ChapterEntity;
+use Module\Book\Domain\Repositories\ChapterRepository;
 
 
 /**
@@ -41,18 +42,11 @@ class BookChapterModel extends ChapterEntity {
     }
 
     public function getIsBoughtAttribute() {
-        if ($this->type > 0 || $this->price <= 0) {
-            return true;
-        }
-        return false;
+        return ChapterRepository::isBought($this->book_id, $this->id, $this->type);
     }
 
     public function getUrlAttribute() {
         return url('./book/read', ['id' => $this->id]);
-    }
-
-    public function getWapUrlAttribute() {
-        return url('./mobile/book/read', ['id' => $this->id]);
     }
 
     public function getPreviousAttribute() {
@@ -69,18 +63,18 @@ class BookChapterModel extends ChapterEntity {
             ->select('id, title')->one();
     }
 
-    public function save() {
+    public function save(bool $force = false): mixed {
         $is_new = $this->isNewRecord;
         if ($this->size < 1) {
             $this->size = mb_strlen($this->content);
         } else {
             $this->size = min($this->size, mb_strlen($this->content));
         }
-        $row = parent::save();
+        $row = parent::save(true);
         if (!$row) {
             return $row;
         }
-        if ($this->type > 0) {
+        if ($this->type == ChapterRepository::TYPE_GROUP) {
             return true;
         }
         $model = new BookChapterBodyModel([
@@ -88,7 +82,7 @@ class BookChapterModel extends ChapterEntity {
             'content' => $this->content
         ]);
         $model->isNewRecord = $is_new;
-        if ($model->save()) {
+        if ($model->save(true)) {
             return true;
         }
         if (!$is_new) {

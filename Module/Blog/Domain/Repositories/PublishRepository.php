@@ -188,7 +188,7 @@ final class PublishRepository {
             }
         }
         $model->parent_id = intval($model->parent_id);
-        if (!$model->saveIgnoreUpdate()) {
+        if (!$model->save(true)) {
             throw new Exception($model->getFirstError());
         }
         if ($model->parent_id < 1) {

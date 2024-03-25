@@ -196,7 +196,7 @@ class ResourceRepository {
         }
         $model->load($data, ['user_id']);
         $model->user_id = auth()->id();
-        if (!$model->saveIgnoreUpdate()) {
+        if (!$model->save(true)) {
             throw new \Exception($model->getFirstError());
         }
         static::tag()->bindTag($model->id, $tags);

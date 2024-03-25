@@ -68,7 +68,7 @@ class FamilyController extends Controller {
         }
         $model->parent_id = intval($model->parent_id);
         $model->mother_id = intval($model->mother_id);
-        if (!$model->saveIgnoreUpdate()) {
+        if (!$model->save(true)) {
             return $this->renderFailure($model->getFirstError());
         }
         $spouseItems = ModelHelper::formArr($request->get('spouse', []));

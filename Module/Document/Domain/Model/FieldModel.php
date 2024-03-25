@@ -103,8 +103,8 @@ class FieldModel extends Model {
        return MockRepository::mockValue($this->mock);
     }
 
-    public function save() {
-        parent::save();
+    public function save(bool $force = false): mixed {
+        parent::save($force);
         if ($this->id < 1) {
             return false;
         }

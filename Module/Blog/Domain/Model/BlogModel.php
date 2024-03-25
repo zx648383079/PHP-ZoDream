@@ -70,12 +70,4 @@ class BlogModel extends BlogEntity {
 	    return BlogRepository::hasLog($this->id, BlogLogModel::ACTION_RECOMMEND);
     }
 
-
-    public function saveIgnoreUpdate() {
-        return $this->save() || $this->isNotChangedError();
-    }
-
-
-
-
 }

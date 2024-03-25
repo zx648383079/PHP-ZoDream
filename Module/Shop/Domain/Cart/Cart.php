@@ -2,11 +2,8 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Cart;
 
-use Module\Shop\Domain\Models\CartModel;
 use Module\Shop\Domain\Models\GoodsSimpleModel;
-use Module\Shop\Domain\Repositories\AttributeRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
-use Module\Shop\Domain\Repositories\GoodsRepository;
 use Traversable;
 use Zodream\Helpers\Json;
 use IteratorAggregate;

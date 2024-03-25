@@ -46,7 +46,7 @@ class AddressModel extends AddressEntity {
         return $id;
     }
 
-//	public function save() {
+//	public function save(bool $force = false): mixed {
 //	    if (!empty($this->id) && $this->status == self::STATUS_FIXED) {
 //            $this->offsetUnset('id');
 //	        $this->isNewRecord = true;
