@@ -98,7 +98,7 @@ class LocalizeRepository {
         if (!empty(static::$browserLang)) {
             return static::$browserLang;
         }
-        $lang = strtolower((string)app()->getLocale());
+        $lang = strtolower(app()->getLocale());
         $hasEn = false;
         $enLang = static::BROWSER_DEFAULT_LANGUAGE;
         $firstLang = '';
