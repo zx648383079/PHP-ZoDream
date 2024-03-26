@@ -116,6 +116,14 @@ class LocalizeRepository {
         return static::$browserLang = $hasEn ? $enLang : $firstLang;
     }
 
+    /**
+     * 判断当前语言是否是 en
+     * @return bool
+     */
+    public static function browserLanguageIsDefault(): bool {
+        return static::browserLanguage() === static::BROWSER_DEFAULT_LANGUAGE;
+    }
+
     public static function languageOptionItems(): array {
         $items = [];
         foreach (static::LANGUAGE_MAP as $value => $name) {

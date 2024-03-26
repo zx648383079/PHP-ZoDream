@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Blog\Service;
 
 use Domain\Model\SearchModel;
+use Domain\Repositories\LocalizeRepository;
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;
@@ -27,13 +28,13 @@ class HomeController extends Controller {
 
     public function indexAction(
         string $sort = 'new', int $category = 0, string $keywords = '',
-        int $user = 0, string $language = '', string $programming_language = '',
+        int $user = 0, string $programming_language = '',
         string $tag = '', int $id = 0) {
         if ($id > 0) {
             return $this->detailAction($id);
         }
         $blog_list  = BlogRepository::getList($sort, $category, $keywords,
-            $user, $language, $programming_language, $tag);
+            $user, LocalizeRepository::browserLanguage(), $programming_language, $tag);
         $cat_list = CategoryRepository::get();
         $comment_list = CommentRepository::newList();
         $new_list = BlogRepository::getNew(4);

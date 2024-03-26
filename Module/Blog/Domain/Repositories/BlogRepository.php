@@ -58,6 +58,9 @@ class BlogRepository {
             $user, $language, $programming_language,
             $tag)
             ->limit($limit ?? 5)->get();
+        if (!empty($language)) {
+            return $page;
+        }
         return LocalizeRepository::formatList($page, BlogSimpleModel::query());
     }
 
@@ -124,7 +127,7 @@ class BlogRepository {
      */
     public static function getNew(int $limit = 5) {
         return self::getSimpleList('new',
-            0, '', 0, '', '', '', $limit);
+            0, '', 0, LocalizeRepository::browserLanguage(), '', '', $limit);
     }
     /**
      * 获取热门文章
@@ -133,7 +136,7 @@ class BlogRepository {
      */
     public static function getHot(int $limit = 5) {
         return self::getSimpleList('hot',
-            0, '', 0, '', '', '', $limit);
+            0, '', 0, LocalizeRepository::browserLanguage(), '', '', $limit);
     }
     /**
      * 获取推荐文章
@@ -142,18 +145,20 @@ class BlogRepository {
      */
     public static function getBest(int $limit = 5) {
         return self::getSimpleList('best',
-            0, '', 0, '', '', '', $limit);
+            0, '', 0, LocalizeRepository::browserLanguage(), '', '', $limit);
     }
 
     public static function getArchives() {
         $data = [];
-        $items = LocalizeRepository::formatList(
-            BlogModel::query()->where('parent_id', 0)
-                ->orderBy('created_at', 'desc')
-                ->asArray()->get('id', 'title', 'parent_id', 'created_at'),
-            BlogModel::query()->asArray()
-            ->select(['id', 'title', 'parent_id', 'created_at'])
-        );
+        $items = BlogModel::query()// ->where('parent_id', 0)
+            ->orderBy('created_at', 'desc')
+            ->where('language', LocalizeRepository::browserLanguage())
+            ->asArray()->get('id', 'title', 'language', 'parent_id', 'created_at');
+//        $items = LocalizeRepository::formatList(
+//            $items,
+//            BlogModel::query()->asArray()
+//                ->select(['id', 'title', 'language', 'parent_id', 'created_at'])
+//        );
         foreach ($items as $item) {
             $year = Time::format($item['created_at'], 'Y');
             if (!isset($data[$year])) {

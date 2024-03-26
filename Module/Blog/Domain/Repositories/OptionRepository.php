@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\CCLicenses;
 use Module\Blog\Domain\Weather;
 
@@ -50,6 +51,7 @@ class OptionRepository {
 
     public static function all(): array {
         return [
+            'localizes' => LocalizeRepository::languageOptionItems(),
             'languages' => static::languages(),
             'weathers' => static::weathers(),
             'licenses' => static::licenses(),

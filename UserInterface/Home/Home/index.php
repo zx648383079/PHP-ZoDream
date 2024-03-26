@@ -1,5 +1,7 @@
 <?php
 defined('APP_DIR') or exit();
+
+use Domain\Repositories\LocalizeRepository;
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('home');
@@ -178,23 +180,25 @@ $demo_list = [
         </div>
     </div>
 
-    <div class="panel">
-        <div class="panel-header">
-            <a href="<?=$this->url('./app')?>"><?=__('App')?></a>
+    <?php if (!LocalizeRepository::browserLanguageIsDefault()):?>
+        <div class="panel">
+            <div class="panel-header">
+                <a href="<?=$this->url('./app')?>"><?=__('App')?></a>
+            </div>
+            <div class="panel-body">
+                <?=$this->node('app-panel', ['limit' => 6])?>
+            </div>
         </div>
-        <div class="panel-body">
-            <?=$this->node('app-panel', ['limit' => 6])?>
-        </div>
-    </div>
 
-    <div class="panel">
-        <div class="panel-header">
-            <a href="<?=$this->url('./res')?>"><?=__('Resource')?></a>
+        <div class="panel">
+            <div class="panel-header">
+                <a href="<?=$this->url('./res')?>"><?=__('Resource')?></a>
+            </div>
+            <div class="panel-body">
+                <?=$this->node('res-panel', ['limit' => 6])?>
+            </div>
         </div>
-        <div class="panel-body">
-            <?=$this->node('res-panel', ['limit' => 6])?>
-        </div>
-    </div>
+    <?php endif;?>
 
     <div class="panel">
         <div class="panel-header">

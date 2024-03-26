@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\Model\TagModel;
 use Module\Blog\Domain\Model\TagRelationshipModel;
 use Zodream\Database\Contracts\SqlBuilder;
@@ -41,7 +42,7 @@ class TagRepository extends TagBase {
         if (empty($ids)) {
             return [];
         }
-        return BlogRepository::getSimpleList($ids);
+        return BlogRepository::getSimpleList($ids, language: LocalizeRepository::browserLanguage());
     }
 
 

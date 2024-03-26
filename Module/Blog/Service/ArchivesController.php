@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service;
-
 
 use Module\Blog\Domain\Repositories\BlogRepository;
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Note\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Domain\Repositories\LocalizeRepository;
 use Exception;
 use Module\Note\Domain\Model\NoteModel;
 
@@ -104,7 +105,8 @@ final class NoteRepository {
     }
 
     public static function getNewList(int $limit) {
-        return NoteModel::with('user')->where('is_notice', 1)
+        return NoteModel::with('user')->where('is_notice',
+            LocalizeRepository::browserLanguageIsDefault() ? 2 : 1)
             ->orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
     }
 

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Weights;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\Middleware\BlogSeoMiddleware;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
@@ -22,7 +23,7 @@ class BlogPanel extends Node {
         $sort = (string)$this->attr('sort') ?: 'new';
         $cb = function () use ($category, $tag, $lang, $keywords, $sort, $limit) {
             $data = BlogRepository::getSimpleList($sort, $category, $keywords,
-                0, '', $lang,
+                0, LocalizeRepository::browserLanguage(), $lang,
                 $tag, $limit);
             return implode('', array_map(function (BlogModel $item) {
                 $url = BlogSeoMiddleware::encodeUrl($item->id, $item->language);
@@ -41,7 +42,7 @@ HTML;
             return $cb();
         }
         return $this->cache()->getOrSet(sprintf('%s-%s-%s-%s-%s-%s-%s-%s',
-            self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, app()->getLocale()),
+            self::KEY, $category, $tag, $lang, $keywords, $sort, $limit, LocalizeRepository::browserLanguage()),
             $cb, rand(600, 3600)
         );
     }
