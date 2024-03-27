@@ -46,12 +46,12 @@ class NavBar extends Node implements INode {
     public function render(string $type = ''): mixed {
         $data = $this->page->trigger(self::KEY);
         $js = <<<JS
-$('.nav-bar .nav-bar-toggle').on('click', function() {
-  $(this).closest('.nav-bar').toggleClass('open');
+$('.nav-horizontal-bar .nav-bar-toggle').on('click', function() {
+  $(this).closest('.nav-horizontal-bar').toggleClass('open');
 });
 JS;
         view()->registerJs($js, View::JQUERY_READY);
-        return sprintf('<div class="nav-bar"><span class="nav-bar-toggle"></span><ul>%s</ul>%s</div>', implode('', array_map(function ($item) {
+        return sprintf('<div class="nav-horizontal-bar"><span class="nav-bar-toggle"></span><ul>%s</ul>%s</div>', implode('', array_map(function ($item) {
             return sprintf('<li><a href="%s">%s</a></li>', url($item['url']), __($item['name']));
         }, $data)), $this->renderRight());
     }
@@ -92,7 +92,7 @@ HTML;
     <a href="javascript:;" title="{$download_tip}">{$download}
         <i class="fa fa-caret-down"></i>
     </a>
-    <div class="sub-nav">
+    <div class="nav-drop-bar">
         <ul>
             <li>
                 <a href="{$uwp_url}" target="_blank" title="{$uwp_tip}">Win10 UWP</a>
@@ -129,7 +129,7 @@ HTML;
         return <<<HTML
     <li>
         <a href="javascript:;">{$name}</a>
-        <div class="sub-nav">
+        <div class="nav-drop-bar">
             <ul>
                 <li>
                     <a href="{$bulletin_url}">{$bulletin_label}</a>

@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Layout;
-use Domain\AdminMenu;
+use Domain\MenuLoader;
 /** @var $this View */
 $this->registerCssFile([
         '@font-awesome.min.css',
@@ -23,4 +23,4 @@ $this->registerCssFile([
     ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./@admin/', false)), View::HTML_HEAD);
 ?>
 
-<?= Layout::mainIfPjax($this, AdminMenu::all(), $this->contents(), $this->title ?? 'ZoDream Admin',  $this->renderPart(dirname(__DIR__).'/navDrop.php')) ?>
+<?= Layout::mainIfPjax($this, MenuLoader::loadAdmin(), $this->contents(), $this->title ?? 'ZoDream Admin',  $this->renderPart(dirname(__DIR__).'/navDrop.php')) ?>

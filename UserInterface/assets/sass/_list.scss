@@ -11,3 +11,129 @@
         width: 100%;
     }
 }
+
+.column-item {
+    --#{$prefix}-column: #fff;
+    --#{$prefix}-column-text: #333;
+    --#{$prefix}-column-icon: #333;
+    --#{$prefix}-column-icon-text: #fff;
+    display: inline-block;
+    position: relative;
+    height: 6.25rem;
+    background-color: var(--#{$prefix}-column);
+    color: var(--#{$prefix}-column-text);
+    vertical-align: top;
+    width: 90%;
+    margin: 0.625rem 5%;
+    .icon {
+        position: absolute;
+        width: 6.25rem;
+        height: 6.25rem;
+        text-align: center;
+        background-color: var(--#{$prefix}-column-icon);
+        color: var(--#{$prefix}-column-icon-text);
+        padding-top: 1.25rem;
+        font-size: 2.5rem;
+    }
+    .content {
+        display: block;
+        margin-left: 6.25rem;
+        padding: 1.25rem 0.625rem;
+    }
+}
+
+.column-full-item {
+    --#{$prefix}-column: #17a2b8;
+    --#{$prefix}-column-text: #fff;
+    border-radius: .25rem;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    display: block;
+    margin-bottom: 1.25rem;
+    position: relative;
+    background-color: var(--#{$prefix}-column);
+    color: var(--#{$prefix}-column-text);
+    .overlay {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        border-radius: .25rem;
+        align-items: center;
+        background: rgba(255,255,255,.7);
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        z-index: 50;
+        i {
+            color: #343a40;
+            font-size: 3em;
+            animation: spin 1s linear infinite;
+        }
+    }
+    .inner {
+        padding: 0.625rem;
+        z-index: 5;
+    }
+    h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        padding: 0;
+        white-space: nowrap;
+    }
+    p {
+        font-size: 1rem;
+    }
+    .icon {
+        color: rgba(0,0,0,.15);
+        z-index: 0;
+        i {
+            font-size: 50px;
+            position: absolute;
+            right: 15px;
+            top: 20px;
+            transition: all .3s linear;
+        }
+    }
+    .column-footer {
+        background: rgba(0,0,0,.1);
+        color: rgba(255,255,255,.8);
+        display: block;
+        padding: 3px 0;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        z-index: 10;
+        &:hover {
+            background: rgba(0,0,0,.15);
+            color: var(--#{$prefix}-column-text);
+        }
+    }
+    a {
+        color: var(--#{$prefix}-column-text);
+    }
+    &:hover {
+        .icon {
+            i {
+                font-size: 3.4375rem;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (min-width: 48rem) {
+    .column-item {
+        width: 18.75rem;
+        margin: 0.625rem;
+    }
+}

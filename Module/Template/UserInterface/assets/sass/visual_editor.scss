@@ -1131,7 +1131,10 @@ $iconWidth: 1.5rem;
         }
         .multiple-control-body {
             display: none;
-            margin: 0 -.8rem;
+            // margin: 0 -.8rem;
+            border-radius: 0 0 $radius $radius;
+            border: 1px dotted var(--#{$prefix}-gray);
+            border-top: none;
         }
         &:hover {
             .multiple-control-header {
@@ -1301,6 +1304,37 @@ $iconWidth: 1.5rem;
         &.panel-body {
             margin: 0;
             max-height: none;
+        }
+    }
+
+    .flip-container {
+        .flip-back-body {
+            display: none;
+            border-radius: 0 0 $radius $radius;
+            border: 1px dotted var(--#{$prefix}-gray);
+        }
+        .flip-action-bar {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--#{$prefix}-gray);
+        }
+        .flip-back-btn,
+        .flip-save-btn {
+            display: inline-block;
+            width: 2rem;
+            line-height: 2rem;
+            text-align: center;
+            &:hover {
+                background-color: var(--#{$prefix}-gray);
+            }
+        }
+        &.flip-toggle {
+            .flip-front-body {
+                display: none;
+            }
+            .flip-back-body {
+                display: block;
+            }
         }
     }
     &.visual-mobile-editor {

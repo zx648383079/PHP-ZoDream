@@ -1,7 +1,7 @@
 <?php
 namespace Module\Note;
 
-use Domain\AdminMenu;
+use Domain\MenuLoader;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\Note\Domain\Migrations\CreateNoteTables;
@@ -18,7 +18,7 @@ class Module extends BaseModule {
 
     public function adminMenu(): array {
         return [
-            AdminMenu::build('便签管理', 'fa fa-comment', './@admin/note')
+            MenuLoader::build('便签管理', 'fa fa-comment', './@admin/note')
         ];
     }
 }

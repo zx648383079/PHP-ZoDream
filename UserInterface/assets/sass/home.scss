@@ -53,78 +53,6 @@ footer {
     }
 }
 
-.nav-bar {
-    li {
-        line-height: 3.75rem;
-        height: 3.75rem;
-        display: inline-block;
-        padding: 0 1.25rem;
-        position: relative;
-        &:hover {
-            border-bottom: 3px solid var(--#{$prefix}-primary-text);
-            .sub-nav {
-                display: block;
-            }
-        }
-    }
-    .search-icon {
-        cursor: pointer;
-        &:hover {
-           border-bottom: none; 
-        }
-    }
-    ul {
-        display: inline-block;
-        &.nav-right {
-            float: right;
-        }
-    }
-    .sub-nav {
-        display: none;
-        position: absolute;
-        background-color: var(--#{$prefix}-panel);
-        color: var(--#{$prefix}-body-text);
-        box-shadow: 0px 2px 8px 1px $shadow;
-        right: 0;
-        width: 100%;
-        margin-top: -5px;
-        z-index: 66;
-        min-width: 7rem;
-        a {
-            color: var(--#{$prefix}-body-text);
-            display: block;
-            &:hover {
-                background-color: var(--#{$prefix}-primary-hover);
-                color: var(--#{$prefix}-primary-text);
-                text-decoration: none;
-            }
-        }
-        ul {
-            display: block;
-        }
-        li {
-            display: block;
-            padding: 0;
-            text-align: center;
-            height: 2.5rem;
-            line-height: 2.5rem;
-            overflow: hidden;
-        }
-    }
-    .nav-bar-toggle {
-        display: none;
-    }
-    .new-tip {
-        display: inline-block;
-        width: 0.625rem;
-        height: 0.625rem;
-        background-color: yellow;
-        border-radius: 50%;
-        position: absolute;
-        top: 0.625rem;
-    }
-}
-
 
 .metro-grid {
     margin: 3.125rem 0;
@@ -728,50 +656,6 @@ footer {
             font-size: 20px;
             &.unknow {
                 display: none;
-            }
-        }
-    }
-    .nav-bar {
-        .nav-bar-toggle {
-            padding: 15px 1.25rem;
-            @include icon("\f0c9", 1.875rem);
-        }
-        ul {
-            display: none;
-            // background-color: $panel;
-            li {
-                display: block;
-                line-height: 2.5rem;
-                height: auto;
-            }
-            .sub-nav {
-                background-color: transparent;
-                box-shadow: inset 0px 5px 5px -5px #000,
-                            inset 0px -5px 5px -5px #000;
-                display: block;
-                position: static;
-                margin: 0;
-                margin: 0 -1.25rem;
-                width: auto;
-                a {
-                    color: #fff;
-                }
-            }
-            &.nav-right {
-                float: none;
-            }
-        }
-        .new-tip {
-            display: none;
-        }
-        &.open {
-            ul {
-                display: block;
-            }
-            .nav-bar-toggle {
-                &::before {
-                    content: "\f00d";
-                }
             }
         }
     }

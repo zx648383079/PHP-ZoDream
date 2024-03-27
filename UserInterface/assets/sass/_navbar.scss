@@ -1,124 +1,144 @@
-.navbar {
+.nav-vertical-bar {
+    --#{$prefix}-nav: var(--#{$prefix}-primary);
+    --#{$prefix}-nav-text: var(--#{$prefix}-primary-text);
     width: 18.75rem;
     height: 100%;
-    background-color: var(--#{$prefix}-primary);
-    color:  var(--#{$prefix}-primary-text);
+    background-color: var(--#{$prefix}-nav);
+    color:  var(--#{$prefix}-nav-text);
     position: relative;
-    .navicon {
-        width: 2rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--#{$prefix}-primary-text);
-        background-color: var(--#{$prefix}-primary);
-    }
     
-    ul {
-        margin: 0;
-        padding: 0;
-        li {
-            list-style: none;
-            line-height: 2.5rem;
-            text-align: center;
-            a {
-                text-decoration: none;
-                display: block;
-                width: 100%;
-                background: #333;
-                color: #fff;
-                position: relative;
-                box-sizing: border-box;
-                .fa {
-                    position: absolute;
-                    left: 0.625rem;
-                    top: .7rem;
-                    &.image-icon {
-                        width: 1.3125rem;
-                        height: 1.3125rem;
-                        background-size: 100%;
-                        border-radius: 50%;
-                        background-repeat: no-repeat;
-                        top: 0.3125rem;
-                        left: 0.5rem;
-                    }
-                }
-            }
-            ul {
-                display: none;
-                li {
-                    a {
-                        background: #888;
-                    }
-                }
-            }
-            &.active {
-                @include active();
-                >a {
-                    background: var(--#{$prefix}-primary);
-                }
-                ul {
-                    display: block;
-                }
-            }
-            &.expand {
-                ul {
-                    display: block;
-                }
-            }
-            &:hover {
-                >a {
-                    background: var(--#{$prefix}-primary);
-                }
-            }
-        }
-    }
-    >ul {
-        &.nav-bottom {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            max-height: 18.75rem;
-        }
-    }
+}
 
-    &.min {
-        width: 1.875rem;
-        >ul {
-            >li {
-                >a {
-                    span {
-                        display: none;
-                    }
-                    .fa {
-                        position: static;
-                    }
-                }
-                &.active {
-                    a {
-                        .fa {
-                            position: static;
-                        }
-                        span {
-                            display: none;
-                        }
-                    }
-                }
+.nav-horizontal-bar {
+    --#{$prefix}-nav: var(--#{$prefix}-primary);
+    --#{$prefix}-nav-text: var(--#{$prefix}-primary-text);
+    --#{$prefix}-nav-drop: var(--#{$prefix}-panel);
+    --#{$prefix}-nav-drop-text: var(--#{$prefix}-body-text);
+    --#{$prefix}-nav-hover: var(--#{$prefix}-primary-hover);
+    --#{$prefix}-nav-hover-text: var(--#{$prefix}-primary-text);
+    --#{$prefix}-nav-notify: yellow;
+    li {
+        display: block;
+        line-height: 2.5rem;
+        height: auto;
+        padding: 0 1.25rem;
+        position: relative;
+        &:hover {
+            border-bottom: 3px solid var(--#{$prefix}-nav-text);
+        }
+    }
+    .search-icon {
+        cursor: pointer;
+        &:hover {
+           border-bottom: none; 
+        }
+    }
+    ul {
+        display: none;
+        &.nav-right {
+            float: none;
+        }
+    }
+    .nav-drop-bar {
+        display: block;
+        position: static;
+        background-color: transparent;
+        margin: 0 -1.25rem;
+        width: auto;
+        background-color: var(--#{$prefix}-nav-drop);
+        color: var(--#{$prefix}-nav-drop-text);
+        right: 0;
+        box-shadow: inset 0px 5px 5px -5px var(--#{$prefix}-nav),
+                        inset 0px -5px 5px -5px var(--#{$prefix}-nav);
+        z-index: 66;
+        min-width: 7rem;
+        a {
+            color: var(--#{$prefix}-nav-drop-text);
+            display: block;
+            &:hover {
+                background-color: var(--#{$prefix}-nav-hover);
+                color: var(--#{$prefix}-nav-hover-text);
+                text-decoration: none;
             }
-            li {
-                &:hover {
-                    >a {
-                        span {
-                            width: 16.875rem;
-                            display: block;
-                            position: absolute;
-                            background: var(--#{$prefix}-primary);
-                            top: 0;
-                            left: 1.875rem;
-                        }
-                    }
+        }
+        ul {
+            display: block;
+        }
+        li {
+            display: block;
+            padding: 0;
+            text-align: center;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            overflow: hidden;
+        }
+    }
+    .nav-bar-toggle {
+        padding: 15px 1.25rem;
+        @include icon("\f0c9", 1.875rem);
+    }
+    .new-tip {
+        display: none;
+        width: 0.625rem;
+        height: 0.625rem;
+        background-color: var(--#{$prefix}-nav-notify);
+        border-radius: 50%;
+        position: absolute;
+        top: 0.625rem;
+    }
+    &::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+    &.open {
+        ul {
+            display: block;
+        }
+        .nav-bar-toggle {
+            &::before {
+                content: "\f00d";
+            }
+        }
+    }
+}
+
+@media (min-width: 48rem) {
+    .nav-horizontal-bar {
+        .nav-bar-toggle {
+            display: none;
+        }
+        .new-tip {
+            display: inline-block;
+        }
+        li {
+            line-height: 3.75rem;
+            height: 3.75rem;
+            display: inline-block;
+            &:hover {
+                .nav-drop-bar {
+                    display: block;
                 }
             }
         }
+        .nav-drop-bar {
+            display: none;
+            position: absolute;
+            box-shadow: 0px 2px 8px 1px $shadow;
+            width: 100%;
+            margin: -5px 0 0;
+            a {
+                color: var(--#{$prefix}-nav-drop-text);
+            }
+        }
+        ul {
+            display: inline-block;
+            // background-color: $panel;
+            &.nav-right {
+                float: right;
+            }
+        }
+        
+        
     }
 }

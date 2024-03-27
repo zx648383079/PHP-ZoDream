@@ -141,29 +141,6 @@ footer {
     }
 }
 
-.column-item {
-    width: 18.75rem;
-    display: inline-block;
-    position: relative;
-    height: 6.25rem;
-    background-color: var(--#{$prefix}-panel);
-    margin: 0.625rem;
-    vertical-align: top;
-    .icon {
-        position: absolute;
-        width: 6.25rem;
-        height: 6.25rem;
-        text-align: center;
-        background-color: var(--#{$prefix}-body-text);
-        color: var(--#{$prefix}-panel);
-        padding-top: 1.25rem;
-        font-size: 2.5rem;
-    }
-    .content {
-        margin-left: 6.25rem;
-        padding: 1.25rem 0.625rem;
-    }
-}
 .page-search-bar {
     padding: 0.625rem 0;
     .form-horizontal {

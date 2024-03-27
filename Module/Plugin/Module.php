@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Plugin;
 
-use Domain\AdminMenu;
+use Domain\MenuLoader;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\Plugin\Domain\Migrations\CreatePluginTables;
 
@@ -14,7 +14,7 @@ class Module extends BaseModule {
 
     public function adminMenu(): array {
         return [
-            AdminMenu::build('插件管理', 'fa fa-calendar', './@admin')
+            MenuLoader::build('插件管理', 'fa fa-calendar', './@admin')
         ];
     }
 }

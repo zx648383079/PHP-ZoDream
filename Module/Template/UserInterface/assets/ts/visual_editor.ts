@@ -34,6 +34,9 @@ const EditorMobileStyle = 'mobile-style';
 const EditorEventInputChange = 'value:change';
 const EditorEventInputReset = 'value:reset';
 const EditorEventTabToggle = 'tab:toggle';
+const EditorEventListEdit = 'list:edit';
+const EditorEventFlipToggle = 'flip:toggle';
+const EditorEventFlipFinish = 'flip:finish';
 
 type FailureCallbackFunc = (message: string, code?: number) => void;
 
@@ -55,7 +58,7 @@ interface EditorListeners {
     [EditorEventOperateWeight]: (isNew: boolean, target: JQuery<HTMLDivElement>, row: JQuery<HTMLDivElement>, replace?: JQuery<HTMLDivElement>) => void;
     [EditorEventGetWeightProperty]: (id: number, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventGetStyleSuccess]: (data: any) => void;
-    [EditorEventSaveWeightProperty]: (id: number, data: string, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventSaveWeightProperty]: (id: number, data: Object, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventDrag]: (ele: JQuery<HTMLDivElement>, isNew: boolean, p: IPoint) => void;
     [EditorEventDragStart]: (ele: JQuery<HTMLDivElement>) => void;
     [EditorEventOpenProperty]: (target: EditorWeight) => void;
@@ -768,8 +771,10 @@ class EditorPropertyPanel implements IEditorPanel {
         if (!this.target) {
             return;
         }
-        const data = formData(this.box.find('.form-table')) + '&style_id=' + EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id')) + '&id=' + this.target.id();
-        this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), data, data => {
+        const data: any = EditorHtmlHelper.formData(this.box.find('.form-table'));
+        data.style_id = EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id'));
+        data.id = this.target.id();
+        this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), data as Object, data => {
             this.target.html(data.html);
         });
     }
@@ -1182,7 +1187,7 @@ class EditorDialog {
             this.box = (target as any).dialog();
             this.bindEvent();
             this.box.on('done', () => {
-                this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), target.find('.dialog-body').serialize(), data => {
+                this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), EditorHtmlHelper.formData(target.find('.dialog-body')), data => {
                     that.editor.emit(EditorEventOpenProperty, that.target);
                     that.target.html(data.html);
                 });
@@ -2898,18 +2903,37 @@ class EditorHtmlHelper {
     }
 
     private static renderMultipleItem(input: IVisualInput[], value?: any) {
-        return `<div class="multiple-control-item">
-                <div class="multiple-control-header">
-                    <span>${value?.title}</span>
-                    <div class="control-action">
-                        <i class="fa fa-edit"></i>
-                        <i class="fa fa-trash"></i>
-                    </div>
+        let icon = '';
+        if (value && value.icon) {
+            icon = '<i class="item-icon fa '+ value.icon +'"></i>';
+        }
+        const title = value ? value.title : '';
+        return `<div class="list-item">
+        ${icon}
+            <span class="item-title">${title}</span>
+            <div class="item-action-icon">
+                <i class="fa fa-ellipsis-h"></i>
+                <div class="item-action-bar">
+                    <i class="fa fa-trash"></i>
+                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-arrow-up"></i>
+                    <i class="fa fa-arrow-down"></i>
                 </div>
-                <div class="multiple-control-body">
-                    ${this.renderForm(input, value)}
-                </div>
-            </div>`;
+            </div>
+        </div>`
+        // return `<div class="multiple-control-item">
+        //         <div class="multiple-control-header">
+        //             <span>${value?.title}</span>
+        //             <div class="control-action">
+        //                 <i class="fa fa-edit"></i>
+        //                 <i class="fa fa-trash"></i>
+        //             </div>
+        //         </div>
+        //         <div class="multiple-control-body">
+        //         ${this.renderForm(input, value)}
+        //         </div>
+        //     </div>`;
+         
     }
     
     private static renderTreeItem(input: IVisualInput[], item?: any) {
@@ -3006,10 +3030,62 @@ class EditorHtmlHelper {
         return form.map(this.renderInput.bind(this)).join('');
     }
 
+    public static formData(target: JQuery<HTMLElement>): Object;
+    public static formData(target: JQuery<HTMLElement>, isObject: false): string;
+    public static formData(target: JQuery<HTMLElement>, isObject: true): Object;
+    public static formData(target: JQuery<HTMLElement>, prefix: string): Object;
+    public static formData(target: JQuery<HTMLElement>, isObject: string|boolean = true): any {
+        const that = this;
+        const prefix = typeof isObject === 'string' ? isObject : '';
+        isObject = typeof isObject === 'string' || isObject;
+        const data: any = isObject ? {} : [];
+        target.find('input,textarea,select,.multiple-container,.tree-container').each(function(this: HTMLInputElement) {
+            const $this = $(this);
+            if ($this.hasClass('multiple-container') || $this.hasClass('.tree-container')) {
+                const input = that.get<IVisualInput>($this.data('cache'));
+                if (isObject) {
+                    data[input.name] = input.items;
+                    return;
+                }
+                data.push(encodeURIComponent(input.name) + '=' +
+                    encodeURIComponent( JSON.stringify(input.items) ));
+                return;
+            }
+            if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
+                return;
+            }
+            if (!this.name) {
+                return;
+            }
+            const name = prefix && this.name.indexOf(prefix) === 0 ? this.name.substring(prefix.length) : this.name;
+            if (isObject) {
+                data[name] = $(this).val();
+                return;
+            }
+            data.push(encodeURIComponent(name) + '=' +
+                    encodeURIComponent( $(this).val().toString() ));
+        });
+        return isObject ? data : data.join('&');
+    }
+
     private static renderForm(form: IVisualInput[], data?: any): string {
         return this.render(form.map(item => {
-            return {...item, value: data ? data[item.name] : undefined};
+            return {...item, value: this.inputValue(data, item.name)};
         }));
+    }
+
+    private static inputValue(data: any, key: string): any {
+        if (typeof data !== 'object' || !key) {
+            return undefined;
+        }
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+            return data[key];
+        }
+        if (key.indexOf('item_') !== 0) {
+            return undefined;
+        }
+        key = key.substring(5);
+        return Object.prototype.hasOwnProperty.call(data, key) ? data[key] : undefined;
     }
 
     private static renderInput(input: IVisualInput): string {
@@ -3149,18 +3225,124 @@ class EditorHtmlHelper {
             <i class="fa fa-plus"></i>
         </div>`);
         return this.input(id, input.label, 
-            `<div class="multiple-container" data-cache="${this.set(input)}">${items.join('')}</div>`
+            this.flipPanel(`<div class="multiple-container" data-cache="${this.set(input)}">${items.join('')}</div>`)
         , 'control-line-group');
     }
 
     private static treeExecute(input: IVisualInput, id: string) {
         return this.input(id, input.label, 
-            `<div class="tree-container" data-cache="${this.set(input)}">${this.treeInput(input.input, input.items)}</div>`
+            this.flipPanel(`<div class="tree-container" data-cache="${this.set(input)}">${this.treeInput(input.input, input.items)}</div>`)
         , 'control-line-group');
+    }
+
+    private static flipPanel(body: string) {
+        return `<div class="flip-container"><div class="flip-front-body">${body}</div><div class="flip-back-body">
+            <div class="flip-action-bar">
+                <i class="fa fa-arrow-left flip-back-btn"></i>
+                <i class="fa fa-save flip-save-btn"></i>
+            </div>
+            <div class="flip-body"></div>
+        </div></div>`;
     }
 
     private static htmlExecute(input: IVisualInput, id: string) {
         return this.input(id, input.label, `<textarea class="form-control" id="${id}" name="${input.name}">${input.value}</textarea>`, 'control-line-group');
+    }
+
+    private static getData(data: any[], index: number[]): any {
+        let i = index.length - 1;
+        while (i >= 0) {
+            const j = index[i];
+            if (j >= data.length) {
+                return undefined;
+            }
+            const res = data[j];
+            if (i === 0) {
+                return res;
+            }
+            data = res.children;
+            i --;
+        }
+        return undefined;
+    }
+
+    private static setData(data: any[], index: number[], val: any) {
+        let i = index.length - 1;
+        while (i >= 0) {
+            const j = index[i];
+            if (i === 0) {
+                if (j >= data.length) {
+                    data.push({...val});
+                } else {
+                    data[j] = {...val};
+                }
+            }
+            if (!data[j].children) {
+                data[j].children = [];
+            }
+            data = data[j].children;
+            i --;
+        }
+    }
+
+    private static moveItem(data: any[], source: number[], dist: number[]) {
+        let item: any;
+        let temp = data;
+        let i = source.length - 1;
+        while (i >= 0) {
+            const j = source[i];
+            if (i === 0) {
+                if (j < temp.length) {
+                    item = temp[j];
+                    temp.splice(j, 1);
+                }
+                break;
+            }
+            if (!temp[j].children) {
+                temp[j].children = [];
+            }
+            temp = temp[j].children;
+            i --;
+        }
+        if (!item) {
+            return;
+        }
+        temp = data;
+        i = dist.length - 1;
+        while (i >= 0) {
+            const j = dist[i];
+            if (i === 0) {
+                if (j < temp.length) {
+                    temp.splice(j, 0, item);
+                } else {
+                    temp.push(item);
+                }
+                break;
+            }
+            if (!temp[j].children) {
+                temp[j].children = [];
+            }
+            temp = temp[j].children;
+            i --;
+        }
+    }
+
+    private static removeItem(data: any[], index: number[]) {
+        let i = index.length - 1;
+        while (i >= 0) {
+            const j = index[i];
+            if (i === 0) {
+                if (j < data.length) {
+                    data.splice(j, 1);
+                }
+                return;
+            }
+            if (!data[j].children) {
+                data[j].children = [];
+            }
+            data = data[j].children;
+            i --;
+        }
     }
 
     public static bindInputEvent(box: JQuery<HTMLDivElement>) {
@@ -3190,8 +3372,10 @@ class EditorHtmlHelper {
         .on('click', '.control-popup-target', function() {
             const $this = $(this);
             const popup = $this.next('.control-popup');
-            popup// .toggleClass('popup-top', $this.offset().top + $this.height() > window.innerHeight - popup.height())
-            .toggleClass('open');
+            if ($this.closest('.dialog-box').length > 0) {
+                popup.toggleClass('popup-top', $this.offset().top + $this.height() > window.innerHeight - popup.height())
+            }
+            popup.toggleClass('open');
         })
         .on(EditorEventInputChange, '.control-popup-target', function(e, val) {
             e.stopPropagation();
@@ -3400,38 +3584,91 @@ class EditorHtmlHelper {
             $this.addClass('hidden');
         })
         // 多项添加
-        .on('click', '.multiple-container .multiple-add-btn', function() {
-            const $this = $(this);
-            const box = $this.closest('.multiple-container');
-            $this.before(that.renderMultipleItem(that.get<IVisualInput>(box.data('cache')).input));
-        }).on('click', '.multiple-container .multiple-control-header', function() {
+        .on('click', '.multiple-container .multiple-control-header', function() {
             $(this).closest('.multiple-control-item').toggleClass('open').siblings().removeClass('open');
         })
-        // tree 
-        .on('click', '.tree-container .tree-add-btn', function() {
+        // flip 
+        .on('click', '.flip-container .flip-back-btn', function() {
+            $(this).closest('.flip-container').trigger(EditorEventFlipFinish, false);
+        })
+        .on('click', '.flip-container .flip-save-btn', function() {
+            $(this).closest('.flip-container').trigger(EditorEventFlipFinish, true);
+        })
+        .on(EditorEventFlipToggle, '.flip-container', function(_, data: {body: string, callback: (data: any) => void}) {
             const $this = $(this);
-            const box = $this.closest('.tree-container');
-            $this.before(that.renderTreeItem(that.get<IVisualInput>(box.data('cache')).input));
+            $this.addClass('flip-toggle');
+            $this.find('.flip-body').html(data.body);
+            $this.one(EditorEventFlipFinish, (_, res: boolean) => {
+                $this.removeClass('flip-toggle');
+                if (res) {
+                    data.callback(that.formData($this.find('.flip-body'), 'item_'));
+                }
+            });
+        })
+        .on(EditorEventListEdit, '.tree-container,.multiple-container', function(_, target: HTMLElement|JQuery<HTMLElement>) {
+            if (target instanceof HTMLElement) {
+                target = $(target);
+            }
+            const isTree = target.hasClass('.tree-item');
+            const map = isTree ? [target.index(), ...$(this).parents('.tree-item').map((_, j) => $(j).index()).toArray()] : [target.index()];
+            const formData = that.get<IVisualInput>($(this).data('cache'));
+            target.closest('.flip-container').trigger(EditorEventFlipToggle, {
+                body: that.renderForm(formData.input, that.getData(formData.items, map)),
+                callback: data => {
+                    target.replaceWith(isTree ? that.renderTreeItem(formData.input, data) : that.renderMultipleItem(formData.input, data));
+                    that.setData(formData.items, map, data);
+                    target.closest('.control-line-group').trigger(EditorEventInputChange, formData.items);
+                }
+            });
+        })
+        // tree 
+        .on('click', '.tree-container .tree-add-btn,.multiple-container .multiple-add-btn', function() {
+            const $this = $(this);
+            const box = $this.closest('.tree-container,.multiple-container');
+            const formData = that.get<IVisualInput>(box.data('cache')).input;
+            const target = $(box.hasClass('tree-container') ? that.renderTreeItem(formData) : that.renderMultipleItem(formData));
+            $this.before(target);
+            box.trigger(EditorEventListEdit, target);
         }).on('click', '.tree-container .item-body', function() {
             const $this = $(this);
             
-        }).on('click', '.tree-container .item-action-bar .fa-arrow-up', function(e) {
+        }).on('click', '.tree-container .item-action-bar .fa-arrow-up,.multiple-container .item-action-bar .fa-arrow-up', function(e) {
             e.stopPropagation();
-            const item = $(this).closest('.tree-item');
-            const prev = item.prev();
+            const $this = $(this);
+            const box = $this.closest('.tree-container,.multiple-container');
+            const target = $this.closest('.tree-item,.list-item');
+            const prev = target.prev();
             if (prev.length === 0) {
                 return;
             }
-            prev.before(item);
-        }).on('click', '.tree-container .item-action-bar .fa-arrow-down', function(e) {
+            const index = target.index();
+            const map = box.hasClass('tree-container') ? $(this).parents('.tree-item').map((_, j) => $(j).index()).toArray() : [];
+            const data = that.get<IVisualInput>(box.data('cache')).items;
+            that.moveItem(data, [index, ...map], [index - 1, ...map]);
+            prev.before(target);
+            box.closest('.control-line-group').trigger(EditorEventInputChange, data);
+        }).on('click', '.tree-container .item-action-bar .fa-arrow-down,.multiple-container .item-action-bar .fa-arrow-down', function(e) {
             e.stopPropagation();
-            const item = $(this).closest('.tree-item');
-            const next = item.next();
+            const $this = $(this);
+            const box = $this.closest('.tree-container,.multiple-container');
+            const target = $this.closest('.tree-item,.list-item');
+            const next = target.next();
             if (next.length === 0) {
                 return;
             }
-            next.after(item);
-        }).on('click', '.tree-container .item-action-bar .fa-plus', function(e) {
+            const index = target.index();
+            const map = box.hasClass('tree-container') ? $(this).parents('.tree-item').map((_, j) => $(j).index()).toArray() : [];
+            const data = that.get<IVisualInput>(box.data('cache')).items;
+            that.moveItem(data, [index, ...map], [index + 1, ...map]);
+            next.after(target);
+            box.closest('.control-line-group').trigger(EditorEventInputChange, data);
+        }).on('click', '.tree-container .item-action-bar .fa-edit,.multiple-container .item-action-bar .fa-edit', function(e) {
+            e.stopPropagation();
+            const target = $(this).closest('.tree-item,.list-item');
+            const box = target.closest('.tree-container,.multiple-container');
+            box.trigger(EditorEventListEdit, target);
+        })
+        .on('click', '.tree-container .item-action-bar .fa-plus', function(e) {
             e.stopPropagation();
             const item = $(this).closest('.item-body');
             let next = item.next('.item-children');
@@ -3440,10 +3677,20 @@ class EditorHtmlHelper {
                 item.after(next);
                 item.prepend('<div class="item-open-icon"><i class="fa fa-chevron-right"></i></div>');
             }
-            next.append(that.renderTreeItem(that.get<IVisualInput>(item.closest('.tree-container').data('cache')).input));
-        }).on('click', '.tree-container .item-action-bar .fa-trash', function(e) {
+            const formData = that.get<IVisualInput>(item.closest('.tree-container').data('cache')).input;
+            const target = $(that.renderTreeItem(formData));
+            next.append(target);
+            box.trigger(EditorEventListEdit, target);
+        }).on('click', '.tree-container .item-action-bar .fa-trash,.multiple-container .item-action-bar .fa-trash', function(e) {
             e.stopPropagation();
-            $(this).closest('.tree-item').remove();
+            const $this = $(this);
+            const box = $this.closest('.tree-container,.multiple-container');
+            const target = $this.closest('.tree-item,.list-item');
+            const map = box.hasClass('tree-container') ? [target.index(), ...$(this).parents('.tree-item').map((_, j) => $(j).index()).toArray()] : [target.index()];
+            target.remove();
+            const data = that.get<IVisualInput>(box.data('cache')).items;
+            that.removeItem(data, map);
+            box.closest('.control-line-group').trigger(EditorEventInputChange, data);
         }).on('click', '.tree-container .item-open-icon', function(e) {
             e.stopPropagation();
             $(this).closest('.tree-item').toggleClass('open');

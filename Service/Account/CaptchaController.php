@@ -16,8 +16,8 @@ class CaptchaController extends Controller {
 			'*' => '*'
 		);
 	}
-	
-	function indexAction(Request $request, Output $output) {
+
+    public function indexAction(Request $request, Output $output) {
 		$level = intval($request->get('level'));
 		if (empty($level)) {
 			$level = session('level');
@@ -32,16 +32,16 @@ class CaptchaController extends Controller {
 		return $output->image($captcha->generate($level));
 	}
 
-	function slideCheckAction() {
+    public function slideCheckAction() {
 	    $x = floor(request()->get('x'));
 	    $c = session('slider_x');
 	    if (abs($x - $c) < 5) {
-	        return $this->renderData();
+	        return $this->renderData(true);
         }
         return $this->renderFailure($c);
     }
 
-	function slideAction() {
+    public function slideAction() {
         $img = new SlideCaptcha();
         $img->instance()->open(public_path('assets/images/banner.jpg'));
         $img->instance()->scale(300, 130);
