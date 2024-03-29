@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
 use Module\Template\Domain\Model\SiteWeightModel;
+use Zodream\Helpers\Str;
 use Zodream\Html\Input;
 
 final class VisualInput {
@@ -63,55 +64,67 @@ final class VisualInput {
     }
 
     public static function style(SiteWeightModel $model): array {
+        $style = $model->setting('style', []);
+        if (!is_array($style)) {
+            $style = [];
+        }
+        $title = $style['title'] ?? [];
+        $content = $style['content'] ?? [];
         return [
             self::group('整体', [
-                self::bound('margin', '外边距', ''),
-                self::position('position', '布局', ''),
-                self::border('border', '边框', []),
-                self::color('color', '前景色', ''),
-                self::background('background', '背景色', ''),
+                self::bound('style[margin]', '外边距', $style['margin'] ?? null),
+                self::position('style[position]', '布局', $style['position'] ?? null),
+                self::border('style[border]', '边框', $style['border'] ?? null),
+                self::color('style[color]', '前景色', $style['color'] ?? null),
+                self::background('style[background]', '背景色', $style['background'] ?? null),
             ]),
             self::group('标题', [
-                self::switch('visibility', '可见', ''),
-                self::bound('padding', '内边距', ''),
-                self::border('border', '边框', []),
-                self::background('background', '背景色', ''),
-                self::textAlign('text-align', '对齐', ''),
-                self::color('color', '前景色', ''),
-                self::size('font-size', '字体大小', 16),
-                self::range('font-weight', '字体粗细', 500, 100, 900, 100),
-                self::select('font-style', '字体样式', [
+                self::switch('style[title][visibility]', '可见',
+                    array_key_exists('visibility', $title) ?
+                    intval($title['visibility']) : 1),
+                self::bound('style[title][padding]', '内边距', $title['padding'] ?? null),
+                self::border('style[title][border]', '边框', $title['border'] ?? null),
+                self::background('style[title][background]', '背景色', $title['background'] ?? null),
+                self::textAlign('style[title][text-align]', '对齐', $title['text-align'] ?? null),
+                self::color('style[title][color]', '前景色', $title['color'] ?? null),
+                self::size('style[title][font-size]', '字体大小', $title['font-size']?? 16),
+                self::range('style[title][font-weight]', '字体粗细',
+                    $title['font-weight'] ?? 500,
+                    100, 900, 100),
+                self::select('style[title][font-style]', '字体样式', [
                     self::selectOption('normal'),
                     self::selectOption('italic'),
                     self::selectOption('oblique'),
-                ], ''),
-                self::select('font-family', '字体', [
+                ], $title['font-style'] ?? null),
+                self::select('style[title][font-family]', '字体', [
                     self::selectOption('默认'),
                     self::selectOption('微软雅黑'),
                     self::selectOption('黑体'),
                     self::selectOption('宋体'),
-                ], ''),
+                ], $title['font-family'] ?? null),
             ]),
             self::group('内容', [
-                self::switch('visibility', '可见', ''),
-                self::bound('padding', '内边距', ''),
-                self::border('border', '边框', []),
-                self::background('background', '背景色', ''),
-                self::textAlign('text-align', '对齐', ''),
-                self::color('color', '前景色', ''),
-                self::size('font-size', '字体大小', 16),
-                self::range('font-weight', '字体粗细', 500, 100, 900, 100),
-                self::select('font-style', '字体样式', [
+                self::switch('style[content][visibility]', '可见', array_key_exists('visibility', $content) ?
+                    intval($content['visibility']) : 1),
+                self::bound('style[content][padding]', '内边距', $content['padding'] ?? null),
+                self::border('style[content][border]', '边框', $content['border'] ?? null),
+                self::background('style[content][background]', '背景色', $content['background'] ?? null),
+                self::textAlign('style[content][text-align]', '对齐', $content['text-align'] ?? null),
+                self::color('style[content][color]', '前景色', $content['color'] ?? null),
+                self::size('style[content][font-size]', '字体大小', $content['font-size'] ?? 16),
+                self::range('style[content][font-weight]', '字体粗细', $content['font-weight'] ?? 500,
+                    100, 900, 100),
+                self::select('style[content][font-style]', '字体样式', [
                     self::selectOption('normal'),
                     self::selectOption('italic'),
                     self::selectOption('oblique'),
-                ], ''),
-                self::select('font-family', '字体', [
+                ], $content['font-style'] ?? null),
+                self::select('style[content][font-family]', '字体', [
                     self::selectOption('默认'),
                     self::selectOption('微软雅黑'),
                     self::selectOption('黑体'),
                     self::selectOption('宋体'),
-                ], ''),
+                ], $content['font-family'] ?? null),
             ]),
         ];
     }

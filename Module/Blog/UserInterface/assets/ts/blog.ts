@@ -189,43 +189,59 @@ function bindLoadImg() {
 }
 
 function bindCopy() {
-    let trigger: JQuery;
-    const btn = document.createElement('div');
-    btn.classList.add('copy-btn');
-    btn.innerText = '复制';
-    document.body.append(btn);
-    const copyBtn = $(btn);
-    $('#content code').on('click mouseenter', function () {
-        const $this = $(this);
-        if ($this.css('display') !== 'block') {
-            return;
-        }
-        const offset = $this.offset();
-        copyBtn.css({
-            right: $(window).width() - offset.left - $this.width(),
-            top: offset.top,
-            display: 'block',
-        });
-        trigger = $this;
+    $(document).on('click', '.code-container .code-header *[data-action=copy]', function(e) {
+        e.preventDefault();
+        const target = $(this).closest('.code-container').find('code');
+        navigator.clipboard.writeText(target.text()).then(
+            () => {
+                Dialog.tip(`Copy successfully`);
+            },
+            () => {
+                Dialog.tip(`Copy failed`);
+            }
+        );
+    }).on('click', '.code-container .code-header *[data-action=full]', function(e) {
+        e.preventDefault();
+        $(this).closest('.code-container').toggleClass('code-full-screen');
     });
-    const resetCopy = () => {
-        setTimeout(() => {
-            copyBtn.text('复制');
-        }, 2000);
-    };
-    const clipboard = new ClipboardJS(btn, {
-        text: function () {
-          return trigger ? trigger.text() : '';
-        },
-    });
-    clipboard.on('success', function() {
-        copyBtn.text('复制成功');
-        resetCopy();
-    });
-    clipboard.on('error', function() {
-        copyBtn.text('复制失败');
-        resetCopy();
-    });
+
+    //let trigger: JQuery;
+    // const btn = document.createElement('div');
+    // btn.classList.add('copy-btn');
+    // btn.innerText = '复制';
+    // document.body.append(btn);
+    // const copyBtn = $(btn);
+    // $('#content code').on('click mouseenter', function () {
+    //     const $this = $(this);
+    //     if ($this.css('display') !== 'block') {
+    //         return;
+    //     }
+    //     const offset = $this.offset();
+    //     copyBtn.css({
+    //         right: $(window).width() - offset.left - $this.width(),
+    //         top: offset.top,
+    //         display: 'block',
+    //     });
+    //     trigger = $this;
+    // });
+    // const resetCopy = () => {
+    //     setTimeout(() => {
+    //         copyBtn.text('复制');
+    //     }, 2000);
+    // };
+    // const clipboard = new ClipboardJS(btn, {
+    //     text: function () {
+    //       return trigger ? trigger.text() : '';
+    //     },
+    // });
+    // clipboard.on('success', function() {
+    //     copyBtn.text('复制成功');
+    //     resetCopy();
+    // });
+    // clipboard.on('error', function() {
+    //     copyBtn.text('复制失败');
+    //     resetCopy();
+    // });
 }
 
 function bindBlogComment(id: number, langs = {}) {

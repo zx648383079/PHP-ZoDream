@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\Template\Domain\VisualEditor;
 
 use Module\Template\Domain\Model\SitePageModel;
+use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 
 class VisualHelper {
@@ -20,7 +21,7 @@ class VisualHelper {
         }
         if ($item['type'] === 'target') {
             return [
-                'uri' => sprintf('javascript:lazyWeight("%d", "%s");',
+                'uri' => sprintf('javascript:lazyWeight(\'%d\', \'%s\');',
                     static::weightId($item['target'], true), $item['uri']),
                 'target' => '',
             ];
@@ -61,6 +62,9 @@ class VisualHelper {
      * @return array
      */
     public static function formatUrlForm(array $data): array {
+        if (!Arr::isAssoc($data)) {
+            return $data;
+        }
         $items = [];
         foreach ($data['title'] as $i => $title) {
             if (empty($title)) {

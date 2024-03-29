@@ -25,12 +25,11 @@ class CopyrightWeight extends BaseWeight {
         return $this->show('view', compact('company', 'icp_beian', 'is_beian', 'is_beian_code'));
     }
 
-    public function renderForm(SiteWeightModel $model): array
-    {
+    public function renderForm(SiteWeightModel $model): array {
         $args = explode("\n", $model->content);
         return [
             VisualInput::text('company', '版权人', $model->title, ),
-            VisualInput::text('icp_beian', 'ICP备案号', $args[0]??'', ).
+            VisualInput::text('icp_beian', 'ICP备案号', $args[0]??'', ),
             VisualInput::text('is_beian', '网安备案号', $args[1]??'')
         ];
     }

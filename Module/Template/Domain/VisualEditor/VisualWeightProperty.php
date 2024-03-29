@@ -34,7 +34,7 @@ class VisualWeightProperty {
                 continue;
             }
             if ($key === 'visibility') {
-                if ($val == 1) {
+                if (intval($val) === 0) {
                     return 'display: none;';
                 }
                 continue;
@@ -44,7 +44,6 @@ class VisualWeightProperty {
                 $items[] = $this->$method($val);
                 continue;
             }
-
             if (is_array($val)) {
                 $val = implode(' ', $val);
             }
@@ -118,15 +117,21 @@ class VisualWeightProperty {
         return $this->get($name);
     }
 
-    private function formatPixel($val): string {
-        return is_numeric($val) ? $val. 'px' : $val;
+    private function formatPixel(mixed $val): string {
+        if (!is_array($val)) {
+            return is_numeric($val) && !empty($val) ? $val. 'px' : $val;
+        }
+        if (isset($val['value'])) {
+            return $val['value'] > 0 ? $val['value'].$val['unit'] : '0';
+        }
+        return current($val) > 0 ? implode('', $val) : '0';
     }
 
     private function formatCss($key, $val): string {
         return sprintf('%s: %s;', $key, $val);
     }
 
-    private function arrEmptyCount(array $data) {
+    private function arrEmptyCount(array $data): int {
         $i = 0;
         foreach ($data as $item) {
             if (empty($item)) {
@@ -136,20 +141,19 @@ class VisualWeightProperty {
         return $i;
     }
 
-    private function formatStyleMargin($val, $key = 'margin') {
+    private function formatStyleMargin($val, string $key = 'margin') {
         if (!is_array($val)) {
             return $val === '' ? '' : $this->formatCss($key, $this->formatPixel($val));
         }
         $val = array_map(function ($item) {
             return $item === '' ? $item : $this->formatPixel($item);
         }, $val);
-
-        if (count($val) == 4 && $this->arrEmptyCount($val) === 0) {
+        if (count($val) === 4 && $this->arrEmptyCount($val) === 0) {
             return $this->formatCss($key, implode(' ', $val));
         }
         $items = [];
         foreach ($val as $i => $v) {
-            if ($v === '') {
+            if (empty($v)) {
                 continue;
             }
             $items[] = sprintf('%s-%s: %s;', $key, $this->sideMap[$i], $this->formatPixel($v));
@@ -161,12 +165,15 @@ class VisualWeightProperty {
         return $this->formatStyleMargin($val, 'padding');
     }
 
-    private function formatStyleTextAlign($val) {
+    private function formatStyleTextAlign(mixed $val): string {
         $maps = ['left', 'center', 'right'];
-        if ($val < 1) {
+        if (is_numeric($val)) {
+            $val = $maps[$val] ?? '';
+        }
+        if (empty($val) || !in_array($val, $maps) || $val === 'left') {
             return '';
         }
-        return $this->formatCss('text-align', $maps[$val]);
+        return $this->formatCss('text-align', $val);
     }
 
     private function formatStylePosition($val) {
@@ -187,8 +194,21 @@ class VisualWeightProperty {
         }
         return implode('', $items);
     }
+    private function formatStyleFontSize($val): string {
+        $val = $this->formatPixel($val);
+        if (empty($val)) {
+            return '';
+        }
+        return $this->formatCss('font-size', $val);
+    }
+    private function formatStyleFontFamily($val): string {
+        if (empty($val) || $val === '默认') {
+            return '';
+        }
+        return $this->formatCss('font-family', $val);
+    }
 
-    private function formatStyleBorder($val) {
+    private function formatStyleBorder($val): string {
         if (empty($val['side']) || empty($val['value'][0])) {
             return '';
         }
@@ -215,7 +235,16 @@ class VisualWeightProperty {
         }, $val)));
     }
 
-    private function formatStyleBackground($val) {
+    private function formatStyleBackground($val): string {
+        if (array_key_exists('color', $val)) {
+            if (!empty($val['image'])) {
+                return $this->formatCss('background-image', sprintf('url(%s)', url()->asset($val['image'])));
+            }
+            if (!empty($val['color'])) {
+                return $this->formatCss('background-color', $val['color']);
+            }
+            return '';
+        }
         if ($val['type'] < 1) {
             return '';
         }
@@ -226,6 +255,9 @@ class VisualWeightProperty {
     }
 
     private function formatStyleColor($val) {
+        if (!is_array($val)) {
+            return !empty($val) ? $this->formatCss('color', $val) : '';
+        }
         if (!isset($val['type']) || $val['type'] < 1) {
             return '';
         }
@@ -236,8 +268,8 @@ class VisualWeightProperty {
         $instance = new static();
         $model->set('title', $model->title)
             ->set('content', $model->content);
-        if ($model->theme_style_id > 0) {
-            $style = ThemeStyleModel::find($model->theme_style_id);
+        if ($model->style_id > 0) {
+            $style = ThemeStyleModel::find($model->style_id);
             $path = (string)VisualFactory::templateFolder($style->path);
             if (file_exists($path)) {
                 include_once $path;

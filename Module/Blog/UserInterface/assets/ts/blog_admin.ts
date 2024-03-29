@@ -17,10 +17,10 @@ function bindEdit(configs: any) {
     $('select[name=type]').on('change', function () { 
         $('.if_type_1').toggle($(this).val() == 1);
     }).trigger('change');
-    $("#edit_type").on('change', function() {
+    $("select[name=edit_type]").on('change', function() {
         editor.toggleEditor($(this).val() == 1);
     }).trigger('change');
-    $('#open_type').on('change', function() {
+    $('select[name=open_type]').on('change', function() {
         let val = $(this).val() as number;
         let ruleInput = $('#open_rule');
         let ruleBox = ruleInput.closest('.input-group');

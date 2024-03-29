@@ -51,7 +51,7 @@ $(function() {
                 ul.html(html).show();
             });
         };
-    $('.nav-bar .search-icon').on('click',function() {
+    $('.nav-horizontal-bar .search-icon').on('click',function() {
         searchDialog.show();
         searchDialog.find('form input').trigger('focus');
     });

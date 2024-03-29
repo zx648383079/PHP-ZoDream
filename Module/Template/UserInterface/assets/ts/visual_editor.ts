@@ -771,7 +771,7 @@ class EditorPropertyPanel implements IEditorPanel {
         if (!this.target) {
             return;
         }
-        const data: any = EditorHtmlHelper.formData(this.box.find('.form-table'));
+        const data: any = EditorHtmlHelper.formData(this.box);
         data.style_id = EditorHelper.parseNumber(this.box.find('.style-item.active').attr('data-id'));
         data.id = this.target.id();
         this.editor.emit(EditorEventSaveWeightProperty, this.target.id(), data as Object, data => {
@@ -2393,14 +2393,14 @@ class EditorHtmlHelper {
 
     public static switch(id: string, name: string, val: string|number|boolean, onLabel = '开启', offLabel = '关闭') {
         val = EditorHelper.parseNumber(val);
-        return this.join('<div id="', id,'" class="switch-input" data-on="',onLabel,'" data-off="', offLabel ,'"><span class="switch-control"></span><span class="switch-label">', val > 0 ? onLabel : offLabel ,'</span><input type="hidden" name="', name,'" value="', val, '"/></div>');
+        return this.join('<div id="', id,'" class="switch-input', val > 0 ? ' checked' : '' ,'" data-on="',onLabel,'" data-off="', offLabel ,'"><span class="switch-control"></span><span class="switch-label">', val > 0 ? onLabel : offLabel ,'</span><input type="hidden" name="', name,'" value="', val, '"/></div>');
     }
 
     private static radioInput(id: string, name: string, items: IItem[], selected?: string| number) {
         return this.join('<div class="control-row">', ...items.map((item, j) => {
             const index = [id, j].join('_');
             const chk = item.value == selected ? ' checked' : '';
-            return `<span class="radio-control-item" data-value="${item.value}">${item.name}</span>`;
+            return `<span class="radio-control-item${chk}" data-value="${item.value}">${item.name}</span>`;
         }), `<input type="hidden" name="${name}" value="${this.value(selected)}">`, '</div>');
     }
 
@@ -2559,7 +2559,6 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
-        <input type="hidden" name="${name}" value="${this.value(val)}">
     </div>
     <div class="control-popup" data-popup="background">
         <div class="control-inline-group">
@@ -2608,7 +2607,6 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
-        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup" data-popup="shadow">
         <div class="control-row">
@@ -2628,7 +2626,7 @@ class EditorHtmlHelper {
 
     private static selectOption(items: IItem[], selected?: any) {
         return items.map(item => {
-            const sel = selected === item.value ? ' selected' : '';
+            const sel = selected == item.value ? ' selected' : '';
             return `<option value="${item.value}"${sel}>${item.name}</option>`;
         }).join('');
     }
@@ -2644,7 +2642,6 @@ class EditorHtmlHelper {
         <div class="color-icon">
             <i class="fa fa-edit"></i>
         </div>
-        <input type="hidden" name="${name}" value="${val}">
     </div>
     <div class="control-popup" data-popup="border">
         <div class="control-line-group">
@@ -2863,6 +2860,10 @@ class EditorHtmlHelper {
     }
 
     private static sizeInput(label: string|undefined, id?: string, name?: string, val?: any, unit: string = 'px') {
+        if (typeof val === 'object' && val.value) {
+            unit = val.unit;
+            val = val.value;
+        }
         val = toFloat(val);
         const input = `<input type="number" id="${id}" name="${name}[value]" value="${val}">`;
         const core = label ? `<div class="control-body">
@@ -3163,7 +3164,7 @@ class EditorHtmlHelper {
     }
 
     private static positionExecute(input: IVisualInput, id: string) {
-        const data = input.value; 
+        const data = input.value ?? []; 
         const typeItems = [
             {name: '无', value: 'static'},
             {name: '相对定位', value: 'relative'},
@@ -3597,12 +3598,14 @@ class EditorHtmlHelper {
         .on(EditorEventFlipToggle, '.flip-container', function(_, data: {body: string, callback: (data: any) => void}) {
             const $this = $(this);
             $this.addClass('flip-toggle');
-            $this.find('.flip-body').html(data.body);
+            const form = $this.find('.flip-body');
+            form.html(data.body);
             $this.one(EditorEventFlipFinish, (_, res: boolean) => {
                 $this.removeClass('flip-toggle');
                 if (res) {
-                    data.callback(that.formData($this.find('.flip-body'), 'item_'));
+                    data.callback(that.formData(form, 'item_'));
                 }
+                form.empty();
             });
         })
         .on(EditorEventListEdit, '.tree-container,.multiple-container', function(_, target: HTMLElement|JQuery<HTMLElement>) {

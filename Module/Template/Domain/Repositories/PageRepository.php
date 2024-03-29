@@ -213,10 +213,13 @@ final class PageRepository {
         $disable = ['id', 'page_id', 'weight_id', 'component_id',
             'parent_id', 'parent_index', 'position'];
         $maps = ['style_id', 'title', 'content', 'is_share', 'settings'];
-        $data = (new VisualWeight($pageModel))->validateForm(request()->get());
+        $input = request()->get();
+        $data = isset($input['style']) ? $input :
+            (new VisualWeight($pageModel))->validateForm($input);
         $model = VisualFactory::cache()->getOrSet(SiteWeightModel::class,
             $pageModel->weight_id, function () use ($pageModel) {
-                return SiteWeightModel::where('id', $pageModel->weight_id);
+                return SiteWeightModel::where('id', $pageModel->weight_id)
+                    ->first();
             });
         $args = [
             'settings' => $model->getSettingsAttribute()
