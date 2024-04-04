@@ -1,3 +1,4 @@
+@import 'theme';
 .page-footer {
     text-align: center;
 }
@@ -5,7 +6,7 @@
 .tab-box {
     .tab-header {
         .tab-item {
-            width: 120px;
+            width: 7.5rem;
         }
     }
 }
@@ -13,10 +14,10 @@
 .version-bar {
     text-align: right;
     color: #767676;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
     select {
         color: #333;
-        height: 30px;
+        height: 1.875rem;
         border: none;
         border-bottom: 1px solid;
         border-radius: 0;
@@ -32,7 +33,7 @@
     z-index: 0;
 }
 .page-header {
-    padding: 8px;
+    padding: 0.5rem;
     height: auto;
     .opt-btn {
         position: absolute;
@@ -43,7 +44,7 @@
 
 .dialog-box {
     form {
-        min-width: 600px;
+        min-width: 37.5rem;
     }
 }
 
@@ -60,15 +61,15 @@
     .uri-box {
         select,
         input {
-            height: 30px;
+            height: 1.875rem;
         }
         input {
-            min-width: 300px;
+            min-width: 18.75rem;
         }
     }
     table {
         input {
-            height: 30px;
+            height: 1.875rem;
             width: 100%;
         }
     }
@@ -77,8 +78,8 @@
 .json-box {
     pre {
         outline: 1px solid #ccc;
-        padding: 5px;
-        margin: 5px;
+        padding: 0.3125rem;
+        margin: 0.3125rem;
         overflow: auto;
     }
 
@@ -124,21 +125,21 @@
 #coder-dialog {
     .dialog-header {
         select {
-            height: 30px;
+            height: 1.875rem;
             background-color: transparent;
             color: #fff;
-            min-width: 80px;
+            min-width: 5rem;
             
         }
         option {
             color: #333;
         }
         button {
-            height: 30px;
+            height: 1.875rem;
             background-color: transparent;
             color: #fff;
-            border-width: 1px;
-            padding: 0 5px;
+            border-width: 0.0625rem;
+            padding: 0 0.3125rem;
         }
     }
     .dialog-body {
@@ -148,16 +149,16 @@
 }
 
 #editor-container {
-    line-height: 23px;
-    font-size: 16px;
-    letter-spacing: 2px;
+    line-height: 1.4375rem;
+    font-size: 1rem;
+    letter-spacing: 0.125rem;
     font-weight: 500;
     font-family: "Microsoft YaHei",微软雅黑,宋体;
     outline: 0;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 0.3125rem;
+    border-radius: 0.3125rem;
     width: 100%;
-    min-height: 500px;
+    min-height: 31.25rem;
 }
 
 @import './markdown';

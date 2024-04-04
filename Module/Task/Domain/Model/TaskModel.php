@@ -15,7 +15,7 @@ use Zodream\Helpers\Time;
  * @property integer $status
  * @property integer $every_time
  * @property integer $space_time
- * @property integer $duration
+ * @property integer $per_time
  * @property integer $start_at
  * @property integer $time_length
  * @property integer $created_at

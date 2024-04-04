@@ -14,7 +14,7 @@ $this->registerCssFile([
     ->registerJsFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
-        '@prism.js',
+        '@prism.min.js',
         '@main.min.js',
         '@micro.min.js'
     ])

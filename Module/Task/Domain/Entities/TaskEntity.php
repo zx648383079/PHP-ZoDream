@@ -13,7 +13,7 @@ use Domain\Entities\Entity;
  * @property integer $status
  * @property integer $every_time
  * @property integer $space_time
- * @property integer $duration
+ * @property integer $per_time
  * @property integer $start_at
  * @property integer $time_length
  * @property integer $created_at
@@ -39,7 +39,7 @@ class TaskEntity extends Entity {
             'status' => 'int:0,127',
             'every_time' => 'int:0,9999',
             'space_time' => 'int:0,127',
-            'duration' => 'int:0,127',
+            'per_time' => 'int:0,127',
             'start_at' => 'int',
             'time_length' => 'int',
             'created_at' => 'int',
@@ -57,7 +57,7 @@ class TaskEntity extends Entity {
             'status' => '状态',
             'every_time' => '单次时长（/分钟）',
             'space_time' => '单次间隔（/分钟）',
-            'duration' => '每日次数',
+            'per_time' => '每日次数',
             'start_at' => '开始时间',
             'time_length' => 'Time Length',
             'created_at' => 'Created At',

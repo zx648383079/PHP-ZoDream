@@ -15,6 +15,7 @@ final class PublishRepository {
     const PUBLISH_STATUS_DRAFT = 0; // 草稿
     const PUBLISH_STATUS_POSTED = 5; // 已发布
     const PUBLISH_STATUS_TRASH = 9; // 垃圾箱
+    const PUBLISH_STATUS_AUTO_SAVE = 8; // 自动保存
 
     const TYPE_ORIGINAL = 0; // 原创
     const TYPE_REPRINT = 1; // 转载
@@ -39,6 +40,8 @@ final class PublishRepository {
                 $query->where('type', $type - 1);
             })->when($status > 0, function ($query) use ($status) {
                 $query->where('publish_status', $status - 1);
+            }, function ($query) {
+                $query->where('publish_status', '<>', self::PUBLISH_STATUS_AUTO_SAVE);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
             })->orderBy('id', 'desc')->page();
@@ -80,7 +83,7 @@ final class PublishRepository {
             return $data;
         }
         $model = BlogModel::where('user_id', auth()->id())
-            ->where('publish_status', self::PUBLISH_STATUS_DRAFT)
+            ->where('publish_status', self::PUBLISH_STATUS_AUTO_SAVE)
             ->orderBy('parent_id', 'asc')
             ->first();
         if (empty($model)) {
@@ -213,7 +216,7 @@ final class PublishRepository {
      * @throws Exception
      */
     public static function saveDraft(array $data, int $id = 0) {
-        $data['publish_status'] = self::PUBLISH_STATUS_DRAFT;
+        $data['publish_status'] = self::PUBLISH_STATUS_AUTO_SAVE;
         return self::save($data, $id);
     }
 

@@ -39,7 +39,7 @@ class HtmlExpand {
     }
 
 
-	public static function getImage($content, $default = '/assets/images/default.jpg') {
+	public static function getImage(string $content, string $default = '/assets/images/default.jpg'): string {
 		$match = array();
 		if (preg_match('/\<img[^<>]+src="([^"<>\s]+)"/i', $content, $match)) {
 			return $match[1];
@@ -47,7 +47,7 @@ class HtmlExpand {
 		return $default;
 	}
 
-	public static function getVideo($content, $default = '/assets/video/default.mp4') {
+	public static function getVideo(string $content, string $default = '/assets/video/default.mp4'): string {
 		$match = array();
 		if (preg_match('/\<video[^<>]+src="([^"<>\s]+)"/i', $content, $match)) {
 			return $match[1];
@@ -55,12 +55,12 @@ class HtmlExpand {
 		return $default;
 	}
 	
-	public static function shortString($content, $length = 100) {
+	public static function shortString(string $content, int $length = 100): string {
 		$content = preg_replace('/(\<.+?\>)|(\&nbsp;)+/', '', htmlspecialchars_decode($content));
 		return Str::substr($content, 0, $length);
 	}
 
-	public static function getMenu(array $data) {
+	public static function getMenu(array $data): void {
 		$class = null;
 		foreach ($data as $value) {
 			if ($value['class'] != $class) {
@@ -79,13 +79,13 @@ class HtmlExpand {
 		}
 	}
 
-	/**
-	 * 根据相同分组
-	 * @param array $args
-	 * @param string|object $tag 如果为匿名函数, 传入两个数组, 相等返回true 否则false
-	 * @return array
-	 */
-	public static function getTree(array $args, $tag) {
+    /**
+     * 根据相同分组
+     * @param array $args
+     * @param callable|string $tag 如果为匿名函数, 传入两个数组, 相等返回true 否则false
+     * @return array
+     */
+	public static function getTree(array $args, callable|string $tag): array {
 		if (is_string($tag)) {
 			$tag = function(array $arg, array $composer) use ($tag) {
 				return $arg[$tag] === $composer[$tag];
@@ -144,10 +144,11 @@ class HtmlExpand {
                 $isCode = false;
                 $tag = explode(' ', $tag, 2)[0];
                 if (str_starts_with($tag, '/')) {
+                    $tag = substr($tag, 1);
                     // 判断是否时结束标签， 倒序找到邻近开始标签，进行移除
                     for ($j = count($unClosedTags) - 1; $j >= 0; $j --) {
                         if ($tag === $unClosedTags[$j]) {
-                            $unClosedTags = array_splice($unClosedTags, 0, $j - 1);
+                            $unClosedTags = array_splice($unClosedTags, 0, $j);
                             break;
                         }
                     }

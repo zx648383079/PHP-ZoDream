@@ -35,6 +35,7 @@ class BlogPageModel extends BlogModel {
         'parent_id',
         'open_type',
         'comment_count',
+        'publish_status',
         'click_count', 'recommend_count', 'created_at'];
 
     protected array $append = ['url', 'term', 'user'];

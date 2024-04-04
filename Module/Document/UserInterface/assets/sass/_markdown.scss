@@ -278,24 +278,28 @@
     }
     code {
         font-family: Menlo, Monaco, Consolas, Droid Sans Mono, Courier New, monospace, Microsoft YaHei, 微软雅黑, 宋体;
-        background: rgba(127, 127, 127, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.18);
+        background: var(--#{$prefix}-body);
         border-radius: 0.25rem;
         font-size: .9em;
+        line-height: inherit !important;
+        text-shadow: none !important;
     }
-    pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        margin: 0;
-        > code {
-            background: rgba(127, 127, 127, 0.05);
-            display: block;
-            padding: 0.65rem 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.18);
-        }
-        &:not(:first-child) {
-            margin-top: 1rem;
-        }
-    }
+    // pre {
+    //     white-space: pre-wrap;
+    //     word-wrap: normal !important;
+    //     overflow-x: auto;
+    //     margin: 0;
+    //     background: var(--#{$prefix}-body);
+    //     > code {
+    //         white-space: pre !important;
+    //         display: block;
+    //         padding: 0.65rem 1rem;
+    //         background-color: transparent;
+    //         border: none;
+    //     }
+    //     &:not(:first-child) {
+    //         margin-top: 1rem;
+    //     }
+    // }
 
 }

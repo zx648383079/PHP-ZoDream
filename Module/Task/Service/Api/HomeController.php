@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Module\Task\Service\Api;
 
 use Module\Task\Domain\Model\TaskDayModel;
-use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\DayRepository;
 use Module\Task\Domain\Repositories\TaskRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
-use Zodream\Validate\ValidationException;
 
 class HomeController extends Controller {
 
@@ -41,12 +39,10 @@ class HomeController extends Controller {
                 'description' => 'string:0,255',
                 'every_time' => 'int:0,9999',
                 'space_time' => 'int:0,127',
-                'duration' => 'int:0,127',
+                'per_time' => 'int:0,127',
                 'start_at' => '',
             ]);
             $model = TaskRepository::save($data, $id, $status);
-        } catch (ValidationException $ex) {
-            return $this->renderFailure($ex->bag->firstError());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -61,7 +57,7 @@ class HomeController extends Controller {
                 'description' => 'string:0,255',
                 'every_time' => 'int:0,9999',
                 'space_time' => 'int:0,127',
-                'duration' => 'int:0,127',
+                'per_time' => 'int:0,127',
                 'start_at' => '',
             ]);
             $task = TaskRepository::save($data);

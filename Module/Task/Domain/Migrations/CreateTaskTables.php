@@ -26,7 +26,7 @@ class CreateTaskTables extends Migration {
             $table->uint('every_time', 4)->default(0)->comment('每次计划时间');
             $table->uint('space_time', 2)->default(0)->comment('每次休息时间');
             $table->timestamp('start_at')->comment('任务开始时间');
-            $table->uint('duration', 2)->default(0)->comment('每天连续次数');
+            $table->uint('per_time', 2)->default(0)->comment('每天连续次数');
             $table->uint('time_length')->default(0)->comment('总时间');
             $table->timestamps();
         })->append(TaskLogModel::tableName(), function (Table $table) {

@@ -17,7 +17,7 @@ class CodeNode extends Node {
             ];
         }
         view()->registerCssFile('@prism.min.css')
-            ->registerJsFile('@prism.js');
+            ->registerJsFile('@prism.min.js');
         return <<<HTML
 <pre><code class="language-{$lang}">{$content}</code></pre>
 HTML;
