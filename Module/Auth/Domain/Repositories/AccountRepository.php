@@ -143,6 +143,11 @@ final class AccountRepository {
         ];
     }
 
+    public static function getAuthorizeApp(): array {
+        return [
+        ];
+    }
+
     private static function getConnectMaps(): array {
         return [
             OAuthModel::TYPE_QQ => [

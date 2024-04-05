@@ -44,6 +44,10 @@ class AccountController extends Controller {
         return $this->renderData(AccountRepository::getDriver());
     }
 
+    public function authorizeAction() {
+        return $this->renderData(AccountRepository::getAuthorizeApp());
+    }
+
     public function subtotalAction() {
         return $this->render([
            'money' => 0,
