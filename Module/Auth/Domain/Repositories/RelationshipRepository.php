@@ -9,6 +9,18 @@ final class RelationshipRepository {
     const TYPE_FOLLOWING = 1; // 关注
     const TYPE_BLOCKING = 5; // 屏蔽用户
 
+    /**
+     * 判断关系是
+     * @param int $me
+     * @param int $user
+     * @param int $type
+     * @return bool
+     */
+    public static function is(int $me, int $user, int $type): bool {
+        return UserRelationshipEntity::where('user_id', $me)->where('link_id', $user)
+            ->where('type', $type)->count() > 0;
+    }
+
     public static function count(int $user, int $type): int {
         return UserRelationshipEntity::where('user_id', $user)->where('type', $type)->count();
     }

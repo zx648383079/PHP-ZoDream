@@ -17,9 +17,9 @@ class BulletinController extends Controller {
         return $this->renderPage(BulletinRepository::getList($keywords, $status, $user, $last_id));
     }
 
-    public function userAction() {
+    public function userAction(int $extra = 0) {
         return $this->renderData(
-            BulletinRepository::userList()
+            BulletinRepository::userList($extra)
         );
     }
 

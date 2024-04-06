@@ -7,6 +7,7 @@ use Exception;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
+use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 
@@ -15,6 +16,7 @@ class BulletinRepository {
     const TYPE_AT = 7;
     const TYPE_COMMENT = 8;
     const TYPE_AGREE = 6;
+    const TYPE_MESSAGE = 96;
     const TYPE_OTHER = 99;
 
     const SYSTEM_USER = [
@@ -80,17 +82,17 @@ class BulletinRepository {
         return $page;
     }
 
-    public static function userList() {
+    public static function userList(int $extra = 0) {
         $systemUser = static::SYSTEM_USER;
         $systemUser['avatar'] = url()->asset($systemUser['avatar']);
         $bulletinId = BulletinUserModel::where('user_id', auth()->id())
             ->pluck('bulletin_id');
-        if (empty($bulletinId)) {
-            return [$systemUser];
-        }
-        $userId = BulletinModel::whereIn('id', $bulletinId)
+        $userId = empty($bulletinId) ? [] : BulletinModel::whereIn('id', $bulletinId)
             ->where('user_id', '>', 0)
             ->selectRaw('DISTINCT user_id')->pluck('user_id');
+        if ($extra > 0 && !in_array($extra, $userId) && $extra !== auth()->id()) {
+            $userId[] = $extra;
+        }
         if (empty($userId)) {
             return [$systemUser];
         }
@@ -100,11 +102,26 @@ class BulletinRepository {
     }
 
     public static function create(array $data) {
-        if ($data['user'] < 1) {
+        $userId = intval($data['user']);
+        if ($userId < 1 || $userId === auth()->id()) {
             throw new Exception('操作错误');
         }
-        return static::message(intval($data['user']),
-            $data['title'] ?? '消息', $data['content'], static::TYPE_OTHER, EmojiRepository::renderRule($data['content']));
+        $user = UserModel::where('id', $userId)->first('status');
+        if (empty($user) || $user->status < UserModel::STATUS_ACTIVE) {
+            throw new Exception('操作错误');
+        }
+        if (RelationshipRepository::is($userId, auth()->id(), RelationshipRepository::TYPE_BLOCKING)) {
+            throw new Exception('被对方拉黑了');
+        }
+        if (!self::canSend()) {
+            throw new Exception('你的操作太频繁了，请五分钟后再试');
+        }
+        return static::message($userId, $data['title'] ?? '消息', $data['content'], static::TYPE_MESSAGE, EmojiRepository::renderRule($data['content']));
+    }
+
+    public static function canSend(): bool {
+        return BulletinModel::where('user_id', auth()->id())->where('created_at', '>',
+            time() - 300)->count() < 1;
     }
 
     public static function doAction(int $id, array|string $action) {
@@ -137,7 +154,7 @@ class BulletinRepository {
      * 标记全部已读
      * @throws Exception
      */
-    public static function readAll() {
+    public static function readAll(): void {
         BulletinUserModel::where('user_id', auth()->id())
             ->where('status', 0)->update([
                 'status' => BulletinUserModel::READ,
@@ -151,7 +168,7 @@ class BulletinRepository {
      * @return bool
      * @throws Exception
      */
-    public static function remove(int $id) {
+    public static function remove(int $id): void {
         $model = BulletinUserModel::where('user_id', auth()->id())
             ->where('bulletin_id', $id)->first();
         if (empty($model)) {

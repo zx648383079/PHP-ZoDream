@@ -35,7 +35,7 @@ class BulletinModel extends Model {
             'title' => 'required|string:0,100',
             'content' => 'required|string:0,255',
             'extra_rule' => '',
-            'type' => 'int:0,99',
+            'type' => 'int:0,127',
             'user_id' => 'required|int',
             'created_at' => 'int',
             'updated_at' => 'int',
