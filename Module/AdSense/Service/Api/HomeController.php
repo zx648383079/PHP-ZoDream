@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Module\AdSense\Service\Api;
 
-use Module\Shop\Domain\Repositories\AdRepository;
+use Module\AdSense\Domain\Repositories\AdRepository;
 use Module\ModuleController as Controller;
 
-class AdController extends Controller {
+class HomeController extends Controller {
 
     public function indexAction(int $id = 0, int|string $position = 0) {
         if ($id > 0) {

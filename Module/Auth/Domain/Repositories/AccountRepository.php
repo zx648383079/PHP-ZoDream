@@ -92,7 +92,7 @@ final class AccountRepository {
     public static function cancel(UserModel $user, string $reason) {
         $user->status = UserModel::STATUS_FROZEN;
         $user->save();
-        BulletinRepository::system(1, '账户注销申请',
+        BulletinRepository::sendAdministrator('账户注销申请',
             sprintf('申请用户：%s，注销理由：%s [马上查看]', $user->name,
                 $reason), 98,
             [

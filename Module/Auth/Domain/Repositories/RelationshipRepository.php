@@ -134,4 +134,45 @@ final class RelationshipRepository {
             ->count() > 0;
     }
 
+    /**
+     * 获取用户的所有关系
+     * @param int $me
+     * @param int $user
+     * @return int[]
+     */
+    public static function relationship(int $me, int $user): array {
+        $items = [
+            'follow_status' => 0,
+            'mark_status' => 0,
+        ];
+        if ($me === $user) {
+            return $items;
+        }
+        $log = UserRelationshipEntity::where('user_id', $me)->where('link_id', $user)->first();
+        if (empty($log)) {
+            return $items;
+        }
+        $type = intval($log['type']);
+        if ($type === self::TYPE_BLOCKING) {
+            $items['mark_status'] = 1;
+            return $items;
+        }
+        if ($type === self::TYPE_FOLLOWING) {
+            $items['follow_status'] = self::userAlsoIs($me, $user, $type) ? 2 : 1;
+            return $items;
+        }
+        return $items;
+    }
+
+    public static function containsRelationship(array $keys): bool {
+        foreach ([
+                     'follow_status',
+                     'mark_status'
+                 ] as $key) {
+            if (in_array($key, $keys)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

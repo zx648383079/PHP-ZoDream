@@ -61,7 +61,7 @@ class ContactRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        BulletinRepository::system(1, '友情链接申请', '[马上查看]', 98, [
+        BulletinRepository::sendAdministrator('友情链接申请', '[马上查看]', 98, [
             LinkRule::formatLink('[马上查看]', 'b/friend_link')
         ]);
         return $model;

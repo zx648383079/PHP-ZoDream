@@ -107,7 +107,7 @@ final class OrderRepository {
             if (empty($log)) {
                 throw new Exception('未遭到您的支付记录，请联系商家');
             }
-            BulletinRepository::system([1, 14], sprintf('订单【%s】申请退款', $order->series_number),
+            BulletinRepository::sendAdministrator(sprintf('订单【%s】申请退款', $order->series_number),
                 sprintf('订单%d【%s】的支付流水号【%s】第三方流水号【%s】,[马上查看]',
                     $order->id, $order->series_number, $log->id, $log->trade_no), 66, [
                         LinkRule::formatLink('[马上查看]', 'b/order/'.$order->id)

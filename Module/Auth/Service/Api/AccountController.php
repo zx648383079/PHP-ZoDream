@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
-use Domain\Model\SearchModel;
-use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 

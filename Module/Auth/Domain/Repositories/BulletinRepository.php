@@ -225,8 +225,23 @@ class BulletinRepository {
      * @return int
      * @throws Exception
      */
-    public static function system(array|int $user, string $title, string $content, int $type = 99, array $extraRule = []) {
+    public static function system(array|int $user, string $title, string $content,
+                                  int $type = 99, array $extraRule = []): int {
         return static::send($user, $title, $content, $type, 0, $extraRule);
+    }
+
+    /**
+     * 发送给管理员
+     * @param string $title
+     * @param string $content
+     * @param int $type
+     * @param array $extraRule
+     * @return int
+     * @throws Exception
+     */
+    public static function sendAdministrator(string $title,
+                                          string $content, int $type = 99, array $extraRule = []): int {
+        return static::send(1, $title, $content, $type, 0, $extraRule);
     }
 
     /**
@@ -240,7 +255,8 @@ class BulletinRepository {
      * @return int
      * @throws Exception
      */
-    public static function send(array|int $user, string $title, string $content, int $type = 0, int $sender = 0, array $extraRule = []) {
+    public static function send(array|int $user, string $title, string $content, int $type = 0,
+                                int $sender = 0, array $extraRule = []): int {
         if (empty($user)) {
             return 0;
         }
@@ -258,7 +274,7 @@ class BulletinRepository {
         foreach ((array)$user as $item) {
             $data[] = [$bulletin->id, $item, time()];
         }
-        return BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
+        return (int)BulletinUserModel::query()->insert(['bulletin_id', 'user_id', 'created_at'], $data);
     }
 
     /**

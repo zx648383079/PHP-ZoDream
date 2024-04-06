@@ -13,13 +13,4 @@ class UserController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
     }
-
-    public function reportAction(int $id) {
-        try {
-            UserRepository::report($id);
-            return $this->renderData(true);
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-    }
 }

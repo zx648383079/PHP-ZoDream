@@ -14,12 +14,10 @@ use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
-use Module\Auth\Domain\Model\Scene\User;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Repositories\BlogRepository;
-use Module\Contact\Domain\Repositories\ReportRepository;
 use Module\Game\CheckIn\Domain\Repositories\CheckinRepository;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
@@ -81,7 +79,6 @@ class UserRepository {
              'post_count',
              'following_count',
              'follower_count',
-            'follow_status'
                  ] as $word) {
             if (!in_array($word, $extraWords)) {
                 continue;
@@ -93,42 +90,39 @@ class UserRepository {
             }
             $data[$word] = call_user_func($func, $userId);
         }
+        if (RelationshipRepository::containsRelationship($extraWords)) {
+            $data = array_merge($data, RelationshipRepository::relationship(auth()->id(), $userId));
+        }
         return $data;
     }
 
-    public static function getLastIp(int $user) {
+    public static function getLastIp(int $user): string {
          return Helpers::hideIp((string)LoginLogModel::where('user_id', $user)
              ->where('status', 1)->orderBy('created_at', 'desc')
              ->value('ip'));
     }
-    public static function getFollowStatus(int $user) {
-        if (auth()->id() === $user) {
-            return 0;
-        }
-        return RelationshipRepository::typeStatus($user, RelationshipRepository::TYPE_FOLLOWING);
-    }
 
-    public static function getCardItems(int $user) {
+    public static function getCardItems(int $user): array {
         return CardRepository::getUserCard($user);
     }
 
-    public static function getBulletinCount(int $user) {
+    public static function getBulletinCount(int $user): int {
         return BulletinUserModel::where('user_id', $user)->where('status', 0)->count();
     }
 
-    public static function getPostCount(int $user) {
+    public static function getPostCount(int $user): int {
         return BlogRepository::getPostCount($user);
     }
 
-    public static function getFollowingCount(int $user) {
+    public static function getFollowingCount(int $user): int {
         return RelationshipRepository::followingCount($user);
     }
 
-    public static function getFollowerCount(int $user) {
+    public static function getFollowerCount(int $user): int {
         return RelationshipRepository::followerCount($user);
     }
 
-    public static function getTodayCheckin(int $user) {
+    public static function getTodayCheckin(int $user): bool {
         return CheckinRepository::todayIsChecked($user);
     }
 
@@ -296,27 +290,5 @@ class UserRepository {
             $query->whereIn('id', $userId);
         }
         return $query->pluck('id');
-    }
-
-    public static function toggleFollow(int $user)
-    {
-        if (auth()->guest()) {
-            return 0;
-        }
-        $status = RelationshipRepository::toggle($user, RelationshipRepository::TYPE_FOLLOWING);
-        if ($status < 1) {
-            return 0;
-        }
-        return RelationshipRepository::userAlsoIs(auth()->id(), $user, RelationshipRepository::TYPE_FOLLOWING)
-            ? 2 : 1;
-    }
-
-    public static function report(int $userId) {
-        if (auth()->guest()) {
-            throw new Exception(__('Please log in first'));
-        }
-        $user = UserModel::findOrThrow($userId, 'user is error');
-        ReportRepository::quickCreate(Constants::TYPE_USER,
-            $userId, sprintf('举报【%s】', $user->name), '举报用户');
     }
 }

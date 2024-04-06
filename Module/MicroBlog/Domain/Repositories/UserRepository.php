@@ -7,7 +7,7 @@ use Module\Auth\Domain\Repositories\UserRepository as Auth;
 
 class UserRepository {
 
-    public static function get(int $id) {
+    public static function get(int $id): array {
         $micro_count = MicroBlogModel::where('user_id', $id)
             ->count();
         if ($micro_count < 1) {
@@ -18,9 +18,5 @@ class UserRepository {
             throw new \Exception('用户已注销');
         }
         return array_merge($user, compact('micro_count'));
-    }
-
-    public static function report(int $id) {
-        Auth::report($id);
     }
 }
