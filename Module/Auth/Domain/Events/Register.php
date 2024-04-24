@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\UserModel;
 
-class Register {
+readonly class Register {
     /**
      * Register constructor.
      * @param UserModel $user 用户模型

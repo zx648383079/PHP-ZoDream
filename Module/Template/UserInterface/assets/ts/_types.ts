@@ -154,10 +154,22 @@ interface IVisualInput {
     };
 }
 
-interface IEditorInput {
-    name: string;
-    value: any;
-    form: IVisualInput[];
+interface IEditorInputGroup {
+    notify(control: IEditorElement): void;
+}
+
+interface IEditorElement {
     render(): string;
-    ready(box: JQuery): void;
+    ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void;
+}
+
+interface IEditorInput extends IEditorElement {
+    shimmed?: string;
+    label?: string;
+    name?: string;
+    value?: any;
+    get isUpdated(): boolean;
+    render(): string;
+    ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void;
+    reset(): void;
 }

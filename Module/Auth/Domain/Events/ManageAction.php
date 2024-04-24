@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\AdminLogModel;
 
-class ManageAction {
+readonly class ManageAction {
 
     protected string $ip;
     protected int $userId;

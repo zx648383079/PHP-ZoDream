@@ -51,8 +51,7 @@ class CreateMicroBlogTables extends Migration {
         })->autoUp();
     }
 
-    public function seed(): void
-    {
+    public function seed(): void {
         RoleRepository::newPermission([
             'micro_manage' => '微博管理'
         ]);

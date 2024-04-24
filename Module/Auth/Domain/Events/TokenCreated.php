@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Events;
 
 use Zodream\Infrastructure\Contracts\UserObject;
 
-class TokenCreated {
+readonly class TokenCreated {
 
     protected int $expiredAt;
     public function __construct(

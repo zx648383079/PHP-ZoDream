@@ -605,9 +605,9 @@ $iconWidth: 1.5rem;
         display: block;
         user-select: none;
         border-radius: .25rem;
-        padding: 2rem 0 1rem;
         text-align: center;
         border: .2rem dotted var(--#{$prefix}-primary);
+        height: $lineHight * 3;
         p {
             margin: 0;
         }
@@ -615,6 +615,11 @@ $iconWidth: 1.5rem;
             width: 0;
             height: 0;
             overflow: hidden;
+        }
+        label {
+            display: block;
+            padding-top: 1rem;
+            height: 100%;
         }
         .loading {
             display: none;
@@ -627,6 +632,9 @@ $iconWidth: 1.5rem;
             background-color: var(--#{$prefix}-input);
         }
         &.is-uploading {
+            label {
+                display: none;
+            }
             .loading {
                 display: block;
             }
@@ -635,30 +643,48 @@ $iconWidth: 1.5rem;
 
     .image-control-item {
         position: relative;
+        background-color: #ccc;
+        border-radius: $radius;
         .control-body {
             display: block;
             width: 100%;
             height: $lineHight * 3;
+            border-radius: $radius;
             img {
                 display: block;
                 object-fit: contain;
                 height: 100%;
                 width: 100%;
+                border-radius: $radius;
             }
         }
         .control-action {
             position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            bottom: 1rem;
+            left: 50%;
+            width: 6rem;
+            margin-left: -3rem;
+            text-align: center;
             .fa {
+                line-height: 2rem;
+                flex: 1;
                 display: block;
                 background-color: var(--#{$prefix}-primary);
                 color: var(--#{$prefix}-primary-text);
+                &:first-of-type {
+                    border-radius: $radius 0 0 $radius;
+                }
+                &:last-of-type {
+                    border-radius: 0 $radius $radius 0;
+                }
+                &:hover {
+                    background-color: var(--#{$prefix}-primary-hover);
+                }
             }
+        }
+        &:hover {
+            background-color: #aaa;
         }
     }
 

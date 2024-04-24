@@ -1,4 +1,4 @@
-class EditorPropertyPanel implements IEditorPanel {
+class EditorPropertyPanel implements IEditorPanel, IEditorInputGroup {
 
     private box: JQuery<HTMLDivElement>;
     private target: EditorWeight;
@@ -39,7 +39,7 @@ class EditorPropertyPanel implements IEditorPanel {
             return;
         }
         const that = this;
-        EditorHtmlHelper.bindInputEvent(this.box);
+        EditorHtmlHelper.bindInputEvent(this.box, this);
         this.box.on(EditorEventInputChange, '.control-inline-group,.control-line-group', function() {
             that.autoSave();
         }).on('click', '.style-item', function() {
@@ -67,6 +67,10 @@ class EditorPropertyPanel implements IEditorPanel {
     private autoSave() {
         this.isAsync = true;
         this.lastAt = new Date().getTime();
+    }
+
+    public notify(control: IEditorInput): void {
+        this.autoSave();
     }
 
     public render(): JQuery {
@@ -146,5 +150,6 @@ class EditorPropertyPanel implements IEditorPanel {
             let $this = $(this);
             $this.toggleClass('active', $this.attr('data-id') == data.style_id);
         });
+        EditorHtmlHelper.readyControl(items, this);
     }
 }

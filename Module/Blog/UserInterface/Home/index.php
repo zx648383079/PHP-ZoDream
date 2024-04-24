@@ -12,7 +12,7 @@ $data = [
     'description' => __('site description')
 ];
 if (!empty($term)) {
-    $tags[] = $term->name;
+    $tags[] = LocalizeRepository::formatValueWidthPrefix($term, 'name');
     $data['description'] = $term->description;
     if (!empty($term->keywords)) {
         $data['keywords'] = $term->keywords;

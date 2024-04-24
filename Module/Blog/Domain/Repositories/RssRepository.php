@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Repositories;
 
+use Domain\Repositories\LocalizeRepository;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Zodream\Disk\File;
@@ -19,6 +20,7 @@ class RssRepository {
             ->setImage(url()->asset('assets/images/favicon.png'), url('/'));
         $model_list = BlogModel::query()->with('term')
             ->where('open_type', PublishRepository::OPEN_PUBLIC)
+            ->where('language', LocalizeRepository::browserLanguage())
             ->orderBy('id', 'desc')
             ->get('id', 'term_id', 'title', 'edit_type', 'content', 'programming_language', 'created_at');
         $metaItems = static::getMeta();
@@ -29,7 +31,7 @@ class RssRepository {
                 ->setLink(url('blog', ['id' => $item->id]))
                 ->setPubDate($item->getAttributeSource('created_at'))
                 ->setDescription(BlogRepository::renderLazyContent($item, false, false))
-                ->addTag('category', $item->term->name);
+                ->addTag('category', LocalizeRepository::formatValueWidthPrefix($item['term'], 'name'));
             if (isset($metaItems[$item->id]['video_url'])) {
                 $file = static::toFile($metaItems[$item->id]['video_url']);
                 if ($file) {
@@ -83,7 +85,7 @@ class RssRepository {
         if (app()->isDebug()) {
             return static::render();
         }
-        return cache()->getOrSet(static::CACHE_KEY, function () {
+        return cache()->getOrSet(sprintf('%s-%s', LocalizeRepository::browserLanguage(), static::CACHE_KEY), function () {
             return static::render();
         });
     }

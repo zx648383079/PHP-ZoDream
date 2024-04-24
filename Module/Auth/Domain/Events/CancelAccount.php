@@ -5,7 +5,7 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\UserModel;
 
-class CancelAccount {
+readonly class CancelAccount {
 
     /**
      * CancelAccount constructor.

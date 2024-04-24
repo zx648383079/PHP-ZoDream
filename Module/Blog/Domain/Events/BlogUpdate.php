@@ -4,7 +4,7 @@ namespace Module\Blog\Domain\Events;
 
 use JetBrains\PhpStorm\Pure;
 
-class BlogUpdate {
+readonly class BlogUpdate {
     protected string $url;
 
     /**

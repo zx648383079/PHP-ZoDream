@@ -1,5 +1,5 @@
 
-class EditorDialog {
+class EditorDialog implements IEditorInputGroup {
 
     private box: DialogBox;
     private target: EditorWeight;
@@ -24,14 +24,20 @@ class EditorDialog {
         }).on(EditorEventOpenEditDialog, (weight: EditorWeight) => {
             this.target = weight;
             this.editor.emit(EditorEventWeightForm, weight.id(), data => {
-                this.box.find('.dialog-body').html(`<input type="hidden" name="id" value="${weight.id()}">${EditorHtmlHelper.render(data.form)}`);
+                const panel = this.box.find('.dialog-body');
+                panel.html(EditorHtmlHelper.render(data.form));
                 this.box.showCenter();
+                EditorHtmlHelper.readyControl(panel, that);
             });
         });
     }
 
     private bindEvent() {
-        EditorHtmlHelper.bindInputEvent(this.box.box as any);
+        EditorHtmlHelper.bindInputEvent(this.box.box as any, this);
+    }
+
+    public notify(control: IEditorInput): void {
+        
     }
 
 }
