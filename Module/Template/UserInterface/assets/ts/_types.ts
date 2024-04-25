@@ -10,6 +10,8 @@ const EditorEventSavePage = 'editor_save_page';
 const EditorEventGetPage = 'editor_get_page';
 const EditorEventPageList = 'editor_get_page_list';
 const EditorEventWeightTree = 'editor_get_page_weight';
+const EditorEventPageSetting = 'editor_get_page_setting';
+const EditorEventSavePageSetting = 'editor_save_page_setting';
 
 const EditorEventWindowResize = 'editor_Window_resize';
 const EditorEventResize = 'editor_resize';
@@ -45,6 +47,8 @@ interface EditorListeners {
     [EditorEventGetPage]: (success: (data: IPageModel) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventPageList]: (success: (data: IPageModel[]) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventWeightTree]: (success: (data: IPageWeight[]) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventPageSetting]: (success: (data: {theme: IVisualInput[], page: IVisualInput[]}) => void, failure?: FailureCallbackFunc) => void;
+    [EditorEventSavePageSetting]: (data: any, success: (data: any) => void, failure?: FailureCallbackFunc) => void;
     [EditorEventWindowResize]: (width: number, height: number) => void;
     [EditorEventResize]: (width: number, height: number) => void;
     [EditorEventSavePage]: (data: any[], success: (data: any) => void, failure?: FailureCallbackFunc) => void;
@@ -168,6 +172,7 @@ interface IEditorInput extends IEditorElement {
     label?: string;
     name?: string;
     value?: any;
+    tooltip?: string;
     get isUpdated(): boolean;
     render(): string;
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void;

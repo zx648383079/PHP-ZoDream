@@ -55,14 +55,13 @@ class EditorLayerPanel implements IEditorPanel {
                 <i class="fa fa-chevron-right"></i>
             </div>`
             }
-            const name = item.name ?? item.id;
             html += `<div class="tree-item">
             <div class="item-body">
                 ${iconArrow}
                 <div class="item-icon">
                     <i class="fa fa-chain"></i>
                 </div>
-                <input type="text" class="item-title" value="${name}">
+                <input type="text" class="item-title" value="${item.title}" placeholder="ID: ${item.weight_id}">
                 <div class="item-action-icon">
                     <i class="fa fa-ellipsis-h"></i>
                     <div class="item-action-bar">

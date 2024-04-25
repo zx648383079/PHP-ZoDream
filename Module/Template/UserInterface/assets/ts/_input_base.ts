@@ -48,9 +48,9 @@ class EditorTextControl implements IEditorInput, IEditorInputGroup {
             this.control = new EditorSelectElement(this.value, this.items, true, false, 'fa-bolt');
             html = this.control.render();
         } else {
-            html = `<input value="${this.value}">`;
+            html = `<input class="form-control" value="${this.value}">`;
         }
-        return EditorHtmlHelper.input(this, this.label, html, 'control-line-group');
+        return EditorInputElement.inputGroup(this, html, false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.manager = manager;
@@ -105,7 +105,7 @@ class EditorTextAlignControl implements IEditorInput, IEditorInputGroup {
     }
     render(): string {
         this.control = EditorAlignControl.horizontalAlign(this.value, true)
-        return EditorHtmlHelper.input(this, this.label, this.control.render(), 'control-line-group');
+        return EditorInputElement.inputGroup(this, this.control.render(), false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -163,7 +163,7 @@ class EditorRangeControl implements IEditorInput {
         for (let i = this.input.min; i <= this.input.max; i+= this.input.step) {
             items.push({name: i, value: i});
         }
-        return EditorHtmlHelper.input(this, this.label, EditorSelectControl.selectControl(this.shimmed, this.name, items, this.value, this.input));
+        return EditorInputElement.inputGroup(this, EditorSelectControl.selectControl(this.shimmed, this.name, items, this.value, this.input));
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -205,7 +205,7 @@ class EditorHtmlControl implements IEditorInput {
         this._value = '';
     }
     render(): string {
-        return EditorHtmlHelper.input(this, this.label, `<textarea>${this.value}</textarea>`, 'control-line-group');
+        return EditorInputElement.inputGroup(this, `<textarea>${this.value}</textarea>`, false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box.find('textarea').editor();
@@ -255,13 +255,13 @@ class EditorSelectControl implements IEditorInput, IEditorInputGroup {
     
     render(): string {
         let html: string;
-        if (!this.input.search && this.input.items) {
+        if (!this.input.search && !this.input.multiple && this.input.items) {
             html = EditorSelectControl.selectControl(this.shimmed, this.input.name, this.input.items, this.input.value, this.input);
         } else {
-            this.control = new EditorSelectElement(this.value, this.input.items, false, this.input.search);
+            this.control = new EditorSelectElement(this.value, this.input.items, false, this.input.search, undefined, this.input.multiple);
             html = this.control.render();
         }
-        return EditorHtmlHelper.input(this, this.label, html);
+        return EditorInputElement.inputGroup(this, html, !this.input.multiple);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.manager = manager;
@@ -298,7 +298,7 @@ class EditorSelectControl implements IEditorInput, IEditorInputGroup {
         </select>`;
     }
 
-    public static selectOption(items: IItem[], selected?: any) {
+    private static selectOption(items: IItem[], selected?: any) {
         return items.map(item => {
             const sel = selected == item.value ? ' selected' : '';
             return `<option value="${item.value}"${sel}>${item.name}</option>`;
@@ -351,7 +351,7 @@ class EditorImageControl implements IEditorInput {
     }
     render(): string {
         const html = !this.value ? EditorImageControl.imageUpload(this.shimmed) : EditorImageControl.imageItem(this.value);
-        return EditorHtmlHelper.input(this, this.label, `<div class="control-body">${html}</div>`, 'control-line-group');
+        return EditorInputElement.inputGroup(this, `<div class="control-body">${html}</div>`, false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -457,7 +457,7 @@ class EditorSwitchControl implements IEditorInput, IEditorInputGroup {
     }
     render(): string {
         this.target.value = EditorHelper.parseNumber(this.value);
-        return EditorHtmlHelper.input(this, this.label, this.target.render());
+        return EditorInputElement.inputGroup(this, this.target.render());
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.manager = manager;
@@ -468,6 +468,49 @@ class EditorSwitchControl implements IEditorInput, IEditorInputGroup {
         this._value = control.value;
         this.element.trigger(EditorEventInputChange);
         this.manager.notify(this);
+    }
+}
+
+
+
+class EditorTextareaControl implements IEditorInput {
+    shimmed?: string;
+    name: string;
+    label?: string;
+    private element: JQuery<HTMLElement>;
+    private _value = '';
+
+    public set value(arg: any) {
+        if (this._value === arg) {
+            return;
+        }
+        this._value = typeof arg === 'undefined' ? '' : arg;
+        if (this.element) {
+            this.element.find('textarea').val(this.value);
+        }
+    }
+
+    public get value(): string {
+        return this._value;
+    }
+
+    get isUpdated(): boolean {
+        return !!this.value;
+    }
+
+    reset(): void {
+        this.value = '';
+    }
+    render(): string {
+        return EditorInputElement.inputGroup(this, `<textarea class="form-control" id="${this.shimmed}" name="${this.name}">${this.value}</textarea>`, false);
+    }
+    ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
+        this.element = box;
+        const that = this;
+        box.on('change', 'textarea', function() {
+            that._value = this.value;
+            manager.notify(that);
+        });
     }
 }
 
@@ -501,56 +544,25 @@ class EditorNumberControl implements IEditorInput {
         this.value = 0;
     }
     render(): string {
-        return EditorHtmlHelper.input(this, this.label, `<input type="number" id="${this.shimmed}" name="${this.name}" value="${this.value}">`);
+        return EditorInputElement.inputSideGroup(this, EditorNumberControl.numberInput(this.value), `<input type="range" value="${EditorHelper.parseNumber(this.value)}">`);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
         const that = this;
         box.on('change', 'input', function() {
-            that._value = this.value;
+            that.value = this.value;
             manager.notify(that);
         });
     }
-}
 
-class EditorTextareaControl implements IEditorInput {
-    shimmed?: string;
-    name: string;
-    label?: string;
-    private element: JQuery<HTMLElement>;
-    private _value = '';
-
-    public set value(arg: any) {
-        if (this._value === arg) {
-            return;
-        }
-        this._value = typeof arg === 'undefined' ? '' : arg;
-        if (this.element) {
-            this.element.find('textarea').val(this.value);
-        }
-    }
-
-    public get value(): string {
-        return this._value;
-    }
-
-    get isUpdated(): boolean {
-        return !!this.value;
-    }
-
-    reset(): void {
-        this.value = '';
-    }
-    render(): string {
-        return EditorHtmlHelper.input(this, this.label, `<textarea class="form-control" id="${this.shimmed}" name="${this.name}">${this.value}</textarea>`, 'control-line-group');
-    }
-    ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
-        this.element = box;
-        const that = this;
-        box.on('change', 'textarea', function() {
-            that._value = this.value;
-            manager.notify(that);
-        });
+    public static numberInput(val: number|string = ''): string {
+        return `<div class="number-control-container">
+        <input type="text" value="${val}">
+        <div class="control-action-bar">
+            <i class="fa fa-angle-up action-plus"></i>
+            <i class="fa fa-angle-down action-minus"></i>
+        </div>
+    </div>`;
     }
 }
 
@@ -558,35 +570,56 @@ class EditorSizeControl implements IEditorInput, IEditorInputGroup {
     shimmed?: string;
     name: string;
     label?: string;
+
+    private _value?: any;
     private control = new EditorSizeElement;
     private manager: IEditorInputGroup;
+    private element: JQuery<HTMLElement>;
 
     public set value(arg: any) {
+        if (this._value === arg) {
+            return;
+        }
         this.control.value = arg;
+        this._value = this.control.value;
+        if (this.element) {
+            this.element.find('.side-label input').val(this._value.value);
+        }
     }
 
-    public get value(): string {
-        return this.control.value;
+    public get value(): any {
+        return this._value;
     }
 
     get isUpdated(): boolean {
-        return false;
+        return this._value && this._value.value;
     }
 
     reset(): void {
         this.value = undefined;
     }
     render(): string {
-        this.control.value = this.value;
-        return EditorHtmlHelper.input(this, this.label, this.control.render());
+        return EditorInputElement.inputSideGroup(this, this.control.render(), `<input type="range" value="${EditorHelper.parseNumber(this.control.value.value)}">`);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
+        const that = this;
+        this.element = box;
         this.manager = manager;
-        this.control.ready(box.find('.control-row'), this);
+        this.control.ready(box.find('.select-with-control'), this);
+        box.on('change', '.side-label input', function() {
+            const val = that.value;
+            val.value = EditorHelper.parseNumber(this.value);
+            that.control.value = that._value = val;
+            box.trigger(EditorEventInputChange);
+            manager.notify(that);
+        })
     }
 
     notify(control: IEditorElement): void {
+        this._value = this.control.value;
+        this.element.find('.side-label input').val(this._value.value);
         this.manager.notify(this);
+        this.element.trigger(EditorEventInputChange);
     }
 }
 
@@ -600,7 +633,7 @@ class EditorRadioControl implements IEditorInput, IEditorInputGroup {
     private manager: IEditorInputGroup;
 
     get isUpdated(): boolean {
-        return false;
+        return !this._value;
     }
 
     public set value(arg: any) {
@@ -628,7 +661,7 @@ class EditorRadioControl implements IEditorInput, IEditorInputGroup {
     }
     render(): string {
         this.control = new EditorCheckElement(this.value, this.items);
-        return EditorHtmlHelper.input(this, this.label, this.control.render());
+        return EditorInputElement.inputGroup(this, this.control.render(), false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.manager = manager;
@@ -675,8 +708,8 @@ class EditorBoundControl implements IEditorInput, IEditorInputGroup {
     
     render(): string {
         this.control.columns = this.columns;
-        return EditorHtmlHelper.input(this, this.label, this.control.render()
-        , 'control-line-group');
+        return EditorInputElement.inputGroup(this, this.control.render()
+        , false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.manager = manager;

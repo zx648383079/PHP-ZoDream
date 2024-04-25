@@ -11,6 +11,7 @@ use Module\Template\Domain\Model\SiteWeightModel;
 use Module\Template\Domain\VisualEditor\VisualFactory;
 use Module\Template\Domain\VisualEditor\VisualInput;
 use Module\Template\Domain\VisualEditor\VisualWeight;
+use Zodream\Database\Relation;
 use Zodream\Helpers\Arr;
 use Zodream\Html\Tree;
 
@@ -315,6 +316,15 @@ final class PageRepository {
     public static function weightSearch(int $pageId): array {
         $items = SitePageWeightModel::where('page_id', $pageId)->orderBy('parent_id', 'asc')
             ->orderBy('parent_index', 'asc')->get();
+        $items = Relation::create($items, [
+            Relation::MERGE_RELATION_KEY => Relation::make(SiteWeightModel::select('id', 'title'), 'weight_id', 'id')
+        ]);
         return (new Tree($items))->makeIdTree();
+    }
+
+    public static function pageSetting(int $pageId): array {
+        $theme = Arr::toArray(VisualInput::themeSetting());
+        $page = Arr::toArray(VisualInput::pageSetting());
+        return compact('theme', 'page');
     }
 }

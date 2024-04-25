@@ -1,50 +1,66 @@
 class EditorMaskControl implements IEditorInput {
+    shimmed?: string;
     name: string;
-    value: any;
     label?: string;
 
+    private _value?: string;
+    private element: JQuery<HTMLElement>;
+    private items: string[] = [
+        'inset(10%)',
+        'circle(45% at 50% 50%)',
+        'ellipse(30% 45% at 50% 50%)',
+        'polygon(50% 0%, 0% 100%, 100% 100%)',
+        'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)',
+        'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)',
+        'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+        'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
+        'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+    ];
+
+    public set value(arg: string) {
+        if (this._value === arg) {
+            return;
+        }
+        this._value = arg;
+        if (this.element) {
+            this.element.find('.clip-path-box .shape').removeClass('selected').eq(this.items.indexOf(arg)).addClass('selected');
+        }
+    }
+
+    public get value() {
+        return this._value;
+    }
+
     get isUpdated(): boolean {
-        return false;
+        return !!this._value;
     }
 
     reset(): void {
+        this.value = undefined;
     }
+
     render(): string {
-        return `<div class="mark-container">
+        const html = this.items.map(i => `<div class="shape" style="clip-path: ${i};"></div>`).join('');
+        return `<div class="mark-container" ${EditorHtmlHelper.shimmed(this.shimmed)}>
         <div class="clip-path-box">
-            <div class="shape" style="clip-path: inset(10%);"></div>
-            <div class="shape" style="clip-path: circle(45% at 50% 50%);"></div>
-            <div class="shape" style="clip-path: ellipse(30% 45% at 50% 50%);"></div>
-            <div class="shape"
-                style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
-            ></div>
-            <div
-                class="shape"
-                style="clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);"
-            ></div>
-            <div
-                class="shape"
-                style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);"
-            ></div>
-            <div
-                class="shape"
-                style="clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);"
-            ></div>
-            <div
-                class="shape"
-                style="clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);"
-            ></div>
-            <div
-                class="shape"
-                style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"
-            ></div>
+            ${html}
         </div>
         <button class="btn btn-primary">一键取消</button>
     </div>
     `;
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
-        
+        this.element = box;
+        const that = this;
+        box.on('click', '.btn', function() {
+            that.reset();
+            manager.notify(that);
+        }).on('click', '.clip-path-box .shape', function() {
+            const $this = $(this);
+            $this.addClass('selected').siblings().removeClass('selected');
+            that._value = that.items[$this.index()];
+            manager.notify(that);
+        });
     }
 }
 
@@ -106,7 +122,7 @@ class EditorPositionControl implements IEditorInput, IEditorInputGroup {
         const hidden = this._type !== this.typeItems[0].value ? '' : ' hidden';
         this.control.value = this._value;
         const bound = this.control.render();
-        const select = EditorHtmlHelper.input(this, this.label, EditorSelectControl.selectControl(this.shimmed, this.name + '[type]', this.typeItems, this._type));
+        const select = EditorInputElement.inputGroup(this, EditorSelectControl.selectControl(this.shimmed, this.name + '[type]', this.typeItems, this._type));
         return  `<div ${EditorHtmlHelper.shimmed(this.shimmed)} class="position-container">
         ${select}
         <div class="${hidden}">${bound}</div>
@@ -164,7 +180,6 @@ class EditorGroupControl implements IEditorInput {
 
 class EditorAlignControl implements IEditorInput, IEditorInputGroup {
     shimmed?: string;
-    value?: any;
     label?: string;
 
     private manager: IEditorInputGroup;
@@ -172,12 +187,28 @@ class EditorAlignControl implements IEditorInput, IEditorInputGroup {
         EditorAlignControl.horizontalAlign(),
         EditorAlignControl.verticalAlign()
     ];
+
+    public set value(arg: any) {
+        this.items.forEach((item, i) => {
+            item.value = arg ? arg[i] : undefined;
+        });
+    }
+
+    public get value() {
+        return this.items.map(i => i.value);
+    }
     
     get isUpdated(): boolean {
+        for (const item of this.items) {
+            if (item.value) {
+                return true;
+            }
+        }
         return false;
     }
 
     reset(): void {
+        this.value = [];
     }
 
     render(): string {
@@ -192,7 +223,6 @@ class EditorAlignControl implements IEditorInput, IEditorInputGroup {
     }
 
     notify(control: IEditorElement): void {
-        this.value = this.items.map(i => i.value);
         this.manager.notify(this);
     }
 
@@ -218,138 +248,174 @@ class EditorAlignControl implements IEditorInput, IEditorInputGroup {
     }
 }
 
-class EditorAnimationControl implements IEditorInput {
+class EditorAnimationControl implements IEditorInput, IEditorInputGroup {
+    shimmed?: string;
     label?: string;
 
+    private items: IEditorInput[] = [
+        EditorHtmlHelper.renderControl({
+            label: '动效',
+            type: 'select',
+            name: 'type',
+            items: [
+                { value: '', name: '无' },
+                { value: 'bounce', name: '弹跳' },
+                { value: 'fadeIn', name: '渐现' },
+                { value: 'fadeOut', name: '渐出' },
+                { value: 'flash', name: '闪烁' },
+                { value: 'pulse', name: '跳动' },
+                { value: 'rubberBand', name: '橡皮筋' },
+                { value: 'shake', name: '抖动' },
+                { value: 'swing', name: '摆动' },
+                { value: 'tada', name: '哒嘟' },
+                { value: 'wobble', name: '摇晃' },
+                { value: 'jello', name: '扭曲抖动' },
+                { value: 'bounceIn', name: '弹入' },
+                { value: 'bounceInDown', name: '上弹入' },
+                { value: 'bounceInLeft', name: '左弹入' },
+                { value: 'bounceInRight', name: '右弹入' },
+                { value: 'bounceInUp', name: '下弹入' },
+                { value: 'flipInX', name: '水平翻转' },
+                { value: 'flipInY', name: '垂直翻转' },
+                { value: 'spinning', name: '旋转（顺时针）' },
+                { value: 'spinning-reverse', name: '旋转（逆时针）' },
+                { value: 'rotateIn', name: '旋入' },
+                { value: 'rotateInDownLeft', name: '左下旋转' },
+                { value: 'rotateInDownRight', name: '右下旋转' },
+                { value: 'rotateInUpLeft', name: '左上旋转' },
+                { value: 'rotateInUpRight', name: '右上旋转' },
+                { value: 'slideInDown', name: '上滑入' },
+                { value: 'slideInLeft', name: '左滑入' },
+                { value: 'slideInRight', name: '右滑入' },
+                { value: 'slideInUp', name: '下滑入' },
+                { value: 'zoomIn', name: '逐渐放大' },
+                { value: 'zoomInDown', name: '从下放大' },
+                { value: 'zoomInLeft', name: '从左放大' },
+                { value: 'zoomInRight', name: '从右放大' },
+                { value: 'zoomInUp', name: '从上放大' },
+                { value: 'rollIn', name: '滚入' },
+                { value: 'lightSpeedIn', name: '闪入' },
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '延时',
+            type: 'select',
+            name: 'delay',
+            items: [
+                { value: '', name: '无' },
+                { value: '0.1s', name: '100ms' },
+                { value: '0.2s', name: '200ms' },
+                { value: '0.3s', name: '300ms' },
+                { value: '0.5s', name: '500ms' },
+                { value: '1s', name: '1s' },
+                { value: '2s', name: '2s' },
+                { value: '3s', name: '3s' },
+                { value: '4s', name: '4s' },
+                { value: '5s', name: '5s' },
+                { value: '6s', name: '6s' },
+                { value: '7s', name: '7s' },
+                { value: '8s', name: '8s' },
+                { value: '9s', name: '9s' },
+                { value: '10s', name: '10s' },
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '时长',
+            type: 'select',
+            name: 'duration',
+            items: [
+                { value: '0.25s', name: '250ms' },
+                { value: '0.5s', name: '500ms' },
+                { value: '0.75s', name: '750ms' },
+                { value: '1s', name: '1s' },
+                { value: '2s', name: '2s' },
+                { value: '3s', name: '3s' },
+                { value: '4s', name: '4s' },
+                { value: '5s', name: '5s' },
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '重复',
+            type: 'select',
+            name: 'count',
+            items: [
+                { value: '1', name: '1' },
+                { value: '2', name: '2' },
+                { value: '3', name: '3' },
+                { value: '4', name: '4' },
+                { value: '5', name: '5' },
+                { value: '6', name: '6' },
+                { value: '7', name: '7' },
+                { value: '8', name: '8' },
+                { value: '9', name: '9' },
+                { value: '10', name: '10' },
+                { value: 'infinite', name: '无限循环' },
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '缓动函数',
+            type: 'select',
+            name: 'func',
+            items: [
+                { value: 'linear', name: '线性' },
+                { value: 'ease', name: 'ease' },
+                { value: 'ease-in', name: 'ease-in' },
+                { value: 'ease-out', name: 'ease-out' },
+                { value: 'ease-in-out', name: 'ease-in-out' },
+            ]
+        }),
+    ];
+    private element: JQuery<HTMLElement>;
+    private manager: IEditorInputGroup;
+
+    public set value(arg: any) {
+        this.items.forEach(item => {
+            if (!arg) {
+                item.reset();
+                return;
+            }
+            item.value = item[item.name];
+        });
+    }
+
+    public get value(): any {
+        const data = {};
+        for (const item of this.items) {
+            data[item.name] = item.value;
+        }
+        return data;
+    }
+
     get isUpdated(): boolean {
+        for (const item of this.items) {
+            if (item.isUpdated) {
+                return true;
+            }
+        }
         return false;
     }
 
     reset(): void {
+        this.value = undefined;
     }
+
     render(): string {
-        // 动效名称
-        const animationLabelOptions = [
-            { value: '', name: '无' },
-            { value: 'bounce', name: '弹跳' },
-            { value: 'fadeIn', name: '渐现' },
-            { value: 'fadeOut', name: '渐出' },
-            { value: 'flash', name: '闪烁' },
-            { value: 'pulse', name: '跳动' },
-            { value: 'rubberBand', name: '橡皮筋' },
-            { value: 'shake', name: '抖动' },
-            { value: 'swing', name: '摆动' },
-            { value: 'tada', name: '哒嘟' },
-            { value: 'wobble', name: '摇晃' },
-            { value: 'jello', name: '扭曲抖动' },
-            { value: 'bounceIn', name: '弹入' },
-            { value: 'bounceInDown', name: '上弹入' },
-            { value: 'bounceInLeft', name: '左弹入' },
-            { value: 'bounceInRight', name: '右弹入' },
-            { value: 'bounceInUp', name: '下弹入' },
-            { value: 'flipInX', name: '水平翻转' },
-            { value: 'flipInY', name: '垂直翻转' },
-            { value: 'spinning', name: '旋转（顺时针）' },
-            { value: 'spinning-reverse', name: '旋转（逆时针）' },
-            { value: 'rotateIn', name: '旋入' },
-            { value: 'rotateInDownLeft', name: '左下旋转' },
-            { value: 'rotateInDownRight', name: '右下旋转' },
-            { value: 'rotateInUpLeft', name: '左上旋转' },
-            { value: 'rotateInUpRight', name: '右上旋转' },
-            { value: 'slideInDown', name: '上滑入' },
-            { value: 'slideInLeft', name: '左滑入' },
-            { value: 'slideInRight', name: '右滑入' },
-            { value: 'slideInUp', name: '下滑入' },
-            { value: 'zoomIn', name: '逐渐放大' },
-            { value: 'zoomInDown', name: '从下放大' },
-            { value: 'zoomInLeft', name: '从左放大' },
-            { value: 'zoomInRight', name: '从右放大' },
-            { value: 'zoomInUp', name: '从上放大' },
-            { value: 'rollIn', name: '滚入' },
-            { value: 'lightSpeedIn', name: '闪入' },
-        ];
-
-        // 延时时间
-        const animationLabelDelayOptions = [
-            { value: '', name: '无' },
-            { value: '0.1s', name: '100ms' },
-            { value: '0.2s', name: '200ms' },
-            { value: '0.3s', name: '300ms' },
-            { value: '0.5s', name: '500ms' },
-            { value: '1s', name: '1s' },
-            { value: '2s', name: '2s' },
-            { value: '3s', name: '3s' },
-            { value: '4s', name: '4s' },
-            { value: '5s', name: '5s' },
-            { value: '6s', name: '6s' },
-            { value: '7s', name: '7s' },
-            { value: '8s', name: '8s' },
-            { value: '9s', name: '9s' },
-            { value: '10s', name: '10s' },
-        ];
-
-        // 时长
-        const animationLabelDurationOptions = [
-            { value: '0.25s', name: '250ms' },
-            { value: '0.5s', name: '500ms' },
-            { value: '0.75s', name: '750ms' },
-            { value: '1s', name: '1s' },
-            { value: '2s', name: '2s' },
-            { value: '3s', name: '3s' },
-            { value: '4s', name: '4s' },
-            { value: '5s', name: '5s' },
-        ];
-
-        // 重复次数
-        const animationIterationCountOptions = [
-            { value: '1', name: '1' },
-            { value: '2', name: '2' },
-            { value: '3', name: '3' },
-            { value: '4', name: '4' },
-            { value: '5', name: '5' },
-            { value: '6', name: '6' },
-            { value: '7', name: '7' },
-            { value: '8', name: '8' },
-            { value: '9', name: '9' },
-            { value: '10', name: '10' },
-            { value: 'infinite', name: '无限循环' },
-        ];
-
-        const animationFuncOptions = [
-            { value: 'linear', name: '线性' },
-            { value: 'ease', name: 'ease' },
-            { value: 'ease-in', name: 'ease-in' },
-            { value: 'ease-out', name: 'ease-out' },
-            { value: 'ease-in-out', name: 'ease-in-out' },
-        ];
-        return `<div class="animation-container">
+        const html = this.items.map(i => i.render()).join('');
+        return `<div class="animation-container" ${EditorHtmlHelper.shimmed(this.shimmed)}>
         <div class="effect-show">效果展示</div>
-        <div class="control-inline-group">
-            <label for="animation-type">动效</label>
-            <select class="form-control" id="animation-type" name="animation[type]">
-            ${EditorSelectControl.selectOption(animationLabelOptions)}
-            </select>
-        </div>
-        <div class="control-inline-group">
-            <label for="animation-delay">延时</label>
-            <select class="form-control" id="animation-delay" name="animation[delay]">
-            ${EditorSelectControl.selectOption(animationLabelDelayOptions)}
-            </select>
-        </div>
-        <div class="control-inline-group">
-            <label for="animation-duratio">时长</label>
-            <select class="form-control" id="animation-duration" name="animation[duration]">
-            ${EditorSelectControl.selectOption( animationLabelDurationOptions)}
-            </select>
-        </div>
-        <div class="control-inline-group">
-            <label for="animation-count">重复</label>
-            <select class="form-control" id="animation-count" name="animation[count]">
-            ${EditorSelectControl.selectOption(animationIterationCountOptions)}
-            </select>
-        </div>
+       <div class="control-body">${html}</div>
     </div>`;
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
+        this.element = box;
+        this.manager = manager;
+        const items = box.find('.control-body').children();
+        this.items.forEach((item, i) => {
+            item.ready(items.eq(i), this);
+        });
+    }
+
+    notify(control: IEditorElement): void {
+        this.manager.notify(this);
     }
 }

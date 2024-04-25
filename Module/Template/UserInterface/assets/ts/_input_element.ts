@@ -41,6 +41,61 @@ class EditorSwitchElement implements IEditorElement {
     }
 }
 
+class EditorNumberElement implements IEditorElement {
+    constructor(
+        private _value?: number,
+        public min?: number,
+        public max?: number,
+        public step = 1,
+    ) {
+    }
+
+    private element?: JQuery<HTMLElement>;
+
+    public set value(arg: any) {
+        if (typeof arg !== 'undefined') {
+            arg = EditorHelper.parseNumber(arg);
+        }
+        if (this._value === arg) {
+            return;
+        }
+        this._value = arg;
+        if (!this.element) {
+            return;
+        }
+        this.element.find('input').val(typeof this._value === 'undefined' ? '' : this._value);
+    }
+
+    public get value(): number|undefined {
+        return this._value;
+    }
+
+    public reset() {
+        this.value = undefined;
+    }
+
+    public render(): string {
+        return EditorNumberControl.numberInput(typeof this._value === 'undefined' ? '' : this._value);
+    }
+
+    public ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup) {
+        const that = this;
+        this.element = box;
+        box.on('click', '.action-plus', function() {
+            that.value = EditorHelper.parseNumber(this._value) + that.step;
+            manager.notify(that);
+        })
+        .on('click', '.action-minus', function() {
+            that.value = EditorHelper.parseNumber(this._value) - that.step;
+            manager.notify(that);
+        }).on('change', 'input', function(this: HTMLInputElement) {
+            const val = this.value;
+            that._value = typeof val === 'undefined' || val === '' ? undefined : EditorHelper.parseNumber(val);
+            manager.notify(that);
+        });
+    }
+}
+
 class EditorSizeElement implements IEditorElement {
   
     constructor(
@@ -50,7 +105,7 @@ class EditorSizeElement implements IEditorElement {
         this.format(value);
     }
 
-    private _value = 0;
+    private _value?: number;
     private _unit = 'px';
     private element: JQuery<HTMLElement>;
 
@@ -59,7 +114,7 @@ class EditorSizeElement implements IEditorElement {
         if (!this.element) {
             return;
         }
-        this.element.find('.control-body .value-control').val(this._value);
+        this.element.find('.control-body .number-control-container input').val(typeof this._value === 'undefined' ? '' : this._value);
         this.element.find('.control-body .extra-control').val(this._unit);
     }
 
@@ -69,11 +124,11 @@ class EditorSizeElement implements IEditorElement {
 
     private format(val: any) {
         if (!val) {
-            this._value = 0;
+            this._value = undefined;
             return;
         }
         if (typeof val === 'object') {
-            if (val.value) {
+            if (val.value || val.unit) {
                 this._value = val.value;
                 this._unit = val.unit;
             }
@@ -82,10 +137,10 @@ class EditorSizeElement implements IEditorElement {
         val = val.toString().trim();
         const match = val.match(/[\d\.]+/);
         if (!match) {
-            this._value = 0;
+            this._value = undefined;
             return;
         }
-        this._value = parseFloat(match[0]);
+        this._value = EditorHelper.parseNumber(match[0]);
         const unit = val.substring(match.index + match[0].length);
         if (unit) {
             this._unit = unit;
@@ -93,7 +148,7 @@ class EditorSizeElement implements IEditorElement {
     }
 
     public render(): string {
-        const input = `<input type="number" class="value-control" value="${this._value}">`;
+        const input = EditorNumberControl.numberInput(typeof this._value === 'undefined' ? '' : this._value);
         const core = this.label ? `<div class="control-body">
         <label for="">${this.label}</label>
         ${input}
@@ -107,9 +162,9 @@ class EditorSizeElement implements IEditorElement {
     public ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup) {
         const that = this;
         this.element = box;
-        box.on('change', '.control-body .value-control', function() {
-            const $this = $(this);
-            that._value = toFloat($this.val());
+        box.on('change', '.control-body .number-control-container input', function(this: HTMLInputElement) {
+            const val = this.value;
+            that._value = typeof val === 'undefined' || val === '' ? undefined : EditorHelper.parseNumber(val);
             manager.notify(that);
             // let target = $this.parent();
             // if (!target.hasClass('.control-inline-group')) {
@@ -290,6 +345,7 @@ class EditorSelectElement implements IEditorElement {
         public editable = false,
         public searchable = false,
         public arrow = 'fa-angle-down',
+        public multiple = false,
         public placeholder?: string
     ) {
 
@@ -318,17 +374,23 @@ class EditorSelectElement implements IEditorElement {
 
 
     public render(): string {
-        const body = this.editable ? `<input type="text" class="input-body"  value="${this.value}">` : `<span class="input-body">${this.value}</span>`;
+        const val = !this.multiple ? this.value : '';
+        let body = this.editable ? `<input type="text" class="input-body"  value="${val}">` : `<span class="input-body">${val}</span>`;
+        if (this.multiple) {
+            body = `<div class="selected-container"></div>` + body;
+        } else {
+            body += `<div class="input-clear">
+            <i class="fa fa-close"></i>
+        </div>`;
+        }
         return EditorHtmlHelper.join(`<div class="select-control-container">`, `<div class="select-input-container">
             ${body}
-            <div class="input-clear">
-                <i class="fa fa-close"></i>
-            </div>
             <div class="input-arrow">
                 <i class="fa ${this.arrow}"></i>
             </div>
         </div>`, EditorSelectControl.selectOptionBar(this.items, this.value, this.searchable), `</div>`);
     }
+
     public ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup) {
         const that = this;
         this.element = box.find('.input-body');
@@ -343,6 +405,8 @@ class EditorSelectElement implements IEditorElement {
             that.value = val;
             manager.notify(that);
             // $this.closest('.control-line-group').trigger(EditorEventInputChange, val);
+        }).on('click', '.selected-container .item-close', function() {
+            $(this).closest('.selected-item').remove();
         }).on('click', '.input-clear', function() {
             const target = $(this).prev('.input-body');
             if (target[0] instanceof HTMLInputElement) {
@@ -355,11 +419,17 @@ class EditorSelectElement implements IEditorElement {
             $(this).closest('.select-control-container').toggleClass('select-focus');
         }).on('select:change', '.select-option-bar', function(_, ele: HTMLDivElement) {
             const $this = $(ele);
-            const target = $this.closest('.select-control-container').removeClass('select-focus').find('.input-body');
+            const control = $this.closest('.select-control-container').removeClass('select-focus');
+            const val = $this.data('value');
+            if (that.multiple) {
+                control.find('.selected-container').append(EditorSelectElement.multipleSelectedItem(val));
+                return;
+            }
+            const target = control.find('.input-body');
             if (target[0] instanceof HTMLInputElement) {
-                target.val($this.data('value'));
+                target.val(val);
             } else {
-                target.text($this.data('value'));
+                target.text(val);
             }
             target.trigger('change');
         }).on('click', '.select-option-bar .option-item', function() {
@@ -368,12 +438,16 @@ class EditorSelectElement implements IEditorElement {
             $this.closest('.select-option-bar').trigger('select:change', this);
         });
     }
+
+    private static multipleSelectedItem(text: string): string {
+        return `<div class="selected-item"><span class="item-close">&times;</span><div class="item-label">${text}</div></div>`;
+    }
 }
 
 class EditorInputElement implements IEditorElement {
     constructor(
-        private shimmed: string,
-        private label: string,
+        public shimmed: string,
+        public label: string,
         private inline = true,
     ) {
     }
@@ -381,13 +455,10 @@ class EditorInputElement implements IEditorElement {
     private element: JQuery<HTMLElement>;
 
     render(): string {
-        return this.renderOutline('');
+        return EditorInputElement.inputGroup(this as any, '', this.inline);
     }
 
-    protected renderOutline(body: string) {
-        const cls = this.inline ? 'control-inline-group' : 'control-line-group';
-        return `<div ${EditorHtmlHelper.shimmed(this.shimmed)} class="${cls}"><i class="control-updated-tag hidden"></i><label for="${this.shimmed}">${this.label}</label>${body}</div>`;
-    }
+    
 
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -396,5 +467,56 @@ class EditorInputElement implements IEditorElement {
             $this.next().next().trigger(EditorEventInputReset).next('.control-popup').trigger(EditorEventInputReset);
             $this.addClass('hidden');
         });
+    }
+
+    /**
+     * 生成普通的标签加输入组合
+     * @param control 
+     * @param body 
+     * @param inline 
+     * @returns 
+     */
+    public static inputGroup(control: IEditorInput, body: string, inline = true) {
+        const inner = `<label for="${control.shimmed}">${control.label}</label>
+        ${body}`;
+        if (!inline) {
+            return this.inputOutline(control, inner);
+        }
+        let cls = !control.label ? ' control-inline-not-label' : '';
+        if (body.indexOf('control-popup-target') > 0) {
+            cls += ' control-inline-popup-group';
+        }
+        return this.inputOutline(control, `<div class="control-inline-group${cls}">
+        ${inner}
+    </div>`);
+    }
+
+    /**
+     * 生成标签+滑动条+输入的组合
+     * @param control 
+     * @param body 
+     * @param bottom 
+     * @returns 
+     */
+    public static inputSideGroup(control: IEditorInput, body: string, bottom: string = '') {
+        return this.inputOutline(control, `<div class="control-inline-group">
+        <div class="side-label"><label for="${control.shimmed}">${control.label}</label>${bottom}</div>
+        ${body}
+    </div>`);
+    }
+
+    private static inputOutline(control: IEditorInput, body: string) {
+        const hidden = typeof control !== 'object' || !control.isUpdated ? ' hidden' : '';
+        return `<div ${EditorHtmlHelper.shimmed(control.shimmed)} class="control-line-group"><i class="control-updated-tag${hidden}"></i>
+        ${body}
+        ${this.inputTooltip(control.tooltip)}
+        </div>`;
+    }
+
+    private static inputTooltip(tooltip?: string): string {
+        if (!tooltip) {
+            return '';
+        }
+        return `<div class="control-tooltip">${tooltip}</div>`;
     }
 }

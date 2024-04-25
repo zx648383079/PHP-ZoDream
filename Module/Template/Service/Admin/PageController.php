@@ -101,4 +101,23 @@ class PageController extends Controller {
         }
         return $this->renderData($data);
     }
+
+    public function settingAction(int $id) {
+        try {
+            $data = PageRepository::pageSetting($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData($data);
+    }
+
+    public function saveSettingAction(Input $input, int $id) {
+        try {
+            // TODO
+            $input->get();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

@@ -22,6 +22,17 @@ function bindPage(pageId: number) {
         $.getJSON(BASE_URI + 'page/search?id=' + pageId, data => {
             postCallback(data, success, failure);
         });
+    }).on(EditorEventPageSetting, function(success, failure) {
+        $.getJSON(BASE_URI + 'page/setting?id=' + pageId, data => {
+            postCallback(data, success, failure);
+        });
+    }).on(EditorEventSavePageSetting, function(data: any, success, failure) {
+        postJson(BASE_URI + 'page/save_setting', typeof data !== 'object' ? data : {
+            id: pageId,
+            ...data
+        }, res => {
+            postCallback(res, success, failure);
+        });
     }).on(EditorEventWeightTree, function(success, failure) {
         $.getJSON(BASE_URI + 'weight/search?id=' + pageId, data => {
             postCallback(data, success, failure);

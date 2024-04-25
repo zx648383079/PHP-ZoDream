@@ -633,3 +633,4 @@ declare namespace ZreDialog {
     }
 }
 
+declare class Dialog extends ZreDialog.Dialog {}

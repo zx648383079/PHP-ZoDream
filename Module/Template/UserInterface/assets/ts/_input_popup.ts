@@ -104,7 +104,7 @@ class EditorColorControl implements IEditorInput {
             <a class="item">HSL</a>
         </div>
     </div>`;
-        return EditorHtmlHelper.input(this, this.label, html);
+        return EditorInputElement.inputGroup(this, html);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         const that = this;
@@ -327,15 +327,14 @@ class EditorBackgroundControl implements IEditorInput, IEditorInputGroup {
         ${children}
     </div>
     `;
-        return EditorHtmlHelper.input(this, this.label, html);
+        return EditorInputElement.inputGroup(this, html);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
         this.manager = manager;
         const items = box.find('.control-popup').children();
-        const that = this;
         this.items.forEach((item, i) => {
-            item.ready(items.eq(i), that);
+            item.ready(items.eq(i), this);
         });
     }
 
@@ -427,7 +426,7 @@ class EditorBorderControl implements IEditorInput, IEditorInputGroup {
     <div class="control-popup" data-popup="border">
         ${children}
     </div>`
-        return EditorHtmlHelper.input(this, this.label, html);
+        return EditorInputElement.inputGroup(this, html);
     }
 
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
@@ -453,7 +452,13 @@ class EditorShadowControl implements IEditorInput, IEditorInputGroup {
     label?: string;
 
     private items: IEditorElement[] = [
-        new EditorBoundElement(undefined, ['X', 'Y', 'BLUR', 'SPREAD']),
+        EditorHtmlHelper.renderControl({
+            label: '',
+            type: 'bound',
+            name: 'bound',
+            items: ['X', 'Y', 'BLUR', 'SPREAD']
+        }),
+        // new EditorBoundElement(undefined, ['X', 'Y', 'BLUR', 'SPREAD']),
         EditorHtmlHelper.renderControl({
             label: 'Color',
             type: 'color',
@@ -497,7 +502,7 @@ class EditorShadowControl implements IEditorInput, IEditorInputGroup {
     <div class="control-popup" data-popup="shadow">
         ${children}
     </div>`;
-        return EditorHtmlHelper.input(this, this.label, html);
+        return EditorInputElement.inputGroup(this, html);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -516,6 +521,155 @@ class EditorShadowControl implements IEditorInput, IEditorInputGroup {
                 this.value[(item as IEditorInput).name] = (item as IEditorInput).value;
             }
         }
+        this.manager.notify(this);
+    }
+}
+
+class EditorTypographyControl implements IEditorInput, IEditorInputGroup {
+    shimmed?: string;
+    name?: string;
+    label?: string;
+
+    private items: IEditorInput[] = [
+        EditorHtmlHelper.renderControl({
+            label: 'Color',
+            type: 'color',
+            name: 'color'
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Font Size',
+            type: 'size',
+            name: 'font-size'
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Text Align',
+            type: 'textAlign',
+            name: 'text-align'
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Text Transform',
+            type: 'radio',
+            name: 'text-transform',
+            items: [
+                {name: 'Aa', value: 'capitalize'},
+                {name: 'aa', value: 'lowercase'},
+                {name: 'AA', value: 'uppercase'},
+                {name: 'x', value: 'none'},
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '',//'Font Family',
+            type: 'select',
+            name: 'font-family',
+            items: [
+                {name: '默认', value: ''},
+                {name: '微软雅黑', value: '微软雅黑'},
+                {name: '黑体', value: '黑体'},
+                {name: '宋体', value: '宋体'},
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '',//'Font Weight',
+            type: 'range',
+            name: 'font-weight',
+            step: 100,
+            min: 100,
+            max: 900
+        }),
+        EditorHtmlHelper.renderControl({
+            label: '',//'Font Style',
+            type: 'select',
+            name: 'font-style',
+            items: [
+                {name: 'Normal', value: 'normal'},
+                {name: 'Italic', value: 'italic'},
+                {name: 'Oblique', value: 'oblique'},
+            ]
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Line Height',
+            type: 'size',
+            name: 'line-height'
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Letter Spacing',
+            type: 'size',
+            name: 'letter-spacing'
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Text Shadow',
+            type: 'shadow',
+            name: 'text-shadow',
+        }),
+        EditorHtmlHelper.renderControl({
+            label: 'Text Decoration',
+            type: 'radio',
+            name: 'text-decoration',
+            items: [
+                {name: '<span style="text-decoration:line-through">Aa</span>', value: 'line-through'},
+                {name: '<span style="text-decoration:underline">Aa</span>', value: 'underline'},
+                {name: '<span style="text-decoration:overline">Aa</span>', value: 'overline'},
+                {name: 'x', value: 'none'},
+            ]
+        }),
+    ];
+    private element: JQuery<HTMLElement>;
+    private manager: IEditorInputGroup;
+
+    public set value(arg: any) {
+        this.items.forEach(item => {
+            if (!arg) {
+                item.reset();
+                return;
+            }
+            item.value = item[item.name];
+        });
+    }
+
+    public get value(): any {
+        const data = {};
+        for (const item of this.items) {
+            data[item.name] = item.value;
+        }
+        return data;
+    }
+
+    get isUpdated(): boolean {
+        for (const item of this.items) {
+            if (item.isUpdated) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    reset(): void {
+        this.value = undefined;
+    }
+
+    render(): string {
+        const children = this.items.map(i => i.render()).join('');
+        const html = `<div class="control-popup-target">
+        <div class="color-icon">
+            <i class="fa fa-edit"></i>
+        </div>
+    </div>
+    <div class="control-popup" data-popup="border">
+        ${children}
+    </div>`
+        return EditorInputElement.inputGroup(this, html);
+    }
+
+    ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
+        this.element = box;
+        this.manager = manager;
+        const items = box.find('.control-popup').children();
+        this.items.forEach((item, i) => {
+            item.ready(items.eq(i), this);
+        });
+    }
+
+    notify(control: IEditorInput): void {
         this.manager.notify(this);
     }
 }

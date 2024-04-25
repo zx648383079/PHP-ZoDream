@@ -125,30 +125,70 @@ final class VisualInput {
                     self::selectOption('黑体'),
                     self::selectOption('宋体'),
                 ], $content['font-family'] ?? null),
+                self::typography('font', 'Typography', null)
             ]),
         ];
     }
 
-    public static function setting(): array {
+    public static function themeSetting(): array {
         return [
-            self::group('主题', [
-                self::color('primary', 'Primary Color', ''),
-                self::color('primary', 'Secondary Color', ''),
-                self::color('primary', 'Light Color', ''),
-                self::color('primary', 'Dark Color', ''),
-                self::color('primary', 'Muted Color', ''),
-                self::color('primary', 'Border Color', ''),
-                self::color('primary', 'Info Color', ''),
-                self::color('primary', 'Success Color', ''),
-                self::color('primary', 'Warning Color', ''),
-                self::color('primary', 'Danger Color', ''),
+            self::group('常用', [
+                self::color('theme[background_color]', 'Site Background', ''),
+                self::bound('theme[content_margin]', 'Content Margin', '')->tip('Space between header and footer.'),
+                self::bound('theme[element_margin]', 'Element Margin', ''),
+                self::bound('theme[root_margin]', 'Root Container Margin', ''),
+                self::size('container_width', 'Container Width', ''),
             ]),
-            self::group('样式', [
-                self::codeEditor('style', '样式', '', 'css')
+            self::group('颜色', [
+                self::color('theme[primary]', 'Primary Color', ''),
+                self::color('theme[secondary]', 'Secondary Color', ''),
+                self::color('theme[light]', 'Light Color', ''),
+                self::color('theme[dark]', 'Dark Color', ''),
+                self::color('theme[muted]', 'Muted Color', ''),
+                self::color('theme[border]', 'Border Color', ''),
+                self::color('theme[info]', 'Info Color', ''),
+                self::color('theme[success]', 'Success Color', ''),
+                self::color('theme[warning]', 'Warning Color', ''),
+                self::color('theme[danger]', 'Danger Color', ''),
             ]),
-            self::group('脚本', [
-                self::codeEditor('script', '脚本', '', 'javascript')
-            ])
+            self::group('自定义代码', [
+                self::codeEditor('theme[style]', '样式', '', 'css'),
+                self::codeEditor('theme[script]', '脚本', '', 'javascript')
+            ]),
+        ];
+    }
+
+    public static function pageSetting(): array {
+        return [
+            self::group('常用', [
+                self::switch('page[disable_header]', 'Disable Header', 0),
+                self::switch('page[disable_footer]', 'Disable Footer', 0),
+                self::color('page[background_color]', 'Site Background', ''),
+                self::bound('page[content_margin]', 'Content Margin', '')->tip('Space between header and footer.'),
+                self::bound('page[element_margin]', 'Element Margin', ''),
+                self::bound('page[root_margin]', 'Root Container Margin', ''),
+                self::size('page[container_width]', 'Container Width', ''),
+            ]),
+            self::group('SEO', [
+                self::text('page[permalink]', 'Permalink', ''),
+                self::text('page[seo_title]', 'Title', ''),
+                self::text('page[seo_keywords]', 'Meta Keywords', ''),
+                self::textarea('page[seo_description]', 'Meta Description', ''),
+                self::select('page[seo_robot]', 'Meta Robots', [
+                    self::selectOption('noindex'),
+                    self::selectOption('nofollow'),
+                    self::selectOption('none'),
+                    self::selectOption('noarchive'),
+                    self::selectOption('nocache'),
+                    self::selectOption('nosnippet'),
+                    self::selectOption('notranslate'),
+                    self::selectOption('noimageindex'),
+                ], '')->multiple(true),
+            ]),
+            self::group('自定义代码', [
+                self::codeEditor('page[style]', '样式', '', 'css'),
+                self::codeEditor('page[script]', '脚本', '', 'javascript')
+            ]),
         ];
     }
 
@@ -223,7 +263,7 @@ final class VisualInput {
     }
 
     public static function textarea(string $name, string $label, mixed $value, string $placeholder = ''): Input {
-        return Input::textarea($name, $label)->value($value);
+        return Input::textarea($name, $label)->value($value)->placeholder($placeholder);
     }
 
     public static function switch(string $name, string $label, mixed $value): Input {
@@ -269,6 +309,11 @@ final class VisualInput {
     }
 
     public static function bound(string $name, string $label, mixed $value): Input {
+        $type = __FUNCTION__;
+        return new Input(compact('type', 'label', 'name', 'value'));
+    }
+
+    public static function typography(string $name, string $label, mixed $value): Input {
         $type = __FUNCTION__;
         return new Input(compact('type', 'label', 'name', 'value'));
     }

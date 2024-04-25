@@ -1,16 +1,46 @@
-class EditorSettingPanel implements IEditorPanel {
+class EditorSettingPanel implements IEditorPanel, IEditorInputGroup {
     private box: JQuery<HTMLDivElement>;
+    private lastAt: number = 0;
+    private booted = false;
+    private isAsync = false;
 
     constructor(
         private editor: VisualEditor
     ) {
         this.editor.on(EditorEventAfterViewInit, () => {
             this.bindEvent();
+        }).on(EditorEventTimeLoop, (now: Date) => {
+            if (!this.isAsync) {
+                return;
+            }
+            const space = 20000;
+            const nowTime = now.getTime();
+            if (nowTime - this.lastAt > space) {
+                this.saveSync();
+                this.lastAt = nowTime;
+            }
         });
     }
 
+    private saveSync() {
+        this.isAsync = false;
+        const data: any = EditorHtmlHelper.formData(this.box);
+        this.editor.emit(EditorEventSavePageSetting, data as Object, res => {
+            
+        });
+    }
+
+    private autoSave() {
+        this.isAsync = true;
+        this.lastAt = new Date().getTime();
+    }
+
+    public notify(control: IEditorInput): void {
+        this.autoSave();
+    }
+
     private bindEvent() {
-        const that = this.editor;
+        EditorHtmlHelper.bindInputEvent(this.box, this);
         this.box.on('click', '.tree-item .item-open-icon', function() {
             $(this).closest('.tree-item').toggleClass('open');
         });
@@ -44,9 +74,24 @@ class EditorSettingPanel implements IEditorPanel {
 
     public show() {
         this.box.removeClass('min');
+        if (this.booted) {
+            return;
+        }
+        this.booted = true;
+        this.editor.emit(EditorEventPageSetting, data => {
+            this.applyForm(data);
+        });
     }
     public hide() {
         this.box.addClass('min')
+    }
+
+
+    private applyForm(data: any) {
+        const items = this.box.find('.tab-body .tab-item');
+        items[0].innerHTML = EditorHtmlHelper.render(data.page);
+        items[1].innerHTML = EditorHtmlHelper.render(data.theme);
+        EditorHtmlHelper.readyControl(items, this);
     }
 
 }

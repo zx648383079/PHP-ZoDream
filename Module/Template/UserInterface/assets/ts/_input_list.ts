@@ -25,9 +25,9 @@ class EditorTreeControl implements IEditorInput, IEditorInputGroup {
     }
     render(): string {
         this.items = EditorHtmlHelper.renderControlItems(this.form);
-        return EditorHtmlHelper.input(this, this.label, 
+        return EditorInputElement.inputGroup(this, 
             EditorTreeControl.flipPanel(`<div class="tree-container">${this.treeInput(this.form, this.value)}</div>`, this.items.map(i => i.render()).join(''))
-        , 'control-line-group');
+        , false);
     }
 
     notify(control: IEditorElement): void {}
@@ -313,9 +313,9 @@ class EditorMultipleControl implements IEditorInput, IEditorInputGroup {
         items.push(`<div class="multiple-add-btn">
             <i class="fa fa-plus"></i>
         </div>`);
-        return EditorHtmlHelper.input(this, this.label, 
+        return EditorInputElement.inputGroup(this, 
             EditorTreeControl.flipPanel(`<div class="multiple-container">${items.join('')}</div>`, this.items.map(i => i.render()).join(''))
-        , 'control-line-group');
+        , false);
     }
 
     notify(control: IEditorElement): void {}
@@ -481,9 +481,9 @@ class EditorImagesControl implements IEditorInput {
             }
         }
         items.push(EditorImageControl.imageUpload(this.shimmed));
-        return EditorHtmlHelper.input(this, this.label, 
+        return EditorInputElement.inputGroup(this, 
             EditorHtmlHelper.join('<div class="image-container">', ...items, '</div>')
-        , 'control-line-group');
+        , false);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;
@@ -580,7 +580,7 @@ class EditorIconControl implements IEditorInput {
             ${html}
         </div>
     </div>`;
-        return EditorHtmlHelper.input(this, this.label, res);
+        return EditorInputElement.inputGroup(this, res);
     }
     ready(box: JQuery<HTMLElement>, manager: IEditorInputGroup): void {
         this.element = box;

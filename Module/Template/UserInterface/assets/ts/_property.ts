@@ -142,7 +142,7 @@ class EditorPropertyPanel implements IEditorPanel, IEditorInputGroup {
 
     private applyForm(data: any) {
         // const styles = data.settings?.style;
-        let items = this.box.find('.tab-body .tab-item');
+        const items = this.box.find('.tab-body .tab-item');
         items[0].innerHTML = EditorHtmlHelper.render(data.form.basic)
                         + EditorHtmlHelper.buttonGroup(EditorHtmlHelper.button('重置', 'reset-btn'));
         items[1].innerHTML = EditorHtmlHelper.render(data.form.style);

@@ -58,13 +58,6 @@ class EditorHtmlHelper {
         return html;
     }
 
-    public static input(id: string|IEditorInput, label: string, content: string, cls: string = 'control-inline-group'): string {
-        const shimmed = this.shimmed(typeof id === 'object' ? id.shimmed : undefined);
-        const idVal = typeof id === 'object' ? id.shimmed : id;
-        const hidden = typeof id !== 'object' || !id.isUpdated ? ' hidden' : '';
-        return `<div ${shimmed} class="${cls}"><i class="control-updated-tag${hidden}"></i><label for="${idVal}">${label}</label>${content}</div>`;
-    }
-
     public static buttonGroup(...items) {
         return this.join('<div class="btn-group control-offset">', ...items, '</div>');
     }
@@ -73,8 +66,6 @@ class EditorHtmlHelper {
         return `<button type="button" class="btn ${cls}">${text}</button>`;
     }
 
-
-    
     public static nameToId(name: string) {
         return name.replace(/\[/g, '_').replace(/\]/g, '');
     }
@@ -233,6 +224,7 @@ class EditorHtmlHelper {
             icon: EditorIconControl,
             number: EditorNumberControl,
             textarea: EditorTextareaControl,
+            code: EditorTextareaControl,
             size: EditorSizeControl,
             range: EditorRangeControl,
             position: EditorPositionControl,
@@ -245,7 +237,11 @@ class EditorHtmlHelper {
             html: EditorHtmlControl,
             text: EditorTextControl,
             select: EditorSelectControl,
-            shadow: EditorShadowControl
+            shadow: EditorShadowControl,
+            typography: EditorTypographyControl,
+            mask: EditorMaskControl,
+            animation: EditorAnimationControl,
+            radio: EditorRadioControl
         };
         let control: IEditorInput;
         if (maps[input.type]) {
@@ -256,6 +252,7 @@ class EditorHtmlHelper {
         }
         control.shimmed = input.type + shimmed;
         control.label = input.label;
+        control.tooltip = input.tip;
         if (!control.value) {
             control.value = input.value;
         }
@@ -266,14 +263,39 @@ class EditorHtmlHelper {
     }
 
     public static readyControl(box: JQuery<HTMLElement>, manager: IEditorInputGroup) {
-        const that = this;
-        box.children().each(function() {
-            const shimmed = that.getShimmed(this);
-            if (!shimmed) {
-                return;
-            }
-            that.get<IEditorInput>(shimmed).ready($(this) as any, manager);
+        this.controlNodes(box, (node, ctl) => {
+            ctl.ready(node, manager);
         });
+    }
+
+    /**
+     * 获取控件
+     * @param box 
+     * @param cb 
+     */
+    public static controlNodes(box: JQuery<HTMLElement>, cb: (node: JQuery<HTMLElement>, ctl: IEditorInput) => void) {
+        const that = this;
+        const queryFn = (box: JQuery<HTMLElement>) => {
+            box.children().each(function(this: HTMLInputElement) {
+                if (this.classList.contains('panel-item')) {
+                    queryFn($(this).find('.tab-body .tab-item'));
+                    return;
+                }
+                if (this.classList.contains('expand-box')) {
+                    queryFn($(this).children('.expand-body'));
+                    return;
+                }
+                const shimmed = that.getShimmed(this);
+                if (!shimmed) {
+                    return;
+                }
+                const control = that.get<IEditorInput>(shimmed);
+                if (control) {
+                    cb($(this), control);
+                }
+            });
+        };
+        queryFn(box);
     }
 
     public static bindInputEvent(box: JQuery<HTMLElement>, manager: IEditorInputGroup) {
@@ -296,6 +318,15 @@ class EditorHtmlHelper {
         // .on(EditorEventInputReset, '.switch-input', function() {
         //     $(this).trigger('click');
         // })
+        // numner
+        .on('click', '.number-control-container .action-plus', function() {
+            const target = $(this).closest('.number-control-container').find('input');
+            target.val(EditorHelper.parseNumber(target.val()) + 1).trigger('change');
+        })
+        .on('click', '.number-control-container .action-minus', function() {
+            const target = $(this).closest('.number-control-container').find('input');
+            target.val(EditorHelper.parseNumber(target.val()) - 1).trigger('change');
+        })
         // popup
         .on('click', '.control-popup-target', function() {
             const $this = $(this);
