@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Video\Domain\Migrations;
 
-use Module\AppStore\Domain\Repositories\AppRepository;
+use Module\Video\Domain\Repositories\VideoRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\Video\Domain\Models\MusicModel;
 use Module\Video\Domain\Models\VideoModel;
@@ -12,8 +12,8 @@ use Zodream\Database\Schema\Table;
 class CreateVideoTables extends Migration {
 
     public function up(): void {
-        AppRepository::comment()->migration($this);
-        AppRepository::tag()->migration($this);
+        VideoRepository::comment()->migration($this);
+        VideoRepository::tag()->migration($this);
         $this->append(MusicModel::tableName(), function (Table $table) {
             $table->comment('背景音乐库');
             $table->id();
