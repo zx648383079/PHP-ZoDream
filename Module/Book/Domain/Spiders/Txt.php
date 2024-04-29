@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
-use Zodream\Debugger\Domain\Log;
+use Zodream\Debugger\Domain\Console;
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
 
@@ -20,7 +21,7 @@ class Txt {
         if (is_array($content)) {
             $content = implode(PHP_EOL, $content);
         }
-        Log::info($title);
+        Console::info($title);
         $model =  new BookChapterModel([
             'title' => trim($title),
             'content' => $content,
@@ -67,7 +68,7 @@ class Txt {
             $i ++;
             $this->save($book, $title, $lines);
         }
-        Log::notice(sprintf('成功导入%s章', $i));
+        Console::notice(sprintf('成功导入%s章', $i));
         $stream->close();
         $ids = BookChapterModel::where('book_id', $book->id)->pluck('id');
         $book->size = BookChapterBodyModel::whereIn('id', $ids)->sum('char_length(content)');

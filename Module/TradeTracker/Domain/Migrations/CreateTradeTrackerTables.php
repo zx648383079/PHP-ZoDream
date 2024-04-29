@@ -6,7 +6,6 @@ use Domain\Repositories\LocalizeRepository;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\TradeTracker\Domain\Entities\ChannelEntity;
 use Module\TradeTracker\Domain\Entities\ChannelProductEntity;
-use Module\TradeTracker\Domain\Entities\GoodsEntity;
 use Module\TradeTracker\Domain\Entities\ProductEntity;
 use Module\TradeTracker\Domain\Entities\TradeEntity;
 use Module\TradeTracker\Domain\Entities\TradeLogEntity;
@@ -18,20 +17,17 @@ use Zodream\Database\Schema\Table;
 class CreateTradeTrackerTables extends Migration {
 
     public function up(): void {
-        $this->append(GoodsEntity::tableName(), function (Table $table) {
-            $table->comment('商品表');
-            $table->id();
-            foreach (LocalizeRepository::languageAsColumnPrefix() as $lang) {
-                $table->string($lang.'name', 50)->nullable(!empty($lang));
-            }
-            $table->timestamps();
-        })->append(ProductEntity::tableName(), function (Table $table) {
+        $this->append(ProductEntity::tableName(), function (Table $table) {
             $table->comment('商品货品表');
             $table->id();
-            $table->uint('goods_id');
+            $table->uint('parent_id')->default(0);
             foreach (LocalizeRepository::languageAsColumnPrefix() as $lang) {
                 $table->string($lang.'name', 100)->nullable(!empty($lang));
             }
+            $table->uint('cat_id')->default(0);
+            $table->uint('project_id')->default(0);
+            $table->string('unique_code', 100)->default('');
+            $table->bool('is_sku')->default(1);
             $table->timestamps();
         })->append(ChannelEntity::tableName(), function (Table $table) {
             $table->comment('渠道表');
@@ -43,8 +39,7 @@ class CreateTradeTrackerTables extends Migration {
         })->append(ChannelProductEntity::tableName(), function (Table $table) {
             $table->comment('渠道货品表');
             $table->id();
-            $table->uint('goods_id');
-            $table->uint('product_id')->default(0);
+            $table->uint('product_id');
             $table->uint('channel_id');
             $table->string('platform_no', 40)->default('');
             $table->string('extra_meta')->default('');
@@ -52,8 +47,7 @@ class CreateTradeTrackerTables extends Migration {
         })->append(TradeEntity::tableName(), function (Table $table) {
             $table->comment('交易价格（按天取出售最低价格求购最高价）');
             $table->id();
-            $table->uint('goods_id');
-            $table->uint('product_id')->default(0);
+            $table->uint('product_id');
             $table->uint('channel_id');
             $table->bool('type')->default(0)->comment('0 出售, 1 求购');
             $table->decimal('price', 12, 2);
@@ -62,8 +56,7 @@ class CreateTradeTrackerTables extends Migration {
         })->append(TradeLogEntity::tableName(), function (Table $table) {
             $table->comment('价格变动记录（只保留一天）');
             $table->id();
-            $table->uint('goods_id');
-            $table->uint('product_id')->default(0);
+            $table->uint('product_id');
             $table->uint('channel_id');
             $table->bool('type')->default(0)->comment('0 出售, 1 求购');
             $table->decimal('price', 12, 2);
@@ -72,10 +65,12 @@ class CreateTradeTrackerTables extends Migration {
             $table->comment('已购商品');
             $table->id();
             $table->uint('user_id');
-            $table->uint('goods_id');
-            $table->uint('product_id')->default(0);
+            $table->uint('product_id');
             $table->uint('channel_id');
             $table->decimal('price', 12, 2);
+            $table->decimal('sell_price', 12, 2)->default(0);
+            $table->uint('sell_channel_id')->default(0);
+            $table->uint('status')->default(0);
             $table->timestamps();
         })->autoUp();
     }

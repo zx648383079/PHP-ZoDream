@@ -1,7 +1,6 @@
 <?php
 namespace PHPSTORM_META {
 
-
     override(app(0), map([
         '' => '@',
         'db' => \Zodream\Database\Command::class,
@@ -15,5 +14,12 @@ namespace PHPSTORM_META {
 
     override(url(0), map([
         '' => \Zodream\Route\UrlGenerator::class,
+    ]));
+
+    override(request(0), map([
+        '' => \Zodream\Service\Http\Request::class
+    ]));
+    override(response(0), map([
+        '' => \Zodream\Service\Http\Response::class
     ]));
 }

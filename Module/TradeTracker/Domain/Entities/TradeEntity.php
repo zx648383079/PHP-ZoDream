@@ -7,7 +7,6 @@ use Domain\Entities\Entity;
 /**
  * 
  * @property integer $id
- * @property integer $goods_id
  * @property integer $product_id
  * @property integer $channel_id
  * @property integer $type
@@ -23,8 +22,7 @@ class TradeEntity extends Entity {
 
     protected function rules(): array {
 		return [
-            'goods_id' => 'required|int',
-            'product_id' => 'int',
+            'product_id' => 'required|int',
             'channel_id' => 'required|int',
             'type' => 'int:0,127',
             'price' => 'required|string',
@@ -36,7 +34,6 @@ class TradeEntity extends Entity {
 	protected function labels(): array {
 		return [
             'id' => 'Id',
-            'goods_id' => 'Goods Id',
             'product_id' => 'Product Id',
             'channel_id' => 'Channel Id',
             'type' => 'Type',

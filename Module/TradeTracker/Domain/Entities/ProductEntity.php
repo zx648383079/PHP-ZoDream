@@ -6,9 +6,13 @@ use Domain\Entities\Entity;
 /**
  * 
  * @property integer $id
- * @property integer $goods_id
+ * @property integer $parent_id
  * @property string $name
  * @property string $en_name
+ * @property integer $cat_id
+ * @property integer $project_id
+ * @property string $unique_code
+ * @property integer $is_sku
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -20,9 +24,13 @@ class ProductEntity extends Entity {
 
     protected function rules(): array {
 		return [
-            'goods_id' => 'required|int',
+            'parent_id' => 'int',
             'name' => 'required|string:0,100',
             'en_name' => 'string:0,100',
+            'cat_id' => 'int',
+            'project_id' => 'int',
+            'unique_code' => 'string:0,100',
+            'is_sku' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -31,9 +39,13 @@ class ProductEntity extends Entity {
 	protected function labels(): array {
 		return [
             'id' => 'Id',
-            'goods_id' => 'Goods Id',
+            'parent_id' => 'Parent Id',
             'name' => 'Name',
             'en_name' => 'En Name',
+            'cat_id' => 'Cat Id',
+            'project_id' => 'Project Id',
+            'unique_code' => 'Unique Code',
+            'is_sku' => 'Is Sku',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];

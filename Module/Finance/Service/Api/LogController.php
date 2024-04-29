@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Finance\Service\Api;
 
-use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Repositories\AccountRepository;
 use Module\Finance\Domain\Repositories\LogRepository;
 use Zodream\Database\Relation;

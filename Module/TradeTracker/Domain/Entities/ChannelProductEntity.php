@@ -6,7 +6,6 @@ use Domain\Entities\Entity;
 /**
  * 
  * @property integer $id
- * @property integer $goods_id
  * @property integer $product_id
  * @property integer $channel_id
  * @property string $platform_no
@@ -22,8 +21,7 @@ class ChannelProductEntity extends Entity {
 
     protected function rules(): array {
 		return [
-            'goods_id' => 'required|int',
-            'product_id' => 'int',
+            'product_id' => 'required|int',
             'channel_id' => 'required|int',
             'platform_no' => 'string:0,40',
             'extra_meta' => 'string:0,255',
@@ -35,7 +33,6 @@ class ChannelProductEntity extends Entity {
 	protected function labels(): array {
 		return [
             'id' => 'Id',
-            'goods_id' => 'Goods Id',
             'product_id' => 'Product Id',
             'channel_id' => 'Channel Id',
             'platform_no' => 'Platform No',

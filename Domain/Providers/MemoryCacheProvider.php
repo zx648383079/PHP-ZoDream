@@ -101,4 +101,8 @@ class MemoryCacheProvider {
         static::setAny($func, $queries, $key);
         return array_merge($items, $queries);
     }
+
+    public function clear(): void {
+        $this->cacheData = [];
+    }
 }
