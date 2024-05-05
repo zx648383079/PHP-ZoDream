@@ -5,8 +5,7 @@ namespace Module\TradeTracker\Domain\Importers;
 use Domain\Providers\MemoryCacheProvider;
 use Module\TradeTracker\Domain\Entities\ChannelEntity;
 use Module\TradeTracker\Domain\Entities\ProductEntity;
-use Module\TradeTracker\Domain\Entities\TradeEntity;
-use Module\TradeTracker\Domain\Entities\TradeLogEntity;
+use Module\TradeTracker\Domain\Repositories\TrackRepository;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\Stream;
@@ -59,6 +58,7 @@ class DataImporter {
 
     private function readFromJson(File $file): void {
         $reader = new Stream($file);
+        $reader->openRead();
         $i = 0;
         while (!$reader->isEnd()) {
             $line = $reader->readLine();
@@ -80,14 +80,7 @@ class DataImporter {
         foreach ($items['items'] as $appName => $args) {
             $channelId = $this->getChannelId($appName);
             foreach ($args as $type => $item) {
-                $this->addLog([
-                    'product_id' => $product['id'],
-                    'channel_id' => $channelId,
-                    'type' => $type,
-                    'price' => $item['price'],
-                    'created_at' => $items['time'],
-                ]);
-                $this->addTrade([
+                TrackRepository::addTradeLog([
                     'product_id' => $product['id'],
                     'channel_id' => $channelId,
                     'type' => $type,
@@ -99,45 +92,6 @@ class DataImporter {
         }
     }
 
-    private function addTrade(array $data): void {
-        $dayDate = date('Y-m-d', $data['created_at']);
-        $dayBeign = strtotime($dayDate. ' 00:00:00');
-        $dayEnd = $dayBeign + 86400;
-        /** @var TradeEntity $log */
-        $log = TradeEntity::where([
-            'product_id' => $data['product_id'],
-            'channel_id' => $data['channel_id'],
-            'type' => $data['type'],
-        ])->where('created_at', '>=', $dayBeign)->where('created_at', '<', $dayEnd)->first();
-        if (empty($log)) {
-            TradeEntity::createOrThrow($data);
-            return;
-        }
-        if ($log->getAttributeSource('created_at') == $data['created_at']) {
-            return;
-        }
-        if ($log['order_count'] < $data['order_count']) {
-            $log['order_count'] = $data['order_count'];
-        }
-        if (($data['type'] > 0 && $log['price'] < $data['price']) || 
-        ($data['type'] < 1 && $log['price'] > $data['price'])) {
-            $log['price'] = $data['price'];
-        }
-        $log->save();
-    }
-
-    private function addLog(array $data) : void {
-        $exist = TradeLogEntity::where([
-            'product_id' => $data['product_id'],
-            'channel_id' => $data['channel_id'],
-            'type' => $data['type'],
-            'created_at' => $data['created_at'],
-        ])->count() > 0;
-        if ($exist) {
-            return;
-        }
-        TradeLogEntity::createOrThrow($data);
-    }
 
     private function formatLog(array $data): array {
         $items = [];

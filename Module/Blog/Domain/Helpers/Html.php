@@ -14,7 +14,7 @@ class Html {
     public static function render($content, array $tags = [], bool $isMarkDown = false,
         bool $imgLazy = false, bool $useDeeplink = false): string {
         if ($isMarkDown) {
-            $content = MarkDown::parse($content, true);
+            $content = (new MarkDown())->setSafeMode(true)->setCustomStyle($imgLazy || $useDeeplink)->text($content);
         }
         if (empty($content)) {
             return '';

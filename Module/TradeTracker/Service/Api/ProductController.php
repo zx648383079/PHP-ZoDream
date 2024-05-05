@@ -28,12 +28,16 @@ class ProductController extends Controller {
         }
     }
 
-    public function chartAction(int $id, int $channel, int $type = 0, 
-    string $startAt = '', string $endAt = '') {
+    public function chartAction(int $id, int $channel, int $type = 0,
+                                string $startAt = '', string $endAt = '') {
         try {
-            return $this->render(ProductRepository::getPriceList($id, $channel, $type, $startAt, $endAt));
+            return $this->renderData(ProductRepository::getPriceList($id, $channel, $type, $startAt, $endAt));
         } catch (\Throwable $ex) {
             return $this->renderFailure($ex);
         }
     }
+    public function suggestAction(string $keywords) {
+        return $this->renderData(ProductRepository::suggestion($keywords));
+    }
+
 }

@@ -71,4 +71,8 @@ final class PageRepository {
         PageModel::where('id', $id)->delete();
         PageKeywordModel::where('page_id', $id)->delete();
     }
+
+    public static function crawlSave(array $data) {
+        return self::save($data);
+    }
 }

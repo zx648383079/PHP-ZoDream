@@ -68,4 +68,30 @@ class QuestionController extends Controller {
     public function searchAction(string $keywords = '', int|array $id = 0) {
         return $this->renderData(QuestionRepository::search($keywords, $id));
     }
+
+    public function crawlAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'title' => 'required|string:0,255',
+                'image' => 'string:0,200',
+                'course_id' => 'required|string',
+                'course_grade' => 'required|int',
+                'material_id' => 'int',
+                'status' => 'int',
+                'type' => 'int:0,127',
+                'easiness' => 'int:0,11',
+                'content' => '',
+                'dynamic' => '',
+                'answer' => '',
+                'analysis_items' => '',
+                'option_items' => '',
+                'children' => '',
+            ]);
+            return $this->render(
+                QuestionRepository::crawlSave($data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

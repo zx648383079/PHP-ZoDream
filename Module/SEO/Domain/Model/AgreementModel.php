@@ -25,7 +25,7 @@ class AgreementModel extends Model {
 
     protected function rules(): array {
         return [
-            'name' => 'required|string:0,20',
+            'name' => 'required|string:0,50',
             'language' => '',
             'title' => 'required|string:0,100',
             'description' => 'string',

@@ -27,7 +27,7 @@ class AgreementController extends Controller {
         try {
             $data = $input->validate([
                 'id' => 'int',
-                'name' => 'required|string:0,20',
+                'name' => 'required|string:0,50',
                 'language' => '',
                 'title' => 'required|string:0,100',
                 'description' => 'string',
@@ -38,7 +38,7 @@ class AgreementController extends Controller {
                 AgreementRepository::save($data)
             );
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
     }
 

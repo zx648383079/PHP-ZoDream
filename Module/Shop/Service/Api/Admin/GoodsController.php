@@ -147,4 +147,35 @@ class GoodsController extends Controller {
         }
         return $this->renderData(true);
     }
+
+    public function crawlAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'cat_id' => 'required|int',
+                'brand_id' => 'required|int',
+                'name' => 'required|string:0,100',
+                'series_number' => 'required|string:0,100',
+                'keywords' => 'string:0,200',
+                'thumb' => 'string:0,200',
+                'picture' => 'required|string:0,200',
+                'description' => 'string:0,200',
+                'brief' => 'string:0,200',
+                'content' => 'required',
+                'price' => '',
+                'market_price' => '',
+                'stock' => 'int',
+                'attribute_group_id' => 'int',
+                'weight' => '',
+                'shipping_id' => 'int',
+                'sales' => 'int',
+                'type' => 'int:0,99',
+                'attr' => '',
+                'products' => '',
+                'gallery' => '',
+            ]);
+            return $this->render(GoodsRepository::crawlSave($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

@@ -16,8 +16,23 @@ class ProductController extends Controller {
         );
     }
 
-    public function addAction(Input $input) {
-        
+    public function saveAction(Input $input) {
+        try {
+            return $this->render(
+                ManagerRepository::productSave($input->validate([
+                    'id' => 'int',
+                    'parent_id' => 'int',
+                    'name' => 'required|string:0,100',
+                    'en_name' => 'string:0,100',
+                    'cat_id' => 'int',
+                    'project_id' => 'int',
+                    'unique_code' => 'string:0,100',
+                    'items' => '',
+              ]))
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
     public function deleteAction(int $id) {

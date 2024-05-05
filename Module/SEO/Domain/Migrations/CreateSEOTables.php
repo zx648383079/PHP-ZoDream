@@ -49,7 +49,7 @@ class CreateSEOTables extends Migration {
         })->append(AgreementModel::tableName(), function(Table $table) {
             $table->comment('服务协议');
             $table->id();
-            $table->string('name', 20);
+            $table->string('name', 50);
             $table->string('title', 100);
             LocalizeRepository::addTableColumn($table);
             $table->string('description', 500)->default('');

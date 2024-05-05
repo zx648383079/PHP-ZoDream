@@ -211,4 +211,8 @@ class QuestionRepository {
                     SearchModel::searchWhere($query, ['title']);
                 })->orderBy('id', 'desc')->limit(5)->get('id', 'title', 'course_id', 'type', 'easiness');
     }
+
+    public static function crawlSave(array $data) {
+        return self::save($data);
+    }
 }

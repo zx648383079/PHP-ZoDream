@@ -53,4 +53,19 @@ final class PageController extends Controller {
             return $this->renderFailure($ex->getMessage());
         }
     }
+
+    public function crawlAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'title' => 'required|string:0,30',
+                'description' => 'string:0,255',
+                'thumb' => 'string:0,255',
+                'link' => 'required|string:0,255',
+                'keywords' => '',
+            ]);
+            return $this->render(PageRepository::crawlSave($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

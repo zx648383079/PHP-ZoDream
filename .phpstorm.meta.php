@@ -22,4 +22,11 @@ namespace PHPSTORM_META {
     override(response(0), map([
         '' => \Zodream\Service\Http\Response::class
     ]));
+    override(\Zodream\Database\Model\Model::__callStatic(0), map([
+        '' => '@Class',
+        'with' => \Zodream\Database\Model\Query::class,
+        'where' => \Zodream\Database\Model\Query::class,
+        'when' => \Zodream\Database\Model\Query::class,
+        'select' => \Zodream\Database\Model\Query::class,
+    ]));
 }

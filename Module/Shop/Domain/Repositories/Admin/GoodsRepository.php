@@ -434,4 +434,8 @@ class GoodsRepository {
             ]);
         });
     }
+
+    public static function crawlSave(array $data) {
+        return self::save($data);
+    }
 }
