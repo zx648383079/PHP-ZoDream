@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
@@ -7,7 +8,8 @@ use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Zodream\Helpers\Time;
+use Module\OpenPlatform\Domain\Platform;
+use Zodream\Helpers\Security\Encryptor;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class LoginController extends Controller {
@@ -25,6 +27,7 @@ class LoginController extends Controller {
         $account = !empty($mobile) ?
             $mobile : $request->string('email');
         $captchaKey = $request->string('captcha_token');
+        $encryptor = new Encryptor(Platform::current()->requestTime());
         try {
             $captcha = $request->string('captcha');
             AuthRepository::loginPreCheck($request->ip(), $account, $captcha);
@@ -41,13 +44,13 @@ class LoginController extends Controller {
                 } else {
                     AuthRepository::loginMobile(
                         $mobile,
-                        $request->string('password'),
+                        $encryptor->decrypt($request->string('password')),
                         $remember, false);
                 }
             } else {
                 AuthRepository::login(
                     $request->string('email'),
-                    $request->string('password'),
+                    $encryptor->decrypt($request->string('password')),
                     $remember, false);
             }
 

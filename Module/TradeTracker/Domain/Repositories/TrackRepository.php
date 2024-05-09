@@ -60,13 +60,17 @@ final class TrackRepository {
      * @param array{product_id: int, channel_id: int, type?: int, price: float, order_count?: int, created_at: int|string} $data
      */
     public static function addTradeLog(array $data): void {
+        $data['created_at'] = is_numeric($data['created_at']) ? intval($data['created_at']) : strtotime($data['created_at']);
         if (empty($data['price']) || $data['price'] >= 9999999) {
+            if (!empty($data['order_count'])) {
+                self::updateTrade($data);
+            }
             return;
         }
         if (!isset($data['type'])) {
             $data['type'] = 0;
         }
-        $data['created_at'] = is_numeric($data['created_at']) ? intval($data['created_at']) : strtotime($data['created_at']);
+        
         self::addLog([
             'product_id' => $data['product_id'],
             'channel_id' => $data['channel_id'],
@@ -81,6 +85,19 @@ final class TrackRepository {
             'price' => $data['price'],
             'order_count' => $data['order_count'] ?? 0,
             'created_at' => $data['created_at'],
+        ]);
+    }
+
+    private static function updateTrade(array $data): void {
+        $dayDate = date('Y-m-d', $data['created_at']);
+        $dayBeign = strtotime($dayDate. ' 00:00:00');
+        $dayEnd = $dayBeign + 86400;
+        TradeEntity::where([
+            'product_id' => $data['product_id'],
+            'channel_id' => $data['channel_id'],
+            'type' => $data['type'],
+        ])->where('created_at', '>=', $dayBeign)->where('created_at', '<', $dayEnd)->where('order_count', '<', $data['order_count'])->update([
+            'order_count' => $data['order_count']
         ]);
     }
 

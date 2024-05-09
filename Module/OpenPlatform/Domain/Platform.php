@@ -28,12 +28,17 @@ class Platform implements IAuthPlatform {
      */
     const APPID_KEY = 'appid';
 
+    const FORMAT_TIME = 'Y-m-d H:i:s';
+
 
     private $app;
 
     private array $options = [];
 
     private Input $request;
+
+    private int $lastRequestTime;
+    private int $lastResponseTime;
 
     public function __construct($app) {
         $this->app = $app;
@@ -50,6 +55,20 @@ class Platform implements IAuthPlatform {
 
     public function get(string $key): mixed {
         return $this->app[$key] ?? '';
+    }
+
+    public function requestTime(): int {
+        if (empty($this->lastRequestTime)) {
+            $this->lastRequestTime = strtotime($this->request->get('timestamp'));
+        }
+        return $this->lastRequestTime;
+    }
+
+    public function responseTime(): int {
+        if (empty($this->lastResponseTime)) {
+            $this->lastResponseTime = time();
+        }
+        return $this->lastResponseTime;
     }
 
     /**
@@ -104,6 +123,10 @@ class Platform implements IAuthPlatform {
                 $args[] = $data[$key];
                 continue;
             }
+            if ($key === 'timestamp') {
+                $args[] = date(self::FORMAT_TIME, $this->requestTime());
+                continue;
+            }
             $args[] = $this->request->get($key);
         }
         return implode('', $args);
@@ -148,7 +171,7 @@ class Platform implements IAuthPlatform {
             //$data['encrypt_type'] = $this->encrypt_type_list[$this->encrypt_type];
         }
         $data[self::APPID_KEY] = $this->app['appid'];
-        $data['timestamp'] = date('Y-m-d H:i:s');
+        $data['timestamp'] = date(self::FORMAT_TIME, $this->responseTime());
         if ($this->app['sign_type'] > 0) {
             //$data['sign_type'] = $this->sign_type_list[$this->sign_type];
             $data['sign'] = $this->sign($data);

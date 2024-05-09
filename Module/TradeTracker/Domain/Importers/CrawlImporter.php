@@ -5,6 +5,7 @@ namespace Module\TradeTracker\Domain\Importers;
 use Domain\Providers\MemoryCacheProvider;
 use Module\TradeTracker\Domain\Entities\ChannelEntity;
 use Module\TradeTracker\Domain\Entities\ChannelProductEntity;
+use Module\TradeTracker\Domain\Entities\ProductEntity;
 use Module\TradeTracker\Domain\Repositories\TrackRepository;
 
 class CrawlImporter {
@@ -32,7 +33,7 @@ class CrawlImporter {
             if ($channelId < 1) {
                 continue;
             }
-            $productId = is_array($item['product']) ? $this->getProductId($this->getChannelId($item['product']['channel']), $item['product']['id']) : $this->getProductId($channelId, $item['product']);
+            $productId = $this->formatProductId($item['product']??'', $channelId, $data['name'] ?? '');
             if ($productId < 1) {
                 continue;
             }
@@ -45,6 +46,24 @@ class CrawlImporter {
                 'created_at' => $item['created_at'] ?? $this->timestamp,
             ]);
         }
+    }
+
+    private function formatProductId(array|string $product, int $channelId, string $name = ''): int {
+        if (empty($product)) {
+            $product = ['name' => $name];
+        }
+        if (!is_array($product)) {
+            return $this->getProductId($channelId, $product);
+        }
+        if (!empty($product['name'])) {
+            return $this->cache()->getOrSet(__FUNCTION__, $product['name'], function() use ($product) {
+                return intval(ProductEntity::where('name', $product['name'])->orWhere('en_name', $product['name'])->value('id'));
+            });
+        }
+        if (empty($product['channel']) || empty($product['id'])) {
+            return 0;
+        }
+        return $this->getProductId($this->getChannelId($product['channel']), $product['id']);
     }
 
 
