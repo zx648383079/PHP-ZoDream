@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\TradeTracker\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\TradeTracker\Domain\Entities\ChannelEntity;
+use Module\TradeTracker\Domain\Entities\ChannelProductEntity;
 use Module\TradeTracker\Domain\Entities\ProductEntity;
 use Module\TradeTracker\Domain\Entities\TradeEntity;
 use Module\TradeTracker\Domain\Entities\TradeLogEntity;
@@ -140,5 +142,63 @@ final class TrackRepository {
             return;
         }
         TradeLogEntity::createOrThrow($data);
+    }
+
+    public static function batchLatestList(string $channel, array|string $product, string $to): array {
+        $channelId = empty($channel) ? 0 : intval(ChannelEntity::where('short_name', $channel)->value('id'));
+        $maps = [];
+        if ($channelId < 1) {
+            $productId = self::formatArray((array)$product, 'intval');
+        } else {
+            $product = self::formatArray((array)$product);
+            if (empty($product)) {
+                return [];
+            }
+            $maps = ChannelProductEntity::where('channel_id', $channelId)
+                ->whereIn('platform_no', $product)->asArray()->pluck('platform_no', 'product_id');
+            $productId = array_keys($maps);
+        }
+        if (empty($productId)) {
+            return [];
+        }
+        $toChannelId = $to === $channel ? $channelId : intval(ChannelEntity::where('short_name', $to)->value('id'));
+        if ($toChannelId < 1) {
+            return [];
+        }
+        $dayDate = date('Y-m-d');
+        $dayBegin = strtotime($dayDate. ' 00:00:00');
+        $dayEnd = $dayBegin + 86400;
+        $items = TradeModel::query()->whereIn('product_id', $productId)
+            ->where('created_at', '>=', $dayBegin)->where('created_at', '<', $dayEnd)
+            ->where('channel_id', $toChannelId)
+            ->where('type', 0)->asArray()->get('product_id', 'price', 'created_at');
+        $res = [];
+        foreach ($items as $item) {
+            $res[] = [
+                'product' => empty($maps) ? intval($item['product_id']) : $maps[$item['product_id']],
+                'price' => floatval($item['price']),
+                'created_at' => intval($item['created_at'])
+            ];
+        }
+        return $res;
+    }
+
+    private static function formatArray(array $items, ?callable $cb = null): array {
+        $data = [];
+        foreach ($items as $item) {
+            if (empty($item)) {
+                continue;
+            }
+            if (!$cb) {
+                $data[] = $item;
+                continue;
+            }
+            $val = call_user_func($cb, $item);
+            if (empty($val)) {
+                continue;
+            }
+            $data[] = $val;
+        }
+        return $data;
     }
 }

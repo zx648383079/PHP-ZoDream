@@ -46,7 +46,7 @@ final class ProductRepository {
         $items = $model->is_sku ? [] : ProductEntity::where('parent_id', $model->id)
         ->get();
         foreach ($items as $item) {
-            list($_, $attr) = IDMapperImporter::formatName($item['name']);
+            list($_, $attr) = IDMapperImporter::splitName($item['name']);
             $data['items'][] = [
                 'id' => $item['id'],
                 'name' => $attr

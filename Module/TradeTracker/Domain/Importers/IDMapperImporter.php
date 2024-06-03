@@ -54,7 +54,7 @@ class IDMapperImporter {
     private function getProductId(int $appId, string $hashName, string $name = '', $enName = ''): int {
         $funcName = __FUNCTION__;
         return $this->cache()->getOrSet($funcName, $hashName, function() use ($appId, $hashName, $name, $enName, $funcName) {
-            list($goodsHash) = $this->formatName($hashName);
+            list($goodsHash) = $this->splitName($hashName);
             $product = ProductEntity::where('unique_code', $hashName)
             ->first();
             if (!empty($product)) {
@@ -65,8 +65,8 @@ class IDMapperImporter {
             }
             $parentId = 0;
             if ($goodsHash !== $hashName) {
-                list($goodsName) = $this->formatName($name);
-                list($goodsEnName) = $this->formatName($enName);
+                list($goodsName) = $this->splitName($name);
+                list($goodsEnName) = $this->splitName($enName);
                 $parentId = $this->cache()->getOrSet($funcName, $goodsHash, function() use ($goodsHash, $appId, $goodsName, $goodsEnName) {
                     $id = ProductEntity::where('unique_code', $goodsHash)->value('id');
                     if ($id > 0) {
@@ -85,8 +85,8 @@ class IDMapperImporter {
             
             $model = ProductEntity::createOrThrow([
                 'parent_id' => $parentId,
-                'name' => $name,
-                'en_name' => $enName,
+                'name' => self::formatName($name),
+                'en_name' => self::formatName($enName),
                 'project_id' => $appId,
                 'unique_code' => $hashName,
                 'is_sku' => 1
@@ -175,10 +175,10 @@ class IDMapperImporter {
         $add = [];
         $now = time();
         foreach ($data as $hashName => $item) {
-            list($goodsHash) = $this->formatName($hashName);
+            list($goodsHash) = $this->splitName($hashName);
             if ($goodsHash !== $hashName && !isset($exist[$goodsHash])) {
-                list($goodsName) = $this->formatName($item['cn_name']);
-                list($goodsEnName) = $this->formatName($item['en_name']);
+                list($goodsName) = $this->splitName($item['cn_name']);
+                list($goodsEnName) = $this->splitName($item['en_name']);
                 $exist[$goodsHash] = ProductEntity::createOrThrow([
                     'name' => $goodsName,
                     'en_name' => $goodsEnName,
@@ -194,8 +194,8 @@ class IDMapperImporter {
             }
             $add[] = [
                 'parent_id' => $goodsHash !== $hashName ? $exist[$goodsHash] : 0,
-                'name' => $item['cn_name'],
-                'en_name' => $item['en_name'],
+                'name' => self::formatName($item['cn_name']),
+                'en_name' => self::formatName($item['en_name']),
                 'project_id' => $appId,
                 'unique_code' => $hashName,
                 'is_sku' => 1,
@@ -278,8 +278,12 @@ class IDMapperImporter {
         Console::notice($message);
     }
 
-    public static function formatName(string $name): array {
-        $name = str_replace(['（', '）'], ['(', ')'], $name);
+    public static function formatName(string $name): string {
+        return str_replace(['（', '）'], ['(', ')'], $name);
+    }
+
+    public static function splitName(string $name): array {
+        $name = self::formatName($name);
         if (!str_ends_with($name, ')')) {
             return [$name, ''];
         }

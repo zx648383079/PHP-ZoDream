@@ -12,4 +12,8 @@ class LogController extends Controller {
         );
     }
 
+    public function batchAction(array|string $product, string $to, string $channel = '') {
+        return $this->renderData(TrackRepository::batchLatestList($channel, $product, $to));
+    }
+
 }

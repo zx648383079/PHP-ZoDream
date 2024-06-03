@@ -56,6 +56,7 @@ class CrawlImporter {
             return $this->getProductId($channelId, $product);
         }
         if (!empty($product['name'])) {
+            $product['name'] = IDMapperImporter::formatName($product['name']);
             return $this->cache()->getOrSet(__FUNCTION__, $product['name'], function() use ($product) {
                 return intval(ProductEntity::where('name', $product['name'])->orWhere('en_name', $product['name'])->value('id'));
             });
