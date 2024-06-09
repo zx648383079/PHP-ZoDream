@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Domain\Model\ModelHelper;
-use Module\ModuleController;
 use Module\Shop\Domain\Repositories\AttributeRepository;
 use Module\Shop\Domain\Repositories\GoodsRepository;
 use Module\Shop\Domain\Repositories\IssueRepository;
@@ -71,7 +70,7 @@ class GoodsController extends Controller {
     }
 
     public function recommendAction(int $id) {
-        $goods_list = GoodsRepository::getRecommendQuery('is_best')->limit(3)->all();
+        $goods_list = GoodsRepository::getRecommendQuery('is_best')->limit(3)->get();
         return $this->render($goods_list);
     }
 

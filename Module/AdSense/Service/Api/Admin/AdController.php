@@ -7,9 +7,9 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class AdController extends Controller {
 
-    public function indexAction(string $keywords = '', int $position_id = 0) {
+    public function indexAction(string $keywords = '', int $position = 0) {
         return $this->renderPage(
-            AdRepository::manageList($keywords, $position_id)
+            AdRepository::manageList($keywords, $position)
         );
     }
 

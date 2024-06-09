@@ -5,7 +5,6 @@ namespace Module\AdSense\Domain;
 use Module\AdSense\Domain\Repositories\AdRepository;
 use Zodream\Database\Model\Model;
 use Zodream\Infrastructure\Support\Html;
-use function PHPUnit\Framework\returnArgument;
 
 class TemplateCompiler {
 

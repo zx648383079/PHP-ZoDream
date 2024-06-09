@@ -11,6 +11,7 @@ use Module\Shop\Domain\Repositories\GoodsRepository;
 use Module\Shop\Domain\Repositories\OrderRepository;
 use Module\Shop\Domain\Repositories\SearchRepository;
 use Zodream\Route\Controller\Concerns\BatchAction;
+use Module\Shop\Domain\Repositories\ShopRepository;
 use Module\Shop\Domain\Repositories\AccountRepository as ShopAccount;
 
 class BatchController extends Controller {
@@ -19,6 +20,7 @@ class BatchController extends Controller {
 
     public function indexAction() {
         return $this->render($this->invokeBatch([
+            'information' => sprintf('%s::%s', ShopRepository::class, 'siteInfo'),
             'category' => sprintf('%s::%s', CategoryRepository::class, 'getList'),
             'brand' => sprintf('%s::%s', BrandRepository::class, 'recommend'),
             'cart' => sprintf('%s::%s', CartRepository::class, 'load'),
