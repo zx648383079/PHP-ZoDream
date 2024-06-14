@@ -64,7 +64,5 @@ abstract class CRUDRepository {
     }
 
     protected static function updateCache() {
-        cache()->delete('shop_category_tree');
-        cache()->delete('shop_category_level');
     }
 }
