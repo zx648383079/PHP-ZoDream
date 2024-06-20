@@ -557,7 +557,7 @@ class CreateShopTables extends Migration {
         })->append(GoodsModel::tableName(), function (Table $table) {
             $table->id();
             $table->uint('cat_id');
-            $table->column('brand_id')->int();
+            $table->uint('brand_id');
             $table->string('name', 100)->comment('商品名');
             $table->string('series_number', 100);
             $table->string('keywords', 200)->comment('关键字');
@@ -684,7 +684,7 @@ class CreateShopTables extends Migration {
             $table->id();
             $table->uint('act_id');
             $table->uint('time_id');
-            $table->uint('goods_id')->unsigned();
+            $table->uint('goods_id');
             $table->decimal('price', 8, 2)->default(0);
             $table->uint('amount', 5)->default(0);
             $table->uint('every_amount', 2)->default(0);

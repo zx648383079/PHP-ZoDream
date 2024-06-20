@@ -10,6 +10,8 @@ $isFullyTheme: true !default;
             --#{$prefix}-body: #{$dark-body};
             --#{$prefix}-hover: #{$dark-hover};
             --#{$prefix}-body-text: #{$dark-bodyText};
+            --#{$prefix}-body-rgb: #{to-rgb($dark-body)};
+            --#{$prefix}-body-text-rgb: #{to-rgb($dark-bodyText)};
             --#{$prefix}-panel: #{$dark-panel};
             --#{$prefix}-panel-text: #{$dark-bodyText};
     
@@ -47,6 +49,8 @@ $isFullyTheme: true !default;
             --#{$prefix}-body: #{$body};
             --#{$prefix}-hover: #{$hover};
             --#{$prefix}-body-text: #{$bodyText};
+            --#{$prefix}-body-rgb: #{to-rgb($body)};
+            --#{$prefix}-body-text-rgb: #{to-rgb($bodyText)};
             --#{$prefix}-panel: #{$panel};
             --#{$prefix}-panel-text: #{$bodyText};
     

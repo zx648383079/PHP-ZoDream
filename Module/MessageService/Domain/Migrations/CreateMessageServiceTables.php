@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\MessageService\Domain\Migrations;
 
-use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\MessageService\Domain\Entities\LogEntity;
 use Module\MessageService\Domain\Entities\TemplateEntity;
 use Module\MessageService\Domain\Repositories\MessageProtocol;

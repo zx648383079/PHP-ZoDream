@@ -74,7 +74,7 @@ class CreateDocumentTables extends Migration {
             $table->id();
             $table->string('name', 50)->comment('接口名称');
             $table->string('title', 50)->default('')->comment('接口标题');
-            $table->bool('is_required')->bool()->default(1)->comment('是否必传');
+            $table->bool('is_required')->default(1)->comment('是否必传');
             $table->string('default_value')->default('')->comment('默认值');
             $table->string('mock')->default('')->comment('mock规则');
             $table->uint('parent_id')->default(0);

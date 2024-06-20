@@ -23,7 +23,7 @@ class CreateCounterTables extends Migration {
         })->append(VisitorLogModel::tableName(), function(Table $table) {
             $table->comment('访客日志');
             $table->id();
-            $table->uint('user_id')->varchar(50)->default('');
+            $table->uint('user_id')->default(0);
             $table->string('ip', 120);
             $table->timestamp('first_at');
             $table->timestamp('last_at');

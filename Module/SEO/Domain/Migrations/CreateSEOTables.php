@@ -4,7 +4,6 @@ namespace Module\SEO\Domain\Migrations;
 
 use Domain\Providers\StorageProvider;
 use Domain\Repositories\LocalizeRepository;
-use Module\Auth\Domain\Repositories\RoleRepository;
 use Module\SEO\Domain\Model\AgreementModel;
 use Module\SEO\Domain\Model\BlackWordModel;
 use Module\SEO\Domain\Model\EmojiCategoryModel;
