@@ -29,6 +29,9 @@ class BlogSeoMiddleware implements MiddlewareInterface{
     }
 
     public function handle(HttpContext $context, callable $next) {
+        if (!ModuleRoute::isDefaultAppEntry()) {
+            return $next($context);
+        }
         $path = $context->path();
         if (str_starts_with($path, 'open/') || str_contains($path, '/admin/')) {
             return $next($context);

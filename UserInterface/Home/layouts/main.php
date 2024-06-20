@@ -19,6 +19,7 @@ $this->registerCssFile([
     '@home.min.js'
 ]);
 
+$isSimpleMode = $this->get('__simple_mode'); // 是否是精简模式
 $icp_beian = Option::value('site_icp_beian');
 $pns_beian = Option::value('site_pns_beian');
 $pns_beian_no = '';
@@ -57,7 +58,7 @@ if (!empty($pns_beian) && preg_match('/\d+/', $pns_beian, $match)) {
         <?=$this->contents()?>
         <footer>
             <div class="container">
-                <?=$this->node('friend-link')?>
+                <?= $isSimpleMode ? '' : $this->node('friend-link')?>
                 <div class="copyright">
                     <p>Copyright ©<?= request()->host() ?>, All Rights Reserved.</p>
                     <?php if($icp_beian):?>

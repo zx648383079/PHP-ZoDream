@@ -16,6 +16,7 @@ use Zodream\Http\Uri;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Route;
+use Zodream\Route\ModuleRoute;
 use Zodream\Route\OnlyRoute;
 use Zodream\Route\Rewrite\LocaleURLEncoder;
 use Zodream\Service\Middleware\MiddlewareInterface;
@@ -26,6 +27,9 @@ use Zodream\Service\Middleware\MiddlewareInterface;
 class CMSSeoMiddleware implements MiddlewareInterface{
 
     public function handle(HttpContext $context, callable $next) {
+        if (!ModuleRoute::isDefaultAppEntry()) {
+            return $next($context);
+        }
         $path = $context->path();
         if (str_starts_with($path, 'open/') || str_contains($path, '/admin/')) {
             return $next($context);

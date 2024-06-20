@@ -3,6 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
 $this->title = __('error page');
+$this->set('__simple_mode', true);
 if (empty($code)) {
     $code = 404;
 }
