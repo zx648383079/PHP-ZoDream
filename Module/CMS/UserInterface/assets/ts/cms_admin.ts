@@ -91,8 +91,8 @@ function bindEditModel() {
     });
     $('input[name=type]').on('click', function() {
         const val = toInt($(this).val())
-        $('.content-box').toggle(val > 0);
-        $('.form-box').toggle(val < 1);
+        $('.content-box').toggle(val < 1);
+        $('.form-box').toggle(val > 0);
     }).each(function(this: HTMLInputElement) {
         if (this.checked) {
             $(this).trigger('click');

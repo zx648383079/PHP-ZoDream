@@ -16,11 +16,15 @@ class SqlController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData(null, '备份完成');
+        return $this->renderData([
+            'refresh' => true
+        ], '备份完成');
     }
 
     public function clearAction() {
         SEORepository::clearSql();
-        return $this->renderData(null, '已删除所有备份');
+        return $this->renderData([
+            'refresh' => true
+        ], '已删除所有备份');
     }
 }
