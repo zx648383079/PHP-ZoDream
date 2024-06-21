@@ -93,6 +93,7 @@ class MessageProtocol {
     public static function send(string $target, string $templateName, array $data): ?int {
         list($type, $option, $optionKey) = static::targetOption($target);
         $template = TemplateEntity::where('name', $templateName)
+            ->where('status', 1)
             ->when($type === static::RECEIVE_TYPE_MOBILE, function ($query) {
                 $query->where('type', static::TYPE_TEXT);
             }, function ($query) {
@@ -164,7 +165,7 @@ class MessageProtocol {
         }
         $items = [];
         foreach ($data as $key => $val) {
-            if (in_array($key, $filterKeys) || isset($key, $filterKeys)) {
+            if (in_array($key, $filterKeys) || isset($filterKeys[$key])) {
                 $items[$key] = $val;
             }
         }

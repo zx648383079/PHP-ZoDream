@@ -76,7 +76,8 @@ final class MessageRepository {
                 SearchModel::searchWhere($query, ['name', 'title']);
             })->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type);
-            })->orderBy('id', 'desc')->select('id', 'type', 'name', 'title', 'target_no', 'created_at')
+            })->orderBy('id', 'desc')
+            ->select('id', 'type', 'name', 'title', 'target_no', 'status', 'created_at')
             ->page();
     }
 
@@ -119,6 +120,25 @@ final class MessageRepository {
             return;
         }
         TemplateEntity::whereIn('id', $del)->delete();
+    }
+
+    public static function templateChange(int $id, array $data) {
+        $model = TemplateEntity::findOrThrow($id);
+        $maps = ['status'];
+        foreach ($data as $action => $val) {
+            if (is_int($action)) {
+                if (empty($val)) {
+                    continue;
+                }
+                list($action, $val) = [$val, $model->{$val} > 0 ? 0 : 1];
+            }
+            if (empty($action) || !in_array($action, $maps)) {
+                continue;
+            }
+            $model->{$action} = intval($val);
+        }
+        $model->save();
+        return $model;
     }
 
     public static function logList(string $keywords = '', int $status = -1) {

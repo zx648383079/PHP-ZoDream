@@ -35,6 +35,7 @@ $this->title = '模板管理';
             <th>标题</th>
             <th>类型</th>
             <th>外部编号</th>
+            <th>是否启用</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -46,6 +47,9 @@ $this->title = '模板管理';
                 <td class="left"><?=$item->title?></td>
                 <td><?=$item->type > MessageProtocol::TYPE_TEXT ? 'HTML' : 'TEXT'?></td>
                 <td class="left"><?=$item->target_no?></td>
+                <td>
+                    <a data-type="toggle" href="<?=$this->url('./@admin/template/toggle', ['id' => $item['id']])?>?>" class="toggle-switch<?=$item->status > 0 ? ' toggled' : ''?>"></a>
+                </td>
                 <td>
                     <div class="btn-group toggle-icon-text">
                         <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/template/edit', ['id' => $item['id']])?>"  title="编辑详细信息">

@@ -112,7 +112,7 @@ class CreateCmsTables extends Migration {
             'keywords' => '',
             'description' => '',
             'theme' => 'default',
-            'match_type' => 0,
+            // 'match_type' => 0,
             'match_rule' => '',
             'is_default' => 1,
         ]));

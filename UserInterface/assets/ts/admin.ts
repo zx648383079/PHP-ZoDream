@@ -101,6 +101,12 @@ $(function() {
             }
             parseAjax(data);
         });
+    }).on('click', 'a[data-type=toggle]', function(e) {
+        e.preventDefault();
+        $(this).toggleClass('toggled');
+        postJson($(this).attr('href'), function(data) {
+            parseAjax(data);
+        });
     }).on('click', 'a[data-type=form]', function(e) {
         e.preventDefault();
         const $this = $(this);

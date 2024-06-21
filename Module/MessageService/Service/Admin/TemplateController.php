@@ -32,6 +32,7 @@ class TemplateController extends Controller {
                 'data' => '',
                 'content' => 'required|string',
                 'target_no' => 'string:0,32',
+                'status' => 'int:0,10'
             ]);
             MessageRepository::templateSave($data);
         } catch (\Exception $ex) {
@@ -51,5 +52,14 @@ class TemplateController extends Controller {
         return $this->renderData([
             'refresh' => true
         ]);
+    }
+
+    public function toggleAction(int $id) {
+        try {
+            MessageRepository::templateChange($id, ['status']);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
     }
 }

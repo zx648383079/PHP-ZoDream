@@ -207,12 +207,12 @@ final class CacheRepository {
             $data = SiteModel::where('status', SiteRepository::PUBLISH_STATUS_POSTED)
                 ->asArray()
                 ->orderBy('id', 'asc')
-                ->get('id', 'is_default', 'match_type', 'match_rule');
+                ->get('id', 'is_default', 'match_rule');
             return array_map(function ($item) {
                 return [
                     'id' => intval($item['id']),
                     'is_default' => $item['is_default'] > 0,
-                    'match_type' => intval($item['match_type']),
+                    // 'match_type' => intval($item['match_type']),
                     'match_rule' => empty($item['match_rule']) ? '' : ltrim($item['match_rule'], '/')
                 ];
             }, $data);

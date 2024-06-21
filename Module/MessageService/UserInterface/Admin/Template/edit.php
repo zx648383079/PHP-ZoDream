@@ -46,6 +46,7 @@ if (!is_array($filterKeys)) {
             <?php endforeach;?>
         </div>
     </div>
+    <?=Form::checkbox('status')?>
 
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>

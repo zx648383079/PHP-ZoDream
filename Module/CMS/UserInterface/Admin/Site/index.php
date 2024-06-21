@@ -39,7 +39,7 @@ $this->title = '站点列表';
                     <?=$item->title?>
                 </td>
                 <td><?=$item['language']?></td>
-                <td class="left">[<?=$item->match_type < 1 ? '域名' : '路径'?>]<?=$item->match_rule ?: '(空)'?></td>
+                <td class="left"><?=$item->match_rule ?: '(空)'?></td>
                 <td class="right">
                     <?php if(empty($currentSite) || $item->id != $currentSite['id']):?>
                             <a href="<?=$this->url('./@admin/site/change', ['id' => $item->id])?>" data-type="ajax" class="no-jax">管理</a>

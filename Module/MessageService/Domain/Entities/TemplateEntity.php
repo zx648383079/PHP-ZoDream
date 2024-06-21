@@ -13,6 +13,7 @@ use Domain\Entities\Entity;
  * @property string $data
  * @property string $content
  * @property string $target_no
+ * @property integer $status
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -29,6 +30,7 @@ class TemplateEntity extends Entity {
             'data' => 'required|string:0,255',
             'content' => 'required',
             'target_no' => 'string:0,32',
+            'status' => 'int:0,10',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -43,6 +45,7 @@ class TemplateEntity extends Entity {
             'data' => '数据',
             'content' => '内容',
             'target_no' => '外部编号',
+            'status' => '状态',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];

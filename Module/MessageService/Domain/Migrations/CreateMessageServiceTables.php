@@ -30,6 +30,7 @@ class CreateMessageServiceTables extends Migration {
            $table->string('data')->comment('模板字段');
            $table->text('content')->comment('模板内容');
            $table->string('target_no', 32)->default('')->comment('外部编号');
+           $table->bool('status')->default(0)->comment('是否启用');
            $table->timestamps();
         })->append(LogEntity::tableName(), function (Table $table) {
             $table->comment('短信发送记录');
