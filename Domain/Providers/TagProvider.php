@@ -170,8 +170,8 @@ class TagProvider {
     public function searchTag(string $keywords = ''): array {
         if (empty($keywords)) {
             return $this->linkQuery()
-                ->selectRaw('distinct tag_id')
-                ->pluck('tag_id');
+                ->selectRaw('distinct target_id')
+                ->pluck('target_id');
         }
         $tagId = SearchModel::searchWhere($this->tagQuery(),
             'name', false, '', $keywords)

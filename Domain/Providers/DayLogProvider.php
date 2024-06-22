@@ -139,7 +139,7 @@ class DayLogProvider {
             $this->dayQuery()
                 ->where('item_type', $itemType)
                 ->where('item_id', $itemId)
-                ->where('action', $action)->count();
+                ->where('action', $action)->sum('happen_count');
     }
 
     public function dayCount(int $itemType, int $itemId, int $action, string $day): int {

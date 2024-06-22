@@ -67,14 +67,14 @@ class StorageProvider {
         })->append(static::FILE_LOG_TABLE, function(Table $table) {
             $table->id();
             $table->uint('file_id');
-            $table->uint('item_type')->default(0);
+            $table->uint('item_type', 1)->default(0);
             $table->uint('item_id');
             $table->string('data')->default('');
             $table->timestamp(Model::CREATED_AT);
         })->append(static::FILE_QUOTE_TABLE, function(Table $table) {
             $table->id();
             $table->uint('file_id');
-            $table->uint('item_type')->default(0);
+            $table->uint('item_type', 1)->default(0);
             $table->uint('item_id');
             $table->uint('user_id')->default(0);
             $table->timestamp(Model::CREATED_AT);
