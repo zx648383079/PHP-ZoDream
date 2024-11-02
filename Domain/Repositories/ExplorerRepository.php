@@ -124,6 +124,7 @@ final class ExplorerRepository {
         $items = [];
         FileSystem::eachFile($folder, function (string $name) use ($keywords, $filter,
             $folder, $visualFolder,
+            $drive,
             &$items) {
             if (!static::isMatch($keywords, $name)) {
                 return;
@@ -134,13 +135,17 @@ final class ExplorerRepository {
             if (!static::isFilterFile($filter, $isFolder, $ext)) {
                 return;
             }
-            $items[] = [
+            $item = [
                 'name' => $name,
                 'path' => sprintf('%s/%s', $visualFolder, $name),
                 'isFolder' => $isFolder,
                 'size' => $isFolder ? null : FileSystem::size($fullName),
                 'created_at' => FileSystem::lastModified($fullName)
             ];
+            if (FileRepository::isTypeExtension($ext, 'image')) {
+                $item['thumb'] = static::tryPublicUrl($drive, substr($item['path'], strlen($drive) + 1));
+            }
+            $items[] = $item;
         });
         return $items;
     }
@@ -265,12 +270,24 @@ final class ExplorerRepository {
 
 
     public static function storageSearch(string $keywords = '', int $tag = 0) {
-        return DB::table(StorageProvider::FILE_TABLE)
+        $items =  DB::table(StorageProvider::FILE_TABLE)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, 'name', true, '', $keywords);
             })->when($tag > 0, function ($query) use ($tag) {
                 $query->where('folder', $tag);
             })->orderBy('id', 'desc')->page();
+        return $items->map(function ($item) {
+            $item['url'] = static::tryPublicUrl($item['folder'], $item['path']);
+            return $item;
+        });
+    }
+
+    protected static function tryPublicUrl(string|int $folder, string $path): ?string {
+        $storage = static::storage($folder);
+        if ($storage) {
+            return $storage->toPublicUrl($path);
+        }
+        return null;
     }
 
     public static function storageRemove(int|array $id): void {
