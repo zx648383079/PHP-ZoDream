@@ -267,7 +267,7 @@ class CommentRepository {
     }
 
     /**
-     * 获取用户的最好使用信息
+     * 获取用户的最后使用信息
      * @param string $email
      * @return array
      * @throws Exception

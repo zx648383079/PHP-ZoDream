@@ -52,8 +52,9 @@ class OauthController extends Controller {
         if (!$guest) {
             return $this->render($data);
         }
-        $data['token'] = auth()->createToken($user);
-        event(new TokenCreated($data['token'], $user));
+        $token = auth()->createToken($user);
+        $data['token'] = $token;
+        event(new TokenCreated($token, $user));
         return $this->render($data);
     }
 

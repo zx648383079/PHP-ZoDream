@@ -49,7 +49,7 @@ class BookController extends Controller {
         HistoryRepository::log($chapter);
         $setting = new Setting();
         $setting->load()->save();
-        return $this->show(compact('book', 'cat', 'chapter', 'like_book', 'new_book', 'setting'));
+        return $this->show(compact('book', 'cat', 'chapter', 'setting'));
     }
 
     public function txtAction(int $id, Output $output) {

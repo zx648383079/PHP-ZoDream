@@ -28,6 +28,7 @@ class CreateBookTables extends Migration {
         BookRepository::tag()->migration($this);
         BookRepository::log()->migration($this);
         BookRepository::clickLog()->migration($this);
+        BookRepository::score()->migration($this);
         $this->append(BookModel::tableName(), function(Table $table) {
             $table->comment('小说');
             $table->id();
@@ -41,7 +42,7 @@ class CreateBookTables extends Migration {
             $table->uint('size')->default(0)->comment('总字数');
             $table->uint('click_count')->default(0)->comment('点击数');
             $table->uint('recommend_count')
-                ->default(0)->comment('点击数');
+                ->default(0)->comment('推荐数');
             $table->timestamp('over_at')->comment('完本日期');
             $table->uint('status', 2)->default(0);
             $table->uint('source_type', 2)->default(0)->comment('来源类型，原创或转载');

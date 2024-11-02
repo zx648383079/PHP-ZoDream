@@ -5,6 +5,7 @@ namespace Module\Book\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\DayLogProvider;
+use Domain\Providers\ScoreProvider;
 use Domain\Providers\TagProvider;
 use Module\Book\Domain\Model\BookBuyLogModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
@@ -43,6 +44,10 @@ class BookRepository {
 
     public static function clickLog(): DayLogProvider {
         return new DayLogProvider(self::BASE_KEY);
+    }
+
+    public static function score(): ScoreProvider {
+        return new ScoreProvider(self::BASE_KEY);
     }
 
     /**
@@ -374,8 +379,8 @@ class BookRepository {
                      ] as $class) {
                 /** @var Query $query */
                 $query = call_user_func($class.'::query');
-                $query->where('book_id', $old_id)->update([
-                    'book_id' => $new_id
+                $query->where('chapter_id', $old_id)->update([
+                    'chapter_id' => $new_id
                 ]);
             }
             BookChapterBodyModel::where('id', $old_id)

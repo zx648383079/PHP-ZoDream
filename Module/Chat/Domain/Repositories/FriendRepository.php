@@ -34,7 +34,7 @@ class FriendRepository {
         ];
         foreach ($groups as $item) {
             $data[$item['id']] = [
-                'id' => 1,
+                'id' => $item['id'],
                 'online' => 0,
                 'count' => 0,
                 'name' => $item['name'],
