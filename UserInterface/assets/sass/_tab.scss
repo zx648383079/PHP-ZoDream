@@ -1,3 +1,6 @@
+@use 'theme';
+@use 'mixins';
+@use 'sizes';
 .tab-box {
     .tab-header {
         position: relative;
@@ -5,18 +8,18 @@
         user-select: none;
         .tab-item {
             &:hover {
-                background: var(--#{$prefix}-hover);
+                background: var(--#{theme.$prefix}-hover);
             }
             &.active {
-                @include active();
+                @include mixins.active();
                 .fa {
                     display: block;
                 }
             }
             display: inline-block;
             width: 9.375rem;
-            height: $lineHeight;
-            line-height: $lineHeight;
+            height: sizes.$lineHeight;
+            line-height: sizes.$lineHeight;
             text-align: center;
             position: relative;
             .fa-close {
@@ -63,17 +66,17 @@
     display: block;
     line-height: 2.5rem;
     a {
-        color: var(--#{$prefix}-body-text);
+        color: var(--#{theme.$prefix}-body-text);
     }
     .item {
         display: inline-block;
         padding: 0 1.25rem;
         cursor: pointer;
         &:hover {
-            background-color: var(--#{$prefix}-hover);
+            background-color: var(--#{theme.$prefix}-hover);
         }
         &.active {
-            @include active();
+            @include mixins.active();
         }
         &:first-of-type {
             border-top-left-radius: 0.3125rem;

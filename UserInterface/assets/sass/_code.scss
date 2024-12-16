@@ -1,16 +1,18 @@
+@use 'theme';
+@use 'mixins';
 .code-container {
-    --#{$prefix}-code: #282c34;
-    --#{$prefix}-code-text: #fff;
-    --#{$prefix}-code-line: hsla(0, 0%, 100%, .3);
-    --#{$prefix}-code-light: rgba(0,0,0,.66);
+    --#{theme.$prefix}-code: #282c34;
+    --#{theme.$prefix}-code-text: #fff;
+    --#{theme.$prefix}-code-line: hsla(0, 0%, 100%, .3);
+    --#{theme.$prefix}-code-light: rgba(0,0,0,.66);
     position: relative;
-    background-color: var(--#{$prefix}-code);
+    background-color: var(--#{theme.$prefix}-code);
     border-radius: 0.375rem;
     margin-top: 1rem;
     .icon-copy,
     .icon-cloud,
     .icon-full-screen {
-        @include iconFont();
+        @include mixins.iconFont();
     }
     .icon-copy::before {
         content: "\f0c5";
@@ -27,10 +29,10 @@
         z-index: 3;
         width: 100%;
         height: 2rem;
-        background-color: var(--#{$prefix}-code);
+        background-color: var(--#{theme.$prefix}-code);
         a {
             cursor: pointer;
-            color: var(--#{$prefix}-code-text) !important;
+            color: var(--#{theme.$prefix}-code-text) !important;
             display: inline-flex;
             font-size: .6rem;
             width: 1.2rem;
@@ -54,7 +56,7 @@
             }
         }
         span {
-            color: var(--#{$prefix}-code-line);
+            color: var(--#{theme.$prefix}-code-line);
             float: right;
         }
     }
@@ -68,7 +70,7 @@
         overflow-x: auto;
     }
     code {
-        color: var(--#{$prefix}-code-text);
+        color: var(--#{theme.$prefix}-code-text);
         background-color: transparent !important;
         padding: 0;
         border-radius: 0;
@@ -85,7 +87,7 @@
             display: block;
         }
         .highlighted {
-            background-color: var(--#{$prefix}-code-light);
+            background-color: var(--#{theme.$prefix}-code-light);
             position: relative;
             &::before {
                 content: " ";
@@ -96,7 +98,7 @@
                 display: block;
                 width: 3.5rem;
                 height: 100%;
-                background-color: var(--#{$prefix}-code-light);
+                background-color: var(--#{theme.$prefix}-code-light);
             }
         }
     }
@@ -106,7 +108,7 @@
         top: 2rem;
         width: 3.5rem;
         text-align: center;
-        color: var(--#{$prefix}-code-line);
+        color: var(--#{theme.$prefix}-code-line);
         line-height: 1.4;
         z-index: 3;
         span {
@@ -122,8 +124,8 @@
         width: 3.5rem;
         bottom: 0;
         border-radius: 6px 0 0 6px;
-        border-right: 1px solid var(--#{$prefix}-code-light);
-        background-color: var(--#{$prefix}-code);
+        border-right: 1px solid var(--#{theme.$prefix}-code-light);
+        background-color: var(--#{theme.$prefix}-code);
     }
     &.code-full-screen {
         position: fixed;

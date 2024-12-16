@@ -1,5 +1,5 @@
 @use 'sass:math';
-@import 'theme';
+@use 'theme';
 $scrollBarSize: .5rem;
 $scrollBarColor: gray;
 $ruleBarSize: 1rem;
@@ -8,7 +8,7 @@ $radius: .25rem;
 $lineHight: 2.25rem;
 $iconWidth: 1.5rem;
 
-@import 'scrollbar';
+@use 'scrollbar';
 
 .visual-editor {
     display: flex;
@@ -135,8 +135,8 @@ $iconWidth: 1.5rem;
     .rule-line-bar {
         .h-line,
         .v-line {
-            border-top: 1px dotted var(--#{$prefix}-primary);
-            border-right: 1px dotted var(--#{$prefix}-primary);
+            border-top: 1px dotted var(--#{theme.$prefix}-primary);
+            border-right: 1px dotted var(--#{theme.$prefix}-primary);
             position: absolute;
         }
         .h-line {
@@ -153,9 +153,9 @@ $iconWidth: 1.5rem;
     }
 
     .expand-box {
-        border-top: 1px solid var(--#{$prefix}-gray);
+        border-top: 1px solid var(--#{theme.$prefix}-gray);
         .expand-header {
-            background-color: var(--#{$prefix}-panel);
+            background-color: var(--#{theme.$prefix}-panel);
             font-size: 1.3rem;
             line-height: $lineHight;
             user-select: none;
@@ -174,8 +174,8 @@ $iconWidth: 1.5rem;
         &.open,
         &:hover {
             .expand-header {
-                background-color: var(--#{$prefix}-primary);
-                color: var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary-text);
             }
         }
     
@@ -199,14 +199,14 @@ $iconWidth: 1.5rem;
         }
         .visual-edit-control {
             &:hover {
-                color: var(--#{$prefix}-primary);
-                background-color: var(--#{$prefix}-body);
+                color: var(--#{theme.$prefix}-primary);
+                background-color: var(--#{theme.$prefix}-body);
             }
         }
     }
     .panel-item {
-        background: var(--#{$prefix}-body);
-        border: 1px solid var(--#{$prefix}-primary);
+        background: var(--#{theme.$prefix}-body);
+        border: 1px solid var(--#{theme.$prefix}-primary);
         position: absolute;
         top: 0;
         left: 1rem;
@@ -214,8 +214,8 @@ $iconWidth: 1.5rem;
         bottom: 0;
         z-index: 100;
         .panel-header {
-            background: var(--#{$prefix}-primary);
-            color: var(--#{$prefix}-primary-text);
+            background: var(--#{theme.$prefix}-primary);
+            color: var(--#{theme.$prefix}-primary-text);
             font-size: 1.5rem;
             line-height: 2rem;
             user-select: none;
@@ -228,7 +228,7 @@ $iconWidth: 1.5rem;
         .panel-body {
             //position: relative;
             overflow-y: auto;
-            @include scrollbar();
+            @include scrollbar.scrollbar();
             .grid {
                 z-index: 100;
             }
@@ -302,9 +302,9 @@ $iconWidth: 1.5rem;
     }
     .style-item {
         line-height: 3.75rem;
-        border: 1px dotted var(--#{$prefix}-primary);
+        border: 1px dotted var(--#{theme.$prefix}-primary);
         text-align: center;
-        color: var(--#{$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}-secondary-text);
         font-weight: bold;
         font-size: 1.25rem;
         user-select: none;
@@ -312,7 +312,7 @@ $iconWidth: 1.5rem;
             width: 100%;
         }
         &.active {
-            border: 1px dotted var(--#{$prefix}-primary-active);
+            border: 1px dotted var(--#{theme.$prefix}-primary-active);
         }
         &:hover {
             border-style: solid;
@@ -326,7 +326,7 @@ $iconWidth: 1.5rem;
             box-sizing: content-box;
             vertical-align: middle;
             border-radius: $switchRadius;
-            border: 1px solid var(--#{$prefix}-primary);
+            border: 1px solid var(--#{theme.$prefix}-primary);
             display: inline-block;
             position: relative;
             margin-right: .4rem;
@@ -337,14 +337,14 @@ $iconWidth: 1.5rem;
                 content: ' ';
                 position: absolute;
                 border-radius: $switchRadius;
-                background: var(--#{$prefix}-panel);
+                background: var(--#{theme.$prefix}-panel);
                 top: 0;
                 left: 0;
                 z-index: 1;
                 width: $switchRadius * 2;
                 transition: all 0.1s ease-in;
                 height: $switchRadius * 2;
-                box-shadow: 0 0 .6rem var(--#{$prefix}-shadow);
+                box-shadow: 0 0 .6rem var(--#{theme.$prefix}-shadow);
             }
         }
         .switch-label {
@@ -352,7 +352,7 @@ $iconWidth: 1.5rem;
         }
         &.checked {
             .switch-control {
-                background: var(--#{$prefix}-primary);
+                background: var(--#{theme.$prefix}-primary);
                 &::before {
                     left: $switchRadius * 2;
                 }
@@ -361,14 +361,14 @@ $iconWidth: 1.5rem;
     }
     .shell-box {
         display: none;
-        background-color: var(--#{$prefix}-primary);
+        background-color: var(--#{theme.$prefix}-primary);
         bottom: -1rem;
         position: absolute;
         left: -1rem;
         top: -4rem;
         right: -1rem;
         border-radius: .5rem;
-        box-shadow: 0px 0px 20px 0px var(--#{$prefix}-shadow);
+        box-shadow: 0px 0px 20px 0px var(--#{theme.$prefix}-shadow);
         user-select: none;
         z-index: -1;
         padding: 2.5rem 1rem 1rem;
@@ -379,8 +379,8 @@ $iconWidth: 1.5rem;
             font-size: .8rem;
             align-items: center;
             padding: 0 .3rem;
-            color: var(--#{$prefix}-primary-text);
-            background-color: var(--#{$prefix}-primary-hover);
+            color: var(--#{theme.$prefix}-primary-text);
+            background-color: var(--#{theme.$prefix}-primary-hover);
         }
     }
     .await-widget-box {
@@ -421,7 +421,7 @@ $iconWidth: 1.5rem;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background-color: var(--#{$prefix}-input);
+        background-color: var(--#{theme.$prefix}-input);
     }
 
     .select-control-container,
@@ -433,31 +433,31 @@ $iconWidth: 1.5rem;
             left: 0;
             width: 100%;
             border-radius: 0 0 $radius $radius;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             max-height: $lineHight * 8;
             overflow-y: auto;
             z-index: 9;
-            box-shadow: 0 .25rem .25rem var(--#{$prefix}-shadow);
+            box-shadow: 0 .25rem .25rem var(--#{theme.$prefix}-shadow);
         }
         .group-option-item,
         .option-item {
             padding: 0 .4rem;
         }
         .group-option-item {
-            background-color: var(--#{$prefix}-primary);
-            color:  var(--#{$prefix}-primary-text);
+            background-color: var(--#{theme.$prefix}-primary);
+            color:  var(--#{theme.$prefix}-primary-text);
             user-select: none;
         }
         .option-item {
             user-select: none;
             &:hover {
-                background-color: var(--#{$prefix}-primary-hover);
-                color:  var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary-hover);
+                color:  var(--#{theme.$prefix}-primary-text);
             }
             &.selected {
                 font-weight: bold;
-                background-color: var(--#{$prefix}-primary-active);
-                color:  var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary-active);
+                color:  var(--#{theme.$prefix}-primary-text);
             }
         }
         &.select-focus {
@@ -469,8 +469,8 @@ $iconWidth: 1.5rem;
     .select-control-container {
         position: relative;
         line-height: $lineHight;
-        background-color: var(--#{$prefix}-input);
-        color: var(--#{$prefix}-input-text);
+        background-color: var(--#{theme.$prefix}-input);
+        color: var(--#{theme.$prefix}-input-text);
         border-radius: $radius;
         .selected-container {
             max-width: 80%;
@@ -507,7 +507,7 @@ $iconWidth: 1.5rem;
         }
         .input-clear,
         .input-arrow {
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             display: block;
             width: $iconWidth;
             text-align: center;
@@ -535,7 +535,7 @@ $iconWidth: 1.5rem;
                 top: 0;
                 left: 0;
                 display: block;
-                color: var(--#{$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}-secondary-text);
                 width: $iconWidth;
                 text-align: center;
             }
@@ -546,7 +546,7 @@ $iconWidth: 1.5rem;
         }
         &.select-focus {
             border-radius: $radius $radius 0 0;
-            box-shadow: 0 0 .25rem var(--#{$prefix}-shadow);
+            box-shadow: 0 0 .25rem var(--#{theme.$prefix}-shadow);
         }
     }
 
@@ -556,7 +556,7 @@ $iconWidth: 1.5rem;
             background-color: transparent;
             outline: 0;
             border: none;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             text-align: center;
             font-size: 1rem;
         }
@@ -568,7 +568,7 @@ $iconWidth: 1.5rem;
             >label,
             .extra-control {
                 font-size: .6rem;
-                color: var(--#{$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}-secondary-text);
                 line-height: 1.5;
             }
             >label {
@@ -591,8 +591,8 @@ $iconWidth: 1.5rem;
     }
 
     .number-control-container {
-        background-color: var(--#{$prefix}-input);
-        color: var(--#{$prefix}-input-text);
+        background-color: var(--#{theme.$prefix}-input);
+        color: var(--#{theme.$prefix}-input-text);
         border-radius: $radius;
         display: flex;
         height: $lineHight;
@@ -613,9 +613,9 @@ $iconWidth: 1.5rem;
             .fa {
                 cursor: pointer;
                 font-size: .7rem;
-                color: var(--#{$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}-secondary-text);
                 &:hover {
-                    color: var(--#{$prefix}-input-text);
+                    color: var(--#{theme.$prefix}-input-text);
                 }
             }
         }
@@ -630,7 +630,7 @@ $iconWidth: 1.5rem;
             background-color: #c8cdd0;
             cursor: pointer;
             &.selected {
-                border: 1px solid var(--#{$prefix}-primary);
+                border: 1px solid var(--#{theme.$prefix}-primary);
             }
         }
     }
@@ -641,7 +641,7 @@ $iconWidth: 1.5rem;
         user-select: none;
         border-radius: .25rem;
         text-align: center;
-        border: .2rem dotted var(--#{$prefix}-primary);
+        border: .2rem dotted var(--#{theme.$prefix}-primary);
         height: $lineHight * 3;
         p {
             margin: 0;
@@ -664,7 +664,7 @@ $iconWidth: 1.5rem;
             margin-left: -2.5rem;
         }
         &:hover {
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
         }
         &.is-uploading {
             label {
@@ -705,8 +705,8 @@ $iconWidth: 1.5rem;
                 line-height: 2rem;
                 flex: 1;
                 display: block;
-                background-color: var(--#{$prefix}-primary);
-                color: var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary-text);
                 &:first-of-type {
                     border-radius: $radius 0 0 $radius;
                 }
@@ -714,7 +714,7 @@ $iconWidth: 1.5rem;
                     border-radius: 0 $radius $radius 0;
                 }
                 &:hover {
-                    background-color: var(--#{$prefix}-primary-hover);
+                    background-color: var(--#{theme.$prefix}-primary-hover);
                 }
             }
         }
@@ -728,15 +728,15 @@ $iconWidth: 1.5rem;
         width: $lineHight;
         line-height: $lineHight;
         text-align: center;
-        background-color: var(--#{$prefix}-input);
-        color: var(--#{$prefix}-input-text);
+        background-color: var(--#{theme.$prefix}-input);
+        color: var(--#{theme.$prefix}-input-text);
         border-radius: $radius;
         user-select: none;
         cursor: pointer;
         &:hover {
-            background-color: var(--#{$prefix}-hover);
+            background-color: var(--#{theme.$prefix}-hover);
             label {
-                background-color: var(--#{$prefix}-hover);
+                background-color: var(--#{theme.$prefix}-hover);
             }
         }
         input {
@@ -748,19 +748,19 @@ $iconWidth: 1.5rem;
             text-align: center;
             line-height: $lineHight;
             border-radius: $radius;
-            background-color: var(--#{$prefix}-input);
-            color: var(--#{$prefix}-input-text);
+            background-color: var(--#{theme.$prefix}-input);
+            color: var(--#{theme.$prefix}-input-text);
             font-size: .8rem;
             &::before {
                 display: none;
             }
         }
         &.checked {
-            background-color: var(--#{$prefix}-primary);
-            color: var(--#{$prefix}-primary-text);
+            background-color: var(--#{theme.$prefix}-primary);
+            color: var(--#{theme.$prefix}-primary-text);
             label {
-                background-color: var(--#{$prefix}-primary);
-                color: var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary-text);
             }
         }
     }
@@ -780,8 +780,8 @@ $iconWidth: 1.5rem;
             height: 1rem;
             width: 1rem;
             border-radius: .5rem;
-            background-color: var(--#{$prefix}-input-text);
-            box-shadow: 0 0 .25rem var(--#{$prefix}-shadow);
+            background-color: var(--#{theme.$prefix}-input-text);
+            box-shadow: 0 0 .25rem var(--#{theme.$prefix}-shadow);
         }
         &::before {
             content: ' ';
@@ -789,7 +789,7 @@ $iconWidth: 1.5rem;
             transform: translateY(.2rem);
             height: .6rem;
             border-radius: .3rem;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
         }
         &.hue-bar {
             &::before {
@@ -819,7 +819,7 @@ $iconWidth: 1.5rem;
         width: $lineHight;
         background-clip: padding-box;
         border-radius: 50%;
-        background-color: var(--#{$prefix}-panel);
+        background-color: var(--#{theme.$prefix}-panel);
         border: none;
         padding: .3rem;
         &::-webkit-color-swatch {
@@ -886,7 +886,7 @@ $iconWidth: 1.5rem;
             flex: 1;
             min-width: 0;
             height: $lineHight;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             border-radius: $radius $radius 0 0;
             outline: 0;
             text-align: center;
@@ -895,8 +895,8 @@ $iconWidth: 1.5rem;
         >label {
             line-height: $lineHight * .5;
             font-size: .8rem;
-            background-color: var(--#{$prefix}-gray);
-            color: var(--#{$prefix}-gray-text);
+            background-color: var(--#{theme.$prefix}-gray);
+            color: var(--#{theme.$prefix}-gray-text);
             border-radius: 0 0 $radius $radius;
             display: block;
         }
@@ -919,7 +919,7 @@ $iconWidth: 1.5rem;
         select {
             min-width: $lineHight;
             height: $lineHight;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             border-radius: $radius;
             outline: 0;
             border: none;
@@ -946,7 +946,7 @@ $iconWidth: 1.5rem;
             input {
                 width: 100%;
                 border-radius: 0;
-                border-right: 1px solid var(--#{$prefix}-primary);
+                border-right: 1px solid var(--#{theme.$prefix}-primary);
             }
             label {
                 border-radius: 0;
@@ -973,7 +973,7 @@ $iconWidth: 1.5rem;
             &:not(:last-child) {
                 .number-control-container {
                     border-radius: 0;
-                    border-right: 1px solid var(--#{$prefix}-primary);
+                    border-right: 1px solid var(--#{theme.$prefix}-primary);
                 }
             }
         }
@@ -991,13 +991,13 @@ $iconWidth: 1.5rem;
             font-weight: bold;
             font-style: normal;
             line-height: $lineHight;
-            color: var(--#{$prefix}-primary);
+            color: var(--#{theme.$prefix}-primary);
             &::before {
                 display: block;
                 content: '·';
             }
             &:hover {
-                color: var(--#{$prefix}-danger);
+                color: var(--#{theme.$prefix}-danger);
                 &::before {
                     content: '×';
                 }
@@ -1070,7 +1070,7 @@ $iconWidth: 1.5rem;
     }
 
     .control-tooltip {
-        color: var(--#{$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}-secondary-text);
         font-size: 0.75rem;
         line-height: 1.5;
     }
@@ -1100,13 +1100,13 @@ $iconWidth: 1.5rem;
         }
     }
     .control-popup {
-        --#{$prefix}-popup: var(--#{$prefix}-body);
+        --#{theme.$prefix}-popup: var(--#{theme.$prefix}-body);
         display: none;
         position: absolute;
         border-radius: $radius;
         padding: 0 0 .8rem 0;
-        background-color: var(--#{$prefix}-popup);
-        box-shadow: 0 0 1.25rem var(--#{$prefix}-shadow);
+        background-color: var(--#{theme.$prefix}-popup);
+        box-shadow: 0 0 1.25rem var(--#{theme.$prefix}-shadow);
         margin-top: .5rem + $lineHight;
         left: 0;
         width: 100%;
@@ -1134,7 +1134,7 @@ $iconWidth: 1.5rem;
                 text-align: center;
                 padding: 0;
                 &:hover {
-                    background: var(--#{$prefix}-hover);
+                    background: var(--#{theme.$prefix}-hover);
                 }
                 &.active {
                     background: var(--zre--primary);
@@ -1160,7 +1160,7 @@ $iconWidth: 1.5rem;
                 top: 0;
                 left: 0;
                 display: block;
-                color: var(--#{$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}-secondary-text);
                 width: $iconWidth;
                 text-align: center;
                 line-height: $lineHight;
@@ -1178,8 +1178,8 @@ $iconWidth: 1.5rem;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--#{$prefix}-input);
-            color: var(--#{$prefix}-input-text);
+            background-color: var(--#{theme.$prefix}-input);
+            color: var(--#{theme.$prefix}-input-text);
             border-radius: $radius;
             user-select: none;
             font-size: .6rem;
@@ -1188,8 +1188,8 @@ $iconWidth: 1.5rem;
                 font-size: 1rem;
             }
             &.selected {
-                background-color: var(--#{$prefix}-primary-active);
-                color:  var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary-active);
+                color:  var(--#{theme.$prefix}-primary-text);
             }
         }
         &::before {
@@ -1198,14 +1198,14 @@ $iconWidth: 1.5rem;
             position: absolute;
             top: -1rem;
             right: math.div($lineHight, 2) + .3rem;
-            border-bottom-color: var(--#{$prefix}-popup);
+            border-bottom-color: var(--#{theme.$prefix}-popup);
         }
         &.popup-top {
             transform: translateY(-100%);
             margin-top: 0;
             &::before {
                 border: 0.5rem solid transparent;
-                border-top-color: var(--#{$prefix}-popup);
+                border-top-color: var(--#{theme.$prefix}-popup);
                 top: auto;
                 bottom: -.9rem;
             }
@@ -1220,7 +1220,7 @@ $iconWidth: 1.5rem;
             padding-left: .4rem;
             display: flex;
             justify-content: space-between;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             user-select: none;
             .control-action {
                 width: 1.5rem;
@@ -1228,25 +1228,25 @@ $iconWidth: 1.5rem;
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: center;
-                color: var(--#{$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}-secondary-text);
             }
         }
         .multiple-control-body {
             display: none;
             // margin: 0 -.8rem;
             border-radius: 0 0 $radius $radius;
-            border: 1px dotted var(--#{$prefix}-gray);
+            border: 1px dotted var(--#{theme.$prefix}-gray);
             border-top: none;
         }
         &:hover {
             .multiple-control-header {
-                background-color: var(--#{$prefix}-hover);
+                background-color: var(--#{theme.$prefix}-hover);
             }
         }
         &.open {
             .multiple-control-header {
-                background-color: var(--#{$prefix}-primary);
-                color: var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary-text);
             }
             .multiple-control-body {
                 display: block;
@@ -1262,7 +1262,7 @@ $iconWidth: 1.5rem;
             justify-content: center;
             height: $lineHight;
             border-radius: $radius;
-            border: 1px solid var(--#{$prefix}-gray);
+            border: 1px solid var(--#{theme.$prefix}-gray);
         }
     }
     .fa-vertical {
@@ -1301,7 +1301,7 @@ $iconWidth: 1.5rem;
             top: 0;
             z-index: 2;
             display: none;
-            background-color: var(--#{$prefix}-input);
+            background-color: var(--#{theme.$prefix}-input);
             height: $lineHight;
             .fa {
                 display: inline-block;
@@ -1315,11 +1315,11 @@ $iconWidth: 1.5rem;
                     border-radius: 0 $radius $radius 0;
                 }
                 &:not(:last-of-type) {
-                    border-right: 1px solid var(--#{$prefix}-primary);
+                    border-right: 1px solid var(--#{theme.$prefix}-primary);
                 }
                 &:hover {
-                    background-color: var(--#{$prefix}-primary);
-                    color: var(--#{$prefix}-primary-text);
+                    background-color: var(--#{theme.$prefix}-primary);
+                    color: var(--#{theme.$prefix}-primary-text);
                 }
             }
         }
@@ -1338,7 +1338,7 @@ $iconWidth: 1.5rem;
         position: relative;
         border-radius: $radius;
         line-height: $lineHight;
-        background-color: var(--#{$prefix}-input);
+        background-color: var(--#{theme.$prefix}-input);
         margin-bottom: .2rem;
         span {
             flex: 1;
@@ -1347,9 +1347,9 @@ $iconWidth: 1.5rem;
 
     .list-item {
         &.active {
-            border: .1rem solid var(--#{$prefix}-primary);
+            border: .1rem solid var(--#{theme.$prefix}-primary);
             .item-title {
-                color: var(--#{$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary);
             }
             &::after {
                 content: '√';
@@ -1357,8 +1357,8 @@ $iconWidth: 1.5rem;
                 position: absolute;
                 right: .8rem;
                 top: -.2rem;
-                background-color: var(--#{$prefix}-primary);
-                color: var(--#{$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}-primary-text);
                 line-height: 1;
                 font-size: .6rem;
                 min-width: 2rem;
@@ -1399,7 +1399,7 @@ $iconWidth: 1.5rem;
         position: relative;
         border-radius: $radius;
         padding: .2rem .2rem .2rem 1.2rem;
-        border: 1px dotted var(--#{$prefix}-gray);
+        border: 1px dotted var(--#{theme.$prefix}-gray);
         max-height: 20rem;
         overflow: auto;
         margin: 0 -.8rem;
@@ -1413,12 +1413,12 @@ $iconWidth: 1.5rem;
         .flip-back-body {
             display: none;
             border-radius: 0 0 $radius $radius;
-            border: 1px dotted var(--#{$prefix}-gray);
+            border: 1px dotted var(--#{theme.$prefix}-gray);
         }
         .flip-action-bar {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid var(--#{$prefix}-gray);
+            border-bottom: 1px solid var(--#{theme.$prefix}-gray);
         }
         .flip-back-btn,
         .flip-save-btn {
@@ -1427,7 +1427,7 @@ $iconWidth: 1.5rem;
             line-height: 2rem;
             text-align: center;
             &:hover {
-                background-color: var(--#{$prefix}-gray);
+                background-color: var(--#{theme.$prefix}-gray);
             }
         }
         &.flip-toggle {

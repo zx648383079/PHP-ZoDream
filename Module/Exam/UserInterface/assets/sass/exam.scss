@@ -1,4 +1,4 @@
-@import 'theme';
+@use 'theme';
 $valid: #337ab7;
 .option-box {
     .option-item {
@@ -32,10 +32,10 @@ $valid: #337ab7;
             }
         }
         .wrong {
-            border-bottom: 1px solid $invalid;
+            border-bottom: 1px solid theme.$invalid;
         }
         .right {
-            border-bottom: 1px solid $valid;
+            border-bottom: 1px solid theme.$valid;
         }
     }
     .option-list {
@@ -57,13 +57,13 @@ $valid: #337ab7;
             .wrong {
                 &::before {
                     content: "\f00d";
-                    color: $invalid;
+                    color: theme.$invalid;
                 }
             }
             .right {
                 &::before {
                     content: "\f00c";
-                    color: $valid;
+                    color: theme.$valid;
                 }
             }
             &:hover {
@@ -92,12 +92,12 @@ $valid: #337ab7;
         }
         &.wrong {
             textarea {
-                border: 1px solid $invalid;
+                border: 1px solid theme.$invalid;
             }
         }
         &.right {
             textarea {
-                border: 1px solid $valid;
+                border: 1px solid theme.$valid;
             }
         }
     }
@@ -116,13 +116,13 @@ $valid: #337ab7;
     &.item-wrong {
         &::before {
             content: "\f00d";
-            color: rgba($invalid, .5);
+            color: rgba(theme.$invalid, .5);
         }
     }
     &.item-right {
         &::before {
             content: "\f00c";
-            color: rgba($valid, .5);
+            color: rgba(theme.$valid, .5);
         }
     }
 }
@@ -280,13 +280,13 @@ $valid: #337ab7;
                 }
             }
             &.active {
-                border: 2px solid $valid;
+                border: 2px solid theme.$valid;
             }
             &.right {
-                background-color: $valid;
+                background-color: theme.$valid;
             }
             &.wrong {
-                background-color: $invalid;
+                background-color: theme.$invalid;
             }
             &:hover {
                 border-color: #777;

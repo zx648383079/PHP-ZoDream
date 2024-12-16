@@ -5,8 +5,8 @@
  *
  * Copyright (c) 2017 ZoDream
  */
-@import "prefix";
-@import "scrollbar";
+@use "prefix";
+@use "scrollbar";
 .datetimer {
     width: 350px;
     position: absolute;
@@ -14,7 +14,7 @@
     z-index: 999;
     user-select: none;
     background: #fff;
-    @include prefix-content(user-select, none);
+    @include prefix.prefix-content(user-select, none);
     .header {
         position: relative;
         text-align: center;
@@ -149,7 +149,7 @@
     ul {
         overflow-y: auto;
         border: 1px solid #eee;
-        @include scrollbar();
+        @include scrollbar.scrollbar();
     }
 }
 

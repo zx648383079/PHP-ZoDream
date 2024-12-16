@@ -1,4 +1,6 @@
-@import 'theme';
+@use 'theme';
+@use './markdown';
+
 .page-footer {
     text-align: center;
 }
@@ -161,4 +163,3 @@
     min-height: 31.25rem;
 }
 
-@import './markdown';

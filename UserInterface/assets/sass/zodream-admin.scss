@@ -1,14 +1,12 @@
-@import 'function';
-@import 'theme';
-@import 'function';
+@use 'theme';
 
 $primary: #2f4156;
 $primaryText: rgb(191, 203, 217);
 $isFullyTheme: false;
 
-@import 'root';
-@import 'menu';
-@import 'scroll';
+@use 'root';
+@use 'menu';
+@use 'scroll';
 
 
 a {
@@ -21,15 +19,15 @@ a {
 
 footer,
 header {
-    background: var(--#{$prefix}-primary);
-    color: var(--#{$prefix}-primary-text); 
+    background: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}-primary-text); 
     a {
-        color: var(--#{$prefix}-primary-text);
+        color: var(--#{theme.$prefix}-primary-text);
         text-decoration: none;
     }
 }
 .tab-box .tab-header {
-    background-color: var(--#{$prefix}-panel);
+    background-color: var(--#{theme.$prefix}-panel);
 }
 
 header {
@@ -56,13 +54,13 @@ footer {
 
 
 .page-tooltip-bar {
-    border: 1px dashed var(--#{$prefix}-primary);
+    border: 1px dashed var(--#{theme.$prefix}-primary);
     padding: 0.625rem;
     border-radius: 0.3125rem;
-    background-color: var(--#{$prefix}-panel);
+    background-color: var(--#{theme.$prefix}-panel);
     position: relative;
     .tooltip-header {
-        color: var(--#{$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}-secondary-text);
     }
     ul {
         width: 100%;
@@ -71,7 +69,7 @@ footer {
             padding-left: 10px;
             list-style: inside;
             a {
-                color: var(--#{$prefix}-panel-text);
+                color: var(--#{theme.$prefix}-panel-text);
             }
         }
     }
@@ -106,16 +104,16 @@ footer {
 .breadcrumb {
     padding: 0.5rem 0.9375rem;
     list-style: none;
-    background-color: var(--#{$prefix}-body);
+    background-color: var(--#{theme.$prefix}-body);
     border-radius: 0.25rem;
     >li {
         display: inline-block;
         &.active {
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
         }
         +li::before {
             padding: 0 0.3125rem;
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             content: "/\00a0";
         }
     }
@@ -172,7 +170,7 @@ table,
         .item-meta-bar {
             float: left;
             font-size: .8rem;
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             >a,
             >span {
                 margin-right: .4rem;
@@ -189,14 +187,14 @@ table,
     }
     .row-item {
         position: relative;
-        background-color: var(--#{$prefix}-panel);
+        background-color: var(--#{theme.$prefix}-panel);
         margin-bottom: 1.25rem;
         .stamp {
             position: absolute;
             right: 0;
             top: 0;
             transform: rotate(30deg);
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             border: 2px solid;
             display: flex;
             align-items: center;
@@ -212,7 +210,7 @@ table,
             font-weight: 700;
             .no {
                 display: inline-block;
-                background-color: var(--#{$prefix}-body);
+                background-color: var(--#{theme.$prefix}-body);
                 padding: 0 5px;
                 line-height: 1.875rem;
                 margin-right: 0.625rem;
@@ -220,7 +218,7 @@ table,
                 &::after {
                     content: "";
                     border: 6px solid transparent;
-                    border-left-color: var(--#{$prefix}-body);
+                    border-left-color: var(--#{theme.$prefix}-body);
                     position: absolute;
                     right: -12px;
                     top: 9px;
@@ -228,7 +226,7 @@ table,
             }
         }
         .item-body {
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             padding: 5px;
         }
         &.thumb-item {
@@ -246,31 +244,31 @@ table,
         &:hover {
             .item-header {
                 .no {
-                    background-color: var(--#{$prefix}-primary);
-                    color: var(--#{$prefix}-primary-text);
+                    background-color: var(--#{theme.$prefix}-primary);
+                    color: var(--#{theme.$prefix}-primary-text);
                     &::after {
-                        border-left-color: var(--#{$prefix}-primary);
+                        border-left-color: var(--#{theme.$prefix}-primary);
                     }
                 }
             }
             .stamp {
-                color: var(--#{$prefix}-primary-hover);
+                color: var(--#{theme.$prefix}-primary-hover);
                 transform: rotate(390deg);
             }
             .item-body {
-                background-color: var(--#{$prefix}-gray);
-                color: var(--#{$prefix}-gray-text);
+                background-color: var(--#{theme.$prefix}-gray);
+                color: var(--#{theme.$prefix}-gray-text);
             }
         }
     }
 
     .image-row-item {
         display: flex;
-        background-color: var(--#{$prefix}-panel);
+        background-color: var(--#{theme.$prefix}-panel);
         margin-bottom: 1.25rem;
         .no {
             display: inline-block;
-            background-color: var(--#{$prefix}-body);
+            background-color: var(--#{theme.$prefix}-body);
             padding: 0 5px;
             line-height: 1.875rem;
             margin-right: 0.625rem;
@@ -278,7 +276,7 @@ table,
             &::after {
                 content: "";
                 border: 6px solid transparent;
-                border-left-color: var(--#{$prefix}-body);
+                border-left-color: var(--#{theme.$prefix}-body);
                 position: absolute;
                 right: -12px;
                 top: 9px;
@@ -299,7 +297,7 @@ table,
             font-weight: 700;
         }
         .item-meta {
-            color: var(--#{$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}-secondary-text);
             padding: 0.3125rem;
         }
         
@@ -310,12 +308,12 @@ table,
 
 .column-full-item {
     border-radius: .25rem;
-    box-shadow: 0 0 1px var(--#{$prefix}-shadow), 0 1px 3px var(--#{$prefix}-shadow);
+    box-shadow: 0 0 1px var(--#{theme.$prefix}-shadow), 0 1px 3px var(--#{theme.$prefix}-shadow);
     display: block;
     margin-bottom: 1.25rem;
     position: relative;
-    background-color: var(--#{$prefix}-panel);
-    color: var(--#{$prefix}-panel-text);
+    background-color: var(--#{theme.$prefix}-panel);
+    color: var(--#{theme.$prefix}-panel-text);
     .overlay {
         height: 100%;
         left: 0;
@@ -324,12 +322,12 @@ table,
         width: 100%;
         border-radius: .25rem;
         align-items: center;
-        background: var(--#{$prefix}-gray);
+        background: var(--#{theme.$prefix}-gray);
         display: flex;
         justify-content: center;
         z-index: 50;
         i {
-            color: var(--#{$prefix}-gray-text);
+            color: var(--#{theme.$prefix}-gray-text);
             font-size: 3em;
             animation: spin 1s linear infinite;
         }
@@ -349,7 +347,7 @@ table,
         font-size: 1rem;
     }
     .icon {
-        color: var(--#{$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary);
         z-index: 0;
         i {
             font-size: 3.125rem;
@@ -360,8 +358,8 @@ table,
         }
     }
     .column-footer {
-        background: var(--#{$prefix}-primary);
-        color: var(--#{$prefix}-primary-text);
+        background: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
         display: block;
         padding: 3px 0;
         position: relative;
@@ -369,11 +367,11 @@ table,
         text-decoration: none;
         z-index: 10;
         &:hover {
-            background: var(--#{$prefix}-primary-hover);
+            background: var(--#{theme.$prefix}-primary-hover);
         }
     }
     a {
-        color: var(--#{$prefix}-panel-text);
+        color: var(--#{theme.$prefix}-panel-text);
     }
     &:hover {
         .icon {

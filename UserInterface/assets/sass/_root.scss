@@ -1,83 +1,86 @@
+@use 'theme';
+@use 'variables/dark';
+
 $isFullyTheme: true !default;
 @if $isFullyTheme {
     @media (prefers-color-scheme: dark) {
         :root {
-            --#{$prefix}-primary: #{$dark-primary};
-            --#{$prefix}-primary-hover: #{tint-color($dark-primary, $colorHoverOffset)};
-            --#{$prefix}-primary-active: #{tint-color($dark-primary, $colorActiveOffset)};
-            --#{$prefix}-primary-text: #{$dark-primaryText};
+            --#{theme.$prefix}-primary: #{dark.$primary};
+            --#{theme.$prefix}-primary-hover: #{tint-color(dark.$primary, theme.$colorHoverOffset)};
+            --#{theme.$prefix}-primary-active: #{tint-color(dark.$primary, theme.$colorActiveOffset)};
+            --#{theme.$prefix}-primary-text: #{dark.$primaryText};
             
-            --#{$prefix}-body: #{$dark-body};
-            --#{$prefix}-hover: #{$dark-hover};
-            --#{$prefix}-body-text: #{$dark-bodyText};
-            --#{$prefix}-body-rgb: #{to-rgb($dark-body)};
-            --#{$prefix}-body-text-rgb: #{to-rgb($dark-bodyText)};
-            --#{$prefix}-panel: #{$dark-panel};
-            --#{$prefix}-panel-text: #{$dark-bodyText};
+            --#{theme.$prefix}-body: #{dark.$body};
+            --#{theme.$prefix}-hover: #{dark.$hover};
+            --#{theme.$prefix}-body-text: #{dark.$bodyText};
+            --#{theme.$prefix}-body-rgb: #{to-rgb(dark.$body)};
+            --#{theme.$prefix}-body-text-rgb: #{to-rgb(dark.$bodyText)};
+            --#{theme.$prefix}-panel: #{dark.$panel};
+            --#{theme.$prefix}-panel-text: #{dark.$bodyText};
     
-            --#{$prefix}-dialog: #{$dark-dialog};
-            --#{$prefix}-dialog-text: #{$dark-dialogText};
-            --#{$prefix}-dialog-mask: #{$dark-dialogMask};
-            --#{$prefix}-shadow: #{$dark-shadow};
+            --#{theme.$prefix}-dialog: #{dark.$dialog};
+            --#{theme.$prefix}-dialog-text: #{dark.$dialogText};
+            --#{theme.$prefix}-dialog-mask: #{dark.$dialogMask};
+            --#{theme.$prefix}-shadow: #{dark.$shadow};
     
-            --#{$prefix}-secondary: #{$dark-secondary};
-            --#{$prefix}-secondary-text: #{$dark-secondaryText};
+            --#{theme.$prefix}-secondary: #{dark.$secondary};
+            --#{theme.$prefix}-secondary-text: #{dark.$secondaryText};
 
-            --#{$prefix}-gray: #{$dark-gray};
-            --#{$prefix}-gray-text: #{$dark-grayText};
+            --#{theme.$prefix}-gray: #{dark.$gray};
+            --#{theme.$prefix}-gray-text: #{dark.$grayText};
     
-            --#{$prefix}-link-text: #{$dark-linkText};
-            --#{$prefix}-link-hover-text: #{$dark-linkHoverText};
+            --#{theme.$prefix}-link-text: #{dark.$linkText};
+            --#{theme.$prefix}-link-hover-text: #{dark.$linkHoverText};
     
             
-            --#{$prefix}-input: #{$dark-input};
-            --#{$prefix}-input-text: #{$dark-inputText};
+            --#{theme.$prefix}-input: #{dark.$input};
+            --#{theme.$prefix}-input-text: #{dark.$inputText};
     
-            --#{$prefix}-input-border: #{$dark-inputBorder};
-            --#{$prefix}-input-hover-border: #{$dark-inputHoverBorder};
-            --#{$prefix}-input-hover-shadow: #{$dark-inputHoverShadow};
+            --#{theme.$prefix}-input-border: #{dark.$inputBorder};
+            --#{theme.$prefix}-input-hover-border: #{dark.$inputHoverBorder};
+            --#{theme.$prefix}-input-hover-shadow: #{dark.$inputHoverShadow};
         }
     }
 }
 @media (prefers-color-scheme: light) {
     :root {
-        --#{$prefix}-primary: #{$primary};
-        --#{$prefix}-primary-hover: #{shade-color($primary, $colorHoverOffset)};
-        --#{$prefix}-primary-active: #{shade-color($primary, $colorActiveOffset)};
-        --#{$prefix}-primary-text: #{$primaryText};
+        --#{theme.$prefix}-primary: #{theme.$primary};
+        --#{theme.$prefix}-primary-hover: #{shade-color(theme.$primary, theme.$colorHoverOffset)};
+        --#{theme.$prefix}-primary-active: #{shade-color(theme.$primary, theme.$colorActiveOffset)};
+        --#{theme.$prefix}-primary-text: #{theme.$primaryText};
         @if $isFullyTheme {
-            --#{$prefix}-body: #{$body};
-            --#{$prefix}-hover: #{$hover};
-            --#{$prefix}-body-text: #{$bodyText};
-            --#{$prefix}-body-rgb: #{to-rgb($body)};
-            --#{$prefix}-body-text-rgb: #{to-rgb($bodyText)};
-            --#{$prefix}-panel: #{$panel};
-            --#{$prefix}-panel-text: #{$bodyText};
+            --#{theme.$prefix}-body: #{theme.$body};
+            --#{theme.$prefix}-hover: #{theme.$hover};
+            --#{theme.$prefix}-body-text: #{theme.$bodyText};
+            --#{theme.$prefix}-body-rgb: #{to-rgb(theme.$body)};
+            --#{theme.$prefix}-body-text-rgb: #{to-rgb(theme.$bodyText)};
+            --#{theme.$prefix}-panel: #{theme.$panel};
+            --#{theme.$prefix}-panel-text: #{theme.$bodyText};
     
 
 
-            --#{$prefix}-dialog: #{$dialog};
-            --#{$prefix}-dialog-text: #{$dialogText};
-            --#{$prefix}-dialog-mask: #{$dialogMask};
+            --#{theme.$prefix}-dialog: #{theme.$dialog};
+            --#{theme.$prefix}-dialog-text: #{theme.$dialogText};
+            --#{theme.$prefix}-dialog-mask: #{theme.$dialogMask};
 
-            --#{$prefix}-gray: #{$gray};
-            --#{$prefix}-gray-text: #{$grayText};
+            --#{theme.$prefix}-gray: #{theme.$gray};
+            --#{theme.$prefix}-gray-text: #{theme.$grayText};
     
-            --#{$prefix}-secondary: #{$secondary};
-            --#{$prefix}-secondary-text: #{$secondaryText};
+            --#{theme.$prefix}-secondary: #{theme.$secondary};
+            --#{theme.$prefix}-secondary-text: #{theme.$secondaryText};
     
-            --#{$prefix}-shadow: #{$shadow};
+            --#{theme.$prefix}-shadow: #{theme.$shadow};
     
-            --#{$prefix}-link-text: #{$linkText};
-            --#{$prefix}-link-hover-text: #{$linkHoverText};
+            --#{theme.$prefix}-link-text: #{theme.$linkText};
+            --#{theme.$prefix}-link-hover-text: #{theme.$linkHoverText};
     
             
-            --#{$prefix}-input: #{$input};
-            --#{$prefix}-input-text: #{$inputText};
+            --#{theme.$prefix}-input: #{theme.$input};
+            --#{theme.$prefix}-input-text: #{theme.$inputText};
     
-            --#{$prefix}-input-border: #{$inputBorder};
-            --#{$prefix}-input-hover-border: #{$inputHoverBorder};
-            --#{$prefix}-input-hover-shadow: #{$inputHoverShadow};
+            --#{theme.$prefix}-input-border: #{theme.$inputBorder};
+            --#{theme.$prefix}-input-hover-border: #{theme.$inputHoverBorder};
+            --#{theme.$prefix}-input-hover-shadow: #{theme.$inputHoverShadow};
         }
     }
 }

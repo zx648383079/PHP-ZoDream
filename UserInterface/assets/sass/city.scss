@@ -6,7 +6,7 @@
  * Copyright (c) 2017 ZoDream
  */
 
-@import "scrollbar";
+@use "scrollbar";
 .selector {
     position: fixed;
     width: 300px;
@@ -38,7 +38,7 @@
     .selector-body {
         overflow-y: auto;
         height: 160px;
-        @include scrollbar();
+        @include scrollbar.scrollbar();
         ul {
             display: none;
             &.active {

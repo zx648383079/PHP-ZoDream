@@ -1,3 +1,5 @@
+@use 'theme';
+
 @mixin size($width:20, $height: 30) {
     width: $width;
     height: $height;
@@ -34,6 +36,19 @@
         @if $isRight {
             right: 0.625rem;
         }
+    }
+}
+
+@mixin active() {
+    background:  var(--#{theme.$prefix}-primary);
+    color:  var(--#{theme.$prefix}-primary-text);
+}
+
+@mixin clearfix() {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
     }
 }
 

@@ -1,9 +1,12 @@
+@use 'theme';
+@use 'sizes';
+
 @mixin form-validation-state($state, $color) {
     .#{$state}-tooltip {
         display: none;
         color: $color;
         max-width: 100%;
-        line-height: $lineHeight;
+        line-height: sizes.$lineHeight;
     }
 
     &.is-#{$state} {
@@ -17,28 +20,28 @@
 }
 
 .form-control {
-    --#{$prefix}-input-width: auto;
-    min-width: var(--#{$prefix}-input-width);
-    padding: $inputPadding;
+    --#{theme.$prefix}-input-width: auto;
+    min-width: var(--#{theme.$prefix}-input-width);
+    padding: sizes.$inputPadding;
     font-size: 1rem;
     font-weight: 400;
-    line-height: $inputLineHeight;
+    line-height: sizes.$inputLineHeight;
     appearance: none;
-    border-radius: $formRadius;
+    border-radius: sizes.$formRadius;
     border-width: 1px;
-    border-color: var(--#{$prefix}-input-border);
-    background-color: var(--#{$prefix}-input);
-    color: var(--#{$prefix}-input-text);
+    border-color: var(--#{theme.$prefix}-input-border);
+    background-color: var(--#{theme.$prefix}-input);
+    color: var(--#{theme.$prefix}-input-text);
     &:focus {
-        border-color: var(--#{$prefix}-input-hover-border);
+        border-color: var(--#{theme.$prefix}-input-hover-border);
         outline: 0;
-        box-shadow: 0 0 0 .25rem var(--#{$prefix}-input-hover-shadow);
+        box-shadow: 0 0 0 .25rem var(--#{theme.$prefix}-input-hover-shadow);
     }
 }
 
 textarea {
     &.form-control {
-        min-height: $lineHeight;
+        min-height: sizes.$lineHeight;
     }
 }
 
@@ -52,16 +55,16 @@ input[type="color"] {
 
 .form-control-color {
     &::-webkit-color-swatch {
-        border-radius: $formRadius;
+        border-radius: sizes.$formRadius;
     }
 }
 
 .input-group {
     .tooltip {
-        color: var(--#{$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}-secondary-text);
         font-size: 0.8rem;
         padding: 0 0 0.625rem 0.625rem;
     }
-    @include form-validation-state(invalid, $invalid);
-    @include form-validation-state(valid, $valid);
+    @include form-validation-state(invalid, theme.$invalid);
+    @include form-validation-state(valid, theme.$valid);
 }

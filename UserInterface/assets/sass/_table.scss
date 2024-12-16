@@ -1,4 +1,5 @@
-@import 'mixin';
+@use 'mixins';
+@use 'sizes';
 .table {
     display: table;
     width: 100%;
@@ -61,17 +62,17 @@ table {
             width: 100%;
             border: none;
             border-bottom: 1px solid #555;
-            height: $lineHeight;
+            height: sizes.$lineHeight;
         }
         .sort-desc {
             &::after {
-                @include iconFont();
+                @include mixins.iconFont();
                 content: "\f15e";
             }
         }
         .sort-asc {
             &::after {
-                @include iconFont();
+                @include mixins.iconFont();
                 content: "\f15d";
             }
         }
@@ -85,7 +86,7 @@ table {
     }
     .tree-item-arrow {
         color: #1890ff;
-        @include icon('\f65e');
+        @include mixins.icon('\f65e');
         font-size: 2em;
     }
     .tree-item {

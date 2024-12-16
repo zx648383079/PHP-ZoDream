@@ -1,4 +1,4 @@
-@import 'theme';
+@use 'theme';
 .member-container {
     .person-box {
         margin: 5rem 0;
@@ -139,8 +139,8 @@
 }
 
 .column-item {
-    --#{$prefix}-column-icon: var(--#{$prefix}-primary);
-    --#{$prefix}-column-icon-text: var(--#{$prefix}-primary-text);
+    --#{theme.$prefix}-column-icon: var(--#{theme.$prefix}-primary);
+    --#{theme.$prefix}-column-icon-text: var(--#{theme.$prefix}-primary-text);
     cursor: pointer;
     .item-unit {
         font-size: 1rem;

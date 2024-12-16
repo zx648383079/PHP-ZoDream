@@ -1,4 +1,4 @@
-@import 'theme';
+@use 'theme';
 $top: 40px;
 $left: 5px;
 
@@ -12,7 +12,7 @@ $sizes: (
     768: 1024
 ) !default;
 
-@import 'scrollbar';
+@use 'scrollbar';
 
 @mixin size($width, $height) {
     &.mobile-#{$width} {
@@ -131,8 +131,8 @@ $sizes: (
 
 
 .top-nav {
-    background: var(--#{$prefix}-primary);
-    color: var(--#{$prefix}-primary-text);
+    background: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}-primary-text);
     // margin: -8px -8px 0 0;
     .navbar {
         font-size: 1.5rem;

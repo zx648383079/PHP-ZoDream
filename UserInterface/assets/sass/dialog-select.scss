@@ -1,5 +1,7 @@
 @use "sass:math";
-@import 'mixin';
+@use 'mixins';
+
+
 $dialogIndex: 992;
 $lineHeight: 2.25rem;
 
@@ -12,7 +14,7 @@ $lineHeight: 2.25rem;
     position: relative;
     border: 1px solid #eee;
     cursor: pointer;
-    @include iconArrow();
+    @include mixins.iconArrow();
 }
 .dialog.dialog-select {
     position: fixed;
@@ -96,7 +98,7 @@ $lineHeight: 2.25rem;
         box-sizing: border-box;
         position: relative;
         user-select: none;
-        @include iconArrow();
+        @include mixins.iconArrow();
     }
     .select-option-bar {
         position: absolute;

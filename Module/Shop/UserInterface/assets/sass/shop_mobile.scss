@@ -1,7 +1,8 @@
-@import "mixin";
-
+@use "mixin";
+@use 'sizes';
+@use 'theme';
 body {
-    background-color: $bg;
+    background-color: var(--#{theme.$prefix}-body);
 }
 
 a {
@@ -15,7 +16,7 @@ a {
 .scroll-nav {
     position: relative;
     height: 45px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     z-index: 10;
     ul {
         padding-right: 35px;
@@ -24,7 +25,7 @@ a {
         white-space: nowrap;
         overflow: hidden;
         overflow-x: auto;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
     }
     li {
         width: 3.75rem;
@@ -53,7 +54,7 @@ a {
         height: 45px;
         line-height: 45px;
         text-align: center;
-        background: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         &::before {
             content: "\f107";
         }
@@ -109,17 +110,17 @@ header,
             font-size: 1.25rem;
             padding: 4px 29px;
             box-sizing: border-box;
-            background-color: $bg;
+            background-color: var(--#{theme.$prefix}-body);
             border: 0;
         }
         .cancel-btn {
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
         }
         .home-btn {
             font-size: 28px;
             .fa {
                 position: static;
-                color: $white;
+                color: var(--#{theme.$prefix}-primary-text);
             }
         }
         &.under-search {
@@ -145,8 +146,8 @@ header,
     top: 0;
     left: 0;
     right: 0;
-    background: $primary;
-    color: $white;
+    background-color: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}-primary-text);
     text-align: center;
     z-index: 99;
     border: 0;
@@ -157,7 +158,7 @@ header,
         top: 50%;
         margin-top: -1rem;
         font-size: 1.5625rem;
-        color: $white;
+        color: var(--#{theme.$prefix}-primary-text);
     }
     .back {
         position: absolute;
@@ -218,7 +219,7 @@ header,
         }
         a {
             line-height: 36px;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
         }
     }
     &.main-header-box {
@@ -239,7 +240,7 @@ header,
                 top: 0;
                 width: 1rem;
                 height: 1rem;
-                color: $white;
+                color: var(--#{theme.$prefix}-primary-text);
                 background: #e1454b;
                 font-size: 0.625rem;
                 line-height: 1rem;
@@ -268,7 +269,7 @@ footer,
 footer,
 .footer {
     height: 3rem;
-    background: $white;
+    background: var(--#{theme.$prefix}-panel);
     border: 0.0625rem solid #e1e1e1;
     a,
     .item {
@@ -288,7 +289,7 @@ footer,
             top: 0;
             width: 1rem;
             height: 1rem;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             background: #e1454b;
             font-size: 0.625rem;
         }
@@ -334,8 +335,8 @@ footer,
     bottom: 0;
     width: 100%;
     height: 3rem;
-    background: $white;
-    border-top: $hr;
+    background: var(--#{theme.$prefix}-panel);
+    border-top: var(--#{theme.$prefix}-border);
     a {
         position: relative;
         text-align: center;
@@ -356,7 +357,7 @@ footer,
             top: 0;
             right: -0.75rem;
             background: #f00;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             border-radius: 50%;
             text-align: center;
             line-height: 1.1875rem;
@@ -376,10 +377,10 @@ footer,
         line-height: 3rem;
         height: 3rem;
         position: static;
-        background: $primary;
+        background: var(--#{theme.$prefix}-primary);
         border: none;
         a {
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             &.active {
                 border-bottom: 5px solid #b4282d;
             }
@@ -420,7 +421,7 @@ footer,
         position: relative;
         display: block;
         box-sizing: border-box;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         .item-img {
             img {
                 width: 100%;
@@ -453,11 +454,11 @@ footer,
 .home-panel {
     margin-top: 20px;
     .panel-header {
-        border-bottom: $hr;
-        border-top: $hr;
+        border-bottom: var(--#{theme.$prefix}-border);
+        border-top: var(--#{theme.$prefix}-border);
         line-height: 40px;
         text-align: center;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
     }
     .goods-list {
         margin-top: 0;
@@ -493,17 +494,17 @@ footer,
                 padding: 1.5625rem 0.9375rem;
             }
             a {
-                color: $white;
+                color: var(--#{theme.$prefix}-primary-text);
                 text-decoration: none;
             }
         }
         .actions-left {
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             background-color: rgb(0, 187, 72);
             right: 100%;
         }
         .actions-right {
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             background-color: #BB0000;
             left: 100%;
         }
@@ -511,7 +512,7 @@ footer,
     &.goods-list {
         text-align: left;
         .goods-item {
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             padding: 5px;
             .goods-img {
                 display: inline-block;
@@ -533,13 +534,13 @@ footer,
 .search-tip-box {
     display: block;
     padding-left: 10px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     display: none;
     li {
         height: 30px;
         line-height: 30px;
         &:not(:last-of-type) {
-            border-bottom: $hr;
+            border-bottom: var(--#{theme.$prefix}-border);
         }
     }
 }
@@ -547,7 +548,7 @@ footer,
 .search-recommend-box {
     .panel {
         padding: 0 10px 10px;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         margin-bottom: 5px;
         .panel-header {
             height: 30px;
@@ -559,7 +560,7 @@ footer,
         }
         .panel-body {
             a {
-                border: $hr;
+                border: var(--#{theme.$prefix}-border);
                 border-radius: 2px;
                 color: #333;
                 padding: 0 2px;
@@ -573,7 +574,7 @@ footer,
     position: relative;
     display: block;
     width: 100%;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     overflow: hidden;
     border-bottom: #e2e2e2 0.0625rem solid;
     .menu-item {
@@ -636,7 +637,7 @@ footer,
             border-bottom: #e2e2e2 0.0625rem solid;
             &.active {
                 border-left: #55595f 0.25rem solid;
-                background-color: $white;
+                background-color: var(--#{theme.$prefix}-panel);
             }
         }
     }
@@ -653,7 +654,7 @@ footer,
     }
     .header {
         line-height: 40px;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         padding-left: 10px;
     }
     .banner {
@@ -668,10 +669,10 @@ footer,
         list-style: none;
         a {
             line-height: 40px;
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             padding-left: 10px;
             display: block;
-            border-top: $hr;
+            border-top: var(--#{theme.$prefix}-border);
         }
     }
     .tree-item-chidren {
@@ -682,7 +683,7 @@ footer,
                 text-align: center;
                 &:not(:nth-child(3n - 1)),
                 &:not(:last-child) {
-                    border-right: $hr;
+                    border-right: var(--#{theme.$prefix}-border);
                 }
             }
         }
@@ -737,7 +738,7 @@ footer,
         display: block;
         .goods-item {
             position: relative;
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             .check-box {
                 font-size: 1rem;
                 width: 2rem;
@@ -768,7 +769,7 @@ footer,
 
 .cart-footer {
     bottom: 3rem;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     .check-box {
         font-size: 1rem;
         width: 3.125rem;
@@ -782,7 +783,7 @@ footer,
         .btn {
             margin-right: 0;
             background-color: #b4282d;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             line-height: 2rem;
         }
     }
@@ -827,7 +828,7 @@ footer,
         }
         .default {
             background: #f00;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             padding: 0.125rem 0.4375rem;
         }
         &.empty-address {
@@ -863,7 +864,7 @@ footer,
         margin-top: 0;
         .goods-item {
             position: relative;
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             display: grid;
             grid-template: 70px / 80px 1fr;
             padding: 5px;
@@ -889,7 +890,7 @@ footer,
 .refund-box {
     .goods-item {
         position: relative;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         display: grid;
         grid-template: 70px / 80px 1fr;
         padding: 5px;
@@ -913,7 +914,7 @@ footer,
                 right: 0;
                 bottom: 0;
                 line-height: 30px;
-                border: 1px solid $red;
+                border: 1px solid theme.$invalid;
                 padding: 0 10px;
                 border-radius: 10px;
             }
@@ -926,8 +927,8 @@ footer,
         padding: 20px;
         text-align: center;
         font-size: 40px;
-        background: $primary;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
         em {
             font-style: normal;
             font-size: 20px;
@@ -936,7 +937,7 @@ footer,
     .address-box {
         border-bottom: 0.0625rem solid;
     }
-    @include lineItem();
+    @include mixin.lineItem();
     .shipping-box,
     .payment-box {
         border-bottom: 0.0625rem solid;
@@ -951,13 +952,13 @@ footer,
 
 .checkout-footer {
     text-align: right;
-    border-top: 0.0625rem solid $red;
-    background-color: $white;
+    border-top: 0.0625rem solid var(--#{theme.$prefix}-primary);
+    background-color: var(--#{theme.$prefix}-panel);
     .btn {
         margin: 0 0 0 0.3125rem;
         line-height: 2.5rem;
-        background-color: $red;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
     }
 }
 
@@ -970,7 +971,7 @@ footer,
 
 .goods-info {
     margin-bottom: 20px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     .goods-header {
         position: relative;
         .goods-name {
@@ -996,7 +997,7 @@ footer,
             }
             &.active {
                 .like-icon {
-                    color: $red
+                    color: theme.$invalid;
                 }
             }
         }
@@ -1015,11 +1016,11 @@ footer,
 }
 
 .comment-box {
-    background-color: $white;
-    border-bottom: $hr;
+    background-color: var(--#{theme.$prefix}-panel);
+    border-bottom: var(--#{theme.$prefix}-border);
     .comment-header {
         position: relative;
-        border-bottom: $hr;
+        border-bottom: var(--#{theme.$prefix}-border);
         padding: 10px;
         font-size: 20px;
         .fa {
@@ -1100,7 +1101,7 @@ footer,
 }
 
 .recomment-box {
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     .recommend-header {
         line-height: 40px;
         padding-left: 10px;
@@ -1115,7 +1116,7 @@ footer,
 .tab-box.goods-content {
     margin-top: 20px;
     .tab-header {
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         .tab-item {
             width: 33%;
             line-height: 40px;
@@ -1208,19 +1209,19 @@ footer,
         min-height: 375px;
         max-height: 475px;
         bottom: 0;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         transition: transform .2s cubic-bezier(0,0,.25,1),-webkit-transform .2s cubic-bezier(0,0,.25,1);
     }
     .dialog-footer {
         position: absolute;
         bottom: 0;
         display: flex;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         width: 100%;
         .dailog-yes {
             height: 50px;
             line-height: 50px;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             font-size: 16px;
             text-align: center;
             background-color: #e4393c;
@@ -1232,7 +1233,7 @@ footer,
     .dialog-header {
         height: 70px;
         padding: 0 0 10px 110px;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         position: relative;
         line-height: 46px;
         font-size: 16px;
@@ -1305,7 +1306,7 @@ footer,
                     cursor: pointer;
                     &.active {
                         background-color: #e4393c;
-                        color: $white;
+                        color: var(--#{theme.$prefix}-primary-text);
                     }
                     &.disable {
                         background-color: #bbb;
@@ -1329,7 +1330,7 @@ footer,
     position: relative;
     padding-top: 1.5625rem;
     padding-bottom: 1.875rem;
-    background: $primary;
+    background-color: var(--#{theme.$prefix}-primary);
     .avatar {
         width: 5.625rem;
         height: 5.625rem;
@@ -1357,19 +1358,19 @@ footer,
     .name {
         text-align: center;
         padding-top: 0.625rem;
-        color: $white;
+        color: var(--#{theme.$prefix}-primary-text);
     }
 }
 
 .menu-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     .item {
         border-right: 0.0625rem dotted #4693d0;
         text-align: center;
         box-sizing: border-box;
-        line-height: $lineHeight;
+        line-height: sizes.$lineHeight;
         &:nth-child(5n) {
             border: 0;
         }
@@ -1398,7 +1399,7 @@ footer,
             top: 0;
             left: 50%;
             background: #f00;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             border-radius: 50%;
             text-align: center;
             line-height: 1.1875rem;
@@ -1419,7 +1420,7 @@ footer,
 
 .menu-panel {
     .panel-header {
-        @include menuA();
+        @include mixin.menuA();
     }
     .panel-body {
         display: grid;
@@ -1442,14 +1443,14 @@ footer,
 
 
 .menu-list {
-    background: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     padding: 0 0.625rem;
     a {
-        @include menuA();
+        @include mixin.menuA();
         margin-top: 0;
         padding: 0.625rem 0;
         &:not(:last-child) {
-            border-bottom: $hr;
+            border-bottom: var(--#{theme.$prefix}-border);
         }
     }
 }
@@ -1457,9 +1458,9 @@ footer,
 .profile-box,
 .account-box {
     margin-bottom: 2rem;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     padding: 0 10px;
-    @include lineItem();
+    @include mixin.lineItem();
     .avatar-item {
         line-height: 5rem;
         .fa {
@@ -1477,7 +1478,7 @@ footer,
         }
     }
     .line-item {
-        border-top: $hr;
+        border-top: var(--#{theme.$prefix}-border);
     }
 }
 .account-box {
@@ -1499,8 +1500,8 @@ footer,
         padding: 0.375rem;
         display: block;
         text-align: center;
-        background-color: $red;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
     }
 }
 
@@ -1538,8 +1539,8 @@ footer,
         width: 100%;
         margin: 0;
         line-height: 40px;
-        background: $red;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
     }
 }
 
@@ -1555,7 +1556,7 @@ footer,
             line-height: 3.125rem;
             border-radius: 50%;
             background: #333;
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             text-align: center;
             img {
                 width: 100%;
@@ -1576,7 +1577,7 @@ footer,
             }
             .default {
                 background: #f00;
-                color: $white;
+                color: var(--#{theme.$prefix}-primary-text);
                 padding: 0.125rem 0.4375rem;
             }
         }
@@ -1601,7 +1602,7 @@ footer,
 
 .order-box {
     .order-item {
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         .order-header {
             line-height: 30px;
             .status {
@@ -1613,10 +1614,10 @@ footer,
         }
         .goods-list {
             .goods-item {
-                background-color: $bg;
+                background-color: var(--#{theme.$prefix}-body);
             }
             .goods-info {
-                background-color: $bg;
+                background-color: var(--#{theme.$prefix}-body);
                 margin: 0;
             }
         }
@@ -1642,7 +1643,7 @@ footer,
             }
         }
     }
-    @include lineItem();
+    @include mixin.lineItem();
     .line-item {
         span:nth-child(2) {
             margin-right: 0;
@@ -1653,8 +1654,8 @@ footer,
     }
     .status-header {
         padding: 10px 20px 30px;
-        background-color: $primary;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
         text-align: center;
         font-size: 30px;
     }
@@ -1674,11 +1675,11 @@ footer,
         margin: 0 0 10px;
         line-height: 40px;
         height: 40px;
-        color: $white;
+        color: var(--#{theme.$prefix}-primary-text);
         border: 1px solid #b4282d;
         background-color: #b4282d;
         &.btn-none {
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             color: #b4282d;
         }
     }
@@ -1696,7 +1697,7 @@ footer,
             display: inline-block;
             padding: 0 10px;
             &:not(:last-child) {
-                border-right: $hr;
+                border-right: var(--#{theme.$prefix}-border);
             }
         }
     }
@@ -1705,7 +1706,7 @@ footer,
     }
     .input-box,
     .code-input {
-        border-bottom: $hr;
+        border-bottom: var(--#{theme.$prefix}-border);
         input {
             height: 40px;
             border: 0;
@@ -1757,7 +1758,7 @@ footer,
     display: grid;
     grid-template-columns: 75px 1fr 75px;
     height: 114px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     margin-bottom: 10px;
     .thumb {
         padding-top: 20px;
@@ -1812,7 +1813,7 @@ footer,
         background-color: #7eacf4;
         text-align: center;
         i {
-            color: $white;
+            color: var(--#{theme.$prefix}-primary-text);
             font-size: 12px;
             font-style: normal;
         }
@@ -1822,8 +1823,8 @@ footer,
             display: block;
             font-size: 12px;
             box-sizing: border-box;
-            border: 2px solid $white;
-            color: $white;
+            border: 2px solid var(--#{theme.$prefix}-primary-text);
+            color: var(--#{theme.$prefix}-primary-text);
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -1836,7 +1837,7 @@ footer,
     justify-content: space-around;
     flex-flow: row nowrap;
     line-height: 40px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     .tab-item {
         &.active {
             border-bottom: 2px solid #b4282d;
@@ -1849,11 +1850,11 @@ footer,
     display: grid;
     grid-template-columns: 100px 1fr;
     height: 114px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     margin: 5px 0;
     .price {
         background-color: #b4282d;
-        color: $white;
+        color: var(--#{theme.$prefix}-primary-text);
         text-align: center;
         padding: 30px 0 0;
         em {
@@ -1887,8 +1888,8 @@ footer,
 }
 
 .search-back-box {
-    background: $primary;
-    color: $white;
+    background-color: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}-primary-text);
     position: relative;
     height: 44px;
     padding: 5px 5px 0 40px;
@@ -1897,7 +1898,7 @@ footer,
         top: 50%;
         margin-top: -1rem;
         font-size: 1.5625rem;
-        color: $white;
+        color: var(--#{theme.$prefix}-primary-text);
         left: 0.625rem;
     }
     .search-entry {
@@ -1948,7 +1949,7 @@ footer,
                 line-height: 23px;
                 white-space: nowrap;
                 font-size: 12px;
-                color: $white;
+                color: var(--#{theme.$prefix}-primary-text);
             }
         }
     }
@@ -1959,7 +1960,7 @@ footer,
         position: absolute;
         top: 0;
         z-index: 7;
-        background-color: $bg;
+        background-color: var(--#{theme.$prefix}-body);
     }
     .store-body {
         margin-top: 184px;
@@ -1997,7 +1998,7 @@ footer,
 .log-item,
 .order-mini-item {
     position: relative;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     padding: 0 20px;
     .info {
         padding: 10px 80px 10px 0;
@@ -2018,7 +2019,7 @@ footer,
     }
     &:not(:last-of-type) {
         .info {
-            border-bottom: $hr;
+            border-bottom: var(--#{theme.$prefix}-border);
         }
     }
 }
@@ -2043,7 +2044,7 @@ footer,
     bottom: 0;
     width: 100%;
     padding-left: 20px;
-    background-color: $white;
+    background-color: var(--#{theme.$prefix}-panel);
     >div {
         &:first-child,
         &:nth-child(2) {
@@ -2058,7 +2059,7 @@ footer,
             p {
                 line-height: 22px;
                 &:first-child {
-                    color: $red;
+                    color: theme.$invalid;
                 }
             }
         }
@@ -2067,8 +2068,8 @@ footer,
         width: 100%;
         line-height: 44px;
         text-align: center;
-        background-color: $red;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
         display: block;
     }
 }
@@ -2078,7 +2079,7 @@ footer,
     grid-template: 40px / 40px 1fr 40px;
     grid-gap: 10px;
     line-height: 40px;
-    background: $white;
+    background: var(--#{theme.$prefix}-panel);
     .icon {
         text-align: center;
         img {
@@ -2100,16 +2101,16 @@ footer,
 .payment-list {
     .payment-item {
         &:not(:last-of-type) {
-            border-bottom: $hr;
+            border-bottom: var(--#{theme.$prefix}-border);
         }
     }
 }
 
 .account-header,
 .affiliate-header {
-    background-color: $primary;
+    background-color: var(--#{theme.$prefix}-primary);
     padding: 20px;
-    color: $white;
+    color: var(--#{theme.$prefix}-primary-text);
     .money {
         font-size: 40px;
         font-weight: 700;
@@ -2126,7 +2127,7 @@ footer,
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
     >div:first-child {
-        border-right: $hr;
+        border-right: var(--#{theme.$prefix}-border);
     }
 }
 
@@ -2158,7 +2159,7 @@ footer,
         .fa {
             font-size: 20px;
             &.active {
-                color: $red;
+                color: theme.$invalid;
             }
         }
     }
@@ -2180,8 +2181,8 @@ footer,
         }
     }
     .btn {
-        background-color: $red;
-        color: $white;
+        background-color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}-primary-text);
         width: 80%;
         margin: 0 auto;
         display: block;
@@ -2226,11 +2227,11 @@ footer,
     bottom: 0px;
     top: 38%;
     .dialog-header {
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         color: #333;
         border: none;
         .dialog-close {
-            background-color: $white;
+            background-color: var(--#{theme.$prefix}-panel);
             color: #333;
         }
         .dialog-title {
@@ -2240,7 +2241,7 @@ footer,
     .dialog-footer {
         border: none;
         .dialog-yes {
-            background-color: $red;
+            background-color: var(--#{theme.$prefix}-primary);
             width: 80%;
         }
     }
@@ -2270,7 +2271,7 @@ footer,
 
 .title-list {
     .title-item {
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         padding-left: 10px;
         .name {
             font-weight: 700;
@@ -2289,7 +2290,7 @@ footer,
     .input-group {
         display: grid;
         grid-template-columns: 100px 1fr;
-        background-color: $white;
+        background-color: var(--#{theme.$prefix}-panel);
         > label:first-child {
             padding: 0;
             width: auto;

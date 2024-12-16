@@ -1,3 +1,4 @@
+@use 'theme';
 .page-not-found {
     margin-top: 10vh;
     margin-bottom: 30vh;
@@ -18,7 +19,7 @@
     text-align: center;
     .panel-icon {
         font-size: 3rem;
-        color: $invalid;
+        color: theme.$invalid;
         margin-bottom: 1rem;
     }
     .panel-body {
@@ -26,7 +27,7 @@
     }
     &.toast-success {
         .panel-icon {
-            color: $valid;
+            color: theme.$valid;
         }
     }
 }

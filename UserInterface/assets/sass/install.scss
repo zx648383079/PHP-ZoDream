@@ -1,4 +1,4 @@
-@import "theme";
+@use "theme";
 .full-page {
     height: 100vh;
     display: flex;
@@ -7,21 +7,21 @@
 
 .page-header {
     padding: 0.625rem 1.25rem;
-    background-color: $primary;
-    color: $primaryText;
+    background-color: theme.$primary;
+    color: theme.$primaryText;
 }
 
 .page-body {
     overflow-y: auto;
     flex: 1;
-    border: 1px solid $primary;
+    border: 1px solid theme.$primary;
     padding: 0.3125rem;
-    box-shadow: 0 0 10px inset rgba($color: $primary, $alpha: .3);
+    box-shadow: 0 0 10px inset rgba($color: theme.$primary, $alpha: .3);
     ol {
         margin-left: 1.25rem;
     }
     code {
-        background-color: rgba($color: $primary, $alpha: .3);
+        background-color: rgba($color: theme.$primary, $alpha: .3);
         padding: 0.3125rem;
     }
 }
@@ -30,8 +30,8 @@
     text-align: right;
     padding: 0.3125rem;
     .btn {
-        background-color: $primary;
-        color: $primaryText;
+        background-color: theme.$primary;
+        color: theme.$primaryText;
     }
 }
 

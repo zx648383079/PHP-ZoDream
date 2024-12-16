@@ -1,3 +1,5 @@
+@use 'theme';
+
 $radius: .5rem;
 $shadow: rgba(0,0,0,.125);
 
@@ -6,15 +8,15 @@ $shadow: rgba(0,0,0,.125);
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 1px $shadow, 0 1px 3px $shadow;
-    background-color: var(--#{$prefix}-panel);
+    box-shadow: 0 0 1px theme.$shadow, 0 1px 3px theme.$shadow;
+    background-color: var(--#{theme.$prefix}-panel);
     .panel-body {
         flex: 1;
         overflow-y: auto;
         border: 1px solid #ccc;
         // border-radius: $radius;
         // padding: $radius 0;
-        box-shadow: $shadow 0 0 0.625rem inset;
+        box-shadow: theme.$shadow 0 0 0.625rem inset;
     }
     .panel-footer {
         display: flex;
@@ -23,7 +25,7 @@ $shadow: rgba(0,0,0,.125);
     .panel-swiper-item {
         display: flex;
         &:hover {
-            background-color: $body;
+            background-color: theme.$body;
         }
         &:not(:first-child) {
             margin-top: .1rem;
@@ -50,7 +52,7 @@ $shadow: rgba(0,0,0,.125);
         .item-version {
             user-select: none;
             .iconfont {
-                color: var(--bs-danger);
+                color: theme.$invalid;
             }
         }
         .item-name {

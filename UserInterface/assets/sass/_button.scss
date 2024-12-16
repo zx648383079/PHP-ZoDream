@@ -1,17 +1,20 @@
+@use 'theme';
+@use 'sizes';
+
 @mixin make-button($name, $bg, $hover, $color) {
     .btn-#{$name} {
-        --#{$prefix}-btn: #{$bg};
-        --#{$prefix}-btn-text: #{$color};
-        --#{$prefix}-btn-hover: #{$hover};
-        --#{$prefix}-btn-border: #{$hover};
+        --#{theme.$prefix}-btn: #{$bg};
+        --#{theme.$prefix}-btn-text: #{$color};
+        --#{theme.$prefix}-btn-hover: #{$hover};
+        --#{theme.$prefix}-btn-border: #{$hover};
     }
     .btn-outline-#{$name} {
-        --#{$prefix}-btn: transparent;
-        --#{$prefix}-btn-text: #{$bg};
-        --#{$prefix}-btn-hover-text: #{$color};
-        --#{$prefix}-btn-hover: #{$bg};
-        --#{$prefix}-btn-border: #{$bg};
-        border: 1px solid var(--#{$prefix}-btn-border);
+        --#{theme.$prefix}-btn: transparent;
+        --#{theme.$prefix}-btn-text: #{$bg};
+        --#{theme.$prefix}-btn-hover-text: #{$color};
+        --#{theme.$prefix}-btn-hover: #{$bg};
+        --#{theme.$prefix}-btn-border: #{$bg};
+        border: 1px solid var(--#{theme.$prefix}-btn-border);
     }
 }
 
@@ -19,40 +22,40 @@
 
 
 .btn {
-    --#{$prefix}-btn: var(--#{$prefix}-primary);
-    --#{$prefix}-btn-text: var(--#{$prefix}-primary-text);
-    --#{$prefix}-btn-hover: var(--#{$prefix}-primary-hover);
-    --#{$prefix}-btn-border: var(--#{$prefix}-primary-active);
-    --#{$prefix}-btn-hover-text: var(--#{$prefix}-btn-text);
-    padding: $inputPadding;
-    background: var(--#{$prefix}-btn);
-    color: var(--#{$prefix}-btn-text);
+    --#{theme.$prefix}-btn: var(--#{theme.$prefix}-primary);
+    --#{theme.$prefix}-btn-text: var(--#{theme.$prefix}-primary-text);
+    --#{theme.$prefix}-btn-hover: var(--#{theme.$prefix}-primary-hover);
+    --#{theme.$prefix}-btn-border: var(--#{theme.$prefix}-primary-active);
+    --#{theme.$prefix}-btn-hover-text: var(--#{theme.$prefix}-btn-text);
+    padding: sizes.$inputPadding;
+    background: var(--#{theme.$prefix}-btn);
+    color: var(--#{theme.$prefix}-btn-text);
     border: none;
-    border-color: var(--#{$prefix}-btn-border);
+    border-color: var(--#{theme.$prefix}-btn-border);
     display: inline-block;
     text-decoration: none;
-    line-height: $inputLineHeight;
+    line-height: sizes.$inputLineHeight;
     margin: 0 0.5rem;
     vertical-align:middle;
-    border-radius: $formRadius;
+    border-radius: sizes.$formRadius;
     &.btn-full {
         width: 100%;
         margin: 0;
     }
     &:hover {
-        background: var(--#{$prefix}-btn-hover);
-        color: var(--#{$prefix}-btn-hover-text);
+        background: var(--#{theme.$prefix}-btn-hover);
+        color: var(--#{theme.$prefix}-btn-hover-text);
     }
 }
 
-@include make-button(default, var(--#{$prefix}-primary), var(--#{$prefix}-primary-hover), var(--#{$prefix}-primary-text));
+@include make-button(default, var(--#{theme.$prefix}-primary), var(--#{theme.$prefix}-primary-hover), var(--#{theme.$prefix}-primary-text));
 
 
-@each $color, $value in $theme-colors {
+@each $color, $value in theme.$theme-colors {
     @include make-button(
         $color, 
         $value, 
-        shade-color($value, $colorHoverOffset), 
+        shade-color($value, theme.$colorHoverOffset), 
         #fff
     );
 }
@@ -63,12 +66,12 @@
         border-radius: 0;
         margin: 0;
         &:first-child {
-            border-top-left-radius: $formRadius;
-            border-bottom-left-radius: $formRadius;
+            border-top-left-radius: sizes.$formRadius;
+            border-bottom-left-radius: sizes.$formRadius;
         }
         &:last-child {
-            border-top-right-radius: $formRadius;
-            border-bottom-right-radius: $formRadius;
+            border-top-right-radius: sizes.$formRadius;
+            border-bottom-right-radius: sizes.$formRadius;
         }
     }
 }

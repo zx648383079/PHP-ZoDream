@@ -81,7 +81,7 @@ class HomeController extends Controller {
                 $request->has('rememberMe'));
         } catch (\Exception $ex) {
             // 是否需要显示验证码
-            if (!empty($email) && $ex->getCode() < 1009) {
+            if (!empty($email) && ($ex->getCode() < 1009 || $ex->getCode() === 1015)) {
                 LoginLogModel::addLoginLog($email, 0, false);
             }
             return $this->renderFailure($ex->getMessage(), $ex->getCode());

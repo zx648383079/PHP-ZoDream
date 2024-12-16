@@ -1,19 +1,19 @@
 .bread {
     .bread-item {
         display: inline-block;
-        line-height: 40px;
+        line-height: 2.5rem;
         background: #777;
         color: #fff;
-        padding: 0 10px;
+        padding: 0 .625rem;
         position: relative;
         &:after {
             position: absolute;
             content: "";
             width: 0;
             height: 0;
-            border: transparent 20px solid;
-            right: -40px;
-            margin-top: -20px;
+            border: 1.25rem solid transparent;
+            right: -2.5rem;
+            margin-top: -1.25rem;
             top: 50%;
             border-left-color: #777;
             z-index: 99;

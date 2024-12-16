@@ -110,9 +110,11 @@ $this->set([
     </div>
     <article id="content" class="content style-type-<?=$blog->edit_type?>">
         <?php $this->extend('./content');?>
+        <?php if ($blog->type != 1): ?>
         <p class="book-copyright"><?=__('Reprint please keep the original link:')?>
             <a href="<?=$this->url('./', ['id' => $blog->id])?>" title="<?=$this->text($blog->title)?>"><?=BlogSeoMiddleware::encodeUrl($blog->id, $blog->language)?></a>
         </p>
+        <?php endif;?>
     </article>
     <div class="toggle-open">
         <?php if($blog->type == 1):?>

@@ -1,4 +1,4 @@
-@import 'theme';
+@use 'theme';
 $primary: #266faf;
 $primaryText: #fff;
 $linkHoverText: #a40000;
@@ -16,7 +16,7 @@ $navActiveText: #fff;
 
 @media (prefers-color-scheme: light) {
     :root {
-        --#{$prefix}-body: #fff;
+        --#{theme.$prefix}-body: #fff;
     }
 }
 

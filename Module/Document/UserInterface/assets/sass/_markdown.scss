@@ -1,3 +1,5 @@
+@use 'theme';
+
 .style-type-1 {
     font: 1.3em "Vollkorn", "Microsoft YaHei", 微软雅黑, 宋体;
     color: #333;
@@ -278,7 +280,7 @@
     }
     code {
         font-family: Menlo, Monaco, Consolas, Droid Sans Mono, Courier New, monospace, Microsoft YaHei, 微软雅黑, 宋体;
-        background: var(--#{$prefix}-body);
+        background: var(--#{theme.$prefix}-body);
         border-radius: 0.25rem;
         font-size: .9em;
         line-height: inherit !important;
@@ -289,7 +291,7 @@
     //     word-wrap: normal !important;
     //     overflow-x: auto;
     //     margin: 0;
-    //     background: var(--#{$prefix}-body);
+    //     background: var(--#{theme.$prefix}-body);
     //     > code {
     //         white-space: pre !important;
     //         display: block;

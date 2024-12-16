@@ -1,4 +1,4 @@
-@import 'theme';
+@use 'theme';
 .login-box {
     max-width: 18.75rem;
     margin: 20vh auto 40vh;
@@ -27,7 +27,7 @@
             input {
                 padding-left: .5rem;
                 padding-right: 1.875rem;
-                border-bottom: 2px solid var(--#{$prefix}-input-hover-border);
+                border-bottom: 2px solid var(--#{theme.$prefix}-input-hover-border);
             }
             .fa {
                 left: 17.5rem;
@@ -88,7 +88,7 @@
                 top: 6.625rem;
                 left: 8.0625rem;
                 font-size: 3.125rem;
-                color: $invalid;
+                color: theme.$invalid;
                 display: none;
             }
         }
@@ -157,15 +157,15 @@
     }
 }
 .footer {
-    background: var(--#{$prefix}-primary);
-    color: var(--#{$prefix}-primary-text);
+    background: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}-primary-text);
     font-weight: 400;
     font-size: 0.875rem;
     padding: 2rem 1.25rem;
     position: relative;
     text-align: center;
     a {
-        color: var(--#{$prefix}-primary-text);
+        color: var(--#{theme.$prefix}-primary-text);
         text-decoration: none;
     }
 }

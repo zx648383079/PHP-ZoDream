@@ -55,7 +55,8 @@ class LoginController extends Controller {
             }
 
         } catch (\Exception $ex) {
-            if (!empty($account) && $ex->getCode() < 1009) {
+            if (!empty($account) && ($ex->getCode() < 1009 || $ex->getCode() === 1015)) {
+                // TODO 加入2fa 验证失败，防止暴力破解
                 LoginLogModel::addLoginLog($account, 0, false);
             }
             if ($ex->getCode() === 1009) {
