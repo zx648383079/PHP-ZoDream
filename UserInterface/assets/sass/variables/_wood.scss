@@ -1,12 +1,32 @@
 // 原木色
-// $primary: #af5d0d;
-// $headerFg: #fff;
-// $secondary: #e29344;
-// $disable: #FF9787;
-// $error: red;
-// $shadow: rgba(51, 51, 51, 0.7);
-// $border: $primary;
-// $bodyBg: #f4f4f4;
-// $bg: #f9cfa6;
-// $fg: #333;
-// $secondaryFg: #b3b1b1;
+$primary: #af5d0d;
+$primaryText: #fff;
+
+$disabledText: #FF9787;
+$strongText: red;
+$shadow: rgba(51, 51, 51, 0.7);
+$border: $primary;
+$body: #f4f4f4;
+$bodyText: #333;
+$hover: #ccc;   // 相对与body的变化
+
+$panel: #f9cfa6;
+
+$gray: #6c757d;
+$grayText: #fff;
+
+$secondary: #e29344;
+$secondaryText: #b3b1b1;
+
+$dialog: rgba(255, 255, 255, .9);
+$dialogMask: rgba(0, 0, 0, .3);
+$dialogText: #333;
+
+$linkText: #e29344;
+$linkHoverText: #af5d0d;
+
+$input: #fff;
+$inputText: #e29344;
+$inputBorder: #f9cfa6;
+$inputHoverBorder: #af5d0d;
+$inputHoverShadow: #f9cfa6;
