@@ -2,31 +2,46 @@
 $primary: #333;
 $primaryText: #fff;
 
-$disabledText: #ccc;
-$strongText: #000;
-$shadow: rgba(51, 51, 51, 0.7);
-$border: $primary;
 $body: #f4f4f4;
 $bodyText: #333;
-$hover: #ccc;   // 相对与body的变化
 
-$panel: white;
+$secondary: #ccc;
+$secondaryText: #b3b1b1;
+
+$third: #6c757d;
+$thirdText: $bodyText;
 
 $gray: #6c757d;
 $grayText: #fff;
 
-$secondary: #ccc;
-$secondaryText: #b3b1b1;
+$disabledText: #ccc;
+
+$linkText: #0d6efd;
+$linkHoverText: #0a58ca;
+
+$hover: #404040;
+$hoverText: white;
+
+$active: #454545;
+$activeText: white;
+
+$shadow: rgba(51, 51, 51, 0.7);
+$border: $primary;
+$panel: white;
 
 $dialog: rgba(255, 255, 255, .9);
 $dialogMask: rgba(0, 0, 0, .3);
 $dialogText: #333;
 
-$linkText: #0d6efd;
-$linkHoverText: #0a58ca;
+$button: transparent;
+$buttonText: white;
+$buttonBorder: #7B7B7B;
+$buttonHoverBorder:  #A2A2A2;
 
 $input: #fff;
+$inputTextIcon: #333;
 $inputText: #333;
+$inputLabel: #929292;
 $inputBorder: #ced4da;
-$inputHoverBorder: rgb(47, 65, 86);
-$inputHoverShadow: #0d6efd40;
+$inputFocusBorder: rgb(47, 65, 86);
+$inputFocusShadow: #0d6efd40;

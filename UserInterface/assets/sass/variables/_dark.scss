@@ -1,30 +1,48 @@
 // 黑暗模式
-$primary: #000;
-$primaryText: #fff;
-$secondary: #767676;
-$disabledText: #ccc;
-$strongText: red;
-$shadow: rgba(200, 200, 200, 0.7);
-$border: $primary;
+$primary: #2e2e2e;
+$primaryText: #eee;
+
+$body: #333;
+$bodyText: white;
+
+$secondary: #333;
+$secondaryText: white;
+
+$third: #6c757d;
+$thirdText: $bodyText;
 
 $gray: #6c757d;
 $grayText: #fff;
 
-$body: #333;
-$hover: #555;
-$panel: #222;
-$bodyText: #fff;
-$secondaryText: #b3b1b1;
-$dialog: #333;
-$dialogText: #fff;
-$dialogMask: rgba(255,255,255, .3);
+$disabledText: #ababaa;
 
-
-$linkText: #0d6efd;
+$linkText: #43a1e1;
 $linkHoverText: #0a58ca;
 
-$input: #23222b;
-$inputText: #fff;
-$inputBorder: #7c7b82;
-$inputHoverBorder: rgb(47, 65, 86);
-$inputHoverShadow: #0d6efd40;
+$hover: #404040;
+$hoverText: white;
+
+$active: #454545;
+$activeText: white;
+
+$shadow: rgba(0, 0, 0, .25);
+$border: #7B7B7B;
+
+$panel: #3b3b3b;
+
+$dialog: #3b3b3b;
+$dialogText: white;
+$dialogMask: rgba(0, 0, 0, .3);
+
+$button: transparent;
+$buttonText: white;
+$buttonBorder: #7B7B7B;
+$buttonHoverBorder:  #A2A2A2;
+
+$input: #2b2b2b;
+$inputTextIcon: white;
+$inputText: white;
+$inputLabel: #929292;
+$inputBorder: #6B6B6B;
+$inputFocusBorder: #808080;
+$inputFocusShadow: 0 0 0 1px #808080 inset;

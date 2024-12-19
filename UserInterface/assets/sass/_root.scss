@@ -38,8 +38,8 @@ $isFullyTheme: true !default;
             --#{theme.$prefix}-input-text: #{dark.$inputText};
     
             --#{theme.$prefix}-input-border: #{dark.$inputBorder};
-            --#{theme.$prefix}-input-hover-border: #{dark.$inputHoverBorder};
-            --#{theme.$prefix}-input-hover-shadow: #{dark.$inputHoverShadow};
+            --#{theme.$prefix}-input-hover-border: #{dark.$inputFocusBorder};
+            --#{theme.$prefix}-input-hover-shadow: #{dark.$inputFocusShadow};
         }
     }
 }
@@ -80,8 +80,8 @@ $isFullyTheme: true !default;
             --#{theme.$prefix}-input-text: #{theme.$inputText};
     
             --#{theme.$prefix}-input-border: #{theme.$inputBorder};
-            --#{theme.$prefix}-input-hover-border: #{theme.$inputHoverBorder};
-            --#{theme.$prefix}-input-hover-shadow: #{theme.$inputHoverShadow};
+            --#{theme.$prefix}-input-hover-border: #{theme.$inputFocusBorder};
+            --#{theme.$prefix}-input-hover-shadow: #{theme.$inputFocusShadow};
         }
     }
 }

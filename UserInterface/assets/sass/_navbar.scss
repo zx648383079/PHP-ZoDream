@@ -54,14 +54,15 @@
         box-shadow: inset 0px 5px 5px -5px var(--#{theme.$prefix}-nav),
                         inset 0px -5px 5px -5px var(--#{theme.$prefix}-nav);
         z-index: 66;
-        min-width: 7rem;
+        min-width: 10rem;
         a {
             color: var(--#{theme.$prefix}-nav-drop-text);
             display: block;
+            padding: 0.25rem .8rem;
+            line-height: 2rem;
             &:hover {
                 background-color: var(--#{theme.$prefix}-nav-hover);
                 color: var(--#{theme.$prefix}-nav-hover-text);
-                text-decoration: none;
             }
         }
         ul {
@@ -70,11 +71,16 @@
         li {
             display: block;
             padding: 0;
-            text-align: center;
-            height: 2.5rem;
-            line-height: 2.5rem;
-            overflow: hidden;
+            text-align: left;
+            height: auto;
         }
+    }
+    .nav-drop-divider {
+        margin: .5rem 0;
+        height: 0;
+        opacity: 1;
+        overflow: hidden;
+        border-top: 1px solid var(--#{theme.$prefix}-border);
     }
     .nav-bar-toggle {
         padding: 15px 1.25rem;

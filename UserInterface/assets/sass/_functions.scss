@@ -1,11 +1,12 @@
+@use 'sass:color';
 @function tint-color($color, $weight) {
-    @return mix(white, $color, $weight);
+    @return color.mix(white, $color, $weight);
 }
 
 @function shade-color($color, $weight) {
-    @return mix(black, $color, $weight);
+    @return color.mix(black, $color, $weight);
 }
 
 @function to-rgb($value) {
-    @return red($value), green($value), blue($value);
+    @return color.channel($value, 'red'), color.channel($value, 'green'), color.channel($value, 'blue');
 }

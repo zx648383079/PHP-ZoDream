@@ -138,6 +138,18 @@ HTML;
                     <a href="{$account_url}">{$account_label}</a>
                 </li>
                 <li>
+                    <hr class="nav-drop-divider" />
+                </li>
+                <li>
+                    <a href="/">帮助</a>
+                </li>
+                <li>
+                    <a href="/">设置</a>
+                </li>
+                <li>
+                    <hr class="nav-drop-divider" />
+                </li>
+                <li>
                     <a href="{$logout_url}">{$logout}</a>
                 </li>
             </ul>
