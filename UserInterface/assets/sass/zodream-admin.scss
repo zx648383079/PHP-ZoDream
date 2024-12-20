@@ -1,10 +1,12 @@
 @use 'theme';
 
-$primary: #2f4156;
-$primaryText: rgb(191, 203, 217);
-$isFullyTheme: false;
 
-@use 'root';
+
+@use 'root' with (
+    $primary: #2f4156,
+    $primaryText: rgb(191, 203, 217),
+    $isFullyTheme: false,
+);
 @use 'menu';
 @use 'scroll';
 

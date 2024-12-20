@@ -2,6 +2,8 @@
 @use 'functions';
 @use 'variables/dark';
 
+$primary: theme.$primary !default;
+$primaryText: theme.$primaryText !default;
 $isFullyTheme: true !default;
 @if $isFullyTheme {
     @media (prefers-color-scheme: dark) {
@@ -45,10 +47,10 @@ $isFullyTheme: true !default;
 }
 @media (prefers-color-scheme: light) {
     :root {
-        --#{theme.$prefix}-primary: #{theme.$primary};
-        --#{theme.$prefix}-primary-hover: #{functions.shade-color(theme.$primary, theme.$colorHoverOffset)};
-        --#{theme.$prefix}-primary-active: #{functions.shade-color(theme.$primary, theme.$colorActiveOffset)};
-        --#{theme.$prefix}-primary-text: #{theme.$primaryText};
+        --#{theme.$prefix}-primary: #{$primary};
+        --#{theme.$prefix}-primary-hover: #{functions.shade-color($primary, theme.$colorHoverOffset)};
+        --#{theme.$prefix}-primary-active: #{functions.shade-color($primary, theme.$colorActiveOffset)};
+        --#{theme.$prefix}-primary-text: #{$primaryText};
         @if $isFullyTheme {
             --#{theme.$prefix}-body: #{theme.$body};
             --#{theme.$prefix}-hover: #{theme.$hover};

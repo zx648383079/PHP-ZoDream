@@ -34,7 +34,7 @@ class RoleRepository {
             throw new Exception($model->getFirstError());
         }
         $model->setPermission($permission);
-        event(new ManageAction('role_edit', '', 11, $model->id));
+        event(new ManageAction('role_edit', '', Constants::TYPE_ROLE, $model->id));
         return $model;
     }
 
