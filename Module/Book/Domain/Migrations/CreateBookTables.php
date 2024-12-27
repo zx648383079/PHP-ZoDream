@@ -64,7 +64,7 @@ class CreateBookTables extends Migration {
             $table->comment('小说来源');
             $table->id();
             $table->uint('book_id');
-            $table->uint('size_id');
+            $table->uint('site_id');
             $table->string('url', 200)->comment('来源网址');
             $table->softDeletes();
             $table->timestamps();

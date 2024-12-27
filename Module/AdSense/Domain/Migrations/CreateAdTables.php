@@ -13,6 +13,7 @@ class CreateAdTables extends Migration {
 
     public function up(): void {
         $this->append(AdEntity::tableName(), function (Table $table) {
+            $table->comment('广告');
             $table->id();
             $table->string('name', 30);
             $table->uint('position_id');

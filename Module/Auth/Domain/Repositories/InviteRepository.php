@@ -23,7 +23,7 @@ class InviteRepository {
         return InviteCodeModel::with('user')
             ->where('type', self::TYPE_CODE)
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                $query->where('code', $keywords);
+                $query->where('token', $keywords);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })->orderBy('id', 'desc')->page();
@@ -75,7 +75,7 @@ class InviteRepository {
     public static function logList(string $keywords = '', int $user = 0, int $inviter = 0) {
         return InviteLogModel::with('user', 'inviter')
             ->when(!empty($keywords), function ($query) use ($keywords) {
-                $query->where('code', $keywords);
+                $query->where('token', $keywords);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })->when($inviter > 0, function ($query) use ($inviter) {
@@ -250,12 +250,12 @@ class InviteRepository {
         }
         if (!empty($confirm)) {
             $log->status = self::STATUS_SUCCESS;
-            $model->save();
+            $log->save();
             return true;
         }
         if (!empty($reject)) {
-            $model->status = self::STATUS_REJECT;
-            $model->save();
+            $log->status = self::STATUS_REJECT;
+            $log->save();
             return false;
         }
         return null;
