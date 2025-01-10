@@ -38,7 +38,7 @@ class CMSRepository {
      */
     private static string $cacheTheme = '';
 
-    private static ?Directory $viewFolder = null;
+    private static Directory|null $viewFolder = null;
 
     public static function isPreview(): bool {
         return array_key_exists(self::PREVIEW_KEY, $_GET);
@@ -58,7 +58,7 @@ class CMSRepository {
         return self::$cacheTheme = static::site()->theme;
     }
 
-    public static function registerLocate(Directory $folder, ?string $language) {
+    public static function registerLocate(Directory $folder, string|null $language) {
         if (empty($language)) {
             $language = 'zh-cn';
         }
@@ -70,7 +70,7 @@ class CMSRepository {
     }
 
     public static function registerView(string|SiteModel $theme = '',
-                                        ?ViewFactory $provider = null): ViewFactory {
+                                        ViewFactory|null $provider = null): ViewFactory {
         $language = '';
         if (empty($theme)) {
             $theme = static::theme();

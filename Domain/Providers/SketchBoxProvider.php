@@ -80,7 +80,7 @@ class SketchBoxProvider {
             ->get('id', 'ip', 'updated_at', 'created_at');
     }
 
-    public function get(int $target = 0): ?array {
+    public function get(int $target = 0): array|null {
         $data = $this->query()->where('item_type', $this->itemType)
             ->where('item_id', $target)
             ->where('user_id', auth()->id())
@@ -91,7 +91,7 @@ class SketchBoxProvider {
         return Json::decode($data['data']);
     }
 
-    public function getById(int $id): ?array {
+    public function getById(int $id): array|null {
         $data = $this->query()->where('item_type', $this->itemType)
             ->where('id', $id)
             ->where('user_id', auth()->id())->first('data');

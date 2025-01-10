@@ -30,7 +30,7 @@ class GameAdapter implements IGameAdapter {
 
     public function __construct(
         protected ProjectEntity $project,
-        protected ?CharacterEntity $character
+        protected CharacterEntity|null $character
     ) {
     }
 

@@ -59,7 +59,7 @@ class MessageProtocol {
      * @throws \Exception
      */
     public static function sendCode(string $target, string $templateName,
-                                    string $code, array $extra = []): ?int {
+                                    string $code, array $extra = []): int|null {
         if (!static::verifySpace($target) || !static::verifyIp() || !static::verifyCount()) {
             throw new \Exception('发送过于频繁');
         }
@@ -90,7 +90,7 @@ class MessageProtocol {
      * @return int|null 返回记录id, 失败则为null
      * @throws \Exception
      */
-    public static function send(string $target, string $templateName, array $data): ?int {
+    public static function send(string $target, string $templateName, array $data): int|null {
         list($type, $option, $optionKey) = static::targetOption($target);
         $template = TemplateEntity::where('name', $templateName)
             ->where('status', 1)

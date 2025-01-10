@@ -282,7 +282,7 @@ final class ExplorerRepository {
         });
     }
 
-    protected static function tryPublicUrl(string|int $folder, string $path): ?string {
+    protected static function tryPublicUrl(string|int $folder, string $path): string|null {
         $storage = static::storage($folder);
         if ($storage) {
             return $storage->toPublicUrl($path);

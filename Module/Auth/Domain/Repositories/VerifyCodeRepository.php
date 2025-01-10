@@ -16,7 +16,7 @@ final class VerifyCodeRepository {
 
     /**
      * 发送验证码
-     * @param array{to_type: string, to: ?string, event: string} $data
+     * @param array{to_type: string, to: string|null, event: string} $data
      * @return void
      */
     public static function sendCode(array $data): array {
@@ -49,7 +49,7 @@ final class VerifyCodeRepository {
 
     /**
      * 验证验证码
-     * @param array{to_type: string, to: ?string, code: string, event: string} $data
+     * @param array{to_type: string, to: string|null, code: string, event: string} $data
      * @param bool $refreshCode
      * @return bool
      * @throws Exception

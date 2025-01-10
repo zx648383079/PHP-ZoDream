@@ -29,7 +29,7 @@ abstract class BaseSpider implements GetBookInterface {
         return $this;
     }
 
-    public function invoke($uri, callable $next = null) {
+    public function invoke($uri, callable|null $next = null) {
         if (!$uri instanceof Uri) {
             $uri = new Uri($uri);
         }
@@ -147,7 +147,7 @@ abstract class BaseSpider implements GetBookInterface {
      * @param Uri|null $uri
      * @return array
      */
-    abstract public function getChapter(Html $html, Uri $uri = null);
+    abstract public function getChapter(Html $html, Uri|null $uri = null);
 
     public function book(string $uri): array {
         return cache()->getOrSet('book_spider_book_'.$uri, function () use ($uri) {

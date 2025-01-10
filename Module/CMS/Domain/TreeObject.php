@@ -15,7 +15,7 @@ class TreeObject implements \IteratorAggregate {
 
     protected array $pathItems = [];
     protected array $data = [];
-    protected ?TreeConverter $converter = null;
+    protected TreeConverter|null $converter = null;
 
     public function __construct(
         array $data = []

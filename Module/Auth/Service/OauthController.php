@@ -53,7 +53,7 @@ class OauthController extends Controller {
         return $this->successCallback($user, $platform);
     }
 
-    protected function failureCallback(string $error, ?IAuthPlatform $platform = null) {
+    protected function failureCallback(string $error, IAuthPlatform|null $platform = null) {
         $redirect_uri = session('redirect_uri');
         if (empty($platform) || empty($redirect_uri)) {
             return $this->redirectWithMessage('/', $error);
@@ -69,7 +69,7 @@ class OauthController extends Controller {
         return $this->redirect($redirect_uri);
     }
 
-    protected function successCallback(UserModel $user, ?IAuthPlatform $platform = null) {
+    protected function successCallback(UserModel $user, IAuthPlatform|null $platform = null) {
         $redirect_uri = session('redirect_uri');
         if (empty($platform) || empty($redirect_uri)) {
             return $this->redirect($redirect_uri ?: '/');

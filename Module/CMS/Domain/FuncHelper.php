@@ -100,7 +100,7 @@ class FuncHelper {
         return intval($map[$type][$name] ?? 0);
     }
 
-    public static function channels(array $params = null): mixed {
+    public static function channels(array|null $params = null): mixed {
         /** @var TreeObject $data */
         $data = static::cache()->getOrSet(__FUNCTION__, 'all',
             function () {
@@ -175,7 +175,7 @@ class FuncHelper {
      * @param array|null $params
      * @return Page
      */
-    public static function contents(array $params = null): Page {
+    public static function contents(array|null $params = null): Page {
         $data = self::getContentsQuery($params);
         return static::cache()->getOrSet(__FUNCTION__,
             md5(Json::encode($data)),
@@ -292,7 +292,7 @@ class FuncHelper {
      * @return mixed
      * @throws \Exception
      */
-    public static function contentPage(array $params = null): mixed {
+    public static function contentPage(array|null $params = null): mixed {
         if (empty($params)) {
             $params = [];
         }
@@ -592,7 +592,7 @@ class FuncHelper {
      * @param array|null $data
      * @return null|string|mixed
      */
-    protected static function getContentValue(string|bool|null $name, ?array $data): mixed {
+    protected static function getContentValue(string|bool|null $name, array|null $data): mixed {
         if (empty($data)) {
             return null;
         }
@@ -911,7 +911,7 @@ class FuncHelper {
      * @throws \Exception
      */
     protected static function urlEncode(mixed $path = null, array $parameters = [],
-                                        ?bool $secure = null, bool $encode = true): string {
+                                        bool|null $secure = null, bool $encode = true): string {
         if (CMSRepository::isPreview()) {
             $parameters[CMSRepository::PREVIEW_KEY] = $_GET[CMSRepository::PREVIEW_KEY];
         }
@@ -1082,7 +1082,7 @@ class FuncHelper {
         return request()->isAjax();
     }
 
-    public static function authUser(): ?array {
+    public static function authUser(): array|null {
         return self::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
             // 获取拓展表单的信息
             return UserRepository::getCurrentProfile('last_ip');

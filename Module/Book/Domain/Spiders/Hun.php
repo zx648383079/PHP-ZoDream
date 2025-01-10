@@ -81,7 +81,7 @@ class Hun extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null) {
         if ($html->isEmpty()) {
             return [];
         }

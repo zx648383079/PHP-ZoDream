@@ -53,7 +53,7 @@ class UserRepository {
         return self::appendExtraData($data, $extra);
     }
 
-    public static function getCurrentProfile(string $extra = ''): ?array {
+    public static function getCurrentProfile(string $extra = ''): array|null {
         if (auth()->guest()) {
             return null;
         }

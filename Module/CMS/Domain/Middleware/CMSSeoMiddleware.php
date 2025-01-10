@@ -120,7 +120,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         return $maps[$val] ?? false;
     }
 
-    protected static function getArticleData(string $val, bool $isId = false): ?array {
+    protected static function getArticleData(string $val, bool $isId = false): array|null {
         $maps = FuncHelper::cache()->getOrSet('article_map', 1, function () {
             return CacheRepository::getSeoCache();
         });

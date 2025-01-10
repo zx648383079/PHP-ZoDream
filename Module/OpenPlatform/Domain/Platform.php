@@ -77,7 +77,7 @@ class Platform implements IAuthPlatform {
      * @param string|null $code
      * @return array|string
      */
-    public function option(string $store, ?string $code = null): mixed {
+    public function option(string $store, string|null $code = null): mixed {
         if (!isset($this->options[$store])) {
             $this->options[$store] = PlatformOptionModel::options($this->id(), $store);
         }

@@ -6,7 +6,7 @@ use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookAuthorModel;
 
 class AuthorController extends Controller {
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $model_list = BookAuthorModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->page();
@@ -17,7 +17,7 @@ class AuthorController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = BookAuthorModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }

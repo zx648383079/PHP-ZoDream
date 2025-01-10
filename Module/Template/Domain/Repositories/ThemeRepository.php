@@ -104,7 +104,7 @@ final class ThemeRepository {
      * @return array[]
      * @throws \Exception
      */
-    public static function load(string $title, File $file, ?Directory $workFolder = null): array {
+    public static function load(string $title, File $file, Directory|null $workFolder = null): array {
         $args = pathinfo($title);
         $name = $args['basename'];
         $extension = $args['extension'] ?? '';

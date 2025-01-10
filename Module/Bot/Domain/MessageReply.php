@@ -139,7 +139,7 @@ class MessageReply {
      * @param EditorModel|null $model
      * @return EditorModel|array
      */
-    protected function replyIfDefault(?EditorModel $model) {
+    protected function replyIfDefault(EditorModel|null $model) {
         if (!empty($model)) {
             return $model;
         }

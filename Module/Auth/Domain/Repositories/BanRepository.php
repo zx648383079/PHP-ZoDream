@@ -71,7 +71,7 @@ final class BanRepository {
                 ->where('item_type', $itemType)->where('platform_id', $platformId)->count() > 0;
     }
 
-    public static function isBanOAuth(string $openid, ?string $unionId, string $vendor, int $platformId): bool {
+    public static function isBanOAuth(string $openid, string|null $unionId, string $vendor, int $platformId): bool {
         $type = self::OAUTH_TYPE_MAPS[$vendor];
         if (!empty($openid) && self::isBan($openid, $type, $platformId)) {
             return true;

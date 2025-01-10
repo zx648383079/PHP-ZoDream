@@ -9,7 +9,7 @@ use Module\Shop\Domain\Models\WarehouseRegionModel;
 
 class WarehouseRepository {
 
-    public static function getByRegion(int $regionId, int $goodsId, int $productId = 0): ?array {
+    public static function getByRegion(int $regionId, int $goodsId, int $productId = 0): array|null {
         if ($regionId < 1) {
             return null;
         }

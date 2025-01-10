@@ -83,7 +83,7 @@ abstract class BaseField {
         return $res;
     }
 
-    public static function textToItems(?string $text): array {
+    public static function textToItems(string|null $text): array {
         if (empty($text)) {
             return [];
         }

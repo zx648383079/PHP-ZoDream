@@ -51,7 +51,7 @@ class BlogSeoMiddleware implements MiddlewareInterface{
         ]);
     }
 
-    public static function encodeUrl(int|string $id, ?string $language = ''): string {
+    public static function encodeUrl(int|string $id, string|null $language = ''): string {
         $link = RouterHelper::idLink($id);
         $path = static::modulePath();
         if (!empty($language) && $language !== 'zh') {

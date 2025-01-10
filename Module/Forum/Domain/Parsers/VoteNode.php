@@ -125,7 +125,7 @@ HTML;
     }
 
 
-    private function formatJson(string $content, ?array $subtotal = []): array {
+    private function formatJson(string $content, array|null $subtotal = []): array {
         $index = $this->attr(Parser::UID_KEY);
         $items = [];
         $content = $this->replace($content, function ($label, $i) use ($index, &$items, $subtotal) {

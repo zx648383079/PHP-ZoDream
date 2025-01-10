@@ -194,7 +194,7 @@ class TagProvider {
      */
     public function bindTag(int $target,
                                    string|array $tags,
-                                   array $append = [], ?callable $afterBind = null) {
+                                   array $append = [], callable|null $afterBind = null) {
         $tagId = $this->save($tags, $append);
         if (empty($tagId)) {
             return;

@@ -107,7 +107,7 @@ class CBOR {
         return static::processFinite($stream, $mt, $ai, $val);
     }
 
-    private static function processFinite(BinaryReader $stream, int $mt, int $ai, ?string $val): mixed {
+    private static function processFinite(BinaryReader $stream, int $mt, int $ai, string|null $val): mixed {
         switch ($mt) {
             case static::MAJOR_TYPE_UNSIGNED_INTEGER: //0
                 return static::parseUnsignedInteger($ai, $val);
@@ -226,11 +226,11 @@ class CBOR {
         }
     }
 
-    private static function parseUnsignedInteger(int $ai, ?string $val): int {
+    private static function parseUnsignedInteger(int $ai, string|null $val): int {
         return is_null($val) ? $ai : hexdec(bin2hex($val));
     }
 
-    private static function parseNegativeInteger(int $ai, ?string $val): string {
+    private static function parseNegativeInteger(int $ai, string|null $val): string {
         return (string)(-1 - (is_null($val) ? $ai : static::parseUnsignedInteger($ai, $val)));
     }
 

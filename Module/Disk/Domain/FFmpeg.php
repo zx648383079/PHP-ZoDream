@@ -77,7 +77,7 @@ class FFmpeg {
      * @param null $input
      * @return static
      */
-    public static function factory(?string $driver = null, $input = null) {
+    public static function factory(string|null $driver = null, $input = null) {
         return new static($driver, $input);
     }
 
@@ -124,7 +124,7 @@ class FFmpeg {
      * @param bool $input
      * @throws Exception
      */
-    public function __construct(?string $driver = null, $input = false ) {
+    public function __construct(string|null $driver = null, $input = false ) {
         $this->setDriver( $driver );
         if (!empty($input)) {
             $this->input( $input );
@@ -493,7 +493,7 @@ class FFmpeg {
      *   @param	string	ffmpeg
      *   @access	public
      */
-    public function setDriver(?string $driver) {
+    public function setDriver(string|null $driver) {
         if (!empty($driver)) {
             self::$driver = $driver;
         }

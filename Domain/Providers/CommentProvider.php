@@ -126,7 +126,7 @@ class CommentProvider {
     }
 
 
-    public function get(int $id): ?array {
+    public function get(int $id): array|null {
         $data = $this->query()->where('id', $id)->first();
         return empty($data) ? null : $this->format($data);
     }

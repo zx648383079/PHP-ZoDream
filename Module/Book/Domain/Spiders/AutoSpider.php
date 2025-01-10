@@ -96,7 +96,7 @@ class AutoSpider extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null) {
         $html = $html->getHtml();
         $title = $this->getTitle($html);
         $html = $this->cleanHtml($html);

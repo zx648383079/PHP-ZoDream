@@ -124,7 +124,7 @@ class Room implements IteratorAggregate {
         $this->banker->withAction();
     }
 
-    public function compare(Player $player, Player $other = null) {
+    public function compare(Player $player, Player|null $other = null) {
         if (!$other) {
             $other = $this->banker;
         }

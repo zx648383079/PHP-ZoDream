@@ -142,7 +142,7 @@ class Scheduler {
      * @param DateTime|null $runTime Optional, run at specific moment
      * @return array  Executed jobs
      */
-    public function run(?Datetime $runTime = null) {
+    public function run(Datetime|null $runTime = null) {
         $jobs = $this->getQueuedJobs();
         if (is_null($runTime)) {
             $runTime = new DateTime('now');

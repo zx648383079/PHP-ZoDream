@@ -327,7 +327,7 @@ class AuthRepository {
     }
 
     public static function oauth(
-        string $type, string $openid, callable $infoCallback, ?string $unionId = null, int $platform_id = 0) {
+        string $type, string $openid, callable $infoCallback, string|null $unionId = null, int $platform_id = 0) {
         if (BanRepository::isBanOAuth($openid, $unionId, $type, $platform_id)) {
             throw AuthException::disableAccount();
         }
@@ -371,7 +371,7 @@ class AuthRepository {
         return $user;
     }
 
-    private static function successBindUser(string $type, $user, string $nickname, string $openid, ?string $unionId = null, $platform_id = 0) {
+    private static function successBindUser(string $type, $user, string $nickname, string $openid, string|null $unionId = null, $platform_id = 0) {
         OAuthModel::bindUser($user, $openid, $unionId, $type, $nickname, $platform_id);
     }
 
@@ -518,7 +518,7 @@ class AuthRepository {
         ]);
     }
 
-    public static function updateOAuthData(string $type, string $openid, ?string $data, ?string $unionId = null, int $platform_id = 0) {
+    public static function updateOAuthData(string $type, string $openid, string|null $data, string|null $unionId = null, int $platform_id = 0) {
         $model = OAuthModel::where('vendor', $type)
             ->where('platform_id', $platform_id)
             ->where('identity', $openid)->first();

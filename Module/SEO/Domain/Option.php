@@ -98,7 +98,7 @@ class Option {
         return $value;
     }
 
-    private static function formatIfInt(?string $val): mixed {
+    private static function formatIfInt(string|null $val): mixed {
         if (is_null($val)) {
             return '';
         }

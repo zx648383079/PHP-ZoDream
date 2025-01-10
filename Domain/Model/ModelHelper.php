@@ -80,7 +80,7 @@ class ModelHelper {
      * @param callable|null $check
      * @return array
      */
-    public static function formArr(array $data, $default = null, callable $check = null): array {
+    public static function formArr(array $data, $default = null, callable|null $check = null): array {
         if (empty($data)) {
             return [];
         }

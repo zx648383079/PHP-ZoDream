@@ -19,7 +19,7 @@ class TwoFactorAuth {
     private static array $base32Lookup = [];
 
     public function __construct(
-        private readonly ?string   $issuer = null,
+        private readonly string|null   $issuer = null,
         private readonly int       $digits = 6,
         private readonly int       $period = 30,
         private readonly string $algorithm = 'sha1',
@@ -52,7 +52,7 @@ class TwoFactorAuth {
     /**
      * Calculate the code with given secret and point in time
      */
-    public function getCode(string $secret, ?int $time = null): string {
+    public function getCode(string $secret, int|null $time = null): string {
         $secretKey = $this->base32Decode($secret);
 
         $timestamp = "\0\0\0\0" . pack('N*', $this->getTimeSlice($this->getTime($time)));  // Pack time into binary string
@@ -68,7 +68,7 @@ class TwoFactorAuth {
      * Check if the code is correct. This will accept codes starting from ($discrepancy * $period) sec ago to ($discrepancy * period) sec from now
      */
     public function verifyCode(string $secret, string $code, int $discrepancy = 1,
-                               ?int $time = null, ?int &$timeSlice = 0): bool {
+                               int|null $time = null, int|null &$timeSlice = 0): bool {
         $timestamp = $this->getTime();
 
         $timeSlice = 0;
@@ -130,7 +130,7 @@ class TwoFactorAuth {
         return $result;
     }
 
-    public function getTime(?int $time = null): int {
+    public function getTime(int|null $time = null): int {
         return $time ?? time();
     }
 
@@ -155,7 +155,7 @@ class TwoFactorAuth {
         return false;
     }
 
-    private function getTimeSlice(?int $time = null, int $offset = 0): int {
+    private function getTimeSlice(int|null $time = null, int $offset = 0): int {
         return (int)floor($time / $this->period) + ($offset * $this->period);
     }
 

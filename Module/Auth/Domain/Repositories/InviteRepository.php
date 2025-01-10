@@ -214,10 +214,10 @@ class InviteRepository {
      * @param string $token
      * @param bool $confirm
      * @param bool $reject
-     * @return ?bool
+     * @return bool|null
      */
     public static function authorize(int $type, string $token, bool $confirm = false,
-                                     bool $reject = false): ?bool {
+                                     bool $reject = false): bool|null {
         if (auth()->guest()) {
             throw new \Exception('Need Login first', 204);
         }

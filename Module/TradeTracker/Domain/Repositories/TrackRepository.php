@@ -183,7 +183,7 @@ final class TrackRepository {
         return $res;
     }
 
-    private static function formatArray(array $items, ?callable $cb = null): array {
+    private static function formatArray(array $items, callable|null $cb = null): array {
         $data = [];
         foreach ($items as $item) {
             if (empty($item)) {

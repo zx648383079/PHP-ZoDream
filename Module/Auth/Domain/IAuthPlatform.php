@@ -8,7 +8,7 @@ interface IAuthPlatform {
 
     public function id(): string|int;
 
-    public function option(string $store, ?string $code = null): mixed;
+    public function option(string $store, string|null $code = null): mixed;
 
     public function getCookieTokenKey(): string;
 

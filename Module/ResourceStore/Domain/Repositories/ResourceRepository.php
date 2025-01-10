@@ -233,7 +233,7 @@ class ResourceRepository {
         self::removeResource($model);
     }
 
-    private static function removeResource(?ResourceModel $model) {
+    private static function removeResource(ResourceModel|null $model) {
         if (empty($model)) {
             throw new \Exception('资源不存在');
         }

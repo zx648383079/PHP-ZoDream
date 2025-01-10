@@ -8,7 +8,7 @@ use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 
 class BulletinController extends Controller {
 
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $model_list = BulletinUserModel::with('bulletin')
             ->when(!empty($keywords), function ($query) {
                 $ids = SearchModel::searchWhere(BulletinModel::query(), 'title')->pluck('id');
@@ -28,7 +28,7 @@ class BulletinController extends Controller {
         return $this->show();
     }
 
-    public function readAction($id) {
+    public function readAction(int $id) {
         $model = BulletinUserModel::where('user_id', auth()->id())
             ->where('bulletin_id', $id)->first();
         if (empty($model)) {

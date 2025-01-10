@@ -47,7 +47,7 @@ abstract class ActionRepository {
      * @return int|null
      * @throws \Exception
      */
-    public static function userActionValue(int $item_id, int $item_type, array $onlyAction): ?int {
+    public static function userActionValue(int $item_id, int $item_type, array $onlyAction): int|null {
         if (auth()->guest()) {
             return null;
         }

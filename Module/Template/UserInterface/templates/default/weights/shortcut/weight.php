@@ -35,7 +35,7 @@ class ShortcutWeight extends BaseWeight {
         ];
     }
 
-    private function splitKeys(?string $line): array {
+    private function splitKeys(string|null $line): array {
         if (empty($line)) {
             return [];
         }

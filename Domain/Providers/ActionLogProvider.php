@@ -86,7 +86,7 @@ class ActionLogProvider {
     }
 
 
-    public function getAction(int $type, int $id, array $onlyAction = []): ?int {
+    public function getAction(int $type, int $id, array $onlyAction = []): int|null {
         if (auth()->guest()) {
             return null;
         }

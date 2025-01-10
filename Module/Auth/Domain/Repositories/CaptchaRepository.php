@@ -16,7 +16,7 @@ final class CaptchaRepository {
 
     const SESSION_KEY = 'captcha';
 
-    public static function token(?string $captcha_token = ''): string {
+    public static function token(string|null $captcha_token = ''): string {
         if (!empty($captcha_token)) {
             return $captcha_token;
         }

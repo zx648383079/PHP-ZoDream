@@ -42,7 +42,7 @@ class VisualFactory {
         static::$lockData[$parentId][$index] = 1;
     }
 
-    public static function newViewFactory(?bool $cacheable = null): ViewFactory {
+    public static function newViewFactory(bool|null $cacheable = null): ViewFactory {
         $factory = new ViewFactory();
         $factory->setEngine(ParserCompiler::class, $cacheable)
             ->setConfigs([

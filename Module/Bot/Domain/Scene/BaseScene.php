@@ -9,7 +9,7 @@ abstract class BaseScene implements SceneInterface {
 
     use Attributes;
 
-    protected ?MessageReply $provider = null;
+    protected MessageReply|null $provider = null;
 
     public function messageProvider(MessageReply $message) {
         $this->provider = $message;
