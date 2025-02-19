@@ -14,12 +14,19 @@ class Ip {
      * @return Reader
      * @throws Reader\InvalidDatabaseException
      */
-    public static function reader() {
-        return new Reader((string)app_path('data/Country.mmdb'));
+    public static function reader() : null|Reader {
+        $file = app_path('data/Country.mmdb');
+        if ($file->exist()) {
+            return new Reader((string)$file);
+        }
+        return null;
     }
 
     public static function find(string $ip) {
         $reader = static::reader();
+        if (!$reader) {
+            return null;
+        }
         $data = $reader->get($ip);
         $reader->close();
         return $data;
@@ -32,6 +39,9 @@ class Ip {
      */
     public static function isChina(string $ip): bool {
         $reader = static::reader();
+        if (!$reader) {
+            return false;
+        }
         $data = $reader->get($ip);
         $reader->close();
         return $data['country']['iso_code'] === 'CN';
@@ -39,6 +49,9 @@ class Ip {
 
     public static function country(string $ip): string {
         $reader = static::reader();
+        if (!$reader) {
+            return 'Unknown';
+        }
         $data = $reader->get($ip);
         $reader->close();
         return $data['country']['iso_code']??'Unknown';
