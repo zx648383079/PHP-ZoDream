@@ -1,5 +1,6 @@
 @use 'theme';
 @use 'sizes';
+@use 'functions';
 
 @mixin make-button($name, $bg, $hover, $color) {
     .btn-#{$name} {
@@ -28,7 +29,7 @@
     --#{theme.$prefix}-btn-border: var(--#{theme.$prefix}-primary-active);
     --#{theme.$prefix}-btn-hover-text: var(--#{theme.$prefix}-btn-text);
     padding: sizes.$inputPadding;
-    background: var(--#{theme.$prefix}-btn);
+    background-color: var(--#{theme.$prefix}-btn);
     color: var(--#{theme.$prefix}-btn-text);
     border: none;
     border-color: var(--#{theme.$prefix}-btn-border);
@@ -43,7 +44,7 @@
         margin: 0;
     }
     &:hover {
-        background: var(--#{theme.$prefix}-btn-hover);
+        background-color: var(--#{theme.$prefix}-btn-hover);
         color: var(--#{theme.$prefix}-btn-hover-text);
     }
 }
@@ -55,7 +56,7 @@
     @include make-button(
         $color, 
         $value, 
-        shade-color($value, theme.$colorHoverOffset), 
+        functions.shade-color($value, theme.$colorHoverOffset), 
         #fff
     );
 }

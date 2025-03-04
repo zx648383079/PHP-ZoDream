@@ -110,6 +110,10 @@ function matchReplace(content: string, reg: RegExp, cb: (matches: string[]) => s
     return str;
 }
 
+function isInt(content: string): boolean {
+    return /^\d+$/.test(content);
+}
+
 class Color {
     constructor(
         public r?: number,
@@ -262,34 +266,59 @@ function converter(content: string, type: string): string| number {
             result = asciiDecode(content);
             break;
         case 'binaryencode':
-            result = strMap(content, (_, code) => {
-                return '\\b' + code.toString(2);
-            });
+            if (isInt(content)) {
+                result = parseInt(content, 10).toString(2);
+            } else {
+                result = strMap(content, (_, code) => {
+                    return '\\b' + code.toString(2);
+                });
+            }
             break;
         case 'binarydecode':
-            result = matchReplace(content, /\\b([01]+)/g, matches => {
-                return String.fromCharCode(parseInt(matches[1], 2));
-            });
+            if (/^[01]+$/.test(content)) {
+                result = parseInt(content, 2);
+            } else {
+                result = matchReplace(content, /\\b([01]+)/.test(content) ? /\\b([01]+)/g : /0b([01]+)/g, matches => {
+                    return String.fromCharCode(parseInt(matches[1], 2));
+                });
+            }
             break;
         case 'octalencode':
-            result = strMap(content, (_, code) => {
-                return '\\' + code.toString(8);
-            });
+            if (isInt(content)) {
+                result = parseInt(content, 10).toString(8);
+            } else {
+                result = strMap(content, (_, code) => {
+                    return '\\' + code.toString(8);
+                });
+            }
             break;
         case 'octaldecode':
-            result = matchReplace(content, /\\([0-7]+)/g, matches => {
-                return String.fromCharCode(parseInt(matches[1], 8));
-            });
+            if (/^[0-7]+$/.test(content)) {
+                result = parseInt(content, 8);
+            } else {
+                result = matchReplace(content, /\\([0-7]+)/.test(content) ? /\\([0-7]+)/g : /0([0-7]+)/g, matches => {
+                    return String.fromCharCode(parseInt(matches[1], 8));
+                });
+            }
             break;
         case 'hexencode':
-            result = strMap(content, (_, code) => {
-                return '\\x' + code.toString(16);
-            });
+            if (isInt(content)) {
+                result = parseInt(content, 10).toString(16);
+            } else {
+                result = strMap(content, (_, code) => {
+                    return '\\x' + code.toString(16);
+                });
+            }
             break;
         case 'hexdecode':
-            result = matchReplace(content, /\\x([0-9a-f]+)/g, matches => {
-                return String.fromCharCode(parseInt(matches[1], 16));
-            });
+            if (/^[0-9a-f]+$/i.test(content)) {
+                result = parseInt(content, 16);
+            } else {
+                result = matchReplace(content, /\\x([0-9a-f]+)/i.test(content) ? /\\x([0-9a-f]+)/ig : /0x([0-9a-f]+)/ig, matches => {
+                    return String.fromCharCode(parseInt(matches[1], 16));
+                });
+            }
+            
             break;
         case 'unicode':
             result = encodeURIComponent(content).toLocaleLowerCase().replace(/%u/gi,'\\u');
