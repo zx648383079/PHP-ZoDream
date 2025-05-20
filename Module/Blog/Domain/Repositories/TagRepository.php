@@ -24,7 +24,7 @@ class TagRepository extends TagBase {
         if (isset(self::$caches[$blog_id])) {
             return self::$caches[$blog_id];
         }
-        $tags = TagRelationshipModel::where('blog_id', $blog_id)->pluck('tag_id');
+        $tags = TagRelationshipModel::where('target_id', $blog_id)->pluck('tag_id');
         if (empty($tags)) {
             return self::$caches[$blog_id] = [];
         }
@@ -38,7 +38,7 @@ class TagRepository extends TagBase {
             return [];
         }
         $ids = TagRelationshipModel::whereIn('tag_id', array_column($tags, 'id'))
-            ->where('blog_id', '<>', $blog)->pluck('blog_id');
+            ->where('target_id', '<>', $blog)->pluck('target_id');
         if (empty($ids)) {
             return [];
         }
@@ -50,7 +50,7 @@ class TagRepository extends TagBase {
         static::bindTag(
             TagRelationshipModel::query(),
             $blog,
-            'blog_id',
+            'target_id',
             $tags,
             [
                 'blog_count' => 1
@@ -61,7 +61,7 @@ class TagRepository extends TagBase {
     public static function searchBlogTag(string $keywords): array {
         return TagRepository::searchTag(
             TagRelationshipModel::query(),
-            'blog_id',
+            'target_id',
             $keywords
         );
     }

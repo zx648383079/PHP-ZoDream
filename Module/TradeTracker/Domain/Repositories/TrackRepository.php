@@ -21,8 +21,8 @@ final class TrackRepository {
         // select a.* from tb a inner join (select name , min(val) val from tb group by name) b on a.name = b.name and a.val = b.val order by a.name
         $productId = null;
         if ($product > 0) {
-            $productId = ProductEntity::where(function ($query) use ($productId) {
-                $query->where('id', $productId)->orWhere('parent_id', $productId);
+            $productId = ProductEntity::where(function ($query) use ($product) {
+                $query->where('id', $product)->orWhere('parent_id', $product);
             })->where('is_sku', 1)->pluck('id');
         } elseif (!empty($keywords) || $project > 0) {
             $productId = ProductEntity::when(!empty($keywords), function ($query) {

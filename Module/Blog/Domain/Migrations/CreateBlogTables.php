@@ -93,7 +93,7 @@ class CreateBlogTables extends Migration {
             $table->uint('blog_count')->default(0);
         })->append(TagRelationshipModel::tableName(), function(Table $table) {
             $table->uint('tag_id');
-            $table->uint('blog_id');
+            $table->uint('target_id');
             $table->uint('position', 2)->default(99);
         })->append(BlogClickLogModel::tableName(), function(Table $table) {
             $table->id();

@@ -168,7 +168,7 @@ class CreateCareerTables extends Migration {
             $table->string('name');
             $table->uint('company_id');
             $table->uint('user_id');
-            $table->uint('type', 1)->default('')->comment('工作类型：全职/兼职/实习');
+            $table->uint('type', 1)->default(0)->comment('工作类型：全职/兼职/实习');
             $table->string('address')->comment('地址');
             $table->uint('region_id')->default(0)->comment('城市');
             $table->string('description')->default('')->comment('介绍');
