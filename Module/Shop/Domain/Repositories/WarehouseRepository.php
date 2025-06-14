@@ -66,7 +66,7 @@ class WarehouseRepository {
             ->where('product_id', $productId)
             ->orderBy('amount', 'desc')
             ->limit(1)
-            ->updateIncrement('stock', $amount);
+            ->updateIncrement('amount', $amount);
         return $count > 0;
     }
 }

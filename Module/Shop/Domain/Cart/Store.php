@@ -35,7 +35,7 @@ class Store {
 
     public function __construct() {
         $this->stockTime = intval(Option::value('shop_store'));
-        $this->useWarehouse = Option::value('shop_warehouse', 0) > 1;
+        $this->useWarehouse = Option::value('shop_warehouse', 0) > 0;
     }
 
     public function setStatus(int $status) {

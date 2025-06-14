@@ -85,7 +85,23 @@ final class CashierRepository {
         return CouponLogModel::where(function ($query) use ($user) {
             $query->where('user_id', $user)
                 ->orWhere('user_id', 0);
-        })->where('serial_number', $couponCode)->where('id', $coupon)->where('order_id', 0)->first();
+        })->where('serial_number', $couponCode)->where('order_id', 0)->first();
+    }
+
+    public static function getShipping(string $code): ShippingModel|null
+    {
+        return ShippingModel::where('code', $code)->first();
+    }
+
+    public static function getPayment(string $code): PaymentModel|null
+    {
+        if ($code === PaymentModel::COD_CODE) {
+            return new PaymentModel([
+                'code' => PaymentModel::COD_CODE,
+                'name' => '货到付款'
+            ]);
+        }
+        return PaymentModel::where('code', $code)->first();
     }
 
     public static function shipList(int $userId, array $goods, mixed $addressId, int $type = 0) {
@@ -104,8 +120,12 @@ final class CashierRepository {
         return $data;
     }
 
-    public static function paymentList(array $goods, int $shipping, int $type = 0) {
+    public static function paymentList(array $goods, string $shipping, int $type = 0) {
         $data = PaymentModel::query()->get();
+        $ship = static::getShipping($shipping);
+        if ($ship && $ship->cod_enabled > 0) {
+            $data[] = static::getPayment(PaymentModel::COD_CODE);
+        }
         return $data;
     }
 
@@ -118,8 +138,8 @@ final class CashierRepository {
      * @param int $userId
      * @param array $goods_list
      * @param int $address
-     * @param int $shipping
-     * @param int $payment
+     * @param string $shipping
+     * @param string $payment
      * @param int $coupon
      * @param bool $isPreview // 如果只验证，则配送方式和支付方式可空
      * @return OrderModel
@@ -127,8 +147,8 @@ final class CashierRepository {
      */
     public static function preview(int $userId, array $goods_list,
                                    mixed $address,
-                                   int $shipping,
-                                   int $payment,
+                                   string $shipping,
+                                   string $payment,
                                    int $coupon = 0,
                                    string $coupon_code = '',
                                    bool $isPreview = true) {
@@ -148,15 +168,15 @@ final class CashierRepository {
             throw new InvalidArgumentException('优惠卷不能使用在此订单');
             // TODO 减去优惠金额
         }
-        if ($payment > 0 && !$order->setPayment(PaymentModel::find($payment)) && !$isPreview) {
+        if (!empty($payment) && !$order->setPayment(static::getPayment($payment)) && !$isPreview) {
             throw new InvalidArgumentException('请选择支付方式');
         }
-        if ($shipping > 0) {
-            $ship = ShippingModel::find($shipping);
+        if (!empty($shipping)) {
+            $ship = static::getShipping($shipping);
             if (empty($ship)) {
                 throw new InvalidArgumentException('配送方式不存在');
             }
-            $shipGroup = ShippingRepository::getGroup($shipping, $address->region_id);
+            $shipGroup = ShippingRepository::getGroup($ship->id, $address->region_id);
             if (empty($shipGroup)) {
                 throw new InvalidArgumentException('当前地址不支持此配送方式');
             }
@@ -164,7 +184,7 @@ final class CashierRepository {
             if (!$order->setShipping($ship) && !$isPreview) {
                 throw new InvalidArgumentException('请选择配送方式');
             }
-            if ($payment > 0 && !$ship->canUsePayment($order->payment)) {
+            if (!empty($payment) && !$ship->canUsePayment($order->payment)) {
                 throw new InvalidArgumentException(
                     sprintf('当前配送方式不支持【%s】支付方式', $order->payment->name)
                 );
@@ -179,8 +199,8 @@ final class CashierRepository {
      * 结算
      * @param int $userId
      * @param int|array $address
-     * @param int $shipping
-     * @param int $payment
+     * @param string $shipping
+     * @param string $payment
      * @param int $coupon
      * @param string $coupon_code
      * @param string $cart
@@ -188,7 +208,7 @@ final class CashierRepository {
      * @return OrderModel
      * @throws Exception
      */
-    public static function checkout(int $userId, mixed $address, int $shipping, int $payment,
+    public static function checkout(int $userId, mixed $address, string $shipping, string $payment,
                                     int $coupon = 0, string $coupon_code = '', $cart = '', int $type = 0) {
         $goods_list = static::getGoodsList($cart, $type);
         $store = self::store(Store::STATUS_ORDER);

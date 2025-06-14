@@ -75,7 +75,7 @@ class QuestionCompiler {
             return $arg < $val;
         }
         if ($con === '<=') {
-            return $arg < $val;
+            return $arg <= $val;
         }
         if ($con === '<>' || $con === '!=') {
             return $arg != $val;

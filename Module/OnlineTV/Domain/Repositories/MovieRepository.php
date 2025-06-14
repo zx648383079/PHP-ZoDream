@@ -60,7 +60,7 @@ final class MovieRepository extends CRUDRepository {
                     'file_type' => 'int:0,127',
                     'file' => 'required|string:0,255',
                 ]);
-                $item['music_id'] = $id;
+                $item['movie_id'] = $id;
                 static::fileSave($item);
             }
         }

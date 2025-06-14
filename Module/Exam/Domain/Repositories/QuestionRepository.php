@@ -129,9 +129,9 @@ class QuestionRepository {
             foreach ($data['children'] as $item) {
                 $item['parent_id'] = $model->id;
                 $item['course_id'] = $model->course_id;
-                $data['course_grade'] = $model->course_grade;
-                $data['easiness'] = $model->easiness;
-                $data['dynamic'] = $data['dynamic'] ?? '';
+                $item['course_grade'] = $model->course_grade;
+                $item['easiness'] = $model->easiness;
+                $item['dynamic'] = $data['dynamic'] ?? '';
                 $itemType = isset($item['type']) ? intval($item['type']) : 0;
                 if ($itemType === 4 && empty($item['content'])) {
                     $item['content'] = $item['title'];

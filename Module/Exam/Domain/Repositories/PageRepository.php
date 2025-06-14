@@ -19,7 +19,7 @@ class PageRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
             })->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', auth()->id());
+                $query->where('user_id', $user);
             })->when($course > 0, function ($query) use ($course) {
                 $query->where('course_id', $course);
             })->when($grade > 0, function ($query) use ($grade) {

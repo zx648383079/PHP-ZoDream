@@ -20,6 +20,8 @@ use Domain\Model\Model;
  */
 class PaymentModel extends Model {
 
+    const COD_CODE = 'cod';
+
     public static function tableName(): string {
         return 'shop_payment';
     }

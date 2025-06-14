@@ -14,14 +14,14 @@ class CreateTradeTables extends Migration {
             $table->comment('支付系统');
             $table->id();
             $table->uint('open_id');
-            $table->uint('buyer_id')->comment('买家');
-            $table->uint('seller_id')->comment('收款方');
+            $table->string('buyer_id', 32)->comment('买家');
+            $table->string('seller_id', 32)->comment('收款方');
             $table->string('out_trade_no', 64)->comment('商户订单号,64个字符以内、可包含字母、数字、下划线；需保证在商户端不重复');
             $table->string('subject');
             $table->string('body')->default('')->comment('订单描述');
             $table->decimal('total_amount', 10, 2)->comment('订单总金额');
             $table->string('operator_id', 28)->default('')->comment('商户操作员编号');
-            $table->string('timeout_express', 6)->default('')->comment('该笔订单允许的最晚付款时间，逾期将关闭交易');
+            $table->timestamp('time_expire')->comment('该笔订单允许的最晚付款时间，逾期将关闭交易');
             $table->string('notify_url')->default('')->comment('通知地址');
             $table->string('return_url')->default('')->comment('返回地址');
             $table->string('passback_params', 512)->default('')->comment('公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝只会在同步返回（包括跳转回商户网站）和异步通知时将该参数原样返回');

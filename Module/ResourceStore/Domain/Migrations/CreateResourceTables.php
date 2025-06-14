@@ -53,7 +53,7 @@ class CreateResourceTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('res_id');
-            $table->uint('file_type')->default(0)->comment('本地文件/网盘/种子');
+            $table->uint('file_type', 1)->default(0)->comment('本地文件/网盘/种子');
             $table->string('file');
             $table->uint('click_count')->default(0);
             $table->timestamps();

@@ -21,9 +21,9 @@ use Zodream\Helpers\Time;
  * @property string $series_number
  * @property integer $user_id
  * @property integer $status
- * @property integer $payment_id
+ * @property string $payment_id
  * @property string $payment_name
- * @property integer $shipping_id
+ * @property string $shipping_id
  * @property string $shipping_name
  * @property float $goods_amount
  * @property float $order_amount
@@ -83,9 +83,9 @@ class OrderModel extends Model {
             'series_number' => 'required|string:0,100',
             'user_id' => 'required|int',
             'status' => 'int',
-            'payment_id' => 'int',
+            'payment_id' => 'string:0,30',
             'payment_name' => 'string:0,30',
-            'shipping_id' => 'int',
+            'shipping_id' => 'string:0,30',
             'shipping_name' => 'string:0,30',
             'goods_amount' => '',
             'order_amount' => '',
@@ -178,7 +178,7 @@ class OrderModel extends Model {
     }
 
     public function payment() {
-        return $this->hasOne(PaymentModel::class, 'id', 'payment_id');
+        return $this->hasOne(PaymentModel::class, 'code', 'payment_id');
     }
 
     public function address() {
@@ -186,7 +186,7 @@ class OrderModel extends Model {
     }
 
     public function shipping() {
-        return $this->hasOne(ShippingModel::class, 'id', 'shipping_id');
+        return $this->hasOne(ShippingModel::class, 'code', 'shipping_id');
     }
 
     public function getTotalAttribute() {
@@ -205,7 +205,7 @@ class OrderModel extends Model {
         if (empty($payment)) {
             return false;
         }
-        $this->payment_id = $payment->id;
+        $this->payment_id = $payment->code;
         $this->payment_name = $payment->name;
         $this->setRelation('payment', $payment);
         $this->pay_fee = PaymentRepository::getFee($payment, $this->goods);
@@ -217,7 +217,7 @@ class OrderModel extends Model {
         if (empty($shipping)) {
             return false;
         }
-        $this->shipping_id = $shipping->id;
+        $this->shipping_id = $shipping->code;
         $this->shipping_name = $shipping->name;
         $this->setRelation('shipping', $shipping);
         $this->shipping_fee = ShippingRepository::getFee($shipping, $shipping->settings, $this->goods);

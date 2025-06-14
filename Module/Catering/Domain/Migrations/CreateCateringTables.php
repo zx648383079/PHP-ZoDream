@@ -181,7 +181,7 @@ class CreateCateringTables extends Migration {
             $table->timestamps();
         })->append(StoreMetaEntity::tableName(), function(Table $table) {
             $table->id();
-            $table->uint('store_id');
+            $table->uint('item_id');
             $table->string('name', 100);
             $table->text('content');
         })->append(StoreStaffEntity::tableName(), function(Table $table) {

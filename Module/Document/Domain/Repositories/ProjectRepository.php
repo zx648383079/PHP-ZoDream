@@ -175,7 +175,7 @@ class ProjectRepository {
             }
             $id = $item['id'];
             unset($item['id']);
-            $mapId[$id] = FieldModel::query()->insert($item);
+            $fieldMap[$id] = FieldModel::query()->insert($item);
         }
     }
 

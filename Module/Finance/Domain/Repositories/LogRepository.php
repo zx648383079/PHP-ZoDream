@@ -181,6 +181,6 @@ class LogRepository {
             'updated_at' => '更新时间',
             'happened_at' => '发生时间',
             'trading_object' => '交易对象',
-        ], LogModel::query());
+        ], LogModel::auth());
     }
 }

@@ -8,7 +8,7 @@ class StoreMetaModel extends StoreMetaEntity {
 
     use TableMeta;
 
-    protected static string $idKey = 'store_id';
+    protected static string $idKey = 'item_id';
     protected static array $defaultItems = [
         'is_open_live' => 1, // 是否支持到店点餐
         'is_open_ship' => 0, // 是否支持外送

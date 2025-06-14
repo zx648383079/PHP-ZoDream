@@ -32,7 +32,7 @@ class QuestionAnalysisModel extends QuestionAnalysisEntity {
                 $exist[] = $id;
                 static::where('question_id', $model->id)
                     ->where('id', $id)->update($data);
-                return;
+                continue;
             }
             static::create($data);
         }

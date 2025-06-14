@@ -75,7 +75,7 @@ final class AttributeRepository {
             return [[], [], 0, '', 0];
         }
         $items = GoodsAttributeEntity::whereIn('id', $properties)->get('attribute_id', 'id', 'price', 'value');
-        if (empty($data)) {
+        if (empty($items)) {
             return [[], [], 0, '', 0];
         }
 

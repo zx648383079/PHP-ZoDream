@@ -322,7 +322,7 @@ class GoodsRepository {
             'brand_id' => BrandRepository::findOrNew($data['brand']),
             'name' => $data['title'],
             'series_number' => $data['sn'] ?? self::generateSn(),
-            'keywords' => 'string:0,200',
+            'keywords' => $data["keywords"] ?? "",
             'thumb' => $data['thumb'],
             'picture' => $data['thumb'],
             'description' => $data['description'],
@@ -343,7 +343,8 @@ class GoodsRepository {
         foreach ($data['images'] as $img) {
             $items[] = [
                 'goods_id' => $goods->id,
-                'image' => $img,
+                'thumb' => $img,
+                'file' => $img,
             ];
         }
         GoodsGalleryModel::query()->insert($items);

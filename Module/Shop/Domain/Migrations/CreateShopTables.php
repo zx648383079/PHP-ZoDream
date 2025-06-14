@@ -290,11 +290,11 @@ class CreateShopTables extends Migration {
             $table->string('series_number', 100);
             $table->uint('user_id');
             $table->uint('status')->default(0);
-            $table->uint('payment_id')->default(0);
-            $table->string('payment_name', 30)->default(0);
-            $table->uint('shipping_id')->default(0);
+            $table->string('payment_id', 30)->default('')->comment('支付code');
+            $table->string('payment_name', 30)->default('');
+            $table->string('shipping_id', 30)->default('')->comment('物流code');
             $table->uint('invoice_id')->default(0)->comment('发票');
-            $table->string('shipping_name', 30)->default(0);
+            $table->string('shipping_name', 30)->default('');
             $table->decimal('goods_amount', 8, 2)->default(0);
             $table->decimal('order_amount', 8, 2)->default(0);
             $table->decimal('discount', 8, 2)->default(0);
@@ -488,6 +488,7 @@ class CreateShopTables extends Migration {
             $table->uint('method', 2)->default(0)->comment('计费方式');
             $table->string('icon', 100)->default('');
             $table->string('description')->default('');
+            $table->uint('cod_enabled', 1)->default(0);
             $table->uint('position', 2)->default(50);
             $table->timestamps();
         })->append(ShippingGroupModel::tableName(), function (Table $table) {

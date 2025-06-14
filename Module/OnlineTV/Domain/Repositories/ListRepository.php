@@ -29,13 +29,13 @@ class ListRepository {
 
     public static function save(array $data, array $items) {
         if (empty($items)) {
-            throw new \Exception('请选择书籍');
+            throw new \Exception('请选择歌曲');
         }
         $id = $data['id'] ?? 0;
         unset($data['id']);
         $model = $id > 0 ? MusicListModel::findWithAuth($id) : new MusicListModel();
         if (empty($model)) {
-            throw new \Exception('书单不存在');
+            throw new \Exception('歌单不存在');
         }
         $model->user_id = auth()->id();
         if (!$model->load($data) || !$model->save()) {
@@ -82,7 +82,7 @@ class ListRepository {
     public static function remove(int $id) {
         $model = MusicListModel::findWithAuth($id);
         if (empty($model)) {
-            throw new \Exception('书单不存在');
+            throw new \Exception('歌单不存在');
         }
         $model->delete();
         MusicListItemModel::where('list_id', $model->id)->delete();

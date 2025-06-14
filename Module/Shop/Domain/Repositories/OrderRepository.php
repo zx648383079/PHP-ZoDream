@@ -54,7 +54,7 @@ final class OrderRepository {
         $address = OrderAddressModel::where('order_id', $id)->first();
         $data = $order->toArray();
         $data['address'] = self::formatAddress($address);
-        if ($order->status === OrderModel::STATUS_UN_PAY) {
+        if ($order->status === OrderModel::STATUS_UN_PAY && $order->payment_id !== PaymentModel::COD_CODE) {
             $data['expired_at'] = $order->getAttributeSource('created_at') + self::orderExpireTime();
         }
         return $data;
