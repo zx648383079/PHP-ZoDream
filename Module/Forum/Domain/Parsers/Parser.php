@@ -128,6 +128,26 @@ class Parser extends Page {
         return $type !== 'json' ? $this->parseText($this->content, $type) : $this->parseJson($this->content, $type);
     }
 
+    public function substr(int $length = 50): string {
+        return mb_substr($this->cleanText($this->content), 0, $length);
+    }
+
+    public function getImage(): array {
+        $items = [];
+        if (preg_match_all('#<img(\s+([^\<\>]+))?>([\s\S]*?)</img>#i', $this->content, $matches)) {
+            foreach ($matches as $match) {
+                $items[] = [
+                    'url' => $match[3],
+                ];
+            }
+        }
+        if (empty($items)) {
+            $items[] = ['url' => '/assets/images/banner.jpg'];
+            $items[] = ['url' => '/assets/images/avatar/0.png'];
+        }
+        return $items;
+    }
+
     private function parseText($html, $type) {
         $maps = [];
         $this->eachNode(function (INode $node) use (&$html, $type) {

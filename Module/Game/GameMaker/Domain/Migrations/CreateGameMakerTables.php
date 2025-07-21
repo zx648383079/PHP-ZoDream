@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\Game\GameMaker\Domain\Migrations;
 
 use Module\Game\GameMaker\Domain\Entities\ActionLogEntity;
+use Module\Game\GameMaker\Domain\Entities\AchieveEntity;
+use Module\Game\GameMaker\Domain\Entities\RecipeEntity;
 use Module\Game\GameMaker\Domain\Entities\AuctionEntity;
 use Module\Game\GameMaker\Domain\Entities\BagEntity;
 use Module\Game\GameMaker\Domain\Entities\CharacterEntity;
@@ -74,8 +76,26 @@ final class CreateGameMakerTables extends Migration {
             $table->id();
             $table->uint('project_id');
             $table->string('name');
+            $table->string('description')->default('');
+            $table->int('lifespan')->default(1)->comment('寿命');
             BattleRepository::addProperty($table);
             $table->string('specialty')->default('')->comment('血统特长');
+        })->append(AchieveEntity::tableName(), function (Table $table) {
+            $table->comment('成就规则');
+            $table->id();
+            $table->uint('project_id');
+            $table->string('name');
+            $table->string('icon')->default('')->comment('图标');
+            $table->string('description')->default('');
+            $table->int('demand')->default(1)->comment('达成需求');
+        })->append(RecipeEntity::tableName(), function (Table $table) {
+            $table->comment('配方规则');
+            $table->id();
+            $table->uint('project_id');
+            $table->string('name');
+            $table->string('icon')->default('')->comment('图标');
+            $table->string('description')->default('');
+            $table->string('data', 500)->comment('炼制方法');
         })->append(CharacterEntity::tableName(), function (Table $table) {
             $table->comment('角色表');
             $table->id();

@@ -73,15 +73,16 @@ class GameAdapter implements IGameAdapter {
         if ($count > 0) {
             throw new \Exception('昵称已存在');
         }
-        $identity = CharacterIdentityEntity::where('project_id', $this->project['id'])
-            ->where('id', $data['identity_id'])->first();
-        if (empty($identity)) {
-            throw new \Exception('请选择职业');
+        $descent = DescentEntity::where('project_id', $this->project['id'])
+            ->where('id', $data['descent_id'])->first();
+        if (empty($descent)) {
+            throw new \Exception('请选择血统');
         }
         $target = [
             'user_id' => auth()->id(),
             'project_id' => $this->project['id'],
             'identity_id' => intval($data['identity_id']),
+            'descent_id' => intval($data['descent_id']),
             'nickname' => $data['name'],
             'sex' => $data['sex'] ?? 2,
             'grade' => 0,
@@ -92,7 +93,7 @@ class GameAdapter implements IGameAdapter {
             'y' => 0,
         ];
         foreach (BattleRepository::PROPERTY_KEYS as $key) {
-            $target[$key] = $identity[$key];
+            $target[$key] = $descent[$key];
         }
         return CharacterEntity::createOrThrow($target);
     }

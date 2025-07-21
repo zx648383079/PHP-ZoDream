@@ -30,6 +30,7 @@ class DescentEntity extends Entity {
         return [
             'project_id' => 'required|int',
             'name' => 'required|string:0,255',
+            'description' => 'string:0,255',
             'hp' => 'int',
             'mp' => 'int',
             'att' => 'int',
@@ -47,6 +48,7 @@ class DescentEntity extends Entity {
         return [
             'id' => 'Id',
             'project_id' => 'Project Id',
+            'description' => 'Description',
             'name' => 'Name',
             'hp' => 'Hp',
             'mp' => 'Mp',

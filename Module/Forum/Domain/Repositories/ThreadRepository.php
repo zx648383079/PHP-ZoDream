@@ -13,6 +13,7 @@ use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Zodream\Helpers\Json;
 use Zodream\Html\Page;
@@ -76,7 +77,7 @@ class ThreadRepository {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
             'updated_at', 'created_at', 'post_count', 'top_type'
         ]);
-        $data = ThreadModel::with('user', 'classify')
+        $data = ThreadModel::with('user', 'classify', 'forum')
             ->when($classify > 0, function ($query) use ($classify) {
                 $query->where('classify_id', $classify);
             })->whereIn('forum_id', ForumModel::getAllChildrenId($forum))
@@ -97,10 +98,26 @@ class ThreadRepository {
             })
             ->orderBy($sort, $order)->page();
         foreach ($data as $item) {
-            $item->last_post = static::lastPost($item->id);
+            $first = ThreadPostModel::where('thread_id', $item->id)->where('grade', '<', 1)->first();
+            if ($first->is_public_post) {
+                $parser = Parser::create($first, request());
+                $item->brief = $parser->substr();
+                $item->image_items = $parser->getImage();
+            }
+            $item->agree_count = $first->agree_count;
+            $item->disagree_count = $first->disagree_count;
+
+            $item->user_items = static::getParticipant($item->id, $item->user_id);
+            // $item->last_post = static::lastPost($item->id);
             $item->is_new = static::isNew($item);
         }
         return $data;
+    }
+
+    private static function getParticipant(int $threadId, int $exclude): array {
+        $idItems = ThreadPostModel::where('thread_id', $threadId)
+        ->where('user_id', '<>', $exclude)->selectRaw('distinct user_id')->limit(5)->pluck('user_id');
+        return UserSimpleModel::whereIn('id', $idItems)->get();
     }
 
     public static function selfList(string $keywords = '', string $sort = '', string $order = '') {

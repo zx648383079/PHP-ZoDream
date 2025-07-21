@@ -76,9 +76,13 @@ class AdController extends Controller {
             $data = $input->validate([
                 'id' => 'int',
                 'name' => 'required|string:0,30',
-                'width' => 'required|string:0,20',
-                'height' => 'required|string:0,20',
-                'template' => 'required|string:0,255',
+                'code' => 'required|string:0,20',
+                'auto_size' => 'int:0,127',
+                'source_type' => 'int:0,127',
+                'width' => 'string:0,10',
+                'height' => 'string:0,10',
+                'template' => 'string:0,500',
+                'status' => 'int:0,127',
             ]);
             return $this->render(
                 AdRepository::managePositionSave($data)

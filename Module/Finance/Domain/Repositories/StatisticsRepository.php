@@ -25,6 +25,9 @@ final class StatisticsRepository {
                 $query->where('happened_at', '<=', $endAt);
             })
             ->sum('money');
+        $expenditure_count = LogEntity::auth()->where('type', LogEntity::TYPE_EXPENDITURE)
+            ->where('happened_at', '>=', $currentStart)->where('happened_at', '<', $currentEnd)
+            ->count();
         $expenditure_current = LogEntity::auth()->where('type', LogEntity::TYPE_EXPENDITURE)
             ->where('happened_at', '>=', $currentStart)->where('happened_at', '<', $currentEnd)
             ->sum('money');
@@ -41,14 +44,18 @@ final class StatisticsRepository {
             ->sum('money');
         $income_current = LogEntity::auth()->where('type', LogEntity::TYPE_INCOME)
             ->where('happened_at', '>=', $currentStart)->where('happened_at', '<', $currentEnd)
+            ->count();
+        $income_current = LogEntity::auth()->where('type', LogEntity::TYPE_INCOME)
+            ->where('happened_at', '>=', $currentStart)->where('happened_at', '<', $currentEnd)
             ->sum('money');
         $income_last = LogEntity::auth()->where('type', LogEntity::TYPE_INCOME)
             ->where('happened_at', '>=', $lastStart)->where('happened_at', '<', $lastEnd)
             ->sum('money');
         $stage_items = static::getStage($startAt, $endAt, $type);
         return compact('money_total',
-            'expenditure_total', 'expenditure_current', 'expenditure_last',
-            'income_total', 'income_current', 'income_last', 'stage_items'
+            'expenditure_total', 'expenditure_current', 'expenditure_last', 'expenditure_count',
+            'income_total', 'income_current', 'income_last', 'income_count', 
+            'stage_items'
         );
     }
 

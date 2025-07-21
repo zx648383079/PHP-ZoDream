@@ -8,7 +8,7 @@ use Module\Counter\Domain\Events\CounterState;
  * Class VisitorLogModel
  * @package Module\Counter\Domain\Model
  * @property integer $id
- * @property string $user_id
+ * @property integer $user_id
  * @property string $ip
  * @property integer $first_at
  * @property integer $last_at
@@ -21,7 +21,7 @@ class VisitorLogModel extends Model {
 
     protected function rules(): array {
         return [
-            'user_id' => 'string:0,50',
+            'user_id' => 'int',
             'ip' => 'required|string:0,120',
             'first_at' => 'int',
             'last_at' => 'int',
