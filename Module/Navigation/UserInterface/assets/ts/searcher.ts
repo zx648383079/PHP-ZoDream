@@ -4,7 +4,7 @@ function bindSearch() {
     const searchForm = searchBox.find('.search-input');
     const refreshSuggest = (keywords: string) => {
         const suggestBox = searchBox.find('.suggest-body');
-        $.getJSON(BASE_URI + 'search/suggestion', {keywords}, res => {
+        $.getJSON(BASE_URI + 'search/suggest', {keywords}, res => {
             if (res.code !== 200) {
                 return;
             }

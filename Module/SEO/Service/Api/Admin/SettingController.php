@@ -22,7 +22,7 @@ class SettingController extends Controller {
         return $this->renderData(true);
     }
 
-    public function infoAction(int $id) {
+    public function detailAction(int $id) {
         return $this->render(OptionModel::find($id));
     }
 

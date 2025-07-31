@@ -16,7 +16,7 @@ class HomeController extends Controller {
         return $this->show(compact('forum_list'));
     }
 
-    public function suggestionAction(string $keywords = '') {
+    public function suggestAction(string $keywords = '') {
         return $this->renderData(
             ThreadRepository::suggestion($keywords)
         );

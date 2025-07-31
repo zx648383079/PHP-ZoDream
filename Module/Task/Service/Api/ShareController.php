@@ -67,9 +67,9 @@ class ShareController extends Controller {
         return $this->renderData(true);
     }
 
-    public function deleteUserAction(int $id, int $user_id) {
+    public function deleteUserAction(int $id, int $user) {
         try {
-            ShareRepository::removeUser($id, $user_id);
+            ShareRepository::removeUser($id, $user);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

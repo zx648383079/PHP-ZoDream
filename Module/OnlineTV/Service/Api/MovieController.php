@@ -35,7 +35,7 @@ class MovieController extends Controller {
         }
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         return $this->renderData(
             MovieRepository::suggestion($keywords)
         );

@@ -15,7 +15,7 @@ class SearchController extends Controller {
         return $this->show(compact('items', 'keywords'));
     }
 
-    public function suggestionAction(string $keywords = '') {
+    public function suggestAction(string $keywords = '') {
         return $this->renderData(
             SearchRepository::suggest($keywords)
         );

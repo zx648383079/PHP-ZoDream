@@ -60,7 +60,7 @@ class ProjectController extends Controller {
         return $this->renderData(true);
     }
 
-    public function versionRemoveAction(int $project, int $version) {
+    public function versionDeleteAction(int $project, int $version) {
         try {
             ProjectRepository::versionRemove($project, $version);
         } catch (\Exception $ex) {

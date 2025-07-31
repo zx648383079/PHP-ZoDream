@@ -85,7 +85,7 @@ class HomeController extends Controller {
         }
     }
 
-    public function fileRemoveAction(int $id) {
+    public function fileDeleteAction(int $id) {
         try {
             ResourceRepository::fileRemove($id);
         } catch (\Exception $ex) {

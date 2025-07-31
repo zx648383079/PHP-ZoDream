@@ -12,9 +12,9 @@ class CommentController extends Controller {
         return ['*' => '@'];
     }
 
-    public function indexAction(int $task_id) {
+    public function indexAction(int $task) {
         return $this->renderPage(
-            CommentRepository::getList($task_id)
+            CommentRepository::getList($task)
         );
     }
 

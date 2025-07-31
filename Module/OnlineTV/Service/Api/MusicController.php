@@ -19,7 +19,7 @@ class MusicController extends Controller {
         return $this->renderData($data);
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         return $this->renderData(
             MusicRepository::suggestion($keywords)
         );

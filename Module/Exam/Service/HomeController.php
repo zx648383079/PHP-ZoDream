@@ -12,7 +12,7 @@ class HomeController extends Controller {
         return $this->show(compact('course_list'));
     }
 
-    public function suggestionAction(string $keywords = '') {
+    public function suggestAction(string $keywords = '') {
         $data = CourseModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
          })->limit(4)->get();

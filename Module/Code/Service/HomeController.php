@@ -93,7 +93,7 @@ class HomeController extends ModuleController {
         return $this->renderData(true);
     }
 
-    public function suggestionAction(string $keywords = '') {
+    public function suggestAction(string $keywords = '') {
         $data = CodeRepository::tag()->suggest($keywords);
         return $this->renderData($data);
     }

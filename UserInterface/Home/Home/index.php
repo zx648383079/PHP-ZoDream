@@ -10,7 +10,7 @@ $this->set([
     'description' => __('site description'),
     'layout_search_url' => $this->url('/blog'),
     'rss_show' => true
-])->registerJs(sprintf('var SUGGESTION_URI = "%s";', $this->url('./blog/suggestion', false)), View::HTML_HEAD);
+])->registerJs(sprintf('var SUGGESTION_URI = "%s";', $this->url('./blog/suggest', false)), View::HTML_HEAD);
 
 $module_list = [
     [

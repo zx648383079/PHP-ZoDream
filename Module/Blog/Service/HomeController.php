@@ -93,7 +93,7 @@ class HomeController extends Controller {
         return $this->renderData($model->recommend_count);
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();

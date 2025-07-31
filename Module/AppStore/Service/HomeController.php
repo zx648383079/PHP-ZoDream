@@ -32,7 +32,7 @@ class HomeController extends Controller {
         return $this->show('detail', compact('model'));
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         $data = AppRepository::suggestion($keywords);
         foreach($data as &$item) {
             $item['url'] = url('./', ['id' => $item['id']]);

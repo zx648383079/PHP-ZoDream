@@ -22,7 +22,7 @@ class HomeController extends ModuleController {
 		return $this->show(compact('model_list', 'keywords'));
 	}
 
-    public function suggestionAction(string $keywords = '') {
+    public function suggestAction(string $keywords = '') {
         return $this->renderData(NoteRepository::suggestion($keywords));
     }
 

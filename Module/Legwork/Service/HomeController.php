@@ -17,7 +17,7 @@ class HomeController extends Controller {
         return $this->show(compact('cat_list', 'category', 'keywords', 'model_list'));
     }
 
-    public function suggestionAction($keywords) {
+    public function suggestAction($keywords) {
         $data = ServiceModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->limit(4)->pluck('name');

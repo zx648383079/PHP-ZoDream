@@ -41,7 +41,7 @@ class HomeController extends Controller {
         return $this->show(compact('files'));
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         $data = ResourceRepository::suggestion($keywords);
         foreach($data as &$item) {
             $item['url'] = url('./', ['id' => $item['id']]);

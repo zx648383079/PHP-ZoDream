@@ -43,7 +43,7 @@ class ThreadController extends Controller {
     }
 
     public function createAction(string $title, string $content,
-                                 int $forum_id, int $classify_id = 0, int $is_private_post = 0) {
+                                 int $forum, int $classify = 0, int $is_private_post = 0) {
         try {
             return $this->render(
                 ThreadRepository::create($title, $content, $forum_id, $classify_id, $is_private_post)
@@ -83,9 +83,9 @@ class ThreadController extends Controller {
         }
     }
 
-    public function rewardAction(int $item_id, int $item_type = 0) {
+    public function rewardAction(int $id, int $type = 0) {
         return $this->renderPage(
-            ThreadRepository::rewardList($item_id, $item_type)
+            ThreadRepository::rewardList($id, $type)
         );
     }
 
@@ -114,10 +114,10 @@ class ThreadController extends Controller {
         }
     }
 
-    public function replyAction(string $content, int $thread_id) {
+    public function replyAction(string $content, int $thread) {
         try {
             return $this->render(
-                ThreadRepository::reply($content, $thread_id)
+                ThreadRepository::reply($content, $thread)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -164,7 +164,7 @@ class ThreadController extends Controller {
         }
     }
 
-    public function removePostAction(int $id) {
+    public function deletePostAction(int $id) {
         try {
             ThreadRepository::removePost($id);
         } catch (\Exception $ex) {

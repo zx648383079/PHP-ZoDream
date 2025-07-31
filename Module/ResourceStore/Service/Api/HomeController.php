@@ -55,7 +55,7 @@ class HomeController extends Controller {
         }
     }
 
-    public function suggestionAction(string $keywords) {
+    public function suggestAction(string $keywords) {
         return $this->renderData(
             ResourceRepository::suggestion($keywords)
         );
