@@ -11,7 +11,7 @@ class ChatController extends Controller {
         );
     }
 
-    public function remove(int $id) {
+    public function deleteAction(int $id) {
         try {
             ChatRepository::removeIdHistory($id);
         } catch (\Exception $ex) {

@@ -105,7 +105,7 @@ final class AccountRepository {
     public static function getConnect(): array {
         $map_list = self::getConnectMaps();
         $model_list = OAuthModel::where('user_id', auth()->id())
-            ->get('id', 'vendor', 'nickname', 'created_at');
+            ->get('id', 'vendor', 'nickname', 'platform_id', 'created_at');
         $platformId = Platform::platformId();
         $items = [];
         $keys = [];

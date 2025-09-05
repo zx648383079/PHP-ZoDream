@@ -8,10 +8,7 @@ use Module\Counter\Domain\Events\CounterState;
  * Class LoadTimeLogModel
  * @package Module\Counter\Domain\Model
  * @property integer $id
- * @property string $url
- * @property string $ip
- * @property string $session_id
- * @property string $user_agent
+ * @property integer $log_id
  * @property integer $load_time
  * @property integer $created_at
  */
@@ -23,10 +20,7 @@ class LoadTimeLogModel extends Model {
 
     protected function rules(): array {
         return [
-            'url' => 'required|string:0,255',
-            'ip' => 'required|string:0,120',
-            'session_id' => 'string:0,32',
-            'user_agent' => 'string:0,255',
+            'log_id' => 'required|int',
             'load_time' => 'required|int:0,99999',
             'created_at' => 'int',
         ];
@@ -35,10 +29,7 @@ class LoadTimeLogModel extends Model {
     protected function labels(): array {
         return [
             'id' => 'Id',
-            'url' => 'Url',
-            'ip' => 'Ip',
-            'session_id' => 'Session Id',
-            'user_agent' => 'User Agent',
+            'log_id' => 'Log Id',
             'load_time' => 'Load Time',
             'created_at' => 'Created At',
         ];

@@ -26,8 +26,8 @@ class ExplorerController extends Controller {
         return $this->renderData(true);
     }
 
-    public function storageAction(string $keywords = '', int $tag = 0) {
-        return $this->renderPage(ExplorerRepository::storageSearch($keywords, $tag));
+    public function storageAction(string $keywords = '', int $folder = 0) {
+        return $this->renderPage(ExplorerRepository::storageSearch($keywords, $folder));
     }
 
     public function storageDeleteAction(int|array $id) {
@@ -39,9 +39,9 @@ class ExplorerController extends Controller {
         return $this->renderData(true);
     }
 
-    public function storageReloadAction(int $tag) {
+    public function storageReloadAction(int $folder) {
         try {
-            ExplorerRepository::storageReload($tag);
+            ExplorerRepository::storageReload($folder);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }

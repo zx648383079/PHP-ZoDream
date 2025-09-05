@@ -11,16 +11,14 @@ use Zodream\Helpers\Time;
  * @package Module\Counter\Domain\Model
  * @property integer $id
  * @property string $ip
- * @property string $browser
- * @property string $browser_version
- * @property string $os
- * @property string $os_version
- * @property string $url
- * @property string $referrer
  * @property string $user_agent
- * @property string $country
- * @property string $region
- * @property string $city
+ * @property string $hostname
+ * @property string $pathname
+ * @property string $queries
+ * @property string $referrer_hostname
+ * @property string $referrer_pathname
+ * @property string $method
+ * @property integer $status_code
  * @property integer $user_id
  * @property string $session_id
  * @property string $latitude
@@ -36,16 +34,14 @@ class LogModel extends Model {
     protected function rules(): array {
         return [
             'ip' => 'required|string:0,120',
-            'browser' => 'string:0,40',
-            'browser_version' => 'string:0,20',
-            'os' => 'string:0,20',
-            'os_version' => 'string:0,20',
-            'url' => 'string|string:0,255',
-            'referrer' => 'string',
+            'hostname' => 'string:0,100',
+            'pathname' => 'string:0,255',
+            'queries' => 'string:0,255',
+            'referrer_hostname' => 'string:0,100',
+            'referrer_pathname' => 'string:0,255',
+            'method' => 'string:0,10',
+            'status_code' => 'int',
             'user_agent' => 'string',
-            'country' => 'string:0,45',
-            'region' => 'string:0,45',
-            'city' => 'string:0,45',
             'user_id' => 'int',
             'session_id' => 'string:0,32',
             'latitude' => 'string:0,30',
@@ -58,16 +54,14 @@ class LogModel extends Model {
         return [
             'id' => 'Id',
             'ip' => 'Ip',
-            'browser' => 'Browser',
-            'browser_version' => 'Browser Version',
-            'os' => 'Os',
-            'os_version' => 'Os Version',
-            'url' => 'Url',
-            'referrer' => 'Referrer',
+            'hostname' => 'Hostname',
+            'pathname' => 'Pathname',
+            'queries' => 'Queries',
+            'referrer_hostname' => 'Referrer Hostname',
+            'referrer_pathname' => 'Referrer Pathname',
+            'method' => 'Method',
+            'status_code' => 'Status Code',
             'user_agent' => 'User Agent',
-            'country' => 'Country',
-            'region' => 'Region',
-            'city' => 'City',
             'user_id' => 'User Id',
             'session_id' => 'Session Id',
             'latitude' => 'Latitude',

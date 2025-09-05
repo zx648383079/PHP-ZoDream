@@ -12,7 +12,7 @@ final class StatisticsRepository {
         $server_count = ServerModel::query()->count();
         $online_count = $server_count > 0 ? ServerModel::query()->where('status', 1)->count() : 0;
         $file_count = FileModel::query()->count();
-        $today_count = $file_count > 0 ? FileModel::where('created_at', '>=', $todayStart)->count() : 0;
-        return compact('server_count', 'online_count', 'today_count', 'file_count');
+        $file_today= $file_count > 0 ? FileModel::where('created_at', '>=', $todayStart)->count() : 0;
+        return compact('server_count', 'online_count', 'file_today', 'file_count');
     }
 }

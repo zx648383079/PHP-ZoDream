@@ -44,7 +44,7 @@ class TagModel extends Model {
 	    if (empty($id)) {
 	        return [];
         }
-        return TagRelationshipModel::where('tag_id', $id)->pluck('blog_id');
+        return TagRelationshipModel::where('tag_id', $id)->pluck('target_id');
     }
 
 }

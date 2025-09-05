@@ -8,7 +8,8 @@ use Module\Counter\Domain\Events\CounterState;
  * Class PageLogModel
  * @package Module\Counter\Domain\Model
  * @property integer $id
- * @property string $url
+ * @property integer $host_id
+ * @property integer $path_id
  * @property integer $visit_count
  */
 class PageLogModel extends Model {
@@ -21,7 +22,8 @@ class PageLogModel extends Model {
 
     protected function rules(): array {
         return [
-            'url' => 'required|string:0,255',
+            'host_id' => 'required|int',
+            'path_id' => 'required|int',
             'visit_count' => 'int',
         ];
     }
@@ -29,7 +31,8 @@ class PageLogModel extends Model {
     protected function labels(): array {
         return [
             'id' => 'Id',
-            'url' => 'Url',
+            'host_id' => 'Host Id',
+            'path_id' => 'Path Id',
             'visit_count' => 'Visit Count',
         ];
     }

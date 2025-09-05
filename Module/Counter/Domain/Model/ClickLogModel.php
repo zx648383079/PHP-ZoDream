@@ -8,10 +8,7 @@ use Module\Counter\Domain\Events\CounterState;
  * Class ClickLogModel
  * @package Module\Counter\Domain\Model
  * @property integer $id
- * @property string $url
- * @property string $ip
- * @property string $session_id
- * @property string $user_agent
+ * @property integer $log_id
  * @property string $x
  * @property string $y
  * @property string $tag
@@ -26,10 +23,7 @@ class ClickLogModel extends Model {
 
     protected function rules(): array {
         return [
-            'url' => 'required|string:0,255',
-            'ip' => 'required|string:0,120',
-            'session_id' => 'string:0,32',
-            'user_agent' => 'string:0,255',
+            'log_id' => 'required|int',
             'x' => 'string:0,100',
             'y' => 'string:0,100',
             'tag' => 'required|string:0,120',
@@ -41,10 +35,7 @@ class ClickLogModel extends Model {
     protected function labels(): array {
         return [
             'id' => 'Id',
-            'url' => 'Url',
-            'ip' => 'Ip',
-            'session_id' => 'Session Id',
-            'user_agent' => 'User Agent',
+            'log_id' => 'Log Id',
             'x' => 'X',
             'y' => 'Y',
             'tag' => 'Tag',
