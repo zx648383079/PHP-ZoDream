@@ -92,7 +92,7 @@ final class ApacheImporter implements ILogImporter
     }
 
     public function parseFields(string $line): array {
-        if (preg_match_all('/%([\{\}a-z_\->]+)/', $line, $matches, PREG_SET_ORDER))
+        if (preg_match_all('/%([\{\}a-z_\->]+)/', $line, $matches))
         {
             return $matches[1];
         }

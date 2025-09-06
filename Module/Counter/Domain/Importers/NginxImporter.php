@@ -88,14 +88,15 @@ final class NginxImporter implements ILogImporter
         return $res;
     }
     public static function parseValues(string $line): array {
+        $line = trim($line);
         $res = [];
         $i = 0;
         while ($i < strlen($line))
         {
             $next = match ($line[$i]) {
-                '"' => strpos($line, '"', $i ++),
-                '[' => strpos($line, ']', $i ++),
-                '<' => strpos($line, '>', $i ++),
+                '"' => strpos($line, '"',  ++$i),
+                '[' => strpos($line, ']',  ++$i),
+                '<' => strpos($line, '>',  ++$i),
                 default => strpos($line, ' ', $i)
             };
             if ($next < $i)
@@ -103,9 +104,10 @@ final class NginxImporter implements ILogImporter
                 $res[] = substr($line, $i);
                 break;
             }
-            $res[] = substr($line, $i, $next - $i);
+            $val = substr($line, $i, $next - $i);
+            $res[] = $val === '-' ? '' : $val;
             $i = $next + 1;
-            while ($i < strlen($line) && $line[$i] == ' ')
+            while ($i < strlen($line) && $line[$i] === ' ')
             {
                 $i ++;
             }
@@ -114,7 +116,7 @@ final class NginxImporter implements ILogImporter
     }
 
     public function parseFields(string $line): array {
-        if (preg_match_all('/\$([a-z_]+)/', $line, $matches, PREG_SET_ORDER))
+        if (preg_match_all('/\$([a-z_]+)/', $line, $matches))
         {
             return $matches[1];
         }
