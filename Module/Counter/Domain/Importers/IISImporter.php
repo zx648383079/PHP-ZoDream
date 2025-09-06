@@ -28,13 +28,13 @@ final class IISImporter implements ILogImporter
      *     [14] time-taken
      */
 
-    public function read(mixed $file, callable $callback): void
+    public function read(array $fields, mixed $file, callable $callback): void
     {
         if (!$file instanceof Stream) {
             $file = new Stream($file);
         }
         $file->openRead();
-        $headers = null;
+        $fields = [];
         $index = -1;
         while (!$file->isEnd()) {
             $index ++;
@@ -43,20 +43,20 @@ final class IISImporter implements ILogImporter
                 continue;
             }
             if (str_starts_with($line, '#Fields')) {
-                $headers = $this->parserFields($line);
+                $fields = $this->parseFields($line);
                 Console::notice($line);
                 continue;
             }
-            if (empty($headers)
+            if (empty($fields)
                 || str_starts_with($line, '#')) {
                 continue;
             }
             $data = $this->parseValues($line);
-            if (empty($data) || count($data) !== count($headers)) {
+            if (empty($data) || count($data) !== count($fields)) {
                 continue;
             }
             try {
-                $callback($this->parseLog(array_combine($headers, $data)));
+                $callback($this->parseLog(array_combine($fields, $data)));
                 Console::notice(sprintf('line %s success!', $index));
             } catch (Exception $ex) {
                 Console::error(sprintf('line %s error!', $index));
@@ -74,6 +74,7 @@ final class IISImporter implements ILogImporter
             {
                 case 'date':
                     $res->created_at = strtotime(sprintf('%s %s', $value, $data['time']));
+                    break;
                 case 'c_ip':
                     $res->ip = $value;
                     break;
@@ -90,8 +91,10 @@ final class IISImporter implements ILogImporter
                     $res->user_agent = $value;
                     break;
                 case 'cs_referer':
-                    $res->referrer_hostname = parse_url($value, PHP_URL_HOST);
-                    $res->referrer_pathname = parse_url($value, PHP_URL_PATH);
+                    $args = parse_url($value);
+                    $res->referrer_hostname = $args['host'] ?? '';
+                    $res->referrer_pathname = NginxImporter::combinePathQueries($args['path'] ?? '',
+                        $args['query'] ?? '');
                     break;
                 case 'sc_status':
                     $res->status_code = $value;
@@ -105,7 +108,7 @@ final class IISImporter implements ILogImporter
         return explode(' ', $line);
     }
 
-    private function parserFields(string $line): array {
+    public function parseFields(string $line): array {
         list(, $line) = explode(':', $line);
         $data = [];
         $args = explode(' ', $line);

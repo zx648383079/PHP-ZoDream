@@ -11,15 +11,15 @@ use Zodream\Disk\Stream;
 final class ApacheImporter implements ILogImporter
 {
 
-    public function read(mixed $file, callable $callback): void
+    public function read(array $fields, mixed $file, callable $callback): void
     {
         if (!$file instanceof Stream) {
             $file = new Stream($file);
         }
         $file->openRead();
-        $headers = ['remote_addr', 'remote_user', 'time_local', 'request', 'status',
-            'body_bytes_sent', 'http_referer', 'http_user_agent', 'request_time',
-            'upstream_response_time', 'http_x_forwarded_for'];
+        if (empty($fields)) {
+            $fields = ['h', 'l', 'u', 't', 'r', '>s', 'b'];
+        }
         $index = -1;
         while (!$file->isEnd()) {
             $index ++;
@@ -28,11 +28,11 @@ final class ApacheImporter implements ILogImporter
                 continue;
             }
             $data = NginxImporter::parseValues($line);
-            if (empty($data) || count($data) !== count($headers)) {
+            if (empty($data) || count($data) !== count($fields)) {
                 continue;
             }
             try {
-                $callback($this->parseLog(array_combine($headers, $data)));
+                $callback($this->parseLog(array_combine($fields, $data)));
                 Console::notice(sprintf('line %s success!', $index));
             } catch (Exception $ex) {
                 Console::error(sprintf('line %s error!', $index));
@@ -50,11 +50,23 @@ final class ApacheImporter implements ILogImporter
             {
                 case 't':
                     $res->created_at = strtotime($value);
+                    break;
                 case 'a':
+                case 'h':
                     $res->ip = $value;
                     break;
                 case 'm':
                     $res->method = strtoupper($value);
+                    break;
+                case 'r':
+                    $args = explode(' ', $value);
+                    $res->method = strtoupper($args[0]);
+                    $args = parse_url($args[1]);
+                    if (isset($args['host'])) {
+                        $res->hostname = $args['host'];
+                    }
+                    $res->pathname = $args['path'] ?? '';
+                    $res->queries = $args['query'] ?? '';
                     break;
                 case 'U':
                     $res->pathname = $value;
@@ -66,8 +78,10 @@ final class ApacheImporter implements ILogImporter
                     $res->user_agent = $value;
                     break;
                 case '{Referer}i':
-                    $res->referrer_hostname = parse_url($value, PHP_URL_HOST);
-                    $res->referrer_pathname = parse_url($value, PHP_URL_PATH);
+                    $args = parse_url($value);
+                    $res->referrer_hostname = $args['host'] ?? '';
+                    $res->referrer_pathname = NginxImporter::combinePathQueries($args['path'] ?? '',
+                        $args['query'] ?? '');
                     break;
                 case '>s':
                     $res->status_code = $value;
@@ -77,7 +91,7 @@ final class ApacheImporter implements ILogImporter
         return $res;
     }
 
-    private function parserFields(string $line): array {
+    public function parseFields(string $line): array {
         if (preg_match_all('/%([\{\}a-z_\->]+)/', $line, $matches, PREG_SET_ORDER))
         {
             return $matches[1];

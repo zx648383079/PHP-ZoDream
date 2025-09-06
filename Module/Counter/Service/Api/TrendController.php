@@ -24,7 +24,7 @@ class TrendController extends Controller {
         return $this->renderPage(AnalysisRepository::logList($start_at, $end_at));
     }
 
-    public function logImportAction(string $engine = 'iis', string $fields = '')
+    public function logImportAction(string $engine = 'iis', string $hostname = '', string $fields = '')
     {
         $upload = new Upload();
         $upload->setDirectory(app_path()->directory('data/cache'));
@@ -32,8 +32,9 @@ class TrendController extends Controller {
         if (!$upload->save()) {
             return $this->renderFailure('上传失败');
         }
-        $upload->each(function (BaseUpload $file) use ($engine, $fields) {
-            AnalysisRepository::logImport($engine, $fields, $file->getFile());
+        $upload->each(function (BaseUpload $file) use ($engine, $fields, $hostname) {
+            $hostname = $file->getName();
+            AnalysisRepository::logImport($hostname, $engine, $fields, $file->getFile());
         });
         return $this->renderData(true);
     }

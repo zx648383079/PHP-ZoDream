@@ -16,15 +16,17 @@ final class NginxImporter implements ILogImporter
      * "upstream_response_time", "http_x_forwarded_for"
      */
 
-    public function read(mixed $file, callable $callback): void
+    public function read(array $fields, mixed $file, callable $callback): void
     {
         if (!$file instanceof Stream) {
             $file = new Stream($file);
         }
         $file->openRead();
-        $headers = ['remote_addr', 'remote_user', 'time_local', 'request', 'status',
-            'body_bytes_sent', 'http_referer', 'http_user_agent', 'request_time',
-            'upstream_response_time', 'http_x_forwarded_for'];
+        if (empty($fields)) {
+            $fields = ['remote_addr', 'remote_user', 'time_local', 'request', 'status',
+                'body_bytes_sent', 'http_referer', 'http_user_agent', 'request_time',
+                'upstream_response_time', 'http_x_forwarded_for'];
+        }
         $index = -1;
         while (!$file->isEnd()) {
             $index ++;
@@ -33,11 +35,11 @@ final class NginxImporter implements ILogImporter
                 continue;
             }
             $data = self::parseValues($line);
-            if (empty($data) || count($data) !== count($headers)) {
+            if (empty($data) || count($data) !== count($fields)) {
                 continue;
             }
             try {
-                $callback($this->parseLog(array_combine($headers, $data)));
+                $callback($this->parseLog(array_combine($fields, $data)));
                 Console::notice(sprintf('line %s success!', $index));
             } catch (Exception $ex) {
                 Console::error(sprintf('line %s error!', $index));
@@ -55,22 +57,28 @@ final class NginxImporter implements ILogImporter
             {
                 case 'time_local':
                     $res->created_at = strtotime($value);
+                    break;
                 case 'remote_addr':
                     $res->ip = $value;
                     break;
                 case 'request':
                     $args = explode(' ', $value);
                     $res->method = strtoupper($args[0]);
-                    $args = explode('?', $args[1], 2);
-                    $res->pathname = $args[0];
-                    $res->queries = $args[1] ?? '';
+                    $args = parse_url($args[1]);
+                    if (isset($args['host'])) {
+                        $res->hostname = $args['host'];
+                    }
+                    $res->pathname = $args['path'] ?? '';
+                    $res->queries = $args['query'] ?? '';
                     break;
                 case 'http_user_agent':
                     $res->user_agent = $value;
                     break;
                 case 'http_referer':
-                    $res->referrer_hostname = parse_url($value, PHP_URL_HOST);
-                    $res->referrer_pathname = parse_url($value, PHP_URL_PATH);
+                    $args = parse_url($value);
+                    $res->referrer_hostname = $args['host'] ?? '';
+                    $res->referrer_pathname = self::combinePathQueries($args['path'] ?? '',
+                        $args['query'] ?? '');
                     break;
                 case 'status':
                     $res->status_code = $value;
@@ -105,11 +113,20 @@ final class NginxImporter implements ILogImporter
         return $res;
     }
 
-    private function parserFields(string $line): array {
+    public function parseFields(string $line): array {
         if (preg_match_all('/\$([a-z_]+)/', $line, $matches, PREG_SET_ORDER))
         {
             return $matches[1];
         }
         return [];
+    }
+
+    public static function combinePathQueries(string $path, string $query) : string
+    {
+        if ($query === '')
+        {
+            return $path;
+        }
+        return sprintf('%s?%s', $path, $query);
     }
 }

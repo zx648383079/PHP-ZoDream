@@ -4,5 +4,7 @@ namespace Module\Counter\Domain\Importers;
 
 interface ILogImporter
 {
-    public function read(mixed $file, callable $callback): void;
+    public function read(array $fields, mixed $file, callable $callback): void;
+
+    public function parseFields(string $line): array;
 }
