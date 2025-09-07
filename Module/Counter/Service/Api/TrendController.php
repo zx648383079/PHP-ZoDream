@@ -19,9 +19,11 @@ class TrendController extends Controller {
         return $this->renderPage($items);
     }
 
-    public function logAction(string $start_at = '', string $end_at = '')
+    public function logAction(string $start_at = '',
+                              string $end_at = '',
+                                string $ip = '')
     {
-        return $this->renderPage(AnalysisRepository::logList($start_at, $end_at));
+        return $this->renderPage(AnalysisRepository::logList($start_at, $end_at, $ip));
     }
 
     public function logImportAction(string $engine = 'iis', string $hostname = '', string $field_names = '')

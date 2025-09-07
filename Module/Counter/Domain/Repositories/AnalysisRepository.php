@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Module\Counter\Domain\Repositories;
 
 
+use Domain\Model\ModelHelper;
+use Domain\Model\SearchModel;
 use Module\Counter\Domain\Importers\ApacheImporter;
 use Module\Counter\Domain\Importers\IISImporter;
 use Module\Counter\Domain\Importers\NginxImporter;
@@ -15,12 +17,16 @@ final class AnalysisRepository
 {
 
 
-    public static function logList(string $start_at = '', string $end_at = '') : Page
+    public static function logList(string $start_at = '', string $end_at = '', string $ip = '') : Page
     {
         return LogModel::query()->when(!empty($start_at), function ($query) use ($start_at) {
             $query->where('created_at', '>=', strtotime($start_at));
         })->when(!empty($end_at), function ($query) use ($end_at) {
             $query->where('created_at', '<=', strtotime($end_at));
+        })->when(!empty($ip), function ($query) use ($ip) {
+            $query->where('ip', $ip);
+        })->when(!empty($keywords), function ($query) {
+            SearchModel::searchWhere($query, ['pathname', 'queries'], false);
         })->orderBy('created_at', 'desc')
             ->page();
     }
