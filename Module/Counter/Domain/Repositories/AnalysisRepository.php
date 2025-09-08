@@ -17,8 +17,24 @@ final class AnalysisRepository
 {
 
 
-    public static function logList(string $start_at = '', string $end_at = '', string $ip = '') : Page
+    public static function logList(string $start_at = '', string $end_at = '',
+                                   string $ip = '', string $goto = '', int $page = 1,
+                                   int $per_page = 20) : Page
     {
+        if (!empty($goto)) {
+            $count = LogModel::query()->when(!empty($start_at), function ($query) use ($start_at) {
+                $query->where('created_at', '>=', strtotime($start_at));
+            })->when(!empty($end_at), function ($query) use ($end_at) {
+                $query->where('created_at', '<=', strtotime($end_at));
+            })->when(!empty($ip), function ($query) use ($ip) {
+                $query->where('ip', $ip);
+            })->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['pathname', 'queries'], false);
+            })
+            ->where('created_at', '>=', strtotime($goto))
+            ->count();
+            $page = (int)ceil((float)$count / $per_page);
+        }
         return LogModel::query()->when(!empty($start_at), function ($query) use ($start_at) {
             $query->where('created_at', '>=', strtotime($start_at));
         })->when(!empty($end_at), function ($query) use ($end_at) {
@@ -28,7 +44,7 @@ final class AnalysisRepository
         })->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['pathname', 'queries'], false);
         })->orderBy('created_at', 'desc')
-            ->page();
+            ->page($per_page, 'page', $page);
     }
 
     public static function logImport(string $hostname, string $engine, string $fields, File $file): void
