@@ -37,12 +37,12 @@ class CounterState {
         return $this->loaded_at - $this->enter_at;
     }
 
-    public function getTimeOrNow(string $key) {
+    public function getTimeOrNow(string $key): int {
         $time = $this->$key;
-        return $time && $time > 0 ? $time : time();
+        return $time && $time > 0 ? (int)$time : time();
     }
 
-    public static function create(Request $request) {
+    public static function create(Request $request): CounterState {
         $state = new static();
         $state->ip = $request->ip();
         $state->session_id = session()->id();

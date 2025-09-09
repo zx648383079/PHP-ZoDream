@@ -75,12 +75,12 @@ class CreateCounterTables extends Migration {
             $table->comment('访问记录');
             $table->id();
             $table->string('ip', 120);
-            $table->string('hostname', 100)->default('')->comment('域名');
+            $table->string('hostname')->default('')->comment('域名');
             $table->string('pathname')->default('')->comment('访问路径');
-            $table->string('queries')->default('')->comment('查询参数');
-            $table->string('referrer_hostname', 100)->default('')->comment('来路域名');
+            $table->string('queries', 1000)->default('')->comment('查询参数');
+            $table->string('referrer_hostname')->default('')->comment('来路域名');
             $table->string('referrer_pathname')->default('')->comment('来路路径及参数');
-            $table->string('user_agent')->default('')->comment('代理');
+            $table->string('user_agent', 1000)->default('')->comment('代理');
             $table->string('method', 10)->default('GET')->comment('请求方法');
             $table->uint('status_code')->default('200')->comment('响应的状态码');
             $table->uint('user_id')->default(0);

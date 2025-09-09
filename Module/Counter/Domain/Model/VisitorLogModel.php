@@ -2,7 +2,6 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class VisitorLogModel
@@ -38,23 +37,4 @@ class VisitorLogModel extends Model {
         ];
     }
 
-    public static function log(CounterState $state) {
-        if ($state->status !== CounterState::STATUS_ENTER) {
-            return;
-        }
-        $ip = $state->ip;
-        $user_id = $state->user_id;
-        $model = static::where('ip', $ip)->where('user_id', $user_id)->first();
-        if ($model) {
-            $model->last_at = $state->getTimeOrNow('leave_at');
-            $model->save();
-            return;
-        }
-        static::create([
-            'ip' => $ip,
-            'user_id' => $user_id,
-            'first_at' => $state->getTimeOrNow('enter_at'),
-            'last_at' => $state->getTimeOrNow('leave_at'),
-        ]);
-    }
 }

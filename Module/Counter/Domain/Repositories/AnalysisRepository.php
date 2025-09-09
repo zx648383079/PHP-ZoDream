@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\Counter\Domain\Repositories;
 
-
-use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Counter\Domain\Importers\ApacheImporter;
 use Module\Counter\Domain\Importers\IISImporter;
@@ -11,6 +9,7 @@ use Module\Counter\Domain\Importers\NginxImporter;
 use Module\Counter\Domain\Model\AnalysisFlagModel;
 use Module\Counter\Domain\Model\LogModel;
 use Zodream\Disk\File;
+use Zodream\Helpers\Str;
 use Zodream\Html\Page;
 
 final class AnalysisRepository
@@ -58,17 +57,40 @@ final class AnalysisRepository
         $headers = $importer->parseFields($fields);
         $last = intval(LogModel::query()->where('hostname', $hostname)
             ->max('created_at'));
-        $importer->read($headers, $file, function(LogModel $log) use ($hostname, $last) {
-            if ($log->getAttributeSource('created_at') <= $last)
+        $batchItems = [];
+        $importer->read($headers, $file, function(array $log) use ($hostname, $last, &$batchItems) {
+            if ($log['created_at'] <= $last)
             {
-                return;
+                return false;
             }
-            if (empty($log->getAttributeSource('hostname')))
+            if (empty($log['hostname']))
             {
-                $log->hostname = $hostname;
+                $log['hostname'] = $hostname;
             }
-            $log->save();
+            if (isset($log['pathname']) && mb_strlen($log['pathname']) > 255) {
+                $log['queries'] = sprintf('%s?%s', mb_substr($log['pathname'], 255), $log['queries']);
+                $log['pathname'] = Str::substr($log['pathname'], 0, 255);
+            }
+            if (isset($log['queries'])) {
+                $log['queries'] = Str::substr($log['queries'], 0, 1000);
+            }
+            if (isset($log['user_agent'])) {
+                $log['user_agent'] = Str::substr($log['user_agent'], 0, 1000);
+            }
+            if (isset($log['referrer_pathname'])) {
+                $log['referrer_pathname'] = Str::substr($log['referrer_pathname'], 0, 255);
+            }
+            $batchItems[] = $log;
+            if (count($batchItems) >= 500) {
+                LogModel::query()->insert($batchItems);
+                $batchItems = [];
+            }
+            return true;
         });
+        if (!empty($batchItems)) {
+            LogModel::query()->insert($batchItems);
+            $batchItems = [];
+        }
     }
 
     public static function mask(array $data) : AnalysisFlagModel

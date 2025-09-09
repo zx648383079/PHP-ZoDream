@@ -4,7 +4,6 @@ namespace Module\Counter\Domain\Importers;
 
 
 use Exception;
-use Module\Counter\Domain\Model\LogModel;
 use Zodream\Debugger\Domain\Console;
 use Zodream\Disk\Stream;
 
@@ -56,8 +55,9 @@ final class IISImporter implements ILogImporter
                 continue;
             }
             try {
-                $callback($this->parseLog(array_combine($fields, $data)));
-                Console::notice(sprintf('line %s success!', $index));
+                $res = $callback($this->parseLog(array_combine($fields, $data)));
+                Console::notice(sprintf('line %s %s!',
+                    $index, $res === false ? 'skip' : 'success'));
             } catch (Exception $ex) {
                 Console::error(sprintf('line %s error!', $index));
             }
@@ -65,39 +65,42 @@ final class IISImporter implements ILogImporter
         $file->close();
     }
 
-    private function parseLog(array $data) : LogModel
+    private function parseLog(array $data) : array
     {
-        $res = new LogModel();
+        $res = [
+            'pathname' => '/',
+            'queries' => '',
+        ];
         foreach ($data as $field => $value)
         {
             switch ($field)
             {
                 case 'date':
-                    $res->created_at = strtotime(sprintf('%s %s', $value, $data['time']));
+                    $res['created_at'] = strtotime(sprintf('%s %s', $value, $data['time']));
                     break;
                 case 'c_ip':
-                    $res->ip = $value;
+                    $res['ip'] = $value;
                     break;
                 case 'cs_method':
-                    $res->method = strtoupper($value);
+                    $res['method'] = strtoupper($value);
                     break;
                 case 'cs_uri_stem':
-                    $res->pathname = $value;
+                    $res['pathname'] = $value;
                     break;
                 case 'cs_uri_query':
-                    $res->queries = $value;
+                    $res['queries'] = $value;
                     break;
                 case 'cs_user_agent':
-                    $res->user_agent = $value;
+                    $res['user_agent'] = $value;
                     break;
                 case 'cs_referer':
                     $args = parse_url($value);
-                    $res->referrer_hostname = $args['host'] ?? '';
-                    $res->referrer_pathname = NginxImporter::combinePathQueries($args['path'] ?? '',
+                    $res['referrer_hostname'] = $args['host'] ?? '';
+                    $res['referrer_pathname'] = NginxImporter::combinePathQueries($args['path'] ?? '',
                         $args['query'] ?? '');
                     break;
                 case 'sc_status':
-                    $res->status_code = $value;
+                    $res['status_code'] = $value;
                     break;
             }
         }

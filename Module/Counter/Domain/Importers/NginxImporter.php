@@ -4,7 +4,6 @@ namespace Module\Counter\Domain\Importers;
 
 
 use Exception;
-use Module\Counter\Domain\Model\LogModel;
 use Zodream\Debugger\Domain\Console;
 use Zodream\Disk\Stream;
 
@@ -39,8 +38,9 @@ final class NginxImporter implements ILogImporter
                 continue;
             }
             try {
-                $callback($this->parseLog(array_combine($fields, $data)));
-                Console::notice(sprintf('line %s success!', $index));
+                $res = $callback($this->parseLog(array_combine($fields, $data)));
+                Console::notice(sprintf('line %s %s!',
+                    $index, $res === false ? 'skip' : 'success'));
             } catch (Exception $ex) {
                 Console::error(sprintf('line %s error!', $index));
             }
@@ -48,40 +48,41 @@ final class NginxImporter implements ILogImporter
         $file->close();
     }
 
-    private function parseLog(array $data) : LogModel
+    private function parseLog(array $data): array
     {
-        $res = new LogModel();
+        $res = [
+            'pathname' => '/',
+            'queries' => '',
+        ];
         foreach ($data as $field => $value)
         {
             switch ($field)
             {
                 case 'time_local':
-                    $res->created_at = strtotime($value);
+                    $res['created_at'] = strtotime($value);
                     break;
                 case 'remote_addr':
-                    $res->ip = $value;
+                    $res['ip'] = $value;
                     break;
                 case 'request':
                     $args = explode(' ', $value);
-                    $res->method = strtoupper($args[0]);
+                    $res['method'] = strtoupper($args[0]);
                     $args = parse_url($args[1]);
-                    if (isset($args['host'])) {
-                        $res->hostname = $args['host'];
-                    }
-                    $res->pathname = $args['path'] ?? '';
-                    $res->queries = $args['query'] ?? '';
+                    $res['hostname'] = $args['host'] ?? '';
+                    $res['pathname'] = $args['path'] ?? '';
+                    $res['queries'] = $args['query'] ?? '';
                     break;
                 case 'http_user_agent':
-                    $res->user_agent = $value;
+                    $res['user_agent'] = $value;
                     break;
                 case 'http_referer':
                     $args = parse_url($value);
-                    $res->referrer_hostname = $args['host'] ?? '';
-                    $res->referrer_pathname = self::combinePathQueries($args['path'] ?? '',
+                    $res['referrer_hostname'] = $args['host'] ?? '';
+                    $res['referrer_pathname'] = self::combinePathQueries($args['path'] ?? '',
                         $args['query'] ?? '');
                     break;
                 case 'status':
-                    $res->status_code = $value;
+                    $res['status_code'] = $value;
                     break;
             }
         }

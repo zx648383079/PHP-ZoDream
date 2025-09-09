@@ -34,14 +34,14 @@ class LogModel extends Model {
     protected function rules(): array {
         return [
             'ip' => 'required|string:0,120',
-            'hostname' => 'string:0,100',
+            'hostname' => 'string:0,255',
             'pathname' => 'string:0,255',
-            'queries' => 'string:0,255',
-            'referrer_hostname' => 'string:0,100',
+            'queries' => 'string:0,1000',
+            'referrer_hostname' => 'string:0,255',
             'referrer_pathname' => 'string:0,255',
             'method' => 'string:0,10',
             'status_code' => 'int',
-            'user_agent' => 'string',
+            'user_agent' => 'string:0,1000',
             'user_id' => 'int',
             'session_id' => 'string:0,32',
             'latitude' => 'string:0,30',

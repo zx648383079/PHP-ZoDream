@@ -2,7 +2,6 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class LoadTimeLogModel
@@ -35,16 +34,4 @@ class LoadTimeLogModel extends Model {
         ];
     }
 
-    public static function log(CounterState $state) {
-        if ($state !== CounterState::STATUS_LOADED) {
-            return;
-        }
-        static::create([
-            'url' => $state->url,
-            'ip' => $state->ip,
-            'session_id' => $state->session_id,
-            'user_agent' => $state->session_id,
-            'load_time' => $state->getLoadTime(),
-        ]);
-    }
 }

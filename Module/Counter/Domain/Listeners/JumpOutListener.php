@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Module\Counter\Domain\Listeners;
 
 
@@ -6,7 +7,7 @@ use Module\Counter\Domain\Events\JumpOut;
 use Module\Counter\Domain\Model\JumpLogModel;
 use Zodream\Helpers\Str;
 
-class JumpOutListener {
+final class JumpOutListener {
 
     public function __construct(JumpOut $jump) {
         $model = new JumpLogModel();

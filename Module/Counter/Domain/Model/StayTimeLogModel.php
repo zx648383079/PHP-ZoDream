@@ -2,7 +2,6 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class StayTimeLogModel
@@ -38,29 +37,4 @@ class StayTimeLogModel extends Model {
         ];
     }
 
-    public static function log(CounterState $state) {
-        if ($state->status === CounterState::STATUS_ENTER) {
-            static::create([
-                'url' => $state->url,
-                'ip' => $state->ip,
-                'user_agent' => $state->user_agent,
-                'session_id' => $state->session_id,
-                'status' => $state->status,
-                'enter_at' => $state->getTimeOrNow('enter_at'),
-                'leave_at' => 0,
-            ]);
-            return;
-        }
-        if ($state->status === CounterState::STATUE_LEAVE) {
-            static::where('url', $state->url)
-                ->where('session_id', $state->session_id)
-                ->where('leave_at', 0)->orderBy('id', 'desc')
-                ->limit(1)
-                ->update([
-                    'status' => $state->status,
-                    'leave_at' => $state->getTimeOrNow('leave_at')
-                ]);
-            return;
-        }
-    }
 }

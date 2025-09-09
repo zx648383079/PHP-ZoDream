@@ -2,7 +2,6 @@
 namespace Module\Counter\Domain\Model;
 
 use Domain\Model\Model;
-use Module\Counter\Domain\Events\CounterState;
 
 /**
  * Class ClickLogModel
@@ -42,10 +41,6 @@ class ClickLogModel extends Model {
             'tag_url' => 'Tag Url',
             'created_at' => 'Created At',
         ];
-    }
-
-    public static function log(CounterState $state) {
-
     }
 
 }
