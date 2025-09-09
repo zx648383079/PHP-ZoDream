@@ -19,14 +19,15 @@ class TrendController extends Controller {
         return $this->renderPage($items);
     }
 
-    public function logAction(string $start_at = '',
+    public function logAction(string $keywords = '',
+                              string $start_at = '',
                               string $end_at = '',
                               string $ip = '',
                               string $goto = '',
                               int $page = 1,
                               int $per_page = 20)
     {
-        return $this->renderPage(AnalysisRepository::logList($start_at, $end_at, $ip, $goto, $page, $per_page));
+        return $this->renderPage(AnalysisRepository::logList($keywords, $start_at, $end_at, $ip, $goto, $page, $per_page));
     }
 
     public function logImportAction(string $engine = 'iis', string $hostname = '', string $field_names = '')

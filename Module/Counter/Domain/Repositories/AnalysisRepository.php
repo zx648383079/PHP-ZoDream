@@ -11,12 +11,13 @@ use Module\Counter\Domain\Model\LogModel;
 use Zodream\Disk\File;
 use Zodream\Helpers\Str;
 use Zodream\Html\Page;
+use Zodream\Infrastructure\Support\UserAgent;
 
 final class AnalysisRepository
 {
 
 
-    public static function logList(string $start_at = '', string $end_at = '',
+    public static function logList(string $keywords = '', string $start_at = '', string $end_at = '',
                                    string $ip = '', string $goto = '', int $page = 1,
                                    int $per_page = 20) : Page
     {
@@ -34,7 +35,7 @@ final class AnalysisRepository
             ->count();
             $page = (int)ceil((float)$count / $per_page);
         }
-        return LogModel::query()->when(!empty($start_at), function ($query) use ($start_at) {
+        $res = LogModel::query()->when(!empty($start_at), function ($query) use ($start_at) {
             $query->where('created_at', '>=', strtotime($start_at));
         })->when(!empty($end_at), function ($query) use ($end_at) {
             $query->where('created_at', '<=', strtotime($end_at));
@@ -44,6 +45,14 @@ final class AnalysisRepository
             SearchModel::searchWhere($query, ['pathname', 'queries'], false);
         })->orderBy('created_at', 'desc')
             ->page($per_page, 'page', $page);
+        $res->map(function (LogModel $item) {
+            $data = $item->toArray();
+            $data['os'] = UserAgent::os($data['user_agent']);
+            $data['browser'] = UserAgent::browser($data['user_agent']);
+            $data['device'] = UserAgent::device($data['user_agent']);
+            return $data;
+        });
+        return $res;
     }
 
     public static function logImport(string $hostname, string $engine, string $fields, File $file): void
