@@ -23,6 +23,7 @@ trait UserTrait {
             'parent_id' => 'int',
             'token' => 'string:0,60',
             'status' => 'int:0,127',
+            'activated_at' => 'int',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -43,6 +44,7 @@ trait UserTrait {
             'birthday' => '生日',
             'token' => 'Token',
             'status' => '状态',
+            'activated_at' => '最后活跃时间',
             'created_at' => '注册时间',
             'updated_at' => '更新时间',
         ];

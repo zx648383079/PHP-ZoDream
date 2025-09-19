@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Migrations;
 
 use Module\Auth\Domain\Entities\InviteCodeEntity;
 use Module\Auth\Domain\Entities\InviteLogEntity;
+use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Entities\UserRelationshipEntity;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
@@ -37,7 +38,7 @@ class CreateAuthTables extends Migration {
      * @return void
      */
     public function up(): void {
-        $this->append(UserModel::tableName(), function(Table $table) {
+        $this->append(UserEntity::tableName(), function(Table $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('email', 200)->default('');
@@ -50,7 +51,8 @@ class CreateAuthTables extends Migration {
             $table->uint('credits')->default(0)->comment('积分');
             $table->uint('parent_id')->default(0);
             $table->string('token', 60)->default(0);
-            $table->uint('status', 2)->default(UserModel::STATUS_ACTIVE);
+            $table->uint('status', 2)->default(UserModel::STATUS_ACTIVE)->comment('账户的是否有限状态');
+            $table->timestamp('activated_at')->comment('最后活跃的时间');
             $table->timestamps();
         })->append(OAuthModel::tableName(), function(Table $table) {
             $table->id();

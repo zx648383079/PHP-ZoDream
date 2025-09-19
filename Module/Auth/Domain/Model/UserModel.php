@@ -25,6 +25,7 @@ use Zodream\Helpers\Security\Hash;
  * @property integer $parent_id
  * @property string $token
  * @property integer $status
+ * @property integer $activated_at
  * @property integer $updated_at
  * @property integer $created_at
  */
