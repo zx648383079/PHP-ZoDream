@@ -58,20 +58,20 @@ class Option {
         return $this->data[$code] ?? $default;
     }
 
-    public function __isset($code) {
+    public function __isset(string $code) {
         return isset($this->data[$code]);
     }
 
-    public function __get($name) {
+    public function __get(string $name) {
         return $this->get($name);
     }
 
-    public static function value($code, $default = null) {
+    public static function value(string|int $code, mixed $default = null) {
         return self::getInstance()->get($code, $default);
     }
 
 
-    public static function __callStatic($name, $arguments) {
+    public static function __callStatic(string $name, array $arguments) {
         $default = null;
         if (!empty($arguments)) {
             $default = $arguments[0];
@@ -87,7 +87,7 @@ class Option {
             return self::formatIfInt($value);
         }
         if ($type === 'checkbox') {
-            return array_map('self::formatIfInt', explode(',', $value));
+            return array_map(self::formatIfInt(...), explode(',', $value));
         }
         if ($type === 'image' || $type === 'file') {
             return empty($value) ? $value : url()->asset($value);

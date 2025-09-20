@@ -14,7 +14,7 @@ class PublishController extends Controller {
         ];
     }
 
-    public function indexAction(string $keywords = '', ) {
+    public function indexAction(string $keywords = '') {
         return $this->renderPage(
             MicroRepository::getList('new', $keywords, 0, auth()->id())
         );

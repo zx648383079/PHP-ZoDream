@@ -141,10 +141,6 @@ class Parser extends Page {
                 ];
             }
         }
-        if (empty($items)) {
-            $items[] = ['url' => '/assets/images/banner.jpg'];
-            $items[] = ['url' => '/assets/images/avatar/0.png'];
-        }
         return $items;
     }
 

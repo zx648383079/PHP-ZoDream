@@ -7,6 +7,7 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\FundAccount;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Auth\Domain\Repositories\ZoneRepository;
 use Module\Forum\Domain\Model\ForumLogModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -15,6 +16,7 @@ use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Model\ThreadSimpleModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Forum\Domain\Parsers\Parser;
+use Module\SEO\Domain\Option;
 use Zodream\Helpers\Json;
 use Zodream\Html\Page;
 
@@ -77,10 +79,23 @@ class ThreadRepository {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
             'updated_at', 'created_at', 'post_count', 'top_type'
         ]);
+        if (auth()->guest()) {
+            return new Page(0);
+        }
+        $zoneId = ZoneRepository::getId(auth()->id());
+        if (empty($zoneId)) {
+            if ($user !== auth()->id()) {
+                return new Page(0);
+            }
+            $user = auth()->id();
+        }
         $data = ThreadModel::with('user', 'classify', 'forum')
             ->when($classify > 0, function ($query) use ($classify) {
                 $query->where('classify_id', $classify);
             })->whereIn('forum_id', ForumModel::getAllChildrenId($forum))
+            ->when($zoneId > 0, function($query) use ($zoneId) {
+                $query->where('zone_id', $zoneId);
+            })
             ->when(!empty($keywords), function ($query) use ($type, $keywords) {
                 if ($type < 2) {
                     SearchModel::searchWhere($query, 'title');
@@ -96,6 +111,7 @@ class ThreadRepository {
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
+            ->where('status', 1)
             ->orderBy($sort, $order)->page();
         foreach ($data as $item) {
             $first = ThreadPostModel::where('thread_id', $item->id)->where('grade', '<', 1)->first();
@@ -162,9 +178,24 @@ class ThreadRepository {
             ->first('id', 'user_id', 'created_at');
     }
 
+    private static function checkThreadZone(int|ThreadModel $thread): bool {
+        if (auth()->guest()) {
+            return false;
+        }
+        $zoneId = ZoneRepository::getId(auth()->id());
+        if (empty($zoneId)) {
+            return false;
+        }
+        $model = !is_numeric($thread) ? $thread : ThreadModel::query()->where('id', $thread)->first('id', 'zone_id');
+        return intval($model['zone_id']) === $zoneId;
+    }
+
     public static function postList(
         int $thread_id, int $user_id = 0, int $post_id = 0, int $status = 0, string $sort = '', string $order = '',
         int $per_page = 20, string $type = '') {
+        if (!self::checkThreadZone($thread_id)) {
+            return new Page(0);
+        }
         $page = -1;
         if ($post_id > 0) {
             $maps = ThreadPostModel::when($user_id > 0, function ($query) use ($user_id) {
@@ -299,11 +330,13 @@ class ThreadRepository {
             throw new Exception('你的操作太频繁了，请五分钟后再试');
         }
         $thread = ThreadModel::create([
+            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
             'title' => $title ,
             'forum_id' => $forum_id,
             'classify_id' => $classify_id,
             'user_id' => $userId,
-            'is_private_post' => $is_private_post
+            'is_private_post' => $is_private_post,
+            'status' => Option::value('publish_review', false) ? 1 : 0,
         ]);
         if (empty($thread)) {
             throw new Exception('发帖失败');
@@ -361,11 +394,17 @@ class ThreadRepository {
 
 
     public static function getFull(int $id, bool $isSee = false) {
+        if (auth()->guest()) {
+            throw new Exception('数据错误');
+        }
         if ($isSee) {
             ThreadModel::query()->where('id', $id)
                 ->updateIncrement('view_count');
         }
         $model = static::get($id);
+        if (!self::checkThreadZone($model)) {
+            throw new Exception('数据错误');
+        }
         $model->forum;
         $model->path = array_merge(ForumModel::findPath($model->forum_id), [$model->forum]);
         $model->digestable = static::can($model, 'is_digest');

@@ -126,6 +126,13 @@ class CreateSEOTables extends Migration {
         OptionModel::group('高级', function () {
             return [
                 [
+                    'name' => '发布预审核',
+                    'code' => 'publish_review',
+                    'type' => 'switch',
+                    'value' => 0,
+                    'visibility' => 1,
+                ],
+                [
                     'name' => '关站',
                     'code' => 'site_close',
                     'type' => 'switch',

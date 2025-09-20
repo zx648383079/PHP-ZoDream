@@ -12,6 +12,6 @@ class Module extends BaseModule {
     }
 
     public function openLinks(SiteMap $map) {
-        $map->add(url('./'), time());
+//        $map->add(url('./'), time());
     }
 }

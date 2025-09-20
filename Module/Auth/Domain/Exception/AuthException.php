@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Exception;
 
 use Exception;
 
-class AuthException {
+final class AuthException {
     public static function invalid2FA() {
         return new Exception(__('2FA authentication code error'), 1015);
     }
@@ -42,5 +42,9 @@ class AuthException {
 
     public static function samePassword() {
         return new Exception(__('Consistent with the original password'), 1007);
+    }
+
+    public static function invalidZone() {
+        return new Exception(__('Zone not set'), 401);
     }
 }

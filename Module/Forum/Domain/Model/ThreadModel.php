@@ -19,6 +19,8 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $is_closed
  * @property integer $top_type
  * @property integer $is_private_post
+ * @property integer $zone_id
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
 */
@@ -44,6 +46,8 @@ class ThreadModel extends Model {
             'is_closed' => 'int:0,9',
             'is_private_post' => 'int:0,9',
             'top_type' => 'int:0,127',
+            'zone_id' => 'int',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

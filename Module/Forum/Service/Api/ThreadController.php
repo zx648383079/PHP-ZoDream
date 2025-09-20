@@ -6,7 +6,6 @@ use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Parsers\Parser;
 use Module\Forum\Domain\Repositories\ThreadRepository;
-use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class ThreadController extends Controller {
@@ -46,7 +45,7 @@ class ThreadController extends Controller {
                                  int $forum, int $classify = 0, int $is_private_post = 0) {
         try {
             return $this->render(
-                ThreadRepository::create($title, $content, $forum_id, $classify_id, $is_private_post)
+                ThreadRepository::create($title, $content, $forum, $classify, $is_private_post)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

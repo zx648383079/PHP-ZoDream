@@ -5,6 +5,7 @@ use Module\Auth\Domain\Entities\InviteCodeEntity;
 use Module\Auth\Domain\Entities\InviteLogEntity;
 use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Entities\UserRelationshipEntity;
+use Module\Auth\Domain\Entities\ZoneEntity;
 use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
@@ -115,6 +116,15 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->uint('parent_id')->default(0);
             $table->uint('code_id')->default(0);
+            $table->uint('status', 1)->default(0);
+            $table->timestamps();
+        })->append(ZoneEntity::tableName(), function(Table $table) {
+            $table->comment('分区');
+            $table->id();
+            $table->string('name', 30);
+            $table->string('icon')->default('');
+            $table->string('description')->default('');
+            $table->bool('is_open')->default(0);
             $table->uint('status', 1)->default(0);
             $table->timestamps();
         });

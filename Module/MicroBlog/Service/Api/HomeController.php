@@ -42,10 +42,12 @@ class HomeController extends Controller {
     }
 
     public function detailAction(int $id) {
-        $blog = MicroBlogModel::find($id);
-        $blog->user;
-        $blog->attachment;
-        return $this->render($blog);
+        try {
+            $model = MicroRepository::get($id);
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
     }
 
     public function forwardAction(int $id, string $content, bool $is_comment = false) {

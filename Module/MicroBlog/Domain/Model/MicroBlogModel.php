@@ -13,6 +13,8 @@ use Module\MicroBlog\Domain\Repositories\MicroRepository;
 * Class MicroBlogModel
  * @property integer $id
  * @property integer $user_id
+ * @property integer $zone_id
+ * @property integer $status
  * @property string $content
  * @property string $extra_rule
  * @property integer $recommend_count
@@ -47,6 +49,8 @@ class MicroBlogModel extends Model {
             'collect_count' => 'int',
             'forward_id' => 'int',
             'source' => 'string:0,30',
+            'zone_id' => 'int',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

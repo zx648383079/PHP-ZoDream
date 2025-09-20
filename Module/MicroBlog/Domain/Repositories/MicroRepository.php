@@ -6,6 +6,7 @@ use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
 use Module\Auth\Domain\Repositories\BulletinRepository;
+use Module\Auth\Domain\Repositories\ZoneRepository;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\MicroBlog\Domain\LinkRule;
 use Module\Auth\Domain\Model\UserModel;
@@ -16,6 +17,7 @@ use Module\MicroBlog\Domain\Model\MicroBlogModel;
 use Exception;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\Html;
+use Zodream\Html\Page;
 
 class MicroRepository {
 
@@ -38,6 +40,51 @@ class MicroRepository {
     }
 
     public static function getList(
+        string $sort = 'new', string $keywords = '',
+        int $id = 0, int $user = 0, int $topic = 0) {
+        if (auth()->guest()) {
+            return new Page(0);
+        }
+        $zoneId = ZoneRepository::getId(auth()->id());
+        if (empty($zoneId)) {
+            if ($user !== auth()->id()) {
+                return new Page(0);
+            }
+            $user = auth()->id();
+        }
+        return MicroBlogModel::with('user', 'attachment')
+            ->when($id > 0, function($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->when($zoneId > 0, function($query) use ($zoneId) {
+                $query->where('zone_id', $zoneId);
+            })
+            ->when(!empty($sort), function ($query) use ($sort) {
+                if ($sort == 'new') {
+                    return $query->orderBy('created_at', 'desc');
+                }
+                if ($sort == 'recommend') {
+                    return $query->orderBy('recommend_count', 'desc');
+                }
+            })->when(!empty($keywords) && $id < 1, function ($query) {
+                SearchModel::searchWhere($query, ['content']);
+            })
+            ->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
+            ->when($topic > 0, function ($query) use ($topic) {
+                $itemId = BlogTopicModel::where('topic_id', $topic)
+                    ->pluck('micro_id');
+                if (empty($itemId)) {
+                    return $query->isEmpty();
+                }
+                $query->whereIn('id', $itemId);
+            })
+            ->where('status', 1)
+            ->page();
+    }
+
+    public static function manageList(
         string $sort = 'new', string $keywords = '',
         int $id = 0, int $user = 0, int $topic = 0) {
         return MicroBlogModel::with('user', 'attachment')
@@ -68,6 +115,19 @@ class MicroRepository {
             ->page();
     }
 
+    public static function get(int $id) {
+        if (auth()->guest()) {
+            throw new Exception('数据错误');
+        }
+        $model = MicroBlogModel::find($id);
+        if (intval($model->user_id) !== auth()->id() && intval($model->zone_id) !== ZoneRepository::getId(auth()->id())) {
+            throw new Exception('数据错误');
+        }
+        $model->user;
+        $model->attachment;
+        return $model;
+    }
+
     /**
      * 不允许频繁发布
      * @return bool
@@ -90,9 +150,11 @@ class MicroRepository {
 
     public static function createWithRule(string $content, array $extraRules = [], array $files = [], string $source = 'web') {
         $model = MicroBlogModel::createOrThrow([
+            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
             'user_id' => auth()->id(),
             'content' => Html::text($content),
-            'source' => $source
+            'source' => $source,
+            'status' => Option::value('publish_review', false) ? 1 : 0,
         ]);
         $extraRules = array_merge(
             $extraRules,
@@ -407,4 +469,6 @@ class MicroRepository {
         ];
         return static::createWithRule($content, $extraRule, (array)$pics);
     }
+
+
 }

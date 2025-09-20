@@ -23,7 +23,8 @@ class CreateMicroBlogTables extends Migration {
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
-            $table->string('content', 140);
+            $table->uint('zone_id')->default(0);
+            $table->string('content', 255);
             $table->string('extra_rule', 500)->default('')
                 ->comment('内容的一些附加规则');
             $table->uint('open_type', 1)->default(0);
@@ -33,6 +34,7 @@ class CreateMicroBlogTables extends Migration {
             $table->uint('comment_count')->default(0)->comment('评论数');
             $table->uint('forward_id')->default(0)->comment('转发的源id');
             $table->string('source', 30)->default('')->comment('来源');
+            $table->uint('status', 1)->default(0)->comment('后台审核');
             $table->timestamps();
         })->append(AttachmentModel::tableName(), function (Table $table) {
             $table->id();

@@ -41,6 +41,7 @@ class CreateForumTables extends Migration {
             $table->id();
             $table->uint('forum_id');
             $table->uint('classify_id')->default(0);
+            $table->uint('zone_id')->default(0);
             $table->string('title', 200)->comment('主题');
             $table->uint('user_id')->comment('发送用户');
             $table->uint('view_count')->default(0)->comment('查看数');
@@ -55,6 +56,7 @@ class CreateForumTables extends Migration {
             $table->uint('top_type', 1)->default(0)
                 ->comment('置顶类型，1 本版置顶 2 分类置顶 3 全局置顶');
             $table->bool('is_private_post')->default(0)->comment('是否仅楼主可见');
+            $table->uint('status', 1)->default(0)->comment('后台审核');
             $table->timestamps();
         })->append(ThreadPostModel::tableName(), function(Table $table) {
             $table->id();
