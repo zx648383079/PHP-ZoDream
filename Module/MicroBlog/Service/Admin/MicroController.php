@@ -17,7 +17,7 @@ class MicroController extends Controller {
     }
 
     public function deleteAction(int $id) {
-        MicroRepository::remove($id);
+        MicroRepository::manageRemove($id);
         return $this->renderData([
             'url' => $this->getUrl('micro')
         ]);

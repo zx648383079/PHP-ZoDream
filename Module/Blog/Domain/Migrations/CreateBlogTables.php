@@ -45,6 +45,7 @@ class CreateBlogTables extends Migration {
             $table->uint('open_type', 1)->default(PublishRepository::OPEN_PUBLIC)->comment('公开类型');
             $table->string('open_rule', 20)->default('')->comment('类型匹配的值');
             $table->uint('publish_status', 1)->default(PublishRepository::PUBLISH_STATUS_DRAFT)->comment('发布状态');
+            $table->uint('status', 1)->default(0)->comment('审核状态');
             $table->timestamps();
         })->append(BlogMetaModel::tableName(), function(Table $table) {
             $table->id();

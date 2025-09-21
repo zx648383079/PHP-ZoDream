@@ -31,6 +31,10 @@ class MicroRepository {
     const LOG_ACTION_AGREE = 3;
     const LOG_ACTION_DISAGREE = 4;
 
+    const REVIEW_STATUS_NONE = 0;
+    const REVIEW_STATUS_APPROVED = 1;
+    const REVIEW_STATUS_REJECTED = 9;
+
     public static function comment(): CommentProvider {
         return new CommentProvider(self::BASE_KEY);
     }
@@ -80,24 +84,16 @@ class MicroRepository {
                 }
                 $query->whereIn('id', $itemId);
             })
-            ->where('status', 1)
+            ->where('status', self::REVIEW_STATUS_APPROVED)
             ->page();
     }
 
     public static function manageList(
-        string $sort = 'new', string $keywords = '',
+        string $keywords = '',
         int $id = 0, int $user = 0, int $topic = 0) {
         return MicroBlogModel::with('user', 'attachment')
             ->when($id > 0, function($query) use ($id) {
                 $query->where('id', $id);
-            })
-            ->when(!empty($sort), function ($query) use ($sort) {
-                if ($sort == 'new') {
-                    return $query->orderBy('created_at', 'desc');
-                }
-                if ($sort == 'recommend') {
-                    return $query->orderBy('recommend_count', 'desc');
-                }
             })->when(!empty($keywords) && $id < 1, function ($query) {
                 SearchModel::searchWhere($query, ['content']);
             })
@@ -112,6 +108,8 @@ class MicroRepository {
                 }
                 $query->whereIn('id', $itemId);
             })
+            ->orderBy('status', 'asc')
+            ->orderBy('id', 'desc')
             ->page();
     }
 
@@ -154,7 +152,7 @@ class MicroRepository {
             'user_id' => auth()->id(),
             'content' => Html::text($content),
             'source' => $source,
-            'status' => Option::value('publish_review', false) ? 1 : 0,
+            'status' => Option::value('publish_review', false) ? self::REVIEW_STATUS_NONE : self::REVIEW_STATUS_APPROVED,
         ]);
         $extraRules = array_merge(
             $extraRules,
@@ -289,7 +287,7 @@ class MicroRepository {
         return true;
     }
 
-    public static function remove(int $id) {
+    public static function manageRemove(int $id) {
         $model = MicroBlogModel::find($id);
         if (!$model) {
             throw new Exception('id 错误');
@@ -468,6 +466,16 @@ class MicroRepository {
             LinkRule::formatLink($tag, $url)
         ];
         return static::createWithRule($content, $extraRule, (array)$pics);
+    }
+
+    public static function manageChange(int $id, int $status) {
+        $model = MicroBlogModel::find($id);
+        if (!$model) {
+            throw new Exception('id 错误');
+        }
+        $model->status = $status;
+        $model->save();
+        return $model;
     }
 
 

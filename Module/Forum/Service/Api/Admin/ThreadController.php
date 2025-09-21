@@ -12,6 +12,14 @@ class ThreadController extends Controller {
         );
     }
 
+    public function changeAction(int $id, int $status = 0) {
+        try {
+            return $this->render(ThreadRepository::manageChange($id, $status));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
     public function deleteAction(array|int $id) {
         try {
             ThreadRepository::manageRemove($id);

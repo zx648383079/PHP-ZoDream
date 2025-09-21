@@ -125,6 +125,9 @@ HTML;
     }
 
     private function isBuy() {
+        if ($this->page->isReviewMode) {
+            return true;
+        }
         if ($this->price <= 0) {
             return true;
         }

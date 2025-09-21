@@ -22,13 +22,45 @@ use Zodream\Html\Page;
 
 class ThreadRepository {
 
+    const REVIEW_STATUS_NONE = 0;
+    const REVIEW_STATUS_APPROVED = 1;
+    const REVIEW_STATUS_REJECTED = 9;
     public static function manageList(string $keywords = '', int $forum_id = 0) {
-        return ThreadModel::with('user', 'forum')->when(!empty($forum_id), function ($query) use ($forum_id) {
+        /** @var Page $items */
+        $items = ThreadModel::with('user', 'forum')->when(!empty($forum_id), function ($query) use ($forum_id) {
                 $query->where('forum_id', $forum_id);
             })
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
-            })->orderBy('updated_at', 'desc')->page();
+            })
+            ->orderBy('status', 'asc')
+            ->orderBy('id', 'desc')->page();
+        if ($items->count() == 0) {
+            return $items;
+        }
+        $idItems = [];
+        foreach ($items->getPage() as $item)
+        {
+            $idItems[] = $item['id'];
+        }
+        $postItems = ThreadPostModel::query()
+            ->whereIn('thread_id', $idItems)
+            ->where('grade', '<', 1)
+            ->asArray()
+            ->pluck(null, 'thread_id');
+        $items->map(function (ThreadModel $item) use ($postItems) {
+            $data = $item->toArray();
+            if (!isset($postItems[$item->id])) {
+                return $data;
+            }
+            $parser = new Parser();
+            $parser->setModel(new ThreadPostModel($postItems[$item->id]));
+            $parser->request = request();
+            $parser->isReviewMode = true;
+            $data['content'] = $parser->render('json');
+            return $data;
+        });
+        return $items;
     }
 
     /**
@@ -111,7 +143,7 @@ class ThreadRepository {
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
-            ->where('status', 1)
+            ->where('status', self::REVIEW_STATUS_APPROVED)
             ->orderBy($sort, $order)->page();
         foreach ($data as $item) {
             $first = ThreadPostModel::where('thread_id', $item->id)->where('grade', '<', 1)->first();
@@ -336,7 +368,7 @@ class ThreadRepository {
             'classify_id' => $classify_id,
             'user_id' => $userId,
             'is_private_post' => $is_private_post,
-            'status' => Option::value('publish_review', false) ? 1 : 0,
+            'status' => Option::value('publish_review', false) ? self::REVIEW_STATUS_NONE : self::REVIEW_STATUS_APPROVED,
         ]);
         if (empty($thread)) {
             throw new Exception('发帖失败');
@@ -655,5 +687,15 @@ class ThreadRepository {
             // ['name' => '', 'icon' => url()->asset('')],
         ];
         return $user;
+    }
+
+    public static function manageChange(int $id, int $status) {
+        $model = ThreadModel::find($id);
+        if (!$model) {
+            throw new Exception('id 错误');
+        }
+        $model->status = $status;
+        $model->save();
+        return $model;
     }
 }

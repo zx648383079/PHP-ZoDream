@@ -29,6 +29,7 @@ use Module\Blog\Domain\Repositories\BlogRepository;
  * @property integer $open_type
  * @property string $open_rule
  * @property integer $publish_status
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
 */

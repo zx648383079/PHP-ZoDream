@@ -9,6 +9,7 @@ use Module\Blog\Domain\Events\BlogUpdate;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
 use Module\Blog\Domain\Model\BlogPageModel;
+use Module\SEO\Domain\Option;
 
 final class PublishRepository {
 
@@ -27,6 +28,10 @@ final class PublishRepository {
     const OPEN_LOGIN = 1; // 需要登录
     const OPEN_PASSWORD = 5; // 需要密码
     const OPEN_BUY = 6; // 需要购买
+
+    const REVIEW_STATUS_NONE = 0;
+    const REVIEW_STATUS_APPROVED = 1;
+    const REVIEW_STATUS_REJECTED = 9;
 
     public static function getList(string $keywords = '', int $category = 0,
                                    int $status = 0, int $type = 0, string $language = '') {
@@ -191,12 +196,13 @@ final class PublishRepository {
             }
         }
         $model->parent_id = intval($model->parent_id);
+        $model->status = Option::value('publish_review', false) ? self::REVIEW_STATUS_NONE : self::REVIEW_STATUS_APPROVED;
         if (!$model->save(true)) {
             throw new Exception($model->getFirstError());
         }
         if ($model->parent_id < 1) {
             TagRepository::addTag($model->id,
-                isset($data['tags']) && !empty($data['tags']) ? $data['tags'] : []);
+                !empty($data['tags']) ? $data['tags'] : []);
             $asyncData = [];
             foreach ($async_column as $key) {
                 $asyncData[$key] = $model->getAttributeSource($key);

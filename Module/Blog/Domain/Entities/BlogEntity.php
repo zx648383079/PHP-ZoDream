@@ -25,6 +25,7 @@ use Domain\Entities\Entity;
  * @property integer $open_type
  * @property string $open_rule
  * @property integer $publish_status
+ * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -55,7 +56,8 @@ class BlogEntity extends Entity {
             'click_count' => 'int',
             'open_type' => 'int:0,127',
             'open_rule' => 'string:0,20',
-            'publish_status' => 'int',
+            'publish_status' => 'int:0,127',
+            'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];

@@ -81,6 +81,7 @@ class BlogRepository {
                                       string $programming_language = '',
                                       string $tag = '') {
         return $query->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
+            ->where('status', PublishRepository::REVIEW_STATUS_APPROVED)
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('term_id', $category);
             })

@@ -12,11 +12,12 @@ class PageNode extends Node {
 
     public function render(string $type = ''): mixed {
         $blocks = explode('<page/>', $this->attr('content'));
+        $block = $this->page->isReviewMode ? implode('', $blocks) : reset($blocks);
         if ($type === 'json') {
             return [
-                'content' => $blocks[0]
+                'content' => $block
             ];
         }
-        return $blocks[0];
+        return $block;
     }
 }

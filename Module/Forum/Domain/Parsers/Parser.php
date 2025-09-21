@@ -26,6 +26,12 @@ class Parser extends Page {
      */
     public Input $request;
 
+    /**
+     * 是否是审核模式
+     * @var bool
+     */
+    public bool $isReviewMode = false;
+
     protected string $content = '';
 
     protected bool $openNotUnder = false;
