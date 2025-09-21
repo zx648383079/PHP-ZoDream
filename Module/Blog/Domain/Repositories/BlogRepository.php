@@ -152,6 +152,8 @@ class BlogRepository {
     public static function getArchives() {
         $data = [];
         $items = BlogModel::query()// ->where('parent_id', 0)
+            ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
+            ->where('status', PublishRepository::REVIEW_STATUS_APPROVED)
             ->orderBy('created_at', 'desc')
             ->where('language', LocalizeRepository::browserLanguage())
             ->asArray()->get('id', 'title', 'language', 'parent_id', 'created_at');
@@ -363,7 +365,8 @@ class BlogRepository {
         if (!auth()->guest() && $model->user_id === auth()->id()) {
             return 2;
         }
-        if ($model->publish_status !== PublishRepository::PUBLISH_STATUS_POSTED) {
+        if ($model->publish_status !== PublishRepository::PUBLISH_STATUS_POSTED
+        || $model->status !== PublishRepository::REVIEW_STATUS_APPROVED) {
             return 0;
         }
         if ($model->open_type < 1) {
