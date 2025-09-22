@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Domain\Providers\ActionLogProvider;
+use Module\Auth\Domain\Repositories\ZoneRepository;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Zodream\Helpers\Tree as TreeHelper;
 
-class ForumRepository {
+final class ForumRepository {
 
     public static function getList(string $keywords = '', int $parent = 0) {
         return ForumModel::where('parent_id', $parent)
@@ -101,22 +101,25 @@ class ForumRepository {
         $query = $hasChildren ? ForumModel::with('children') : ForumModel::query();
         $data = $query
             ->where('parent_id', $id)->get();
+        $zoneId = auth()->guest() ? 0 : ZoneRepository::getId(auth()->id());
         foreach ($data as $item) {
-            $item->last_thread = static::lastThread($item['id']);
+            $item->last_thread = static::lastThread($item['id'], $zoneId);
             $item->today_count = $item->getTodayCountAttribute();
             if ($hasChildren) {
                 foreach ($item->children as $it) {
                     $it->today_count = $it->getTodayCountAttribute();
-                    $it->last_thread = static::lastThread($it['id']);
+                    $it->last_thread = static::lastThread($it['id'], $zoneId);
                 }
             }
         };
         return $data;
     }
 
-    private static function lastThread(int $id) {
+    private static function lastThread(int $id, int $zoneId) {
         return ThreadModel::with('user')
+            ->where('zone_id', $zoneId)
             ->where('forum_id', $id)
+            ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
             ->orderBy('id', 'desc')->first('id', 'title', 'user_id', 'view_count',
             'post_count',
             'collect_count', 'updated_at');

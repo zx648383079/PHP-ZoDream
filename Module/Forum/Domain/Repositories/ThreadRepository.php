@@ -180,8 +180,13 @@ class ThreadRepository {
             ->orderBy($sort, $order)->page();
     }
 
-    public static function topList(int $forum) {
+    public static function topList(int $forum): array {
+        if (auth()->guest()) {
+            return [];
+        }
+        $zoneId = ZoneRepository::getId(auth()->id());
         $data = ThreadModel::with('user', 'classify')
+            ->where('zone_id', $zoneId)
             ->where('forum_id', $forum)
             ->where('top_type', '>', 0)
             ->orderBy('top_type', 'desc')

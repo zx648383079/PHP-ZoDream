@@ -202,7 +202,10 @@ function bindCopy() {
         );
     }).on('click', '.code-container .code-header *[data-action=full]', function(e) {
         e.preventDefault();
-        $(this).closest('.code-container').toggleClass('code-full-screen');
+        $(this).closest('.code-container').toggleClass('code-full-screen').removeClass('code-with-minimize');
+    }).on('click', '.code-container .code-header *[data-action=minimize]', function(e) {
+        e.preventDefault();
+        $(this).closest('.code-container').toggleClass('code-with-minimize').removeClass('code-full-screen');
     });
 
     //let trigger: JQuery;

@@ -3,6 +3,7 @@ namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Forum\Domain\Repositories\ThreadRepository;
 use Zodream\Html\Tree;
 use Zodream\Helpers\Tree as TreeHelper;
 
@@ -82,6 +83,7 @@ class ForumModel extends Model {
 
     public function getLastThreadAttribute() {
 	    return ThreadModel::query()->where('forum_id', $this->id)
+            ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
             ->orderBy('id', 'desc')->first();
     }
 

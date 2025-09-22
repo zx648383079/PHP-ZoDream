@@ -11,7 +11,8 @@
     margin-top: 1rem;
     .icon-copy,
     .icon-cloud,
-    .icon-full-screen {
+    .icon-full-screen,
+    .icon-minimize {
         @include mixins.iconFont();
     }
     .icon-copy::before {
@@ -22,6 +23,9 @@
     }
     .icon-cloud::before {
         content: "\f0c2";
+    }
+    .icon-minimize::before {
+        content: "\f2d1";
     }
     .code-header {
         padding: .2rem .8rem 0;
@@ -42,6 +46,7 @@
             align-items: center;
             vertical-align: top;
             margin-top: .2rem;
+            text-decoration: none !important;
             &:not(:last-of-type) {
                 margin-right: 0;
             }
@@ -138,6 +143,19 @@
         overflow-y: auto;
         .icon-full-screen::before {
             content: "\f066";
+        }
+    }
+    &.code-with-minimize {
+        .line-number-bar,
+        .highlight-bar,
+        pre {
+            display: none;
+        }
+        .code-header {
+            position: static;
+        }
+        .icon-minimize::before {
+            content: "\f2d0";
         }
     }
 }
