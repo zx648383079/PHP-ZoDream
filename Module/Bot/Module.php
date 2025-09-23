@@ -31,13 +31,13 @@ class Module extends BaseModule implements ISiteMapModule, ICustomRouteModule {
     }
 
     public function openLinks(SiteMap $map) {
-        $map->add(url('./'), time());
-        $map->add(url('./emulate'), time());
-        $items = MediaModel::where('type', MediaModel::TYPE_NEWS)->orderBy('id', 'desc')
-            ->get('id', 'updated_at');
-        foreach ($items as $item) {
-            $map->add(url('./emulate/media', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
-        }
+//        $map->add(url('./'), time());
+//        $map->add(url('./emulate'), time());
+//        $items = MediaModel::where('type', MediaModel::TYPE_NEWS)->orderBy('id', 'desc')
+//            ->get('id', 'updated_at');
+//        foreach ($items as $item) {
+//            $map->add(url('./emulate/media', ['id' => $item->id]),
+//                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
+//        }
     }
 }
