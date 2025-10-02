@@ -10,11 +10,15 @@ class CodeNode extends Node {
         $lang = $this->attr('lang');
         $content = $this->attr('content');
         if ($type === 'json') {
-            return  [
+            $res = [
                 'tag' => 'code',
                 'content' => $content,
                 'language' => $lang,
             ];
+            if ($this->attr('src')) {
+                $res['src'] = $this->attr('src');
+            }
+            return $res;
         }
         view()->registerCssFile('@prism.min.css')
             ->registerJsFile('@prism.min.js');
