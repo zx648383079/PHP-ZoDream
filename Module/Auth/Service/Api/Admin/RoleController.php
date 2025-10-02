@@ -3,8 +3,6 @@ namespace Module\Auth\Service\Api\Admin;
 
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
-use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
-use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
@@ -42,7 +40,6 @@ class RoleController extends Controller {
     }
 
     public function allAction() {
-        $data = RoleModel::query()->get('id', 'name', 'display_name');
-        return $this->renderData($data);
+        return $this->renderData(RoleRepository::all());
     }
 }

@@ -14,7 +14,7 @@ $(function() {
         $(this).closest('.expand-card').toggleClass('open');
     }).toggle(!window.localStorage.getItem('cookie_policy'));
     if (typeof SUGGESTION_URI === 'undefined' && typeof BASE_URI !== 'undefined') {
-        SUGGESTION_URI = BASE_URI + 'suggestion';
+        SUGGESTION_URI = BASE_URI + 'suggest';
     }
     let searchDialog = $('.dialog-search'),
         refreshSuggestion = function(keywords: string) {

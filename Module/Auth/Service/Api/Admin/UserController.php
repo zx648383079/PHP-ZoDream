@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Auth\Domain\Repositories\ZoneRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class UserController extends Controller {
@@ -23,13 +23,11 @@ class UserController extends Controller {
 
     public function detailAction(int $id) {
         try {
-            $model = UserRepository::get($id);
+            $model = UserRepository::manageDetail($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        $data = $model->toArray();
-        $data['roles'] = UserRoleModel::where('user_id', $id)->pluck('role_id');
-        return $this->render($data);
+        return $this->render($model);
     }
 
     public function saveAction(Request $request) {
@@ -46,6 +44,10 @@ class UserController extends Controller {
             ]), $request->get('roles', []));
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
+        }
+        $zoneId = intval($request->get('zone_id'));
+        if ($zoneId > 0) {
+            ZoneRepository::userChange($model->id, $zoneId);
         }
         return $this->render($model);
     }

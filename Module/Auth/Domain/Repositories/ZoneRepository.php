@@ -8,10 +8,9 @@ use Module\Auth\Domain\Entities\ZoneEntity;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\UserMetaModel;
 
-final class ZoneRepository
-{
+final class ZoneRepository {
 
-    public static function all(): array {
+    public static function userZone(): array {
         $lastAt = auth()->guest() ? 0 : intval(UserMetaModel::where('user_id', auth()->id())
             ->where('name', 'zone_at')->value('content'));
         $data = ZoneEntity::query()->where('status', 1)->orderBy('id', 'asc')->get();
@@ -32,13 +31,22 @@ final class ZoneRepository
         return compact('data', 'activated_at', 'selected');
     }
 
+    public static function all(): array {
+        return ZoneEntity::query()->where('status', 1)->orderBy('id', 'asc')->get();
+    }
+
     public static function save(int $user, array|int $zoneId) {
         if (is_array($zoneId)) {
             $zoneId = intval(current($zoneId));
         }
+        self::userChange($user, $zoneId, true);
+    }
+
+    public static function userChange(int $user, int $zoneId, bool $checkTime = true)
+    {
         $lastAt = UserMetaModel::where('user_id', $user)
             ->where('name', 'zone_at')->first();
-        if (!$lastAt && intval($lastAt->content) > time() - 30 * 86400) {
+        if ($checkTime && !$lastAt && intval($lastAt->content) > time() - 30 * 86400) {
             throw new \Exception('时间间隔不允许设置');
         }
         if (!$lastAt) {
@@ -56,10 +64,12 @@ final class ZoneRepository
             ]);
             return;
         }
-        UserMetaModel::query()->where('user_id', $user)
-            ->where('name', 'zone_at')->update([
-                'content' => time()
-            ]);
+        if ($checkTime) {
+            UserMetaModel::query()->where('user_id', $user)
+                ->where('name', 'zone_at')->update([
+                    'content' => time()
+                ]);
+        }
         UserMetaModel::query()->where('user_id', $user)
             ->where('name', 'zone_id')->update([
                 'content' => $zoneId

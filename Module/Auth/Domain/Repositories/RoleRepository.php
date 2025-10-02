@@ -9,9 +9,8 @@ use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
-use Zodream\Database\Query\Builder;
 
-class RoleRepository {
+final class RoleRepository {
 
     /**
      * @param array $data
@@ -166,5 +165,9 @@ class RoleRepository {
         UserRoleModel::where('role_id', $id)->delete();
         RolePermissionModel::where('role_id', $id)->delete();
         event(new ManageAction('role_remove', $model->name, Constants::TYPE_ROLE, $model->id));
+    }
+
+    public static function all(): array {
+        return RoleModel::query()->get('id', 'name', 'display_name');
     }
 }

@@ -24,13 +24,13 @@
   "dependencies": {
     "bourbon": "^7.3.0",
     "bourbon-neat": "^4.0.0",
-    "vue": "^3.5.21"
+    "vue": "^3.5.22"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.33",
     "@types/js-cookie": "^3.0.6",
     "gulp-vue2mini": "^1.6.2",
     "tslint": "^6.1.3",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }

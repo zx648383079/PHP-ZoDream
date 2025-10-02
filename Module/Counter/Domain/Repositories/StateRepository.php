@@ -41,12 +41,12 @@ class StateRepository {
     public static function statisticsByTime(int $start_at, int $end_at): array {
         $pv = StayTimeLogModel::where('enter_at',  '>=', $start_at)
             ->where('enter_at',  '<', $end_at)->count();
-        $uv = StayTimeLogModel::where('enter_at',  '>=', $start_at)
-            ->where('enter_at',  '<', $end_at)
-            ->groupBy('session_id')->count();
-        $ip_count = StayTimeLogModel::where('enter_at',  '>=', $start_at)
-            ->where('enter_at',  '<', $end_at)
-            ->groupBy('ip')->count();
+        $uv = 0;//StayTimeLogModel::where('enter_at',  '>=', $start_at)
+//            ->where('enter_at',  '<', $end_at)
+//            ->groupBy('session_id')->count();
+        $ip_count = 0;//StayTimeLogModel::where('enter_at',  '>=', $start_at)
+//            ->where('enter_at',  '<', $end_at)
+//            ->groupBy('ip')->count();
         $jump_count = JumpLogModel::where('created_at',  '>=', $start_at)
             ->where('created_at',  '<', $end_at)->count();
         $stay_time = (int)StayTimeLogModel::query()->where('enter_at',  '>=', $start_at)
@@ -57,7 +57,7 @@ class StateRepository {
         $host = sprintf('%s://%s', $request->isSSL() ? 'https' : 'http', $request->host());
         $next_time = LogModel::query()->where('created_at',  '>=', $start_at)
             ->where('created_at',  '<', $end_at)
-            ->where('referrer', 'like', $host. '%')->count();
+            ->where('referrer_hostname', $host)->count();
         return compact('pv', 'uv', 'ip_count', 'jump_count', 'stay_time', 'next_time');
     }
 
@@ -77,7 +77,7 @@ class StateRepository {
                     return false;
                 }
                 return $url;
-            }, 'url', null, 'url');
+            }, 'url', null, 'pathname');
         }, 60);
         return new Page($items);
     }
@@ -92,20 +92,15 @@ class StateRepository {
                 return $url;
             }, 'url', LogModel::query()
                 ->where(function ($query) {
-                    $query->where('referrer', '==', '')
-                        ->orWhere('referrer', 'not like',
-                            sprintf('%%%s%%', request()->host()));
-                }), 'url');
+                    $query->where('referrer_hostname', '==', '')
+                        ->orWhere('referrer_hostname', '!=', request()->host());
+                }), 'pathname');
         }, 60);
         return new Page($items);
     }
 
     public static function domain(int $start_at, int $end_at) {
-        return self::mapGroups($start_at, $end_at, function ($url) {
-            if (empty($url)) {
-                return;
-            }
-            $host = parse_url($url, PHP_URL_HOST);
+        return self::mapGroups($start_at, $end_at, function ($host) {
             if (empty($host)) {
                 return;
             }
@@ -113,7 +108,7 @@ class StateRepository {
                 return substr($host, 4);
             }
             return $host;
-        }, 'host', null, 'url');
+        }, 'host', null, 'hostname');
     }
 
     private static function isSearch(string $url): string|false {
@@ -219,13 +214,12 @@ class StateRepository {
     }
 
     public static function mapGroups(int $start_at, int $end_at,
-                                     callable $cb, $primary, $query = null, $key = 'referrer') {
+                                     callable $cb, $primary, $query = null, $key = 'referrer_hostname') {
         $items = [];
-        if (empty($query) && $key === 'referrer') {
+        if (empty($query) && str_starts_with($key, 'referrer')) {
             $query = LogModel::query()
-                ->where('referrer', '!=', '')
-                ->where('referrer', 'not like',
-                    sprintf('%%%s%%', request()->host()));
+                ->where('referrer_hostname', '!=', '')
+                ->where('referrer_hostname', '!=', request()->host());
         }
         if (empty($query)) {
             $query = LogModel::query();

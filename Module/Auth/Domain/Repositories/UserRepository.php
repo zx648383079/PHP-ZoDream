@@ -254,6 +254,16 @@ class UserRepository {
         event(new ManageAction('user_remove', $user->name, 5, $user->id));
     }
 
+    public static function manageDetail(int $user): array
+    {
+        $model = self::get($user);
+        $data = $model->toArray();
+        $data['roles'] = UserRoleModel::where('user_id', $user)->pluck('role_id');
+        $data['zone_id'] = intval(UserMetaModel::where('user_id', $user)
+            ->where('name', 'zone_id')->value('content'));
+        return $data;
+    }
+
     /**
      * 缓存用户的权限
      * @param int $user

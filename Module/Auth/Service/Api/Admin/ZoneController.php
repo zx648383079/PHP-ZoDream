@@ -31,4 +31,14 @@ final class ZoneController extends Controller {
         ZoneRepository::manageRemove($id);
         return $this->renderData(true);
     }
+
+    public function toAction(int $user, int $id)
+    {
+        try {
+            ZoneRepository::userChange($user, $id, false);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
 }

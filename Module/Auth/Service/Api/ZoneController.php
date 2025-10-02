@@ -12,7 +12,7 @@ final class ZoneController extends Controller {
     }
 
     public function indexAction() {
-        return $this->render(ZoneRepository::all());
+        return $this->render(ZoneRepository::userZone());
     }
 
     public function saveAction(array|int $id) {
