@@ -24,14 +24,15 @@ class CounterMiddleware implements MiddlewareInterface {
         $event = event();
         $event->listen(Visit::class, VisitListener::class)
             ->listen(JumpOut::class, JumpOutListener::class);
-        if (str_starts_with($path, '/counter')
-            || str_starts_with($path, '/auth')
-            || str_starts_with($path, '/to')
-            || str_starts_with($path, '/admin.php')
-            || strpos($path, '/admin') > 3) {
+        if (str_starts_with($path, 'counter')
+            || str_starts_with($path, 'auth')
+            || str_starts_with($path, 'to')
+            || str_starts_with($path, 'admin.php')
+            || strpos($path, 'admin') > 3) {
             return;
         }
         $event->dispatch(Visit::createCurrent());
+//        $this->useCounter();
         $this->useGoogle();
         $this->useBaidu();
     }

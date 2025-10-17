@@ -104,15 +104,25 @@ final class ForumRepository {
         $zoneId = auth()->guest() ? 0 : ZoneRepository::getId(auth()->id());
         foreach ($data as $item) {
             $item->last_thread = static::lastThread($item['id'], $zoneId);
-            $item->today_count = $item->getTodayCountAttribute();
+            $item->today_count = self::getTodayCount($item);
             if ($hasChildren) {
                 foreach ($item->children as $it) {
-                    $it->today_count = $it->getTodayCountAttribute();
+                    $it->today_count = self::getTodayCount($it);
                     $it->last_thread = static::lastThread($it['id'], $zoneId);
                 }
             }
         };
         return $data;
+    }
+
+    public static function getTodayCount(ForumModel $model): int {
+        if ($model->thread_count < 1) {
+	        return 0;
+        }
+	    $time = strtotime(date('Y-m-d'));
+	    return ThreadModel::where('forum_id', $model->id)
+            ->where('created_at', '>=',  $time)
+            ->where('created_at', '<=',  $time + 86400)->count();
     }
 
     private static function lastThread(int $id, int $zoneId) {

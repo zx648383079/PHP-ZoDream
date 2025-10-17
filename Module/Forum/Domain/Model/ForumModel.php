@@ -71,21 +71,21 @@ class ForumModel extends Model {
         return $this->hasMany(ForumClassifyModel::class, 'forum_id', 'id');
     }
 
-    public function getTodayCountAttribute() {
-	    if ($this->thread_count < 1) {
-	        return 0;
-        }
-	    $time = strtotime(date('Y-m-d'));
-	    return ThreadModel::where('forum_id', $this->id)
-            ->where('created_at', '>=',  $time)
-            ->where('created_at', '<=',  $time + 86400)->count();
-    }
+    // public function getTodayCountAttribute() {
+	//     if ($this->thread_count < 1) {
+	//         return 0;
+    //     }
+	//     $time = strtotime(date('Y-m-d'));
+	//     return ThreadModel::where('forum_id', $this->id)
+    //         ->where('created_at', '>=',  $time)
+    //         ->where('created_at', '<=',  $time + 86400)->count();
+    // }
 
-    public function getLastThreadAttribute() {
-	    return ThreadModel::query()->where('forum_id', $this->id)
-            ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
-            ->orderBy('id', 'desc')->first();
-    }
+    // public function getLastThreadAttribute() {
+	//     return ThreadModel::query()->where('forum_id', $this->id)
+    //         ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
+    //         ->orderBy('id', 'desc')->first();
+    // }
 
     public static function tree() {
         return new Tree(static::cacheAll());
