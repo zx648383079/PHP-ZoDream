@@ -43,6 +43,8 @@ class CreateResourceTables extends Migration {
             $table->uint('comment_count')->default(0);
             $table->uint('view_count')->default(0);
             $table->uint('download_count')->default(0);
+            $table->uint('collect_count')->default(0);
+            $table->uint('status', 1)->default(0);
             $table->timestamps();
         })->append(ResourceMetaModel::tableName(), function (Table $table) {
             $table->id();

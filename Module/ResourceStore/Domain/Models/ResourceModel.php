@@ -25,6 +25,8 @@ use Domain\Repositories\FileRepository;
  * @property integer $comment_count
  * @property integer $view_count
  * @property integer $download_count
+ * @property integer $collect_count
+ * @property integer $status
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -51,6 +53,8 @@ class ResourceModel extends Model {
             'comment_count' => 'int',
             'view_count' => 'int',
             'download_count' => 'int',
+            'collect_count' => 'int',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
@@ -70,6 +74,8 @@ class ResourceModel extends Model {
             'comment_count' => 'Comment Count',
             'view_count' => 'Click Count',
             'download_count' => 'Download Count',
+            'collect_count' => 'Collect Count',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

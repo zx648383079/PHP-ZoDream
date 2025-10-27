@@ -43,7 +43,7 @@ class PostController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            ResourceRepository::removeSelf($id);
+            ResourceRepository::selfRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

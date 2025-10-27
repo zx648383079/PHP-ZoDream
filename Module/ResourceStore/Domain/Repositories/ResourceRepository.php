@@ -23,6 +23,13 @@ class ResourceRepository {
     const LOG_TYPE_RES = 0;
     const LOG_ACTION_BUY = 66;
     const LOG_ACTION_DOWNLOAD = 1;
+    const LOG_ACTION_COLLECT = 2;
+
+
+    const REVIEW_STATUS_NONE = 0;
+    const REVIEW_STATUS_APPROVED = 1;
+    const REVIEW_STATUS_REJECTED = 9;
+
     const BASE_KEY = 'res';
     const RES_PAGE_FILED = [
         'id', 'user_id', 'cat_id', 'title', 'description', 'thumb',
@@ -141,6 +148,8 @@ class ResourceRepository {
         $data['user'] = $model->user;
         $data['category'] = $model->category;
         $data['is_gradable'] = static::isGradable($id);
+        $data['is_collected'] = self::log()->has(self::LOG_TYPE_RES, $id,
+            self::LOG_ACTION_COLLECT);
         $data['tags'] = self::tag()->getTags($id);
         $data['files'] = ResourceFileModel::where('res_id', $id)->get();
         $data = array_merge($data, ResourceMetaModel::getOrDefault($id));
@@ -288,7 +297,19 @@ class ResourceRepository {
             })->orderBy('id', 'desc')->page();
     }
 
-    public static function getSelf(int $id) {
+    public static function selfList(string $keywords = '', int $category = 0) {
+        return ResourceModel::with('user', 'category')
+            ->when($category > 0, function ($query) use ($category) {
+                $query->where('cat_id', $category);
+            })
+            ->where('user_id', auth()->id())
+            ->when(!empty($keywords), function ($query) use ($keywords)  {
+                SearchModel::searchWhere($query, ['title'], true, '', $keywords);
+            })->orderBy('id', 'desc')->page();
+    }
+    
+
+    public static function selfGet(int $id) {
         $model = ResourceModel::findWithAuth($id);
         if (empty($model)) {
             throw new Exception('资源不存在');
@@ -296,8 +317,12 @@ class ResourceRepository {
         return $model;
     }
 
-    public static function removeSelf(int $id) {
-        self::removeResource(self::getSelf($id));
+    public static function selfSave(array $data, array $tags, array $files) {
+        return self::save($data, $tags, $files);
+    }
+
+    public static function selfRemove(int $id) {
+        self::removeResource(self::selfGet($id));
     }
 
     public static function fileList(int $res_id, string $keywords = '') {
@@ -324,12 +349,29 @@ class ResourceRepository {
         self::removeFile(ResourceFileModel::findOrThrow($id, '文件不存在'));
     }
 
+    public static function collect(int $id) {
+        $model = ResourceModel::findOrThrow($id, '资源不存在');
+        if ($model->user_id == auth()->id()) {
+            throw new Exception('自己无法收藏');
+        }
+        $res = self::log()->toggleLog(self::LOG_TYPE_RES, self::LOG_ACTION_COLLECT, $id);
+        if ($res > 0) {
+            $model->collect_count ++;
+            $model->is_collected = true;
+        } else {
+            $model->collect_count --;
+            $model->is_collected = false;
+        }
+        $model->save();
+        return $model;
+    }
+
     public static function download(int $id, int $file = 0) {
         $model = self::get($id);
         self::log()->insert([
-            'item_type' => ResourceRepository::LOG_TYPE_RES,
+            'item_type' => self::LOG_TYPE_RES,
             'item_id' => $id,
-            'action' => ResourceRepository::LOG_ACTION_DOWNLOAD,
+            'action' => self::LOG_ACTION_DOWNLOAD,
         ]);
         $fileModel = ResourceFileModel::where('res_id', $id)
             ->when($file > 0, function ($query) use ($file) {

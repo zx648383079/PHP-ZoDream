@@ -51,7 +51,7 @@ class HomeController extends Controller {
 
     public function deleteAction(int $id) {
         try {
-            ResourceRepository::removeSelf($id);
+            ResourceRepository::selfRemove($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -60,7 +60,7 @@ class HomeController extends Controller {
 
     public function fileAction(int $res_id, string $keywords = '') {
         try {
-            ResourceRepository::getSelf($res_id);
+            ResourceRepository::selfGet($res_id);
             return $this->renderPage(ResourceRepository::fileList($res_id, $keywords));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

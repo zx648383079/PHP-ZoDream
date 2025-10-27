@@ -8,6 +8,13 @@ use Zodream\Infrastructure\Contracts\Http\Output;
 
 class HomeController extends Controller {
 
+    public function rules() {
+        return [
+            'collect' => '@',
+            '*' => '*'
+        ];
+    }
+
     public function indexAction(string $keywords = '', int $user = 0, int $category = 0,
                                 string $tag = '',
                                 string $sort = 'created_at',
@@ -59,5 +66,14 @@ class HomeController extends Controller {
         return $this->renderData(
             ResourceRepository::suggestion($keywords)
         );
+    }
+
+    public function collectAction(int $id) {
+        try {
+            $model = ResourceRepository::collect($id);
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->render($model);
     }
 }
