@@ -40,6 +40,7 @@ class HomeController extends Controller {
                 'price' => 'int',
                 'is_commercial' => 'int:0,127',
                 'is_reprint' => 'int:0,127',
+                'status' => 'int:0,127',
             ]);
             return $this->render(
                 ResourceRepository::save($data, $input->get('tags', []), $input->get('files', []))

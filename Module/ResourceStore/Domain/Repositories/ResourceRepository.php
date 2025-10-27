@@ -69,7 +69,7 @@ class ResourceRepository {
                                    int $user = 0, string $tag = '',
                                    string|array $sort = 'created_at',
                                    string|int|bool $order = 'desc', int $perPage = 20) {
-        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->page($perPage);
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->where('status', self::REVIEW_STATUS_APPROVED)->page($perPage);
     }
 
     public static function getListQuery(string $keywords = '', int $category = 0,
@@ -141,7 +141,10 @@ class ResourceRepository {
     }
 
     public static function getFull(int $id) {
-        $model = static::get($id);
+        $model = ResourceModel::findOrThrow($id, '资源不存在');
+        if ($model->status !== self::REVIEW_STATUS_APPROVED) {
+           throw new Exception('资源不存在');
+        }
         ResourceModel::query()->where('id', $id)->updateIncrement('view_count');
         $data = $model->toArray();
         $data['content'] = HtmlExpand::toHtml($model->content, true, false);
@@ -160,7 +163,10 @@ class ResourceRepository {
     }
 
     public static function getPreview(int $id) {
-        $model = static::get($id);
+        $model = ResourceModel::findOrThrow($id, '资源不存在');
+        if ($model->status !== self::REVIEW_STATUS_APPROVED) {
+           throw new Exception('资源不存在');
+        }
         $data = $model->toArray();
         // $data = array_merge($data, ResourceMetaModel::getOrDefault($id));
         $data['preview_url'] = url('./preview/view/0/id/'.$id.'/file/0/', [], null,false);
@@ -308,6 +314,14 @@ class ResourceRepository {
             })->orderBy('id', 'desc')->page();
     }
     
+
+    public static function selfEdit(int $id) {
+        $model = self::selfGet($id);
+        $data = $model->toArray();
+        $data['tags'] = self::tag()->getTags($id);
+        $data['files'] = ResourceFileModel::where('res_id', $id)->get();
+        return array_merge($data, ResourceMetaModel::getOrDefault($id));
+    }
 
     public static function selfGet(int $id) {
         $model = ResourceModel::findWithAuth($id);

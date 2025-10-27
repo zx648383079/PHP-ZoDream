@@ -16,7 +16,7 @@ class ResourceController extends Controller {
     public function detailAction(int $id) {
         try {
             return $this->render(
-                ResourceRepository::selfGet($id)
+                ResourceRepository::selfEdit($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
