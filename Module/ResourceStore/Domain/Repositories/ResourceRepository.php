@@ -69,7 +69,8 @@ class ResourceRepository {
                                    int $user = 0, string $tag = '',
                                    string|array $sort = 'created_at',
                                    string|int|bool $order = 'desc', int $perPage = 20) {
-        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->where('status', self::REVIEW_STATUS_APPROVED)->page($perPage);
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)
+        ->where('status', self::REVIEW_STATUS_APPROVED)->page($perPage);
     }
 
     public static function getListQuery(string $keywords = '', int $category = 0,

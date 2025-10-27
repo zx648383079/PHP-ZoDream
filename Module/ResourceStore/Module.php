@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\ResourceStore;
 
+use Module\ResourceStore\Domain\Repositories\ResourceRepository;
 use Module\ResourceStore\Domain\Migrations\CreateResourceTables;
 use Module\ResourceStore\Domain\Models\ResourceModel;
 use Module\ResourceStore\Service\PreviewController;
@@ -42,6 +43,7 @@ class Module extends BaseModule implements ICustomRouteModule {
     public function openLinks(SiteMap $map) {
         $map->add(url('./'), time());
         $items = ResourceModel::orderBy('id', 'desc')
+            ->where('status', ResourceRepository::REVIEW_STATUS_APPROVED)
             ->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./', ['id' => $item['id']]),
