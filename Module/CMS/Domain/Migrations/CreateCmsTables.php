@@ -63,6 +63,7 @@ class CreateCmsTables extends Migration {
             $table->uint('type', 2)->default(0);
             $table->char('code', 20);
             $table->string('language', 10)->default('');
+            $table->string('uri_template')->default('')->comment('生成网址模板');
         })->append(LinkageDataEntity::tableName(), function (Table $table) {
             $table->id();
             $table->uint('linkage_id');

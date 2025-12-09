@@ -140,7 +140,7 @@ class PagerDefaultOption implements PagerOption {
 
 
 ;(function($: any) {
-  $.fn.pager = function(option ?: PagerOption) {
-    return new Pager(this, option); 
-  };
+    $.fn.pager = function(option ?: PagerOption) {
+        return new Pager(this, option); 
+    };
 })(jQuery);

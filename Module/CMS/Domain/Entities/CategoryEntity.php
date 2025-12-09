@@ -29,9 +29,9 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property integer $updated_at
  */
 class CategoryEntity extends Entity {
-    const TYPE_CONTENT = 0; //内容
-    const TYPE_PAGE = 1; //单页
-    const TYPE_LINK = 2; //外链
+    const int TYPE_CONTENT = 0; //内容
+    const int TYPE_PAGE = 1; //单页
+    const int TYPE_LINK = 2; //外链
 
     public static function tableName(): string {
         return 'cms_category_'.CMSRepository::siteId();

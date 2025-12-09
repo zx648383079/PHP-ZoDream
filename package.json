@@ -24,7 +24,7 @@
   "dependencies": {
     "bourbon": "^7.3.0",
     "bourbon-neat": "^4.0.0",
-    "vue": "^3.5.22"
+    "vue": "^3.5.25"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.33",
