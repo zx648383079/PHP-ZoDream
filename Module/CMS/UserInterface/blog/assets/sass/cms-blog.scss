@@ -1,13 +1,8 @@
 @use 'sass:math';
 @use 'theme';
 @use 'function';
-$primary: #222;
-$primaryText: #fff;
-$isFullyTheme: false;
 
-@use 'root';
-
-$linkMask: #eee;
+$link-mask: #eee;
 
 a {
     text-decoration: none;
@@ -17,9 +12,9 @@ a {
 .comment-item,
 .friend-link {
     a {
-        color: var(--#{theme.$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}secondary-text);
         &:hover {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
         }
     }
 }
@@ -71,7 +66,7 @@ header {
         top: 0;
         z-index: 99;
         text-align: left;
-        background-color: var(--#{theme.$prefix}-body);
+        background-color: var(--#{theme.$prefix}body);
         a {
             padding-left: .8rem;
         }
@@ -94,7 +89,7 @@ header {
             position: absolute;
             left: .5rem;
             top: .6rem;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
         }
         .form-control {
             padding-left: 1.5rem;
@@ -133,19 +128,19 @@ footer {
 
 .router-bar {
     display: flex;
-    background-color: var(--#{theme.$prefix}-primary);
-    color: var(--#{theme.$prefix}-primary-text);
+    background-color: var(--#{theme.$prefix}primary);
+    color: var(--#{theme.$prefix}primary-text);
     align-items: center;
     .tool-item {
-        background-color: var(--#{theme.$prefix}-primary-active);
+        background-color: var(--#{theme.$prefix}primary-active);
         width: 3rem;
         height: 3rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: var(--#{theme.$prefix}-primary-text);
+        color: var(--#{theme.$prefix}primary-text);
         &:hover {
-            background-color: var(--#{theme.$prefix}-primary-hover);
+            background-color: var(--#{theme.$prefix}primary-hover);
         }
     }
     .title-bar {
@@ -198,14 +193,14 @@ footer {
         text-align: left;
         left: 0;
         width: 10rem;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         line-height: 2.25rem;
-        box-shadow: 0 .25rem .25rem .25rem var(--#{theme.$prefix}-shadow);
+        box-shadow: 0 .25rem .25rem .25rem var(--#{theme.$prefix}shadow);
         li {
             padding: 0 .7rem;
             cursor: pointer;
             &:hover {
-                background-color: var(--#{theme.$prefix}-body);
+                background-color: var(--#{theme.$prefix}body);
             }
         }
         .fa {
@@ -232,8 +227,8 @@ footer {
     .item-title {
         margin: 1rem 0;
         a {
-            background-color: $linkMask;
-            color: var(--#{theme.$prefix}-body-text);
+            background-color: $link-mask;
+            color: var(--#{theme.$prefix}body-text);
         }
     }
     .item-tag-bar {
@@ -253,7 +248,7 @@ footer {
     }
     .tag-item-block {
         border-radius: .25rem;
-        border: 1px solid var(--#{theme.$prefix}-secondary-text);
+        border: 1px solid var(--#{theme.$prefix}secondary-text);
      }
      .item-more {
          text-align: center;
@@ -261,8 +256,8 @@ footer {
          a {
              padding: 0.25rem .8rem;
              display: inline-block;
-             background-color: $linkMask;
-             color: var(--#{theme.$prefix}-body-text);
+             background-color: $link-mask;
+             color: var(--#{theme.$prefix}body-text);
          }
      }
 }
@@ -312,8 +307,8 @@ footer {
     position: relative;
     margin-bottom: .75em;
     .comment {
-        background: var(--#{theme.$prefix}-secondary);
-        box-shadow: 0 0 2px 0 var(--#{theme.$prefix}-shadow);
+        background: var(--#{theme.$prefix}secondary);
+        box-shadow: 0 0 2px 0 var(--#{theme.$prefix}shadow);
         padding: 15px 10px;
     }
     .comment-content {
@@ -350,7 +345,7 @@ footer {
     }
     .children {
         padding-left: 1.5em;
-        border-left: solid 1px var(--#{theme.$prefix}-secondary);
+        border-left: solid 1px var(--#{theme.$prefix}secondary);
         margin: .75em 0;
     }
 }
@@ -363,9 +358,9 @@ footer {
     
     .book-copyright {
         clear: both;
-        background-color: var(--#{theme.$prefix}-secondary);
+        background-color: var(--#{theme.$prefix}secondary);
         font-size: 12px;
-        color: var(--#{theme.$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}secondary-text);
         padding: 6px 15px 5px;
         border-radius: 2px;
         text-align: center;
@@ -430,8 +425,8 @@ footer {
     width: 16rem;
     left: -30rem;
     transition: left 500ms;
-    background-color: var(--#{theme.$prefix}-primary);
-    color: var(--#{theme.$prefix}-primary-text);
+    background-color: var(--#{theme.$prefix}primary);
+    color: var(--#{theme.$prefix}primary-text);
     text-align: center;
     .nav-bar,
     .social-bar,
@@ -443,7 +438,7 @@ footer {
         font-size: .8rem;
     }
     a {
-        color: var(--#{theme.$prefix}-primary-text);
+        color: var(--#{theme.$prefix}primary-text);
     }
     .nav-bar {
         max-height: 14rem;
@@ -457,7 +452,7 @@ footer {
         width: 100%;
         text-align: center;
         a {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
         }
     }
  
@@ -487,7 +482,7 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
     span {
         width: 2.5rem;
         height: $toggleHeight;
-        background-color: var(--#{theme.$prefix}-body-text);
+        background-color: var(--#{theme.$prefix}body-text);
         display: block;
         margin: $toggleMargin auto;
         transition: all 0.3s ease-in-out;
@@ -505,7 +500,7 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
     .nav-toggle-arrow {
         span {
             opacity: 0;
-            background-color: var(--#{theme.$prefix}-primary-text);
+            background-color: var(--#{theme.$prefix}primary-text);
             &:first-of-type {
                 opacity: 1;
                 transform: translateY($toggleOffset) rotate(45deg);
@@ -523,7 +518,7 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
     text-align: center;
     height: 6rem;
     font-size: 2.5rem;
-    color: var(--#{theme.$prefix}-primary);
+    color: var(--#{theme.$prefix}primary);
     padding-bottom: 1.875rem;
     padding-top: 1.25rem;
     img {
@@ -551,25 +546,25 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
         width: 20rem;
         left: auto;
         background-color: transparent;
-        color: var(--#{theme.$prefix}-body-text);
+        color: var(--#{theme.$prefix}body-text);
         .nav-brand,
         .social-bar,
         .copyright {
             padding-right: 0;
         }
         a {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
         }
         .nav-bar {
             a {
-                color: var(--#{theme.$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}secondary-text);
                 &:hover {
-                    color: var(--#{theme.$prefix}-body-text);
+                    color: var(--#{theme.$prefix}body-text);
                 }
             }
         }
         .copyright {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
         }
         .nav-bar {
             text-align: right;
@@ -580,7 +575,7 @@ $toggleOffset: math.div($toggleMargin * ($toggleCount - 1), 2) + $toggleHeight *
             }
         }
         .nav-sub-bar {
-            box-shadow: .25rem 0 .25rem .25rem var(--#{theme.$prefix}-shadow);
+            box-shadow: .25rem 0 .25rem .25rem var(--#{theme.$prefix}shadow);
             position: absolute;
             width: 15rem;
             text-align: left;

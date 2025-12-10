@@ -132,5 +132,28 @@ $(function() {
         const form = $(this).closest('form');
         form.append('<input type="hidden" name="status" value="5">');
         form.trigger('submit');
+    }).on('click', '*[data-help]', function(e) {
+        e.preventDefault();
+        $(this).tour({
+            title: 'CMS操作引导',
+            items: [
+                {
+                    selector: '.sidebar-container',
+                    content: '菜单',
+                },
+                {
+                    selector: '.form-table',
+                    content: '表格',
+                },
+                {
+                    selector: '.form-table .tab-header',
+                    content: '切换表格内容',
+                },
+                {
+                    selector: '.form-table .btn-group',
+                    content: '保存操作',
+                }
+            ]
+        }).open();
     });
 });

@@ -1,7 +1,7 @@
 @use 'theme';
 .style-type-1 {
     font: 1.3em "Vollkorn", "Microsoft YaHei", 微软雅黑, 宋体;
-    color: var(--#{theme.$prefix}-body-text);
+    color: var(--#{theme.$prefix}body-text);
     line-height: 1.4;
     text-align: justify;
 
@@ -86,10 +86,10 @@
     h3 {
         font-weight: normal;
         font-weight: normal;
-        color: var(--#{theme.$prefix}-body-text);
+        color: var(--#{theme.$prefix}body-text);
         line-height: 1.2;
         margin: 1em 0 0.6em;
-        border-bottom: 1px solid var(--#{theme.$prefix}-primary);
+        border-bottom: 1px solid var(--#{theme.$prefix}primary);
         &:first-child {
             margin-top: 0;
         }
@@ -99,10 +99,10 @@
         font-size: 2.5rem;
         border-bottom-width: 2px;
         a {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
             text-decoration: none;
             &:hover {
-                color: var(--#{theme.$prefix}-body-text);
+                color: var(--#{theme.$prefix}body-text);
                 text-decoration: none;
             }
         }
@@ -268,7 +268,7 @@
     }
     code {
         font-family: Menlo, Monaco, Consolas, Droid Sans Mono, Courier New, monospace, Microsoft YaHei, 微软雅黑, 宋体;
-        background: var(--#{theme.$prefix}-body);
+        background: var(--#{theme.$prefix}body);
         border-radius: 0.25rem;
         font-size: .9em;
     }
@@ -277,7 +277,7 @@
     //     word-wrap: normal !important;
     //     overflow-x: auto;
     //     margin: 0;
-    //     background: var(--#{theme.$prefix}-body);
+    //     background: var(--#{theme.$prefix}body);
     //     > code {
     //         white-space: pre !important;
     //         display: block;

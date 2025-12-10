@@ -1,89 +1,136 @@
 @use 'theme';
+@use 'colors';
 @use 'functions';
 @use 'variables/dark';
 
-$primary: theme.$primary !default;
-$primaryText: theme.$primaryText !default;
-$isFullyTheme: true !default;
-@if $isFullyTheme {
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --#{theme.$prefix}-primary: #{dark.$primary};
-            --#{theme.$prefix}-primary-hover: #{functions.tint-color(dark.$primary, theme.$colorHoverOffset)};
-            --#{theme.$prefix}-primary-active: #{functions.tint-color(dark.$primary, theme.$colorActiveOffset)};
-            --#{theme.$prefix}-primary-text: #{dark.$primaryText};
-            
-            --#{theme.$prefix}-body: #{dark.$body};
-            --#{theme.$prefix}-hover: #{dark.$hover};
-            --#{theme.$prefix}-body-text: #{dark.$bodyText};
-            --#{theme.$prefix}-body-rgb: #{functions.to-rgb(dark.$body)};
-            --#{theme.$prefix}-body-text-rgb: #{functions.to-rgb(dark.$bodyText)};
-            --#{theme.$prefix}-panel: #{dark.$panel};
-            --#{theme.$prefix}-panel-text: #{dark.$bodyText};
-    
-            --#{theme.$prefix}-dialog: #{dark.$dialog};
-            --#{theme.$prefix}-dialog-text: #{dark.$dialogText};
-            --#{theme.$prefix}-dialog-mask: #{dark.$dialogMask};
-            --#{theme.$prefix}-shadow: #{dark.$shadow};
-    
-            --#{theme.$prefix}-secondary: #{dark.$secondary};
-            --#{theme.$prefix}-secondary-text: #{dark.$secondaryText};
 
-            --#{theme.$prefix}-gray: #{dark.$gray};
-            --#{theme.$prefix}-gray-text: #{dark.$grayText};
-    
-            --#{theme.$prefix}-link-text: #{dark.$linkText};
-            --#{theme.$prefix}-link-hover-text: #{dark.$linkHoverText};
-    
-            
-            --#{theme.$prefix}-input: #{dark.$input};
-            --#{theme.$prefix}-input-text: #{dark.$inputText};
-    
-            --#{theme.$prefix}-input-border: #{dark.$inputBorder};
-            --#{theme.$prefix}-input-hover-border: #{dark.$inputFocusBorder};
-            --#{theme.$prefix}-input-hover-shadow: #{dark.$inputFocusShadow};
-        }
+:root,
+[data-theme="light"] {
+     @each $color, $value in colors.$theme-colors {
+        --#{theme.$prefix}#{$color}: #{$value};
     }
+    @each $color, $value in colors.$theme-colors-text {
+        --#{theme.$prefix}#{$color}-text: #{$value};
+    }
+
+    --#{theme.$prefix}primary: #{theme.$primary};
+    --#{theme.$prefix}primary-hover: #{theme.$primary-hovered};
+    --#{theme.$prefix}primary-active: #{theme.$primary-actived};
+    --#{theme.$prefix}primary-text: #{theme.$primary-text};
+    --#{theme.$prefix}body: #{theme.$body};
+    --#{theme.$prefix}body-text: #{theme.$body-text};
+    --#{theme.$prefix}body-rgb: #{functions.to-rgb(theme.$body)};
+    --#{theme.$prefix}body-text-rgb: #{functions.to-rgb(theme.$body-text)};
+    --#{theme.$prefix}border: #{theme.$border};
+    --#{theme.$prefix}panel: #{theme.$panel};
+
+    --#{theme.$prefix}surface: #{theme.$surface};
+    --#{theme.$prefix}surface-hovered: #{theme.$surface-hovered};
+    --#{theme.$prefix}surface-selected: #{theme.$surface-selected};
+    --#{theme.$prefix}surface-selected-text: #{theme.$surface-selected-text};
+    --#{theme.$prefix}surface-child: #{theme.$surface-child};
+    --#{theme.$prefix}surface-text: #{theme.$surface-text};
+    --#{theme.$prefix}repeater: #{theme.$repeater};
+
+
+    --#{theme.$prefix}dialog: #{theme.$dialog};
+    --#{theme.$prefix}dialog-text: #{theme.$dialog-text};
+    --#{theme.$prefix}dialog-mask: #{theme.$dialog-mask};
+
+    --#{theme.$prefix}meta-text: #{theme.$meta-text};
+
+    --#{theme.$prefix}secondary: #{theme.$secondary};
+    --#{theme.$prefix}secondary-text: #{theme.$secondary-text};
+
+    --#{theme.$prefix}accent: #{theme.$accent};
+    --#{theme.$prefix}accent-text: #{theme.$accent-text};
+
+    --#{theme.$prefix}tertiary: #{theme.$tertiary};
+    --#{theme.$prefix}tertiary-text: #{theme.$tertiary-text};
+
+    --#{theme.$prefix}mask-rgb: #{functions.to-rgb(theme.$mask)};
+
+    --#{theme.$prefix}shadow: #{theme.$shadow};
+
+    --#{theme.$prefix}link-text: #{theme.$link-text};
+    --#{theme.$prefix}link-hover-text: #{theme.$link-hover-text};
+
+    
+    --#{theme.$prefix}input: #{theme.$input};
+    --#{theme.$prefix}input-text: #{theme.$input-text};
+    --#{theme.$prefix}input-disabled: #{theme.$input-disabled};
+    --#{theme.$prefix}input-hovered: #{theme.$input-hovered};
+    --#{theme.$prefix}input-selected: #{theme.$input-selected};
+
+    --#{theme.$prefix}input-icon: #{theme.$input-icon};
+    --#{theme.$prefix}input-hover-icon: #{theme.$input-hovered-icon};
+    --#{theme.$prefix}input-label: #{theme.$input-label};
+
+    --#{theme.$prefix}input-placeholder: #{theme.$input-placeholder};
+    --#{theme.$prefix}input-border: #{theme.$input-border};
+    --#{theme.$prefix}input-focus-border: #{theme.$input-focus-border};
 }
-@media (prefers-color-scheme: light) {
+
+@mixin theme-dark {
+    --#{theme.$prefix}primary: #{dark.$primary};
+    --#{theme.$prefix}primary-hover: #{dark.$primary-hovered};
+    --#{theme.$prefix}primary-active: #{dark.$primary-actived};
+    --#{theme.$prefix}primary-text: #{dark.$primary-text};
+    
+    --#{theme.$prefix}body: #{dark.$body};
+    --#{theme.$prefix}body-text: #{dark.$body-text};
+    --#{theme.$prefix}body-rgb: #{functions.to-rgb(dark.$body)};
+    --#{theme.$prefix}body-text-rgb: #{functions.to-rgb(dark.$body-text)};
+    --#{theme.$prefix}border: #{dark.$border};
+    --#{theme.$prefix}panel: #{dark.$panel};
+
+    --#{theme.$prefix}surface: #{dark.$surface};
+    --#{theme.$prefix}surface-hovered: #{dark.$surface-hovered};
+    --#{theme.$prefix}surface-selected: #{dark.$surface-selected};
+    --#{theme.$prefix}surface-selected-text: #{dark.$surface-selected-text};
+    --#{theme.$prefix}surface-child: #{dark.$surface-child};
+    --#{theme.$prefix}surface-text: #{dark.$surface-text};
+    --#{theme.$prefix}repeater: #{dark.$repeater};
+
+    --#{theme.$prefix}dialog: #{dark.$dialog};
+    --#{theme.$prefix}dialog-text: #{dark.$dialog-text};
+    --#{theme.$prefix}dialog-mask: #{dark.$dialog-mask};
+    --#{theme.$prefix}shadow: #{dark.$shadow};
+
+    --#{theme.$prefix}secondary: #{dark.$secondary};
+    --#{theme.$prefix}secondary-text: #{dark.$secondary-text};
+
+    --#{theme.$prefix}meta-text: #{dark.$meta-text};
+
+    --#{theme.$prefix}accent: #{dark.$accent};
+    --#{theme.$prefix}accent-text: #{dark.$accent-text};
+
+    --#{theme.$prefix}tertiary: #{dark.$tertiary};
+    --#{theme.$prefix}tertiary-text: #{dark.$tertiary-text};
+
+    --#{theme.$prefix}link-text: #{dark.$link-text};
+    --#{theme.$prefix}link-hover-text: #{dark.$link-hover-text};
+
+    
+    --#{theme.$prefix}input: #{dark.$input};
+    --#{theme.$prefix}input-text: #{dark.$input-text};
+    --#{theme.$prefix}input-disabled: #{dark.$input-disabled};
+    --#{theme.$prefix}input-hovered: #{dark.$input-hovered};
+    --#{theme.$prefix}input-selected: #{dark.$input-selected};
+
+    --#{theme.$prefix}input-icon: #{dark.$input-icon};
+    --#{theme.$prefix}input-hover-icon: #{dark.$input-hovered-icon};
+    --#{theme.$prefix}input-label: #{dark.$input-label};
+
+    --#{theme.$prefix}input-placeholder: #{dark.$input-placeholder};
+    --#{theme.$prefix}input-border: #{dark.$input-border};
+    --#{theme.$prefix}input-focus-border: #{dark.$input-focus-border};
+}
+[data-theme="dark"] {
+    @include theme-dark;
+}
+@media (prefers-color-scheme: dark) {
     :root {
-        --#{theme.$prefix}-primary: #{$primary};
-        --#{theme.$prefix}-primary-hover: #{functions.shade-color($primary, theme.$colorHoverOffset)};
-        --#{theme.$prefix}-primary-active: #{functions.shade-color($primary, theme.$colorActiveOffset)};
-        --#{theme.$prefix}-primary-text: #{$primaryText};
-        @if $isFullyTheme {
-            --#{theme.$prefix}-body: #{theme.$body};
-            --#{theme.$prefix}-hover: #{theme.$hover};
-            --#{theme.$prefix}-body-text: #{theme.$bodyText};
-            --#{theme.$prefix}-body-rgb: #{functions.to-rgb(theme.$body)};
-            --#{theme.$prefix}-body-text-rgb: #{functions.to-rgb(theme.$bodyText)};
-            --#{theme.$prefix}-panel: #{theme.$panel};
-            --#{theme.$prefix}-panel-text: #{theme.$bodyText};
-    
-
-
-            --#{theme.$prefix}-dialog: #{theme.$dialog};
-            --#{theme.$prefix}-dialog-text: #{theme.$dialogText};
-            --#{theme.$prefix}-dialog-mask: #{theme.$dialogMask};
-
-            --#{theme.$prefix}-gray: #{theme.$gray};
-            --#{theme.$prefix}-gray-text: #{theme.$grayText};
-    
-            --#{theme.$prefix}-secondary: #{theme.$secondary};
-            --#{theme.$prefix}-secondary-text: #{theme.$secondaryText};
-    
-            --#{theme.$prefix}-shadow: #{theme.$shadow};
-    
-            --#{theme.$prefix}-link-text: #{theme.$linkText};
-            --#{theme.$prefix}-link-hover-text: #{theme.$linkHoverText};
-    
-            
-            --#{theme.$prefix}-input: #{theme.$input};
-            --#{theme.$prefix}-input-text: #{theme.$inputText};
-    
-            --#{theme.$prefix}-input-border: #{theme.$inputBorder};
-            --#{theme.$prefix}-input-hover-border: #{theme.$inputFocusBorder};
-            --#{theme.$prefix}-input-hover-shadow: #{theme.$inputFocusShadow};
-        }
+        @include theme-dark;
     }
 }

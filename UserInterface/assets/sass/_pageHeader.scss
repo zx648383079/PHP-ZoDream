@@ -2,9 +2,9 @@
 @use 'sizes';
 
 .page-header {
-    line-height: sizes.$lineHeight;
+    line-height: sizes.$line-height;
     position: relative;
-    background-color: var(--#{theme.$prefix}-primary);
+    background-color: var(--#{theme.$prefix}primary);
     .path {
         position: absolute;
     }

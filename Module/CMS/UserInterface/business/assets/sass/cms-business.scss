@@ -1,9 +1,9 @@
 @use 'theme';
 $primary: #266faf;
-$primaryText: #fff;
-$linkHoverText: #a40000;
-$navActive: #68ac37;
-$navActiveText: #fff;
+$primary-text: #fff;
+$link-hover-text: #a40000;
+$nav-active: #68ac37;
+$nav-active-text: #fff;
 
 @mixin iconFont($size: 1rem) {
     display: inline-block;
@@ -16,7 +16,7 @@ $navActiveText: #fff;
 
 @media (prefers-color-scheme: light) {
     :root {
-        --#{theme.$prefix}-body: #fff;
+        --#{theme.$prefix}body: #fff;
     }
 }
 
@@ -29,7 +29,7 @@ a {
     color: $primary;
     text-decoration: none;
     &:hover{
-        color: $linkHoverText;
+        color: $link-hover-text;
     }
 }
 
@@ -117,8 +117,8 @@ a {
             min-width: 6rem;
             text-align: center;
             &:hover {
-                background-color: $navActive;
-                color: $navActiveText;
+                background-color: $nav-active;
+                color: $nav-active-text;
             }
         }
         ul,
@@ -388,7 +388,7 @@ a {
     &:hover {
         background-color: $primary;
         .item-title {
-            color: $primaryText;
+            color: $primary-text;
         }
     }
 }
@@ -400,14 +400,14 @@ a {
 
 .btn-default {
     background-color: $primary;
-    color: $primaryText;
+    color: $primary-text;
 }
 .btn {
     border-radius: 0;
     line-height: 1.5625rem;
     font-size: .8rem;
     &:hover {
-        color: $linkHoverText;
+        color: $link-hover-text;
     }
 }
 
@@ -506,7 +506,7 @@ $dialogHeight: 20rem;
     z-index: 999;
     .dialog-header {
         background-color: $primary;
-        color: $primaryText;
+        color: $primary-text;
         padding: .5rem;
     }
     .dialog-body {
@@ -674,7 +674,7 @@ $dialogHeight: 20rem;
         >.menu-name {
             border-color: $primary;
             a {
-                color: $linkHoverText;
+                color: $link-hover-text;
             }
         }
     }
@@ -816,7 +816,7 @@ $dialogHeight: 20rem;
 .card-panel {
     .panel-header {
         background-color: $primary;
-        color: $primaryText;
+        color: $primary-text;
         padding: .5rem;
     }
     .panel-body {
@@ -1010,7 +1010,7 @@ $dialogHeight: 20rem;
         height: 11.5rem;
         .item-action {
             background-color: $primary;
-            color: $primaryText;
+            color: $primary-text;
             line-height: 2.5rem;
             text-align: center;
             font-size: .8rem;
@@ -1062,10 +1062,10 @@ $dialogHeight: 20rem;
     }
     thead {
         background-color: $primary;
-        color: $primaryText;
+        color: $primary-text;
         th,
         td {
-            border-color: $primaryText;
+            border-color: $primary-text;
         }
     }
 }
@@ -1086,7 +1086,7 @@ $dialogHeight: 20rem;
                 margin: 0 .5rem;
                 word-break: keep-all;
                 &.active {
-                    color: $linkHoverText;
+                    color: $link-hover-text;
                 }
             }
         }
@@ -1104,8 +1104,8 @@ $dialogHeight: 20rem;
         transform-origin: 0 0;
         top: -9.7rem;
         left: -2.5rem;
-        background-color: $navActive;
-        color: $navActiveText;
+        background-color: $nav-active;
+        color: $nav-active-text;
         text-align: center;
         height: 3rem;
         padding-top: 1.2rem;

@@ -52,7 +52,7 @@ $this->registerJs($js);
                 <?=Form::text('position')?>
             </div>
             <div class="tab-item">
-                <?=Form::text('url')?>
+                <?=Form::text('url')->after('<i class="tool-help" data-help="channel-url" title="查看帮助"></i>')?>
                 <?= Editor::html('content', $model->content) ?>
             </div>
             <div class="tab-item">

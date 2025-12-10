@@ -27,7 +27,7 @@
             input {
                 padding-left: .5rem;
                 padding-right: 1.875rem;
-                border-bottom: 2px solid var(--#{theme.$prefix}-input-hover-border);
+                border-bottom: 2px solid var(--#{theme.$prefix}input-focus-border);
             }
             .fa {
                 left: 17.5rem;
@@ -157,15 +157,15 @@
     }
 }
 .footer {
-    background: var(--#{theme.$prefix}-primary);
-    color: var(--#{theme.$prefix}-primary-text);
+    background: var(--#{theme.$prefix}primary);
+    color: var(--#{theme.$prefix}primary-text);
     font-weight: 400;
     font-size: 0.875rem;
     padding: 2rem 1.25rem;
     position: relative;
     text-align: center;
     a {
-        color: var(--#{theme.$prefix}-primary-text);
+        color: var(--#{theme.$prefix}primary-text);
         text-decoration: none;
     }
 }

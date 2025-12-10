@@ -1,21 +1,22 @@
 @use 'theme';
 @use 'sizes';
 @use 'functions';
+@use 'colors';
 
 @mixin make-button($name, $bg, $hover, $color) {
     .btn-#{$name} {
-        --#{theme.$prefix}-btn: #{$bg};
-        --#{theme.$prefix}-btn-text: #{$color};
-        --#{theme.$prefix}-btn-hover: #{$hover};
-        --#{theme.$prefix}-btn-border: #{$hover};
+        --#{theme.$prefix}btn: #{$bg};
+        --#{theme.$prefix}btn-text: #{$color};
+        --#{theme.$prefix}btn-hover: #{$hover};
+        --#{theme.$prefix}btn-border: #{$hover};
     }
     .btn-outline-#{$name} {
-        --#{theme.$prefix}-btn: transparent;
-        --#{theme.$prefix}-btn-text: #{$bg};
-        --#{theme.$prefix}-btn-hover-text: #{$color};
-        --#{theme.$prefix}-btn-hover: #{$bg};
-        --#{theme.$prefix}-btn-border: #{$bg};
-        border: 1px solid var(--#{theme.$prefix}-btn-border);
+        --#{theme.$prefix}btn: transparent;
+        --#{theme.$prefix}btn-text: #{$bg};
+        --#{theme.$prefix}btn-hover-text: #{$color};
+        --#{theme.$prefix}btn-hover: #{$bg};
+        --#{theme.$prefix}btn-border: #{$bg};
+        border: 1px solid var(--#{theme.$prefix}btn-border);
     }
 }
 
@@ -23,40 +24,40 @@
 
 
 .btn {
-    --#{theme.$prefix}-btn: var(--#{theme.$prefix}-primary);
-    --#{theme.$prefix}-btn-text: var(--#{theme.$prefix}-primary-text);
-    --#{theme.$prefix}-btn-hover: var(--#{theme.$prefix}-primary-hover);
-    --#{theme.$prefix}-btn-border: var(--#{theme.$prefix}-primary-active);
-    --#{theme.$prefix}-btn-hover-text: var(--#{theme.$prefix}-btn-text);
-    padding: sizes.$inputPadding;
-    background-color: var(--#{theme.$prefix}-btn);
-    color: var(--#{theme.$prefix}-btn-text);
+    --#{theme.$prefix}btn: var(--#{theme.$prefix}primary);
+    --#{theme.$prefix}btn-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}btn-hover: var(--#{theme.$prefix}primary-hover);
+    --#{theme.$prefix}btn-border: var(--#{theme.$prefix}primary-active);
+    --#{theme.$prefix}btn-hover-text: var(--#{theme.$prefix}btn-text);
+    padding: sizes.$input-padding;
+    background-color: var(--#{theme.$prefix}btn);
+    color: var(--#{theme.$prefix}btn-text);
     border: none;
-    border-color: var(--#{theme.$prefix}-btn-border);
+    border-color: var(--#{theme.$prefix}btn-border);
     display: inline-block;
     text-decoration: none;
-    line-height: sizes.$inputLineHeight;
+    line-height: sizes.$input-line-height;
     margin: 0 0.5rem;
     vertical-align:middle;
-    border-radius: sizes.$formRadius;
+    border-radius: sizes.$form-radius;
     &.btn-full {
         width: 100%;
         margin: 0;
     }
     &:hover {
-        background-color: var(--#{theme.$prefix}-btn-hover);
-        color: var(--#{theme.$prefix}-btn-hover-text);
+        background-color: var(--#{theme.$prefix}btn-hover);
+        color: var(--#{theme.$prefix}btn-hover-text);
     }
 }
 
-@include make-button(default, var(--#{theme.$prefix}-primary), var(--#{theme.$prefix}-primary-hover), var(--#{theme.$prefix}-primary-text));
+@include make-button(default, var(--#{theme.$prefix}primary), var(--#{theme.$prefix}primary-hover), var(--#{theme.$prefix}primary-text));
 
 
-@each $color, $value in theme.$theme-colors {
+@each $color, $value in colors.$theme-colors {
     @include make-button(
         $color, 
         $value, 
-        functions.shade-color($value, theme.$colorHoverOffset), 
+        functions.shade-color($value, colors.$color-hover-offset), 
         #fff
     );
 }
@@ -67,12 +68,12 @@
         border-radius: 0;
         margin: 0;
         &:first-child {
-            border-top-left-radius: sizes.$formRadius;
-            border-bottom-left-radius: sizes.$formRadius;
+            border-top-left-radius: sizes.$form-radius;
+            border-bottom-left-radius: sizes.$form-radius;
         }
         &:last-child {
-            border-top-right-radius: sizes.$formRadius;
-            border-bottom-right-radius: sizes.$formRadius;
+            border-top-right-radius: sizes.$form-radius;
+            border-bottom-right-radius: sizes.$form-radius;
         }
     }
 }

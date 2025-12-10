@@ -8,7 +8,7 @@
         user-select: none;
         .tab-item {
             &:hover {
-                background: var(--#{theme.$prefix}-hover);
+                background: var(--#{theme.$prefix}input-hovered);
             }
             &.active {
                 @include mixins.active();
@@ -18,8 +18,8 @@
             }
             display: inline-block;
             width: 9.375rem;
-            height: sizes.$lineHeight;
-            line-height: sizes.$lineHeight;
+            height: sizes.$line-height;
+            line-height: sizes.$line-height;
             text-align: center;
             position: relative;
             .fa-close {
@@ -66,14 +66,14 @@
     display: block;
     line-height: 2.5rem;
     a {
-        color: var(--#{theme.$prefix}-body-text);
+        color: var(--#{theme.$prefix}body-text);
     }
     .item {
         display: inline-block;
         padding: 0 1.25rem;
         cursor: pointer;
         &:hover {
-            background-color: var(--#{theme.$prefix}-hover);
+            background-color: var(--#{theme.$prefix}hover);
         }
         &.active {
             @include mixins.active();

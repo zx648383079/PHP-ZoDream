@@ -22,7 +22,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--#{theme.$prefix}-dialog-mask);
+        background-color: var(--#{theme.$prefix}dialog-mask);
         z-index: 78;
         display: none;
     }
@@ -40,8 +40,8 @@
         width: 8rem;
         margin-left: -5rem;
         line-height: 2.25rem;
-        background-color: var(--#{theme.$prefix}-panel);
-        box-shadow: 0 0.125rem 0.75rem 0 var(--#{theme.$prefix}-shadow);
+        background-color: var(--#{theme.$prefix}panel);
+        box-shadow: 0 0.125rem 0.75rem 0 var(--#{theme.$prefix}shadow);
         display: none;
         &,
         ul,
@@ -53,7 +53,7 @@
             user-select: none;
             padding: .2rem .8rem;
             &:hover {
-                background-color: var(--#{theme.$prefix}-body);
+                background-color: var(--#{theme.$prefix}body);
             }
         }
     }
@@ -66,7 +66,7 @@
     .app-header-container {
         line-height: 3.25rem;
         display: flex;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         .sidebar-container-toggle {
             display: block;
             padding: 0 .8rem;
@@ -75,7 +75,7 @@
                 content: "\f0c9";
             }
             &:hover {
-                background-color: var(--#{theme.$prefix}-body);
+                background-color: var(--#{theme.$prefix}body);
             }
         }
         .header-body {
@@ -120,8 +120,8 @@
         transition: left 1s;
         // padding: 20px 12px 60px 36px;
         overflow-y: auto;
-        background-color: var(--#{theme.$prefix}-primary);
-        color: var(--#{theme.$prefix}-primary-text);
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
         @include scrollbar.scrollbar();
         .sidebar-container-toggle {
             display: none;
@@ -149,9 +149,9 @@
                 padding: 0 1rem;
                 position: relative;
                 display: block;
-                color: var(--#{theme.$prefix}-primary-text);
+                color: var(--#{theme.$prefix}surface-text);
                 &:hover {
-                    background-color: var(--#{theme.$prefix}-primary-hover);
+                    background-color: var(--#{theme.$prefix}surface-hovered);
                 }
             }
             .menu-icon {
@@ -163,7 +163,7 @@
         }
         .menu-children {
             display: none;
-            background-color: var(--#{theme.$prefix}-primary-active);
+            background-color: var(--#{theme.$prefix}surface-child);
             span {
                 font-weight: normal;
             }
@@ -191,7 +191,7 @@
     .main-container {
         transition: all 1s;
         position: relative;
-        background-color: var(--#{theme.$prefix}-body);
+        background-color: var(--#{theme.$prefix}body);
         flex-grow: unset;
         top: 0;
         min-height: 18.75rem;
@@ -309,7 +309,7 @@
                             position: fixed;
                             display: block;
                             width: 10rem;
-                            background-color: var(--#{theme.$prefix}-primary);
+                            background-color: var(--#{theme.$prefix}surface);
                             margin-left: 1.7rem;
                             top: 0;
                             padding: 0 .8rem;

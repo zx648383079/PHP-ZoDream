@@ -9,7 +9,7 @@ $shadow: rgba(0,0,0,.125);
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 1px theme.$shadow, 0 1px 3px theme.$shadow;
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     .panel-body {
         flex: 1;
         overflow-y: auto;

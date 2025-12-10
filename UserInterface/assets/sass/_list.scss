@@ -15,15 +15,15 @@
 }
 
 .column-item {
-    --#{theme.$prefix}-column: #fff;
-    --#{theme.$prefix}-column-text: #333;
-    --#{theme.$prefix}-column-icon: #333;
-    --#{theme.$prefix}-column-icon-text: #fff;
+    --#{theme.$prefix}column: #fff;
+    --#{theme.$prefix}column-text: #333;
+    --#{theme.$prefix}column-icon: #333;
+    --#{theme.$prefix}column-icon-text: #fff;
     display: inline-block;
     position: relative;
     height: 6.25rem;
-    background-color: var(--#{theme.$prefix}-column);
-    color: var(--#{theme.$prefix}-column-text);
+    background-color: var(--#{theme.$prefix}column);
+    color: var(--#{theme.$prefix}column-text);
     vertical-align: top;
     width: 90%;
     margin: 0.625rem 5%;
@@ -32,8 +32,8 @@
         width: 6.25rem;
         height: 6.25rem;
         text-align: center;
-        background-color: var(--#{theme.$prefix}-column-icon);
-        color: var(--#{theme.$prefix}-column-icon-text);
+        background-color: var(--#{theme.$prefix}column-icon);
+        color: var(--#{theme.$prefix}column-icon-text);
         padding-top: 1.25rem;
         font-size: 2.5rem;
     }
@@ -45,15 +45,15 @@
 }
 
 .column-full-item {
-    --#{theme.$prefix}-column: #17a2b8;
-    --#{theme.$prefix}-column-text: #fff;
+    --#{theme.$prefix}column: #17a2b8;
+    --#{theme.$prefix}column-text: #fff;
     border-radius: .25rem;
     box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
     display: block;
     margin-bottom: 1.25rem;
     position: relative;
-    background-color: var(--#{theme.$prefix}-column);
-    color: var(--#{theme.$prefix}-column-text);
+    background-color: var(--#{theme.$prefix}column);
+    color: var(--#{theme.$prefix}column-text);
     .overlay {
         height: 100%;
         left: 0;
@@ -109,11 +109,11 @@
         z-index: 10;
         &:hover {
             background: rgba(0,0,0,.15);
-            color: var(--#{theme.$prefix}-column-text);
+            color: var(--#{theme.$prefix}column-text);
         }
     }
     a {
-        color: var(--#{theme.$prefix}-column-text);
+        color: var(--#{theme.$prefix}column-text);
     }
     &:hover {
         .icon {

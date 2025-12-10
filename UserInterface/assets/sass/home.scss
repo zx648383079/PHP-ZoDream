@@ -4,7 +4,7 @@
 @use 'cookie';
 
 a {
-    color: var(--#{theme.$prefix}-body-text);
+    color: var(--#{theme.$prefix}body-text);
     text-decoration: none;
 }
 
@@ -16,10 +16,10 @@ a {
 }
 header,
 footer {
-    background-color: var(--#{theme.$prefix}-primary);
-    color: var(--#{theme.$prefix}-primary-text);
+    background-color: var(--#{theme.$prefix}primary);
+    color: var(--#{theme.$prefix}primary-text);
     a {
-        color: var(--#{theme.$prefix}-primary-text);
+        color: var(--#{theme.$prefix}primary-text);
     }
     ul,
     li {
@@ -45,7 +45,7 @@ footer {
         position: absolute;
         left: 0;
         width: 5.625rem;
-        border-right: 5px solid var(--#{theme.$prefix}-primary-text);
+        border-right: 5px solid var(--#{theme.$prefix}primary-text);
         text-align: center;
     }
     a {
@@ -68,9 +68,9 @@ footer {
         width: 18.75rem;
         font-size: 1.875rem;
         text-align: center;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         margin: 0.5rem;
-        box-shadow: 0 0 0.625rem var(--#{theme.$prefix}-shadow);
+        box-shadow: 0 0 0.625rem var(--#{theme.$prefix}shadow);
         position: relative;
         overflow: hidden;
         &.unknow {
@@ -103,18 +103,18 @@ footer {
 }
 
 .panel {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     margin-bottom: 1.25rem;
     .panel-header {
         line-height: 3.125rem;
         padding-left: 1.25rem;
-        border-left: 5px solid var(--#{theme.$prefix}-primary);
+        border-left: 5px solid var(--#{theme.$prefix}primary);
         font-size: 1.25rem;
         font-weight: 700;
         small {
             font-size: 0.75rem;
             font-weight: 200;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
         }
         .panel-menu {
             font-size: 0.875rem;
@@ -148,7 +148,7 @@ footer {
             text-decoration: none;
             word-break: break-all;
             .item-time {
-                color: var(--#{theme.$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}secondary-text);
                 font-size: 0.875rem;
                 text-align: right;
             }
@@ -164,7 +164,7 @@ footer {
             flex: 1;
         }
         .time {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             font-size: .8rem;
             height: 2.5rem;
             word-break: keep-all;
@@ -177,14 +177,14 @@ footer {
         }
         .item-meta {
             padding: 0 .5rem .5rem;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             font-size: .8rem;
         }
         &:hover {
-            box-shadow: 0 0 .8rem var(--#{theme.$prefix}-shadow);  
+            box-shadow: 0 0 .8rem var(--#{theme.$prefix}shadow);  
         }
         &:not(:last-of-type) {
-            border-bottom: 1px solid var(--#{theme.$prefix}-secondary-text);
+            border-bottom: 1px solid var(--#{theme.$prefix}secondary-text);
         }
     }
     .card-list-item {
@@ -206,12 +206,12 @@ footer {
         }
         .item-meta,
         .item-time {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             font-size: .8rem;
             padding-top: .5rem;
         }
         &:hover {
-            box-shadow: 0 0 .8rem var(--#{theme.$prefix}-shadow);  
+            box-shadow: 0 0 .8rem var(--#{theme.$prefix}shadow);  
         }
     }
 }
@@ -222,7 +222,7 @@ footer {
 	display: inline-block;
 	vertical-align: middle;
 	transform: translateZ(0);
-	box-shadow: 0 0 1px var(--#{theme.$prefix}-shadow);
+	box-shadow: 0 0 1px var(--#{theme.$prefix}shadow);
 	backface-visibility: hidden;
 	position: relative;
 	transition-property: color;
@@ -235,7 +235,7 @@ footer {
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: var(--#{theme.$prefix}-primary);
+        background-color: var(--#{theme.$prefix}primary);
         transform: scaleX(0);
         transform-origin: 50%;
         transition-property: transform;
@@ -269,9 +269,9 @@ footer {
     input[type="text"],
     input[type="email"],
     textarea {
-        background-color: var(--#{theme.$prefix}-input);
-        color: var(--#{theme.$prefix}-input-text);
-        border: 1px solid var(--#{theme.$prefix}-input-border);
+        background-color: var(--#{theme.$prefix}input);
+        color: var(--#{theme.$prefix}input-text);
+        border: 1px solid var(--#{theme.$prefix}input-border);
         width: 100%;
         padding: 0.75rem 0.75rem;
         font-size: 0.9375rem;
@@ -290,14 +290,14 @@ footer {
 }
 
 .simple-panel {
-    background-color: var(--#{theme.$prefix}-panel);
-    color: var(--#{theme.$prefix}-body-text);
+    background-color: var(--#{theme.$prefix}panel);
+    color: var(--#{theme.$prefix}body-text);
     padding: 1.25rem;
     .panel-header {
         h3, 
         h1, 
         h2 {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
             font-size: 2.1em;
             font-weight: 500;
             margin: 0;
@@ -327,7 +327,7 @@ footer {
             font-family: 'Play-Regular';
         }
         p {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             font-size: 15px;
             margin: 5px 0px 0px;
             font-family: 'Play-Regular';
@@ -336,7 +336,7 @@ footer {
     }
     .autograph {
         line-height: 30px;
-        color: var(--#{theme.$prefix}-body-text);
+        color: var(--#{theme.$prefix}body-text);
         text-align: right;
     }
 }
@@ -360,41 +360,41 @@ footer {
         display: flex;
         height: .8rem;
         border-radius: .25rem;
-        background-color: var(--#{theme.$prefix}-primary-text);
-        border: 1px solid var(--#{theme.$prefix}-primary);
+        background-color: var(--#{theme.$prefix}primary-text);
+        border: 1px solid var(--#{theme.$prefix}primary);
         .inner-bar {
             display: flex;
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
-            color: var(--#{theme.$prefix}-primary-text);
+            color: var(--#{theme.$prefix}primary-text);
             text-align: center;
             white-space: nowrap;
-            background-color: var(--#{theme.$prefix}-primary-hover);
+            background-color: var(--#{theme.$prefix}primary-hover);
         }
     }
     .skill-meta {
-        color: var(--#{theme.$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}secondary-text);
         font-size: .8rem;
     }
 }
 
 .person-box {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     padding: 1.25rem 0.625rem;
-    color: var(--#{theme.$prefix}-body-text);
+    color: var(--#{theme.$prefix}body-text);
     .avatar {
         text-align: center;
         img {
             padding: 2px;
             max-width: 7.5rem;
             height: auto;
-            border: 1px solid var(--#{theme.$prefix}-secondary-text);
+            border: 1px solid var(--#{theme.$prefix}secondary-text);
         }
     }
     .name {
         text-align: center;
-        color: var(--#{theme.$prefix}-body-text);
+        color: var(--#{theme.$prefix}body-text);
         line-height: 2.5rem;
         font-weight: 600;
     }
@@ -408,14 +408,14 @@ footer {
         margin-top: 0.625rem;
         line-height: 1.875rem;
         a {
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
             display: inline-block;
             width: 45%;
             padding: 0 10px;
             &:hover {
                 border-radius: 4px;
-                color: var(--#{theme.$prefix}-primary-text);
-                background: var(--#{theme.$prefix}-primary-hover);
+                color: var(--#{theme.$prefix}primary-text);
+                background: var(--#{theme.$prefix}primary-hover);
             }
         }
     }
@@ -423,7 +423,7 @@ footer {
 
 .friend-box {
     margin: 3.125rem 0;
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     min-height: 18.75rem;
     line-height: 2.5rem;
     padding: 1.25rem 0.625rem;
@@ -431,7 +431,7 @@ footer {
         padding-left: 9.375rem;
         > div:first-child {
             width: 8.75rem;
-            border-right: 5px solid var(--#{theme.$prefix}-primary);
+            border-right: 5px solid var(--#{theme.$prefix}primary);
             font-size: 1.25rem;
         }
     }
@@ -453,9 +453,9 @@ footer {
 
 .apply-dialog {
     input {
-        background-color: var(--#{theme.$prefix}-input);
-        color: var(--#{theme.$prefix}-input-text);
-        border: 1px solid var(--#{theme.$prefix}-input-border);
+        background-color: var(--#{theme.$prefix}input);
+        color: var(--#{theme.$prefix}input-text);
+        border: 1px solid var(--#{theme.$prefix}input-border);
         height: 1.875rem;
         width: 18.75rem;
     }
@@ -470,13 +470,13 @@ footer {
     bottom: 0;
     top: 0;
     z-index: 99;
-    background-color: var(--#{theme.$prefix}-dialog-mask);
+    background-color: var(--#{theme.$prefix}dialog-mask);
     .dialog-close {
         @include mixins.icon("\f00d", 3rem);
         position: absolute;
         right: 0;
-        background-color: var(--#{theme.$prefix}-primary);
-        color: var(--#{theme.$prefix}-primary-text);
+        background-color: var(--#{theme.$prefix}primary);
+        color: var(--#{theme.$prefix}primary-text);
         padding: 0.3125rem 0.625rem;
     }
     .dialog-body {
@@ -492,7 +492,7 @@ footer {
             line-height: 3rem;
             background: 0 0;
             border: none;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             outline: 0;
             padding: 0 0.625rem;
         }
@@ -506,9 +506,9 @@ footer {
             display: none;
         }
         input {
-            background-color: var(--#{theme.$prefix}-input);
-            color: var(--#{theme.$prefix}-input-text);
-            border: 1px solid var(--#{theme.$prefix}-input-border);
+            background-color: var(--#{theme.$prefix}input);
+            color: var(--#{theme.$prefix}input-text);
+            border: 1px solid var(--#{theme.$prefix}input-border);
             width: 100%;
             height: 3.125rem;
             line-height: 3.125rem;
@@ -522,15 +522,15 @@ footer {
     .search-suggestion {
         width: 100%;
         border-radius: 0 0 0.625rem 0.625rem;
-        background: var(--#{theme.$prefix}-panel);
-        box-shadow: 0 4px 5px 0 var(--#{theme.$prefix}-shadow);
+        background: var(--#{theme.$prefix}panel);
+        box-shadow: 0 4px 5px 0 var(--#{theme.$prefix}shadow);
         overflow: hidden;
         li {
-            border-top: 1px solid var(--#{theme.$prefix}-input-border);
+            border-top: 1px solid var(--#{theme.$prefix}input-border);
             line-height: 3.125rem;
             font-size: 0.875rem;
             padding: 0 0.625rem;
-            color: var(--#{theme.$prefix}-body-text);
+            color: var(--#{theme.$prefix}body-text);
             cursor: pointer;
             list-style: none;
             span {
@@ -540,13 +540,13 @@ footer {
                 font-size: 0.75rem;
                 line-height: 1.875rem;
                 text-align: center;
-                background: var(--#{theme.$prefix}-primary);
+                background: var(--#{theme.$prefix}primary);
                 margin-right: 0.625rem;
                 border-radius: 50%;
-                color: var(--#{theme.$prefix}-primary-text);
+                color: var(--#{theme.$prefix}primary-text);
             }
             &.active {
-                background-color: var(--#{theme.$prefix}-secondary);
+                background-color: var(--#{theme.$prefix}secondary);
             }
         }
     }

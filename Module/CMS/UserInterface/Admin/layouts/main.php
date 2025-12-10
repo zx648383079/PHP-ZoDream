@@ -60,6 +60,7 @@ $this->registerCssFile([
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
         '@jquery.pjax.min.js',
+        '@jquery.tour.min.js',
         '@main.min.js',
         '@admin.min.js',
         '@cms_admin.min.js'

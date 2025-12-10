@@ -1,15 +1,7 @@
 @use 'theme';
-
-
-
-@use 'root' with (
-    $primary: #2f4156,
-    $primaryText: rgb(185, 201, 218),
-    $isFullyTheme: false,
-);
 @use 'menu';
 @use 'scroll';
-
+@use 'tour';
 
 a {
     text-decoration: none;
@@ -21,15 +13,15 @@ a {
 
 footer,
 header {
-    background: var(--#{theme.$prefix}-primary);
-    color: var(--#{theme.$prefix}-primary-text); 
+    background: var(--#{theme.$prefix}primary);
+    color: var(--#{theme.$prefix}primary-text); 
     a {
-        color: var(--#{theme.$prefix}-primary-text);
+        color: var(--#{theme.$prefix}primary-text);
         text-decoration: none;
     }
 }
 .tab-box .tab-header {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
 }
 
 header {
@@ -56,13 +48,13 @@ footer {
 
 
 .page-tooltip-bar {
-    border: 1px dashed var(--#{theme.$prefix}-primary);
+    border: 1px dashed var(--#{theme.$prefix}primary);
     padding: 0.625rem;
     border-radius: 0.3125rem;
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     position: relative;
     .tooltip-header {
-        color: var(--#{theme.$prefix}-secondary-text);
+        color: var(--#{theme.$prefix}secondary-text);
     }
     ul {
         width: 100%;
@@ -71,7 +63,7 @@ footer {
             padding-left: 10px;
             list-style: inside;
             a {
-                color: var(--#{theme.$prefix}-panel-text);
+                color: var(--#{theme.$prefix}body-text);
             }
         }
     }
@@ -106,16 +98,16 @@ footer {
 .breadcrumb {
     padding: 0.5rem 0.9375rem;
     list-style: none;
-    background-color: var(--#{theme.$prefix}-body);
+    background-color: var(--#{theme.$prefix}body);
     border-radius: 0.25rem;
     >li {
         display: inline-block;
         &.active {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
         }
         +li::before {
             padding: 0 0.3125rem;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             content: "/\00a0";
         }
     }
@@ -172,7 +164,7 @@ table,
         .item-meta-bar {
             float: left;
             font-size: .8rem;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             >a,
             >span {
                 margin-right: .4rem;
@@ -189,14 +181,14 @@ table,
     }
     .row-item {
         position: relative;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         margin-bottom: 1.25rem;
         .stamp {
             position: absolute;
             right: 0;
             top: 0;
             transform: rotate(30deg);
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             border: 2px solid;
             display: flex;
             align-items: center;
@@ -212,7 +204,7 @@ table,
             font-weight: 700;
             .no {
                 display: inline-block;
-                background-color: var(--#{theme.$prefix}-body);
+                background-color: var(--#{theme.$prefix}body);
                 padding: 0 5px;
                 line-height: 1.875rem;
                 margin-right: 0.625rem;
@@ -220,7 +212,7 @@ table,
                 &::after {
                     content: "";
                     border: 6px solid transparent;
-                    border-left-color: var(--#{theme.$prefix}-body);
+                    border-left-color: var(--#{theme.$prefix}body);
                     position: absolute;
                     right: -12px;
                     top: 9px;
@@ -228,7 +220,7 @@ table,
             }
         }
         .item-body {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             padding: 5px;
         }
         &.thumb-item {
@@ -246,31 +238,31 @@ table,
         &:hover {
             .item-header {
                 .no {
-                    background-color: var(--#{theme.$prefix}-primary);
-                    color: var(--#{theme.$prefix}-primary-text);
+                    background-color: var(--#{theme.$prefix}primary);
+                    color: var(--#{theme.$prefix}primary-text);
                     &::after {
-                        border-left-color: var(--#{theme.$prefix}-primary);
+                        border-left-color: var(--#{theme.$prefix}primary);
                     }
                 }
             }
             .stamp {
-                color: var(--#{theme.$prefix}-primary-hover);
+                color: var(--#{theme.$prefix}primary-hover);
                 transform: rotate(390deg);
             }
             .item-body {
-                background-color: var(--#{theme.$prefix}-gray);
-                color: var(--#{theme.$prefix}-gray-text);
+                background-color: var(--#{theme.$prefix}tertiary);
+                color: var(--#{theme.$prefix}meta-text);
             }
         }
     }
 
     .image-row-item {
         display: flex;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         margin-bottom: 1.25rem;
         .no {
             display: inline-block;
-            background-color: var(--#{theme.$prefix}-body);
+            background-color: var(--#{theme.$prefix}body);
             padding: 0 5px;
             line-height: 1.875rem;
             margin-right: 0.625rem;
@@ -278,7 +270,7 @@ table,
             &::after {
                 content: "";
                 border: 6px solid transparent;
-                border-left-color: var(--#{theme.$prefix}-body);
+                border-left-color: var(--#{theme.$prefix}body);
                 position: absolute;
                 right: -12px;
                 top: 9px;
@@ -299,7 +291,7 @@ table,
             font-weight: 700;
         }
         .item-meta {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             padding: 0.3125rem;
         }
         
@@ -310,12 +302,12 @@ table,
 
 .column-full-item {
     border-radius: .25rem;
-    box-shadow: 0 0 1px var(--#{theme.$prefix}-shadow), 0 1px 3px var(--#{theme.$prefix}-shadow);
+    box-shadow: 0 0 1px var(--#{theme.$prefix}shadow), 0 1px 3px var(--#{theme.$prefix}shadow);
     display: block;
     margin-bottom: 1.25rem;
     position: relative;
-    background-color: var(--#{theme.$prefix}-panel);
-    color: var(--#{theme.$prefix}-panel-text);
+    background-color: var(--#{theme.$prefix}panel);
+    color: var(--#{theme.$prefix}body-text);
     .overlay {
         height: 100%;
         left: 0;
@@ -324,12 +316,12 @@ table,
         width: 100%;
         border-radius: .25rem;
         align-items: center;
-        background: var(--#{theme.$prefix}-gray);
+        background: var(--#{theme.$prefix}tertiary);
         display: flex;
         justify-content: center;
         z-index: 50;
         i {
-            color: var(--#{theme.$prefix}-gray-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: 3em;
             animation: spin 1s linear infinite;
         }
@@ -349,7 +341,7 @@ table,
         font-size: 1rem;
     }
     .icon {
-        color: var(--#{theme.$prefix}-primary);
+        color: var(--#{theme.$prefix}primary);
         z-index: 0;
         i {
             font-size: 3.125rem;
@@ -360,8 +352,8 @@ table,
         }
     }
     .column-footer {
-        background: var(--#{theme.$prefix}-primary);
-        color: var(--#{theme.$prefix}-primary-text);
+        background: var(--#{theme.$prefix}primary);
+        color: var(--#{theme.$prefix}primary-text);
         display: block;
         padding: 3px 0;
         position: relative;
@@ -369,11 +361,11 @@ table,
         text-decoration: none;
         z-index: 10;
         &:hover {
-            background: var(--#{theme.$prefix}-primary-hover);
+            background: var(--#{theme.$prefix}primary-hover);
         }
     }
     a {
-        color: var(--#{theme.$prefix}-panel-text);
+        color: var(--#{theme.$prefix}body-text);
     }
     &:hover {
         .icon {
@@ -381,6 +373,44 @@ table,
                 font-size: 3.4375rem;
             }
         }
+    }
+}
+
+.tool-help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--#{theme.$prefix}border);
+    font-size: .8rem;
+    font-style: normal;
+    color: var(--#{theme.$prefix}meta-text);
+    cursor: pointer;
+    &::after {
+        content: '?';
+    }
+    &:hover {
+        border: .1rem solid var(--#{theme.$prefix}info);
+        color: var(--#{theme.$prefix}info);
+        font-weight: bold;
+        animation: shake 0.8s ease-in-out;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-15deg);
+    }
+    50% {
+        transform: rotate(15deg);
+    }
+    75% {
+        transform: rotate(-15deg);
     }
 }
 

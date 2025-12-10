@@ -1,20 +1,8 @@
 @forward 'variables/red';
+@use 'colors';
 
 $prefix: 'zre-' !default;
 
 
-$invalid: #dc3545;
-$valid: #198754;
-
-$theme-colors: (
-    'primary': #337ab7,
-    'success': #198754,
-    'info': #5bc0de,
-    'danger': $invalid,
-    'warning': #f0ad4e,
-    'secondary': #6c757d
-);
-
-$colorHoverOffset: 12%; // Hover 颜色加深程度
-$colorActiveOffset: 20%; // 点击后 颜色加深程度
-
+$invalid: colors.$red;
+$valid: colors.$green;

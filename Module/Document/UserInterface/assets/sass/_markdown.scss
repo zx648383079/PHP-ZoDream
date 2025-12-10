@@ -280,7 +280,7 @@
     }
     code {
         font-family: Menlo, Monaco, Consolas, Droid Sans Mono, Courier New, monospace, Microsoft YaHei, 微软雅黑, 宋体;
-        background: var(--#{theme.$prefix}-body);
+        background: var(--#{theme.$prefix}body);
         border-radius: 0.25rem;
         font-size: .9em;
         line-height: inherit !important;
@@ -291,7 +291,7 @@
     //     word-wrap: normal !important;
     //     overflow-x: auto;
     //     margin: 0;
-    //     background: var(--#{theme.$prefix}-body);
+    //     background: var(--#{theme.$prefix}body);
     //     > code {
     //         white-space: pre !important;
     //         display: block;

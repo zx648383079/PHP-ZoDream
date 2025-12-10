@@ -4,10 +4,10 @@
 .pager {
     li {
         display: inline-block;
-        line-height: sizes.$lineHeight;
-        min-width: sizes.$lineHeight;
+        line-height: sizes.$line-height;
+        min-width: sizes.$line-height;
         text-align: center;
-        border: 1px solid var(--#{theme.$prefix}-primary);
+        border: 1px solid var(--#{theme.$prefix}primary);
         box-sizing: border-box;
         cursor: pointer;
         &.active {
@@ -31,15 +31,15 @@
             padding: 6px 12px;
             margin-left: -1px;
             line-height: 1.42857143;
-            color: var(--#{theme.$prefix}-panel-text);
+            color: var(--#{theme.$prefix}body-text);
             text-decoration: none;
-            background-color: var(--#{theme.$prefix}-panel);
-            border: 1px solid var(--#{theme.$prefix}-input-border);
+            background-color: var(--#{theme.$prefix}panel);
+            border: 1px solid var(--#{theme.$prefix}input-border);
             &:hover,
             &:focus {
                 z-index: 2;
-                color: var(--#{theme.$prefix}-primary-text);
-                background-color: var(--#{theme.$prefix}-primary-hover);
+                color: var(--#{theme.$prefix}primary-text);
+                background-color: var(--#{theme.$prefix}primary-hover);
             }
         }
     }
@@ -47,25 +47,25 @@
         >a,
         >span {
             z-index: 3;
-            color: var(--#{theme.$prefix}-primary-text);
-            background-color: var(--#{theme.$prefix}-primary);
-            border-color: var(--#{theme.$prefix}-input-border);
+            color: var(--#{theme.$prefix}primary-text);
+            background-color: var(--#{theme.$prefix}primary);
+            border-color: var(--#{theme.$prefix}input-border);
             cursor: default;
             &:hover,
             &:focus {
-                background-color: var(--#{theme.$prefix}-primary-hover);
+                background-color: var(--#{theme.$prefix}primary-hover);
             }
         }
     }
     >.disabled {
         >a,
         >span {
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
             cursor: default;
             background-color: transparent;
             &:hover,
             &:focus {
-                color: var(--#{theme.$prefix}-secondary-text);
+                color: var(--#{theme.$prefix}secondary-text);
                 background-color: transparent;
             }
         }

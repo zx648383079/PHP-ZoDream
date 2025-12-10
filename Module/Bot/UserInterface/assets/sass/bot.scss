@@ -5,7 +5,7 @@
         display: inline-block;
         padding: 5px 10px;
         background: #97CCFE; 
-        min-bot_idth: 100px;
+        min-width: 100px;
         text-align: center;
     }
 }
@@ -14,18 +14,18 @@
     select {
         height: auto;
         display: block;
-        min-bot_idth: 200px;
+        min-width: 200px;
     }
 }
 
 .wx-editor {
     .tab-header {
         .tab-item {
-            bot_idth: 80px;
+            width: 80px;
         }
     }
     textarea {
-        bot_idth: 100%;
+        width: 100%;
         height: 100px;
     }
 }
@@ -33,13 +33,13 @@
 .form-inline {
     .input-group {
         select {
-            min-bot_idth: 120px;
+            min-width: 120px;
         }
         .file-input {
             display: inline-block;
             button {
                 background: #97CCFE;
-                min-bot_idth: 70px;
+                min-width: 70px;
                 padding: 0 30px;
                 border: none;
                 display: inline-block;
@@ -89,15 +89,15 @@ table {
                 flex: 1;
             }
             :first-child {
-                border-top-left-radius: $formRadius;
-                border-bottom-left-radius: $formRadius;
+                border-top-left-radius: #{theme.$form-radius};
+                border-bottom-left-radius: #{theme.$form-radius};
             }
             :last-child {
-                border-top-right-radius: $formRadius;
-                border-bottom-right-radius: $formRadius;
+                border-top-right-radius: #{theme.$form-radius};
+                border-bottom-right-radius: #{theme.$form-radius};
             }
             select {
-                bot_idth: 4rem;
+                width: 4rem;
                 flex: none !important;
             }
         }
@@ -108,10 +108,10 @@ table {
                 list-style: none;
                 display: inline-block;
                 box-sizing: border-box;
-                bot_idth: 80px;
+                width: 80px;
                 height: 80px;
                 img {
-                    bot_idth: 100%;
+                    width: 100%;
                     height: 100%;
                 }
                 &.active,
@@ -135,8 +135,8 @@ table {
     }
     .tab-header {
         .tab-item {
-            bot_idth: auto;
-            min-bot_idth: 80px;
+            width: auto;
+            min-width: 80px;
         }
     }
     .template-preview {
@@ -148,12 +148,12 @@ table {
 
 .editor-box {
     .editor-template-box {
-        bot_idth: 520px;
+        width: 520px;
         float: left;
         height: 800px;
         position: relative;
         .template-menu {
-            bot_idth: 80px;
+            width: 80px;
             li {
                 text-align: center;
                 line-height: 30px;
@@ -168,7 +168,7 @@ table {
         .template-box {
             overflow-x: hidden;
             height: 800px;
-            bot_idth: 440px;
+            width: 440px;
             position: absolute;
             top: 0;
             left: 80px;
@@ -184,7 +184,7 @@ table {
                     overflow:visible;
                     min-height:64px;
                     // img {
-                    //     max-bot_idth: 100%;
+                    //     max-width: 100%;
                     //     min-height: 110px;
                     // }
                     &:hover {
@@ -195,7 +195,7 @@ table {
         }
     }
     .editor {
-        bot_idth: 440px;
+        width: 440px;
         height: 800px;
         float: left;
         border: 4px dotted #D8D8D8;
@@ -205,7 +205,7 @@ table {
 
 .qr-box {
     margin: 20vh auto;
-    bot_idth: 258px;
+    width: 258px;
 }
 
 .emulate-box {
@@ -218,7 +218,7 @@ table {
         line-height: 40px;
         height: 40px;
         top: 0;
-        bot_idth: 100%;
+        width: 100%;
         z-index: 99;
         box-shadow: 1px 1px 0 rgba($color: #777, $alpha: .1);
         .fa-arrow-left {
@@ -232,7 +232,7 @@ table {
             >.fa {
                 font-size: 20px;
                 display: block;
-                bot_idth: 40px;
+                width: 40px;
                 text-align: center;
                 cursor: pointer;
                 line-height: 40px;
@@ -243,13 +243,13 @@ table {
                 margin-top: 10px;
                 right: 0;
                 background-color: #f4f4f4;
-                bot_idth: 200px;
+                width: 200px;
                 z-index: 5;
                 box-shadow: 0 0 10px rgba(0,0,0,.5);
                 .qr {
                     height: 200px;
                     img {
-                        bot_idth: 100%;
+                        width: 100%;
                         height: 100%;
                     }
                 }
@@ -267,7 +267,7 @@ table {
                 &::before {
                     content: " ";
                     display: block;
-                    bot_idth: 0px;
+                    width: 0px;
                     height: 0px;
                     border: 10px solid transparent;
                     border-bottom-color: #f4f4f4;
@@ -309,11 +309,11 @@ table {
                 position: absolute;
                 top: 0;
                 height: 2.5rem;
-                bot_idth: 2.5rem;
+                width: 2.5rem;
                 border-radius: 50%;
             }
             .content {
-                max-bot_idth: 66%;
+                max-width: 66%;
                 background: rgba(0,255,255,0.16);
                 line-height: 2.5rem;
                 padding: 0 0.625rem;
@@ -359,10 +359,10 @@ table {
             color: #333;
             text-decoration: none;
             .thumb {
-                bot_idth: 100%;
+                width: 100%;
                 height: 160px;
                 img {
-                    bot_idth: 100%;
+                    width: 100%;
                     height: 100%;
                 }
             }
@@ -381,7 +381,7 @@ table {
         background-color: #f4f4f4;
         bottom: 0;
         left: 0;
-        bot_idth: 100%;
+        width: 100%;
         .input-box {
             display: none;
             line-height: 40px;
@@ -403,7 +403,7 @@ table {
             display: none;
             .icon-item {
                 display: inline-block;
-                bot_idth: 80px;
+                width: 80px;
                 height: 80px;
                 text-align: center;
                 background-color: #fff;
@@ -441,7 +441,7 @@ table {
                     position: absolute;
                     bottom: 50px;
                     background-color: #fff;
-                    bot_idth: 160px;
+                    width: 160px;
                     text-align: center;
                     margin-left: -80px;
                     li {

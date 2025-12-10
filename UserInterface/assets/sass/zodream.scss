@@ -29,8 +29,8 @@
 }
 
 body {
-    background-color: var(--#{theme.$prefix}-body);
-    color: var(--#{theme.$prefix}-body-text);
+    background-color: var(--#{theme.$prefix}body);
+    color: var(--#{theme.$prefix}body-text);
 }
 
 

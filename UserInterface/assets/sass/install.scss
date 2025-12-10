@@ -8,7 +8,7 @@
 .page-header {
     padding: 0.625rem 1.25rem;
     background-color: theme.$primary;
-    color: theme.$primaryText;
+    color: theme.$primary-text;
 }
 
 .page-body {
@@ -31,7 +31,7 @@
     padding: 0.3125rem;
     .btn {
         background-color: theme.$primary;
-        color: theme.$primaryText;
+        color: theme.$primary-text;
     }
 }
 

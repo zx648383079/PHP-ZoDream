@@ -13,6 +13,7 @@ $this->title = ($model->id > 0 ? '编辑' : '新增').'联动菜单';
     <?=Form::text('code', true)?>
     <?=Form::radio('type', ['栏目', '内容'])?>
     <?=Form::text('language')->tip('具体语言请对应站点语言')?>
+    <?=Form::text('uri_template')->tip('后台辅助功能：在栏目或文章插入网址时使用，{id}占位符')?>
    
     <div class="btn-group">
         <button type="submit" class="btn btn-success">确认保存</button>

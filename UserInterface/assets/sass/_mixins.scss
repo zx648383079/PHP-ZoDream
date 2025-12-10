@@ -40,8 +40,8 @@
 }
 
 @mixin active() {
-    background:  var(--#{theme.$prefix}-primary);
-    color:  var(--#{theme.$prefix}-primary-text);
+    background-color:  var(--#{theme.$prefix}input-selected);
+    color:  var(--#{theme.$prefix}input-text);
 }
 
 @mixin clearfix() {

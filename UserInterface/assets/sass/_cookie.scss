@@ -9,7 +9,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color:  var(--#{theme.$prefix}-dialog-mask);
+        background-color:  var(--#{theme.$prefix}dialog-mask);
     }
     .dialog-cookie-body {
         position: fixed;
@@ -17,8 +17,8 @@
         left: 0;
         right: 0;
         z-index: 2;
-        background-color: var(--#{theme.$prefix}-dialog);
-        color: var(--#{theme.$prefix}-dialog-text);
+        background-color: var(--#{theme.$prefix}dialog);
+        color: var(--#{theme.$prefix}dialog-text);
         box-shadow: 0 0 1.25rem theme.$shadow;
     }
     .dialog-header {
@@ -44,8 +44,8 @@
             border: 1px solid #ccc;
             padding: .8rem;
             border-radius: .25rem;
-            background-color: var(--#{theme.$prefix}-panel);
-            color: var(--#{theme.$prefix}-panel-text);
+            background-color: var(--#{theme.$prefix}panel);
+            color: var(--#{theme.$prefix}body-text);
             display: flex;
             align-items: center;
             min-height: 3rem;

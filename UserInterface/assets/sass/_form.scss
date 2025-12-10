@@ -7,18 +7,18 @@
 .form-ico {
     .form-control {
         border-radius: 0;
-        padding-left: sizes.$lineHeight;
+        padding-left: sizes.$line-height;
         width: 100%;
         box-sizing: border-box;
     }
     .input-group {
         position: relative;
-        line-height: sizes.$lineHeight;
+        line-height: sizes.$line-height;
         .fa {
             position: absolute;
             left: .8rem;
             top: .6rem;
-            color: var(--#{theme.$prefix}-secondary-text);
+            color: var(--#{theme.$prefix}secondary-text);
         }
         &.is-invalid {
             .fa {
@@ -32,15 +32,15 @@
 .checkbox {
     position: relative;
     display: inline-block;
-    width: sizes.$lineHeight;
-    height: sizes.$lineHeight;
+    width: sizes.$line-height;
+    height: sizes.$line-height;
     input[type=checkbox] {
         visibility: hidden;
         &:checked {
             &+label {
                 &::before {
                     content: "\f14a";
-                    color:  var(--#{theme.$prefix}-primary);
+                    color:  var(--#{theme.$prefix}primary);
                 }
             }
         }
@@ -59,7 +59,7 @@
     }
 }
 
-$toggleHeight: sizes.$lineHeight * .8;
+$toggleHeight: sizes.$line-height * .8;
 
 .check-toggle {
     input[type=checkbox] {
@@ -70,16 +70,16 @@ $toggleHeight: sizes.$lineHeight * .8;
                     left: $toggleHeight;
                 }
                 &::after {
-                    background-color: var(--#{theme.$prefix}-primary);
-                    box-shadow: 0 0 1px var(--#{theme.$prefix}-primary);
+                    background-color: var(--#{theme.$prefix}primary);
+                    box-shadow: 0 0 1px var(--#{theme.$prefix}primary);
                 }
             }
         }
     }
     label {
         cursor: pointer;
-        border-color: var(--#{theme.$prefix}-border);
-        background-color: var(--#{theme.$prefix}-body);
+        border-color: var(--#{theme.$prefix}border);
+        background-color: var(--#{theme.$prefix}body);
         border-radius: 3.125rem;
         display: inline-block;
         position: relative;
@@ -94,14 +94,14 @@ $toggleHeight: sizes.$lineHeight * .8;
             border-radius: 6.25rem;
         }
         &::before {
-            background-color: var(--#{theme.$prefix}-panel);
+            background-color: var(--#{theme.$prefix}panel);
             top: .1rem;
             left: .1rem;
             z-index: 1;
             width: $toggleHeight - .2rem;
             transition: all 0.1s ease-in;
             height: $toggleHeight - .2rem;
-            box-shadow: 0 3px 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.05), 0 0 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.3);
+            box-shadow: 0 3px 1px rgba(var(--#{theme.$prefix}body-text-rgb),.05), 0 0 1px rgba(var(--#{theme.$prefix}body-text-rgb),.3);
         }
         &::after {
             top: 0;
@@ -109,7 +109,7 @@ $toggleHeight: sizes.$lineHeight * .8;
             left: 0;
             width: 100%;
             height: 100%;
-            box-shadow: inset 0 0 0 0 var(--#{theme.$prefix}-body), 0 0 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.4);
+            box-shadow: inset 0 0 0 0 var(--#{theme.$prefix}body), 0 0 1px rgba(var(--#{theme.$prefix}body-text-rgb),.4);
         }
     }
 }
@@ -121,8 +121,9 @@ $toggleHeight: sizes.$lineHeight * .8;
         display: none;
         &:checked {
             &+label {
-                background-color: var(--#{theme.$prefix}-primary);
-                color: var(--#{theme.$prefix}-primary-text);
+                background-color: var(--#{theme.$prefix}primary);
+                border: none;
+                color: var(--#{theme.$prefix}primary-text);
                 &::before {
                     content: "\f00c";
                 }
@@ -135,9 +136,10 @@ $toggleHeight: sizes.$lineHeight * .8;
         margin-top: 0.125rem;
         display: inline-block;
         position: relative;
-        line-height: sizes.$lineHeight;
-        background-color: var(--#{theme.$prefix}-secondary);
-        color: var(--#{theme.$prefix}-secondary-text);
+        line-height: sizes.$line-height;
+        background-color: var(--#{theme.$prefix}input);
+        border: 1px solid var(--#{theme.$prefix}input-border);
+        color: var(--#{theme.$prefix}input-text);
         &::before {
             font-family: "Font Awesome 5 Free";
             content: "\f111";
@@ -152,8 +154,8 @@ $toggleHeight: sizes.$lineHeight * .8;
 .toggle-switch {
     display: inline-block;
     cursor: pointer;
-    border-color: var(--#{theme.$prefix}-border);
-    background-color: var(--#{theme.$prefix}-body);
+    border-color: var(--#{theme.$prefix}border);
+    background-color: var(--#{theme.$prefix}body);
     border-radius: 2em;
     display: inline-block;
     position: relative;
@@ -166,14 +168,14 @@ $toggleHeight: sizes.$lineHeight * .8;
         content: ' ';
         position: absolute;
         border-radius: 2em;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         top: 0;
         left: 0;
         z-index: 1;
         width: 2em;
         transition: all .1s ease-in;
         height: 2em;
-        box-shadow: 0 3px 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.05), 0 0 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.3);
+        box-shadow: 0 3px 1px rgba(var(--#{theme.$prefix}body-text-rgb),.05), 0 0 1px rgba(var(--#{theme.$prefix}body-text-rgb),.3);
     }
     &:after {
         content: ' ';
@@ -184,15 +186,15 @@ $toggleHeight: sizes.$lineHeight * .8;
         left: 0;
         width: 100%;
         height: 100%;
-        box-shadow: inset 0 0 0 0 var(--#{theme.$prefix}-body), 0 0 1px rgba(var(--#{theme.$prefix}-body-text-rgb),.4);
+        box-shadow: inset 0 0 0 0 var(--#{theme.$prefix}body), 0 0 1px rgba(var(--#{theme.$prefix}body-text-rgb),.4);
     }
     &.toggled {
         &::before {
             left: 2em;
         }
         &:after {
-            background-color: var(--#{theme.$prefix}-primary);
-            box-shadow: 0 0 1px var(--#{theme.$prefix}-primary);
+            background-color: var(--#{theme.$prefix}primary);
+            box-shadow: 0 0 1px var(--#{theme.$prefix}primary);
         }
     }
 }
@@ -201,7 +203,7 @@ i {
     &.checkbox {
         font-style: normal;
         text-align: center;
-        line-height: sizes.$lineHeight;
+        line-height: sizes.$line-height;
         &::before {
             font-family: "Font Awesome 5 Free";
             font-size: inherit;
@@ -212,7 +214,7 @@ i {
         &.checked {
             &::before {
                 content: "\f14a";
-                color: var(--#{theme.$prefix}-primary);
+                color: var(--#{theme.$prefix}primary);
             }
         }
     }
@@ -231,24 +233,24 @@ i {
 
 .form-table {
     .form-control {
-        --#{theme.$prefix}-input-width: 12.5rem;
+        --#{theme.$prefix}input-width: 12.5rem;
     }
     .input-group {
         display: flex;
         margin-bottom: .3rem;
         select {
-            --#{theme.$prefix}-input-width: 6.25rem;
+            --#{theme.$prefix}input-width: 6.25rem;
         }
         textarea {
             padding: .5rem;
-            --#{theme.$prefix}-input-width: 12.5rem;
-            min-height: sizes.$lineHeight * 3;
+            --#{theme.$prefix}input-width: 12.5rem;
+            min-height: sizes.$line-height * 3;
         }
         >label:first-child {
             width: 25%;
             display: block;
             text-align: right;
-            line-height: sizes.$lineHeight;
+            line-height: sizes.$line-height;
             padding: 0 0.625rem;
         }        
         >div {
@@ -258,7 +260,7 @@ i {
                 resize: vertical;
             }
             .inline {
-                line-height: sizes.$inputLineHeight;
+                line-height: sizes.$input-line-height;
                 min-width: 6.25rem;
                 display: inline-block;
             }
@@ -289,7 +291,7 @@ i {
 }
 
 .form-horizontal {
-    line-height: sizes.$lineHeight;
+    line-height: sizes.$line-height;
     .form-control {
         border: none;
         background: transparent;
@@ -297,8 +299,8 @@ i {
     }
     .input-group {
         display: inline-block;
-        border-bottom: 1px solid var(--#{theme.$prefix}-border);
-        height: sizes.$lineHeight;
+        border-bottom: 1px solid var(--#{theme.$prefix}border);
+        height: sizes.$line-height;
         textarea {
             padding: .5rem;
         }
@@ -317,8 +319,8 @@ i {
     }
     .input-group {
         display: flex;
-        border-bottom: 1px solid var(--#{theme.$prefix}-border);
-        min-height: sizes.$inputLineHeight;
+        border-bottom: 1px solid var(--#{theme.$prefix}border);
+        min-height: sizes.$input-line-height;
         align-items: center;
     }
     .btn {
@@ -331,8 +333,8 @@ i {
     .form-control {
         border-radius: 0;
         &:first-of-type {
-            border-top-left-radius: sizes.$formRadius;
-            border-bottom-left-radius: sizes.$formRadius;
+            border-top-left-radius: sizes.$form-radius;
+            border-bottom-left-radius: sizes.$form-radius;
         }
     }
     .btn {
@@ -343,8 +345,8 @@ i {
             font-weight: bold;
         }
         &:last-of-type {
-            border-top-right-radius: sizes.$formRadius;
-            border-bottom-right-radius: sizes.$formRadius;
+            border-top-right-radius: sizes.$form-radius;
+            border-bottom-right-radius: sizes.$form-radius;
         }
     }
     &.file-uploading {
@@ -366,7 +368,7 @@ i {
             width: 20%;
             height: .1rem;
             opacity: .6;
-            background-color: var(--#{theme.$prefix}-primary);
+            background-color: var(--#{theme.$prefix}primary);
             animation: 1s linear infinite borderLoop alternate;
         }
     }
@@ -387,13 +389,13 @@ i {
         flex: 1 1 auto;
         width: 1%;
         margin-bottom: 0;
-        border-top-left-radius: sizes.$formRadius;
-        border-bottom-left-radius: sizes.$formRadius;
+        border-top-left-radius: sizes.$form-radius;
+        border-bottom-left-radius: sizes.$form-radius;
     }
     .btn:last-child {
         display: flex;
-        border-top-right-radius: sizes.$formRadius;
-        border-bottom-right-radius: sizes.$formRadius;
+        border-top-right-radius: sizes.$form-radius;
+        border-bottom-right-radius: sizes.$form-radius;
     }
 }
 
@@ -405,12 +407,12 @@ i {
         display: inline-block;
     }
     :first-child {
-        border-top-left-radius: sizes.$formRadius;
-        border-bottom-left-radius: sizes.$formRadius;
+        border-top-left-radius: sizes.$form-radius;
+        border-bottom-left-radius: sizes.$form-radius;
     }
     :last-child {
-        border-top-right-radius: sizes.$formRadius;
-        border-bottom-right-radius: sizes.$formRadius;
+        border-top-right-radius: sizes.$form-radius;
+        border-bottom-right-radius: sizes.$form-radius;
     }
 }
 

@@ -3,8 +3,8 @@
 
 
 :root {
-    --#{theme.$prefix}-primary: rgb(255, 0, 0);
-     --#{theme.$prefix}-primary-hover: rgba(255, 0, 0, .3);
+    --#{theme.$prefix}primary: rgb(255, 0, 0);
+     --#{theme.$prefix}primary-hover: rgba(255, 0, 0, .3);
 }
 
 a,
@@ -53,8 +53,8 @@ ol {
 }
 
 header {
-    color: var(--#{theme.$prefix}-panel-text);
-    background-color: var(--#{theme.$prefix}-panel);
+    color: var(--#{theme.$prefix}body-text);
+    background-color: var(--#{theme.$prefix}panel);
     .logo {
         display: inline-block;
         height: 3.75rem;
@@ -96,9 +96,9 @@ header {
                 margin: 20px 0;
             }
             &.active {
-                background-color: var(--#{theme.$prefix}-primary);
+                background-color: var(--#{theme.$prefix}primary);
                 >a {
-                    color: var(--#{theme.$prefix}-primary-text);
+                    color: var(--#{theme.$prefix}primary-text);
                 }
             }
             .sub-menu {
@@ -106,9 +106,9 @@ header {
                 width: 100%;
                 display: none;
                 z-index: 9999;
-                background: var(--#{theme.$prefix}-panel);
+                background: var(--#{theme.$prefix}panel);
                 box-shadow: 0 0 10px theme.$shadow;
-                border-top: 2px solid var(--#{theme.$prefix}-primary);
+                border-top: 2px solid var(--#{theme.$prefix}primary);
                 li {
                     display: block;
                     width: 100%;
@@ -121,9 +121,9 @@ header {
                 }
             }
             &:hover {
-                background-color: var(--#{theme.$prefix}-primary-hover);
+                background-color: var(--#{theme.$prefix}primary-hover);
                  >a {
-                    color: var(--#{theme.$prefix}-primary-text);
+                    color: var(--#{theme.$prefix}primary-text);
                 }
                 .sub-menu {
                     display: block;
@@ -152,7 +152,7 @@ footer {
 
 
 .tab-box {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
 }
 
 .slider {
@@ -243,7 +243,7 @@ footer {
 }
 
 #content-list {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     border: 1px solid #ededed;
     .item {
         display: grid;
@@ -424,7 +424,7 @@ footer {
 .right-box {
     margin-top: 1.25rem;
     .panel {
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         .panel-header {
             font-size: 1.125rem;
             border-bottom: 0.0625rem solid #dcdcdc;
@@ -470,14 +470,14 @@ footer {
 }
 
 .tree-box {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     li {
         line-height: 2.5rem;
         padding: 0 0.625rem;
         &.active {
-            background-color: var(--#{theme.$prefix}-primary);
+            background-color: var(--#{theme.$prefix}primary);
             a {
-                color: var(--#{theme.$prefix}-primary-text);
+                color: var(--#{theme.$prefix}primary-text);
             }
         }
     }
@@ -487,13 +487,13 @@ footer {
 }
 
 .panel {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     margin-bottom: .8rem;
     .panel-header {
         line-height: 2.5rem;
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         padding: 0 0.625rem;
-        border-bottom: 1px solid var(--#{theme.$prefix}-primary);
+        border-bottom: 1px solid var(--#{theme.$prefix}primary);
         .more {
             float: right;
         }
@@ -821,12 +821,12 @@ footer {
 }
 
 .article-panel {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     border: 1px solid #ededed;
 }
 
 .article-inner-panel {
-    background-color: var(--#{theme.$prefix}-panel);
+    background-color: var(--#{theme.$prefix}panel);
     padding: 2rem;
     .title {
         border-bottom: none;
@@ -857,16 +857,16 @@ $tagHeight: 1.6rem;
         text-align: center;
         display: inline-block;
         border-radius: math.div($tagHeight, 2);
-        background-color: var(--#{theme.$prefix}-panel);
+        background-color: var(--#{theme.$prefix}panel);
         margin-right: .5rem;
     }
     .tag-item {
         display: inline-flex;
-        background-color: var(--#{theme.$prefix}-body);
+        background-color: var(--#{theme.$prefix}body);
         border-radius: math.div($tagHeight, 2);
         margin-right: 1rem;
         padding-right: .8rem;
-        border: 1px solid var(--#{theme.$prefix}-body);
+        border: 1px solid var(--#{theme.$prefix}body);
         &:hover {
             border: 1px solid #ccc;
             color: #000;

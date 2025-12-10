@@ -2,24 +2,24 @@
 @use 'mixins';
 
 .nav-vertical-bar {
-    --#{theme.$prefix}-nav: var(--#{theme.$prefix}-primary);
-    --#{theme.$prefix}-nav-text: var(--#{theme.$prefix}-primary-text);
+    --#{theme.$prefix}nav: var(--#{theme.$prefix}primary);
+    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}primary-text);
     width: 18.75rem;
     height: 100%;
-    background-color: var(--#{theme.$prefix}-nav);
-    color:  var(--#{theme.$prefix}-nav-text);
+    background-color: var(--#{theme.$prefix}nav);
+    color:  var(--#{theme.$prefix}nav-text);
     position: relative;
     
 }
 
 .nav-horizontal-bar {
-    --#{theme.$prefix}-nav: var(--#{theme.$prefix}-primary);
-    --#{theme.$prefix}-nav-text: var(--#{theme.$prefix}-primary-text);
-    --#{theme.$prefix}-nav-drop: var(--#{theme.$prefix}-panel);
-    --#{theme.$prefix}-nav-drop-text: var(--#{theme.$prefix}-body-text);
-    --#{theme.$prefix}-nav-hover: var(--#{theme.$prefix}-primary-hover);
-    --#{theme.$prefix}-nav-hover-text: var(--#{theme.$prefix}-primary-text);
-    --#{theme.$prefix}-nav-notify: yellow;
+    --#{theme.$prefix}nav: var(--#{theme.$prefix}primary);
+    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}nav-drop: var(--#{theme.$prefix}panel);
+    --#{theme.$prefix}nav-drop-text: var(--#{theme.$prefix}body-text);
+    --#{theme.$prefix}nav-hover: var(--#{theme.$prefix}primary-hover);
+    --#{theme.$prefix}nav-hover-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}nav-notify: yellow;
     li {
         display: block;
         line-height: 2.5rem;
@@ -27,7 +27,7 @@
         padding: 0 1.25rem;
         position: relative;
         &:hover {
-            border-bottom: 3px solid var(--#{theme.$prefix}-nav-text);
+            border-bottom: 3px solid var(--#{theme.$prefix}nav-text);
         }
     }
     .search-icon {
@@ -48,21 +48,21 @@
         background-color: transparent;
         margin: 0 -1.25rem;
         width: auto;
-        background-color: var(--#{theme.$prefix}-nav-drop);
-        color: var(--#{theme.$prefix}-nav-drop-text);
+        background-color: var(--#{theme.$prefix}nav-drop);
+        color: var(--#{theme.$prefix}nav-drop-text);
         right: 0;
-        box-shadow: inset 0px 5px 5px -5px var(--#{theme.$prefix}-nav),
-                        inset 0px -5px 5px -5px var(--#{theme.$prefix}-nav);
+        box-shadow: inset 0px 5px 5px -5px var(--#{theme.$prefix}nav),
+                        inset 0px -5px 5px -5px var(--#{theme.$prefix}nav);
         z-index: 66;
         min-width: 10rem;
         a {
-            color: var(--#{theme.$prefix}-nav-drop-text);
+            color: var(--#{theme.$prefix}nav-drop-text);
             display: block;
             padding: 0.25rem .8rem;
             line-height: 2rem;
             &:hover {
-                background-color: var(--#{theme.$prefix}-nav-hover);
-                color: var(--#{theme.$prefix}-nav-hover-text);
+                background-color: var(--#{theme.$prefix}nav-hover);
+                color: var(--#{theme.$prefix}nav-hover-text);
             }
         }
         ul {
@@ -80,7 +80,7 @@
         height: 0;
         opacity: 1;
         overflow: hidden;
-        border-top: 1px solid var(--#{theme.$prefix}-border);
+        border-top: 1px solid var(--#{theme.$prefix}border);
     }
     .nav-bar-toggle {
         padding: 15px 1.25rem;
@@ -90,7 +90,7 @@
         display: none;
         width: 0.625rem;
         height: 0.625rem;
-        background-color: var(--#{theme.$prefix}-nav-notify);
+        background-color: var(--#{theme.$prefix}nav-notify);
         border-radius: 50%;
         position: absolute;
         top: 0.625rem;
@@ -137,7 +137,7 @@
             width: 100%;
             margin: -5px 0 0;
             a {
-                color: var(--#{theme.$prefix}-nav-drop-text);
+                color: var(--#{theme.$prefix}nav-drop-text);
             }
         }
         ul {
