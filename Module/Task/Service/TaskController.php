@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Service;
 
 use Module\Task\Domain\Model\TaskDayModel;
-use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Model\TaskModel;
 use Module\Task\Domain\Repositories\TaskRepository;
 

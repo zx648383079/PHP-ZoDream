@@ -52,7 +52,7 @@ class TaskModel extends TaskEntity {
         return $this->getAttributeSource('updated_at');
     }
 
-    public function makeEnd(TaskDayModel $day = null) {
+    public function makeEnd(TaskDayModel|null $day = null) {
         $log = TaskLogModel::findRunning($this->id);
         $time = 0;
         if (!empty($log)) {
@@ -73,7 +73,7 @@ class TaskModel extends TaskEntity {
         return $this->save();
     }
 
-    public function makeNewRun(TaskDayModel $day = null) {
+    public function makeNewRun(TaskDayModel|null $day = null) {
         $this->status = self::STATUS_RUNNING;
         $this->updated_at = time();
         $log = TaskLogModel::create([

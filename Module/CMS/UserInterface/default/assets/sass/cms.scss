@@ -107,7 +107,7 @@ header {
                 display: none;
                 z-index: 9999;
                 background: var(--#{theme.$prefix}panel);
-                box-shadow: 0 0 10px theme.$shadow;
+                box-shadow: 0 0 10px var(--#{theme.$prefix}shadow);
                 border-top: 2px solid var(--#{theme.$prefix}surface);
                 li {
                     display: block;

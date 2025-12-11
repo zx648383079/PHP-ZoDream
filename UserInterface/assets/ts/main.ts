@@ -292,6 +292,13 @@ $(function() {
         }
         const index = $this.index();
         toggleTab($this.closest('.tab-box').find('.tab-header .tab-item').eq(index), $this, index);
+    }).on('click', '.dropdown .dropdown-toggle', function(e) {
+        e.preventDefault();
+        $(this).closest('.dropdown').toggleClass('--with-open');
+    }).on('click', '.--with-open', function(e) {
+        e.stopPropagation();
+        const excludes = $(e.target).parents('.--with-open').add(e.target);
+        $('.--with-open').not(excludes).removeClass('--with-open');
     });
     const toggleTab = (tabHeader: JQuery, tabBody: JQuery, index: number) => {
         tabHeader.addClass('active').siblings().removeClass('active');

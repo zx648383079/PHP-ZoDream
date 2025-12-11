@@ -570,7 +570,7 @@ footer {
         background-color: #fff;
         padding: 50px;
         border-radius: 5px;
-        box-shadow: theme.$shadow 0 0 10px;
+        box-shadow: var(--#{theme.$prefix}shadow) 0 0 10px;
         h1 {
             text-align: center;
             margin-bottom: 20px;

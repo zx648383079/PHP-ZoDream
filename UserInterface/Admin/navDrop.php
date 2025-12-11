@@ -4,12 +4,12 @@ defined('APP_DIR') or exit();
 $user = auth()->user();
 ?>
 
-<div class="nav-item">
-    <a href="javascript:;" class="user-icon">
+<div class="nav-item dropdown">
+    <a href="javascript:;" class="user-icon dropdown-toggle">
         <img src="<?= $user->avatar ?>" alt="<?=$user->name?>">
-        <i class="drop-icon-arrow"></i>
+        <i class="dropdown-arrow"></i>
     </a>
-    <ul class="drop-bar">
+    <ul class="dropdown-pane">
         <li>
             <a href="<?=$this->url('/auth/admin/account')?>" class="no-jax">账户中心</a>
         </li>

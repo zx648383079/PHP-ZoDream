@@ -11,7 +11,7 @@ $(function() {
     }).on('click', '.more-btn', function() {
         $(this).closest('.dialog-cookie-bar').addClass('cookie-fully');
     }).on('click', '.expand-card .card-header', function() {
-        $(this).closest('.expand-card').toggleClass('open');
+        $(this).closest('.expand-card').toggleClass('--with-open');
     }).toggle(!window.localStorage.getItem('cookie_policy'));
     if (typeof SUGGESTION_URI === 'undefined' && typeof BASE_URI !== 'undefined') {
         SUGGESTION_URI = BASE_URI + 'suggest';

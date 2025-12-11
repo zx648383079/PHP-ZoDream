@@ -57,6 +57,8 @@ return [
     'Bulletin' => '私信',
     'You have new Messages' => '您有新的消息',
     'Account Settings' => '账号设置',
+    'Help' => '帮助',
+    'Settings' => '设置',
     'Client Downloads' => '客户端下载',
     'Comment successfully!' => '已提交评论！',
     'Logout' => '退出',

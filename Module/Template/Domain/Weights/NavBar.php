@@ -46,8 +46,8 @@ class NavBar extends Node implements INode {
     public function render(string $type = ''): mixed {
         $data = $this->page->trigger(self::KEY);
         $js = <<<JS
-$('.nav-horizontal-bar .nav-bar-toggle').on('click', function() {
-  $(this).closest('.nav-horizontal-bar').toggleClass('open');
+$('.nav-horizontal-bar').on('click', '.nav-bar-toggle', function() {
+    $(this).closest('.nav-horizontal-bar').toggleClass('--with-open');
 });
 JS;
         view()->registerJs($js, View::JQUERY_READY);
@@ -88,11 +88,11 @@ HTML;
         $download = __('Application client');
         $uwp_tip = __('My Timer');
         return <<<HTML
-<li>
-    <a href="javascript:;" title="{$download_tip}">{$download}
+<li class="dropdown">
+    <a class="dropdown-toggle" href="javascript:;" title="{$download_tip}">{$download}
         <i class="fa fa-caret-down"></i>
     </a>
-    <div class="nav-drop-bar">
+    <div class="dropdown-pane">
         <ul>
             <li>
                 <a href="{$uwp_url}" target="_blank" title="{$uwp_tip}">Win10 UWP</a>
@@ -118,6 +118,7 @@ HTML;
         $bulletin_url = url('/auth/admin/bulletin');
         $account_url = url('/auth/admin/account');
         $logout_url = url('/auth/logout');
+        $setting_url = url('/seo/admin');
         $bulletin_label = __('Bulletin');
         $bulletin_count = auth()->user()->bulletin_count;
         if ($bulletin_count > 0) {
@@ -125,11 +126,13 @@ HTML;
             $name .= '<i class="new-tip" title="'.__('You have new Messages').'"></i>';
         }
         $account_label = __('Account Settings');
+        $help_label = __('Help');
+        $setting_label = __('Settings');
         $logout = __('Logout');
         return <<<HTML
-    <li>
-        <a href="javascript:;">{$name}</a>
-        <div class="nav-drop-bar">
+    <li class="dropdown">
+        <a class="dropdown-toggle" href="javascript:;">{$name}</a>
+        <div class="dropdown-pane">
             <ul>
                 <li>
                     <a href="{$bulletin_url}">{$bulletin_label}</a>
@@ -138,16 +141,16 @@ HTML;
                     <a href="{$account_url}">{$account_label}</a>
                 </li>
                 <li>
-                    <hr class="nav-drop-divider" />
+                    <hr class="dropdown-divider" />
                 </li>
                 <li>
-                    <a href="/">帮助</a>
+                    <a href="https://zodream.cn/doc">{$help_label}</a>
                 </li>
                 <li>
-                    <a href="/">设置</a>
+                    <a href="{$setting_url}">{$setting_label}</a>
                 </li>
                 <li>
-                    <hr class="nav-drop-divider" />
+                    <hr class="dropdown-divider" />
                 </li>
                 <li>
                     <a href="{$logout_url}">{$logout}</a>

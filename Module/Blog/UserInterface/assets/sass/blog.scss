@@ -380,6 +380,9 @@
 }
 
 .time-axis {
+    --#{theme.$prefix}axis: rgba(var(--#{theme.$prefix}surface-rgb), .3);
+    --#{theme.$prefix}axis-hovered: rgba(var(--#{theme.$prefix}surface-rgb), 1);
+    --#{theme.$prefix}axis-line: rgba(var(--#{theme.$prefix}surface-rgb), .1);
     position: relative;
     z-index: 1010;
     margin-left: 3.4375rem;
@@ -401,7 +404,7 @@
             margin-top: -0.25rem;
             width: 0.5rem;
             height: 0.5rem;
-            background: #bbb;
+            background-color: var(--#{theme.$prefix}axis);
             border-radius: 50%;
         }
     }
@@ -414,7 +417,7 @@
             transition-timing-function: ease-in-out;
             transition-delay: 0s;
             transition-property: border;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 1px dashed var(--#{theme.$prefix}axis);
             line-height: 2.5rem;
             .title {
                 margin-left: 3.75rem;
@@ -431,23 +434,23 @@
             &::before {
                 content: " ";
                 position: absolute;
-                left: 0;
+                left: 0.5px;
                 top: 1.0625rem;
                 width: 0.375rem;
                 height: 0.375rem;
                 margin-left: -0.25rem;
-                background: #bbb;
+                background: var(--#{theme.$prefix}axis);
                 border-radius: 50%;
-                border: 1px solid #fff;
+                border: 1px solid var(--#{theme.$prefix}axis);
                 transition-duration: .2s;
                 transition-timing-function: ease-in-out;
                 transition-delay: 0s;
                 transition-property: background;
             }
             &:hover {
-                border-bottom-color: #666;
+                border-bottom-color: var(--#{theme.$prefix}axis-hovered);
                 &::before {
-                    background: #222;
+                    background-color: var(--#{theme.$prefix}axis-hovered);
                 }
             }
         }
@@ -460,7 +463,7 @@
         margin-left: -0.125rem;
         width: 0.25rem;
         height: 100%;
-        background: #f5f5f5;
+        background-color: var(--#{theme.$prefix}axis-line);
         z-index: -1;
     }
 }

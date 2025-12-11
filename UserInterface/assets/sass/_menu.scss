@@ -7,7 +7,7 @@
     width: 100%;
     .menu-icon-arrow,
     .sidebar-container-toggle,
-    .drop-icon-arrow {
+    .dropdown-arrow {
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
         text-rendering: auto;
@@ -27,42 +27,14 @@
         display: none;
     }
 
-    .drop-icon-arrow {
+    .dropdown-arrow {
         &::before {
             content: "\f0dd";
         }
     }
-
-    .drop-bar {
-        border-radius: .25rem;
-        position: absolute;
-        z-index: 44;
-        width: 8rem;
-        margin-left: -5rem;
-        line-height: 2.25rem;
-        background-color: var(--#{theme.$prefix}panel);
-        box-shadow: 0 0.125rem 0.75rem 0 var(--#{theme.$prefix}shadow);
-        display: none;
-        &,
-        ul,
-        li {
-            list-style: none;
-        }
-        a {
-            color: var(--#{theme.$prefix}body-text);
-            display: block;
-            user-select: none;
-            padding: .2rem .8rem;
-            &:hover {
-                background-color: var(--#{theme.$prefix}body);
-            }
-        }
-    }
-    .nav-drop-open {
-        overflow: inherit;
-        .drop-bar {
-            display: block;
-        }
+    .dropdown-pane {
+        margin: 0;
+        right: .8rem;
     }
     .app-header-container {
         line-height: 3.25rem;
@@ -99,9 +71,9 @@
                 height: 2.5rem;
                 border-radius: 0.625rem;
             }
-        }
-        .nav-drop-open {
-            overflow: inherit;
+            &.--with-open {
+                overflow: inherit;
+            }
         }
         .user-icon {
             padding-top: .4rem;

@@ -19,7 +19,7 @@
         z-index: 2;
         background-color: var(--#{theme.$prefix}dialog);
         color: var(--#{theme.$prefix}dialog-text);
-        box-shadow: 0 0 1.25rem theme.$shadow;
+        box-shadow: 0 0 1.25rem var(--#{theme.$prefix}shadow);
     }
     .dialog-header {
         padding: .8rem 1rem 0;
@@ -61,7 +61,7 @@
             display: none;
             padding: .4rem .4rem 0;
         }
-        &.open {
+        &.--with-open {
             .expand-icon-arrow {
                 &::after {
                     transform: rotate(180deg);

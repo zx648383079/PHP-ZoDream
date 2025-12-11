@@ -59,11 +59,6 @@ function bindNavBar(doc: JQuery<Document>) {
             box.toggleClass('sidebar-fixed', box.hasClass('wrapper-min'));
         }
         $(window).trigger('resize');
-    }).on('click', '.app-header-container .nav-item a', function(e) {
-        const box = $(this).closest('.nav-item');
-        if (box.find('.drop-bar').length > 0) {
-            box.toggleClass('nav-drop-open');
-        }
     }).on('click', '.sidebar-container li a', function() {
         let $this = $(this),
             box = $this.closest('li');

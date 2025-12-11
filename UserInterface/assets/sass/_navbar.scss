@@ -14,6 +14,7 @@
 
 .nav-horizontal-bar {
     --#{theme.$prefix}nav: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}nav-child: var(--#{theme.$prefix}surface-child);
     --#{theme.$prefix}nav-text: var(--#{theme.$prefix}surface-text);
     --#{theme.$prefix}nav-drop: var(--#{theme.$prefix}panel);
     --#{theme.$prefix}nav-drop-text: var(--#{theme.$prefix}body-text);
@@ -27,7 +28,8 @@
         padding: 0 1.25rem;
         position: relative;
         &:hover {
-            border-bottom: 3px solid var(--#{theme.$prefix}nav-text);
+            background-color: var(--#{theme.$prefix}nav-hover);
+            color: var(--#{theme.$prefix}nav-hover-text);
         }
     }
     .search-icon {
@@ -42,49 +44,6 @@
             float: none;
         }
     }
-    .nav-drop-bar {
-        display: block;
-        position: static;
-        background-color: transparent;
-        margin: 0 -1.25rem;
-        width: auto;
-        background-color: var(--#{theme.$prefix}nav-drop);
-        color: var(--#{theme.$prefix}nav-drop-text);
-        right: 0;
-        box-shadow: inset 0px 5px 5px -5px var(--#{theme.$prefix}nav),
-                        inset 0px -5px 5px -5px var(--#{theme.$prefix}nav);
-        z-index: 66;
-        min-width: 10rem;
-        a {
-            color: var(--#{theme.$prefix}nav-drop-text);
-            display: block;
-            padding: 0.25rem .8rem;
-            line-height: 2rem;
-            &:hover {
-                background-color: var(--#{theme.$prefix}nav-hover);
-                color: var(--#{theme.$prefix}nav-hover-text);
-            }
-        }
-        ul {
-            display: block;
-        }
-        li {
-            display: block;
-            padding: 0;
-            text-align: left;
-            height: auto;
-            &:hover {
-                border-bottom: none;
-            }
-        }
-    }
-    .nav-drop-divider {
-        margin: .5rem 0;
-        height: 0;
-        opacity: 1;
-        overflow: hidden;
-        border-top: 1px solid var(--#{theme.$prefix}border);
-    }
     .nav-bar-toggle {
         padding: 15px 1.25rem;
         @include mixins.icon("\f0c9", 1.875rem);
@@ -98,12 +57,39 @@
         position: absolute;
         top: 0.625rem;
     }
+    .dropdown {
+        --#{theme.$prefix}dropdown: var(--#{theme.$prefix}nav-child);
+        --#{theme.$prefix}dropdown-text: var(--#{theme.$prefix}nav-text);
+        --#{theme.$prefix}dropdown-hovered: var(--#{theme.$prefix}nav-hover);
+        --#{theme.$prefix}dropdown-hovered-text: var(--#{theme.$prefix}nav-hover-text);
+        --#{theme.$prefix}dropdown-shadow: var(--#{theme.$prefix}nav);
+    }
+    .dropdown-pane {
+        position: static;
+        margin: 0 -1.25rem;
+        width: auto;
+        right: 0;
+        box-shadow: inset 0px 5px 5px -5px var(--#{theme.$prefix}dropdown-shadow),
+                        inset 0px -5px 5px -5px var(--#{theme.$prefix}dropdown-shadow);
+        ul {
+            display: block;
+        }
+        li {
+            display: block;
+            padding: 0;
+            text-align: left;
+            height: auto;
+            &:hover {
+                border-bottom: none;
+            }
+        }
+    }
     &::after {
         content: '';
         display: block;
         clear: both;
     }
-    &.open {
+    &.--with-open {
         ul {
             display: block;
         }
@@ -128,19 +114,22 @@
             height: 3.75rem;
             display: inline-block;
             &:hover {
-                .nav-drop-bar {
-                    display: block;
-                }
+                background-color: transparent;
+                color: var(--#{theme.$prefix}nav-text);
+                border-bottom: 3px solid var(--#{theme.$prefix}nav-text);
             }
         }
-        .nav-drop-bar {
-            display: none;
+        .dropdown {
+            --#{theme.$prefix}dropdown: var(--#{theme.$prefix}panel);
+            --#{theme.$prefix}dropdown-text: var(--#{theme.$prefix}body-text);
+            --#{theme.$prefix}dropdown-shadow: var(--#{theme.$prefix}shadow);
+        }
+        .dropdown-pane {
             position: absolute;
-            box-shadow: 0px 2px 8px 1px theme.$shadow;
-            width: 100%;
-            margin: -5px 0 0;
-            a {
-                color: var(--#{theme.$prefix}nav-drop-text);
+            box-shadow: 0px 2px 8px 1px var(--#{theme.$prefix}dropdown-shadow);
+            li {
+                display: block;
+                // height: auto;
             }
         }
         ul {
@@ -151,6 +140,10 @@
             }
         }
         
-        
+        &.--with-open {
+            ul {
+                display: inline-block;
+            }
+        }
     }
 }

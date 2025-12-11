@@ -1,17 +1,17 @@
 <?php
+declare(strict_types=1);
 namespace Module\Task\Service;
 
-use Module\Task\Domain\Model\TaskLogModel;
 use Module\Task\Domain\Repositories\ReviewRepository;
 use Zodream\Helpers\Time;
 
 class ReviewController extends Controller {
 
-    public function indexAction($type, $date = null) {
+    public function indexAction(string $type, string|null $date = null) {
         return $this->show(compact('type', 'date'));
     }
 
-    public function viewAction($type, $date = null) {
+    public function viewAction(string $type, string|null $date = null) {
         $time = strtotime(date('Y-m-d 00:00:00', empty($date) ? time() : strtotime($date)));
         if ($type === 'week') {
             list($start_at, $end_at) = Time::week($time, false);
