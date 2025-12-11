@@ -49,6 +49,7 @@
             list-style: none;
         }
         a {
+            color: var(--#{theme.$prefix}body-text);
             display: block;
             user-select: none;
             padding: .2rem .8rem;
@@ -91,6 +92,7 @@
             max-width: 8rem;
             overflow: hidden;
             height: 3rem;
+            color: var(--#{theme.$prefix}body-text);
             img {
                 cursor: pointer;
                 width: 2.5rem;

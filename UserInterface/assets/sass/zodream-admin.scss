@@ -13,10 +13,10 @@ a {
 
 footer,
 header {
-    background: var(--#{theme.$prefix}primary);
-    color: var(--#{theme.$prefix}primary-text); 
+    background: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text); 
     a {
-        color: var(--#{theme.$prefix}primary-text);
+        color: var(--#{theme.$prefix}surface-text);
         text-decoration: none;
     }
 }
@@ -48,13 +48,13 @@ footer {
 
 
 .page-tooltip-bar {
-    border: 1px dashed var(--#{theme.$prefix}primary);
+    border: 1px dashed var(--#{theme.$prefix}surface);
     padding: 0.625rem;
     border-radius: 0.3125rem;
     background-color: var(--#{theme.$prefix}panel);
     position: relative;
     .tooltip-header {
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
     }
     ul {
         width: 100%;
@@ -103,11 +103,11 @@ footer {
     >li {
         display: inline-block;
         &.active {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
         }
         +li::before {
             padding: 0 0.3125rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             content: "/\00a0";
         }
     }
@@ -164,7 +164,7 @@ table,
         .item-meta-bar {
             float: left;
             font-size: .8rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             >a,
             >span {
                 margin-right: .4rem;
@@ -188,7 +188,7 @@ table,
             right: 0;
             top: 0;
             transform: rotate(30deg);
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             border: 2px solid;
             display: flex;
             align-items: center;
@@ -220,7 +220,7 @@ table,
             }
         }
         .item-body {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             padding: 5px;
         }
         &.thumb-item {
@@ -238,15 +238,15 @@ table,
         &:hover {
             .item-header {
                 .no {
-                    background-color: var(--#{theme.$prefix}primary);
-                    color: var(--#{theme.$prefix}primary-text);
+                    background-color: var(--#{theme.$prefix}surface);
+                    color: var(--#{theme.$prefix}surface-text);
                     &::after {
-                        border-left-color: var(--#{theme.$prefix}primary);
+                        border-left-color: var(--#{theme.$prefix}surface);
                     }
                 }
             }
             .stamp {
-                color: var(--#{theme.$prefix}primary-hover);
+                color: var(--#{theme.$prefix}surface-hovered);
                 transform: rotate(390deg);
             }
             .item-body {
@@ -291,7 +291,7 @@ table,
             font-weight: 700;
         }
         .item-meta {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             padding: 0.3125rem;
         }
         
@@ -299,82 +299,6 @@ table,
 }
 
 
-
-.column-full-item {
-    border-radius: .25rem;
-    box-shadow: 0 0 1px var(--#{theme.$prefix}shadow), 0 1px 3px var(--#{theme.$prefix}shadow);
-    display: block;
-    margin-bottom: 1.25rem;
-    position: relative;
-    background-color: var(--#{theme.$prefix}panel);
-    color: var(--#{theme.$prefix}body-text);
-    .overlay {
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        border-radius: .25rem;
-        align-items: center;
-        background: var(--#{theme.$prefix}tertiary);
-        display: flex;
-        justify-content: center;
-        z-index: 50;
-        i {
-            color: var(--#{theme.$prefix}meta-text);
-            font-size: 3em;
-            animation: spin 1s linear infinite;
-        }
-    }
-    .inner {
-        padding: 0.625rem;
-        z-index: 5;
-    }
-    h3 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin: 0 0 10px 0;
-        padding: 0;
-        white-space: nowrap;
-    }
-    p {
-        font-size: 1rem;
-    }
-    .icon {
-        color: var(--#{theme.$prefix}primary);
-        z-index: 0;
-        i {
-            font-size: 3.125rem;
-            position: absolute;
-            right: 0.9375rem;
-            top: 1.25rem;
-            transition: all .3s linear;
-        }
-    }
-    .column-footer {
-        background: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
-        display: block;
-        padding: 3px 0;
-        position: relative;
-        text-align: center;
-        text-decoration: none;
-        z-index: 10;
-        &:hover {
-            background: var(--#{theme.$prefix}primary-hover);
-        }
-    }
-    a {
-        color: var(--#{theme.$prefix}body-text);
-    }
-    &:hover {
-        .icon {
-            i {
-                font-size: 3.4375rem;
-            }
-        }
-    }
-}
 
 .tool-help {
     display: inline-flex;

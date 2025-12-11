@@ -13,10 +13,6 @@
         --#{theme.$prefix}#{$color}-text: #{$value};
     }
 
-    --#{theme.$prefix}primary: #{theme.$primary};
-    --#{theme.$prefix}primary-hover: #{theme.$primary-hovered};
-    --#{theme.$prefix}primary-active: #{theme.$primary-actived};
-    --#{theme.$prefix}primary-text: #{theme.$primary-text};
     --#{theme.$prefix}body: #{theme.$body};
     --#{theme.$prefix}body-text: #{theme.$body-text};
     --#{theme.$prefix}body-rgb: #{functions.to-rgb(theme.$body)};
@@ -25,11 +21,13 @@
     --#{theme.$prefix}panel: #{theme.$panel};
 
     --#{theme.$prefix}surface: #{theme.$surface};
+    --#{theme.$prefix}surface-rgb: #{functions.to-rgb(theme.$surface)};
+    --#{theme.$prefix}surface-text: #{theme.$surface-text};
+    --#{theme.$prefix}surface-text-rgb: #{functions.to-rgb(theme.$surface-text)};
     --#{theme.$prefix}surface-hovered: #{theme.$surface-hovered};
     --#{theme.$prefix}surface-selected: #{theme.$surface-selected};
     --#{theme.$prefix}surface-selected-text: #{theme.$surface-selected-text};
     --#{theme.$prefix}surface-child: #{theme.$surface-child};
-    --#{theme.$prefix}surface-text: #{theme.$surface-text};
     --#{theme.$prefix}repeater: #{theme.$repeater};
 
 
@@ -38,9 +36,6 @@
     --#{theme.$prefix}dialog-mask: #{theme.$dialog-mask};
 
     --#{theme.$prefix}meta-text: #{theme.$meta-text};
-
-    --#{theme.$prefix}secondary: #{theme.$secondary};
-    --#{theme.$prefix}secondary-text: #{theme.$secondary-text};
 
     --#{theme.$prefix}accent: #{theme.$accent};
     --#{theme.$prefix}accent-text: #{theme.$accent-text};
@@ -72,11 +67,6 @@
 }
 
 @mixin theme-dark {
-    --#{theme.$prefix}primary: #{dark.$primary};
-    --#{theme.$prefix}primary-hover: #{dark.$primary-hovered};
-    --#{theme.$prefix}primary-active: #{dark.$primary-actived};
-    --#{theme.$prefix}primary-text: #{dark.$primary-text};
-    
     --#{theme.$prefix}body: #{dark.$body};
     --#{theme.$prefix}body-text: #{dark.$body-text};
     --#{theme.$prefix}body-rgb: #{functions.to-rgb(dark.$body)};
@@ -85,11 +75,13 @@
     --#{theme.$prefix}panel: #{dark.$panel};
 
     --#{theme.$prefix}surface: #{dark.$surface};
+    --#{theme.$prefix}surface-rgb: #{functions.to-rgb(dark.$surface)};
+    --#{theme.$prefix}surface-text: #{dark.$surface-text};
+    --#{theme.$prefix}surface-text-rgb: #{functions.to-rgb(dark.$surface-text)};
     --#{theme.$prefix}surface-hovered: #{dark.$surface-hovered};
     --#{theme.$prefix}surface-selected: #{dark.$surface-selected};
     --#{theme.$prefix}surface-selected-text: #{dark.$surface-selected-text};
     --#{theme.$prefix}surface-child: #{dark.$surface-child};
-    --#{theme.$prefix}surface-text: #{dark.$surface-text};
     --#{theme.$prefix}repeater: #{dark.$repeater};
 
     --#{theme.$prefix}dialog: #{dark.$dialog};
@@ -97,8 +89,8 @@
     --#{theme.$prefix}dialog-mask: #{dark.$dialog-mask};
     --#{theme.$prefix}shadow: #{dark.$shadow};
 
-    --#{theme.$prefix}secondary: #{dark.$secondary};
-    --#{theme.$prefix}secondary-text: #{dark.$secondary-text};
+    --#{theme.$prefix}tertiary: #{dark.$secondary};
+    --#{theme.$prefix}meta-text: #{dark.$secondary-text};
 
     --#{theme.$prefix}meta-text: #{dark.$meta-text};
 

@@ -131,8 +131,8 @@ $sizes: (
 
 
 .top-nav {
-    background: var(--#{theme.$prefix}primary);
-    color: var(--#{theme.$prefix}primary-text);
+    background: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text);
     // margin: -8px -8px 0 0;
     .navbar {
         font-size: 1.5rem;

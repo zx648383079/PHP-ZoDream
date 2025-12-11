@@ -24,10 +24,10 @@
 
 
 .btn {
-    --#{theme.$prefix}btn: var(--#{theme.$prefix}primary);
-    --#{theme.$prefix}btn-text: var(--#{theme.$prefix}primary-text);
-    --#{theme.$prefix}btn-hover: var(--#{theme.$prefix}primary-hover);
-    --#{theme.$prefix}btn-border: var(--#{theme.$prefix}primary-active);
+    --#{theme.$prefix}btn: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}btn-text: var(--#{theme.$prefix}surface-text);
+    --#{theme.$prefix}btn-hover: var(--#{theme.$prefix}surface-hovered);
+    --#{theme.$prefix}btn-border: var(--#{theme.$prefix}surface-selected);
     --#{theme.$prefix}btn-hover-text: var(--#{theme.$prefix}btn-text);
     padding: sizes.$input-padding;
     background-color: var(--#{theme.$prefix}btn);
@@ -50,7 +50,7 @@
     }
 }
 
-@include make-button(default, var(--#{theme.$prefix}primary), var(--#{theme.$prefix}primary-hover), var(--#{theme.$prefix}primary-text));
+@include make-button(default, var(--#{theme.$prefix}surface), var(--#{theme.$prefix}surface-hovered), var(--#{theme.$prefix}surface-text));
 
 
 @each $color, $value in colors.$theme-colors {

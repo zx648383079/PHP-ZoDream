@@ -9,8 +9,6 @@ interface LeadTourOption {
     backText?: string;
     nextText?: string;
     cancelText?: string;
-    onConfirm?: () => void;
-    onCancel?: () => void;
     items?: DialogLeadTourStep[];
 }
 
@@ -59,11 +57,11 @@ class LeadTour {
     }
 
     private set primaryText(v: string) {
-        this.element.find('.dialog-footer .btn-primary').text(v);
+        this.element.find('.dialog-footer .btn-default').text(v);
     }
 
     private set secondaryText(v: string) {
-        this.element.find('.dialog-footer .btn-danger').text(v);
+        this.element.find('.dialog-footer .btn-secondary').text(v);
     }
 
 
@@ -102,10 +100,10 @@ class LeadTour {
     }
 
     private bindEvent() {
-        this.element.on('click', '.dialog-footer .btn-primary', () => {
-            this.previous();
-        }).on('click', '.dialog-footer .btn-danger', () => {
+        this.element.on('click', '.dialog-footer .btn-default', () => {
             this.next();
+        }).on('click', '.dialog-footer .btn-secondary', () => {
+            this.previous();
         }).on('click', '.dialog-close', () => {
             this.close();
         });
@@ -154,8 +152,8 @@ class LeadTour {
         const modalWidth = 320;
         this.dialogStyle = this.computeModalStyle(offset, modalWidth, modalHeight);
         this.content = data.content;
-        this.primaryText = this.canBack ? this.options.backText : this.options.cancelText;
-        this.secondaryText = this.canNext ? this.options.nextText : this.options.confirmText;
+        this.secondaryText = this.canBack ? this.options.backText : this.options.cancelText;
+        this.primaryText = this.canNext ? this.options.nextText : this.options.confirmText;
     }
 
     private computeModalStyle(offset: DOMRect, width: number, height: number): any {
@@ -208,8 +206,8 @@ class LeadTour {
                 </div>
             </div>
             <div class="dialog-footer">
-                <div class="btn btn-primary"></div>
-                <div class="btn btn-danger"></div>
+                <div class="btn btn-secondary"></div>
+                <div class="btn btn-default"></div>
             </div>
         </div>
     </div>`;

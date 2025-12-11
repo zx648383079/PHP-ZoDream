@@ -61,8 +61,8 @@
         line-height: 2rem;
         font-size: 1rem;
         margin-bottom: 0.3125rem;
-        background-color: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
         border-radius: 0.125rem;
         margin-right: 0.3125rem;
         white-space: nowrap;
@@ -70,7 +70,7 @@
         user-select: none;
         .fa {
             line-height: 2rem;
-            border-left: 1px solid ar(--#{theme.$prefix}primary-active);
+            border-left: 1px solid ar(--#{theme.$prefix}surface-selected);
             opacity: .7;
         }
         span,

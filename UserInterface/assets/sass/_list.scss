@@ -15,10 +15,10 @@
 }
 
 .column-item {
-    --#{theme.$prefix}column: #fff;
-    --#{theme.$prefix}column-text: #333;
-    --#{theme.$prefix}column-icon: #333;
-    --#{theme.$prefix}column-icon-text: #fff;
+    --#{theme.$prefix}column: var(--#{theme.$prefix}panel);
+    --#{theme.$prefix}column-text: var(--#{theme.$prefix}body-text);
+    --#{theme.$prefix}column-icon: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}column-icon-text: var(--#{theme.$prefix}surface-text);
     display: inline-block;
     position: relative;
     height: 6.25rem;
@@ -45,10 +45,15 @@
 }
 
 .column-full-item {
-    --#{theme.$prefix}column: #17a2b8;
-    --#{theme.$prefix}column-text: #fff;
+    --#{theme.$prefix}column: var(--#{theme.$prefix}panel);
+    --#{theme.$prefix}column-text: var(--#{theme.$prefix}body-text);
+    --#{theme.$prefix}column-extra: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}column-extra-text: var(--#{theme.$prefix}surface-text);
+    --#{theme.$prefix}column-extra-hovered: var(--#{theme.$prefix}surface-hovered);
+    --#{theme.$prefix}column-overlay: rgba(var(--#{theme.$prefix}surface-rgb), .7);
+    --#{theme.$prefix}column-overlay-text: var(--#{theme.$prefix}surface-text);
     border-radius: .25rem;
-    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    box-shadow: 0 0 1px var(--#{theme.$prefix}shadow), 0 1px 3px var(--#{theme.$prefix}shadow);
     display: block;
     margin-bottom: 1.25rem;
     position: relative;
@@ -62,13 +67,13 @@
         width: 100%;
         border-radius: .25rem;
         align-items: center;
-        background: rgba(255,255,255,.7);
+        background-color: var(--#{theme.$prefix}column-overlay);
         display: -ms-flexbox;
         display: flex;
         justify-content: center;
         z-index: 50;
         i {
-            color: #343a40;
+            color: var(--#{theme.$prefix}column-overlay-text);
             font-size: 3em;
             animation: spin 1s linear infinite;
         }
@@ -88,7 +93,7 @@
         font-size: 1rem;
     }
     .icon {
-        color: rgba(0,0,0,.15);
+        color: var(--#{theme.$prefix}column-extra);
         z-index: 0;
         i {
             font-size: 50px;
@@ -99,8 +104,8 @@
         }
     }
     .column-footer {
-        background: rgba(0,0,0,.1);
-        color: rgba(255,255,255,.8);
+        background-color: var(--#{theme.$prefix}column-extra);
+        color: var(--#{theme.$prefix}column-extra-text);
         display: block;
         padding: 3px 0;
         position: relative;
@@ -108,8 +113,7 @@
         text-decoration: none;
         z-index: 10;
         &:hover {
-            background: rgba(0,0,0,.15);
-            color: var(--#{theme.$prefix}column-text);
+            background-color: var(--#{theme.$prefix}column-extra-hovered);
         }
     }
     a {
@@ -118,7 +122,7 @@
     &:hover {
         .icon {
             i {
-                font-size: 3.4375rem;
+                font-size: 3.5rem;
             }
         }
     }

@@ -19,15 +19,12 @@
     text-align: center;
     .panel-icon {
         font-size: 3rem;
-        color: theme.$invalid;
+        color: var(--#{theme.$prefix}danger);
         margin-bottom: 1rem;
-    }
-    .panel-body {
-
     }
     &.toast-success {
         .panel-icon {
-            color: theme.$valid;
+            color:  var(--#{theme.$prefix}success);
         }
     }
 }
@@ -36,7 +33,7 @@
     position: relative;
     margin-bottom: 2rem;
     .tag-icon {
-        color: #fff;
+        color: var(--#{theme.$prefix}surface-text);
         font-size: 10rem;
         font-weight: 900;
         transform: rotate(15deg);
@@ -44,7 +41,7 @@
     }
     .tag-cover {
         display: block;
-        background-color: rgba($color: #ccc, $alpha: .4);
+        background-color: rgba(var(--#{theme.$prefix}surface-rgb), .4);
         position: absolute;
         top: 2rem;
         left: 50%;

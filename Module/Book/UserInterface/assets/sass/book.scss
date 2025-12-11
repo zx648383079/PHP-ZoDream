@@ -42,19 +42,19 @@ a {
             font-size: 0.75rem;
             color: var(--#{theme.$prefix}body-text);
             &:hover {
-                color: var(--#{theme.$prefix}primary-hover);
+                color: var(--#{theme.$prefix}surface-hovered);
                 text-decoration: none;
             }
         }
     }
     .main-nav-bar {
         line-height: 2.5rem;
-        background-color: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
         a {
-            color: var(--#{theme.$prefix}primary-text);
+            color: var(--#{theme.$prefix}surface-text);
             &:hover {
-                color: var(--#{theme.$prefix}primary-text);
+                color: var(--#{theme.$prefix}surface-text);
             }
         }
     }
@@ -67,14 +67,14 @@ a {
     .with-drop {
         padding-left: 0;
         display: block;
-        @include iconArrow(var(--#{theme.$prefix}primary-text));
+        @include iconArrow(var(--#{theme.$prefix}surface-text));
         > a {
             display: block;
             padding-left: 0.4rem;
         }
         &:hover {
             > a {
-                background-color: var(--#{theme.$prefix}primary-hover);
+                background-color: var(--#{theme.$prefix}surface-hovered);
             }
             .drop-bar {
                 display: block;
@@ -93,7 +93,7 @@ a {
         a {
             color: var(--#{theme.$prefix}body-text);
             &:hover {
-                color: var(--#{theme.$prefix}primary-hover);
+                color: var(--#{theme.$prefix}surface-hovered);
             }
         }
     }
@@ -105,12 +105,12 @@ a {
 }
 
 .footer {
-    background: var(--#{theme.$prefix}primary);
-    color: var(--#{theme.$prefix}primary-text);
+    background: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text);
     padding: 1.25rem 0 0.9375rem 0;
     margin-top: 1.875em;
     a {
-        color: var(--#{theme.$prefix}primary-text);
+        color: var(--#{theme.$prefix}surface-text);
     }
 }
 
@@ -159,7 +159,7 @@ a {
     }
     .item-meta {
         font-size: 0.8rem;
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
     }
 }
 
@@ -223,7 +223,7 @@ a {
             justify-content: space-between;
         }
         .item-count {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: 0.8rem;
         }
         &:first-child {
@@ -259,12 +259,12 @@ a {
 }
 
 .panel {
-    border: 1px solid var(--#{theme.$prefix}primary);
+    border: 1px solid var(--#{theme.$prefix}surface);
     .panel-header {
         line-height: 2.5rem;
         padding-left: 0.4rem;
-        background-color: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
     }
 }
 
@@ -326,7 +326,7 @@ a {
             line-height: 1rem;
             display: inline-block;
             padding: 0 0.4rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             &:not(:last-child) {
                 border-right: 1px solid #ccc;
             }
@@ -338,7 +338,7 @@ a {
 }
 
 .novel-history-item {
-    border: 1px solid var(--#{theme.$prefix}primary);
+    border: 1px solid var(--#{theme.$prefix}surface);
     display: flex;
     margin-bottom: 0.8rem;
     position: relative;
@@ -369,7 +369,7 @@ a {
             line-height: 1rem;
             display: inline-block;
             padding: 0 0.4rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             &:not(:last-child) {
                 border-right: 1px solid #ccc;
             }
@@ -390,7 +390,7 @@ a {
     padding: 1.25rem;
     .page-empty-tip {
         font-size: 3em;
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
         font-weight: 700;
         text-align: center;
         padding: 2em 0;
@@ -727,7 +727,7 @@ a {
                 line-height: 1rem;
                 display: inline-block;
                 padding: 0 0.4rem;
-                color: var(--#{theme.$prefix}secondary-text);
+                color: var(--#{theme.$prefix}meta-text);
                 &:not(:last-child) {
                     border-right: 1px solid #ccc;
                 }
@@ -795,7 +795,7 @@ a {
         margin-bottom: 0.625rem;
     }
     .item-meta {
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
         height: 4.375rem;
         overflow-y: hidden;
     }

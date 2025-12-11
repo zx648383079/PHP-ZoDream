@@ -3,8 +3,8 @@
 
 
 :root {
-    --#{theme.$prefix}primary: rgb(255, 0, 0);
-     --#{theme.$prefix}primary-hover: rgba(255, 0, 0, .3);
+    --#{theme.$prefix}surface: rgb(255, 0, 0);
+     --#{theme.$prefix}surface-hover: rgba(255, 0, 0, .3);
 }
 
 a,
@@ -96,9 +96,9 @@ header {
                 margin: 20px 0;
             }
             &.active {
-                background-color: var(--#{theme.$prefix}primary);
+                background-color: var(--#{theme.$prefix}surface);
                 >a {
-                    color: var(--#{theme.$prefix}primary-text);
+                    color: var(--#{theme.$prefix}surface-text);
                 }
             }
             .sub-menu {
@@ -108,7 +108,7 @@ header {
                 z-index: 9999;
                 background: var(--#{theme.$prefix}panel);
                 box-shadow: 0 0 10px theme.$shadow;
-                border-top: 2px solid var(--#{theme.$prefix}primary);
+                border-top: 2px solid var(--#{theme.$prefix}surface);
                 li {
                     display: block;
                     width: 100%;
@@ -121,9 +121,9 @@ header {
                 }
             }
             &:hover {
-                background-color: var(--#{theme.$prefix}primary-hover);
+                background-color: var(--#{theme.$prefix}surface-hovered);
                  >a {
-                    color: var(--#{theme.$prefix}primary-text);
+                    color: var(--#{theme.$prefix}surface-text);
                 }
                 .sub-menu {
                     display: block;
@@ -475,9 +475,9 @@ footer {
         line-height: 2.5rem;
         padding: 0 0.625rem;
         &.active {
-            background-color: var(--#{theme.$prefix}primary);
+            background-color: var(--#{theme.$prefix}surface);
             a {
-                color: var(--#{theme.$prefix}primary-text);
+                color: var(--#{theme.$prefix}surface-text);
             }
         }
     }
@@ -493,7 +493,7 @@ footer {
         line-height: 2.5rem;
         background-color: var(--#{theme.$prefix}panel);
         padding: 0 0.625rem;
-        border-bottom: 1px solid var(--#{theme.$prefix}primary);
+        border-bottom: 1px solid var(--#{theme.$prefix}surface);
         .more {
             float: right;
         }

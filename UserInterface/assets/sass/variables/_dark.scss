@@ -2,10 +2,12 @@
 @use '../colors';
 
 // 黑暗模式
-$primary: #2e2e2e;
-$primary-hovered: functions.tint-color($primary, colors.$color-hover-offset);
-$primary-actived: functions.tint-color($primary, colors.$color-active-offset);
-$primary-text: #eee;
+$surface: #2e2e2e;
+$surface-hovered: functions.tint-color($surface, colors.$color-hover-offset) !default;
+$surface-selected: functions.tint-color($surface, colors.$color-active-offset) !default;
+$surface-child: $surface-selected !default;
+$surface-text: #eee !default;
+$surface-selected-text: $surface-text !default;
 
 $body: #333;
 $body-text: white;
@@ -37,12 +39,7 @@ $border: #7B7B7B;
 
 $panel: #3b3b3b;
 
-$surface: #2f4156;
-$surface-hovered: functions.tint-color($surface, colors.$color-hover-offset) !default;
-$surface-selected: functions.tint-color($surface, colors.$color-active-offset) !default;
-$surface-child: $surface-selected !default;
-$surface-text: rgb(185, 201, 218) !default;
-$surface-selected-text: $surface-text !default;
+
 
 $repeater: colors.$gray-500 !default; // 占位符
 
@@ -61,7 +58,7 @@ $input-disabled:  $secondary !default;
 $input-hovered: #f4f4f4 !default;
 $input-selected: #ccc !default;
 $input-placeholder:              $secondary-text !default;
-$input-focus-border:              functions.tint-color($primary, 50%) !default;
+$input-focus-border:              functions.tint-color($surface, 50%) !default;
 $input-border: $border !default;
 $input-icon: $input-text !default;
 $input-hovered-icon: $input-text !default;

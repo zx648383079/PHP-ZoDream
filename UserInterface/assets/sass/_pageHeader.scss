@@ -4,7 +4,7 @@
 .page-header {
     line-height: sizes.$line-height;
     position: relative;
-    background-color: var(--#{theme.$prefix}primary);
+    background-color: var(--#{theme.$prefix}surface);
     .path {
         position: absolute;
     }

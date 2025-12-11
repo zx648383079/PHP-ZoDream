@@ -62,7 +62,7 @@
         margin: 0;
     }
     a {
-        color: #333;
+        color: var(--#{theme.$prefix}body-text);
         text-decoration: none;
     }
     .find-link {
@@ -88,7 +88,7 @@
                 top: 6.625rem;
                 left: 8.0625rem;
                 font-size: 3.125rem;
-                color: theme.$invalid;
+                color: var(--#{theme.$prefix}danger);
                 display: none;
             }
         }
@@ -106,8 +106,8 @@
             position: absolute;
             top: 0;
             width: 100%;
-            background: rgba(0,0,0,.4);
-            color: #fff;
+            background-color: rgba(var(--#{theme.$prefix}surface-rgb),.4);
+            color: var(--#{theme.$prefix}surface-text);
         }
         &.waiting_confirm {
             .scan-box {
@@ -142,7 +142,7 @@
         text-align: center;
         margin-top: 1.25rem;
         .box-title {
-            border-bottom: 1px solid #767676;
+            border-bottom: 1px solid var(--#{theme.$prefix}border);
         }
         a {
             font-size: 1.875rem;
@@ -157,15 +157,15 @@
     }
 }
 .footer {
-    background: var(--#{theme.$prefix}primary);
-    color: var(--#{theme.$prefix}primary-text);
+    background: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text);
     font-weight: 400;
     font-size: 0.875rem;
     padding: 2rem 1.25rem;
     position: relative;
     text-align: center;
     a {
-        color: var(--#{theme.$prefix}primary-text);
+        color: var(--#{theme.$prefix}surface-text);
         text-decoration: none;
     }
 }

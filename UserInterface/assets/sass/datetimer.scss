@@ -6,41 +6,49 @@
  * Copyright (c) 2017 ZoDream
  */
 @use "prefix";
+@use 'theme';
 @use "scrollbar";
+
 .datetimer {
-    width: 350px;
+    --#{theme.$prefix}picker: var(--#{theme.$prefix}panel);
+    --#{theme.$prefix}picker-text: var(--#{theme.$prefix}body-text);
+    --#{theme.$prefix}picker-disabled-text: rgba(var(--#{theme.$prefix}body-text-rgb), .2);
+    --#{theme.$prefix}picker-header: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}picker-header-text: var(--#{theme.$prefix}surface-text);
+    --#{theme.$prefix}picker-border: var(--#{theme.$prefix}border);
+    width: 21.875rem;
     position: absolute;
     display: none;
     z-index: 999;
     user-select: none;
-    background: #fff;
+    background-color: var(--#{theme.$prefix}picker);
     @include prefix.prefix-content(user-select, none);
     .header {
         position: relative;
         text-align: center;
-        line-height: 40px;
-        background: #006cff;
-        color: #fff;
-        font-size: 20px;
+        line-height: 2.5rem;
+        background-color: var(--#{theme.$prefix}picker-header);
+        color: var(--#{theme.$prefix}picker-header-text);
+        font-size: 1.25rem;
         span {
             width: 60%;
             display: inline-block;
         }
         .previousMonth,
         .nextYear {
-            margin-left: 10px;
+            margin-left: 0.625rem;
         }
     }
     li {
         list-style: none;
     }
     .body {
-        height: 350px;
+        height: 21.875rem;
         position: relative;
         .month-grid, 
         .year-grid, 
         .day-grid {
-            background: #fff;
+            background-color:  var(--#{theme.$prefix}picker);
             position: absolute;
             top: 0;
             width: 100%;
@@ -53,12 +61,12 @@
         }
         .month-grid {
             ol {
-                background: #eee;
+                background-color:  var(--#{theme.$prefix}picker-border);
             }
             li {
                 display: inline-block;
-                width: 50px;
-                line-height: 50px;
+                width: 3.125rem;
+                line-height: 3.125rem;
                 text-align: center;
                 box-sizing: border-box;
             }
@@ -66,25 +74,25 @@
                 li {
                     cursor: pointer;
                     &.active {
-                        background: #006cff;
-                        color: #fff;
+                        background-color: var(--#{theme.$prefix}picker-header);
+                        color: var(--#{theme.$prefix}picker-header-text);
                     }
                     &.disable {
-                        color: #ccc;
+                        color: var(--#{theme.$prefix}picker-disabled-text);
                     }
                 }
             }
         }
         .list-group {
-            width: 80px;
+            width: 5rem;
             display: inline-block;
             ul {
-                height: 300px;
+                height: 18.75rem;
                 li {
-                    line-height: 30px;
+                    line-height: 1.875rem;
                     &.active {
-                        background: #006cff;
-                        color: #fff;
+                         background-color: var(--#{theme.$prefix}picker-header);
+                        color: var(--#{theme.$prefix}picker-header-text);
                     }
                 }
             }
@@ -92,9 +100,9 @@
         .day-grid {
             display: none;
             .list-group {
-                width: 60px;
+                width: 3.75rem;
                 &:first-child {
-                    margin-left: 80px;
+                    margin-left: 5rem;
                 }
             }
         }
@@ -102,7 +110,7 @@
             display: none;
             .list-group {
                 &:first-child {
-                    margin-left: 90px;
+                    margin-left: 5.625rem;
                 }
             }
         }
@@ -110,19 +118,19 @@
         .day-grid {
             .fa-close {
                 position: absolute;
-                top: 5px;
-                right: 5px;
+                top: 0.3125rem;
+                right: 0.3125rem;
             }
         }
     }
     .footer {
-        background: #eee;
+        background: var(--#{theme.$prefix}picker-border);
         position: relative;
-        height: 30px;
+        height: 1.875rem;
         input {
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
+            width: 1.875rem;
+            height: 1.875rem;
+            font-size: 1rem;
             text-align: center;
             border: none;
             box-sizing: border-box;
@@ -131,10 +139,10 @@
         button {
             position: absolute;
             right: 0;
-            width: 100px;
-            background: green;
-            color: #fff;
-            height: 30px;
+            width: 6.25rem;
+            background-color: var(--#{theme.$prefix}picker-header);
+            color: var(--#{theme.$prefix}picker-header-text);
+            height: 1.875rem;
             border: none;
         }
     }
@@ -148,30 +156,30 @@
     }
     ul {
         overflow-y: auto;
-        border: 1px solid #eee;
+        border: 1px solid var(--#{theme.$prefix}picker-border);
         @include scrollbar.scrollbar();
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 25rem) {
     .datetimer {
         position: fixed;
         width: 100%;
         left: 0;
         bottom: 0;
         .body {
-            height: 315px;
-            width: 315px;
+            height: 19.6875rem;
+            width: 19.6875rem;
             margin: 0 auto;
             .month-grid {
                 li {
-                    width: 45px;
-                    line-height: 45px;
+                    width: 2.8125rem;
+                    line-height: 2.8125rem;
                 }
             }
             .list-group {
                 ul {
-                    height: 290px;
+                    height: 18.125rem;
                 }
             }
         }

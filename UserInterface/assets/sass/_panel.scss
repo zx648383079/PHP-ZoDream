@@ -11,8 +11,8 @@
     .panel-header {
         text-align: center;
         line-height: 30px;
-        background: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
+        background: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
         .fa-close {
             float: right;
             line-height: 1.875rem;
@@ -49,7 +49,7 @@
 }
 .page-empty-tip {
     font-size: 3em;
-    color: var(--#{theme.$prefix}secondary-text);
+    color: var(--#{theme.$prefix}repeater);
     font-weight: 700;
     text-align: center;
     padding: 2em 0;

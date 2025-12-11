@@ -16,10 +16,10 @@ a {
 }
 header,
 footer {
-    background-color: var(--#{theme.$prefix}primary);
-    color: var(--#{theme.$prefix}primary-text);
+    background-color: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text);
     a {
-        color: var(--#{theme.$prefix}primary-text);
+        color: var(--#{theme.$prefix}surface-text);
     }
     ul,
     li {
@@ -45,7 +45,7 @@ footer {
         position: absolute;
         left: 0;
         width: 5.625rem;
-        border-right: 5px solid var(--#{theme.$prefix}primary-text);
+        border-right: 5px solid var(--#{theme.$prefix}surface-text);
         text-align: center;
     }
     a {
@@ -108,13 +108,13 @@ footer {
     .panel-header {
         line-height: 3.125rem;
         padding-left: 1.25rem;
-        border-left: 5px solid var(--#{theme.$prefix}primary);
+        border-left: 5px solid var(--#{theme.$prefix}surface);
         font-size: 1.25rem;
         font-weight: 700;
         small {
             font-size: 0.75rem;
             font-weight: 200;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
         }
         .panel-menu {
             font-size: 0.875rem;
@@ -148,7 +148,7 @@ footer {
             text-decoration: none;
             word-break: break-all;
             .item-time {
-                color: var(--#{theme.$prefix}secondary-text);
+                color: var(--#{theme.$prefix}meta-text);
                 font-size: 0.875rem;
                 text-align: right;
             }
@@ -164,7 +164,7 @@ footer {
             flex: 1;
         }
         .time {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: .8rem;
             height: 2.5rem;
             word-break: keep-all;
@@ -177,14 +177,14 @@ footer {
         }
         .item-meta {
             padding: 0 .5rem .5rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: .8rem;
         }
         &:hover {
             box-shadow: 0 0 .8rem var(--#{theme.$prefix}shadow);  
         }
         &:not(:last-of-type) {
-            border-bottom: 1px solid var(--#{theme.$prefix}secondary-text);
+            border-bottom: 1px solid var(--#{theme.$prefix}meta-text);
         }
     }
     .card-list-item {
@@ -206,7 +206,7 @@ footer {
         }
         .item-meta,
         .item-time {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: .8rem;
             padding-top: .5rem;
         }
@@ -235,7 +235,7 @@ footer {
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: var(--#{theme.$prefix}primary);
+        background-color: var(--#{theme.$prefix}surface);
         transform: scaleX(0);
         transform-origin: 50%;
         transition-property: transform;
@@ -327,7 +327,7 @@ footer {
             font-family: 'Play-Regular';
         }
         p {
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             font-size: 15px;
             margin: 5px 0px 0px;
             font-family: 'Play-Regular';
@@ -360,21 +360,21 @@ footer {
         display: flex;
         height: .8rem;
         border-radius: .25rem;
-        background-color: var(--#{theme.$prefix}primary-text);
-        border: 1px solid var(--#{theme.$prefix}primary);
+        background-color: var(--#{theme.$prefix}surface-text);
+        border: 1px solid var(--#{theme.$prefix}surface);
         .inner-bar {
             display: flex;
             flex-direction: column;
             justify-content: center;
             overflow: hidden;
-            color: var(--#{theme.$prefix}primary-text);
+            color: var(--#{theme.$prefix}surface-text);
             text-align: center;
             white-space: nowrap;
-            background-color: var(--#{theme.$prefix}primary-hover);
+            background-color: var(--#{theme.$prefix}surface-hovered);
         }
     }
     .skill-meta {
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
         font-size: .8rem;
     }
 }
@@ -389,7 +389,7 @@ footer {
             padding: 2px;
             max-width: 7.5rem;
             height: auto;
-            border: 1px solid var(--#{theme.$prefix}secondary-text);
+            border: 1px solid var(--#{theme.$prefix}meta-text);
         }
     }
     .name {
@@ -414,8 +414,8 @@ footer {
             padding: 0 10px;
             &:hover {
                 border-radius: 4px;
-                color: var(--#{theme.$prefix}primary-text);
-                background: var(--#{theme.$prefix}primary-hover);
+                color: var(--#{theme.$prefix}surface-text);
+                background: var(--#{theme.$prefix}surface-hovered);
             }
         }
     }
@@ -431,7 +431,7 @@ footer {
         padding-left: 9.375rem;
         > div:first-child {
             width: 8.75rem;
-            border-right: 5px solid var(--#{theme.$prefix}primary);
+            border-right: 5px solid var(--#{theme.$prefix}surface);
             font-size: 1.25rem;
         }
     }
@@ -475,8 +475,8 @@ footer {
         @include mixins.icon("\f00d", 3rem);
         position: absolute;
         right: 0;
-        background-color: var(--#{theme.$prefix}primary);
-        color: var(--#{theme.$prefix}primary-text);
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
         padding: 0.3125rem 0.625rem;
     }
     .dialog-body {
@@ -492,7 +492,7 @@ footer {
             line-height: 3rem;
             background: 0 0;
             border: none;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
             outline: 0;
             padding: 0 0.625rem;
         }
@@ -540,13 +540,13 @@ footer {
                 font-size: 0.75rem;
                 line-height: 1.875rem;
                 text-align: center;
-                background: var(--#{theme.$prefix}primary);
+                background: var(--#{theme.$prefix}surface);
                 margin-right: 0.625rem;
                 border-radius: 50%;
-                color: var(--#{theme.$prefix}primary-text);
+                color: var(--#{theme.$prefix}surface-text);
             }
             &.active {
-                background-color: var(--#{theme.$prefix}secondary);
+                background-color: var(--#{theme.$prefix}tertiary);
             }
         }
     }

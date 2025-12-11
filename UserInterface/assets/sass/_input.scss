@@ -35,7 +35,7 @@
     &:focus {
         border-color: var(--#{theme.$prefix}input-focus-border);
         outline: 0;
-        box-shadow: 0 0 0 .25rem rgba(var(--#{theme.$prefix}primary-rgb), .25);
+        box-shadow: 0 0 0 .25rem rgba(var(--#{theme.$prefix}surface-rgb), .25);
     }
 }
 
@@ -61,10 +61,10 @@ input[type="color"] {
 
 .input-group {
     .tooltip {
-        color: var(--#{theme.$prefix}secondary-text);
+        color: var(--#{theme.$prefix}meta-text);
         font-size: 0.8rem;
         padding: 0 0 0.625rem 0.625rem;
     }
-    @include form-validation-state(invalid, theme.$invalid);
-    @include form-validation-state(valid, theme.$valid);
+    @include form-validation-state(invalid, var(--#{theme.$prefix}danger));
+    @include form-validation-state(valid, var(--#{theme.$prefix}success));
 }

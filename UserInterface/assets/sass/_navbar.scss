@@ -2,8 +2,8 @@
 @use 'mixins';
 
 .nav-vertical-bar {
-    --#{theme.$prefix}nav: var(--#{theme.$prefix}primary);
-    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}nav: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}surface-text);
     width: 18.75rem;
     height: 100%;
     background-color: var(--#{theme.$prefix}nav);
@@ -13,12 +13,12 @@
 }
 
 .nav-horizontal-bar {
-    --#{theme.$prefix}nav: var(--#{theme.$prefix}primary);
-    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}nav: var(--#{theme.$prefix}surface);
+    --#{theme.$prefix}nav-text: var(--#{theme.$prefix}surface-text);
     --#{theme.$prefix}nav-drop: var(--#{theme.$prefix}panel);
     --#{theme.$prefix}nav-drop-text: var(--#{theme.$prefix}body-text);
-    --#{theme.$prefix}nav-hover: var(--#{theme.$prefix}primary-hover);
-    --#{theme.$prefix}nav-hover-text: var(--#{theme.$prefix}primary-text);
+    --#{theme.$prefix}nav-hover: var(--#{theme.$prefix}surface-hovered);
+    --#{theme.$prefix}nav-hover-text: var(--#{theme.$prefix}surface-text);
     --#{theme.$prefix}nav-notify: yellow;
     li {
         display: block;
@@ -73,6 +73,9 @@
             padding: 0;
             text-align: left;
             height: auto;
+            &:hover {
+                border-bottom: none;
+            }
         }
     }
     .nav-drop-divider {

@@ -18,11 +18,11 @@
             position: absolute;
             left: .8rem;
             top: .6rem;
-            color: var(--#{theme.$prefix}secondary-text);
+            color: var(--#{theme.$prefix}meta-text);
         }
         &.is-invalid {
             .fa {
-                color: theme.$invalid;
+                color: var(--#{theme.$prefix}danger);
             }
         }
     }
@@ -40,7 +40,7 @@
             &+label {
                 &::before {
                     content: "\f14a";
-                    color:  var(--#{theme.$prefix}primary);
+                    color:  var(--#{theme.$prefix}surface);
                 }
             }
         }
@@ -70,8 +70,8 @@ $toggleHeight: sizes.$line-height * .8;
                     left: $toggleHeight;
                 }
                 &::after {
-                    background-color: var(--#{theme.$prefix}primary);
-                    box-shadow: 0 0 1px var(--#{theme.$prefix}primary);
+                    background-color: var(--#{theme.$prefix}surface);
+                    box-shadow: 0 0 1px var(--#{theme.$prefix}surface);
                 }
             }
         }
@@ -121,9 +121,9 @@ $toggleHeight: sizes.$line-height * .8;
         display: none;
         &:checked {
             &+label {
-                background-color: var(--#{theme.$prefix}primary);
+                background-color: var(--#{theme.$prefix}surface);
                 border: none;
-                color: var(--#{theme.$prefix}primary-text);
+                color: var(--#{theme.$prefix}surface-text);
                 &::before {
                     content: "\f00c";
                 }
@@ -193,8 +193,8 @@ $toggleHeight: sizes.$line-height * .8;
             left: 2em;
         }
         &:after {
-            background-color: var(--#{theme.$prefix}primary);
-            box-shadow: 0 0 1px var(--#{theme.$prefix}primary);
+            background-color: var(--#{theme.$prefix}surface);
+            box-shadow: 0 0 1px var(--#{theme.$prefix}surface);
         }
     }
 }
@@ -214,7 +214,7 @@ i {
         &.checked {
             &::before {
                 content: "\f14a";
-                color: var(--#{theme.$prefix}primary);
+                color: var(--#{theme.$prefix}surface);
             }
         }
     }
@@ -368,7 +368,7 @@ i {
             width: 20%;
             height: .1rem;
             opacity: .6;
-            background-color: var(--#{theme.$prefix}primary);
+            background-color: var(--#{theme.$prefix}surface);
             animation: 1s linear infinite borderLoop alternate;
         }
     }

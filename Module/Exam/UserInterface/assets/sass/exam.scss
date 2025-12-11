@@ -32,10 +32,10 @@ $valid: #337ab7;
             }
         }
         .wrong {
-            border-bottom: 1px solid theme.$invalid;
+            border-bottom: 1px solid var(--#{theme.$prefix}danger);
         }
         .right {
-            border-bottom: 1px solid theme.$valid;
+            border-bottom: 1px solid var(--#{theme.$prefix}success);
         }
     }
     .option-list {
@@ -57,13 +57,13 @@ $valid: #337ab7;
             .wrong {
                 &::before {
                     content: "\f00d";
-                    color: theme.$invalid;
+                    color: var(--#{theme.$prefix}danger);
                 }
             }
             .right {
                 &::before {
                     content: "\f00c";
-                    color: theme.$valid;
+                    color: var(--#{theme.$prefix}success);
                 }
             }
             &:hover {
@@ -92,12 +92,12 @@ $valid: #337ab7;
         }
         &.wrong {
             textarea {
-                border: 1px solid theme.$invalid;
+                border: 1px solid var(--#{theme.$prefix}danger);
             }
         }
         &.right {
             textarea {
-                border: 1px solid theme.$valid;
+                border: 1px solid var(--#{theme.$prefix}success);
             }
         }
     }
@@ -116,13 +116,13 @@ $valid: #337ab7;
     &.item-wrong {
         &::before {
             content: "\f00d";
-            color: rgba(theme.$invalid, .5);
+            color: rgba(var(--#{theme.$prefix}danger), .5);
         }
     }
     &.item-right {
         &::before {
             content: "\f00c";
-            color: rgba(theme.$valid, .5);
+            color: rgba(var(--#{theme.$prefix}success), .5);
         }
     }
 }
@@ -280,13 +280,13 @@ $valid: #337ab7;
                 }
             }
             &.active {
-                border: 2px solid theme.$valid;
+                border: 2px solid var(--#{theme.$prefix}success);
             }
             &.right {
-                background-color: theme.$valid;
+                background-color: var(--#{theme.$prefix}success);
             }
             &.wrong {
-                background-color: theme.$invalid;
+                background-color: var(--#{theme.$prefix}danger);
             }
             &:hover {
                 border-color: #777;

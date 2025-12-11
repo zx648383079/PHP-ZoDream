@@ -7,21 +7,21 @@
 
 .page-header {
     padding: 0.625rem 1.25rem;
-    background-color: theme.$primary;
-    color: theme.$primary-text;
+    background-color: var(--#{theme.$prefix}surface);
+    color: var(--#{theme.$prefix}surface-text);
 }
 
 .page-body {
     overflow-y: auto;
     flex: 1;
-    border: 1px solid theme.$primary;
+    border: 1px solid var(--#{theme.$prefix}surface);
     padding: 0.3125rem;
-    box-shadow: 0 0 10px inset rgba($color: theme.$primary, $alpha: .3);
+    box-shadow: 0 0 10px inset rgba(var(--#{theme.$prefix}surface-rgb), .3);
     ol {
         margin-left: 1.25rem;
     }
     code {
-        background-color: rgba($color: theme.$primary, $alpha: .3);
+        background-color: rgba(var(--#{theme.$prefix}surface-rgb), .3);
         padding: 0.3125rem;
     }
 }
@@ -30,8 +30,8 @@
     text-align: right;
     padding: 0.3125rem;
     .btn {
-        background-color: theme.$primary;
-        color: theme.$primary-text;
+        background-color: var(--#{theme.$prefix}surface);
+        color: var(--#{theme.$prefix}surface-text);
     }
 }
 

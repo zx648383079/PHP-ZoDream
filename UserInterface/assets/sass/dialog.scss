@@ -47,7 +47,7 @@ $dialogIndex: 1200;
     &.dialog-pop,
     &.dialog-message {
         background-color: rgba(var(--#{theme.$prefix}mask-rgb), .6);
-        color: var(--#{theme.$prefix}primary-text);
+        color: var(--#{theme.$prefix}surface-text);
         box-shadow: 0 0 1.25rem var(--#{theme.$prefix}shadow);
         min-width: 6.25rem;
         @include prefix.prefix-content(transition, top 1s);
@@ -127,8 +127,8 @@ $dialogIndex: 1200;
         @include prefix.prefix-animation(dialog-box 0.5s);
         .dialog-header {
             position: relative;
-            background: var(--#{theme.$prefix}primary);
-            color: var(--#{theme.$prefix}primary-text);
+            background: var(--#{theme.$prefix}surface);
+            color: var(--#{theme.$prefix}surface-text);
             height: 40px;
             line-height: 1.875rem;
             text-align: center;
@@ -143,19 +143,19 @@ $dialogIndex: 1200;
                 border: none;
                 position: absolute;
                 top: 0;
-                color: var(--#{theme.$prefix}primary-text);
+                color: var(--#{theme.$prefix}surface-text);
                 line-height: 1.875rem;
             }
             .fa-arrow-left {
                 left: 0;
-                background-color: var(--#{theme.$prefix}primary);
-                color: var(--#{theme.$prefix}primary-text);
+                background-color: var(--#{theme.$prefix}surface);
+                color: var(--#{theme.$prefix}surface-text);
                 top: 0.3125rem;
             }
             .dialog-close {
                 right: 0;
-                background: var(--#{theme.$prefix}primary);
-                color: var(--#{theme.$prefix}primary-text);
+                background: var(--#{theme.$prefix}surface);
+                color: var(--#{theme.$prefix}surface-text);
                 top: 0.375rem;
                 &:hover {
                     @include prefix.prefix-content(transform, rotateZ(180deg));
@@ -172,8 +172,8 @@ $dialogIndex: 1200;
                 width: 50%;
                 border: none;
                 line-height: 1.875rem;
-                background: var(--#{theme.$prefix}primary);
-                color: var(--#{theme.$prefix}primary-text);
+                background: var(--#{theme.$prefix}surface);
+                color: var(--#{theme.$prefix}surface-text);
                 padding: 0;
                 margin: 0;
                 &:focus {
@@ -187,8 +187,8 @@ $dialogIndex: 1200;
                 width: 30%;
             }
             .dialog-yes {
-                background: var(--#{theme.$prefix}primary);
-                color: var(--#{theme.$prefix}primary-text);
+                background: var(--#{theme.$prefix}surface);
+                color: var(--#{theme.$prefix}surface-text);
                 margin-right: 0.3125rem;
             }
             .dialog-close {
@@ -207,7 +207,7 @@ $dialogIndex: 1200;
             }
         }
         .dialog-footer {
-            border-top: 1px solid var(--#{theme.$prefix}primary);
+            border-top: 1px solid var(--#{theme.$prefix}surface);
             padding: 2px;
             text-align: right;
         }

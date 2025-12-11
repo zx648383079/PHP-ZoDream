@@ -1,8 +1,4 @@
-@forward 'variables/red';
+@forward 'variables/light';
 @use 'colors';
 
 $prefix: 'zre-' !default;
-
-
-$invalid: colors.$red;
-$valid: colors.$green;

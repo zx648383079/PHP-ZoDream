@@ -89,7 +89,7 @@
         color: var(--#{theme.$prefix}body-text);
         line-height: 1.2;
         margin: 1em 0 0.6em;
-        border-bottom: 1px solid var(--#{theme.$prefix}primary);
+        border-bottom: 1px solid var(--#{theme.$prefix}surface);
         &:first-child {
             margin-top: 0;
         }

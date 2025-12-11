@@ -71,9 +71,11 @@ class Pjax {
 
     private options: PjaxOption;
     private timeoutTimer: number;
-    private initialPop = true;
+
     private initialURL = window.location.href;
     private initialState = window.history.state;
+    private initialPop = !('state' in window.history);
+
     private cacheMapping: any = {};
     private cacheForwardStack = [];
     private cacheBackStack = [];
@@ -82,7 +84,7 @@ class Pjax {
     private xhr: JQuery.jqXHR;
 
     private bindEvent() {
-        $(window).on('popstate.pjax', this.onPjaxPopstate.bind(this));
+        $(window).on('popstate.pjax', this.onPopstate.bind(this));
     }
 
     public handleClick(event: JQuery.ClickEvent, container: PjaxOption|JQuery, options?: PjaxOption) {
@@ -316,7 +318,7 @@ class Pjax {
                     fragment: options.fragment,
                     timeout: options.timeout
                 };
-            
+
                 if (options.push || options.replace) {
                     window.history.replaceState(this.state, container.title, container.url);
                 }
@@ -383,15 +385,14 @@ class Pjax {
         window.location.replace(url);
     }
 
-    private onPjaxPopstate(event: any) {
+    private onPopstate(event: any) {
         if (!this.initialPop) {
             this.abortXHR(this.xhr);
         }
     
         const previousState = this.state;
-        const state = event.state;
+        const state = (event.originalEvent as PopStateEvent).state;
         let direction: string;
-    
         if (state && state.container) {
             if (this.initialPop && this.initialURL == state.url) {
                 return;
@@ -408,7 +409,8 @@ class Pjax {
             const cache = this.cacheMapping[state.id] || [];
             const containerSelector = cache[0] || state.container;
             const container = $(containerSelector), contents = cache[1];
-        
+            
+            
             if (container.length) {
                 if (previousState) {
                     this.cachePop(direction, previousState.id, [containerSelector, this.cloneContents(container)]);
