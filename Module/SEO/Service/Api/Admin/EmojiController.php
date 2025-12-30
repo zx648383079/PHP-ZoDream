@@ -9,9 +9,9 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class EmojiController extends Controller {
 
-    public function indexAction(string $keywords = '', int $cat_id = 0) {
+    public function indexAction(string $keywords = '', int $category = 0) {
         return $this->renderPage(
-            EmojiRepository::getList($keywords, $cat_id)
+            EmojiRepository::getList($keywords, $category)
         );
     }
 

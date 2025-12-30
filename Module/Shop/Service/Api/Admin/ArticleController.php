@@ -7,9 +7,9 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ArticleController extends Controller {
 
-    public function indexAction(string $keywords = '', int $cat_id = 0) {
+    public function indexAction(string $keywords = '', int $category = 0) {
         return $this->renderPage(
-            ArticleRepository::getList($keywords, $cat_id)
+            ArticleRepository::getList($keywords, $category)
         );
     }
 
