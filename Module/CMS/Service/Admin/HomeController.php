@@ -14,4 +14,12 @@ class HomeController extends Controller {
     public function generateAction(string $name) {
         return $this->renderData(CMSRepository::generateTableName($name));
     }
+
+    public function queryUrlAction(array $step, string $keywords = '') {
+        try {
+            return $this->renderData(CMSRepository::queryUrl($step, $keywords));
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
 }

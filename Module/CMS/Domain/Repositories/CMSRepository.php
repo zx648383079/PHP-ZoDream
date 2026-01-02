@@ -2,10 +2,14 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Domain\Model\SearchModel;
+use Exception as GlobalException;
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\CommentEntity;
 use Module\CMS\Domain\Entities\ContentEntity;
 use Module\CMS\Domain\Entities\SiteLogEntity;
+use Module\CMS\Domain\Entities\LinkageEntity;
+use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
@@ -23,6 +27,7 @@ use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Error\Exception;
 use Zodream\Template\Engine\ParserCompiler;
 use Zodream\Template\ViewFactory;
+use Module\CMS\Domain\Middleware\CMSSeoMiddleware;
 
 class CMSRepository {
     const MANAGE_ROLE = 'cms_manage';
@@ -256,5 +261,58 @@ class CMSRepository {
         }
         $val = PinYin::encode($name, 'all');
         return empty($val) ? Str::randomByNumber(8) : str_replace(' ', '_', $val);
+    }
+
+    public static function queryUrl(array $step, string $keywords = ''): array {
+        if (empty($step)) {
+            return [
+                ['name' => '联动项', 'next' => 'linkage'],
+                ['name' => '栏目', 'next' => 'channel'],
+            ];
+        }
+        if ($step[0] === 'channel') {
+            $items = CategoryModel::query()
+                ->when(!empty($keywords), function ($query) {
+                    SearchModel::searchWhere($query, ['title']);
+                })
+                ->orderBy('position', 'asc')
+                ->asArray()
+                ->get('id', 'name', 'title');
+            return array_map(function($item) {
+                return [
+                    'name' => $item['title'],
+                    'value' => CMSSeoMiddleware::encodeUrl($item['id'], false)
+                ];
+            }, $items);
+        }
+        if (empty($step[1])) {
+            $items = LinkageEntity::query()
+                ->asArray()
+                ->get('id', 'name');
+            return array_map(function($item) {
+                return [
+                    'name' => $item['name'],
+                    'next' => $item['id']
+                ];
+            }, $items);
+        }
+        $model = LinkageEntity::find(end($step));
+        if (empty($model) || !$model->uri_template) {
+            throw new GlobalException('未配置网址模板');
+        }
+        $items = LinkageDataEntity::query()
+                ->where('linkage_id', $model->id)
+                ->when(!empty($keywords), function ($query) {
+                    SearchModel::searchWhere($query, ['name']);
+                })
+                ->orderBy('position', 'asc')
+                ->asArray()
+                ->get('id', 'name');
+        return array_map(function($item) use ($model) {
+            return [
+                'name' => $item['name'], //sprintf('%s(%s)', $item['name'], $model['name']),
+                'value' => SiteRepository::encodeUrl(self::site(), str_replace('{id}', (string)$item['id'], $model->uri_template))
+            ];
+        }, $items);
     }
 }

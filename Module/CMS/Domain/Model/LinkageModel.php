@@ -11,6 +11,7 @@ use Module\CMS\Domain\Entities\LinkageEntity;
  * @property integer $type
  * @property string $code
  * @property string $language
+ * @property string $uri_template
  */
 class LinkageModel extends LinkageEntity {
 

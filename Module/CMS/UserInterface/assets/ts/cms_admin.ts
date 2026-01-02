@@ -55,6 +55,68 @@ function bindCat() {
             $(this).trigger('click');
         }
     });
+    const urlDialog = $('.url-dialog').dialog();
+    const urlQuries: string[] = [];
+    let urlTarget: JQuery;
+    urlDialog.on('done', function() {
+        const ele = this.find('.option-list-item.selected');
+        const value = ele.data('value');
+        if (!value) {
+            return;
+        }
+        urlTarget.val(value);
+        this.close();
+    });
+    const tapQueryUrl = (data: any) => {
+        postJson(BASE_URI + 'home/query_url', {
+            step: urlQuries,
+            ...data
+        }, res => {
+            if (res.code !== 200) {
+                parseAjax(res);
+                return;
+            }
+            let html = '';
+            $.each(res.data, function() {
+                let key = this.next ? 'next' : 'value';
+                html += `<div class="option-list-item" data-${key}="${this[key]}">${this.name}</div>`;
+            });
+            urlDialog.find('.flip-tab-item.active .list-scroll-body').html(html);
+            urlDialog.showCenter();
+        });
+    };
+    urlDialog.box.on('click', '.column-item', function() {
+        const $this = $(this);
+        urlQuries.splice(0);
+        urlQuries.push($this.data('next'));
+        const tab = $this.closest('.flip-tab-item');
+        tab.removeClass('active');
+        tab.next('.flip-tab-item').addClass('active');
+        urlDialog.showCenter();
+        tapQueryUrl({});
+    }).on('click', '.option-list-item', function() {
+        const $this = $(this);
+        $this.addClass('selected').siblings().removeClass('selected');
+        const next = $this.data('next');
+        if (next) {
+            urlQuries.push(next);
+            tapQueryUrl({});
+        }
+    }).on('submit', 'form', function(e) {
+        e.preventDefault();
+        const data: any = {};
+        for (const item of $(this).serializeArray()) {
+            data[item.name] = item.value;
+        }
+        tapQueryUrl(data);
+        return false;
+    });
+    $(document).on('click', '*[data-help]', function(e) {
+        e.preventDefault();
+        urlDialog.showCenter();
+        urlDialog.find('.flip-tab-item').eq(0).addClass('active').siblings().removeClass('active');
+        urlTarget = $(this).prev();
+    });
 }
 
 function pinyinIfEmpty(ele: JQuery, val: string) {
@@ -132,7 +194,7 @@ $(function() {
         const form = $(this).closest('form');
         form.append('<input type="hidden" name="status" value="5">');
         form.trigger('submit');
-    }).on('click', '*[data-help]', function(e) {
+    }).on('click', '*[data-tour]', function(e) {
         e.preventDefault();
         $(this).tour({
             title: 'CMS操作引导',

@@ -49,6 +49,9 @@ class LeadTour {
     } 
 
     private set dialogStyle(args: any) {
+        if (!args.display) {
+            args.display = '';
+        }
         this.element.find('.lead-dialog-box').css(args);
     }
 
@@ -117,7 +120,6 @@ class LeadTour {
         }
         const offset = target.offset();
         const sTop = target.scrollTop();
-        
         if (level < 3 && (offset.top < 0 || offset.top + target.height() > window.innerHeight)) {
             this.closeModal();
             target.scrollTop(sTop + offset.top - window.innerHeight / 2);

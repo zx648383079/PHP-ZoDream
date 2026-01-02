@@ -18,7 +18,6 @@ use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Infrastructure\Contracts\Route;
 use Zodream\Route\ModuleRoute;
 use Zodream\Route\OnlyRoute;
-use Zodream\Route\Rewrite\LocaleURLEncoder;
 use Zodream\Service\Middleware\MiddlewareInterface;
 
 /**

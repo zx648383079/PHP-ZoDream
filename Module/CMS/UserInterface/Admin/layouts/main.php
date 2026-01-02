@@ -43,6 +43,7 @@ $navCurrent = '';
 if ($currentSite) {
     $siteUrl = $this->url('./@admin/site');
     $navCurrent = <<<HTML
+    <a class="nav-item" data-tour><i class="tool-help" title="查看帮助"></i></a>
     <a class="nav-item" href="{$siteUrl}">当前站点：{$currentSite['title']}</a>
 HTML;
 }

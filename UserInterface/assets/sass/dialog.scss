@@ -192,9 +192,8 @@ $dialogIndex: 1200;
                 margin-right: 0.3125rem;
             }
             .dialog-close {
-                background: var(--#{theme.$prefix}tertiary);
-                color: var(--#{theme.$prefix}meta-text);
-              
+                background: var(--#{theme.$prefix}secondary);
+                color: var(--#{theme.$prefix}secondary-text);
             }
         }
     }

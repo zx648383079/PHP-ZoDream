@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\ThemeManager;
+use Zodream\Http\Uri;
 
 class SiteRepository {
 
@@ -146,5 +147,24 @@ class SiteRepository {
                 'match_rule' => empty($item['match_rule']) ? '' : ltrim($item['match_rule'], '/')
             ];
         }, $data);
+    }
+
+    public static function encodeUrl(mixed $siteModel, string $path, array $data = []): string {
+        $uri = new Uri($siteModel['match_rule']);
+        $request = request();
+        if (empty($uri->getScheme())) {
+            $uri->setScheme($request->scheme());
+        }
+        if (empty($uri->getHost())) {
+            $uri->setHost($request->host());
+        }
+        if (str_starts_with($path, './')) {
+            $path = substr($path, 2);
+        }
+        if (!empty($path)) {
+            $uri->addPath($path);
+        }
+        $uri->addData($data);
+        return (string)url()->encode($uri);
     }
 }

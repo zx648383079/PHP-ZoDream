@@ -69,3 +69,51 @@ $this->registerJs($js);
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
     </div>
 <?=Form::close('id')?>
+
+<div class="dialog dialog-box url-dialog" data-type="dialog">
+    <div class="dialog-header">
+        <div class="dialog-title">选择生成的网址</div><i class="fa fa-close dialog-close"></i>
+    </div>
+    <div class="dialog-body">
+        <div class="flip-tab-item active">
+            <div class="column-item" data-next="linkage">
+                <div class="icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <div class="content">
+                    <h3>联动项</h3>
+                </div>
+            </div>
+            <div class="column-item" data-next="channel">
+                <div class="icon">
+                    <i class="fa fa-table"></i>
+                </div>
+                <div class="content">
+                    <h3>栏目</h3>
+                </div>
+            </div>
+        </div>
+        <div class="flip-tab-item">
+            <form class="form-horizontal" role="form">
+                <div class="input-group">
+                    <label class="sr-only" for="keywords">标题</label>
+                    <input type="text" class="form-control" name="keywords" id="keywords" placeholder="标题">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <div class="list-scroll-body">
+                <div class="option-list-item">
+                    栏目1
+                </div>
+                <div class="option-list-item selected">
+                    栏目1
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" class="dialog-yes">确认</button>
+        <button type="button" class="dialog-close">取消</button>
+    </div>
+</div>
+
