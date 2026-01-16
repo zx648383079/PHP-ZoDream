@@ -186,9 +186,13 @@ final class PublishRepository {
             'open_type',
             'open_rule',];
         $model->user_id = $userId;
+        if ($id > 0 && $model->parent_id === $model->id) {
+            $model->parent_id = $data['parent_id'] = 0;
+            $model->language = $data['language'] = 'zh';
+        }
         if ($model->parent_id > 0) {
             $parent = BlogModel::find($model->parent_id);
-            if (!$model->language || $model->language == 'zh') {
+            if (!$model->language || $model->language === 'zh') {
                 $model->language = 'en';
             }
             foreach ($async_column as $key) {

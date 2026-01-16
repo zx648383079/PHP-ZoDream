@@ -4,7 +4,7 @@ namespace Module\Shop\Service\Api\Admin;
 
 use Module\Shop\Domain\Repositories\Admin\BrandRepository;
 use Module\Shop\Domain\Repositories\Admin\CategoryRepository;
-use Module\Shop\Domain\Repositories\AttributeRepository;
+use Module\Shop\Domain\Repositories\Admin\AttributeRepository;
 use Zodream\Route\Controller\Concerns\BatchAction;
 
 class BatchController extends Controller {

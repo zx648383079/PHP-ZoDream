@@ -27,13 +27,17 @@ abstract class CsvImporter implements IImporter {
         $column = [];
         while (($data = fgetcsv($resource)) !== false) {
             if ($status === 0) {
-                if (str_starts_with($data[0], '---')) {
+                if (str_starts_with((string)$data[0], '---')) {
                     $status = 1;
                 }
                 continue;
             }
-            if (str_starts_with($data[0], '---')) {
+            if (str_starts_with((string)$data[0], '---')) {
                 break;
+            }
+            if (count($data) === 1) {
+                $status = 0;
+                continue;
             }
             $items = [];
             foreach ($data as $item) {

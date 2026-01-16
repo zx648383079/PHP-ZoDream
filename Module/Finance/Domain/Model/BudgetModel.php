@@ -139,7 +139,7 @@ class BudgetModel extends BudgetEntity {
         return self::getLinkUpLog($log_list, date('Y'));
     }
 
-    public static function getLinkUpLog($log_list, $max, callable $next = null) {
+    public static function getLinkUpLog($log_list, $max, callable|null $next = null) {
         if (empty($log_list)) {
             return [];
         }

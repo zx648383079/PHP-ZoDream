@@ -9,7 +9,17 @@ final class AlipayImporter extends CsvImporter {
     protected mixed $accountId = '';
 
     public function is($resource, string $fileName): bool {
-        return $this->firstRowContains($resource, '支付宝');
+        fseek($resource, 0);
+        for ($i = 0; $i < 5; $i++) { 
+            $line = fgets($resource);
+            if ($line === false) {
+                return false;
+            }
+            if (str_contains($this->formatLine($line), '支付宝账户')) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected function ready() {
@@ -21,20 +31,21 @@ final class AlipayImporter extends CsvImporter {
 
     protected function formatData(array $item): array {
         return [
-            'type' => $item['收/支'] == '支出' ? 0 : 1,
-            'money' => $item['金额（元）'],
+            'type' => $item['收/支'] === '支出' ? 0 : 1,
+            'money' => $item['金额'],
             'frozen_money' => 0,
             'account_id' => $this->accountId,
             'channel_id' => 0,
             'project_id' => 0,
             'budget_id' => 0,
-            'remark' => sprintf('%s %s',$item['交易对方'], $item['商品名称']),
+            'trading_object' => $item['交易对方'],
+            'remark' => $item['商品说明'],
             'user_id' => auth()->id(),
-            'out_trade_no' => 'ali'.$item['交易号'],
+            'out_trade_no' => 'ali'.$item['交易订单号'],
             'created_at' => time(),
             'updated_at' => time(),
             'happened_at' => !empty($item['付款时间'])
-                ? $item['付款时间'] : $item['交易创建时间'],
+                ? $item['付款时间'] : $item['交易时间'],
         ];
     }
 
