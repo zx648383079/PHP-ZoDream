@@ -10,7 +10,7 @@ use Zodream\Helpers\Str;
 final class WxImporter extends Importer implements IImporter {
 
     protected mixed $accountId = '';
-    private \Closure|null $writeFn;
+    private \Closure|null $writeFn = null;
     private string $handle = '';
 
     public function open(string $fileName): bool {
@@ -46,8 +46,8 @@ final class WxImporter extends Importer implements IImporter {
      */
     public function readCallback(callable $cb): bool {
         $this->ready();
-        $this->import($this->handle);
         $this->writeFn = $cb;
+        $this->import($this->handle);
         return true;
     }
 

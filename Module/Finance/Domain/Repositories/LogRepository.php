@@ -134,11 +134,12 @@ class LogRepository {
             LogModel::query()->insert($data);
         }
     }
-    public static function import($file) {
+    public static function import($file): int {
         $file = (string)$file;
         if (!is_file($file)) {
-            return false;
+            return 0;
         }
+        $success = 0;
         foreach ([
                      WxImporter::class,
                      AlipayImporter::class
@@ -148,13 +149,14 @@ class LogRepository {
             if (!$instance->open($file)) {
                 continue;
             }
-            $instance->readCallback(function (array $item) {
+            $instance->readCallback(function (array $item) use (&$success) {
                 LogModel::createIfNot($item);
+                $success ++;
             });
             $instance->close();
             break;
         }
-        return true;
+        return $success;
     }
 
     public static function export(bool $urlEncode = false) {

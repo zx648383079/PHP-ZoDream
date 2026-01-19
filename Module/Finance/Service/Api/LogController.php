@@ -68,7 +68,7 @@ class LogController extends Controller {
             $request->get('project_id'),
             $request->get('channel_id'),
             $request->get('budget_id'));
-        return $this->renderData(true, sprintf('更新%d条数据', $row));
+        return $this->renderData(true, sprintf('更新 %d 条数据', $row));
     }
 
     public function importAction() {
@@ -78,10 +78,11 @@ class LogController extends Controller {
         if (!$upload->checkType(['csv', 'xlsx']) || !$upload->save()) {
             return $this->renderFailure('文件不支持，仅支持gb2312编码的csv文件');
         }
-        $upload->each(function (BaseUpload $file) {
-            LogRepository::import($file->getFile());
+        $success = 0;
+        $upload->each(function (BaseUpload $file) use (&$success) {
+            $success += LogRepository::import($file->getFile());
         });
-        return $this->renderData(true);
+        return $this->renderData(true, sprintf('导入 %d 条数据', $success));
     }
 
     public function exportAction() {
