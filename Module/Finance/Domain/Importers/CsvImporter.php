@@ -3,29 +3,49 @@ declare(strict_types=1);
 namespace Module\Finance\Domain\Importers;
 
 use Infrastructure\IImporter;
+use Zodream\Helpers\Str;
 
 abstract class CsvImporter implements IImporter {
 
-    protected function firstRowContains($resource, string $tag): bool {
-        fseek($resource, 0);
-        $line = fgets($resource);
+    private mixed $handle;
+
+    public function open(string $fileName): bool
+    {
+        if (!Str::endWith($fileName, ['.csv'])) {
+            return false;
+        }
+        $this->handle = fopen($fileName, 'r');
+        return false;
+    }
+
+    public function close(): void 
+    {
+        if ($this->handle) {
+            fclose($this->handle);
+            $this->handle = null;
+        }
+    }
+
+    protected function firstRowContains(string $tag): bool {
+        fseek($this->handle, 0);
+        $line = fgets($this->handle);
         return str_contains($this->formatLine($line), $tag);
     }
 
-    public function read($resource): array {
+    public function readToEnd(): array {
         $items = [];
-        $this->readCallback($resource, function (array $item) use (&$items) {
+        $this->readCallback(function (array $item) use (&$items) {
             $items[] = $item;
         });
         return $items;
     }
 
-    public function readCallback($resource, callable $cb): bool {
-        fseek($resource, 0);
+    public function readCallback(callable $cb): bool {
+        fseek($this->handle, 0);
         $this->ready();
         $status = 0;
         $column = [];
-        while (($data = fgetcsv($resource)) !== false) {
+        while (($data = fgetcsv($this->handle)) !== false) {
             if ($status === 0) {
                 if (str_starts_with((string)$data[0], '---')) {
                     $status = 1;

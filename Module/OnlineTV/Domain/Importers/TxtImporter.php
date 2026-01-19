@@ -9,23 +9,37 @@ use Zodream\Infrastructure\Contracts\Response\ExportObject;
 
 final class TxtImporter implements IImporter, ExportObject {
 
-    public function is($resource, string $fileName): bool
+    private mixed $handle;
+
+    public function open(string $fileName): bool
     {
-        return Str::endWith($fileName, ['.csv', '.txt']);
+        if (!Str::endWith($fileName, ['.csv', '.txt'])) {
+            return false;
+        }
+        $this->handle = fopen($fileName, 'r');
+        return true;
     }
 
-    public function read($resource): array
+    public function close(): void 
+    {
+        if ($this->handle) {
+            fclose($this->handle);
+            $this->handle = null;
+        }
+    }
+
+    public function readToEnd(): array
     {
         $items = [];
-        $this->readCallback($resource, function (array $item) use (&$items) {
+        $this->readCallback(function (array $item) use (&$items) {
             $items[] = $item;
         });
         return $items;
     }
 
-    public function readCallback($resource, callable $cb): bool
+    public function readCallback(callable $cb): bool
     {
-        while (($line = fgets($resource)) !== false) {
+        while (($line = fgets($this->handle)) !== false) {
             $data = explode(',', $line, 2);
             if (count($data) !== 2 || empty($data[1])
                 || !parse_url($data[1], PHP_URL_HOST)) {

@@ -75,7 +75,7 @@ class LogController extends Controller {
         $upload = new Upload();
         $upload->setDirectory(app_path()->directory('data/cache'));
         $upload->upload('file');
-        if (!$upload->checkType('csv') || !$upload->save()) {
+        if (!$upload->checkType(['csv', 'xlsx']) || !$upload->save()) {
             return $this->renderFailure('文件不支持，仅支持gb2312编码的csv文件');
         }
         $upload->each(function (BaseUpload $file) {

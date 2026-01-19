@@ -3,13 +3,61 @@ declare(strict_types=1);
 namespace Module\Finance\Domain\Importers;
 
 use Module\Finance\Domain\Model\MoneyAccountModel;
+use Zodream\Html\Excel\Importer;
+use Infrastructure\IImporter;
+use Zodream\Helpers\Str;
 
-final class WxImporter extends CsvImporter {
+final class WxImporter extends Importer implements IImporter {
 
     protected mixed $accountId = '';
+    private \Closure|null $writeFn;
+    private string $handle = '';
 
-    public function is($resource, string $fileName): bool {
-        return $this->firstRowContains($resource, '微信');
+    public function open(string $fileName): bool {
+        if (!Str::endWith($fileName, ['.xlsx'])) {
+            return false;
+        }
+        $this->handle = $fileName;
+        return true;
+    }
+
+    public function close(): void 
+    {
+    }
+
+    /**
+     * 读取所有的数据
+     * @param resource $resource
+     * @return array
+     */
+    public function readToEnd(): array {
+        $items = [];
+        $this->readCallback(function (array $item) use (&$items) {
+            $items[] = $item;
+        });
+        return $items;
+    }
+
+    /**
+     * 边读取边执行
+     * @param $resource
+     * @param callable $cb
+     * @return bool
+     */
+    public function readCallback(callable $cb): bool {
+        $this->ready();
+        $this->import($this->handle);
+        $this->writeFn = $cb;
+        return true;
+    }
+
+    public function headingRow(): int {
+        return 17;
+    }
+
+    public function model(array $row): mixed {
+        call_user_func($this->writeFn, $this->formatData($row));
+        return null;
     }
 
     protected function ready() {

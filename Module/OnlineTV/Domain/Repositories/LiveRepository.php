@@ -38,10 +38,6 @@ final class LiveRepository extends CRUDRepository {
         if (!is_file($file)) {
             return false;
         }
-        $handle = fopen($file, 'r');
-        if (!$handle) {
-            return false;
-        }
         set_time_limit(0);
         foreach ([
                      DplImporter::class,
@@ -50,15 +46,15 @@ final class LiveRepository extends CRUDRepository {
                  ] as $importer) {
             /** @var IImporter $instance */
             $instance = new $importer;
-            if (!$instance->is($handle, $fileName)) {
+            if (!$instance->open($fileName)) {
                 continue;
             }
-            $instance->readCallback($handle, function (array $item) {
+            $instance->readCallback(function (array $item) {
                 self::createIfNot($item);
             });
+            $instance->close();
             break;
         }
-        fclose($handle);
         return true;
     }
 

@@ -9,30 +9,46 @@ use Zodream\Infrastructure\Contracts\Response\ExportObject;
 
 final class DplImporter implements IImporter, ExportObject {
 
-    public function is($resource, string $fileName): bool
+    private mixed $handle;
+
+    public function open(string $fileName): bool
     {
         if (!Str::endWith($fileName, ['.dpl'])) {
             return false;
         }
-        fseek($resource, 0);
-        $line = fgets($resource);
-        return trim($line) === 'DAUMPLAYLIST';
+        $handle = fopen($fileName, 'r');
+        fseek($handle, 0);
+        $line = fgets($handle);
+        if (trim($line) === 'DAUMPLAYLIST') {
+            $this->handle = $handle;
+            return true;
+        }
+        fclose($handle);
+        return false;
     }
 
-    public function read($resource): array
+    public function close(): void 
+    {
+        if ($this->handle) {
+            fclose($this->handle);
+            $this->handle = null;
+        }
+    }
+
+    public function readToEnd(): array
     {
         $items = [];
-        $this->readCallback($resource, function (array $item) use (&$items) {
+        $this->readCallback(function (array $item) use (&$items) {
             $items[] = $item;
         });
         return $items;
     }
 
-    public function readCallback($resource, callable $cb): bool
+    public function readCallback(callable $cb): bool
     {
         $data = [];
         $status = 0;
-        while (($line = fgets($resource)) !== false) {
+        while (($line = fgets($this->handle)) !== false) {
             if (empty($line)) {
                 continue;
             }

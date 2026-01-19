@@ -139,25 +139,21 @@ class LogRepository {
         if (!is_file($file)) {
             return false;
         }
-        $handle = fopen($file, 'r');
-        if (!$handle) {
-            return false;
-        }
         foreach ([
                      WxImporter::class,
                      AlipayImporter::class
                  ] as $importer) {
             /** @var IImporter $instance */
             $instance = new $importer;
-            if (!$instance->is($handle, $file)) {
+            if (!$instance->open($file)) {
                 continue;
             }
-            $instance->readCallback($handle, function (array $item) {
+            $instance->readCallback(function (array $item) {
                 LogModel::createIfNot($item);
             });
+            $instance->close();
             break;
         }
-        fclose($handle);
         return true;
     }
 
