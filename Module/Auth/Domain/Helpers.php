@@ -56,6 +56,18 @@ class Helpers {
         return implode($tag, $items);
     }
 
+    public static function hideCard(string $text): string {
+        if (empty($text)) {
+            return '';
+        }
+        $len = strlen($text);
+        if ($len <= 2) {
+            return $text;
+        }
+        return sprintf('%s%s%s', substr($text, 0, 1), str_repeat('*', $len - 2),
+            substr($text, $len - 1, 1));
+    }
+
     public static function hideText(string $text, int $first = 1, int $middle = 2, int $end = 1): string {
         $len = mb_strlen($text);
         if ($len < 2) {
