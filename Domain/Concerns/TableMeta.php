@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Domain\Concerns;
 
 use Zodream\Helpers\Json;
+use Zodream\Helpers\Arr;
 
 trait TableMeta {
 
@@ -29,7 +30,14 @@ trait TableMeta {
             return $default;
         }
         $items = static::query()->where(static::$idKey, $id)->pluck('content', 'name');
-        return array_merge($default, $items);
+        foreach ($default as $key => $value) {
+            if (!isset($items[$key])) {
+                $items[$key] = $value;
+                continue;
+            }
+            $items[$key] = Arr::changeType($items[$key], gettype($value));
+        }
+        return $items;
     }
 
     /**
