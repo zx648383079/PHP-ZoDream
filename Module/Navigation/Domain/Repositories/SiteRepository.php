@@ -81,4 +81,9 @@ final class SiteRepository {
         }
         return $data;
     }
+
+    public static function submit(array $data) {
+        
+        return true;
+    }
 }

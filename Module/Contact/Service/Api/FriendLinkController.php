@@ -13,7 +13,13 @@ class FriendLinkController extends Controller {
 
     public function applyAction(Request $request) {
         try {
-            return $this->render(ContactRepository::applyFriendLink($request->get()));
+            return $this->render(ContactRepository::applyFriendLink($request->validate([
+                'name' => 'required|string:0,20',
+                'url' => 'required|string:0,50',
+                'logo' => 'string:0,200',
+                'brief' => 'string:0,255',
+                'email' => 'string:0,100',
+            ])));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

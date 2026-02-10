@@ -21,7 +21,12 @@ class HomeController extends ModuleController {
 
     public function feedbackAction(Request $request) {
         try {
-            ContactRepository::saveFeedback($request->get());
+            ContactRepository::saveFeedback($request->validate([
+                'name' => 'required|string:0,20',
+                'email' => 'string:0,50',
+                'phone' => 'string:0,30',
+                'content' => 'required|string:0,255',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -52,7 +57,13 @@ class HomeController extends ModuleController {
 
     public function friendLinkAction(Request $request) {
         try {
-            ContactRepository::applyFriendLink($request->get());
+            ContactRepository::applyFriendLink($request->validate([
+                'name' => 'required|string:0,20',
+                'url' => 'required|string:0,50',
+                'logo' => 'string:0,200',
+                'brief' => 'string:0,255',
+                'email' => 'string:0,100',
+            ]));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
