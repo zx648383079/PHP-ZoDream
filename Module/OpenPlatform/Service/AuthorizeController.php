@@ -1,11 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\OpenPlatform\Service;
 
-use Module\OpenPlatform\Domain\Model\PlatformModel;
 use Module\OpenPlatform\Domain\Model\PlatformSimpleModel;
 use Module\OpenPlatform\Domain\Model\UserTokenModel;
 use Module\OpenPlatform\Domain\Repositories\OpenRepository;
-use Zodream\Helpers\Time;
 
 class AuthorizeController extends Controller {
 
