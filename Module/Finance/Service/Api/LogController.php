@@ -71,16 +71,16 @@ class LogController extends Controller {
         return $this->renderData(true, sprintf('更新 %d 条数据', $row));
     }
 
-    public function importAction() {
+    public function importAction(string $password = '') {
         $upload = new Upload();
         $upload->setDirectory(app_path()->directory('data/cache'));
         $upload->upload('file');
-        if (!$upload->checkType(['csv', 'xlsx']) || !$upload->save()) {
+        if (!$upload->checkType(['csv', 'xlsx', 'zip']) || !$upload->save()) {
             return $this->renderFailure('文件不支持，仅支持gb2312编码的csv文件');
         }
         $success = 0;
-        $upload->each(function (BaseUpload $file) use (&$success) {
-            $success += LogRepository::import($file->getFile());
+        $upload->each(function (BaseUpload $file) use (&$success, $password) {
+            $success += LogRepository::import($file->getFile(), $password);
         });
         return $this->renderData(true, sprintf('导入 %d 条数据', $success));
     }

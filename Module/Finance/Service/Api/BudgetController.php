@@ -46,9 +46,9 @@ class BudgetController extends Controller {
         return $this->renderData(true);
     }
 
-    public function statisticsAction(int $id) {
+    public function statisticsAction(int $id, string $start_at = '', string $end_at = '') {
         try {
-            $model = BudgetRepository::statistics($id);
+            $model = BudgetRepository::statistics($id, $start_at, $end_at);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

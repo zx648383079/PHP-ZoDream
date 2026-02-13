@@ -10,6 +10,8 @@ use Module\Finance\Domain\Model\LogModel;
 use Exception;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Html\Excel\Exporter;
+use Zodream\Disk\ZipStream;
+use Zodream\Helpers\Time;
 
 class LogRepository {
 
@@ -134,32 +136,56 @@ class LogRepository {
             LogModel::query()->insert($data);
         }
     }
-    public static function import($file): int {
+    public static function import($file, $password = ''): int {
         $file = (string)$file;
         if (!is_file($file)) {
             return 0;
         }
         $success = 0;
-        foreach ([
+        $cb = function($file) use (&$success) {
+            foreach ([
                      WxImporter::class,
                      AlipayImporter::class
                  ] as $importer) {
-            /** @var IImporter $instance */
-            $instance = new $importer;
-            if (!$instance->open($file)) {
-                continue;
+                /** @var IImporter $instance */
+                $instance = new $importer;
+                if (!$instance->open($file)) {
+                    continue;
+                }
+                $instance->readCallback(function (array $item) use (&$success) {
+                    LogModel::createIfNot($item);
+                    $success ++;
+                });
+                $instance->close();
+                break;
             }
-            $instance->readCallback(function (array $item) use (&$success) {
-                LogModel::createIfNot($item);
-                $success ++;
+        };
+        if (str_ends_with($file, '.zip')) {
+            $zip = new ZipStream($file);
+            if (!empty($password) && !$zip->setPassword($password)) {
+                $zip->close();
+                throw new Exception('密码错误');
+            }
+            $targetFile = app_path('data/cache/__'.Time::millisecond());
+            $zip->each(function(string $name, bool $isFolder) use ($targetFile, $zip, $cb) {
+                if ($isFolder) {
+                    return;
+                }
+                if (str_ends_with($name, '.csv') && $zip->extractFile($name, $outputFile = $targetFile.'.csv')) {
+                    call_user_func($cb, $outputFile);
+                } elseif (str_ends_with($name, '.xlsx') && $zip->extractFile($name, $outputFile = $targetFile.'.xlsx')) {
+                    call_user_func($cb, $outputFile);
+                }
             });
-            $instance->close();
-            break;
+            $zip->close();
+        } else {
+            call_user_func($cb, $file);
         }
         return $success;
     }
 
     public static function export(bool $urlEncode = false) {
+        set_time_limit(0);
         $title = '流水记录';
         if ($urlEncode) {
             $title = urlencode($title);

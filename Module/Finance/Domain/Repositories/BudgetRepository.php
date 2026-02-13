@@ -86,9 +86,9 @@ class BudgetRepository {
      * @return array
      * @throws Exception
      */
-    public static function statistics(int $id) {
+    public static function statistics(int $id, string $start_at = '', string $end_at = '') {
         $data = self::get($id);
-        $log_list = $data->getLogs();
+        $log_list = $data->getLogs($start_at, $end_at);
         $sum = array_sum($log_list);
         $budget_sum = count($log_list) * $data->budget;
         return compact('data', 'log_list', 'sum', 'budget_sum');
