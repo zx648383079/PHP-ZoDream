@@ -8,7 +8,6 @@ use Module\Finance\Domain\Model\FinancialProductModel;
 use Module\Finance\Domain\Model\LogModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Zodream\Database\Migrations\Migration;
-use Zodream\Database\Schema\Schema;
 use Zodream\Database\Schema\Table;
 
 class CreateFinanceTables extends Migration {

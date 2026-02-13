@@ -56,7 +56,11 @@ final class WxImporter extends Importer implements IImporter {
     }
 
     public function model(array $row): mixed {
-        call_user_func($this->writeFn, $this->formatData($row));
+        $data = $this->formatData($row);
+        if (empty($data['money'])) {
+            return null;
+        }
+        call_user_func($this->writeFn, $data);
         return null;
     }
 

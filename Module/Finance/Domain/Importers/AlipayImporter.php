@@ -8,7 +8,7 @@ final class AlipayImporter extends CsvImporter {
 
     protected mixed $accountId = '';
 
-    public function is($resource, string $fileName): bool {
+    protected function is($resource, string $fileName): bool {
         fseek($resource, 0);
         for ($i = 0; $i < 5; $i++) { 
             $line = fgets($resource);
@@ -30,6 +30,9 @@ final class AlipayImporter extends CsvImporter {
     }
 
     protected function formatData(array $item): array {
+        if ($item['交易状态'] !== '交易成功') {
+            return [];
+        }
         return [
             'type' => $item['收/支'] === '支出' ? 0 : 1,
             'money' => $item['金额'],

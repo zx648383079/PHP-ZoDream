@@ -14,8 +14,13 @@ abstract class CsvImporter implements IImporter {
         if (!Str::endWith($fileName, ['.csv'])) {
             return false;
         }
-        $this->handle = fopen($fileName, 'r');
-        return false;
+        $handle = fopen($fileName, 'r');
+        if (!$this->is($handle, $fileName)) {
+            fclose($handle);
+            return false;
+        }
+        $this->handle = $handle;
+        return true;
     }
 
     public function close(): void 
@@ -73,8 +78,11 @@ abstract class CsvImporter implements IImporter {
                 $status = 2;
                 continue;
             }
-            $item = array_combine($column, $data);
-            call_user_func($cb, $this->formatData($item));
+            $item = $this->formatData(array_combine($column, $data));
+            if (empty($item['money']) && empty($item['frozen_money'])) {
+                continue;
+            }
+            call_user_func($cb, $item);
         }
         return true;
     }
@@ -84,6 +92,7 @@ abstract class CsvImporter implements IImporter {
     }
 
     abstract protected function formatData(array $item): array;
+    abstract protected function is($resource, string $fileName): bool;
 
     protected function formatLine(string $line): string {
         return trim($line);
