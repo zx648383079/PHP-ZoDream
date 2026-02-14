@@ -62,12 +62,21 @@ class LogController extends Controller {
     }
 
     public function batchAction(Request $request) {
-        $row = LogRepository::batchEdit(
-            $request->get('keywords'),
-            $request->get('account_id'),
-            $request->get('project_id'),
-            $request->get('channel_id'),
-            $request->get('budget_id'));
+        try {
+            $row = LogRepository::batchEdit(
+                $request->validate([
+                    'keywords' => 'required',
+
+                    'account_id' => 'int',
+                    'channel_id' => 'int',
+                    'project_id' => 'int',
+                    'budget_id' => 'int',
+                    'trading_object' => 'string:0,100',
+                ])
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true, sprintf('更新 %d 条数据', $row));
     }
 

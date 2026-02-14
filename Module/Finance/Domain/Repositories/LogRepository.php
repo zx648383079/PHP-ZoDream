@@ -88,23 +88,29 @@ class LogRepository {
         return LogModel::auth()->where('id', $id)->delete();
     }
 
-    public static function batchEdit($keywords,
-                                     $account_id = 0, $project_id = 0, $channel_id = 0, $budget_id = 0) {
-        if (empty($keywords)) {
+    public static function batchEdit(array $data) {
+        if (empty($data['keywords'])) {
             return 0;
         }
-        $data = compact('account_id', 'project_id', 'channel_id', 'budget_id');
+        $keywords = $data['keywords'];
+        unset($data['keywords']);
         foreach ($data as $key => $item) {
-            if ($item < 1) {
-                unset($data[$key]);
+            if (str_ends_with($key, '_id') && $item > 0) {
+                continue;
             }
+            if (!empty($item)) {
+                continue;
+            }
+            unset($data[$key]);
         }
         if (empty($data)) {
             return 0;
         }
         return LogModel::query()->where('user_id', auth()->id())
-            ->where(function ($query) {
-                SearchModel::search($query, 'remark');
+            ->where(function ($query) use ($keywords) {
+                SearchModel::search($query, 'remark', false, '', $keywords);
+        })->when(!empty($data['trading_object']), function($query) {
+            $query->where('trading_object', '');
         })->update($data);
     }
 

@@ -30,11 +30,11 @@ final class AlipayImporter extends CsvImporter {
     }
 
     protected function formatData(array $item): array {
-        if ($item['交易状态'] !== '交易成功') {
+        if ($item['交易状态'] !== '交易成功') { // '交易成功' '已关闭' '冻结成功'
             return [];
         }
         return [
-            'type' => $item['收/支'] === '支出' ? 0 : 1,
+            'type' => $item['收/支'] === '支出' ? 0 : 1, // '不计收支' '支出' '收入'
             'money' => $item['金额'],
             'frozen_money' => 0,
             'account_id' => $this->accountId,

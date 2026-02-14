@@ -72,8 +72,12 @@ final class WxImporter extends Importer implements IImporter {
     }
 
     protected function formatData(array $item): array {
+        if ($item['收/支'] === '/') {
+            return [];
+        }
+        // $item['当前状态'] // '支付成功' '已转账' '对方已收钱' '已存入零钱' '已转账'
         return [
-            'type' => $item['收/支'] == '支出' ? 0 : 1,
+            'type' => $item['收/支'] == '支出' ? 0 : 1, // '支出' '收入' '/'
             'money' => preg_replace('/[^\d\.]+/', '', $item['金额(元)']),
             'frozen_money' => 0,
             'account_id' => $this->accountId,
