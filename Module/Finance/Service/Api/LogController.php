@@ -14,8 +14,10 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class LogController extends Controller {
 
     public function indexAction(int $type = 0, string $keywords = '', int $account = 0,
-                              int $budget = 0, string $start_at = '', string $end_at = '') {
-        $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at);
+                              int $budget = 0, string $start_at = '', string $end_at = '', 
+                              string $goto = '', int $page = 1,
+                              int $per_page = 20) {
+        $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at, $goto, $page, $per_page);
         $account_list = AccountRepository::getItems();
         try {
             $log_list = Relation::bindRelation($log_list, $account_list, 'account', ['account_id' => 'id']);

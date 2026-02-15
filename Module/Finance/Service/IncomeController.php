@@ -33,8 +33,9 @@ class IncomeController extends Controller {
     }
 
     public function logAction(int $type = 0, string $keywords = '', int $account = 0,
-                              int $budget = 0, string $start_at = '', string $end_at = '') {
-        $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at);
+                              int $budget = 0, string $start_at = '', string $end_at = '', int $page = 1,
+                              int $per_page = 20) {
+        $log_list = LogRepository::getList($type, $keywords, $account, $budget, $start_at, $end_at, '', $page, $per_page);
         $account_list = AccountRepository::getItems();
         $items = Relation::bindRelation($log_list, $account_list, 'account', ['account_id' => 'id']);
         return $this->show(compact('items', 'account_list', 'keywords', 'type', 'account'));

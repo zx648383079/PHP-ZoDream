@@ -31,6 +31,7 @@ class ForumController extends Controller {
                 'thumb' => 'string:0,100',
                 'description' => 'string:0,255',
                 'parent_id' => 'int',
+                'zone_id' => 'int',
                 'type' => 'int:0,99',
                 'position' => 'int:0,999',
                 'classifies' => '',

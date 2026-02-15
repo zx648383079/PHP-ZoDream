@@ -23,6 +23,7 @@ class CreateForumTables extends Migration {
             $table->uint('parent_id')->default(0);
             $table->uint('thread_count')->default(0)->comment('主题数');
             $table->uint('post_count')->default(0)->comment('回帖数');
+            $table->uint('zone_id')->default(0);
             $table->uint('type', 2)->default(0);
             $table->uint('position', 2)->default(99);
             $table->timestamps();

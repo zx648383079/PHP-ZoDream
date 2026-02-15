@@ -15,8 +15,15 @@ use Zodream\Helpers\Time;
 
 class LogRepository {
 
-    public static function getList(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {
-        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->orderBy('happened_at', 'desc')->page();
+    public static function getList(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '', string $goto = '', int $page = 1,
+                                   int $per_page = 20) {
+        if (!empty($goto)) {
+            $count = static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)
+            ->where('happened_at', '>=', $goto)
+            ->count();
+            $page = (int)ceil((float)$count / $per_page);
+        }
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->orderBy('happened_at', 'desc')->page($per_page, 'page', $page);
     }
 
     public static function count(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {

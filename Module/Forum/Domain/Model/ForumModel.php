@@ -3,7 +3,6 @@ namespace Module\Forum\Domain\Model;
 
 use Domain\Model\Model;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\Forum\Domain\Repositories\ThreadRepository;
 use Zodream\Html\Tree;
 use Zodream\Helpers\Tree as TreeHelper;
 
@@ -16,6 +15,7 @@ use Zodream\Helpers\Tree as TreeHelper;
  * @property integer $parent_id
  * @property integer $thread_count
  * @property integer $post_count
+ * @property integer $zone_id
  * @property integer $type
  * @property integer $position
  * @property integer $created_at
@@ -35,6 +35,7 @@ class ForumModel extends Model {
             'parent_id' => 'int',
             'thread_count' => 'int',
             'post_count' => 'int',
+            'zone_id' => 'int',
             'type' => 'int:0,99',
             'position' => 'int:0,999',
             'created_at' => 'int',
