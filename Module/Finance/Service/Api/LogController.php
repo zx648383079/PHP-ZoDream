@@ -66,7 +66,7 @@ class LogController extends Controller {
             $row = LogRepository::batchEdit(
                 $request->validate([
                     'keywords' => 'required',
-
+                    'operator' => 'int',
                     'account_id' => 'int',
                     'channel_id' => 'int',
                     'project_id' => 'int',
@@ -108,5 +108,14 @@ class LogController extends Controller {
     public function countAction(int $type = 0, string $keywords = '', int $account = 0,
                                 int $budget = 0, string $start_at = '', string $end_at = '') {
         return $this->renderData(LogRepository::count($type, $keywords, $account, $budget, $start_at, $end_at));
+    }
+
+    public function searchAction(string $keywords = '', int $type = 0, int|array $id = 0) {
+        try {
+            return $this->renderPage(LogRepository::search(
+                $keywords, $type, $id));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 }

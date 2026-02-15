@@ -15,15 +15,15 @@ use Zodream\Helpers\Time;
 
 class LogRepository {
 
-    public static function getList($type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null) {
+    public static function getList(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {
         return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->orderBy('happened_at', 'desc')->page();
     }
 
-    public static function count($type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null) {
+    public static function count(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {
         return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->count();
     }
 
-    protected static function bindQuery(SqlBuilder $builder, $type = 0, $keywords = null, $account = 0, $budget = 0, $start_at = null, $end_at = null): SqlBuilder {
+    protected static function bindQuery(SqlBuilder $builder, int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = ''): SqlBuilder {
         return $builder->when($type > 0, function ($query) use ($type) {
             $query->where('type', $type - 1);
         })->when(!empty($keywords), function ($query) {
@@ -39,6 +39,23 @@ class LogRepository {
         });
     }
 
+    public static function search(string $keywords = '', int $type = 0, int|array $id = 0) {
+        return LogModel::auth()
+            ->where('parent_id', 0)
+            ->when($type > 0, function ($query) use ($type) {
+                $query->where('type', $type - 1);
+            })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, ['remark', 'trading_object']);
+            })->when(!empty($id), function ($query) use ($id) {
+                if (is_array($id)) {
+                    $query->whereIn('id', $id);
+                    return;
+                }
+                $query->where('id', $id);
+            })->orderBy('happened_at', 'desc')->page();
+    }
+
     /**
      * 获取
      * @param int $id
@@ -49,6 +66,9 @@ class LogRepository {
         $model = LogModel::auth()->where('id', $id)->first();
         if (empty($model)) {
             throw new Exception('产品不存在');
+        }
+        if ($model->parent_id > 0) {
+            $model->parent = LogModel::auth()->where('id', $model->parent_id)->first();
         }
         return $model;
     }
@@ -92,8 +112,11 @@ class LogRepository {
         if (empty($data['keywords'])) {
             return 0;
         }
+        if (!empty($data['operator']) && intval($data['operator']) === 1) {
+            return self::mergeLogByMonth($data['keywords']);
+        }
         $keywords = $data['keywords'];
-        unset($data['keywords']);
+        unset($data['keywords'], $data['operator']);
         foreach ($data as $key => $item) {
             if (str_ends_with($key, '_id') && $item > 0) {
                 continue;
@@ -142,7 +165,17 @@ class LogRepository {
             LogModel::query()->insert($data);
         }
     }
-    public static function import($file, $password = ''): int {
+
+    public static function mergeLogByMonth(string $keywords): int {
+        $end_at = date('Y-m-1 00:00:00');
+        LogModel::auth()->where(function ($query) use ($keywords) {
+            SearchModel::search($query, 'remark', false, '', $keywords);
+        })->where('happened_at', '<', $end_at)->orderBy('happened_at', 'desc');
+        // TODO
+        return 0;
+    }
+
+    public static function import(mixed $file, string $password = ''): int {
         $file = (string)$file;
         if (!is_file($file)) {
             return 0;
