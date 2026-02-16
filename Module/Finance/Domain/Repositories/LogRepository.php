@@ -174,12 +174,34 @@ class LogRepository {
     }
 
     public static function mergeLogByMonth(string $keywords): int {
+        set_time_limit(0);
         $end_at = date('Y-m-1 00:00:00');
+        $items = [];
+        $exclude = [];
         LogModel::auth()->where(function ($query) use ($keywords) {
             SearchModel::search($query, 'remark', false, '', $keywords);
-        })->where('happened_at', '<', $end_at)->orderBy('happened_at', 'desc');
-        // TODO
-        return 0;
+        })->where('happened_at', '<', $end_at)
+        ->orderBy('happened_at', 'desc')->asArray()
+        ->each(function(array $item) use(&$items, &$exclude) {
+            $key = sprintf('%s_%s', date('ym', strtotime($item['happened_at'])), $item['type']);
+            if (!isset($items[$key])) {
+                $items[$key] = [
+                    'id' => intval($item['id']),
+                    'money' => floatval($item['money']),
+                    'frozen_money' => floatval($item['frozen_money']),
+                    'remark' => str_starts_with($item['remark'], '月汇总:') ? $item['remark'] : sprintf('月汇总: %s', $item['remark']),
+                ];
+                return;
+            }
+            $exclude[] = intval($item['id']);
+            $items[$key]['money'] += floatval($item['money']);
+            $items[$key]['frozen_money'] += floatval($item['frozen_money']);
+        });
+        foreach($items as $item) {
+            LogModel::auth()->where('id', $item['id'])->update($item);
+        }
+        LogModel::auth()->whereIn('id', $exclude)->delete();
+        return count($items) + count($exclude);
     }
 
     public static function import(mixed $file, string $password = ''): int {

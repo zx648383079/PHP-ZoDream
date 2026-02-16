@@ -49,7 +49,7 @@ class MicroRepository {
         if (auth()->guest()) {
             return new Page(0);
         }
-        $zoneId = ZoneRepository::getId(auth()->id());
+        $zoneId = ZoneRepository::authZone();
         if (empty($zoneId)) {
             if ($user !== auth()->id()) {
                 return new Page(0);
@@ -60,8 +60,8 @@ class MicroRepository {
             ->when($id > 0, function($query) use ($id) {
                 $query->where('id', $id);
             })
-            ->when($zoneId > 0, function($query) use ($zoneId) {
-                $query->where('zone_id', $zoneId);
+            ->where(function($query) use ($zoneId) {
+                $query->where('zone_id', $zoneId)->orWhere('user_id', auth()->id());
             })
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
@@ -117,8 +117,8 @@ class MicroRepository {
         if (auth()->guest()) {
             throw new Exception('数据错误');
         }
-        $model = MicroBlogModel::find($id);
-        if (intval($model->user_id) !== auth()->id() && intval($model->zone_id) !== ZoneRepository::getId(auth()->id())) {
+        $model = MicroBlogModel::findOrThrow($id, '数据错误');
+        if (!self::checkZone($model)) {
             throw new Exception('数据错误');
         }
         $model->user;
@@ -139,6 +139,14 @@ class MicroRepository {
         $time = MicroBlogModel::where('user_id', auth()->id())
             ->max('created_at');
         return !$time || $time < time() - $limit;
+    }
+
+    private static function checkZone(int|MicroBlogModel $source): bool {
+        $model = !is_numeric($source) ? $source : MicroBlogModel::where('id', $source)->first('id', 'zone_id', 'user_id');
+        if (intval($model['user_id']) === auth()->id()) {
+            return true;
+        }
+        return ZoneRepository::check($model['zone_id'], ZoneRepository::authZone());
     }
 
 
@@ -261,6 +269,9 @@ class MicroRepository {
         if ($model->user_id == auth()->id()) {
             throw new Exception('自己无法收藏');
         }
+         if (!self::checkZone($model)) {
+            throw new Exception('数据错误');
+        }
         $res = self::log()->toggleLog(self::LOG_TYPE_MICRO_BLOG, self::LOG_ACTION_COLLECT, $id);
         if ($res > 0) {
             $model->collect_count ++;
@@ -316,7 +327,7 @@ class MicroRepository {
 
     public static function recommend(int $id) {
         $model = MicroBlogModel::find($id);
-        if (!$model) {
+        if (!$model || self::checkZone($model)) {
             throw new Exception('id 错误');
         }
         $res = self::log()->toggleLog(self::LOG_TYPE_MICRO_BLOG, self::LOG_ACTION_RECOMMEND, $id);
@@ -337,6 +348,9 @@ class MicroRepository {
         $source = MicroBlogModel::find($id);
         if (!$source) {
             throw new Exception('id 错误');
+        }
+        if (!self::checkZone($source)) {
+            throw new Exception('数据错误');
         }
         $model = MicroBlogModel::create([
             'user_id' => auth()->id(),

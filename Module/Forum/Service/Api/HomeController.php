@@ -7,9 +7,9 @@ use Module\Forum\Domain\Repositories\ThreadRepository;
 
 class HomeController extends Controller {
 
-    public function indexAction(int $parent_id = 0) {
+    public function indexAction(int $parent = 0) {
         return $this->renderData(
-            ForumRepository::children($parent_id)
+            ForumRepository::children($parent)
         );
     }
 

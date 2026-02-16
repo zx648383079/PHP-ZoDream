@@ -7,6 +7,7 @@ use Exception;
 use Module\Auth\Domain\Entities\ZoneEntity;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\UserMetaModel;
+use Zodream\Database\Contracts\SqlBuilder;
 
 final class ZoneRepository {
 
@@ -100,6 +101,10 @@ final class ZoneRepository {
     }
 
     public static function getId(int $user): int {
+        static $caches = [];
+        if (isset($caches[$user])) {
+            return $caches[$user];
+        }
         return intval(UserMetaModel::query()->where('user_id', $user)
             ->where('name', 'zone_id')->value('content'));
     }
@@ -112,5 +117,28 @@ final class ZoneRepository {
         throw AuthException::invalidZone();
     }
 
+    public static function authZone(): int {
+        return auth()->guest() ? 0 : self::getId(auth()->id());
+    }
 
+    public static function where(SqlBuilder $query, int $zoneId): SqlBuilder {
+        return $query->where(function($query) use ($zoneId) {
+            $query->where('zone_id', 0);
+            if ($zoneId > 0) {
+                $query->orWhere('zone_id', $zoneId);
+            }
+        });
+    }
+
+    public static function filter(array $items, int $zoneId): array {
+        return array_values(array_filter($items, function($item) use ($zoneId) {
+            $val = intval($item['zone_id']);
+            return $val === 0 || $val === $zoneId;
+        }));
+    }
+
+    public static function check(mixed $value, int $zoneId): bool {
+        $val = intval($value);
+        return $val === 0 || $val === $zoneId;
+    }
 }

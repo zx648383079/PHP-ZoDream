@@ -31,6 +31,9 @@ final class ForumRepository {
 
     public static function getFull(int $id, bool $full = true) {
         $model = ForumModel::findOrThrow($id, '数据有误');
+        if (!ZoneRepository::check($model->zone_id, ZoneRepository::authZone())) {
+            throw new \Exception('无法访问此板块');
+        }
         $model->classifies = ForumClassifyModel::where('forum_id', $id)
             ->orderBy('id', 'asc')->get();
         if ($full) {
@@ -50,6 +53,9 @@ final class ForumRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
+        ThreadModel::where('forum_id', $model->id)->update([
+            'zone_id' => $model->zone_id
+        ]);
         if (isset($data['classifies'])) {
             foreach ($data['classifies'] as $item) {
                 $item['forum_id'] = $model->id;
@@ -101,15 +107,18 @@ final class ForumRepository {
         $query = $hasChildren ? ForumModel::with('children') : ForumModel::query();
         $data = $query
             ->where('parent_id', $id)->get();
-        $zoneId = auth()->guest() ? 0 : ZoneRepository::getId(auth()->id());
+        $zoneId = ZoneRepository::authZone();
+        $data = ZoneRepository::filter($data, $zoneId);
         foreach ($data as $item) {
             $item->last_thread = static::lastThread($item['id'], $zoneId);
             $item->today_count = self::getTodayCount($item);
             if ($hasChildren) {
-                foreach ($item->children as $it) {
+                $children = ZoneRepository::filter($item->children, $zoneId);;
+                foreach ($children as $it) {
                     $it->today_count = self::getTodayCount($it);
                     $it->last_thread = static::lastThread($it['id'], $zoneId);
                 }
+                $item->children = $children;
             }
         };
         return $data;
@@ -126,8 +135,7 @@ final class ForumRepository {
     }
 
     private static function lastThread(int $id, int $zoneId) {
-        return ThreadModel::with('user')
-            ->where('zone_id', $zoneId)
+        return ZoneRepository::where(ThreadModel::with('user'), $zoneId)
             ->where('forum_id', $id)
             ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
             ->orderBy('id', 'desc')->first('id', 'title', 'user_id', 'view_count',

@@ -111,23 +111,10 @@ class ThreadRepository {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
             'updated_at', 'created_at', 'post_count', 'top_type'
         ]);
-        if (auth()->guest()) {
-            return new Page(0);
-        }
-        $zoneId = ZoneRepository::getId(auth()->id());
-        if (empty($zoneId)) {
-            if ($user !== auth()->id()) {
-                return new Page(0);
-            }
-            $user = auth()->id();
-        }
-        $data = ThreadModel::with('user', 'classify', 'forum')
+        $data = ZoneRepository::where(ThreadModel::with('user', 'classify', 'forum'), ZoneRepository::authZone())
             ->when($classify > 0, function ($query) use ($classify) {
                 $query->where('classify_id', $classify);
             })->whereIn('forum_id', ForumModel::getAllChildrenId($forum))
-            ->when($zoneId > 0, function($query) use ($zoneId) {
-                $query->where('zone_id', $zoneId);
-            })
             ->when(!empty($keywords), function ($query) use ($type, $keywords) {
                 if ($type < 2) {
                     SearchModel::searchWhere($query, 'title');
@@ -184,7 +171,7 @@ class ThreadRepository {
         if (auth()->guest()) {
             return [];
         }
-        $zoneId = ZoneRepository::getId(auth()->id());
+        $zoneId = ZoneRepository::authZone();
         $data = ThreadModel::with('user', 'classify')
             ->where('zone_id', $zoneId)
             ->where('forum_id', $forum)
@@ -216,15 +203,8 @@ class ThreadRepository {
     }
 
     private static function checkThreadZone(int|ThreadModel $thread): bool {
-        if (auth()->guest()) {
-            return false;
-        }
-        $zoneId = ZoneRepository::getId(auth()->id());
-        if (empty($zoneId)) {
-            return false;
-        }
-        $model = !is_numeric($thread) ? $thread : ThreadModel::query()->where('id', $thread)->first('id', 'zone_id');
-        return intval($model['zone_id']) === $zoneId;
+        $model = !is_numeric($thread) ? $thread : ThreadModel::where('id', $thread)->first('id', 'zone_id');
+        return ZoneRepository::check($model['zone_id'], ZoneRepository::authZone());
     }
 
     public static function postList(
@@ -366,8 +346,12 @@ class ThreadRepository {
         if (!static::canPublish($userId, $title)) {
             throw new Exception('你的操作太频繁了，请五分钟后再试');
         }
+        $forumZone = intval(ForumModel::where('id', $forum_id)->value('zone_id'));
+        if (!ZoneRepository::check($forumZone, ZoneRepository::authZone())) {
+            throw new Exception('版块分区错误');
+        }
         $thread = ThreadModel::create([
-            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
+            'zone_id' => $forumZone,
             'title' => $title ,
             'forum_id' => $forum_id,
             'classify_id' => $classify_id,
@@ -486,6 +470,9 @@ class ThreadRepository {
         $thread = static::get($thread_id);
         if ($thread->is_closed) {
             throw new Exception('帖子已关闭');
+        }
+        if (!self::checkThreadZone($thread)) {
+            throw new Exception('帖子出了问题');
         }
         $max = ThreadPostModel::where('thread_id', $thread_id)->max('grade');
         $post = ThreadPostModel::create([
@@ -619,7 +606,8 @@ class ThreadRepository {
 
 
     public static function suggestion(string $keywords = '') {
-        return ThreadSimpleModel::when(!empty($keywords), function ($query) {
+        return ZoneRepository::where(ThreadSimpleModel::query(), ZoneRepository::authZone())
+        ->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
         })->limit(4)->get();
     }
