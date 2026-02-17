@@ -26,6 +26,7 @@ class BudgetController extends Controller {
             $model = BudgetRepository::save($request->validate([
                 'id' => 'int',
                 'name' => 'required|string:0,50',
+                'remark' => 'string:0,255',
                 'budget' => '',
                 'spent' => '',
                 'cycle' => 'int:0,9',

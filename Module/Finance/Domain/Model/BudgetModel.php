@@ -9,6 +9,7 @@ use Zodream\Helpers\Time;
  * @package Module\Finance\Domain\Model
  * @property integer $id
  * @property string $name
+ * @property string $remark
  * @property float $budget
  * @property float $spent
  * @property integer $cycle

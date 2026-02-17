@@ -6,6 +6,7 @@ use Domain\Entities\Entity;
  * 预算
  * @property integer $id
  * @property string $name
+ * @property string $remark
  * @property float $budget
  * @property float $spent
  * @property integer $cycle
@@ -28,6 +29,7 @@ class BudgetEntity extends Entity {
     public function rules(): array {
         return [
             'name' => 'required|string:0,50',
+            'remark' => 'string:0,255',
             'budget' => '',
             'spent' => '',
             'cycle' => 'int:0,9',

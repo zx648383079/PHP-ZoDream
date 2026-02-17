@@ -86,6 +86,7 @@ class CreateFinanceTables extends Migration {
             $table->comment('预算计划');
             $table->id();
             $table->string('name', 50)->comment('预算名');
+            $table->string('remark')->default('')->comment('备注');
             $table->decimal('budget', 10, 2)->default(0)->comment('预算');
             $table->decimal('spent', 10, 2)->default(0)->comment('花费');
             $table->uint('cycle', 1)->default(0)->comment('周期');
