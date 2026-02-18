@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
 use Module\Finance\Domain\Model\BudgetModel;

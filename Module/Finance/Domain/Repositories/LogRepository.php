@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
+use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Infrastructure\IImporter;
 use Module\Finance\Domain\Importers\AlipayImporter;
@@ -95,6 +96,9 @@ class LogRepository {
         } else {
             $model = new LogModel();
         }
+        if (!empty($data['happened_at'])) {
+            $data['happened_at'] = date('Y-m-d H:i:s', strtotime($data['happened_at']));
+        }
         $model->load($data);
         $model->user_id = auth()->id();
         if (!$model->save()) {
@@ -111,8 +115,39 @@ class LogRepository {
      * @param int $id
      * @return mixed
      */
-    public static function remove(int $id) {
-        return LogModel::auth()->where('id', $id)->delete();
+    public static function remove(int|array $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            throw new Exception('数据错误');
+        }
+        LogModel::auth()->whereIn('id', $items)->delete();
+    }
+
+    public static function merge(int|array $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items) || count($items) === 1) {
+            throw new Exception('数据错误');
+        }
+        $exclude = [];
+        $items = LogModel::auth()->whereIn('id', $items)
+            ->orderBy('happened_at', 'desc')->asArray()
+            ->get('id', 'type', 'account_id', 'trading_object', 'money', 'frozen_money', 'remark');
+        if (count($items) < 2) {
+            throw new Exception('数据错误');
+        }
+        $target = $items[0];
+        for ($i = 1; $i < count($items); $i++) { 
+            $item = $items[$i];
+            if ($item['type'] !== $target['type'] || $item['account_id'] !== $target['account_id'] || $item['trading_object'] !== $target['trading_object']) {
+                throw new Exception('合并操作只能合并同类型|账户|交易对象数据');
+            }
+            $exclude[] = intval($item['id']);
+            $target['money'] += floatval($item['money']);
+            $target['frozen_money'] += floatval($item['frozen_money']);
+        }
+        $target['remark'] = sprintf('合并%d条, %s', count($items), $target['remark']);
+        LogModel::auth()->where('id', intval($target['id']))->update($target);
+        LogModel::auth()->whereIn('id', $exclude)->delete();
     }
 
     public static function batchEdit(array $data) {

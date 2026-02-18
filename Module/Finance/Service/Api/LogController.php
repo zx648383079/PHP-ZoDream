@@ -58,8 +58,20 @@ class LogController extends Controller {
         return $this->render($model);
     }
 
-    public function deleteAction(int $id) {
-        LogRepository::remove($id);
+    public function deleteAction(int|array $id) {
+        try {
+            LogRepository::remove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+    public function mergeAction(int|array $id) {
+        try {
+            LogRepository::merge($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData(true);
     }
 

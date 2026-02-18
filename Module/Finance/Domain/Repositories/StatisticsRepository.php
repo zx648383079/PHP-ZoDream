@@ -5,6 +5,7 @@ namespace Module\Finance\Domain\Repositories;
 use Module\Finance\Domain\Entities\AccountEntity;
 use Module\Finance\Domain\Entities\LogEntity;
 use Module\Finance\Domain\Model\LogModel;
+use Module\Finance\Domain\Model\BudgetModel;
 use Zodream\Helpers\Time;
 
 final class StatisticsRepository {
@@ -51,12 +52,54 @@ final class StatisticsRepository {
         $income_last = LogEntity::auth()->where('type', LogEntity::TYPE_INCOME)
             ->where('happened_at', '>=', $lastStart)->where('happened_at', '<', $lastEnd)
             ->sum('money');
+        $lend_total = LogEntity::auth()->where('type', LogEntity::TYPE_LEND)
+            ->sum('money');
+        $borrow_total = LogEntity::auth()->where('type', LogEntity::TYPE_BORROW)
+            ->sum('money');
         $stage_items = static::getStage($startAt, $endAt, $type);
         return compact('money_total',
             'expenditure_total', 'expenditure_current', 'expenditure_last', 'expenditure_count',
             'income_total', 'income_current', 'income_last', 'income_count', 
-            'stage_items'
+            'stage_items', 'lend_total', 'borrow_total'
         );
+    }
+
+    public static function bugetWithMonth(string $startAt, string $endAt): array {
+        if (empty($startAt) && empty($endAt)) {
+            $startAt = date('Y-01-01');
+        }
+        $data = BudgetModel::auth()->where('deleted_at', 0)
+            ->orderBy('id', 'asc')->asArray()->get('id', 'name');
+        $res = [];
+        foreach($data as $item) {
+            $id = intval($item['id']);
+            $res[$id] = [
+                'id' => $id,
+                'name' => $item['name'],
+                'total' => 0,
+                'items' => []
+            ];
+        }
+        LogModel::auth()->sumByDate('%Y%m')
+            ->where('type', LogEntity::TYPE_EXPENDITURE)
+            ->where('budget_id', '>', 0)
+            ->when(!empty($startAt), function ($query) use ($startAt) {
+                $query->where('happened_at', '>=', $startAt);
+            })
+            ->when(!empty($endAt), function ($query) use ($endAt) {
+                $query->where('happened_at', '<=', $endAt);
+            })->orderBy('day', 'asc')
+            ->groupBy('day', 'budget_id')
+            ->asArray()->each(function($item) use(&$res) {
+                $id = intval($item['budget_id']);
+                $money = floatval($item['money']);
+                $res[$id]['total'] += $money;
+                $res[$id]['items'][] = [
+                    'date' => $item['day'],
+                    'money' => $money
+                ];
+            }, 'budget_id');
+        return array_values($res);
     }
 
     public static function getStage(string $startAt, string $endAt, int $type) {
