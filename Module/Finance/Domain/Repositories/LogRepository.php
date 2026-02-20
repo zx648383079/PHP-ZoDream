@@ -131,15 +131,15 @@ class LogRepository {
         $exclude = [];
         $items = LogModel::auth()->whereIn('id', $items)
             ->orderBy('happened_at', 'desc')->asArray()
-            ->get('id', 'type', 'account_id', 'trading_object', 'money', 'frozen_money', 'remark');
+            ->get('id', 'type', 'account_id', 'money', 'frozen_money', 'remark');
         if (count($items) < 2) {
             throw new Exception('数据错误');
         }
         $target = $items[0];
         for ($i = 1; $i < count($items); $i++) { 
             $item = $items[$i];
-            if ($item['type'] !== $target['type'] || $item['account_id'] !== $target['account_id'] || $item['trading_object'] !== $target['trading_object']) {
-                throw new Exception('合并操作只能合并同类型|账户|交易对象数据');
+            if ($item['type'] !== $target['type'] || $item['account_id'] !== $target['account_id']) {
+                throw new Exception('合并操作只能合并同类型|账户');
             }
             $exclude[] = intval($item['id']);
             $target['money'] += floatval($item['money']);
