@@ -27,7 +27,8 @@ class ThreadRepository {
     const REVIEW_STATUS_REJECTED = 9;
     public static function manageList(string $keywords = '', int $forum_id = 0) {
         /** @var Page $items */
-        $items = ThreadModel::with('user', 'forum')->when(!empty($forum_id), function ($query) use ($forum_id) {
+        $items = ThreadModel::with('user', 'forum')
+            ->when(!empty($forum_id), function ($query) use ($forum_id) {
                 $query->where('forum_id', $forum_id);
             })
             ->when(!empty($keywords), function ($query) {
@@ -103,6 +104,54 @@ class ThreadRepository {
         }
         ThreadModel::whereIn('id', $items)->delete();
         ThreadPostModel::whereIn('thread_id', $items)->delete();
+    }
+
+    public static function managePostList(int $thread, string $keywords = '', int $user = 0) {
+        $items = ThreadPostModel::with('user')
+            ->where('thread_id', $thread)
+            ->when(!empty($user), function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
+            ->when(!empty($keywords), function ($query) {
+                SearchModel::searchWhere($query, 'content');
+            })
+            ->orderBy('id', 'desc')
+            ->page();
+        $items->map(function (ThreadPostModel $item) {
+            $data = $item->toArray();
+            $parser = new Parser();
+            $parser->setModel($item);
+            $parser->request = request();
+            $parser->isReviewMode = true;
+            $data['html'] = $parser->render('json');
+            return $data;
+        });
+        return $items;
+    }
+
+    public static function managePostSave(array $data): array {
+        $id = $data['id'] ?? 0;
+        unset($data['id']);
+        $model = ThreadPostModel::findOrThrow($id);
+        $model->load($data);
+        if (!$model->save()) {
+            throw new \Exception($model->getFirstError());
+        }
+        $data = $model->toArray();
+        $parser = new Parser();
+        $parser->setModel($model);
+        $parser->request = request();
+        $parser->isReviewMode = true;
+        $data['html'] = $parser->render('json');
+        return $data;
+    }
+
+    public static function managePostRemove(array|int $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            return;
+        }
+        ThreadPostModel::whereIn('id', $items)->delete();
     }
 
     public static function getList(int $forum,
@@ -326,10 +375,10 @@ class ThreadRepository {
         }
         $model->save();
         return [
-          'is_agree' => $agree,
-          'is_disagree' => !$agree,
-          'agree_count' => $model->agree_count,
-          'disagree_count' => $model->disagree_count
+            'is_agree' => $agree,
+            'is_disagree' => !$agree,
+            'agree_count' => $model->agree_count,
+            'disagree_count' => $model->disagree_count
         ];
     }
 
