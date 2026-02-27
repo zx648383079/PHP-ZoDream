@@ -10,6 +10,8 @@ class CommentController extends Controller {
         return [
             '*' => '@',
             'index' => '*',
+            'scoreCount' => '*',
+            'score' => '*',
         ];
     }
 
