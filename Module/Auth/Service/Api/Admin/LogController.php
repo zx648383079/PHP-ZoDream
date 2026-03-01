@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Model\ActionLogModel;
-use Module\Auth\Domain\Model\AdminLogModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
 
 class LogController extends Controller {

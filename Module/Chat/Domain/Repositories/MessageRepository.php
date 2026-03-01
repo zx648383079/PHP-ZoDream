@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Module\Chat\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Repositories\FileRepository;
 use Infrastructure\LinkRule;
-use Module\Auth\Domain\Repositories\BulletinRepository;
-use Module\Chat\Domain\Model\ApplyModel;
-use Module\Chat\Domain\Model\GroupModel;
-use Module\Chat\Domain\Model\GroupUserModel;
 use Module\Chat\Domain\Model\MessageModel;
 use Module\SEO\Domain\Repositories\EmojiRepository;
+use Module\Auth\Domain\Repositories\ApplyRepository;
+use Module\Team\Domain\Repositories\TeamRepository;
 
 class MessageRepository {
 
@@ -19,11 +18,7 @@ class MessageRepository {
                 $query->where('created_at', '>=', $time);
             })
             ->where('status', MessageModel::STATUS_NONE)->count();
-        $apply = ApplyModel::where('item_id', auth()->id())
-            ->where('item_type', 0)
-            ->when($time > 0, function ($query) use ($time) {
-                $query->where('created_at', '>', $time);
-            })->where('status', 0)->count();
+        $apply = ApplyRepository::receiveUnread(Constants::TYPE_FRIEND, auth()->id(), $time);
         $messages = [];
         if ($id > 0) {
             $messages = MessageModel::with('user', 'receive')
@@ -56,42 +51,11 @@ class MessageRepository {
         $extraRules = array_merge(
             [],
             // 只有群才能at 群人名
-            $itemType > 0 ? self::at($content, $id) : [],
+            $itemType > 0 ? TeamRepository::at($content, $id) : [],
             EmojiRepository::renderRule($content)
         );
         return static::send($itemType, $id, auth()->id(),
             MessageModel::TYPE_TEXT, $content, $extraRules);
-    }
-
-    public static function at(string $content, int $group): array {
-        if (empty($content) || !str_contains($content, '@')) {
-            return [];
-        }
-        if (!preg_match_all('/@(\S+?)\s/', $content, $matches, PREG_SET_ORDER)) {
-            return [];
-        }
-        $names = array_column($matches, 0, 1);
-        $users = GroupUserModel::whereIn('name', array_keys($names))->asArray()->get();
-        if (empty($users)) {
-            return [];
-        }
-        $rules = [];
-        $currentUser = auth()->id();
-        $userIds = [];
-        foreach ($users as $user) {
-            if ($user['user_id'] != $currentUser) {
-                $userIds[] = $user['user_id'];
-            }
-            $rules[] = LinkRule::formatUser($names[$user['name']], intval($user['user_id']));
-        }
-        if (!empty($userIds)) {
-            $group = GroupModel::find($group);
-            BulletinRepository::message($userIds,
-                sprintf('我在群【%s】提到了你', $group->name), '[回复]', 88, [
-                    LinkRule::formatLink('[回复]', 'chat')
-                ]);
-        }
-        return $rules;
     }
 
     public static function sendImage(int $itemType, int $id, string $fieldKey = 'file') {
@@ -246,9 +210,7 @@ class MessageRepository {
         if (empty($ids)) {
             return [];
         }
-        $users = GroupUserModel::whereIn('user_id', $ids)
-            ->where('group_id', $id)
-            ->get();
+        $users = TeamRepository::userAny($id, $ids);
         $items = [];
         foreach ($users as $item) {
             $items[$item['user_id']] = $item->toArray();

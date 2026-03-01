@@ -1,22 +1,24 @@
 <?php
 declare(strict_types=1);
-namespace Module\Chat\Service\Api;
+namespace Module\Team\Service\Api;
 
-use Module\Chat\Domain\Repositories\GroupRepository;
+use Module\Team\Domain\Repositories\TeamRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
-class GroupController extends Controller {
+class HomeController extends Controller {
+
+    public function rules() {
+        return ['*' => '@'];
+    }
 
     public function indexAction() {
-        return $this->renderData(
-            GroupRepository::all()
-        );
+        return $this->renderData(TeamRepository::all());
     }
 
     public function detailAction(int $id) {
         try {
             return $this->render(
-                GroupRepository::detail($id)
+                TeamRepository::detail($id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -25,23 +27,31 @@ class GroupController extends Controller {
 
     public function searchAction(string $keywords = '') {
         return $this->renderPage(
-            GroupRepository::search($keywords)
+            TeamRepository::search($keywords)
         );
     }
 
-    public function agreeAction(int $user, int $group) {
-        GroupRepository::agree($user, $group);
-        return $this->renderData(true);
+    public function agreeAction(int $user, int $team) {
+        try {
+            TeamRepository::agree($user, $team);
+            return $this->renderData(true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
-    public function applyAction(int $group, string $remark = '') {
-        GroupRepository::apply($group, $remark);
-        return $this->renderData(true);
+    public function applyAction(int $team, string $remark = '') {
+        try {
+            TeamRepository::apply($team, $remark);
+            return $this->renderData(true);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
     }
 
-    public function applyLogAction(int $group) {
+    public function applyLogAction(int $team) {
         return $this->renderPage(
-            GroupRepository::applyLog($group)
+            TeamRepository::applyLog($team)
         );
     }
 
@@ -52,7 +62,7 @@ class GroupController extends Controller {
                 'logo' => 'required|string:0,100',
                 'description' => 'string:0,100',
             ]);
-            return $this->render(GroupRepository::create($data));
+            return $this->render(TeamRepository::create($data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -60,10 +70,12 @@ class GroupController extends Controller {
 
     public function disbandAction(int $id) {
         try {
-            GroupRepository::disband($id);
+            TeamRepository::disband($id);
             return $this->renderData(true);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
+
+    
 }

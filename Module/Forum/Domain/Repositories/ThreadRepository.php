@@ -221,8 +221,7 @@ class ThreadRepository {
             return [];
         }
         $zoneId = ZoneRepository::authZone();
-        $data = ThreadModel::with('user', 'classify')
-            ->where('zone_id', $zoneId)
+        $data = ZoneRepository::where(ThreadModel::with('user', 'classify'), $zoneId)
             ->where('forum_id', $forum)
             ->where('top_type', '>', 0)
             ->orderBy('top_type', 'desc')

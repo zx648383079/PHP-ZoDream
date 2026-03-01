@@ -4,6 +4,9 @@ namespace Domain;
 
 final class Constants {
     const TYPE_USER = 1;
+    const TYPE_FRIEND = 2;
+    const TYPE_TEAM = 3;
+
 
     const TYPE_USER_UPDATE = 5;
 

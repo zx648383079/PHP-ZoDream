@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Module\Chat\Domain\Repositories;
 
-use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Chat\Domain\Model\ChatHistoryModel;
 use Module\Chat\Domain\Model\FriendModel;
-use Module\Chat\Domain\Model\GroupModel;
 use Module\Chat\Domain\Model\MessageModel;
+use Module\Auth\Domain\Repositories\UserRepository;
+use Module\Team\Domain\Repositories\TeamRepository;
 use Zodream\Html\Page;
 
 class ChatRepository {
@@ -113,8 +113,7 @@ class ChatRepository {
         if (empty($ids)) {
             return [];
         }
-        $users = GroupModel::whereIn('id', $ids)
-            ->get();
+        $users = TeamRepository::getAny($ids);
         $items = [];
         foreach ($users as $item) {
             $items[$item['id']] = $item;
@@ -140,8 +139,7 @@ class ChatRepository {
         if (empty($ids)) {
             return [];
         }
-        $users = UserSimpleModel::whereIn('id', $ids)
-            ->get();
+        $users = UserRepository::basicAny($ids);
         $items = [];
         foreach ($users as $item) {
             $items[$item['id']] = $item;

@@ -353,6 +353,7 @@ class MicroRepository {
             throw new Exception('数据错误');
         }
         $model = MicroBlogModel::create([
+            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
             'user_id' => auth()->id(),
             'content' => $content,
             'forward_id' => $source->id,

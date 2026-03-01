@@ -18,7 +18,6 @@ class BatchController extends Controller {
             'chat/chat' => sprintf('%s@%s', ChatController::class, 'indexAction'),
             'chat/user' => sprintf('%s@%s', UserController::class, 'indexAction'),
             'chat/friend' => sprintf('%s@%s', FriendController::class, 'indexAction'),
-            'chat/group' => sprintf('%s@%s', GroupController::class, 'indexAction'),
         ]));
     }
 }

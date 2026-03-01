@@ -10,7 +10,6 @@ use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
-use Module\Auth\Domain\Model\UserSimpleModel;
 
 final class StatisticsRepository {
     public static function subtotal(): array {
@@ -45,7 +44,7 @@ final class StatisticsRepository {
         }
         $data = $user->toArray();
         if ($user->parent_id > 0) {
-            $data['parent'] = UserSimpleModel::find($user->parent_id);
+            $data['parent'] = UserRepository::basic($user->parent_id);
         }
         $data['oauth_count'] = OAuthModel::where('user_id', $user->id)->count();
         $data['last_login'] = LoginLogModel::where('user_id', $user->id)

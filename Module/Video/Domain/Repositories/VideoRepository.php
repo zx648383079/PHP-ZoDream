@@ -6,7 +6,8 @@ use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
 use Domain\Providers\TagProvider;
-use Module\Auth\Domain\Model\UserSimpleModel;
+use Exception;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Video\Domain\Models\VideoModel;
 
 final class VideoRepository {
@@ -114,7 +115,10 @@ final class VideoRepository {
     }
 
     public static function user(int $id): array {
-        $user = UserSimpleModel::findOrThrow($id, '用户不存在');
+        $user = UserRepository::basic($id);
+        if (empty($user)) {
+            throw new Exception('用户不存在');
+        }
         $data = $user->toArray();
         $res = VideoModel::query()->where('user_id', $id)
             ->asArray()

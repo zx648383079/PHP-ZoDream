@@ -9,6 +9,8 @@ use Domain\Model\Model;
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
+ * @property integer $item_type
+ * @property integer $item_id
  * @property integer $money
  * @property string $remark
  * @property integer $status
@@ -25,6 +27,8 @@ class ApplyLogModel extends Model {
         return [
             'user_id' => 'required|int',
             'type' => 'int:0,127',
+            'item_type' => 'int:0,127',
+            'item_id' => 'int',
             'money' => 'int',
             'remark' => 'string:0,255',
             'status' => 'int:0,127',

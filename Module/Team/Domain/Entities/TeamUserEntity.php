@@ -1,14 +1,13 @@
 <?php
-namespace Module\Chat\Domain\Model;
+namespace Module\Team\Domain\Entities;
 
-use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserSimpleModel;
+
+use Domain\Entities\Entity;
 
 /**
- * Class GroupUserModel
- * @package Module\Chat\Domain\Model
+ * 
  * @property integer $id
- * @property integer $group_id
+ * @property integer $team_id
  * @property integer $user_id
  * @property string $name
  * @property integer $role_id
@@ -16,14 +15,14 @@ use Module\Auth\Domain\Model\UserSimpleModel;
  * @property integer $updated_at
  * @property integer $created_at
  */
-class GroupUserModel extends Model {
+class TeamUserEntity extends Entity {
     public static function tableName(): string {
-        return 'chat_group_user';
+        return 'team_users';
     }
 
     protected function rules(): array {
-        return [
-            'group_id' => 'required|int',
+		return [
+            'team_id' => 'required|int',
             'user_id' => 'required|int',
             'name' => 'string:0,50',
             'role_id' => 'int',
@@ -31,12 +30,12 @@ class GroupUserModel extends Model {
             'updated_at' => 'int',
             'created_at' => 'int',
         ];
-    }
+	}
 
-    protected function labels(): array {
-        return [
+	protected function labels(): array {
+		return [
             'id' => 'Id',
-            'group_id' => 'Group Id',
+            'team_id' => 'Team Id',
             'user_id' => 'User Id',
             'name' => 'Name',
             'role_id' => 'Role Id',
@@ -44,9 +43,5 @@ class GroupUserModel extends Model {
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
         ];
-    }
-
-    public function user() {
-        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
-    }
+	}
 }

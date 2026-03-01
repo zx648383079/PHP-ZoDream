@@ -259,6 +259,8 @@ class CreateAuthTables extends Migration {
             $table->id();
             $table->uint('user_id');
             $table->uint('type', 1)->default(0);
+            $table->uint('item_type', 2)->default(0)->comment('向谁发起请求');
+            $table->uint('item_id')->default(0);
             $table->int('money')->default(0);
             $table->string('remark')->default('');
             $table->uint('status', 2)->default(0);

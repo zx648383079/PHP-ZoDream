@@ -42,6 +42,18 @@ class UserRepository {
         return !empty($user) && $user['status'] >= UserModel::STATUS_ACTIVE;
     }
 
+    public static function basic(int $id): UserSimpleModel {
+        return UserSimpleModel::find($id);
+    }
+
+    public static function basicAny(array $idItems): array {
+        if (empty($idItems)) {
+            return [];
+        }
+        return UserSimpleModel::whereIn('id', $idItems)
+            ->get();
+    }
+
     public static function getPublicProfile(int $id, string $extra = ''): array {
         $user = UserModel::where('id', $id)
             ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'created_at']);
