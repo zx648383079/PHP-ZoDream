@@ -91,4 +91,10 @@ final class ApplyRepository {
                 $query->where('created_at', '>', $lastAt);
             })->count();
     }
+
+    public static function receiveAny(int $user, int $itemType, int $itemId): bool {
+        return ApplyLogModel::where('item_type', $itemType)
+            ->where('item_id', $itemId)
+            ->where('user_id', $user)->count() > 0;
+    }
 }

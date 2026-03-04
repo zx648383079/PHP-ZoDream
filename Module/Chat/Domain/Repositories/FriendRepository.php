@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Module\Chat\Domain\Repositories;
 
+use Domain\Constants;
 use Domain\Model\SearchModel;
-use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\Chat\Domain\Model\ApplyModel;
+use Module\Auth\Domain\Repositories\ApplyRepository;
+use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Chat\Domain\Model\FriendClassifyModel;
 use Module\Chat\Domain\Model\FriendModel;
 
@@ -62,9 +63,7 @@ class FriendRepository {
         $exclude = FriendModel::where('belong_id', auth()->id())
             ->pluck('user_id');
         $exclude[] = auth()->id();
-        return UserSimpleModel::when(!empty($keywords), function ($query) {
-            SearchModel::searchWhere($query, 'name');
-        })->whereNotIn('id', $exclude)->page();
+        return UserRepository::basicSearch($keywords, $exclude);
     }
 
     /**
@@ -83,7 +82,7 @@ class FriendRepository {
         if (!static::hasClassify($group)) {
             throw new \Exception('选择的分组错误');
         }
-        $userModel = UserSimpleModel::where('id', $user)->first();
+        $userModel = UserRepository::basic($user);
         if (!$userModel) {
             throw new \Exception('用户不存在');
         }
@@ -96,16 +95,9 @@ class FriendRepository {
             'belong_id' => auth()->id(),
             'status' => $group > 0 && $count > 0 ? 1 : 0,
         ]);
-        $logCount = ApplyModel::where('item_id', auth()->id())
-            ->where('item_type', 0)
-            ->where('user_id', $user)->count();
-        if ($logCount > 0) {
-            ApplyModel::where('item_id', auth()->id())
-                ->where('item_type', 0)
-                ->where('user_id', $user)->update([
-                    'status' => 1,
-                    'updated_at' => time(),
-                ]);
+        $logCount = ApplyRepository::receiveAny($user, Constants::TYPE_FRIEND, auth()->id());
+        if ($logCount) {
+            ApplyRepository::receive($user, Constants::TYPE_FRIEND, auth()->id(), ApplyRepository::STATUS_CONFIRM);
         }
         if ($count > 0) {
             FriendModel::where('belong_id', $user)
@@ -114,16 +106,10 @@ class FriendRepository {
                 ]);
             return;
         }
-        if ($logCount > 0) {
+        if ($logCount) {
             return;
         }
-        ApplyModel::create([
-            'item_type' => 0,
-            'item_id' => $userModel->id,
-            'remark' => $remark,
-            'user_id' => auth()->id(),
-            'status' => 0,
-        ]);
+        ApplyRepository::receiveCreate(auth()->id(), Constants::TYPE_FRIEND, $user, $remark);
     }
 
     /**
@@ -248,10 +234,6 @@ class FriendRepository {
     }
 
     public static function applyLog() {
-        return ApplyModel::with('user')
-            ->where('item_type', 0)
-            ->where('item_id', auth()->id())
-            ->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')->page();
+        return ApplyRepository::receiveSearch(Constants::TYPE_FRIEND, auth()->id());
     }
 }

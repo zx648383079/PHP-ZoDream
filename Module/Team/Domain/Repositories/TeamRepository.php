@@ -54,7 +54,7 @@ final class TeamRepository {
         $ids = TeamUserEntity::where('user_id', auth()->id())->pluck('team_id');
         return TeamEntity::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->whereNotIn('id', $ids)->page();
+        })->whereNotIn('id', $ids)->where('open_type', 0)->page();
     }
 
     public static function canable(int $id) {

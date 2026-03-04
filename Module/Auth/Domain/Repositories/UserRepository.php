@@ -54,6 +54,22 @@ class UserRepository {
             ->get();
     }
 
+    public static function basicSearch(string $keywords, array $idItems, bool $isExclude = true): Page {
+        if (empty($idItems) && !$isExclude) {
+            return new Page(0);
+        }
+        return UserSimpleModel::when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, 'name', false, '', $keywords);
+            })
+            ->when(!empty($idItems), function($query) use ($idItems, $isExclude) {
+                if (!$isExclude) {
+                    return $query->whereIn('id', $idItems);
+                }
+                return $query->whereNotIn('id', $idItems);
+            })
+            ->page();
+    }
+
     public static function getPublicProfile(int $id, string $extra = ''): array {
         $user = UserModel::where('id', $id)
             ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'created_at']);
