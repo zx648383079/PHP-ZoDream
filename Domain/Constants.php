@@ -48,6 +48,6 @@ final class Constants {
 
     const TYPE_ROLE = 83;
     const TYPE_ROLE_PERMISSION = 84;
-    const TYPE_SYSTEM_FRIEND_LINK = 84;
+    const TYPE_SYSTEM_FRIEND_LINK = 86;
     const TYPE_SYSTEM_FEEDBACK = 85;
 }

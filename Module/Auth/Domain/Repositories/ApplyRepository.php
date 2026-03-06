@@ -10,8 +10,8 @@ final class ApplyRepository {
 
     const int STATUS_NONE = 0;
     const int STATUS_CONFIRM = 1;
-    const int STATUS_REJECT = 7;
-    const int STATUS_DELETED = 9;
+    const int STATUS_REJECT = 9;
+    const int STATUS_DELETED = 99;
 
     public static function getList(string $keywords = '', int $type = 0, int $user = 0) {
         return ApplyLogModel::with('user')
