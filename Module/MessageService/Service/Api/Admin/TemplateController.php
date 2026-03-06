@@ -29,8 +29,17 @@ class TemplateController extends Controller {
                 'data' => '',
                 'content' => 'required|string',
                 'target_no' => 'string:0,32',
+                'status' => 'int:0,10',
             ]);
             return $this->render(MessageRepository::templateSave($data));
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function changeAction(int $id, array $data) {
+        try {
+            return $this->render(MessageRepository::templateChange($id, $data));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

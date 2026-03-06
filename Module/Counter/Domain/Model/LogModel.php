@@ -70,24 +70,6 @@ class LogModel extends Model {
         ];
     }
 
-    public static function addLog() {
-        $request = app('request');
-        $os = $request->os();
-        $browser = $request->browser();
-        $model = new static;
-        $model->ip = $request->ip();
-        $model->browser = $browser[0];
-        $model->browser_version = $browser[1];
-        $model->os = $os[0];
-        $model->os_version = $os[1];
-        $model->referrer = $request->referrer();
-        $model->url = url()->current();
-        $model->session_id = session()->id();
-        $model->user_agent = $request->server('HTTP_USER_AGENT', '-');
-        $model->created_at = Time::format();
-        return $model->save();
-    }
-
     /**
      * 获取每天的状态
      * @param array|string $where

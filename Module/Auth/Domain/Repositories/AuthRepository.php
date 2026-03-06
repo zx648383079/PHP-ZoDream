@@ -37,6 +37,10 @@ class AuthRepository {
     const UNSET_PASSWORD = 'no_password';
     const OPTION_REGISTER_CODE = 'auth_register';
     const OPTION_OAUTH_CODE = 'auth_oauth';
+    /**
+     * 活跃有效期
+     */
+    const PULSE_SPACE = 60000;
 
     /**
      * 注册方式
@@ -76,6 +80,18 @@ class AuthRepository {
         if (empty($captcha)) {
             throw AuthException::invalidCaptcha();
         }
+    }
+
+    /**
+     * 记录活跃时间
+     */
+    public static function pulse() {
+        if (auth()->guest()) {
+            return;
+        }
+        UserModel::where('id', auth()->id())->update([
+            'activated_at' => time()
+        ]);
     }
 
     /**
@@ -203,8 +219,7 @@ class AuthRepository {
             $code, [
                 'name' => $name,
                 'url' => url('./register/verify',
-                    ['email' => $email,
-                    'code' => $code],
+                    ['code' => MessageProtocol::encode(sprintf('%s|%s', $email, $code))],
                     null, false)
             ]);
         throw new Exception('注册成功，已发送确认邮件到你的邮箱！');
@@ -303,6 +318,7 @@ class AuthRepository {
             $user->setPassword($password);
         }
         $user->created_at = time();
+        $user->activated_at = time();
         if (!$user->save()) {
             throw new Exception($user->getFirstError());
         }
@@ -428,7 +444,9 @@ class AuthRepository {
             'name' => $user->name,
             'time' => Time::format(),
             'code' => $code,
-            'url' => url('./password', compact('code', 'email'), true,false)
+            'url' => url('./password', [
+                'code' => MessageProtocol::encode(sprintf('%s|%s', $email, $code))
+            ], true,false)
         ]);
     }
 
@@ -579,6 +597,7 @@ class AuthRepository {
         if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
+        $user->activated_at = time();
         if ($remember) {
             if ($replaceToken) {
                 $user->setRememberToken(Str::random(60));
@@ -636,7 +655,8 @@ class AuthRepository {
      * @return void
      * @throws Exception
      */
-    public static function verifyEmailAddress(string $email, string $code) {
+    public static function verifyEmailAddress(string $code) {
+        list($email, $code) = explode('|', MessageProtocol::decode($code));
         if (MessageProtocol::verifyCode($email, MessageProtocol::EVENT_REGISTER_EMAIL_CODE, $code)) {
             UserModel::where('email', $email)
                 ->where('status', UserModel::STATUS_UN_CONFIRM)

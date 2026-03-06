@@ -3,6 +3,7 @@ namespace Module\Auth;
 
 use Domain\Heartbeat;
 use Module\Auth\Domain\Migrations\CreateAuthTables;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Zodream\Route\Controller\Concerns\UseModulePackage;
 use Zodream\Route\Controller\Module as BaseModule;
@@ -20,6 +21,7 @@ class Module extends BaseModule implements Heartbeat {
         if (auth()->guest()) {
             return [];
         }
+        AuthRepository::pulse();
         return [
             'bulletin_count' => UserRepository::getBulletinCount(auth()->id())
         ];

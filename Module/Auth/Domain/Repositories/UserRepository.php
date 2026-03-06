@@ -72,12 +72,12 @@ class UserRepository {
 
     public static function getPublicProfile(int $id, string $extra = ''): array {
         $user = UserModel::where('id', $id)
-            ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'created_at']);
+            ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'activated_at', 'created_at']);
         if (empty($user)) {
             throw new Exception(__('Not found user'));
         }
         $data = static::format($user, true);
-        unset($data['status']);
+        unset($data['status'], $data['activated_at']);
         return self::appendExtraData($data, $extra);
     }
 
@@ -87,6 +87,8 @@ class UserRepository {
         }
         /** @var UserModel $user */
         $user = auth()->user();
+        $user->activated_at = time();
+        $user->save();
         $data = static::format($user);
         $data['country'] = Ip::country(request()->ip());
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
@@ -122,6 +124,11 @@ class UserRepository {
             $data = array_merge($data, RelationshipRepository::relationship(auth()->id(), $userId));
         }
         return $data;
+    }
+
+    public static function getOnlineCount(): int {
+        return UserEntity::where('activated_at', '>', time() - AuthRepository::PULSE_SPACE)
+        ->count();
     }
 
     public static function getLastIp(int $user): string {
@@ -161,6 +168,7 @@ class UserRepository {
             $data['mobile'] = Helpers::hideTel($data['mobile']);
         }
         $data['is_verified'] = static::isVerified($user);
+        $data['is_online'] = $user['activated_at'] > time() - AuthRepository::PULSE_SPACE;
         return $data;
     }
 

@@ -42,11 +42,11 @@ class RegisterController extends Controller {
         ], '注册成功！');
     }
 
-    public function verifyAction(string $email, string $code) {
+    public function verifyAction(string $code) {
         $this->layout = app_path('UserInterface/Home/layouts/main.php');
         $message = '';
         try {
-            AuthRepository::verifyEmailAddress($email, $code);
+            AuthRepository::verifyEmailAddress($code);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
         }

@@ -16,6 +16,7 @@ use Zodream\ThirdParty\SMS\ALiYun;
 use Zodream\ThirdParty\SMS\IHuYi;
 use Zodream\ThirdParty\SMS\IShortMessageProtocol;
 use Zodream\Validate\Validator;
+use Zodream\Helpers\Security\Encryptor;
 
 class MessageProtocol {
 
@@ -48,6 +49,18 @@ class MessageProtocol {
         'everyone' => 20,  // 每个ip一天数量
         'everyday' => 2000 // 每天发送数量
     ];
+    /**
+     * 数据解密
+     */
+    public static function encode(string $text): string {
+        return new Encryptor(array_sum(self::$configs))->encrypt($text);
+    }
+    /**
+     * 数据加密
+     */
+    public static function decode(string $text): string {
+        return new Encryptor(array_sum(self::$configs))->decrypt($text);
+    }
 
     /**
      * 发送验证码

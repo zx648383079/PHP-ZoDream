@@ -31,7 +31,8 @@ final class StatisticsRepository {
             ->where('created_at', '>=', $yesterdayStart)
             ->groupBy('user_id')
             ->count();
-        return compact('user_count', 'user_today', 'user_yesterday',
+        $online_count = UserRepository::getOnlineCount();
+        return compact('user_count', 'user_today', 'online_count', 'user_yesterday',
             'money_today', 'money_total', 'money_yesterday', 'login_today', 'login_yesterday');
     }
 

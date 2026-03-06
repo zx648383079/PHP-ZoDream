@@ -4,7 +4,6 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\VerifyCodeRepository;
-use Module\MessageService\Domain\Repositories\MessageProtocol;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 

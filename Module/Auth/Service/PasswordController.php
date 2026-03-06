@@ -10,8 +10,9 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class PasswordController extends Controller {
 
-    public function indexAction(string $code, string $email) {
+    public function indexAction(string $code) {
         try {
+            list($email, $code) = explode('|', MessageProtocol::decode($code));
             MessageProtocol::verifyCode($email, MessageProtocol::EVENT_FIND_CODE, $code, false);
         } catch (\Exception $ex) {
             return $this->redirectWithMessage('/', '密码找回失败');

@@ -22,7 +22,7 @@ final class VisitListener {
         $args = parse_url($visit->getReferrer());
         $model->referrer_hostname = Str::substr($args['host'] ?? '', 0, 255);
         $model->referrer_pathname = Str::substr(NginxImporter::combinePathQueries($args['path'] ?? '',
-            $args['query'] ?? ''), 0, 1000);
+            $args['query'] ?? ''), 0, 255);
         $args = parse_url($visit->getUrl());
         $model->hostname = Str::substr($args['host'] ?? '', 0, 255);
         $model->pathname = Str::substr($args['path'] ?? '', 0, 255);
