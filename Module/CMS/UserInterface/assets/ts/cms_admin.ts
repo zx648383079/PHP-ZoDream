@@ -171,6 +171,38 @@ $(function() {
     setTimeout(() => {
         $('.column-full-item .overlay').remove();
     }, 1000);
+    $('*[data-tour]').tour({
+        title: 'CMS操作引导',
+        items: [
+            {
+                selector: '.sidebar-container',
+                content: '菜单',
+            },
+            {
+                before: () => parseAjaxUri(BASE_URI + 'category'),
+                selector: '.tree-table',
+                content: '所有栏目',
+            },
+            {
+                selector: '.page-search-bar .btn-success',
+                content: '添加栏目',
+            },
+            {
+                before: () => window.location.href = BASE_URI + 'category/create',
+                selector: '.form-table',
+                content: '表格',
+            },
+            {
+                selector: '.form-table .tab-header',
+                content: '切换表格内容',
+            },
+            {
+                selector: '.form-table .btn-group',
+                content: '保存操作',
+            }
+        ]
+    });
+    
     $(document).on('click', '.multi-input-container .selected-container .item-close', function() {
         $(this).closest('.selected-item').remove();
     }).on('click', '.multi-input-container .add-container .add-item', function() {
@@ -194,28 +226,5 @@ $(function() {
         const form = $(this).closest('form');
         form.append('<input type="hidden" name="status" value="5">');
         form.trigger('submit');
-    }).on('click', '*[data-tour]', function(e) {
-        e.preventDefault();
-        $(this).tour({
-            title: 'CMS操作引导',
-            items: [
-                {
-                    selector: '.sidebar-container',
-                    content: '菜单',
-                },
-                {
-                    selector: '.form-table',
-                    content: '表格',
-                },
-                {
-                    selector: '.form-table .tab-header',
-                    content: '切换表格内容',
-                },
-                {
-                    selector: '.form-table .btn-group',
-                    content: '保存操作',
-                }
-            ]
-        }).open();
     });
 });

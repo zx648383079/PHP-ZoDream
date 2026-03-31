@@ -1,4 +1,5 @@
 interface DialogLeadTourStep {
+    before?: () => boolean,// 进行一些跳转
     selector: string|HTMLElement;
     content: string;
 }
@@ -24,16 +25,22 @@ class LeadTour {
         options?: LeadTourOption
     ) {
         this.options = $.extend({}, new DefaultLeadTourOption(), options);
+        this.guid = `${options?.items?.length}xx${options?.title}`;
         element.on('click', e => {
             e.stopPropagation();
             e.preventDefault();
             this.open();
         });
+        $(document).on('pjax:success', _ => {
+            this.load();
+        });
+        this.load();
     }
 
+    private guid: string;
     private options: LeadTourOption;
     private index = -1;
-    private element: JQuery;
+    private element: JQuery|undefined;
 
 
     public get canBack() {
@@ -45,26 +52,26 @@ class LeadTour {
     }
 
     private set overlayStyle(args: any) {
-        this.element.find('.lead-overlay-container').css(args);
+        this.element?.find('.lead-overlay-container').css(args);
     } 
 
     private set dialogStyle(args: any) {
         if (!args.display) {
             args.display = '';
         }
-        this.element.find('.lead-dialog-box').css(args);
+        this.element?.find('.lead-dialog-box').css(args);
     }
 
     private set content(v: string) {
-        this.element.find('.message-body').text(v);
+        this.element?.find('.message-body').text(v);
     }
 
     private set primaryText(v: string) {
-        this.element.find('.dialog-footer .btn-default').text(v);
+        this.element?.find('.dialog-footer .btn-default').text(v);
     }
 
     private set secondaryText(v: string) {
-        this.element.find('.dialog-footer .btn-secondary').text(v);
+        this.element?.find('.dialog-footer .btn-secondary').text(v);
     }
 
 
@@ -74,7 +81,7 @@ class LeadTour {
             return;
         }
         this.index ++;
-        this.renderStep(this.options.items[this.index]);
+        this.prepare();
     }
 
     public previous() {
@@ -83,27 +90,46 @@ class LeadTour {
             return;
         }
         this.index --;
-        this.renderStep(this.options.items[this.index]);
+        this.prepare();
+    }
+
+    public mask() {
+        window.sessionStorage.setItem('tour_go', `${this.index}|${this.guid}`);
+    }
+
+    public load() {
+        const cache = window.sessionStorage.getItem('tour_go');
+        if (!cache || !cache.endsWith(this.guid)) {
+            return;
+        }
+        window.sessionStorage.removeItem('tour_go');
+        this.initiate();
+        this.index = parseInt(cache.substring(0, cache.length - this.guid.length - 1));
+        this.refresh();
     }
 
     
     public open() {
         this.index = -1;
+        this.initiate();
+        this.next();
+    }
+
+    public close() {
+        this.element?.remove();
+        this.element = undefined;
+    }
+
+    private initiate() {
         if (!this.element) {
             this.element = $(this.render());
             this.bindEvent();
         }
         $(document.body).append(this.element);
-        this.next();
-    }
-
-    public close() {
-        this.element.remove();
-        this.element = undefined;
     }
 
     private bindEvent() {
-        this.element.on('click', '.dialog-footer .btn-default', () => {
+        this.element?.on('click', '.dialog-footer .btn-default', () => {
             this.next();
         }).on('click', '.dialog-footer .btn-secondary', () => {
             this.previous();
@@ -112,9 +138,26 @@ class LeadTour {
         });
     }
 
+    private prepare() {
+        const option = this.options.items[this.index];
+        if (!option.before) {
+            this.renderStep(option);
+            return;
+        }
+        this.mask();
+        if (option.before()) {
+            setTimeout(() => this.load(), 1000);
+            return;
+        }
+    }
+
+    private refresh() {
+        this.renderStep(this.options.items[this.index]);
+    }
+
     private renderStep(data: DialogLeadTourStep, level = 0) {
         const target = $(data.selector as string);
-        if (!target) {
+        if (target.length === 0) {
             this.close();
             return;
         }
@@ -160,37 +203,29 @@ class LeadTour {
 
     private computeModalStyle(offset: DOMRect, width: number, height: number): any {
         const bottom = offset.bottom + height + 10;
-        if (bottom <= window.innerHeight) {
-            return {
-                left: offset.left + 'px',
-                top: offset.bottom + 10 + 'px'
-            };
-        }
-        const top = offset.top - height - 10;
-        if (top >= 0) {
-            return {
-                left: offset.left + 'px',
-                top: top + 'px'
-            };
-        }
-        const right = offset.right + width + 10;
-        if (right <= window.innerWidth) {
-            return {
-                left: offset.right + 10 + 'px',
-                top: offset.top + 'px'
-            };
-        }
-        const left = offset.left - width - 10;
-        if (left >= 0) {
-            return {
-                left: left + 'px',
-                top: offset.top + 'px'
-            };
-        }
-        return {
+        const res = {
             left: (window.innerWidth - width) / 2 + 'px',
             top: (window.innerHeight - height) / 2 + 'px',
+        };
+        if (bottom <= window.innerHeight) {
+            res.top = offset.bottom + 10 + 'px';
+        } else {
+            const top = offset.top - height - 10;
+            if (top >= 0) {
+                res.top = top + 'px';
+            }
         }
+        
+        const right = offset.right + width + 10;
+        if (right <= window.innerWidth) {
+            res.left = offset.right + 10 + 'px';
+        } else {
+            const left = offset.left - width - 10;
+            if (left >= 0) {
+                res.left = left + 'px';
+            }
+        }
+        return res;
     }
 
     private render() {

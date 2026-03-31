@@ -57,8 +57,8 @@ class CreateFamilyTables extends Migration {
             $table->uint('spouse_id');
             $table->column('relation')->tinyint(1)->default(0)->comment('关系');
             $table->column('status')->bool()->default(0);
-            $table->column('start_at')->varchar(20)->default('')->comment('出生时间');
-            $table->column('end_at')->varchar(20)->default('')->comment('去世时间');
+            $table->column('start_at')->varchar(20)->default('')->comment('开始时间');
+            $table->column('end_at')->varchar(20)->default('')->comment('结束时间');
             $table->timestamps();
         })->append(FamilyLogModel::tableName(), function(Table $table) {
             $table->comment('家族历史记录表');
