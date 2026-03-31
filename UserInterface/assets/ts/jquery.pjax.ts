@@ -32,20 +32,20 @@ class Pjax {
 
     public static instance: Pjax = new Pjax();
 
-    public static bind<T>(element: JQuery<T>, selector: string|PjaxOption, container?: string|PjaxOption, options?: PjaxOption): JQuery<T> {
+    public static bind<T>(element: JQuery<T>, selector?: string|PjaxOption, container?: string|PjaxOption, options?: PjaxOption): JQuery<T> {
         if (typeof selector === 'object') {
             options = selector;
             selector = undefined;
         }
         if (typeof container === 'string') {
-            options = this.optionsFor(container, options);
+            options = this.optionsFor(container, options!);
         }
         return element.on('click.pjax', selector, function(event) {
-            const $this = $(this);
+            const $this = $(this as HTMLElement);
             if ($this.attr('target') === '_blank') {
                 return;
             }
-            let opts = options;
+            let opts = options!;
             if (!opts.container) {
                 opts = $.extend({}, options)
                 opts.container = $this.attr('data-pjax')
@@ -54,7 +54,7 @@ class Pjax {
         });
     }
 
-    public static load(element: JQuery, options?: PjaxOption) {
+    public static load(element: JQuery, options: PjaxOption = {}) {
         options.context = element;
         Pjax.instance.get(options);
     }
@@ -77,8 +77,8 @@ class Pjax {
     private initialPop = !('state' in window.history);
 
     private cacheMapping: any = {};
-    private cacheForwardStack = [];
-    private cacheBackStack = [];
+    private cacheForwardStack: any[] = [];
+    private cacheBackStack: any[] = [];
 
     private state: any;
     private xhr: JQuery.jqXHR;
@@ -90,11 +90,11 @@ class Pjax {
     public handleClick(event: JQuery.ClickEvent, container: PjaxOption|JQuery, options?: PjaxOption) {
         options = Pjax.optionsFor(container, options);
     
-        const link = event.currentTarget;
+        const link = event.currentTarget as HTMLAnchorElement;
         
         const $link = $(link);
     
-        if (link.tagName?.toUpperCase() !== 'A')
+        if (link.nodeName !== 'A')
         {
             throw '$.fn.pjax or $.pjax.click requires an anchor element';
         }
@@ -102,7 +102,7 @@ class Pjax {
         {
             return;
         }
-        if ( location.protocol !== link.protocol || location.hostname !== link.hostname )
+        if (location.protocol !== link.protocol || location.hostname !== link.hostname )
         {
             return;
         }
@@ -178,16 +178,16 @@ class Pjax {
             scrollTo: false
         };
     
-        return this.get($.extend(defaults, Pjax.optionsFor(container, options)));
+        return this.get($.extend(defaults, Pjax.optionsFor(container, options!)));
     }
 
-    public get(options: PjaxOption) {
-        options = $.extend(true, {}, this.options, options);
+    public get(options?: PjaxOption) {
+        options = $.extend(true, {}, this.options, options)!;
         if (typeof options.url === 'function') {
             options.url = options.url();
         }
 
-        const hash = this.parseURL(options.url).hash;
+        const hash = this.parseURL(options.url!).hash;
         
         if (!options.context) {
             const containerType = typeof options.container;
@@ -246,15 +246,15 @@ class Pjax {
                 }
             
                 xhr.setRequestHeader('X-PJAX', 'true');
-                xhr.setRequestHeader('X-PJAX-Container', options.container);
+                xhr.setRequestHeader('X-PJAX-Container', options.container!);
             
                 if (!fire('pjax:beforeSend', [xhr, settings]))
                 {
                     return false
                 }
             
-                if (settings.timeout > 0) {
-                    this.timeoutTimer = setTimeout(function() {
+                if (settings.timeout! > 0) {
+                    this.timeoutTimer = setTimeout(() => {
                         if (fire('pjax:timeout', [xhr, options]))
                         {
                             xhr.abort('timeout');
@@ -264,7 +264,7 @@ class Pjax {
                     settings.timeout = 0;
                 }
             
-                const url = this.parseURL(settings.url);
+                const url = this.parseURL(settings.url!);
                 if (hash) {
                     url.hash = hash;
                 }
@@ -323,7 +323,7 @@ class Pjax {
                     window.history.replaceState(this.state, container.title, container.url);
                 }
             
-                const blurFocus = $.contains(context as any, document.activeElement);
+                const blurFocus = $.contains(context as any, document.activeElement!);
 
                 if (blurFocus) {
                     try {
@@ -339,14 +339,14 @@ class Pjax {
                     state: this.state,
                     previousState: previousState
                 });
-                context.html(container.contents);
+                context.html(container.contents as any);
             
                 const autofocusEl = context.find('input[autofocus], textarea[autofocus]').last()[0];
                 if (autofocusEl && document.activeElement !== autofocusEl) {
                     autofocusEl.focus();
                 }
             
-                this.executeScriptTags(container.scripts);
+                this.executeScriptTags(context, container.scripts);
             
                 let scrollTo = options.scrollTo;
             
@@ -354,7 +354,7 @@ class Pjax {
                     const name = decodeURIComponent(hash.slice(1));
                     const target = document.getElementById(name) || document.getElementsByName(name)[0];
                     if (target) {
-                        scrollTo = $(target).offset().top;
+                        scrollTo = $(target).offset()!.top;
                     }
                 }
             
@@ -392,7 +392,7 @@ class Pjax {
     
         const previousState = this.state;
         const state = (event.originalEvent as PopStateEvent).state;
-        let direction: string;
+        let direction = 'back';
         if (state && state.container) {
             if (this.initialPop && this.initialURL == state.url) {
                 return;
@@ -437,7 +437,7 @@ class Pjax {
             
                     this.state = state;
                     if (state.title) {
-                         document.title = state.title;
+                        document.title = state.title;
                     }
                     const beforeReplaceEvent = $.Event('pjax:beforeReplace', {
                         state: state,
@@ -458,8 +458,7 @@ class Pjax {
         this.initialPop = false;
     }
 
-    public fallback(options: PjaxOption) 
-    {
+    public fallback(options: PjaxOption) {
         const url = typeof options.url === 'function' ? options.url() : options.url;
         const method = options.type ? options.type.toUpperCase() : 'GET';
     
@@ -505,41 +504,36 @@ class Pjax {
         }
     }
 
-    private uniqueId() 
-    {
+    private uniqueId() {
         return (new Date).getTime();
     }
 
     private cloneContents(container: JQuery<Element>) {
         const cloned = container.clone();
-        cloned.find('script').each(function(){
-            if (!this.src) {
-                $.data(this, 'globalEval', false);
+        cloned.find('script').each((_, ele) => {
+            if (!ele.src) {
+                $.data(ele, 'globalEval', false);
             }
         });
         return cloned.contents();
     }
 
-    private stripInternalParams(url: URL) 
-    {
+    private stripInternalParams(url: URL) {
         url.search = url.search.replace(/([?&])(_pjax|_)=[^&]*/g, '').replace(/^&/, '');
         return url.href.replace(/\?($|#)/, '$1');
     }
 
-    private parseURL(url: string) 
-    {
+    private parseURL(url: string)  {
         const a = document.createElement('a');
         a.href = url;
         return a;
     }
 
-    private stripHash(location: URL) 
-    {
+    private stripHash(location: HTMLAnchorElement) {
         return location.href.replace(/#.*/, '');
     }
 
-    private static optionsFor(container: string|PjaxOption, options: PjaxOption): PjaxOption
-    {
+    private static optionsFor(container: string|PjaxOption, options?: PjaxOption): PjaxOption {
         if (container && options) {
             options = $.extend({}, options);
             options.container = container as string;;
@@ -551,28 +545,29 @@ class Pjax {
         }
     }
 
-    private findAll<T>(elems: JQuery<T>, selector: string): JQuery<T>
-    {
+    private findAll<T>(elems: JQuery<T>, selector: string): JQuery<T> {
         return elems.filter(selector).add(elems.find(selector));
     }
     
-    private parseHTML(html: string) 
-    {
+    private parseHTML(html: string) {
         return $.parseHTML(html, document, true);
     }
 
-    private extractContainer(data: string, xhr: JQuery.jqXHR, options: PjaxOption) 
-    {
-        const obj = {} as any;
+    private extractContainer(data: string, xhr: JQuery.jqXHR, options: PjaxOption)  {
+        const obj: {
+            url: string;
+            title: string;
+            contents: JQuery<HTMLElement>;
+            scripts: JQuery<HTMLScriptElement>;
+        } = {} as any;
         const fullDocument = /<html/i.test(data);
         const serverUrl = xhr.getResponseHeader('X-PJAX-URL');
-        obj.url = serverUrl ? this.stripInternalParams(
-            this.parseURL(serverUrl) as any) : options.requestUrl;
+        obj.url = serverUrl ? this.stripInternalParams(this.parseURL(serverUrl) as any) : options.requestUrl!;
     
         let $head: JQuery<Node[]>;
         let $body: JQuery<Node[]>;
         if (fullDocument) {
-            $body = $(this.parseHTML(data.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0]));
+            $body = $(this.parseHTML(data.match(/<body[^>]*>([\s\S.]*)<\/body>/i)![0]));
             const head = data.match(/<head[^>]*>([\s\S.]*)<\/head>/i);
             $head = head != null ? $(this.parseHTML(head[0])) : $body;
         } else {
@@ -593,73 +588,86 @@ class Pjax {
             }
         
             if ($fragment.length) {
-                obj.contents = options.fragment === 'body' ? $fragment : $fragment.contents();
+                obj.contents = options.fragment === 'body' ? $fragment : $fragment.contents() as any;
         
-                if (!obj.title)
-                {
+                if (!obj.title) {
                     obj.title = $fragment.attr('title') || $fragment.data('title');
                 }
             }
     
         } else if (!fullDocument) {
-            obj.contents = $body;
+            obj.contents = $body as any;
         }
         if (obj.contents) {
-            obj.contents = obj.contents.not(function() { return $(this).is('title') });
+            obj.contents = obj.contents.not((_, ele)  => ele.nodeName === 'TITLE');
             obj.contents.find('title').remove();
-            obj.scripts = this.findAll(obj.contents, 'script[src]').remove();
-            obj.contents = obj.contents.not(obj.scripts);
+            obj.scripts = this.findAll(obj.contents, 'script').remove() as any;
+            obj.contents = obj.contents.not(obj.scripts as any);
         }
         if (obj.title) {
             obj.title = (obj.title as string).trim();
         }
     
-        return obj
+        return obj;
     }
 
-    private executeScriptTags(scripts: JQuery<HTMLScriptElement>) 
-    {
+    private executeScriptTags(context: JQuery<Element>, scripts: JQuery<HTMLScriptElement>) {
         if (!scripts) {
             return;
         }
-    
-        const existingScripts: JQuery<HTMLScriptElement> = $('script[src]');
-    
-        scripts.each(function() {
-            const src = this.src;
-            const matchedScripts = existingScripts.filter(function() {
-                return this.src === src;
-            })
-            if (matchedScripts.length) {
-                return;
-            }
-        
-            const script = document.createElement('script');
-            const type = $(this).attr('type');
-            if (type) {
-                script.type = type;
-            }
-            script.src = $(this).attr('src');
-            document.head.appendChild(script);
+        this.loadScripts(scripts, () => {
+            scripts.each((_, ele) => {
+                if (!ele.src) {
+                    context.append(ele);
+                    return;
+                }
+            });
         });
     }
 
-    private cachePush(id: any, value: any) 
-    {
-        this.cacheMapping[id] = value;
-        this.cacheBackStack.push(id);
-  
-        this.trimCacheStack(this.cacheForwardStack, 0);
-  
-        this.trimCacheStack(this.cacheBackStack, this.options.maxCacheLength);
+    private loadScripts(scripts: JQuery<HTMLScriptElement>, readyFn: Function) {
+        let remaining = 0;
+        const successFn = (isNext = true) => {
+            if (isNext) {
+                remaining --;
+            }
+            if (remaining <= 0) {
+                readyFn();
+            }
+        };
+        const existingScripts: JQuery<HTMLScriptElement> = $('script[src]');
+        scripts.each((_, ele) => {
+            if (!ele.src) {
+                return;
+            }
+            const matchedScripts = existingScripts.filter((_, e) => e.src === ele.src);
+            if (matchedScripts.length > 0) {
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = ele.src;
+            if (ele.type) {
+                script.type = ele.type;
+            }
+            remaining ++;
+            script.onload = () => successFn();
+            script.onerror = () => successFn();
+            document.head.appendChild(script);
+        });
+        successFn(false);
     }
 
-    private cachePop(direction: string, id: any, value: any) 
-    {
+    private cachePush(id: any, value: any) {
+        this.cacheMapping[id] = value;
+        this.cacheBackStack.push(id);
+        this.trimCacheStack(this.cacheForwardStack, 0);
+        this.trimCacheStack(this.cacheBackStack, this.options.maxCacheLength!);
+    }
+
+    private cachePop(direction: string, id: any, value: any) {
         let pushStack: any[];
         let popStack: any[];
         this.cacheMapping[id] = value;
-    
         if (direction === 'forward') {
             pushStack = this.cacheBackStack;
             popStack  = this.cacheForwardStack;
@@ -674,22 +682,20 @@ class Pjax {
             delete this.cacheMapping[id];
         }
     
-        this.trimCacheStack(pushStack, this.options.maxCacheLength);
+        this.trimCacheStack(pushStack, this.options.maxCacheLength!);
     }
 
-    private trimCacheStack(stack: any[], length: number) 
-    {
+    private trimCacheStack(stack: any[], length: number) {
         while (stack.length > length)
         {
             delete this.cacheMapping[stack.shift()]
         }
     }
 
-    private findVersion() 
-    {
-        return $('meta').filter(function() {
-            const name = $(this).attr('http-equiv');
-            return name && name.toUpperCase() === 'X-PJAX-VERSION';
+    private findVersion() {
+        return $('meta').filter((_, ele) => {
+            const name = $(ele).attr('http-equiv');
+            return !!name && name.toUpperCase() === 'X-PJAX-VERSION';
         }).attr('content');
     }
 }
@@ -697,7 +703,7 @@ class Pjax {
 
 
 ;(function($: any) {
-    $.fn.pjax = function(selector, container, options?: PjaxOption) {
+    $.fn.pjax = function(selector: any, container: any, options?: PjaxOption) {
         return Pjax.bind(this, selector, container, options); 
     };
     $.pjax = function(option?: PjaxOption) {

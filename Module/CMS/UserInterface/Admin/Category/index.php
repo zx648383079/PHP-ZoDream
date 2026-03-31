@@ -19,7 +19,7 @@ $this->title = '栏目管理';
 
         <div class="btn-group pull-right">
             <a data-type="form" href="<?=$this->url('./@admin/category/quickly')?>" data-title="批量添加实体模型栏目" class="btn btn-primary">快速添加</a>
-            <a class="btn btn-success no-jax" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
+            <a class="btn btn-success" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
         </div>
     </div>
 
@@ -61,7 +61,7 @@ $this->title = '栏目管理';
                             <span>预览</span>
                             <i class="fa fa-globe"></i>
                         </a>
-                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>"  title="编辑详细信息">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/category/edit', ['id' => $item['id']])?>"  title="编辑详细信息">
                             <span>编辑</span>
                             <i class="fa fa-edit"></i>
                         </a>

@@ -27,7 +27,7 @@ $this->title = sprintf('“%s” 的内容列表', empty($cat) ? $model['name'] 
             <input type="hidden" name="model_id" value="<?=$model->id?>">
         </form>
         <div class="btn-group pull-right">
-            <a class="btn btn-success no-jax" href="<?=$this->url('./@admin/content/create', ['cat_id' => empty($cat) ? 0 : $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
+            <a class="btn btn-success" href="<?=$this->url('./@admin/content/create', ['cat_id' => empty($cat) ? 0 : $cat->id, 'model_id' => $model->id, 'parent_id' => $parent_id])?>">新增文章</a>
             <a class="btn page-multiple-toggle">批量操作</a>
         </div>
         
@@ -84,7 +84,7 @@ $this->title = sprintf('“%s” 的内容列表', empty($cat) ? $model['name'] 
                             <span>属性</span>
                             <i class="fa fa-cog"></i>
                         </a>
-                        <a class="btn btn-default no-jax" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="编辑详细信息">
+                        <a class="btn btn-default" href="<?=$this->url('./@admin/content/edit', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="编辑详细信息">
                             <span>编辑</span>
                             <i class="fa fa-edit"></i>
                         </a>
