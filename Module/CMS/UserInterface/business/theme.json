@@ -1360,7 +1360,6 @@
             "title": "关于我们",
             "en:title": "Abount US",
             "name": "about_us",
-            "type": "page",
             "content": "",
             "group": "nav",
             "category_template": "index",
@@ -1370,7 +1369,6 @@
                     "action": "channel",
                     "title": "公司介绍",
                     "en:title": "Company Profile",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1379,7 +1377,6 @@
                     "action": "channel",
                     "title": "企业文化",
                     "en:title": "Enterprise Culture",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1388,7 +1385,6 @@
                     "action": "channel",
                     "title": "发展历程",
                     "en:title": "History",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1397,7 +1393,6 @@
                     "action": "channel",
                     "title": "组织机构",
                     "en:title": "Organization",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1406,7 +1401,6 @@
                     "action": "channel",
                     "title": "公司资质",
                     "en:title": "Company Qualification",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1415,7 +1409,6 @@
                     "action": "channel",
                     "title": "公司荣誉",
                     "en:title": "Honors",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1424,7 +1417,6 @@
                     "action": "channel",
                     "title": "公司视频",
                     "en:title": "Videos",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1445,7 +1437,6 @@
                     "title": "产品类型",
                     "en:title": "Products Specification",
                     "name": "",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "product",
                     "image": "/assets/images/banner.jpg"
@@ -1455,7 +1446,6 @@
                     "title": "行业分类",
                     "en:title": "Industry Classification",
                     "name": "product_industry",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "product",
                     "image": "/assets/images/banner.jpg"
@@ -1464,7 +1454,6 @@
                     "action": "channel",
                     "title": "品牌",
                     "en:title": "Brand",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "product",
                     "image": "/assets/images/banner.jpg"
@@ -1535,7 +1524,6 @@
             "title": "服务与支持",
             "en:title": "Service & Support",
             "name": "service_support",
-            "type": "page",
             "group": "nav",
             "category_template": "index",
             "image": "/assets/images/banner.jpg",
@@ -1544,7 +1532,6 @@
                     "action": "channel",
                     "title": "服务网络",
                     "en:title": "Service Network",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1553,7 +1540,6 @@
                     "action": "channel",
                     "title": "公司业绩",
                     "en:title": "Company performance",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1606,7 +1592,6 @@
                     "action": "channel",
                     "title": "服务分类",
                     "en:title": "Classification of service",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg",
@@ -1615,7 +1600,6 @@
                             "action": "channel",
                             "title": "技术支持",
                             "en:title": "Technical Support",
-                            "type": "page",
                             "category_template": "support_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
@@ -1623,7 +1607,6 @@
                             "action": "channel",
                             "title": "产品维修",
                             "en:title": "Product Repair",
-                            "type": "page",
                             "category_template": "maintenance_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
@@ -1631,7 +1614,6 @@
                             "action": "channel",
                             "title": "现场服务",
                             "en:title": "Field Services",
-                            "type": "page",
                             "category_template": "live_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
@@ -1639,7 +1621,6 @@
                             "action": "channel",
                             "title": "商务支持",
                             "en:title": "Business Support",
-                            "type": "page",
                             "category_template": "business_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
@@ -1647,7 +1628,6 @@
                             "action": "channel",
                             "title": "产品校验",
                             "en:title": "Product verification",
-                            "type": "page",
                             "category_template": "verify_form",
                             "image": "/assets/images/banner.jpg"
                         }, 
@@ -1655,7 +1635,6 @@
                             "action": "channel",
                             "title": "投诉与建议",
                             "en:title": "Complaints and Suggestions",
-                            "type": "page",
                             "category_template": "complaints_form",
                             "image": "/assets/images/banner.jpg"
                         }
@@ -1698,7 +1677,6 @@
             "action": "channel",
             "title": "联系我们",
             "en:title": "Contact Us",
-            "type": "page",
             "group": "nav",
             "category_template": "index",
             "image": "/assets/images/banner.jpg",
@@ -1708,7 +1686,6 @@
                     "title": "联系方式",
                     "en:title": "Contact",
                     "name": "contact_information",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "contact",
                     "image": "/assets/images/banner.jpg",
@@ -1743,7 +1720,6 @@
                     "action": "channel",
                     "title": "反馈留言",
                     "en:title": "Comments",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "feedback_form",
                     "image": "/assets/images/banner.jpg"
@@ -1752,7 +1728,6 @@
                     "action": "channel",
                     "title": "微博",
                     "en:title": "Weibo",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1761,7 +1736,6 @@
                     "action": "channel",
                     "title": "微信",
                     "en:title": "Wechat",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1770,7 +1744,6 @@
                     "action": "channel",
                     "title": "手机站",
                     "en:title": "WAP Site",
-                    "type": "page",
                     "group": "nav",
                     "category_template": "index",
                     "image": "/assets/images/banner.jpg"
@@ -1847,7 +1820,6 @@
             "action": "channel",
             "title": "网站地图",
             "en:title": "Site Map",
-            "type": "page",
             "group": "nav",
             "category_template": "map",
             "image": "/assets/images/banner.jpg"

@@ -4,7 +4,7 @@
 
 :root {
     --#{theme.$prefix}surface: rgb(255, 0, 0);
-     --#{theme.$prefix}surface-hover: rgba(255, 0, 0, .3);
+     --#{theme.$prefix}surface-hovered: rgba(255, 0, 0, .3);
 }
 
 a,

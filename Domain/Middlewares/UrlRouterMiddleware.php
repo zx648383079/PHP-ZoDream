@@ -8,7 +8,9 @@ use Zodream\Infrastructure\Contracts\Config\Repository;
 use Zodream\Infrastructure\Contracts\Translator;
 use Zodream\Infrastructure\I18n\I18n;
 use Zodream\Route\Rewrite\RewriteEncoder;
-
+/**
+ * 默认使用语言截取网址，其他地方就获取不到了
+ */
 final class UrlRouterMiddleware extends RewriteEncoder {
 
     const EnabledModuleItems = ['blog', 'auth'];

@@ -137,7 +137,7 @@
                             {if:$pns_beian}
                             <p>
                                 <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,'/\d+/'}">
-                                    <img src="/assets/images/beian.png" alt="备案图标">
+                                    <img src="{this.asset:images/beian.png}" alt="备案图标">
                                     {$pns_beian}
                                 </a>
                             </p>

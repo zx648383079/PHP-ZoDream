@@ -46,7 +46,7 @@ class CMSRepository {
     private static Directory|null $viewFolder = null;
 
     public static function isPreview(): bool {
-        return array_key_exists(self::PREVIEW_KEY, $_GET);
+        return !auth()->guest() && array_key_exists(self::PREVIEW_KEY, $_GET);
     }
 
     public static function theme() {
@@ -147,6 +147,12 @@ class CMSRepository {
         foreach ($items as $item) {
             if (!$isStrict && $item['is_default'] > 0) {
                 $default = $item['id'];
+            }
+            if (!$item['match_rule']) {
+                if (empty($default)) {
+                    $default = $item['id'];
+                }
+                continue;
             }
             $rules = parse_url((string)$item['match_rule']);
             if (!empty($rules['scheme']) && $rules['scheme'] !== $scheme) {

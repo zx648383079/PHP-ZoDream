@@ -46,8 +46,8 @@ $this->registerJs($js);
             </span>
             <?php endforeach;?>
             <?php if(count($tab_list) < 5):?>
-               <div class="add-box">
-                   <input type="text">
+               <div class="add-box file-input">
+                   <input type="text" class="form-control">
                    <button type="button" class="btn btn-info">添加</button>
                </div>
             <?php endif;?>

@@ -8,11 +8,11 @@
                 {for:$field_list,$item}
                     {if:$item.type == 'textarea' || $item.type == 'editor'}
                     <div class="col-md-12">
-                        {formInput:$item}
+                        {=formInput:$item}
                     </div>
                     {else}
                     <div class="col-md-6">
-                        {formInput:$item}
+                        {=formInput:$item}
                     </div>
                     {/if}
                 {/for}

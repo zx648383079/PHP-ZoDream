@@ -2,7 +2,7 @@
 {this.title='Form'}
 <form data-type="ajax" action="{url:./form/save}" method="post" class="form-table" role="form">
     {for:$field_list,$item}
-        {formInput:$item}
+        {=formInput:$item}
     {/for}
     
     <button type="submit" class="btn btn-success">{__:Submit}</button>

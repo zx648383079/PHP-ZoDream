@@ -19,7 +19,7 @@ function bindDB() {
 
 function bindModule() {
     $('.module-box input[type="checkbox"]').on('click',function(this: HTMLInputElement) {
-        let next = $(this).next('input');
+        let next = $(this).closest('td').next('td').find('input');
         if (!this.checked) {
             next.val('');
             return;

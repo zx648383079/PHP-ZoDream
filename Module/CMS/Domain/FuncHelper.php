@@ -451,6 +451,7 @@ class FuncHelper {
             }
             $id = $id['id'];
         }
+        
         if (!is_numeric($id)) {
             $id = static::getChannelId((string)$id);
         }
@@ -460,6 +461,9 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, $id, function () use ($id) {
             return CategoryModel::find($id);
         });
+        if (empty($data)) {
+            return null;
+        }
         if ($name === 'url') {
             if ($data['type'] > 1) {
                 return empty($data['url']) ? 'javascript:;' : static::patchUrl($data['url']);
