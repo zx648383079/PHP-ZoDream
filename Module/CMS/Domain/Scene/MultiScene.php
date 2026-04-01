@@ -90,6 +90,10 @@ class MultiScene extends BaseScene {
         return true;
     }
 
+    public function destroy(): void {
+        CreateCmsTables::dropTable(ContentModel::tableName());
+    }
+
     /**
      * 新建字段
      * @param ModelFieldModel $field

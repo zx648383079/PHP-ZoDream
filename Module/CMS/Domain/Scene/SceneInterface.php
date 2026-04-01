@@ -57,6 +57,11 @@ interface SceneInterface {
     public function removeTable(): bool;
 
     /**
+     * 删除站点触发
+     */
+    public function destroy(): void;
+
+    /**
      * 新建字段
      * @param ModelFieldModel|array $field
      * @return mixed

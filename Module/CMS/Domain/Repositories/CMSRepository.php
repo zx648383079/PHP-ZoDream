@@ -227,11 +227,10 @@ class CMSRepository {
         self::$cacheSite = $site;
         CreateCmsTables::dropTable(SiteLogEntity::tableName());
         CreateCmsTables::dropTable(CategoryEntity::tableName());
-        CreateCmsTables::dropTable(ContentEntity::tableName());
-        CreateCmsTables::dropTable(CommentEntity::tableName());
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }
+        CMSRepository::scene()->destroy();
         self::$cacheSite = $old;
     }
 

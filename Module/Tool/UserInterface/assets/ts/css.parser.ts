@@ -439,7 +439,7 @@
         // 转成 [[第一级], [第二级的格式]...]
         const findTreeName = (names: string[]): string[][] => {
             if (names.length < 2) {
-                return this.splitRuleName(names[0]).map(i => {
+                return splitRuleName(names[0]).map(i => {
                     return [i];
                 });
             }
@@ -448,7 +448,7 @@
             const cache: string[][] = [];
             const getCacheName = (i: number, j: number): string => {
                 if (cache.length <= i) {
-                    cache.push(this.splitRuleName(names[i]));
+                    cache.push(splitRuleName(names[i]));
                 }
                 const pos = j < 0 ? cache[i].length + j : j;
                 if (pos >= cache[i].length) {
@@ -509,7 +509,7 @@
                 return [names];
             }
             reverseArgs.push(names.map((i, j) => {
-                const c = cache.length > j ? cache[j] : this.splitRuleName(i);
+                const c = cache.length > j ? cache[j] : splitRuleName(i);
                 const start = args.length;
                 const end = c.length - reverseArgs.length;
                 return resetName(c.splice(start, end - start), start > 0);
