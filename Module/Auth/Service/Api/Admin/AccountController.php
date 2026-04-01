@@ -8,11 +8,6 @@ use Module\Auth\Domain\Repositories\StatisticsRepository;
 
 class AccountController extends Controller {
 
-    public function indexAction(string $keywords = '', int $user = 0) {
-        return $this->renderPage(
-            AccountRepository::logList($keywords, '', $user)
-        );
-    }
 
     public function rechargeAction(int $user, float $money, string $remark, int $type = 0) {
         try {

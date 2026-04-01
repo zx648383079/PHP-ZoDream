@@ -6,7 +6,6 @@ use Module\Auth\Domain\Entities\InviteLogEntity;
 use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Entities\UserRelationshipEntity;
 use Module\Auth\Domain\Entities\ZoneEntity;
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
 use Module\Auth\Domain\Model\ApplyLogModel;
@@ -15,7 +14,6 @@ use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\Card\EquityCardModel;
 use Module\Auth\Domain\Model\Card\UserEquityCardModel;
-use Module\Auth\Domain\Model\CreditLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
@@ -48,8 +46,6 @@ class CreateAuthTables extends Migration {
             $table->uint('sex', 1)->default(0);
             $table->string('avatar')->default('');
             $table->date('birthday')->default(date('Y-m-d'));
-            $table->uint('money')->default(0);
-            $table->uint('credits')->default(0)->comment('积分');
             $table->uint('parent_id')->default(0);
             $table->string('token', 60)->default(0);
             $table->uint('status', 2)->default(UserModel::STATUS_ACTIVE)->comment('账户的是否有限状态');
@@ -204,29 +200,7 @@ class CreateAuthTables extends Migration {
     }
 
     public function createLog() {
-        $this->append(AccountLogModel::tableName(), function (Table $table) {
-            $table->comment('账户资金变动表');
-            $table->id();
-            $table->uint('user_id')->default(0);
-            $table->uint('type', 1)->default(99);
-            $table->uint('item_id')->default(0);
-            $table->int('money')->comment('本次发生金额');
-            $table->int('total_money')->comment('当前账户余额');
-            $table->uint('status', 2)->default(0);
-            $table->string('remark')->default('');
-            $table->timestamps();
-        })->append(CreditLogModel::tableName(), function (Table $table) {
-            $table->comment('账户积分变动表');
-            $table->id();
-            $table->uint('user_id')->default(0);
-            $table->uint('type', 1)->default(99);
-            $table->uint('item_id')->default(0);
-            $table->int('credits')->comment('本次发生积分');
-            $table->int('total_credits')->comment('当前账户积分');
-            $table->uint('status', 2)->default(0);
-            $table->string('remark')->default('');
-            $table->timestamps();
-        })->append(LoginLogModel::tableName(), function (Table $table) {
+        $this->append(LoginLogModel::tableName(), function (Table $table) {
             $table->comment('账户登录日志表');
             $table->id();
             $table->string('ip', 120);

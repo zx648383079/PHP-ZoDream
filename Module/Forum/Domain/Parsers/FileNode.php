@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Template\Domain\Weights\Node;

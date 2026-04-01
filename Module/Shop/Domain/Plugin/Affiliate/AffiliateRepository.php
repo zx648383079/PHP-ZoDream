@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Affiliate;
 
-use Module\Auth\Domain\FundAccount;
+use Module\Wallet\Domain\FundAccount;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Repositories\Admin\PluginRepository;

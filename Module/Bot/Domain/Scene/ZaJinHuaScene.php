@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Bot\Domain\Scene;
 
-use Module\Auth\Domain\FundAccount;
+use Module\Wallet\Domain\FundAccount;
 use Module\Game\ZaJinHua\Domain\Poker;
 
 /**

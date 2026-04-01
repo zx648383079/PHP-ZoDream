@@ -3,8 +3,7 @@ namespace Module\Game\Miner\Domain\Model;
 
 
 use Domain\Model\Model;
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Exception;
 
 /**

@@ -6,7 +6,7 @@ use Domain\Model\SearchModel;
 use Domain\Repositories\LocalizeRepository;
 use Exception;
 use Infrastructure\HtmlExpand;
-use Module\Auth\Domain\FundAccount;
+use Module\Wallet\Domain\FundAccount;
 use Module\Blog\Domain\Helpers\Html;
 use Module\Blog\Domain\Model\BlogClickLogModel;
 use Module\Blog\Domain\Model\BlogLogModel;

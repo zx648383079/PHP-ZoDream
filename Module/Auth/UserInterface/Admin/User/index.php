@@ -25,7 +25,7 @@ $this->title = '用户列表';
             <th>用户名</th>
             <th class="auto-hide">邮箱</th>
             <th class="auto-hide">性别</th>
-            <th>余额</th>
+            <!-- <th>余额</th> -->
             <th>状态</th>
             <!-- <th class="auto-hide">最近登陆时间</th> -->
             <th class="auto-hide">注册时间</th>
@@ -39,13 +39,13 @@ $this->title = '用户列表';
                 <td class="left"><?=$this->text($item['name'])?></td>
                 <td class="left auto-hide"><?=$this->text($item['email'])?></td>
                 <td class="auto-hide"><?=$item['sex_label']?></td>
-                <td><?=$item['money']?></td>
+                <!-- <td><?=$item['money']?></td> -->
                 <td><?=$item['status']?></td>
                 <!-- <td class="auto-hide"><?=null//$item['last_at']?></td> -->
                 <td class="auto-hide"><?=$item['created_at']?></td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-info" href="<?=$this->url('./@admin/user/account', ['id' => $item['id']])?>">明细</a>
+                        <!-- <a class="btn btn-info" href="<?=$this->url('./@admin/user/account', ['id' => $item['id']])?>">明细</a> -->
                         <?php if($item['id'] != auth()->id()):?>
                         <a class="btn btn-default" href="<?=$this->url('./@admin/user/edit', ['id' => $item['id']])?>">编辑</a>
                         <a class="btn btn-danger" data-type="del" href="<?=$this->url('./@admin/user/delete', ['id' => $item['id']])?>">删除</a>

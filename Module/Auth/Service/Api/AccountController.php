@@ -13,15 +13,6 @@ class AccountController extends Controller {
         ];
     }
 
-    public function indexAction() {
-
-    }
-
-    public function logAction(string $keywords = '', string $type = '') {
-        return $this->renderPage(
-            AccountRepository::logList($keywords, $type, auth()->id())
-        );
-    }
 
 
     public function connectAction() {

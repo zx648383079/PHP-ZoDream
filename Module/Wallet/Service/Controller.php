@@ -1,5 +1,5 @@
 <?php
-namespace Module\Trade\Service;
+namespace Module\Wallet\Service;
 
 use Module\ModuleController;
 

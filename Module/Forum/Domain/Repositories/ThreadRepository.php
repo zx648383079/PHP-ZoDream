@@ -5,7 +5,7 @@ namespace Module\Forum\Domain\Repositories;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
-use Module\Auth\Domain\FundAccount;
+use Module\Wallet\Domain\FundAccount;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Auth\Domain\Repositories\ZoneRepository;
 use Module\Forum\Domain\Model\ForumLogModel;

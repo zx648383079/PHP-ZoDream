@@ -1,8 +1,7 @@
 <?php
 namespace Module\Shop\Domain\Auction;
 
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Shop\Domain\Models\Activity\ActivityModel;
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;

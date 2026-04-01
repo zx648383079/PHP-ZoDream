@@ -188,7 +188,7 @@ $(function() {
                 content: '添加栏目',
             },
             {
-                before: () => window.location.href = BASE_URI + 'category/create',
+                before: () => parseAjaxUri(BASE_URI + 'category/create'),
                 selector: '.form-table',
                 content: '表格',
             },

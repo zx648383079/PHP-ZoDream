@@ -1,8 +1,7 @@
 <?php
 namespace Module\Forum\Domain\Parsers;
 
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Module\Forum\Domain\Model\ThreadLogModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Template\Domain\Weights\Node;

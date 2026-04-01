@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\OAuthModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
@@ -19,10 +18,6 @@ final class StatisticsRepository {
         $user_today = $user_count < 1 ? 0 : UserModel::where('created_at', '>=', $todayStart)->count();
         $user_yesterday = $user_count < 1 ? 0 : UserModel::where('created_at', '<', $todayStart)
             ->where('created_at', '>=', $yesterdayStart)->count();
-        $money_total = AccountLogModel::query()->sum('money');
-        $money_today = AccountLogModel::where('created_at', '>=', $todayStart)->sum('money');
-        $money_yesterday = AccountLogModel::where('created_at', '<', $todayStart)
-            ->where('created_at', '>=', $yesterdayStart)->sum('money');
 
         $login_today = LoginLogModel::where('status', 1)->where('created_at', '>=', $todayStart)
             ->groupBy('user_id')

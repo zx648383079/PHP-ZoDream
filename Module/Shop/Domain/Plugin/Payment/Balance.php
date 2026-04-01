@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Module\Shop\Domain\Plugin\BasePayment;
 use Module\Shop\Domain\Plugin\IPaymentPlugin;
 use Module\Shop\Domain\Repositories\PaymentRepository;

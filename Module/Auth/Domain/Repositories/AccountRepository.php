@@ -2,13 +2,9 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
-use Domain\Constants;
-use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Infrastructure\LinkRule;
-use Module\Auth\Domain\Events\ManageAction;
-use Module\Auth\Domain\FundAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
+use Module\Wallet\Domain\FundAccount;
 use Module\Auth\Domain\Model\ActionLogModel;
 use Module\Auth\Domain\Model\AdminLogModel;
 use Module\Auth\Domain\Model\LoginLogModel;
@@ -19,19 +15,6 @@ use Module\OpenPlatform\Domain\Platform;
 
 final class AccountRepository {
 
-    public static function logList(string $keywords = '', string|int $type = '', int $user = 0) {
-        $items = ModelHelper::parseArrInt($type);
-        return AccountLogModel::with('user')
-            ->when($user > 0, function ($query) use ($user) {
-                $query->where('user_id', $user);
-            })
-            ->when(!empty($keywords), function ($query) {
-                SearchModel::searchWhere($query, ['remark']);
-            })->when(!empty($items), function ($query) use ($items) {
-                $query->whereIn('type', $items);
-            })
-            ->orderBy('created_at', 'desc')->page();
-    }
 
     public static function loginLog(string $keywords = '', int $user = 0) {
         return LoginLogModel::when($user > 0, function ($query) use ($user) {
@@ -64,30 +47,6 @@ final class AccountRepository {
             ->page();
     }
 
-    /**
-     * 充值账户
-     * @param int $user_id
-     * @param float $money
-     * @param string $remark
-     * @param int $type
-     * @throws Exception
-     */
-    public static function recharge(int $user_id, float $money, string $remark, int $type = 0) {
-        $money = abs($money);
-        if ($money <= 0) {
-            throw new Exception('金额输入不正确');
-        }
-        if ($type > 0) {
-            $money *= -1;
-        }
-        if (!FundAccount::change($user_id,
-            FundAccount::TYPE_ADMIN, auth()->id(), $money, $remark, 1)) {
-            throw new Exception('操作失败，金额不足');
-        }
-        event(new ManageAction('user_recharge',
-            sprintf('充值金额：%d', $money)
-            , Constants::TYPE_USER_RECHARGE, $user_id));
-    }
 
     public static function cancel(UserModel $user, string $reason) {
         $user->status = UserModel::STATUS_FROZEN;

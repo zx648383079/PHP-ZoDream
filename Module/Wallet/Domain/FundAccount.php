@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain;
+namespace Module\Wallet\Domain;
 
-use Module\Auth\Domain\Model\AccountLogModel;
-use Module\Auth\Domain\Model\UserModel;
+use Module\Wallet\Domain\Entities\AccountLogEntity;
+use Module\Wallet\Domain\Entities\WalletEntity;
 
 /**
  * 资金账户资金流通
- * @package Module\Auth\Domain
  */
 final class FundAccount {
     const TYPE_SYSTEM = 1; // 系统自动
@@ -22,6 +21,10 @@ final class FundAccount {
     const TYPE_GAME = 40;
     const TYPE_SHOPPING = 60;
 
+    const STATUS_WAITING_PAY = 0;
+    const STATUS_PAID = 1;
+    const STATUS_REFUND = 9;
+
 
 
     /**
@@ -33,11 +36,11 @@ final class FundAccount {
      * @param float $total_money
      * @param string $remark
      * @param int $status
-     * @return AccountLogModel
+     * @return AccountLogEntity
      */
     public static function log(
         int $user_id, int $type, int $item_id, float $money, float $total_money, string $remark, int $status = 0) {
-        return AccountLogModel::create(
+        return AccountLogEntity::create(
             compact('user_id', 'type', 'item_id', 'money', 'total_money', 'remark', 'status'));
     }
 
@@ -57,20 +60,16 @@ final class FundAccount {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
-        $oldMoney = UserModel::query()->where('id', $user_id)
+        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) + $money;
         if ($newMoney < 0) {
             return false;
         }
-        UserModel::query()->where('id', $user_id)->update([
+        WalletEntity::query()->where('user_id', $user_id)->update([
             'money' => $newMoney
         ]);
         $log = self::log($user_id, $type, $item_id, $money, $newMoney, $remark, $status);
-        if (auth()->id() === $user_id) {
-            // 自动更新当前用户信息
-            auth()->user()->money = $newMoney;
-        }
         return $log->id;
     }
 
@@ -90,7 +89,7 @@ final class FundAccount {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
-        $oldMoney = UserModel::query()->where('id', $user_id)
+        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) + $money;
         if ($newMoney < 0) {
@@ -100,12 +99,12 @@ final class FundAccount {
         if (empty($log)) {
             return false;
         }
-        UserModel::query()->where('id', $user_id)->update([
+        WalletEntity::query()->where('user_id', $user_id)->update([
             'money' => $newMoney
         ]);
         $model = call_user_func($cb, $log);
         if ($model === false) {
-            $log->refund();
+            self::refund($log);
             return false;
         }
         if (is_numeric($model)) {
@@ -113,7 +112,7 @@ final class FundAccount {
         } elseif (isset($model['id'])) {
             $log->item_id = $model['id'];
         }
-        $log->paid();
+        self::paid($log);
         return $model;
     }
 
@@ -137,7 +136,7 @@ final class FundAccount {
             // 不能自己付款给自己
             return false;
         }
-        $oldMoney = UserModel::query()->where('id', $user_id)
+        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) - $money;
         if ($newMoney < 0) {
@@ -147,20 +146,20 @@ final class FundAccount {
         if (empty($log)) {
             return false;
         }
-        $oldMoneyTo = UserModel::query()->where('id', $toUser)
+        $oldMoneyTo = WalletEntity::query()->where('user_id', $toUser)
             ->value('money');
         $newMoneyTo = floatval($oldMoneyTo) + $money;
         $logTo = self::log($toUser, $type, 0, $money, $newMoneyTo, $remark, 0);
-        UserModel::query()->where('id', $user_id)->update([
+        WalletEntity::query()->where('user_id', $user_id)->update([
             'money' => $newMoney
         ]);
-        UserModel::query()->where('id', $toUser)->update([
+        WalletEntity::query()->where('user_id', $toUser)->update([
             'money' => $newMoneyTo
         ]);
         $model = call_user_func($cb, $log, $logTo);
         if ($model === false) {
-            $log->refund();
-            $logTo->refund();
+            self::refund($log);
+            self::refund($logTo);
             return false;
         }
         if (is_numeric($model)) {
@@ -168,13 +167,34 @@ final class FundAccount {
         } elseif (isset($model['id'])) {
             $logTo->item_id = $log->item_id = $model['id'];
         }
-        $log->paid();
-        $logTo->paid();
+        self::paid($log);
+        self::paid($logTo);
         return $model;
     }
 
     public static function isBought(int $id, int $type = self::TYPE_DEFAULT): bool {
-        return AccountLogModel::where('item_id', $id)
+        return AccountLogEntity::where('item_id', $id)
                 ->where('type', $type)->count() > 0;
+    }
+
+    /**
+     * 退款，并更改用户金额
+     * @return bool|mixed
+     * @throws \Exception
+     */
+    private static function refund(AccountLogEntity $log) {
+        WalletEntity::query()->where('user_id', $log->user_id)
+            ->updateDecrement('money', $log->money);
+        $log->status = self::STATUS_REFUND;
+        return $log->save();
+    }
+
+    /**
+     * 设置支付，不操作用户余额
+     * @return bool|mixed
+     */
+    private static function paid(AccountLogEntity $log) {
+        $log->status = self::STATUS_PAID;
+        return $log->save();
     }
 }

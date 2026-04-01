@@ -20,8 +20,6 @@ use Zodream\Helpers\Security\Hash;
  * @property integer $sex
  * @property string $avatar
  * @property string $birthday
- * @property integer $money
- * @property integer $credits
  * @property integer $parent_id
  * @property string $token
  * @property integer $status

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Admin;
 
-use Module\Auth\Domain\Events\CancelAccount;
-use Module\Auth\Domain\Model\AccountLogModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AccountRepository;
@@ -53,13 +51,6 @@ class UserController extends Controller {
         return $this->renderData([
             'url' => $this->getUrl('user')
         ]);
-    }
-
-    public function accountAction(int $id) {
-        $user = UserModel::find($id);
-        $log_list = AccountLogModel::where('user_id', $id)->orderBy('id', 'desc')
-            ->page();
-        return $this->show(compact('user', 'log_list'));
     }
 
     public function rechargeAction(int $id) {
