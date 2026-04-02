@@ -142,10 +142,13 @@ abstract class BaseScene implements SceneInterface {
         return $res;
     }
 
-    public function insert(array $data): bool|int {
+    public function insert(array $data, int $timestamp = 0): bool|int {
         $this->validateDataUnique($data);
         list($main, $extend) = $this->filterInput($data);
-        $main['updated_at'] = $main['created_at'] = time();
+        if ($timestamp === 0) {
+            $timestamp = time();
+        }
+        $main['updated_at'] = $main['created_at'] = $timestamp;
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->modelId();

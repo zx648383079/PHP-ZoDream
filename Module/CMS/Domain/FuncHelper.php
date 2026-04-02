@@ -859,6 +859,7 @@ class FuncHelper {
             return sprintf('<input type="hidden" name="%s" value="%d">',
                 $data['field'], static::$current['content']);
         }
+        $data['name'] = self::translate($data['name']);
         return CMSRepository::scene()->setModel(static::model(intval($data['model_id'])))
             ->toInput($data);
     }

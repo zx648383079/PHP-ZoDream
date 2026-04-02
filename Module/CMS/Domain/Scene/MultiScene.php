@@ -167,13 +167,16 @@ class MultiScene extends BaseScene {
         return true;
     }
 
-    public function insert(array $data): bool|int {
+    public function insert(array $data, int $timestamp = 0): bool|int {
+        if ($timestamp === 0) {
+            $timestamp = time();
+        }
         if (!$this->isArticleModel()) {
-            return parent::insert($data);
+            return parent::insert($data, $timestamp);
         }
         $this->validateDataUnique($data);
         list($main, $extend) = $this->filterInput($data);
-        $main['updated_at'] = $main['created_at'] = time();
+        $main['updated_at'] = $main['created_at'] = $timestamp;
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->modelId();

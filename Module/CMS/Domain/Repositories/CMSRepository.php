@@ -5,8 +5,6 @@ namespace Module\CMS\Domain\Repositories;
 use Domain\Model\SearchModel;
 use Exception as GlobalException;
 use Module\CMS\Domain\Entities\CategoryEntity;
-use Module\CMS\Domain\Entities\CommentEntity;
-use Module\CMS\Domain\Entities\ContentEntity;
 use Module\CMS\Domain\Entities\SiteLogEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
@@ -260,11 +258,30 @@ class CMSRepository {
         }
     }
 
+    /**
+     * 创建编辑环境
+     */
+    public static function useScene(int $modelId, int $siteId = 0): SceneInterface {
+        if ($siteId > 0 && self::siteId() !== $siteId) {
+            static::$cacheSite = SiteModel::findOrThrow($siteId);
+        }
+        $scene = CMSRepository::scene();
+        if (empty($scene)) {
+            (new \Module\CMS\Module())->boot();
+            $scene = CMSRepository::scene();
+        }
+        return $scene->setModel(ModelModel::findOrThrow($modelId), self::siteId());
+    }
+
     public static function generateTableName(string $name): string {
         if (empty($name)) {
             return Str::randomByNumber(8);
         }
-        $val = PinYin::encode($name, 'all');
+        if (preg_match('/^[a-zA-Z ]+$/', $name, $_)) {
+            $val = strtolower(trim($name));
+        } else {
+            $val = PinYin::encode(trim($name), 'all');
+        }
         return empty($val) ? Str::randomByNumber(8) : str_replace(' ', '_', $val);
     }
 

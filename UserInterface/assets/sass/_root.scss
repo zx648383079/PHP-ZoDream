@@ -48,7 +48,7 @@
     --#{theme.$prefix}shadow: #{theme.$shadow};
 
     --#{theme.$prefix}link-text: #{theme.$link-text};
-    --#{theme.$prefix}link-hover-text: #{theme.$link-hover-text};
+    --#{theme.$prefix}link-hovered-text: #{theme.$link-hover-text};
 
     
     --#{theme.$prefix}input: #{theme.$input};
@@ -58,7 +58,7 @@
     --#{theme.$prefix}input-selected: #{theme.$input-selected};
 
     --#{theme.$prefix}input-icon: #{theme.$input-icon};
-    --#{theme.$prefix}input-hover-icon: #{theme.$input-hovered-icon};
+    --#{theme.$prefix}input-hovered-icon: #{theme.$input-hovered-icon};
     --#{theme.$prefix}input-label: #{theme.$input-label};
 
     --#{theme.$prefix}input-placeholder: #{theme.$input-placeholder};
@@ -101,7 +101,7 @@
     --#{theme.$prefix}tertiary-text: #{dark.$tertiary-text};
 
     --#{theme.$prefix}link-text: #{dark.$link-text};
-    --#{theme.$prefix}link-hover-text: #{dark.$link-hover-text};
+    --#{theme.$prefix}link-hovered-text: #{dark.$link-hover-text};
 
     
     --#{theme.$prefix}input: #{dark.$input};
@@ -111,7 +111,7 @@
     --#{theme.$prefix}input-selected: #{dark.$input-selected};
 
     --#{theme.$prefix}input-icon: #{dark.$input-icon};
-    --#{theme.$prefix}input-hover-icon: #{dark.$input-hovered-icon};
+    --#{theme.$prefix}input-hovered-icon: #{dark.$input-hovered-icon};
     --#{theme.$prefix}input-label: #{dark.$input-label};
 
     --#{theme.$prefix}input-placeholder: #{dark.$input-placeholder};

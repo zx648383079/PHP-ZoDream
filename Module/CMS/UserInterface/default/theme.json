@@ -344,7 +344,7 @@
             "action": "content",
             "type": "@channel:web_news",
             "title": "站点开启",
-            "content": "",
+            "content": "站点开启",
             "thumb": "assets/images/thumb.png"
         }
     ]

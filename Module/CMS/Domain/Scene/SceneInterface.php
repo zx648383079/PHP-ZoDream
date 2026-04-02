@@ -89,8 +89,10 @@ interface SceneInterface {
      * @throws ValidationException
      */
     public function validate(array $data): array;
-
-    public function insert(array $data): bool|int;
+    /**
+     * 插入数据，可以手动设置时间
+     */
+    public function insert(array $data, int $timestamp = 0): bool|int;
 
     public function update(int $id, array $data, bool $updateTime = true): bool;
 
