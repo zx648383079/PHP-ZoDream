@@ -176,7 +176,24 @@ $(function() {
         items: [
             {
                 selector: '.sidebar-container',
-                content: '菜单',
+                content: '菜单：包含所有功能操作和维护',
+            },
+            {
+                selector: '.header-action',
+                content: '点击当前站点可以快速管理所有站点',
+            },
+            {
+                before: () => parseAjaxUri(BASE_URI + 'site'),
+                selector: '.panel-container',
+                content: '所有站点',
+            },
+            {
+                selector: '.panel-container .btn-group:first',
+                content: '点击“管理”进行切换站点；“编辑”可以设置站点属性：包括标题、LOGO；“配置”可以设置站点模板的属性：包括备案号、联系方式等',
+            },
+            {
+                selector: () => $('.sidebar-container .menu-item a').filter((_, ele) => ele.innerText.indexOf('栏目') >= 0).first(),
+                content: '点击“栏目”进行栏目管理，包括前台导航栏',
             },
             {
                 before: () => parseAjaxUri(BASE_URI + 'category'),
@@ -199,7 +216,39 @@ $(function() {
             {
                 selector: '.form-table .btn-group',
                 content: '保存操作',
-            }
+            },
+            {
+                before: () => history.back(),
+                selector: '.tree-table .btn-group:first',
+                content: '针对栏目的操作：“文章”可以添加文章',
+            },
+            {
+                before: () => $('.tree-table .btn-group a').filter((_, ele) => ele.innerText.indexOf('文章') >= 0).first().trigger('click'),
+                selector: '.page-multiple-table',
+                content: '当前栏目下的所有文章，不包含子栏目的文章',
+            },
+            {
+                before: () => $('.page-search-bar .btn-group a').first().trigger('click'),
+                selector: '.form-table',
+                content: '编辑文章的内容',
+            },
+            {
+                selector: '.form-table .tab-header',
+                content: '切换表格内容，文章的具体内容在“高级”标签下',
+            },
+            {
+                selector: '.form-table .btn-group',
+                content: '保存操作：“确认保存”只是保存数据不显示到前台，“保存并发布”才会既保存又发布显示到前台',
+            },
+            {
+                selector: () => $('.sidebar-container .menu-item a').filter((_, ele) => ele.innerText.indexOf('缓存管理') >= 0).first(),
+                content: '前台不生效的问题都可以通过“清除缓存”解决',
+            },
+            {
+                before: () => parseAjaxUri(BASE_URI + 'cache'),
+                selector: '.form-table .btn-group',
+                content: '直接点击“清除全部缓存”可以解决大部分问题',
+            },
         ]
     });
     

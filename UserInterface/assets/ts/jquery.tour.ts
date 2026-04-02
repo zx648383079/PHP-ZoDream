@@ -1,6 +1,6 @@
 interface DialogLeadTourStep {
     before?: () => boolean,// 进行一些跳转
-    selector: string|HTMLElement;
+    selector: string|HTMLElement|(() => JQuery<HTMLElement>|HTMLElement);
     content: string;
 }
 
@@ -31,7 +31,7 @@ class LeadTour {
             e.preventDefault();
             this.open();
         });
-        $(document).on('pjax:success', _ => {
+        $(document).on('pjax:end', _ => {
             this.load();
         });
         this.load();
@@ -156,14 +156,14 @@ class LeadTour {
     }
 
     private renderStep(data: DialogLeadTourStep, level = 0) {
-        const target = $(data.selector as string);
+        const target = typeof data.selector === 'function' ? $(data.selector()) : $(data.selector as string);
         if (target.length === 0) {
-            this.close();
+            this.next();
             return;
         }
-        const offset = target.offset();
-        const sTop = target.scrollTop();
-        if (level < 3 && (offset.top < 0 || offset.top + target.height() > window.innerHeight)) {
+        const offset = target.offset()!;
+        const sTop = target.scrollTop()!;
+        if (level < 3 && (offset.top < 0 || offset.top + target.height()! > window.innerHeight)) {
             this.closeModal();
             target.scrollTop(sTop + offset.top - window.innerHeight / 2);
             setTimeout(() => {
