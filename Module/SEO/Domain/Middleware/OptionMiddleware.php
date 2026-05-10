@@ -16,16 +16,20 @@ class OptionMiddleware implements MiddlewareInterface {
         if (Bot::disallowSpider($request->server('HTTP_USER_AGENT', '-'))) {
             return response()->statusCode(400)->str('Robots not allowed ');
         }
-        $this->gray();
         if (!str_contains($context->path(), 'admin') && Option::value('site_close')) {
-            return $this->showClose();
+            return $this->outputClose($context);
         }
+        if ($this->isSafetyVerify($context)) {
+            return $this->outputSafety($context);
+        }
+
+        $this->gray($context);
         return $next($context);
     }
 
-    private function showClose() {
+    private function outputClose(HttpContext $context) {
         $retry_date = Option::value('site_close_retry');
-        $response = response();
+        $response = $context['response'];
         $response->statusCode(503);
         if (!empty($retry_date) && ($retry_time = strtotime($retry_date))) {
             $response->header('Retry-After',
@@ -34,7 +38,32 @@ class OptionMiddleware implements MiddlewareInterface {
         return view('@root/Home/close', ['content' => Option::value('site_close_tip')]);
     }
 
-    private function gray() {
+
+    private function isSafetyVerify(HttpContext $context): bool {
+        $option = Option::value('safety_verify');
+        if (empty($option)) {
+            return false;
+        }
+        $request = $context['request'];
+        if ($request->cookie('zre_sfp')) {
+            return false;
+        }
+        return !str_contains($context->path(), 'seo/home/safety');
+    }
+
+    private function outputSafety(HttpContext $context) {
+        $request = $context['request'];
+        $response = response();
+        if ($request->expectsJson()) {
+            return $response->statusCode(401)->json([
+                'code' => '4401',
+                'message' => 'Failed security verification',
+            ]);
+        }
+        return view('@root/Home/safety');
+    }
+
+    private function gray(HttpContext $context) {
         if (Option::value('site_gray')) {
             $css = <<<CSS
 html {

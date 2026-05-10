@@ -45,7 +45,7 @@ $this->title = '模板管理';
                 <td><?=$item->id?></td>
                 <td class="left"><?=$item->name?></td>
                 <td class="left"><?=$item->title?></td>
-                <td><?=$item->type > MessageProtocol::TYPE_TEXT ? 'HTML' : 'TEXT'?></td>
+                <td><?= $item->type > MessageProtocol::TYPE_TEXT ? 'HTML' : 'TEXT' ?></td>
                 <td class="left"><?=$item->target_no?></td>
                 <td>
                     <a data-type="toggle" href="<?=$this->url('./@admin/template/toggle', ['id' => $item['id']])?>?>" class="toggle-switch<?=$item->status > 0 ? ' toggled' : ''?>"></a>

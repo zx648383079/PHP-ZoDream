@@ -133,6 +133,13 @@ class CreateSEOTables extends Migration {
                     'visibility' => 1,
                 ],
                 [
+                    'name' => '安全校验',
+                    'code' => 'safety_verify',
+                    'type' => 'switch',
+                    'value' => 0,
+                    'visibility' => 2,
+                ],
+                [
                     'name' => '关站',
                     'code' => 'site_close',
                     'type' => 'switch',

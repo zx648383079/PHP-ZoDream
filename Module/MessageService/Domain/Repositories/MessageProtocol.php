@@ -53,13 +53,13 @@ class MessageProtocol {
      * 数据解密
      */
     public static function encode(string $text): string {
-        return new Encryptor(array_sum(self::$configs))->encrypt($text);
+        return (new Encryptor(array_sum(self::$configs)))->encrypt($text);
     }
     /**
      * 数据加密
      */
     public static function decode(string $text): string {
-        return new Encryptor(array_sum(self::$configs))->decrypt($text);
+        return (new Encryptor(array_sum(self::$configs)))->decrypt($text);
     }
 
     /**
