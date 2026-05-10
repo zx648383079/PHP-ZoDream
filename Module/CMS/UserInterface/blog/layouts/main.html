@@ -45,10 +45,10 @@
                             <p>= {option:description} =</p>
                         </div>
                         <ul class="nav-bar">
-                            {channels:tree=>1,group=>nav}
+                            {channels:tree=1,group=nav}
                             <li class="{channelActive:$channel.id,true}">
                                 <a href="{=channel:$channel,url}">{$channel.title}</a>
-                                {if:isset($channel.children)}
+                                {if:isset:$channel.children}
                                 <ul class="nav-sub-bar">
                                     {for:$channel.children,$item}
                                     <li>
@@ -73,7 +73,7 @@
                         </div>
                         <form class="search-bar" action="{url:./category/list}" method="get">
                             <i class="fa fa-search"></i>
-                            <input type="text" class="form-control"  name="keywords" placeholder="{__:Search any keywords}" value="{if:isset($keywords),$keywords}">
+                            <input type="text" class="form-control"  name="keywords" placeholder="{__:Search any keywords}" value="{if:isset:$keywords;$keywords}">
                             {searchHidden:}
                         </form>
                         <div class="copyright">

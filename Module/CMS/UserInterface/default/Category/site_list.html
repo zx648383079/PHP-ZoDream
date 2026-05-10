@@ -13,7 +13,7 @@
                 <a href="{url:$item}">{$item.title}</a>
             </div>
             <div class="item-desc">{this.text:$item.description,20}</div>
-            {if:isset($item.uri)}
+            {if:isset:$item.uri}
             <a class="go-btn" href="{redirect:$item.uri}" target="_blank" rel="noopener noreferrer" title="{__:'Direct access'}">
                 <i class="fa fa-arrow-circle-right"></i>
             </a>

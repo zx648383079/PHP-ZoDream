@@ -3,8 +3,8 @@
 .
 
 {> $keywords=request:keywords}
-{contentPage:model=>news,keywords=>$keywords,order=>'id desc',field=>'id,cat_id,model_id,title,thumb,description,created_at,view_count,comment_count'}
-{tpl:layouts/post,content=>$content}
+{contentPage:model=news,keywords=$keywords,order='id desc',field='id,cat_id,model_id,title,thumb,description,created_at,view_count,comment_count'}
+{tpl:layouts/post,content=$content}
 {/contentPage}
 
 <div class="page-link-bar">

@@ -12,7 +12,7 @@ final class ParserTest extends TestCase {
     public static function codeProvider(): array
     {
         return [
-            ['{if:isset($keywords),$keywords}', '\<?php if (isset($keywords)) { echo $keywords; } ?>'],
+            ['{if:isset:$keywords;$keywords}', '\<?php if (isset($keywords)) { echo $keywords; } ?>'],
             ['{>$a=$b}', '\<?php $a = $b; ?>'],
             ['{>$pns_beian=option:pns_beian}', '\<?php $pns_beian = option(\'pns_beian\'); ?>'],
             ['{request.host}', '\<?= request()->host() ?>'],
@@ -33,9 +33,9 @@ final class ParserTest extends TestCase {
 
             ['{for:$name}', '\<?php while ($name): ?>'],
             ['{for:$name,$value}', '\<?php if (!empty($name)): foreach ($name as $value): ?>'],
-            ['{for:$name,$key=>$value}', '\<?php if (!empty($name)): foreach ($name as $key => $value): ?>'],
-            ['{for:$name,$key=>$value,$length}', '\<?php if (!empty($name)):  $i = 0; foreach($name as $key => $value): $i ++; if ($i > $length): break; endif; ?>'],
-            ['{for:$name,$key=>$value,>=10}', '\<?php if (!empty($name)): foreach($name as $key=>$value): if (!($key >= 10)): break; endif; ?>'],
+            ['{for:$name,$key=$value}', '\<?php if (!empty($name)): foreach ($name as $key => $value): ?>'],
+            ['{for:$name,$key=$value,$length}', '\<?php if (!empty($name)):  $i = 0; foreach($name as $key => $value): $i ++; if ($i > $length): break; endif; ?>'],
+            ['{for:$name,$key=$value,>=10}', '\<?php if (!empty($name)): foreach($name as $key => $value): if (!($key >= 10)): break; endif; ?>'],
             ['{for:$i,$i>0,$i++}', '\<?php for($i; $i > 0; $i ++): ?>'],
 /*            ['{/for}', '\<?php endforeach; ?>'],*/
 
@@ -60,7 +60,7 @@ final class ParserTest extends TestCase {
             ['{== $a }', '\<?= $this->text($a) ?>'],
            // ['{arg,...=value,...}', '\<?php arg = value;. = .;?\>'],
             ['{=$item.active?\'class="active"\':\'\'}', '\<?= $item[\'active\'] ? \'class="active"\' : \'\' ?>'],
-            ['{$channelid = isset($channel) ? $channel.id : product_center}', '\<?php $channelid = isset($channel)? $channel[\'id\'] : \'product_center\'; ?>']
+            ['{$channelid = isset:$channel; ? $channel.id : product_center}', '\<?php $channelid = isset($channel)? $channel[\'id\'] : \'product_center\'; ?>']
         ];
     }
 
@@ -77,7 +77,7 @@ final class ParserTest extends TestCase {
             ['tpl:file,a=b,1', '$this->extend(\'file\',[\'a\' => \'b\',1])'],
             ['tpl:file,[a=b],1', '$this->extend(\'file\',[\'a\' => \'b\'],1)'],
             ['if:authGuest:', 'if (authGuest()):', 'authGuest'],
-            ['if:isset($a.a)', 'if (isset($a[\'a\'])):'],
+            ['if:isset:$a.a;8', 'if (isset($a[\'a\'])) { echo 8; }'],
             ['if:isset:$a.a', 'if (isset($a[\'a\'])):'],
             ['if:$a==qq', 'if ($a == \'qq\'):'],
             ['if:$a==\'qq\'', 'if ($a == \'qq\'):'],
@@ -86,7 +86,7 @@ final class ParserTest extends TestCase {
             ['for:$a,', 'if (!empty($a)): foreach ($a as $item):'],
             ['$a??q', '$a ?? \'q\''],
             ['if:$channel.children_count>0', 'if ($channel[\'children_count\'] > 0):'],
-            ['contents:category=>banner,num=>4', 'contents([\'category\' => \'banner\',\'num\' => 4])', 'contents'],
+            ['contents:category=banner,num=4', 'contents([\'category\' => \'banner\',\'num\' => 4])', 'contents'],
         ];
     }
 
@@ -96,8 +96,8 @@ final class ParserTest extends TestCase {
             ['p:a', 'p(\'a\')'],
             ['$p.a:', '$p->a()'],
             ['eval:h', 'null'],
-            ['p(a,$b)', 'p(\'a\',$b)'],
-            ['$p(a,$b)', 'null'],
+            ['p:a,$b', 'p(\'a\',$b)'],
+            ['$p:a,$b', 'null'],
         ];
     }
 
@@ -106,6 +106,7 @@ final class ParserTest extends TestCase {
         return [
             ['$a', '$a'],
             ['this.a', '$this->a'],
+            ['.a', '$this->a'],
             ['$a.a', '$a[\'a\']'],
             ['$a.$a', '$a[$a]'],
             ['$a.$a.1', '$a[$a][1]'],

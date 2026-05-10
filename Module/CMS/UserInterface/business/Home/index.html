@@ -24,7 +24,7 @@ $(".partner-floor .slider").slider({
     <div class="slider" data-auto="true" data-haspoint="false">
         <div class="slider-box">
             <ul>
-                {contents:category=>banner,num=>20}
+                {contents:category=banner,num=20}
                 <li><img src="{$content.thumb}" width="100%" alt=""></li>
                 {/contents}
             </ul>
@@ -87,7 +87,7 @@ $(".partner-floor .slider").slider({
                     {__:新闻中心}
                 </div>
                 <div class="panel-body mw-12">
-                    {contents:category=>news_center,field=>'id,cat_id,model_id,title',num=>5}
+                    {contents:category=news_center,field='id,cat_id,model_id,title',num=5}
                     <a class="news-item" href="{url:$content}">
                         <div class="item-title">{$content.title}</div>
                     </a>
@@ -105,7 +105,7 @@ $(".partner-floor .slider").slider({
                     {__:解决方案}
                 </div>
                 <div class="panel-body mw-12">
-                    {contents:category=>solutions,field=>'id,cat_id,model_id,title',num=>5}
+                    {contents:category=solutions,field='id,cat_id,model_id,title',num=5}
                     <a class="news-item" href="{url:$content}">
                         <div class="item-title">{$content.title}</div>
                     </a>
@@ -190,7 +190,7 @@ $(".partner-floor .slider").slider({
                 </div>
                 <div class="slider-box">
                     <ul>
-                        {contents:category=>partners,field=>'id,cat_id,model_id,title,thumb',num=>20}
+                        {contents:category=partners,field='id,cat_id,model_id,title,thumb',num=20}
                         <li class="partner-item">
                             <a href="{url:$content}"><img src="{$content.thumb}" width="100%" alt="{$content.title}"></a>
                         </li>

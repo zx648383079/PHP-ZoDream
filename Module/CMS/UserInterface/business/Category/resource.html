@@ -12,7 +12,7 @@
                 <form class="page-search-bar">
                     <select name="id">
                         <option value="{channel:download,id}">{__:所有栏目}</option>
-                        {channels:parent=>download}
+                        {channels:parent=download}
                         <option value="{$channel.id}">{$channel.title}</option>
                         {/channels}
                     </select>
@@ -29,7 +29,7 @@
            
 
             <div class="tab-bar">
-                {channels:parent=>download}
+                {channels:parent=download}
                 <a href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                 {/channels}
             </div>
@@ -50,7 +50,7 @@
                     </thead>
                     <tbody>
                         {> $keywords=request:keywords}
-                        {contentPage:category=>$channel.id,keywords=$keywords,field=>'id,cat_id,model_id,title,language,file_name,product_type,file_size,file_type,created_at,file'}
+                        {contentPage:category=$channel.id,keywords=$keywords,field='id,cat_id,model_id,title,language,file_name,product_type,file_size,file_type,created_at,file'}
                         <tr>
                             <td>
                                 {if:authGuest:}
@@ -79,7 +79,7 @@
                     <div class="page-info">
                         {> $count=$items.getPageTotal:}
                         {> $total=$items.getTotal:}
-                        {=__:pagination,pages=>$count,total=>$total}
+                        {=__:pagination,pages=$count,total=$total}
                     </div>
                 </div>
             </div>

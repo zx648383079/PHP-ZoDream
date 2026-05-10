@@ -40,7 +40,7 @@
             <div class="page-body">
                 <div class="row">
                     {> $keywords=request:keywords}
-                    {contentPage:category=>product_center,product_type=>$pt,industry=>$ind,keywords=>$keywords,order=>'is_best desc,id desc',field=>'id,cat_id,model_id,title,thumb,is_best'}
+                    {contentPage:category=product_center,product_type=$pt,industry=$ind,keywords=$keywords,order='is_best desc,id desc',field='id,cat_id,model_id,title,thumb,is_best'}
                     <div class="col-6 col-lg-3 col-md-3">
                         <a class="product-item" href="{url:$content}">
                             <div class="item-thumb-outline">
@@ -64,7 +64,7 @@
                     <div class="page-info">
                         {> $count=$items.getPageTotal:}
                         {> $total=$items.getTotal:}
-                        {=__:pagination,pages=>$count,total=>$total}
+                        {=__:pagination,pages=$count,total=$total}
                     </div>
                 </div>
             </div>

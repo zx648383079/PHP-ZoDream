@@ -34,10 +34,10 @@
                         <li>
                             <a href="{url:./}">{__:Home}</a>
                         </li>
-                        {channels:tree=>1,group=>nav}
+                        {channels:tree=1,group=nav}
                         <li class="{channelActive:$channel.id,true}">
                             <a href="{=channel:$channel,url}">{$channel.title}</a>
-                            {if:isset($channel.children)}
+                            {if:isset:$channel.children}
                             <ul class="sub-menu">
                                 {for:$channel.children,$item}
                                 <li>

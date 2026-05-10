@@ -14,11 +14,11 @@
                 </ul>
             </div>
             <div class="map-large-bar">
-                {channels:tree=>1,group=>nav}
+                {channels:tree=1,group=nav}
                 <div class="map-item">
                     <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                     <ul class="item-body">
-                        {if:isset($channel.children)}
+                        {if:isset:$channel.children}
                         {for:$channel.children,$item}
                         <li>
                             <a href="{url:./category?id=:$item.id}">{$item.title}</a>

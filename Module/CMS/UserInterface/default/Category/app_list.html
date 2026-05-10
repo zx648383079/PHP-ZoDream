@@ -15,10 +15,10 @@
                 <li class="back-btn">
                     <a href="{url:./}">{__:Back}</a>
                 </li>
-                {channels:parent=>app_market,tree=>1}
+                {channels:parent=app_market,tree=1}
                 <li class="{channelActive:$channel.id,true}">
                     <a href="{url:./category/list?id=:$channel.id}">{$channel.title}</a>
-                    {if:isset($channel.children)}
+                    {if:isset:$channel.children}
                     <ul class="sub-menu">
                         {for:$channel.children,$item}
                         <li>

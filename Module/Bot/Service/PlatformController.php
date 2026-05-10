@@ -46,7 +46,7 @@ class PlatformController extends ModuleController {
      * @param $openid
      */
     public function messageAction(string $openid) {
-        dd($openid);
+        dr($openid);
         /*$message = WeChat::instance()->message();
         $response = $message->on(EventEnum::Message, function(Message $message, MessageResponse $response) {
 

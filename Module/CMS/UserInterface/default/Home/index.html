@@ -15,7 +15,7 @@ var silder = $(".photo .slider").slider({
     <div class="slider" data-height="420" data-auto="true">
         <div class="slider-box">
             <ul>
-                {contents:category=>banner,num=>4}
+                {contents:category=banner,num=4}
                 <li><img src="{$content.thumb}" width="100%" alt=""></li>
                 {/contents}
             </ul>
@@ -26,7 +26,7 @@ var silder = $(".photo .slider").slider({
 <div class="container">
     <div class="row">
         {> $i = 0}
-        {channels:group=>recommend}
+        {channels:group=recommend}
         {> $i ++}
         <div class="col-md-{if:$i%2==1,8,4}">
             <div class="tab-box mt-2">
@@ -34,7 +34,7 @@ var silder = $(".photo .slider").slider({
                     <div class="tab-item active"><a href="{=channel:$channel,url}">{$channel.title}</a></div>
                 </div>
                 <div class="tab-body">
-                    {contents:category=>$channel.id,num=>10}
+                    {contents:category=$channel.id,num=10}
                     <div class="article-item" title="{$content.title}-{$content.description}">
                         <div class="item-thumb">
                             <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
@@ -69,7 +69,7 @@ var silder = $(".photo .slider").slider({
                     <div class="tab-item active">{channel:about_us,title}</div>
                 </div>
                 <div class="tab-body thumb-box">
-                    {contents:category=>about_us,num=>1}
+                    {contents:category=about_us,num=>1}
                         <p>
                             <img src="{$content.thumb}" alt="{$content.title}" width="117" height="117" />
                         </p>
@@ -100,7 +100,7 @@ var silder = $(".photo .slider").slider({
                 <div class="tab-body">
                     <div class="tab-item active">
                         <ul class="list-box">
-                            {contents:category=>news,num=>10}
+                            {contents:category=news,num=10}
                                 <li> 
                                     <a href="{url:$content}" target="_blank" title="{$content.title}">
                                         <em></em>
@@ -111,7 +111,7 @@ var silder = $(".photo .slider").slider({
                     </div>
                     <div class="tab-item">
                         <ul class="list-box">
-                            {contents:category=>web_news,num=>10}
+                            {contents:category=web_news,num=10}
                                 <li> 
                                     <a href="{url:$content}" target="_blank" title="{$content.title}">
                                         <em></em>
@@ -132,7 +132,7 @@ var silder = $(".photo .slider").slider({
                         <div class="slider" data-height="420" data-auto="true">
                             <div class="slider-box">
                                 <ul>
-                                    {contents:category=>photos,num=>4}
+                                    {contents:category=photos,num=4}
                                     <li><img src="{$content.thumb}" width="100%" alt=""></li>
                                     {/contents}
                                 </ul>

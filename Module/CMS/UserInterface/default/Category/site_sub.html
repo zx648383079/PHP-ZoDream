@@ -15,7 +15,7 @@
                         {__:Checkin}
                     </a>
                 </li>
-                {channels:parent=>$channel.id}
+                {channels:parent=$channel.id}
                 <li>
                     <a href="">
                         {$channel.title}
@@ -25,14 +25,14 @@
             </ul>
         </div>
         <div class="col-md-9">
-                {channels:parent=>$channel.id}
+                {channels:parent=$channel.id}
                 <div class="panel site-panel">
                     <div class="panel-header">
                         <i class="{$channel.thumb}"></i>
                         <span>{$channel.title}</span>
                     </div>
                     <div class="panel-body">
-                        {contents:category=>$channel.id,num=>8}
+                        {contents:category=$channel.id,num=8}
                         <a href="{url:$content}" class="site-item">
                             <div class="item-name">
                                 <img  class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">

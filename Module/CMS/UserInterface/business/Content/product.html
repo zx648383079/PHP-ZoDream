@@ -46,7 +46,7 @@
                         </div>
                         <div class="tab-item">{$article.applications}</div>
                         <div class="tab-item">
-                            {contents:category=>product_cert,product_id=>$article.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            {contents:category=product_cert,product_id=$article.id,field='id,cat_id,model_id,title,file',num=5}
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}
@@ -64,7 +64,7 @@
                             {/contents}
                         </div>
                         <div class="tab-item">
-                            {contents:category=>product_information,product_id=>$article.id,field=>'id,cat_id,model_id,title,file',num=>5}
+                            {contents:category=product_information,product_id=$article.id,field='id,cat_id,model_id,title,file',num=5}
                             <div class="res-download-item">
                                 <a href="{url:$content}" class="item-title">{$content.title}</a>
                                 {if:authGuest:}

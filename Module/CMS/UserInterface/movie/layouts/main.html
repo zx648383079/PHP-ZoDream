@@ -34,10 +34,10 @@
                             <li>
                                 <a href="{url:./}">首页</a>
                             </li>
-                            {channels:tree=>1,group=>nav}
+                            {channels:tree=1,group=nav}
                             <li class="{channelActive:$channel.id,true}">
                                 <a href="{=channel:$channel,url}">{$channel.title}</a>
-                                {if:isset($channel.children)}
+                                {if:isset:$channel.children}
                                 <ul class="sub-menu">
                                     {for:$channel.children,$item}
                                     <li>
@@ -49,14 +49,14 @@
                             </li>
                             
                             {/channels}
-                            {if:isset($cat)}
+                            {if:isset:$cat}
                             <li class="search-bar">
                                 <a class="search-icon" href="javascript:;">
                                     <i class="fa fa-search"></i>
                                 </a>
                                 <div class="search-input">
                                     <form action="{url:./category/list}" method="get">
-                                        <input type="text" name="keywords" placeholder="请输入搜索关键字" value="{if:isset($keywords),$keywords}">
+                                        <input type="text" name="keywords" placeholder="请输入搜索关键字" value="{if:isset:$keywords;$keywords}">
                                         <button>搜索</button>
                                         {searchHidden:}
                                     </form>

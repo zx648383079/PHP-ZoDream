@@ -35,7 +35,7 @@
     
     <div id="comments" class="panel mt-10">
         <div class="panel-header">
-            <h3>{__:comment_count,0=>$article.comment_count}</h3>
+            <h3>{__:comment_count,0=$article.comment_count}</h3>
         </div>
         <div class="template-lazy comment-page" data-url="{url:./comment?extra=children&article=:$article.id:&model=:$article.model_id:&category=:$article.cat_id}">
         

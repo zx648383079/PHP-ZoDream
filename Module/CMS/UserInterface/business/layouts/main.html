@@ -75,7 +75,7 @@
                         <li class="nav-item">
                             <a href="{url:./}">{__:首页}</a>
                         </li>
-                        {channels:tree=>1,group=>nav}
+                        {channels:tree=1,group=nav}
                         <li class="nav-item  {if:$channel.name==product_center,'nav-large-drop-item'} {channelActive:$channel.id,true}">
                             <a href="{=channel:$channel,url}">         
                                 <span>{$channel.title}</span>
@@ -123,7 +123,7 @@
         <footer class="app-footer">
             <div class="map-bar">
                 <div class="container">
-                    {channels:tree=>1,group=>nav}
+                    {channels:tree=1,group=nav}
                     <div class="map-item">
                         <a class="item-header" href="{url:./category?id=:$channel.id}">{$channel.title}</a>
                         <ul class="item-body">
@@ -180,7 +180,7 @@
         </footer>
 
         <div id="searchDialog" class="dialog search-dialog">
-            {$channelId = isset($channel) ? $channel.id : 'product_center'}
+            {$channelId = isset:$channel; ? $channel.id : 'product_center'}
             <form class="dialog-body flat-input" action="{search:id,$channelId}">
                 <input type="text" class="form-control" name="keywords" required>
                 <button class="btn btn-default">{__:搜索}</button>

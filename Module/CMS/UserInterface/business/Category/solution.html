@@ -31,7 +31,7 @@
                     <div class="page-info">
                         {> $count=$items.getPageTotal:}
                         {> $total=$items.getTotal:}
-                        {=__:pagination,pages=>$count,total=>$total}
+                        {=__:pagination,pages=$count,total=$total}
                     </div>
                 </div>
             </div>
