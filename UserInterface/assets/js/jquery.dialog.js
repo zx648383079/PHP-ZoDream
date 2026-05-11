@@ -160,6 +160,475 @@ var Box = /** @class */ (function (_super) {
     };
     return Box;
 }(Eve));
+var DialogPlugin = /** @class */ (function () {
+    function DialogPlugin(element, option) {
+        this.element = element;
+        this.option = option;
+        var instance = this;
+        this.element.on('click', function () {
+            instance.getDialog($(this)).show();
+        });
+    }
+    DialogPlugin.prototype.getDialog = function (ele) {
+        if (this.dialog && this.dialog.box) {
+            return this.dialog;
+        }
+        return this.dialog = Dialog.create(this._parseOption(ele));
+    };
+    DialogPlugin.prototype._parseOption = function (element) {
+        var option = $.extend({}, this.option);
+        if (!element) {
+            return option;
+        }
+        option.type = Dialog.parseEnum(element.attr('dialog-type') || this.option.type, DialogType);
+        option.content = element.attr('dialog-content') || this.option.content;
+        if (!option.content) {
+            option.content = '';
+        }
+        option.url = element.attr('dialog-url') || this.option.url;
+        option.time = parseInt(element.attr('dialog-time')) || this.option.time;
+        if (option.type == DialogType.pop && !option.target) {
+            option.target = element;
+        }
+        return option;
+    };
+    /**
+     * close
+     */
+    DialogPlugin.prototype.close = function () {
+        if (this.dialog) {
+            this.dialog.close();
+            this.dialog = undefined;
+        }
+        return this;
+    };
+    /**
+     * show
+     */
+    DialogPlugin.prototype.show = function () {
+        this.getDialog().show();
+        return this;
+    };
+    /**
+     * hide
+     */
+    DialogPlugin.prototype.hide = function () {
+        this.getDialog().hide();
+        return this;
+    };
+    /**
+     *
+     */
+    DialogPlugin.prototype.toggle = function () {
+        this.getDialog().toggle();
+        return this;
+    };
+    /**
+     *
+     * @param tag
+     */
+    DialogPlugin.prototype.find = function (tag) {
+        return this.getDialog().find(tag);
+    };
+    /**
+     * on
+     */
+    DialogPlugin.prototype.on = function (event, func) {
+        this.getDialog().on(event, func);
+        return this;
+    };
+    return DialogPlugin;
+}());
+;
+(function ($) {
+    $.fn.dialog = function (option) {
+        if (this.attr('data-type') == 'dialog') {
+            return Dialog.bind(this);
+        }
+        return new DialogPlugin(this, option);
+    };
+})(jQuery);
+/**
+ * 弹出框类型
+ */
+var DialogType;
+(function (DialogType) {
+    DialogType[DialogType["tip"] = 0] = "tip";
+    DialogType[DialogType["message"] = 1] = "message";
+    DialogType[DialogType["notify"] = 2] = "notify";
+    DialogType[DialogType["pop"] = 3] = "pop";
+    DialogType[DialogType["loading"] = 4] = "loading";
+    DialogType[DialogType["select"] = 5] = "select";
+    DialogType[DialogType["image"] = 6] = "image";
+    DialogType[DialogType["disk"] = 7] = "disk";
+    DialogType[DialogType["form"] = 8] = "form";
+    DialogType[DialogType["content"] = 9] = "content";
+    DialogType[DialogType["box"] = 10] = "box";
+    DialogType[DialogType["page"] = 11] = "page";
+})(DialogType || (DialogType = {}));
+/**
+ * 弹出框位置
+ */
+var DialogDirection;
+(function (DialogDirection) {
+    DialogDirection[DialogDirection["top"] = 0] = "top";
+    DialogDirection[DialogDirection["right"] = 1] = "right";
+    DialogDirection[DialogDirection["bottom"] = 2] = "bottom";
+    DialogDirection[DialogDirection["left"] = 3] = "left";
+    DialogDirection[DialogDirection["center"] = 4] = "center";
+    DialogDirection[DialogDirection["leftTop"] = 5] = "leftTop";
+    DialogDirection[DialogDirection["rightTop"] = 6] = "rightTop";
+    DialogDirection[DialogDirection["rightBottom"] = 7] = "rightBottom";
+    DialogDirection[DialogDirection["leftBottom"] = 8] = "leftBottom";
+})(DialogDirection || (DialogDirection = {}));
+/**
+ * 弹出框状态
+ */
+var DialogStatus;
+(function (DialogStatus) {
+    DialogStatus[DialogStatus["hide"] = 0] = "hide";
+    DialogStatus[DialogStatus["show"] = 1] = "show";
+    DialogStatus[DialogStatus["closing"] = 2] = "closing";
+    DialogStatus[DialogStatus["closed"] = 3] = "closed"; //已关闭
+})(DialogStatus || (DialogStatus = {}));
+var DialogDiskType;
+(function (DialogDiskType) {
+    DialogDiskType[DialogDiskType["file"] = 0] = "file";
+    DialogDiskType[DialogDiskType["directory"] = 1] = "directory";
+})(DialogDiskType || (DialogDiskType = {}));
+var DIALOG_SHOW = 'dialog_show';
+var DIALOG_HIDE = 'dialog_hide';
+var DIALOG_CLOSE = 'dialog_close';
+var DIALOG_CLOSING = 'dialog_closing';
+var DIALOG_LOADED = 'dialog_loaded';
+var DIALOG_ASYNC = 'dialog_async';
+var DIALOG_DONE = 'dialog_done';
+var _DIALOG_DONE = 'done';
+var _DIALOG_CANCEL = 'cancel';
+var _DIALOG_SHOW = 'show';
+var _DIALOG_HIDE = 'hide';
+var _DIALOG_CLOSE = 'closed';
+var _DIALOG_CLOSING = 'closing';
+var Dialog = /** @class */ (function () {
+    function Dialog() {
+    }
+    /**
+     * 创造弹出框
+     * @param option
+     */
+    Dialog.create = function (option) {
+        if (!option.type) {
+            option.type = DialogType.tip;
+        }
+        option.type = this.parseEnum(option.type, DialogType);
+        var method = this.getMethod(option.type);
+        var element = new method(option);
+        return element;
+    };
+    Dialog.bind = function (box) {
+        var type = DialogType.box;
+        if (box.hasClass('dialog-content')) {
+            type = DialogType.content;
+        }
+        else if (box.hasClass('dialog-form')) {
+            type = DialogType.form;
+        }
+        else if (box.hasClass('dialog-image')) {
+            type = DialogType.image;
+        }
+        else if (!box.hasClass('dialog-box') && box.hasClass('dialog-page')) {
+            type = DialogType.page;
+        }
+        var method = this.getMethod(type);
+        var element = new method({
+            type: type
+        });
+        element.box = box;
+        element.init();
+        return element;
+    };
+    Dialog.parseEnum = function (val, type) {
+        if (typeof val == 'string') {
+            return type[val];
+        }
+        return val;
+    };
+    /**
+     * 提示
+     * @param content
+     * @param time
+     */
+    Dialog.tip = function (content, time) {
+        if (time === void 0) { time = 2000; }
+        if (typeof content != 'object') {
+            content = { content: content, time: time };
+        }
+        content.type = DialogType.tip;
+        return this.create(content).show();
+    };
+    /**
+     * 消息
+     * @param content
+     * @param time
+     */
+    Dialog.message = function (content, time) {
+        if (time === void 0) { time = 2000; }
+        if (typeof content != 'object') {
+            content = { content: content, time: time };
+        }
+        content.type = DialogType.message;
+        return this.create(content).show();
+    };
+    Dialog.confirm = function (content, title, successFn) {
+        if (typeof title === 'function') {
+            successFn = title;
+            title = '提示';
+        }
+        var modal = this.box(content, title, true, true);
+        modal.on('done', function () {
+            if (successFn) {
+                successFn();
+            }
+            modal.close();
+        });
+    };
+    Dialog.pop = function (content, target, time) {
+        if (time === void 0) { time = 2000; }
+        if (typeof content != 'object') {
+            content = { content: content, time: time, target: target };
+        }
+        content.type = DialogType.pop;
+        return this.create(content).show();
+    };
+    /**
+     * 加载
+     * @param time
+     */
+    Dialog.loading = function (time) {
+        if (time === void 0) { time = 0; }
+        if (typeof time != 'object') {
+            time = { time: time };
+        }
+        time.type = DialogType.loading;
+        return this.create(time).show();
+    };
+    /**
+     * 内容弹窗
+     * @param content
+     * @param hasYes
+     * @param hasNo
+     */
+    Dialog.content = function (content, hasYes, hasNo) {
+        if (typeof content != 'object') {
+            content = {
+                content: content + '',
+                hasYes: hasYes,
+                hasNo: hasNo
+            };
+        }
+        content.type = DialogType.content;
+        return this.create(content).show();
+    };
+    /**
+     * 普通弹窗
+     * @param content
+     * @param title
+     * @param hasYes
+     * @param hasNo
+     */
+    Dialog.box = function (content, title, hasYes, hasNo) {
+        if (title === void 0) { title = '提示'; }
+        if (typeof content != 'object' || content instanceof Array) {
+            content = {
+                content: content + '',
+                title: title,
+                hasYes: hasYes,
+                hasNo: hasNo
+            };
+        }
+        content.type = DialogType.box;
+        return this.create(content).show();
+    };
+    /**
+     * 表格弹窗
+     * @param content
+     * @param title
+     * @param done
+     * @param hasYes
+     * @param hasNo
+     */
+    Dialog.form = function (content, title, done, hasYes, hasNo) {
+        if (title === void 0) { title = '提示'; }
+        return this.create({
+            type: DialogType.form,
+            content: content ? content : '',
+            title: title,
+            hasYes: hasYes,
+            hasNo: hasNo,
+            ondone: done
+        }).show();
+    };
+    /**
+     * 页面弹窗
+     * @param content
+     * @param title
+     * @param hasYes
+     * @param hasNo
+     */
+    Dialog.page = function (content, title, hasYes, hasNo) {
+        if (title === void 0) { title = '提示'; }
+        if (typeof content != 'object') {
+            content = {
+                content: content + '',
+                title: title,
+                hasYes: hasYes,
+                hasNo: hasNo
+            };
+        }
+        content.type = DialogType.page;
+        return this.create(content).show();
+    };
+    /**
+     * 桌面提醒
+     * @param title
+     * @param content
+     * @param icon
+     */
+    Dialog.notify = function (title, content, icon) {
+        if (title === void 0) { title = '通知'; }
+        if (content === void 0) { content = ''; }
+        if (icon === void 0) { icon = ''; }
+        if (typeof title != 'object') {
+            title = {
+                title: title,
+                content: content,
+                ico: icon
+            };
+        }
+        title.type = DialogType.notify;
+        return this.create(title).show();
+    };
+    /**
+     * 添加弹出框
+     * @param element
+     */
+    Dialog.addItem = function (element) {
+        this._data[++this._guid] = element;
+        element.id = this._guid;
+    };
+    Dialog.hasItem = function (id) {
+        if (id === void 0) { id = this._guid; }
+        return this._data.hasOwnProperty(id + '');
+    };
+    Dialog.get = function (id) {
+        if (id === void 0) { id = this._guid; }
+        if (this.hasItem(id)) {
+            return this._data[id];
+        }
+        throw "error:" + id;
+    };
+    /**
+     * 根据id删除弹出框
+     * @param id
+     */
+    Dialog.removeItem = function (id) {
+        if (id === void 0) { id = this._guid; }
+        if (!this.hasItem(id)) {
+            return;
+        }
+        this._data[id].close();
+        delete this._data[id];
+    };
+    /**
+     * 删除所有弹出框
+     */
+    Dialog.remove = function () {
+        this.map(function (item) {
+            item.close();
+        });
+        if (this._bgLock > 0) {
+            this._bgLock = 0;
+            this.closeBg();
+        }
+    };
+    /**
+     * 循环所有弹出框
+     * @param callback
+     */
+    Dialog.map = function (callback) {
+        for (var id in this._data) {
+            if (!this.hasItem(id)) {
+                continue;
+            }
+            var result = callback(this._data[id]);
+            if (result == false) {
+                return;
+            }
+        }
+    };
+    /**
+     * 显示遮罩
+     */
+    Dialog.showBg = function (target, isPublic) {
+        if (target === void 0) { target = $(document.body); }
+        if (isPublic === void 0) { isPublic = true; }
+        var instance = this;
+        if (!this._dialogBg) {
+            this._dialogBg = $('<div class="dialog-bg"></div>');
+            this._dialogBg.on('click', function (e) {
+                e.stopPropagation();
+                instance.remove();
+            });
+        }
+        // 更改遮罩的位置
+        target.append(this._dialogBg);
+        this._dialogBg.toggleClass('dialog-bg-private', !isPublic);
+        this._bgLock++;
+        this._dialogBg.show();
+    };
+    /**
+     * 隐藏遮罩
+     */
+    Dialog.closeBg = function () {
+        if (!this._dialogBg) {
+            return;
+        }
+        this._bgLock--;
+        if (this._bgLock > 0) {
+            return;
+        }
+        this._dialogBg.hide();
+        this._bgLock = 0;
+    };
+    Dialog.addMethod = function (type, dialog) {
+        this.methods[type] = dialog;
+    };
+    Dialog.hasMethod = function (type) {
+        return this.methods.hasOwnProperty(type.toString());
+    };
+    Dialog.getMethod = function (type) {
+        return this.methods[type];
+    };
+    Dialog.methods = {};
+    Dialog._data = {};
+    Dialog._guid = 0; // id标记
+    Dialog._tipData = [];
+    Dialog._bgLock = 0;
+    Dialog.$window = $(window);
+    return Dialog;
+}());
+var DefaultDialogOption = /** @class */ (function () {
+    function DefaultDialogOption() {
+        this.title = '提示';
+        this.type = DialogType.tip;
+        this.canMove = true;
+        this.closeAnimate = true;
+        this.ondone = function () {
+            this.close();
+        };
+    }
+    return DefaultDialogOption;
+}());
 /**
  * 已知问题
  * 如果一个不能关闭， 多个将出现错乱
@@ -489,462 +958,6 @@ var DialogCore = /** @class */ (function (_super) {
     };
     return DialogCore;
 }(Box));
-var DefaultDialogOption = /** @class */ (function () {
-    function DefaultDialogOption() {
-        this.title = '提示';
-        this.type = DialogType.tip;
-        this.canMove = true;
-        this.closeAnimate = true;
-        this.ondone = function () {
-            this.close();
-        };
-    }
-    return DefaultDialogOption;
-}());
-var Dialog = /** @class */ (function () {
-    function Dialog() {
-    }
-    /**
-     * 创造弹出框
-     * @param option
-     */
-    Dialog.create = function (option) {
-        if (!option.type) {
-            option.type = DialogType.tip;
-        }
-        option.type = this.parseEnum(option.type, DialogType);
-        var method = this.getMethod(option.type);
-        var element = new method(option);
-        return element;
-    };
-    Dialog.bind = function (box) {
-        var type = DialogType.box;
-        if (box.hasClass('dialog-content')) {
-            type = DialogType.content;
-        }
-        else if (box.hasClass('dialog-form')) {
-            type = DialogType.form;
-        }
-        else if (box.hasClass('dialog-image')) {
-            type = DialogType.image;
-        }
-        else if (!box.hasClass('dialog-box') && box.hasClass('dialog-page')) {
-            type = DialogType.page;
-        }
-        var method = this.getMethod(type);
-        var element = new method({
-            type: type
-        });
-        element.box = box;
-        element.init();
-        return element;
-    };
-    Dialog.parseEnum = function (val, type) {
-        if (typeof val == 'string') {
-            return type[val];
-        }
-        return val;
-    };
-    /**
-     * 提示
-     * @param content
-     * @param time
-     */
-    Dialog.tip = function (content, time) {
-        if (time === void 0) { time = 2000; }
-        if (typeof content != 'object') {
-            content = { content: content, time: time };
-        }
-        content.type = DialogType.tip;
-        return this.create(content).show();
-    };
-    /**
-     * 消息
-     * @param content
-     * @param time
-     */
-    Dialog.message = function (content, time) {
-        if (time === void 0) { time = 2000; }
-        if (typeof content != 'object') {
-            content = { content: content, time: time };
-        }
-        content.type = DialogType.message;
-        return this.create(content).show();
-    };
-    Dialog.pop = function (content, target, time) {
-        if (time === void 0) { time = 2000; }
-        if (typeof content != 'object') {
-            content = { content: content, time: time, target: target };
-        }
-        content.type = DialogType.pop;
-        return this.create(content).show();
-    };
-    /**
-     * 加载
-     * @param time
-     */
-    Dialog.loading = function (time) {
-        if (time === void 0) { time = 0; }
-        if (typeof time != 'object') {
-            time = { time: time };
-        }
-        time.type = DialogType.loading;
-        return this.create(time).show();
-    };
-    /**
-     * 内容弹窗
-     * @param content
-     * @param hasYes
-     * @param hasNo
-     */
-    Dialog.content = function (content, hasYes, hasNo) {
-        if (typeof content != 'object') {
-            content = {
-                content: content + '',
-                hasYes: hasYes,
-                hasNo: hasNo
-            };
-        }
-        content.type = DialogType.content;
-        return this.create(content).show();
-    };
-    /**
-     * 普通弹窗
-     * @param content
-     * @param title
-     * @param hasYes
-     * @param hasNo
-     */
-    Dialog.box = function (content, title, hasYes, hasNo) {
-        if (title === void 0) { title = '提示'; }
-        if (typeof content != 'object' || content instanceof Array) {
-            content = {
-                content: content + '',
-                title: title,
-                hasYes: hasYes,
-                hasNo: hasNo
-            };
-        }
-        content.type = DialogType.box;
-        return this.create(content).show();
-    };
-    /**
-     * 表格弹窗
-     * @param content
-     * @param title
-     * @param done
-     * @param hasYes
-     * @param hasNo
-     */
-    Dialog.form = function (content, title, done, hasYes, hasNo) {
-        if (title === void 0) { title = '提示'; }
-        return this.create({
-            type: DialogType.form,
-            content: content ? content : '',
-            title: title,
-            hasYes: hasYes,
-            hasNo: hasNo,
-            ondone: done
-        }).show();
-    };
-    /**
-     * 页面弹窗
-     * @param content
-     * @param title
-     * @param hasYes
-     * @param hasNo
-     */
-    Dialog.page = function (content, title, hasYes, hasNo) {
-        if (title === void 0) { title = '提示'; }
-        if (typeof content != 'object') {
-            content = {
-                content: content + '',
-                title: title,
-                hasYes: hasYes,
-                hasNo: hasNo
-            };
-        }
-        content.type = DialogType.page;
-        return this.create(content).show();
-    };
-    /**
-     * 桌面提醒
-     * @param title
-     * @param content
-     * @param icon
-     */
-    Dialog.notify = function (title, content, icon) {
-        if (title === void 0) { title = '通知'; }
-        if (content === void 0) { content = ''; }
-        if (icon === void 0) { icon = ''; }
-        if (typeof title != 'object') {
-            title = {
-                title: title,
-                content: content,
-                ico: icon
-            };
-        }
-        title.type = DialogType.notify;
-        return this.create(title).show();
-    };
-    /**
-     * 添加弹出框
-     * @param element
-     */
-    Dialog.addItem = function (element) {
-        this._data[++this._guid] = element;
-        element.id = this._guid;
-    };
-    Dialog.hasItem = function (id) {
-        if (id === void 0) { id = this._guid; }
-        return this._data.hasOwnProperty(id + '');
-    };
-    Dialog.get = function (id) {
-        if (id === void 0) { id = this._guid; }
-        if (this.hasItem(id)) {
-            return this._data[id];
-        }
-        throw "error:" + id;
-    };
-    /**
-     * 根据id删除弹出框
-     * @param id
-     */
-    Dialog.removeItem = function (id) {
-        if (id === void 0) { id = this._guid; }
-        if (!this.hasItem(id)) {
-            return;
-        }
-        this._data[id].close();
-        delete this._data[id];
-    };
-    /**
-     * 删除所有弹出框
-     */
-    Dialog.remove = function () {
-        this.map(function (item) {
-            item.close();
-        });
-        if (this._bgLock > 0) {
-            this._bgLock = 0;
-            this.closeBg();
-        }
-    };
-    /**
-     * 循环所有弹出框
-     * @param callback
-     */
-    Dialog.map = function (callback) {
-        for (var id in this._data) {
-            if (!this.hasItem(id)) {
-                continue;
-            }
-            var result = callback(this._data[id]);
-            if (result == false) {
-                return;
-            }
-        }
-    };
-    /**
-     * 显示遮罩
-     */
-    Dialog.showBg = function (target, isPublic) {
-        if (target === void 0) { target = $(document.body); }
-        if (isPublic === void 0) { isPublic = true; }
-        var instance = this;
-        if (!this._dialogBg) {
-            this._dialogBg = $('<div class="dialog-bg"></div>');
-            this._dialogBg.on('click', function (e) {
-                e.stopPropagation();
-                instance.remove();
-            });
-        }
-        // 更改遮罩的位置
-        target.append(this._dialogBg);
-        this._dialogBg.toggleClass('dialog-bg-private', !isPublic);
-        this._bgLock++;
-        this._dialogBg.show();
-    };
-    /**
-     * 隐藏遮罩
-     */
-    Dialog.closeBg = function () {
-        if (!this._dialogBg) {
-            return;
-        }
-        this._bgLock--;
-        if (this._bgLock > 0) {
-            return;
-        }
-        this._dialogBg.hide();
-        this._bgLock = 0;
-    };
-    Dialog.addMethod = function (type, dialog) {
-        this.methods[type] = dialog;
-    };
-    Dialog.hasMethod = function (type) {
-        return this.methods.hasOwnProperty(type.toString());
-    };
-    Dialog.getMethod = function (type) {
-        return this.methods[type];
-    };
-    Dialog.methods = {};
-    Dialog._data = {};
-    Dialog._guid = 0; // id标记
-    Dialog._tipData = [];
-    Dialog._bgLock = 0;
-    Dialog.$window = $(window);
-    return Dialog;
-}());
-/**
- * 弹出框类型
- */
-var DialogType;
-(function (DialogType) {
-    DialogType[DialogType["tip"] = 0] = "tip";
-    DialogType[DialogType["message"] = 1] = "message";
-    DialogType[DialogType["notify"] = 2] = "notify";
-    DialogType[DialogType["pop"] = 3] = "pop";
-    DialogType[DialogType["loading"] = 4] = "loading";
-    DialogType[DialogType["select"] = 5] = "select";
-    DialogType[DialogType["image"] = 6] = "image";
-    DialogType[DialogType["disk"] = 7] = "disk";
-    DialogType[DialogType["form"] = 8] = "form";
-    DialogType[DialogType["content"] = 9] = "content";
-    DialogType[DialogType["box"] = 10] = "box";
-    DialogType[DialogType["page"] = 11] = "page";
-})(DialogType || (DialogType = {}));
-/**
- * 弹出框位置
- */
-var DialogDirection;
-(function (DialogDirection) {
-    DialogDirection[DialogDirection["top"] = 0] = "top";
-    DialogDirection[DialogDirection["right"] = 1] = "right";
-    DialogDirection[DialogDirection["bottom"] = 2] = "bottom";
-    DialogDirection[DialogDirection["left"] = 3] = "left";
-    DialogDirection[DialogDirection["center"] = 4] = "center";
-    DialogDirection[DialogDirection["leftTop"] = 5] = "leftTop";
-    DialogDirection[DialogDirection["rightTop"] = 6] = "rightTop";
-    DialogDirection[DialogDirection["rightBottom"] = 7] = "rightBottom";
-    DialogDirection[DialogDirection["leftBottom"] = 8] = "leftBottom";
-})(DialogDirection || (DialogDirection = {}));
-/**
- * 弹出框状态
- */
-var DialogStatus;
-(function (DialogStatus) {
-    DialogStatus[DialogStatus["hide"] = 0] = "hide";
-    DialogStatus[DialogStatus["show"] = 1] = "show";
-    DialogStatus[DialogStatus["closing"] = 2] = "closing";
-    DialogStatus[DialogStatus["closed"] = 3] = "closed"; //已关闭
-})(DialogStatus || (DialogStatus = {}));
-var DialogDiskType;
-(function (DialogDiskType) {
-    DialogDiskType[DialogDiskType["file"] = 0] = "file";
-    DialogDiskType[DialogDiskType["directory"] = 1] = "directory";
-})(DialogDiskType || (DialogDiskType = {}));
-var DIALOG_SHOW = 'dialog_show';
-var DIALOG_HIDE = 'dialog_hide';
-var DIALOG_CLOSE = 'dialog_close';
-var DIALOG_CLOSING = 'dialog_closing';
-var DIALOG_LOADED = 'dialog_loaded';
-var DIALOG_ASYNC = 'dialog_async';
-var DIALOG_DONE = 'dialog_done';
-var _DIALOG_DONE = 'done';
-var _DIALOG_CANCEL = 'cancel';
-var _DIALOG_SHOW = 'show';
-var _DIALOG_HIDE = 'hide';
-var _DIALOG_CLOSE = 'closed';
-var _DIALOG_CLOSING = 'closing';
-var DialogPlugin = /** @class */ (function () {
-    function DialogPlugin(element, option) {
-        this.element = element;
-        this.option = option;
-        var instance = this;
-        this.element.on('click', function () {
-            instance.getDialog($(this)).show();
-        });
-    }
-    DialogPlugin.prototype.getDialog = function (ele) {
-        if (this.dialog && this.dialog.box) {
-            return this.dialog;
-        }
-        return this.dialog = Dialog.create(this._parseOption(ele));
-    };
-    DialogPlugin.prototype._parseOption = function (element) {
-        var option = $.extend({}, this.option);
-        if (!element) {
-            return option;
-        }
-        option.type = Dialog.parseEnum(element.attr('dialog-type') || this.option.type, DialogType);
-        option.content = element.attr('dialog-content') || this.option.content;
-        if (!option.content) {
-            option.content = '';
-        }
-        option.url = element.attr('dialog-url') || this.option.url;
-        option.time = parseInt(element.attr('dialog-time')) || this.option.time;
-        if (option.type == DialogType.pop && !option.target) {
-            option.target = element;
-        }
-        return option;
-    };
-    /**
-     * close
-     */
-    DialogPlugin.prototype.close = function () {
-        if (this.dialog) {
-            this.dialog.close();
-            this.dialog = undefined;
-        }
-        return this;
-    };
-    /**
-     * show
-     */
-    DialogPlugin.prototype.show = function () {
-        this.getDialog().show();
-        return this;
-    };
-    /**
-     * hide
-     */
-    DialogPlugin.prototype.hide = function () {
-        this.getDialog().hide();
-        return this;
-    };
-    /**
-     *
-     */
-    DialogPlugin.prototype.toggle = function () {
-        this.getDialog().toggle();
-        return this;
-    };
-    /**
-     *
-     * @param tag
-     */
-    DialogPlugin.prototype.find = function (tag) {
-        return this.getDialog().find(tag);
-    };
-    /**
-     * on
-     */
-    DialogPlugin.prototype.on = function (event, func) {
-        this.getDialog().on(event, func);
-        return this;
-    };
-    return DialogPlugin;
-}());
-;
-(function ($) {
-    $.fn.dialog = function (option) {
-        if (this.attr('data-type') == 'dialog') {
-            return Dialog.bind(this);
-        }
-        return new DialogPlugin(this, option);
-    };
-})(jQuery);
 var DialogTip = /** @class */ (function (_super) {
     __extends(DialogTip, _super);
     function DialogTip(option, id) {

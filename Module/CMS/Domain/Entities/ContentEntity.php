@@ -16,6 +16,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property string $description
  * @property integer $status
  * @property integer $view_count
+ * @property integer $locale_group_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -34,6 +35,7 @@ class ContentEntity extends Entity {
             'thumb' => 'string:0,255',
             'description' => 'string:0,255',
             'status' => 'int:0,9',
+            'locale_group_id' => 'int',
             'view_count' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',

@@ -8,6 +8,7 @@ use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\SiteRepository;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
@@ -43,9 +44,10 @@ class CategoryController extends Controller {
             });
         }
         $template_list = $this->getThemeTemplate();
+        $languageItems = SiteRepository::localeItems();
         return $this->show('edit', compact('model', 'model_list',
             'cat_list',
-            'group_list', 'template_list'));
+            'group_list', 'template_list', 'languageItems'));
     }
 
     public function saveAction(array|string $groups = []) {

@@ -13,6 +13,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property integer $type
  * @property integer $model_id
  * @property integer $parent_id
+ * @property integer $site_id
  * @property string $keywords
  * @property string $description
  * @property string $image
@@ -25,6 +26,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property string $list_template
  * @property string $show_template
  * @property string $setting
+ * @property integer $locale_group_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -34,7 +36,7 @@ class CategoryEntity extends Entity {
     const TYPE_LINK = 2; //外链
 
     public static function tableName(): string {
-        return 'cms_category_'.CMSRepository::siteId();
+        return 'cms_category_'.CMSRepository::tableSiteId();
     }
 
     public function rules(): array {
@@ -43,6 +45,7 @@ class CategoryEntity extends Entity {
             'title' => 'required|string:0,100',
             'type' => 'int:0,9',
             'model_id' => 'int',
+            'site_id' => 'int',
             'parent_id' => 'int',
             'keywords' => 'string:0,255',
             'description' => 'string:0,255',
@@ -55,6 +58,7 @@ class CategoryEntity extends Entity {
             'category_template' => 'string:0,20',
             'list_template' => 'string:0,20',
             'show_template' => 'string:0,20',
+            'locale_group_id' => 'int',
             'setting' => '',
             'created_at' => 'int',
             'updated_at' => 'int',
@@ -80,6 +84,7 @@ class CategoryEntity extends Entity {
             'category_template' => '分类模板',
             'list_template' => '列表模板',
             'show_template' => '详情模板',
+            'locale_group_id' => '本地化分组',
             'setting' => 'Setting',
             'setting.open_comment' => '开启评论',
             'created_at' => 'Created At',

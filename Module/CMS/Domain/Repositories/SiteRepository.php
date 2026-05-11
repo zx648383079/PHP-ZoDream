@@ -38,7 +38,7 @@ class SiteRepository {
     }
 
     public static function save(array $data) {
-        $id = $data['id'] ?? 0;
+        $id = intval($data['id'] ?? 0);
         unset($data['id']);
         $model = SiteModel::findOrNew($id);
         $oldTheme = $model->theme;
@@ -56,6 +56,10 @@ class SiteRepository {
         if ($oldTheme === $model->theme) {
             return $model;
         }
+        // 根据主题和语言包自动分组
+        if ($id === 0) {
+            static::autoBindingLocalize($model);
+        }
         try {
             CMSRepository::generateSite($model);
         } catch (\Exception $ex) {
@@ -65,10 +69,69 @@ class SiteRepository {
         return $model;
     }
 
+    private static function autoBindingLocalize(SiteModel $model): bool {
+        if (!$model->language) {
+            return false;
+        }
+        $items = SiteModel::where('theme', $model->theme)
+            ->where('id', '<>', $model->id)
+            ->whereNotNull('language')->orderBy('id', 'asc')
+            ->get('id', 'language', 'locale_group_id');
+        if (count($items) < 1) {
+            return false;
+        }
+        $locale_group_id = intval($items[0]['locale_group_id']);
+        if ($locale_group_id === 0) {
+            $locale_group_id = intval($items[0]['id']);
+        }
+        $model->locale_group_id = $locale_group_id;
+        $idItems = array_map(function ($item) {
+            return intval($item['id']);
+        }, $items);
+        $idItems[] = $model->id;
+        SiteModel::query()->whereIn('id', $idItems)->update(compact('locale_group_id'));
+        return true;
+    }
+
+    public static function localeItems(SiteModel|null $model): array {
+        if (empty($model)) {
+            $model = CMSRepository::site();
+        }
+        $locale_group_id = intval($model->locale_group_id);
+        if ($locale_group_id === 0) {
+            return [];
+        }
+        $items = SiteModel::where('locale_group_id', $locale_group_id)
+            ->asArray()
+            ->get('id', 'language', 'title');
+        if ($items < 2) {
+            return [];
+        }
+        return array_map(function ($item) use($model) {
+            return [
+                'selected' => intval($model->id) === intval($item['id']) ,
+                'language' => $item['language'],
+                'id' => intval($item['id']),
+                'name' => $item['title']
+            ];
+        }, $items);
+    }
+
     public static function remove(int $id) {
         $model = static::get($id);
         $model->delete();
         CMSRepository::removeSite($model);
+        $locale_group_id = intval($model->locale_group_id);
+        if ($locale_group_id === 0) {
+            return;
+        }
+        $count = SiteModel::where('locale_group_id', $locale_group_id)
+            ->count();
+        if ($count === 1) {
+            SiteModel::where('locale_group_id', $locale_group_id)->update([
+                'locale_group_id' => 0
+            ]);
+        }
     }
 
     public static function setDefault(int $id) {

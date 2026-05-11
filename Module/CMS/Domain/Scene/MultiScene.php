@@ -12,7 +12,7 @@ use Zodream\Database\Schema\Table;
 class MultiScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s_%s', $this->site, $this->model['table']);
+        return sprintf('cms_content_%s_%s', $this->tableSiteId, $this->model['table']);
     }
 
     public function getExtendTable(): string {
@@ -20,7 +20,7 @@ class MultiScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d_%s', $this->site, $this->model['table']);
+        return sprintf('cms_comment_%d_%s', $this->tableSiteId, $this->model['table']);
     }
 
     public function seoQuery(): SqlBuilder {
@@ -36,9 +36,11 @@ class MultiScene extends BaseScene {
 
 
     public function boot(): void {
-        CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
-            $this->initSeoTableField($table);
-        });
+        if ($this->isSiteTable()) {
+            CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
+                $this->initSeoTableField($table);
+            });
+        }
     }
 
 
@@ -56,6 +58,9 @@ class MultiScene extends BaseScene {
     }
 
     public function initTable(): bool {
+        if (!$this->isSiteTable()) {
+            return true;
+        }
         $extend_list = array_filter($this->fieldList(), function ($item) {
             return $item['is_main'] < 1;
         });
@@ -83,15 +88,31 @@ class MultiScene extends BaseScene {
      * @return mixed
      */
     public function removeTable(): bool {
-        CreateCmsTables::dropTable($this->getMainTable());
-        CreateCmsTables::dropTable($this->getExtendTable());
-        CreateCmsTables::dropTable($this->getCommentTable());
-        $this->seoQuery()->where('model_id', $this->modelId())->delete();
+        if ($this->isSiteTable()) {
+            CreateCmsTables::dropTable($this->getMainTable());
+            CreateCmsTables::dropTable($this->getExtendTable());
+            CreateCmsTables::dropTable($this->getCommentTable());
+        } else {
+            $items = $this->query()->where('model_id', $this->modelId())
+                ->where('site_id', $this->site)->pluck('id');
+            if (!empty($items)) {
+                $this->query()->where('model_id', $this->modelId())
+                    ->where('site_id', $this->site)->delete();
+                $this->extendQuery()->whereIn('id', $items)->delete();
+                $this->commentQuery()->whereIn('id', $items)->delete();
+            }
+        }
+        $this->seoQuery()->where('model_id', $this->modelId())
+            ->where('site_id', $this->site)->delete();
         return true;
     }
 
     public function destroy(): void {
-        CreateCmsTables::dropTable(ContentModel::tableName());
+        if ($this->isSiteTable()) {
+            CreateCmsTables::dropTable(ContentModel::tableName());
+        } else{
+            $this->seoQuery()->where('site_id', $this->site)->delete();
+        }
     }
 
     /**
@@ -179,6 +200,7 @@ class MultiScene extends BaseScene {
         $main['updated_at'] = $main['created_at'] = $timestamp;
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
+        $main['site_id'] = $this->site;
         $main['model_id'] = $this->modelId();
         $main['user_id'] = auth()->id();
         $id = intval($this->seoQuery()->insert([

@@ -7,6 +7,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
 
 /**
  * @property integer $id
+ * @property integer $site_id
  * @property integer $model_id
  * @property integer $item_type
  * @property integer $item_id
@@ -16,12 +17,13 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  */
 class SiteLogEntity extends Entity {
     public static function tableName(): string {
-        return 'cms_log_'.CMSRepository::siteId();
+        return 'cms_log_'.CMSRepository::tableSiteId();
     }
 
     protected function rules(): array {
         return [
             'item_type' => 'int:0,127',
+            'site_id' => 'int',
             'item_id' => 'required|int',
             'model_id' => 'required|int',
             'user_id' => 'required|int',

@@ -76,7 +76,8 @@ class SiteController extends Controller {
 
     public function optionAction(int $id) {
         $model = SiteModel::find($id);
-        return $this->show(compact('model'));
+        $languageItems = SiteRepository::localeItems($model);
+        return $this->show(compact('model', 'languageItems'));
     }
 
     public function saveOptionAction(int $id, array $option = [], array $field = []) {

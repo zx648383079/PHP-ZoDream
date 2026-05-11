@@ -53,6 +53,7 @@ $this->registerCssFile([
         '@font-awesome.min.css',
         '@zodream.min.css',
         '@dialog.min.css',
+        '@dialog-select.min.css',
         '@zodream-admin.min.css',
         '@cms_admin.min.css'
     ])->registerJsFile([

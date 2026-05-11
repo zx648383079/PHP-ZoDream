@@ -70,7 +70,9 @@ class LinkageController extends Controller {
         if (!$model->parent_id) {
             $model->parent_id = $parent_id;
         }
-        return $this->show('editData', compact('model'));
+        $linkage = LinkageModel::find($model->linkage_id);
+        $languageItems = LinkageRepository::localeItems($linkage);
+        return $this->show('editData', compact('model', 'languageItems', 'linkage'));
     }
 
     public function saveDataAction(Input $input) {

@@ -1,11 +1,29 @@
 <?php
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
+use Module\CMS\Domain\FuncHelper;
 /** @var $this View */
 $this->title = $model->id > 0 ? '文章编辑' : '新增文章';
 ?>
 
-<h1><?=$this->title?></h1>
+<div class="flex-slide-row">
+    <h1><?=$this->title?></h1>
+    <?php if(!empty($languageItems)): ?>
+    <div class="localize-selector select--with-search">
+        <div class="select-input">
+            <i class="fa fa-language"></i>
+            切换语言：<?= FuncHelper::selectedLanguage($languageItems) ?>
+        </div>
+        <div class="select-option-bar">
+            <?php foreach($languageItems as $item):?>
+            <a class="option-item<?= $item['selected'] ? ' selected' : '' ?>" data-lang="<?= $item['language'] ?>">
+                <?= $item['name'] ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
 <form data-type="ajax" action="<?=$this->url('./@admin/content/save')?>" method="post" class="form-table" role="form">
     <div class="tab-box">
         <div class="tab-header">

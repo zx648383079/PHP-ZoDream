@@ -10,6 +10,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  * @property integer $id
  * @property string $title
  * @property integer $cat_id
+ * @property integer $site_id
  * @property integer $model_id
  * @property string $keywords
  * @property string $thumb
@@ -25,7 +26,7 @@ class ContentModel extends ContentEntity {
     protected $extend_data = null;
 
     public static function getExtendTable(string $table): string {
-        return sprintf('content_%s_%s', CMSRepository::siteId(), $table);
+        return sprintf('content_%s_%s', CMSRepository::tableSiteId(), $table);
     }
 
     public function category() {

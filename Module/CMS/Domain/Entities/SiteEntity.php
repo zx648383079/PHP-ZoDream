@@ -16,6 +16,7 @@ use Domain\Entities\Entity;
  * @property integer $status
  * @property string $language
  * @property string $options
+ * @property integer $locale_group_id
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -36,6 +37,7 @@ class SiteEntity extends Entity {
             'status' => 'int:0,127',
             'language' => 'string:0,10',
             'options' => '',
+            'locale_group_id' => 'int',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
@@ -53,6 +55,7 @@ class SiteEntity extends Entity {
             'is_default' => '是否为默认站点',
             'status' => '状态',
             'language' => '本地化语言',
+            'locale_group_id' => '本地化分组',
             'options' => 'Options',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

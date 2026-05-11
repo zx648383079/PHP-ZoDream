@@ -11,7 +11,7 @@ use Zodream\Database\Schema\Table;
 class SingleScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s', $this->site);
+        return sprintf('cms_content_%s', $this->tableSiteId);
     }
 
     public function getExtendTable(): string {
@@ -19,14 +19,16 @@ class SingleScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d', $this->site);
+        return sprintf('cms_comment_%d', $this->tableSiteId);
     }
 
     public function boot(): void {
-        CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
-            $this->initMainTableField($table);
-        });
-        $this->initCommentTable();
+        if ($this->isSiteTable()) {
+            CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
+                $this->initMainTableField($table);
+            });
+            $this->initCommentTable();
+        }
     }
 
     /**
@@ -44,16 +46,18 @@ class SingleScene extends BaseScene {
     }
 
     public function initTable(): bool {
-        $field_list = array_filter($this->fieldList(), function ($item) {
-            return $item['is_system'] < 1;
-        });
-        CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
-            $table->column('id')->int(10)->pk(true);
-            foreach ($field_list as $item) {
-                static::converterTableField($table->column($item['field']), $item);
-            }
-            $table->comment($this->model['name']);
-        });
+        if ($this->isSiteTable()) {
+            $field_list = array_filter($this->fieldList(), function ($item) {
+                return $item['is_system'] < 1;
+            });
+            CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
+                $table->column('id')->int(10)->pk(true);
+                foreach ($field_list as $item) {
+                    static::converterTableField($table->column($item['field']), $item);
+                }
+                $table->comment($this->model['name']);
+            });
+        }
         return true;
     }
 
@@ -62,14 +66,28 @@ class SingleScene extends BaseScene {
      * @return mixed
      */
     public function removeTable(): bool {
-        CreateCmsTables::dropTable($this->getExtendTable());
-        $this->query()->where('model_id', $this->modelId())->delete();
+        $items = $this->query()->where('model_id', $this->modelId())
+                ->where('site_id', $this->site)->pluck('id');
+        if (!empty($items)) {
+            $this->query()->where('model_id', $this->modelId())
+                ->where('site_id', $this->site)->delete();
+            $this->extendQuery()->whereIn('id', $items)->delete();
+            $this->commentQuery()->whereIn('id', $items)->delete();
+        }
+        if ($this->isSiteTable()) {
+            CreateCmsTables::dropTable($this->getExtendTable());
+        }
         return true;
     }
 
     public function destroy(): void {
-        CreateCmsTables::dropTable(ContentModel::tableName());
-        CreateCmsTables::dropTable($this->getCommentTable());
+        if ($this->isSiteTable()) {
+            CreateCmsTables::dropTable(ContentModel::tableName());
+            CreateCmsTables::dropTable($this->getCommentTable());
+        } else {
+            $this->query()->where('site_id', $this->site)->delete();
+            $this->commentQuery()->where('site_id', $this->site)->delete();
+        }
     }
 
     /**

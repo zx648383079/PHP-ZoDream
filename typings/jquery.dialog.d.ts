@@ -2,31 +2,31 @@
 
 declare namespace ZreDialog {
     /**
-    * 缓存数据
-    */
+     * 缓存数据
+     */
     class CacheUrl {
         /**
-        * 缓存的数据
-        */
+         * 缓存的数据
+         */
         private static _cacheData;
         /**
-        * 缓存的事件
-        */
+         * 缓存的事件
+         */
         private static _event;
         static hasData(url: string): boolean;
         static hasEvent(url: string): boolean;
         static addEvent(url: string, callback: (data: any) => void): void;
         /**
-        * 获取数据通过回调返回
-        * @param url
-        * @param callback
-        */
+         * 获取数据通过回调返回
+         * @param url
+         * @param callback
+         */
         static getData(url: string, callback: (data: any) => void): void;
         /**
-        * 设置数据并回调
-        * @param url
-        * @param data
-        */
+         * 设置数据并回调
+         * @param url
+         * @param data
+         */
         static setData(url: string, data: any): void;
     }
     abstract class Eve {
@@ -40,245 +40,60 @@ declare namespace ZreDialog {
         box: JQuery;
         protected showPosition(): this;
         /**
-        * 自适应布局
-        */
+         * 自适应布局
+         */
         protected setPosition(): this;
         /**
-        * 根据可能是相对值获取绝对值
-        * @param abservable
-        * @param reltive
-        */
+         * 根据可能是相对值获取绝对值
+         * @param abservable
+         * @param reltive
+         */
         static getReal(abservable: number, reltive: number): number;
     }
-    /**
-    * 已知问题
-    * 如果一个不能关闭， 多个将出现错乱
-    */
-    abstract class DialogCore extends Box implements DialogInterfae {
-        id?: number;
-        constructor(option: DialogOption, id?: number);
-        options: DialogOption;
-        private _status;
-        get status(): DialogStatus;
-        set status(arg: DialogStatus);
-        private _dialogBg;
-        private _y;
-        get y(): number;
-        set y(y: number);
-        private _height;
-        get height(): number;
-        set height(height: number);
+    class DialogPlugin {
+        element: JQuery;
+        option?: DialogOption;
+        constructor(element: JQuery, option?: DialogOption);
+        dialog: DialogCore;
+        getDialog(ele?: JQuery): DialogCore;
+        private _parseOption;
         /**
-        * 改变状态
-        * @param status
-        * @param hasEvent
-        */
-        protected changeStatus(status: DialogStatus): void;
-        /**
-        * 获取默认设置
-        */
-        protected getDefaultOption(): DialogOption;
-        /**
-        * 创建并显示控件
-        */
-        protected showBox(): boolean;
-        protected doShowStatus(): void;
-        /**
-        * 创建并隐藏控件
-        */
-        protected hideBox(): boolean;
-        protected doHideStatus(): void;
-        /**
-        * 动画关闭，有关闭动画
-        */
-        protected closingBox(): boolean;
-        protected doClosingStatus(): void;
-        /**
-        * 删除控件
-        */
-        protected closeBox(): boolean;
-        protected doCloseStatus(): void;
-        abstract init(): any;
-        protected createCore(): this;
-        protected abstract createContent(): this;
-        protected abstract setProperty(): this;
-        css(key: any, value?: string | number): this;
-        show(): this;
-        hide(): this;
-        close(hasAnimation?: boolean): this;
-        toggle(): this;
-        /**
-        * 获取相同类型弹出框的最上面
-        */
-        protected getDialogTop(): number | undefined;
-        protected getDialogBottom(): number | undefined;
-        private _getBottom;
-        private _getTop;
-        private _getLeft;
-        private _getRight;
-        private _getWidth;
-        private _getHeight;
-        private _getLeftTop;
-        x: number;
-        top(top?: number): number | this;
-        left(left?: number): number | this;
-        width(width?: number): number | this;
-        addClass(name: string): this;
-        hasClass(name: string): boolean;
-        removeClass(name: string): this;
-        find(name: string): JQuery;
-        isElement(content: any): boolean;
-    }
-    class DefaultDialogOption implements DialogOption {
-        title: string;
-        type?: DialogType;
-        canMove: boolean;
-        closeAnimate: boolean;
-        ondone: Function;
-    }
-    class Dialog {
-        static methods: {
-            [type: number]: Function;
-        };
-        private static _data;
-        private static _guid;
-        private static _tipData;
-        private static _dialogBg;
-        private static _bgLock;
-        static $window: JQuery<Window & typeof globalThis>;
-        /**
-        * 创造弹出框
-        * @param option
-        */
-        static create<T>(option?: DialogOption): T;
-        static bind(box: JQuery): DialogContent;
-        static parseEnum<T>(val: any, type: any): T;
-        /**
-        * 提示
-        * @param content
-        * @param time
-        */
-        static tip(content: string | DialogTipOption, time?: number): DialogTip;
-        /**
-        * 消息
-        * @param content
-        * @param time
-        */
-        static message(content: string | DialogMessageOption, time?: number): DialogMessage;
-        static pop(content: string | DialogPopOption, target: JQuery, time?: number): DialogPop;
-        /**
-        * 加载
-        * @param time
-        */
-        static loading(time?: number | DialogOption): DialogLoading;
-        /**
-        * 内容弹窗
-        * @param content
-        * @param hasYes
-        * @param hasNo
-        */
-        static content(content: string | DialogOption, hasYes?: boolean, hasNo?: boolean): DialogContent;
-        /**
-        * 普通弹窗
-        * @param content
-        * @param title
-        * @param hasYes
-        * @param hasNo
-        */
-        static box(content: string | DialogOption, title?: string, hasYes?: boolean, hasNo?: boolean): DialogBox;
-        /**
-        * 表格弹窗
-        * @param content
-        * @param title
-        * @param done
-        * @param hasYes
-        * @param hasNo
-        */
-        static form(content: any, title?: string, done?: Function, hasYes?: boolean, hasNo?: boolean): DialogForm;
-        /**
-        * 页面弹窗
-        * @param content
-        * @param title
-        * @param hasYes
-        * @param hasNo
-        */
-        static page(content: string | DialogOption, title?: string, hasYes?: boolean, hasNo?: boolean): DialogPage;
-        /**
-        * 桌面提醒
-        * @param title
-        * @param content
-        * @param icon
-        */
-        static notify(title?: string | DialogOption, content?: string, icon?: string): DialogNotify;
-        /**
-        * 添加弹出框
-        * @param element
-        */
-        static addItem(element: DialogCore): void;
-        static hasItem(id?: number | string): boolean;
-        static get(id?: number | string): any;
-        /**
-        * 根据id删除弹出框
-        * @param id
-        */
-        static removeItem(id?: number): void;
-        /**
-        * 删除所有弹出框
-        */
-        static remove(): void;
-        /**
-        * 循环所有弹出框
-        * @param callback
-        */
-        static map(callback: (item: DialogCore) => any): void;
-        /**
-        * 显示遮罩
-        */
-        static showBg(target?: JQuery, isPublic?: boolean): void;
-        /**
-        * 隐藏遮罩
-        */
-        static closeBg(): void;
-        static addMethod(type: DialogType, dialog: Function): void;
-        static hasMethod(type: DialogType): boolean;
-        static getMethod(type: DialogType): Function;
-    }
-    interface DialogInterfae {
-        status: DialogStatus;
-        x: number;
-        y: number;
-        /**
-        * 显示
-        */
-        show(): this;
-        /**
-        * 隐藏
-        */
-        hide(): this;
-        /**
-        * 关闭
-        */
+         * close
+         */
         close(): this;
         /**
-        * 显示隐藏切换
-        */
+         * show
+         */
+        show(): this;
+        /**
+         * hide
+         */
+        hide(): this;
+        /**
+         *
+         */
         toggle(): this;
         /**
-        * 设置css
-        */
-        css(key: any, value?: string | number): this;
-        top(top?: number): this | number;
-        left(left?: number): this | number;
-        width(width?: number): this | number;
-        addClass(name: string): this;
-        hasClass(name: string): boolean;
-        removeClass(name: string): this;
-        find(name: string): JQuery;
-        on(event: string, callback: Function): this;
+         *
+         * @param tag
+         */
+        find(tag: string): JQuery<HTMLElement>;
+        /**
+         * on
+         */
+        on(event: string, func: Function): this;
+    }
+    interface DialogOption {
+        [setting: string]: any;
+        content?: string;
+        type?: string | number | DialogType;
+        closeAnimate?: boolean;
+        target?: JQuery;
+        onclosing?: () => any;
     }
     /**
-    * 弹出框类型
-    */
+     * 弹出框类型
+     */
     enum DialogType {
         tip = 0,
         message = 1,
@@ -294,8 +109,8 @@ declare namespace ZreDialog {
         page = 11
     }
     /**
-    * 弹出框位置
-    */
+     * 弹出框位置
+     */
     enum DialogDirection {
         top = 0,
         right = 1,
@@ -308,12 +123,12 @@ declare namespace ZreDialog {
         leftBottom = 8
     }
     /**
-    * 弹出框状态
-    */
+     * 弹出框状态
+     */
     enum DialogStatus {
         hide = 0,
         show = 1,
-        closing = 2,
+        closing = 2,//关闭中
         closed = 3
     }
     enum DialogDiskType {
@@ -333,46 +148,231 @@ declare namespace ZreDialog {
     const _DIALOG_HIDE = "hide";
     const _DIALOG_CLOSE = "closed";
     const _DIALOG_CLOSING = "closing";
-    interface DialogOption {
-        [setting: string]: any;
-        content?: string;
-        type?: string | number | DialogType;
-        closeAnimate?: boolean;
-        target?: JQuery;
-        onclosing?: () => any;
-    }
-    class DialogPlugin {
-        element: JQuery;
-        option?: DialogOption;
-        constructor(element: JQuery, option?: DialogOption);
-        dialog: DialogCore;
-        getDialog(ele?: JQuery): DialogCore;
-        private _parseOption;
+    interface DialogInterfae {
+        status: DialogStatus;
+        x: number;
+        y: number;
         /**
-        * close
-        */
-        close(): this;
-        /**
-        * show
-        */
+         * 显示
+         */
         show(): this;
         /**
-        * hide
-        */
+         * 隐藏
+         */
         hide(): this;
         /**
-        *
-        */
+         * 关闭
+         */
+        close(): this;
+        /**
+         * 显示隐藏切换
+         */
         toggle(): this;
         /**
-        *
-        * @param tag
-        */
-        find(tag: string): JQuery<HTMLElement>;
+         * 设置css
+         */
+        css(key: any, value?: string | number): this;
+        top(top?: number): this | number;
+        left(left?: number): this | number;
+        width(width?: number): this | number;
+        addClass(name: string): this;
+        hasClass(name: string): boolean;
+        removeClass(name: string): this;
+        find(name: string): JQuery;
+        on(event: string, callback: Function): this;
+    }
+    class Dialog {
+        static methods: {
+            [type: number]: Function;
+        };
+        private static _data;
+        private static _guid;
+        private static _tipData;
+        private static _dialogBg;
+        private static _bgLock;
+        static $window: JQuery<Window & typeof globalThis>;
         /**
-        * on
-        */
-        on(event: string, func: Function): this;
+         * 创造弹出框
+         * @param option
+         */
+        static create<T>(option?: DialogOption): T;
+        static bind(box: JQuery): DialogContent;
+        static parseEnum<T>(val: any, type: any): T;
+        /**
+         * 提示
+         * @param content
+         * @param time
+         */
+        static tip(content: string | DialogTipOption, time?: number): DialogTip;
+        /**
+         * 消息
+         * @param content
+         * @param time
+         */
+        static message(content: string | DialogMessageOption, time?: number): DialogMessage;
+        static pop(content: string | DialogPopOption, target: JQuery, time?: number): DialogPop;
+        /**
+         * 加载
+         * @param time
+         */
+        static loading(time?: number | DialogOption): DialogLoading;
+        /**
+         * 内容弹窗
+         * @param content
+         * @param hasYes
+         * @param hasNo
+         */
+        static content(content: string | DialogOption, hasYes?: boolean, hasNo?: boolean): DialogContent;
+        /**
+         * 普通弹窗
+         * @param content
+         * @param title
+         * @param hasYes
+         * @param hasNo
+         */
+        static box(content: string | DialogOption, title?: string, hasYes?: boolean, hasNo?: boolean): DialogBox;
+        /**
+         * 表格弹窗
+         * @param content
+         * @param title
+         * @param done
+         * @param hasYes
+         * @param hasNo
+         */
+        static form(content: any, title?: string, done?: Function, hasYes?: boolean, hasNo?: boolean): DialogForm;
+        /**
+         * 页面弹窗
+         * @param content
+         * @param title
+         * @param hasYes
+         * @param hasNo
+         */
+        static page(content: string | DialogOption, title?: string, hasYes?: boolean, hasNo?: boolean): DialogPage;
+        /**
+         * 桌面提醒
+         * @param title
+         * @param content
+         * @param icon
+         */
+        static notify(title?: string | DialogOption, content?: string, icon?: string): DialogNotify;
+        /**
+         * 添加弹出框
+         * @param element
+         */
+        static addItem(element: DialogCore): void;
+        static hasItem(id?: number | string): boolean;
+        static get(id?: number | string): any;
+        /**
+         * 根据id删除弹出框
+         * @param id
+         */
+        static removeItem(id?: number): void;
+        /**
+         * 删除所有弹出框
+         */
+        static remove(): void;
+        /**
+         * 循环所有弹出框
+         * @param callback
+         */
+        static map(callback: (item: DialogCore) => any): void;
+        /**
+         * 显示遮罩
+         */
+        static showBg(target?: JQuery, isPublic?: boolean): void;
+        /**
+         * 隐藏遮罩
+         */
+        static closeBg(): void;
+        static addMethod(type: DialogType, dialog: Function): void;
+        static hasMethod(type: DialogType): boolean;
+        static getMethod(type: DialogType): Function;
+    }
+    class DefaultDialogOption implements DialogOption {
+        title: string;
+        type?: DialogType;
+        canMove: boolean;
+        closeAnimate: boolean;
+        ondone: Function;
+    }
+    /**
+     * 已知问题
+     * 如果一个不能关闭， 多个将出现错乱
+     */
+    abstract class DialogCore extends Box implements DialogInterfae {
+        id?: number;
+        constructor(option: DialogOption, id?: number);
+        options: DialogOption;
+        private _status;
+        get status(): DialogStatus;
+        set status(arg: DialogStatus);
+        private _dialogBg;
+        private _y;
+        get y(): number;
+        set y(y: number);
+        private _height;
+        get height(): number;
+        set height(height: number);
+        /**
+         * 改变状态
+         * @param status
+         * @param hasEvent
+         */
+        protected changeStatus(status: DialogStatus): void;
+        /**
+         * 获取默认设置
+         */
+        protected getDefaultOption(): DialogOption;
+        /**
+         * 创建并显示控件
+         */
+        protected showBox(): boolean;
+        protected doShowStatus(): void;
+        /**
+         * 创建并隐藏控件
+         */
+        protected hideBox(): boolean;
+        protected doHideStatus(): void;
+        /**
+         * 动画关闭，有关闭动画
+         */
+        protected closingBox(): boolean;
+        protected doClosingStatus(): void;
+        /**
+         * 删除控件
+         */
+        protected closeBox(): boolean;
+        protected doCloseStatus(): void;
+        abstract init(): any;
+        protected createCore(): this;
+        protected abstract createContent(): this;
+        protected abstract setProperty(): this;
+        css(key: any, value?: string | number): this;
+        show(): this;
+        hide(): this;
+        close(hasAnimation?: boolean): this;
+        toggle(): this;
+        /**
+         * 获取相同类型弹出框的最上面
+         */
+        protected getDialogTop(): number | undefined;
+        protected getDialogBottom(): number | undefined;
+        private _getBottom;
+        private _getTop;
+        private _getLeft;
+        private _getRight;
+        private _getWidth;
+        private _getHeight;
+        private _getLeftTop;
+        x: number;
+        top(top?: number): number | this;
+        left(left?: number): number | this;
+        width(width?: number): number | this;
+        addClass(name: string): this;
+        hasClass(name: string): boolean;
+        removeClass(name: string): this;
+        find(name: string): JQuery;
+        isElement(content: any): boolean;
     }
     interface DialogTipOption extends DialogOption {
         time?: number;
@@ -384,24 +384,24 @@ declare namespace ZreDialog {
         init(): void;
         protected getDefaultOption(): DefaultDialogTipOption;
         /**
-        * 设置内容
-        */
+         * 设置内容
+         */
         protected createContent(): this;
         /**
-        * 添加到容器上
-        */
+         * 添加到容器上
+         */
         protected appendParent(): this;
         /**
-        * 设置属性
-        */
+         * 设置属性
+         */
         protected setProperty(): this;
         /**
-        * 绑定事件
-        */
+         * 绑定事件
+         */
         protected bindEvent(): this;
         /**
-        * 重设尺寸
-        */
+         * 重设尺寸
+         */
         resize(): void;
         protected addTime(): void;
         protected stopTime(): void;
@@ -431,8 +431,8 @@ declare namespace ZreDialog {
         protected createContent(): this;
         protected setProperty(): this;
         /**
-        * 获取默认设置
-        */
+         * 获取默认设置
+         */
         protected getDefaultOption(): DefaultDialogNotifyOption;
         protected showBox(): boolean;
         protected hideBox(): boolean;
@@ -451,8 +451,8 @@ declare namespace ZreDialog {
         constructor(option: DialogPopOption, id?: number);
         protected setProperty(): this;
         /**
-        * 添加到容器上
-        */
+         * 添加到容器上
+         */
         protected appendParent(): this;
         protected bindEvent(): this;
         private _getRandomDirection;
@@ -497,30 +497,30 @@ declare namespace ZreDialog {
         get isLoading(): boolean;
         set isLoading(arg: boolean);
         /**
-        * 显示加载动画
-        */
+         * 显示加载动画
+         */
         private _toggleLoading;
         /**
-        * 是不是固定的
-        */
+         * 是不是固定的
+         */
         protected isFixedBox(): boolean;
         init(): void;
         protected getDefaultOption(): DefaultDialogContentOption;
         /**
-        * 设置内容
-        */
+         * 设置内容
+         */
         protected createContent(): this;
         /**
-        * 添加到容器上
-        */
+         * 添加到容器上
+         */
         protected appendParent(): this;
         /**
-        * 设置属性
-        */
+         * 设置属性
+         */
         protected setProperty(): this;
         /**
-        * 绑定事件
-        */
+         * 绑定事件
+         */
         protected bindEvent(): this;
         protected getContentHtml(): string;
         protected getFooterHtml(): string;
@@ -544,14 +544,14 @@ declare namespace ZreDialog {
     class DialogBox extends DialogContent {
         constructor(option: DialogBoxOption, id?: number);
         /**
-        * 设置内容
-        */
+         * 设置内容
+         */
         protected createContent(): this;
         protected setProperty(): this;
         protected bindEvent(): this;
         /**
-        * 重设尺寸
-        */
+         * 重设尺寸
+         */
         resize(): void;
         showCenter(): this;
         protected getDefaultOption(): DefaultDialogBoxOption;
@@ -565,15 +565,15 @@ declare namespace ZreDialog {
         constructor(option: DialogOption, id?: number);
         private _data;
         /**
-        * 表单数据
-        */
+         * 表单数据
+         */
         get data(): {
             [name: string]: string | string[];
         };
         private _elements;
         /**
-        * 表单控件
-        */
+         * 表单控件
+         */
         get elements(): {
             [name: string]: JQuery;
         };
@@ -581,20 +581,20 @@ declare namespace ZreDialog {
         private _createForm;
         private _createInput;
         /**
-        * 获取表单控件
-        */
+         * 获取表单控件
+         */
         private _getFormElement;
         /**
-        * 获取表单数据
-        */
+         * 获取表单数据
+         */
         private _getFormData;
     }
     class DialogPage extends DialogBox {
         constructor(option: DialogOption, id?: number);
         protected getHeaderHtml(): string;
         /**
-        * 绑定事件
-        */
+         * 绑定事件
+         */
         protected bindEvent(): this;
     }
     interface DialogImageOption extends DialogOption {
@@ -615,14 +615,14 @@ declare namespace ZreDialog {
         protected setProperty(): this;
         private resetWithImage;
         /**
-        * 绑定事件
-        */
+         * 绑定事件
+         */
         protected bindEvent(): this;
         showIndex(index: number): void;
         showImg(src: string): void;
         /**
-        * 重设尺寸
-        */
+         * 重设尺寸
+         */
         resize(): void;
         previous(): void;
         next(): void;
@@ -631,6 +631,7 @@ declare namespace ZreDialog {
     class DefaultDialogImageOption implements DialogImageOption {
         onrequest: (index: number) => string;
     }
+
 }
 
 declare class Dialog extends ZreDialog.Dialog {}

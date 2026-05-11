@@ -3,10 +3,11 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 use Zodream\Html\Dark\Theme;
+use Module\CMS\Domain\FuncHelper;
 /** @var $this View */
 
 $this->title = '站点配置';
-function parseArr($value) {
+function parseArr(mixed $value) {
     if (empty($value)) {
         return [];
     }
@@ -29,7 +30,25 @@ JS;
 $this->registerJs($js);
 ?>
 
-<h1><?=$this->title?></h1>
+
+<div class="flex-slide-row">
+    <h1><?=$this->title?></h1>
+    <?php if(!empty($languageItems)): ?>
+    <div class="localize-selector select--with-search">
+        <div class="select-input">
+            <i class="fa fa-language"></i>
+            切换语言：<?= FuncHelper::selectedLanguage($languageItems) ?>
+        </div>
+        <div class="select-option-bar">
+            <?php foreach($languageItems as $item):?>
+            <a class="option-item<?= $item['selected'] ? ' selected' : '' ?>" data-lang="<?= $item['language'] ?>">
+                <?= $item['name'] ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
 <?=Form::open($model, './@admin/site/save_option')?>
     <div class="tab-box option-box">
         <div class="tab-header">

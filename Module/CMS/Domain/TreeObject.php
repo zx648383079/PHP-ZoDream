@@ -4,7 +4,6 @@ namespace Module\CMS\Domain;
 
 
 use Traversable;
-use Zodream\Helpers\Tree as TreeHelper;
 use Zodream\Html\Tree as TreeConverter;
 
 class TreeObject implements \IteratorAggregate {

@@ -106,4 +106,25 @@ class LinkageRepository {
         }
         return FuncHelper::linkageData($id)->toIdTree();
     }
+
+    public static function localeItems(LinkageModel $model): array {
+        if (!$model->language) {
+            return [];
+        }
+        $items = LinkageModel::where('code', $model->code)
+            ->where('type', $model->type)
+            ->asArray()
+            ->get('id', 'language', 'name');
+        if ($items < 2) {
+            return [];
+        }
+        return array_map(function ($item) use($model) {
+            return [
+                'selected' => intval($model->id) === intval($item['id']) ,
+                'language' => $item['language'],
+                'id' => intval($item['id']),
+                'name' => $item['name']
+            ];
+        }, $items);
+    }
 }

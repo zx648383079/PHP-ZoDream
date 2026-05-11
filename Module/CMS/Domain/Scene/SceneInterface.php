@@ -10,7 +10,7 @@ use Zodream\Validate\ValidationException;
 
 interface SceneInterface {
 
-    public function setModel(Model|array $model, int $site = 0): static;
+    public function setModel(Model|array $model, int $site = 0, int $tableSiteId = 0): static;
 
     /**
      * 获取主表

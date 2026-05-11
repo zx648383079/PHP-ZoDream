@@ -1,8 +1,14 @@
+@use 'theme';
 .flex-panel {
     display: flex;
     .bak-panel {
         flex: 1;
     }
+}
+
+.flex-slide-row {
+    display: flex;
+    justify-content: space-between;    
 }
 
 // .app-wrapper {
@@ -21,15 +27,13 @@
 
 .panel {
     .panel-header {
-        line-height: 40px;
-        background-color: #fff;
+        line-height: 2.5rem;
+        background-color: var(--#{theme.$prefix}panel);
         padding: 0 10px;
-        border-bottom: 1px solid #f90;
+        border-bottom: 1px solid var(--#{theme.$prefix}warning);
         .more {
             float: right;
         }
-    }
-    .panel-body {
     }
 }
 
@@ -37,18 +41,18 @@
     text-align: center;
     display: inline-block;
     .thumb {
-        max-height: 200px;
+        max-height: 12.5rem;
         overflow-y: auto;
         img {
-            width: 200px;
+            width: 12.5rem;
         }
     }
     .name {
-        line-height: 30px;
+        line-height: 1.875rem;
         font-weight: 600;
     }
     .desc {
-        color: #aaa;
+        color: var(--#{theme.$prefix}meta-text);
     }
 }
 
@@ -56,7 +60,7 @@
     label {
         .fa-times {
             margin-right: .8rem;
-            color: red;
+            color: var(--#{theme.$prefix}danger);
         }
     }
 }

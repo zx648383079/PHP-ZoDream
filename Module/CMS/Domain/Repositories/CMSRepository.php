@@ -178,42 +178,66 @@ class CMSRepository {
         return intval(static::site()->id);
     }
 
+    /**
+     * 同组的站点放在一起
+     */
+    public static function tableSiteId(): int {
+        $model = static::site();
+        if ($model->locale_group_id > 0) {
+            return intval($model->locale_group_id);
+        }
+        return intval($model->id);
+    }
+
+    /**
+     * 判断当前站点是否对表有所有权
+     */
+    public static function isSiteTable(): bool {
+        return static::siteId() === static::tableSiteId();
+    }
+
     public static function siteLanguage(): string {
         return (string)static::site()->language;
     }
 
     public static function generateSite(SiteModel $site) {
         self::$cacheSite = $site;
-        CreateCmsTables::createTable(CategoryEntity::tableName(), function (Table $table) {
-            $table->id();
-            $table->string('name', 100);
-            $table->string('title', 100);
-            $table->uint('type', 1)->default(0);
-            $table->uint('model_id')->default(0);
-            $table->uint('parent_id')->default(0);
-            $table->string('keywords')->default('');
-            $table->string('description')->default('');
-            $table->string('thumb', 100)->default('')->comment('缩略图');
-            $table->string('image', 100)->default('')->comment('主图');
-            $table->text('content')->nullable();
-            $table->string('url', 100)->default('');
-            $table->uint('position', 2)->default(99);
-            $table->string('groups')->default('');
-            $table->string('category_template', 20)->default('');
-            $table->string('list_template', 20)->default('');
-            $table->string('show_template', 20)->default('');
-            $table->text('setting')->nullable();
-            $table->timestamps();
-        });
-        CreateCmsTables::createTable(SiteLogEntity::tableName(), function (Table $table) {
-            $table->id();
-            $table->uint('model_id');
-            $table->uint('item_type', 1)->default(0);
-            $table->uint('item_id');
-            $table->uint('user_id');
-            $table->uint('action');
-            $table->timestamp(Model::CREATED_AT);
-        });
+        if (static::isSiteTable()) {
+            CreateCmsTables::createTable(CategoryEntity::tableName(), function (Table $table) {
+                $table->id();
+                $table->uint('site_id');
+                $table->string('name', 100);
+                $table->string('title', 100);
+                $table->uint('type', 1)->default(0);
+                $table->uint('model_id')->default(0);
+                $table->uint('parent_id')->default(0);
+                $table->string('keywords')->default('');
+                $table->string('description')->default('');
+                $table->string('thumb', 100)->default('')->comment('缩略图');
+                $table->string('image', 100)->default('')->comment('主图');
+                $table->text('content')->nullable();
+                $table->string('url', 100)->default('');
+                $table->uint('position', 2)->default(99);
+                $table->string('groups')->default('');
+                $table->string('category_template', 20)->default('');
+                $table->string('list_template', 20)->default('');
+                $table->string('show_template', 20)->default('');
+                $table->text('setting')->nullable();
+                $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
+                $table->timestamps();
+            });
+            CreateCmsTables::createTable(SiteLogEntity::tableName(), function (Table $table) {
+                $table->id();
+                $table->uint('site_id');
+                $table->uint('model_id');
+                $table->uint('item_type', 1)->default(0);
+                $table->uint('item_id');
+                $table->uint('user_id');
+                $table->uint('action');
+                $table->timestamp(Model::CREATED_AT);
+            });
+        }
+        
         static::scene()->boot();
         (new ThemeManager())->apply($site->theme);
     }
@@ -229,8 +253,10 @@ class CMSRepository {
         $model_list = ModelModel::query()->get();
         $old = self::$cacheSite;
         self::$cacheSite = $site;
-        CreateCmsTables::dropTable(SiteLogEntity::tableName());
-        CreateCmsTables::dropTable(CategoryEntity::tableName());
+        if (static::isSiteTable()) {
+            CreateCmsTables::dropTable(SiteLogEntity::tableName());
+            CreateCmsTables::dropTable(CategoryEntity::tableName());
+        }
         foreach ($model_list as $item) {
             CMSRepository::scene()->setModel($item)->removeTable();
         }

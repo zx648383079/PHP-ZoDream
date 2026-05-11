@@ -91,6 +91,7 @@ $line-height: 2.25rem;
     line-height: $line-height;
     display: inline-block;
     width: 7 * $line-height;
+    text-align: left;
     position: relative;
     .select-input {
         border: 1px solid var(--#{theme.$prefix}border);
@@ -137,7 +138,7 @@ $line-height: 2.25rem;
         display: none;
     }
     .option-item {
-        border-top: 1px solid  var(--#{theme.$prefix}body-text);
+        border-top: 1px solid var(--#{theme.$prefix}body-text);
         display: block;
         padding: 0 .3rem;
         &:hover {

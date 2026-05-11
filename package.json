@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vue2mini --custom=all",
     "prod": "vue2mini --custom=all --min",
+    "start": "vue2mini --custom=cms --min",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -73,6 +73,7 @@ class CreateCmsTables extends Migration {
             $table->string('description')->default('');
             $table->string('thumb')->default('');
             $table->string('full_name', 200)->default('');
+            $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
         })->append(SiteEntity::tableName(), function (Table $table) {
             $table->id();
             $table->string('title');
@@ -86,6 +87,7 @@ class CreateCmsTables extends Migration {
             $table->uint('status', 1)->default(SiteRepository::PUBLISH_STATUS_POSTED)
                 ->comment('发布状态');
             $table->text('options')->nullable();
+            $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
             $table->timestamps();
         })->append(RecycleBinEntity::tableName(), function (Table $table) {
             $table->id();

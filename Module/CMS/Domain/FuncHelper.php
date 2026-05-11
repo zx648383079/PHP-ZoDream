@@ -1065,6 +1065,18 @@ class FuncHelper {
         }
     }
 
+    public static function selectedLanguage(array $items): string {
+        if (empty($items)) {
+            return '';
+        }
+        foreach($items as $item) {
+            if ($item['selected']) {
+                return $item['language'];
+            }
+        }
+        return '';
+    }
+
     public static function regex(mixed $input, string $pattern, int|string $tag = 0): string {
         if (preg_match($pattern, (string)$input, $match)) {
             return $match[intval($tag)] ?? '';

@@ -27,20 +27,26 @@ use Zodream\Validate\ValidationException;
 abstract class BaseScene implements SceneInterface {
 
     protected int $site = 1;
+    protected int $tableSiteId = 1;
 
     /**
      * @var Model|array
      */
     protected mixed $model = null;
 
-    public function setModel(Model|array $model, int $site = 0): static {
+    public function setModel(Model|array $model, int $site = 0, int $tableSiteId = 0): static {
         $this->model = $model;
         $this->site = $site > 0 ? $site : CMSRepository::siteId();
+        $this->tableSiteId = $tableSiteId > 0 ? $tableSiteId : $this->site;
         return $this;
     }
 
     public function modelId(): int {
         return intval($this->model['id']);
+    }
+
+    public function isSiteTable(): bool {
+        return $this->site === $this->tableSiteId;
     }
 
     /**
@@ -152,6 +158,7 @@ abstract class BaseScene implements SceneInterface {
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
         $main['model_id'] = $this->modelId();
+        $main['site_id'] = $this->site;
         $main['user_id'] = auth()->id();
         $id = intval($this->query()->insert($main));
         if ($id <= 0) {
@@ -263,7 +270,7 @@ abstract class BaseScene implements SceneInterface {
      * @return string[]
      */
     protected function mainDefaultField(): array {
-        $items = ['id', 'cat_id', 'model_id', 'user_id',
+        $items = ['id', 'cat_id', 'model_id', 'user_id', 'site_id',
             'status',
             'updated_at', 'created_at', 'parent_id'];
         if (!$this->isArticleModel()) {
@@ -492,7 +499,7 @@ abstract class BaseScene implements SceneInterface {
         if (empty($fields)) {
             $fields = '*';
         }
-        $query = $this->addQuery($this->query(), $params, $order, $fields)
+        $query = $this->addQuery($this->query()->where('site_id', $this->site), $params, $order, $fields)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $this->addSearchQuery($query, $keywords);
             });
@@ -523,6 +530,7 @@ abstract class BaseScene implements SceneInterface {
                 $table->string('email', 50)->default('');
                 $table->string('url', 50)->default('');
             }
+            $table->uint('site_id');
             $table->uint('model_id');
             $table->uint('content_id');
             $table->uint('agree_count')->default(0);
@@ -533,10 +541,12 @@ abstract class BaseScene implements SceneInterface {
 
     protected function initMainTableField(Table $table): void {
         $table->id();
+        $table->uint('site_id');
         $table->uint('cat_id');
         $table->uint('model_id');
         $table->uint('parent_id')->default(0);
         $table->uint('user_id')->default(0);
+        $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
         if ($this->isArticleModel()) {
             $table->string('title', 100);
             $table->string('keywords')->default('');
@@ -559,6 +569,7 @@ abstract class BaseScene implements SceneInterface {
     protected function initSeoTableField(Table $table): void {
         $table->id();
         $table->string('title', 100);
+        $table->uint('site_id');
         $table->uint('cat_id');
         $table->uint('model_id');
         $table->uint('parent_id')->default(0);

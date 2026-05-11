@@ -3,6 +3,7 @@ defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
 use Infrastructure\Editor;
+use Module\CMS\Domain\FuncHelper;
 /** @var $this View */
 $this->title = $model->id > 0 ? '栏目编辑' : '新增栏目';
 $js = <<<JS
@@ -10,7 +11,24 @@ bindCat();
 JS;
 $this->registerJs($js);
 ?>
-<h1><?=$this->title?></h1>
+<div class="flex-slide-row">
+    <h1><?=$this->title?></h1>
+    <?php if(!empty($languageItems)): ?>
+    <div class="localize-selector select--with-search">
+        <div class="select-input">
+            <i class="fa fa-language"></i>
+            切换语言：<?= FuncHelper::selectedLanguage($languageItems) ?>
+        </div>
+        <div class="select-option-bar">
+            <?php foreach($languageItems as $item):?>
+            <a class="option-item<?= $item['selected'] ? ' selected' : '' ?>" data-lang="<?= $item['language'] ?>">
+                <?= $item['name'] ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
 <?=Form::open($model, './@admin/category/save')?>
     <div class="tab-box">
         <div class="tab-header">
