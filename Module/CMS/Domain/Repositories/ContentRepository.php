@@ -27,7 +27,7 @@ class ContentRepository {
             }
         }
         $modelModel = ModelRepository::get($modelId);
-        $scene = CMSRepository::scene()->setModel($modelModel, $site);
+        $scene = CMSRepository::scene()->setModel($modelModel);
         if (!$scene->initializedModel()) {
             throw new Exception('当前站点未初始化模型');
         }
@@ -179,7 +179,7 @@ class ContentRepository {
                 throw new Exception('栏目不包含模型');
             }
         }
-        return CMSRepository::scene()->setModel(ModelRepository::get($modelId), $site);
+        return CMSRepository::scene()->setModel(ModelRepository::get($modelId));
     }
 
     public static function search(int $site, int $model = 0,
@@ -196,7 +196,7 @@ class ContentRepository {
             }
         }
         $modelModel = ModelRepository::get($model);
-        $scene = CMSRepository::scene()->setModel($modelModel, $site);
+        $scene = CMSRepository::scene()->setModel($modelModel);
         return $scene->query()->where('model_id', $model)
             ->when($channel > 0, function ($query) use ($channel) {
             $query->where('cat_id', $channel);

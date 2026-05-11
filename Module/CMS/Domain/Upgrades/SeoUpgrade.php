@@ -41,7 +41,7 @@ class SeoUpgrade {
 
     private function upgradeSite(SiteModel $site, array $modelItem): void {
         CMSRepository::site($site);
-        $scene = CMSRepository::scene();
+        $scene = CMSRepository::scene()->setSite($site);
         $scene->boot();
         ContentModel::query()->delete();
         $id = 100;
@@ -66,6 +66,7 @@ class SeoUpgrade {
                     'id' => $id,
                     'title' => $item['title'],
                     'cat_id' => $item['cat_id'],
+                    'site_id' => $site->id,
                     'model_id' => $item['model_id'],
                     'parent_id' => $item['parent_id'],
                     'seo_link' => $item['seo_link'] ?? '',

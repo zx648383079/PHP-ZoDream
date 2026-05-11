@@ -111,15 +111,15 @@ class ThemeManager {
             unset($data['script']);
         }
         $data['name'] = $theme;
-        $scene = CMSRepository::scene();
+        $scene = CMSRepository::scene()->setSite($site);
         $data['script'] = array_merge([
             [
                 'action' => 'copy',
                 'src' => 'assets',
                 'dist' => 'assets'
             ],
-        ], $this->packOption($site), $this->packModel($scene, $siteId),
-            $this->packChannel(), $this->packContent($scene, $siteId));
+        ], $this->packOption($site), $this->packModel($scene),
+            $this->packChannel(), $this->packContent($scene));
 
         $zip = ZipStream::create(ExplorerRepository::bakPath($fileName));
         $themeRoot->map(function ($file) use ($zip) {
@@ -148,7 +148,7 @@ class ThemeManager {
         ];
     }
 
-    protected function packModel(SceneInterface $scene, int $siteId): array {
+    protected function packModel(SceneInterface $scene): array {
         $data = [];
         $model_list = ModelModel::query()->asArray()->get();
         foreach ($model_list as $item) {
@@ -157,7 +157,7 @@ class ThemeManager {
             ], 'model');
         }
         foreach ($model_list as $item) {
-            if (!$scene->setModel($item, $siteId)->initializedModel()) {
+            if (!$scene->setModel($item)->initializedModel()) {
                 continue;
             }
             $item['action'] = 'model';
@@ -222,11 +222,11 @@ class ThemeManager {
         return $this->getCacheId($item['model_id'], 'model');
     }
 
-    protected function packContent(SceneInterface $scene, int $siteId): array {
+    protected function packContent(SceneInterface $scene): array {
         $data = [];
         $model_list = ModelModel::query()->get();
         foreach ($model_list as $model) {
-            if (!$scene->setModel($model, $siteId)->initializedModel()) {
+            if (!$scene->setModel($model)->initializedModel()) {
                 continue;
             }
             if ($model['type'] < 1) {
@@ -296,7 +296,9 @@ class ThemeManager {
         $this->setCache(GroupModel::pluck('id', 'name'), 'group');
         $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
         $this->setCache(CategoryModel::pluck('id', 'name'), 'channel');
-        $this->runScript($themeOption['script']);
+
+        $scene = CMSRepository::scene();
+        $this->runScript($themeOption['script'], $scene);
     }
 
     protected function setCache(array $data, string $prefix): void {
@@ -310,7 +312,7 @@ class ThemeManager {
         return $this->cache[$key] ?? 0;
     }
 
-    protected function runScript(array $data): void {
+    protected function runScript(array $data, SceneInterface $scene): void {
         usort($data, function ($pre, $next) {
             $maps = ['group' => 1, 'linkage' => 2, 'model' => 3, 'form' => 4, 'field' => 5, 'channel' => 6, 'content' => 7];
             if (!isset($maps[$pre['action']])) {
@@ -327,29 +329,29 @@ class ThemeManager {
         foreach ($data as $item) {
             $method = 'runAction'.Str::studly($item['action']);
             if (method_exists($this, $method)) {
-                $this->{$method}($item);
+                $this->{$method}($item, $scene);
             }
         }
     }
 
 
 
-    protected function runActionCopy(array $data): void {
+    protected function runActionCopy(array $data, SceneInterface $scene): void {
         $this->src->directory($data['src'])->copy($this->dist->directory($data['dist']));
     }
 
-    protected function runActionGroup(array $data): void {
+    protected function runActionGroup(array $data, SceneInterface $scene): void {
         if (!isset($data['data'])) {
             $this->insertGroup($data);
         }
     }
 
-    protected function runActionForm(array $data): void {
+    protected function runActionForm(array $data, SceneInterface $scene): void {
         $data['type'] = 1;
         $this->runActionModel($data);
     }
 
-    protected function runActionLinkage(array $data): void {
+    protected function runActionLinkage(array $data, SceneInterface $scene): void {
         $data = $this->formatI18n($data);
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
@@ -382,7 +384,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionModel(array $data): void {
+    protected function runActionModel(array $data, SceneInterface $scene): void {
         $fields = $data['fields'] ?? [];
         if (isset($data['child'])) {
             $data['child_model'] = $this->getCacheId($data['child']);
@@ -399,14 +401,17 @@ class ThemeManager {
             throw new Exception('数据错误');
         }
         $this->setCache([$model->table => $model->id, $model->id => $model], 'model');
-        CMSRepository::scene()->setModel($model)->initModel();
+        $scene->setModel($model)->initModel();
+        if ($data['table'] === 'news') {
+            dr($data);
+        }
         foreach ($fields as $field) {
             $field['model_id'] = $model->id;
-            $this->runActionField($field);
+            $this->runActionField($field, $scene);
         }
     }
 
-    protected function runActionField(array $data): void {
+    protected function runActionField(array $data, SceneInterface $scene): void {
         if (isset($data['model'])) {
             $data['model_id'] = $this->getCacheId($data['model']);
         }
@@ -446,13 +451,12 @@ class ThemeManager {
             $model->save();
             return;
         }
-        $scene = CMSRepository::scene();
         $model = ModelFieldModel::createOrThrow($data, '数据错误');
         $scene = $scene->setModel($this->getCacheId((string)$model->model_id, 'model'));
         $scene->addField($model);
     }
 
-    protected function runActionChannel(array $data): void {
+    protected function runActionChannel(array $data, SceneInterface $scene): void {
         $data = $this->formatI18n($data);
         $type = $data['type'] ?? null;
         if ($type === 'link') {
@@ -521,7 +525,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionOption(array $data): void {
+    protected function runActionOption(array $data, SceneInterface $scene): void {
         $newOptions = [];
         foreach ($data['data'] as $item) {
             if (isset($item['items'])) {
@@ -625,8 +629,9 @@ class ThemeManager {
             ForumModel::tableName()
         ];
         $model_list = ModelModel::query()->get();
+        $scene = CMSRepository::scene();
         foreach ($model_list as $model) {
-            $scene = CMSRepository::scene()->setModel($model);
+            $scene->setModel($model);
             CreateCmsTables::dropTable($scene->getExtendTable());
             if ($scene instanceof MultiScene) {
                 CreateCmsTables::dropTable($scene->getMainTable());

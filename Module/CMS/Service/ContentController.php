@@ -33,10 +33,10 @@ class ContentController extends Controller {
         $scene->update($id, ['view_count' => $article['view_count']], false);
         $catModel = FuncHelper::model($channel['model_id']);
         if ($article['parent_id'] > 0 && $catModel) {
-            $parent = CMSRepository::scene()
+            $parent = $scene
                 ->setModel($catModel)->find($article['parent_id']);
         }
-        CMSRepository::scene()->setModel($model);
+        $scene->setModel($model);
         $title = $article['title'];
         if (!empty($parent)) {
             $title = sprintf('%s %s', $parent['title'], $article['title']);

@@ -4,6 +4,7 @@ namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Module\CMS\Domain\Model\SiteModel;
+use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Http\Uri;
 
@@ -154,11 +155,15 @@ class SiteRepository {
         $model->save();
     }
 
-    public static function apply(int $id) {
+    public static function apply(int $id): SceneInterface {
+        $scene = CMSRepository::scene();
         if (CMSRepository::siteId() === $id) {
-            return;
+            return $scene->setSite();
         }
-        CMSRepository::site(new SiteModel(compact('id')));
+        $model = SiteModel::where('id', $id)->first('id', 'locale_group_id');
+        CMSRepository::site($model);
+        $scene->setSite($model);
+        return $scene;
     }
 
     public static function themeList() {
@@ -177,9 +182,11 @@ class SiteRepository {
         $scene = CMSRepository::scene();
         foreach ($items as $item) {
             CMSRepository::site($item);
+            $scene->setSite($item);
             call_user_func($cb, $scene, $item);
         }
         CMSRepository::site($source);
+        $scene->setSite($source);
     }
 
     public static function formatStatus(mixed $status): string {

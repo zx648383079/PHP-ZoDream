@@ -34,16 +34,22 @@ $this->registerJs($js);
 <div class="flex-slide-row">
     <h1><?=$this->title?></h1>
     <?php if(!empty($languageItems)): ?>
-    <div class="localize-selector select--with-search">
+    <div class="locale-selector select--with-search">
         <div class="select-input">
             <i class="fa fa-language"></i>
             切换语言：<?= FuncHelper::selectedLanguage($languageItems) ?>
         </div>
         <div class="select-option-bar">
             <?php foreach($languageItems as $item):?>
-            <a class="option-item<?= $item['selected'] ? ' selected' : '' ?>" data-lang="<?= $item['language'] ?>">
-                <?= $item['name'] ?>
-            </a>
+                <?php if($item['selected']): ?>
+                <a class="option-item selected">
+                    <?= $item['name'] ?>
+                </a>
+                <?php else: ?>
+                <a class="option-item" href="<?=$this->url('./@admin/site/option', ['id' => $item['id']])?>">
+                    <?= $item['name'] ?>
+                </a>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

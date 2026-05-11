@@ -2,12 +2,36 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 use Zodream\Html\Dark\Form;
+use Module\CMS\Domain\FuncHelper;
 /** @var $this View */
 
 $this->title = ($model->id > 0 ? '编辑' : '新增').'联动项';
 ?>
 
-<h1><?=$this->title?></h1>
+<div class="flex-slide-row">
+    <h1><?=$this->title?></h1>
+    <?php if(!empty($languageItems)): ?>
+    <div class="locale-selector select--with-search">
+        <div class="select-input">
+            <i class="fa fa-language"></i>
+            切换语言：<?= FuncHelper::selectedLanguage($languageItems) ?>
+        </div>
+        <div class="select-option-bar">
+            <?php foreach($languageItems as $item):?>
+                <?php if($item['selected']): ?>
+                <a class="option-item selected">
+                    <?= $item['name'] ?>
+                </a>
+                <?php else: ?>
+                <a class="option-item" href="<?=$this->url('./@admin/linkage/create_data', ['linkage_id' => $item['id'], 'parent_id' => $model->parent_id, 'locale' => $model->id])?>">
+                    <?= $item['name'] ?>
+                </a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
 <?=Form::open($model, './@admin/linkage/save_data')?>
 <form data-type="ajax" action="<?=$this->url('./@admin/linkage/save_data')?>" method="post" class="form-table" role="form">
     <?=Form::text('name', true)?>

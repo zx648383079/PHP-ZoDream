@@ -4,10 +4,12 @@ namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception as GlobalException;
+use Zodream\Database\DB;
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\SiteLogEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
+use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
@@ -137,6 +139,9 @@ class CMSRepository {
     }
 
     public static function matchSite(string $scheme, string $host, string $path, bool $isStrict = false): int {
+        if (app()->isDebug() && !DB::tableExist(SiteEntity::tableName())) {
+            return 0;
+        }
         $items = self::isPreview() ? SiteRepository::getAll() : CacheRepository::getSiteCache();
         if (empty($items)) {
             return 0;
@@ -181,8 +186,10 @@ class CMSRepository {
     /**
      * 同组的站点放在一起
      */
-    public static function tableSiteId(): int {
-        $model = static::site();
+    public static function tableSiteId(SiteEntity|null $model = null): int {
+        if (empty($model)) {
+            $model = static::site();
+        }
         if ($model->locale_group_id > 0) {
             return intval($model->locale_group_id);
         }
@@ -257,17 +264,20 @@ class CMSRepository {
             CreateCmsTables::dropTable(SiteLogEntity::tableName());
             CreateCmsTables::dropTable(CategoryEntity::tableName());
         }
+        $scene = static::scene()->setSite($site);
         foreach ($model_list as $item) {
-            CMSRepository::scene()->setModel($item)->removeTable();
+            $scene->setModel($item)->removeTable();
         }
-        CMSRepository::scene()->destroy();
+        $scene->destroy();
         self::$cacheSite = $old;
     }
 
     public static function removeModel(ModelModel $model) {
-        $site_list = SiteModel::query()->pluck('id');
+        $site_list = SiteModel::query()->get('id', 'locale_group_id');
+        $scene = static::scene();
         foreach ($site_list as $item) {
-            CMSRepository::scene()->setModel($model, $item)->removeTable();
+            $scene->setSite($item)
+            ->setModel($model)->removeTable();
         }
     }
 
@@ -291,12 +301,12 @@ class CMSRepository {
         if ($siteId > 0 && self::siteId() !== $siteId) {
             static::$cacheSite = SiteModel::findOrThrow($siteId);
         }
-        $scene = CMSRepository::scene();
+        $scene = static::scene();
         if (empty($scene)) {
             (new \Module\CMS\Module())->boot();
-            $scene = CMSRepository::scene();
+            $scene = static::scene();
         }
-        return $scene->setModel(ModelModel::findOrThrow($modelId), self::siteId());
+        return $scene->setSite()->setModel(ModelModel::findOrThrow($modelId));
     }
 
     public static function generateTableName(string $name): string {

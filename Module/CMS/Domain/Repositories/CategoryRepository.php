@@ -20,7 +20,7 @@ class CategoryRepository {
                 $item[$countKey] = 0;
                 continue;
             }
-            $item[$countKey] = CMSRepository::scene()->setModel($modelItems[$item['model_id']], $site)
+            $item[$countKey] = CMSRepository::scene()->setModel($modelItems[$item['model_id']])
                 ->query()->where('model_id', $item['model_id'])
                 ->where('cat_id', $item['id'])->count();
         }
@@ -72,7 +72,7 @@ class CategoryRepository {
         if ($modelId < 1) {
             throw new Exception('栏目不包含模型');
         }
-        return CMSRepository::scene()->setModel(ModelRepository::get(intval($modelId)), $site);
+        return CMSRepository::scene()->setModel(ModelRepository::get(intval($modelId)));
     }
 
     public static function batchSave(array $data): void {

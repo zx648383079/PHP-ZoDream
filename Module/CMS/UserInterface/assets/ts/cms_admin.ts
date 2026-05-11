@@ -275,7 +275,7 @@ $(function() {
         const form = $(this).closest('form');
         form.append('<input type="hidden" name="status" value="5">');
         form.trigger('submit');
-    }).on('click', '.localize-selector', function(e) {
+    }).on('click', '.locale-selector', function(e) {
         e.preventDefault();
         $(this).toggleClass('focus');
     });

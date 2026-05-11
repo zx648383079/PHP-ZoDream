@@ -5,6 +5,7 @@ namespace Module\CMS\Domain\Scene;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Fields\BaseField;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
@@ -26,18 +27,34 @@ use Zodream\Validate\ValidationException;
 
 abstract class BaseScene implements SceneInterface {
 
-    protected int $site = 1;
-    protected int $tableSiteId = 1;
+    protected int $site = 0;
+    protected int $tableSiteId = 0;
 
     /**
      * @var Model|array
      */
     protected mixed $model = null;
 
-    public function setModel(Model|array $model, int $site = 0, int $tableSiteId = 0): static {
+    public function setSite(SiteEntity|array|int $site = 0, int $tableSiteId = 0): static {
+        if (empty($site)) {
+            $this->site = CMSRepository::siteId();
+            $this->tableSiteId = CMSRepository::tableSiteId();
+        } else if (is_int($site)) {
+            $this->site = $site;
+            $this->tableSiteId = $tableSiteId > 0 ? $tableSiteId : $this->site;
+        } else {
+            $this->site = intval($site['id']);
+            $tableSiteId = intval($site['locale_group_id']);
+            $this->tableSiteId = $tableSiteId > 0 ? $tableSiteId : $this->site;
+        }
+        return $this;
+    }
+
+    public function setModel(Model|array $model): static {
+        if ($this->site <= 0) {
+            $this->setSite();
+        }
         $this->model = $model;
-        $this->site = $site > 0 ? $site : CMSRepository::siteId();
-        $this->tableSiteId = $tableSiteId > 0 ? $tableSiteId : $this->site;
         return $this;
     }
 

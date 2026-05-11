@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
+use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
@@ -10,7 +11,9 @@ use Zodream\Validate\ValidationException;
 
 interface SceneInterface {
 
-    public function setModel(Model|array $model, int $site = 0, int $tableSiteId = 0): static;
+    public function setSite(SiteEntity|array|int $site = 0, int $tableSiteId = 0): static;
+
+    public function setModel(Model|array $model): static;
 
     /**
      * 获取主表

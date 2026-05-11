@@ -143,7 +143,7 @@ class ModelRepository {
             throw new \Exception($model->getFirstError());
         }
         SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($id, $model, $old) {
-            $scene->setModel($model->model, intval($site['id']));
+            $scene->setSite($site)->setModel($model->model);
             if (!$scene->initializedModel()) {
                 return;
             }
@@ -166,7 +166,7 @@ class ModelRepository {
             throw new \Exception('系统自带字段禁止删除');
         }
         SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($model) {
-            $scene->setModel($model->model, intval($site['id']));
+            $scene->setSite($site)->setModel($model->model);
             if (!$scene->initializedModel()) {
                 return;
             }
