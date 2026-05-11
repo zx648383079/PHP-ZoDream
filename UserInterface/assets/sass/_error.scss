@@ -51,3 +51,32 @@
         z-index: 3;
     }
 }
+
+.safety-contianer {
+    width: 100%;
+    max-width: 20rem;
+    margin: 40vh auto;
+    .verify-control {
+        user-select: none;
+        margin-top: .8rem;
+        height: 6rem;
+        border: 0.125rem solid var(--#{theme.$prefix}border);
+        border-radius: .25rem;
+        display: flex;
+        .control-body {
+            width: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-meta {
+            flex: 1;
+            padding: 2rem .8rem;
+        }
+    }
+    .--with-waiting {
+        &:hover {
+            border-color: var(--#{theme.$prefix}primary);
+        }
+    }
+}

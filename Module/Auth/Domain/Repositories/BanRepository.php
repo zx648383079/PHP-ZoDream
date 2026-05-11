@@ -63,6 +63,14 @@ final class BanRepository {
         ]);
     }
 
+    /**
+     * 判断是否屏蔽了设备
+     */
+    public static function isBanDevice(string $ip, string $device, int $platformId = 0) : bool {
+        // TODO
+        return false;
+    }
+
     public static function isBan(string $itemKey, int $itemType = -1, int $platformId = 0): bool {
         if ($itemType < 0) {
             return BanAccountModel::where('item_key', $itemKey)->count() > 0;

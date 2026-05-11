@@ -8,7 +8,7 @@ use Zodream\Html\Page;
 class HistoryRepository {
 
 
-    public static function hasBook($id) {
+    public static function hasBook(int $id) {
         if (auth()->guest()) {
             return false;
         }

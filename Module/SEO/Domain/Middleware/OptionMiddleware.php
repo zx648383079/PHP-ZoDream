@@ -10,6 +10,8 @@ use Zodream\Service\Middleware\MiddlewareInterface;
 
 class OptionMiddleware implements MiddlewareInterface {
 
+    const SafetyVerifyKey = '__sfp';
+
     public function handle(HttpContext $context, callable $next) {
         /** @var Input $request */
         $request = $context['request'];
@@ -22,7 +24,6 @@ class OptionMiddleware implements MiddlewareInterface {
         if ($this->isSafetyVerify($context)) {
             return $this->outputSafety($context);
         }
-
         $this->gray($context);
         return $next($context);
     }
@@ -44,8 +45,7 @@ class OptionMiddleware implements MiddlewareInterface {
         if (empty($option)) {
             return false;
         }
-        $request = $context['request'];
-        if ($request->cookie('zre_sfp')) {
+        if (session()->has(static::SafetyVerifyKey)) {
             return false;
         }
         return !str_contains($context->path(), 'seo/home/safety');
