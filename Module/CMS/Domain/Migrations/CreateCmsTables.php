@@ -30,7 +30,7 @@ class CreateCmsTables extends Migration {
             $table->uint('position', 2)->default(99);
             $table->uint('form_type', 2)->default(0);
             $table->bool('is_main')->default(0);
-            $table->bool('is_required')->default(1);
+            $table->bool('is_required')->default(0);
             $table->bool('is_search')->default(0)->comment('是否能搜索');
             $table->bool('is_disable')->default(0)->comment('禁用/启用');
             $table->bool('is_system')->default(0)

@@ -205,6 +205,7 @@ class MultiScene extends BaseScene {
         $main['user_id'] = auth()->id();
         $id = intval($this->seoQuery()->insert([
             'title' => $main['title'],
+            'site_id' => $main['site_id'],
             'cat_id' => $main['cat_id'],
             'model_id' => $main['model_id'],
             'parent_id' => $main['parent_id'],

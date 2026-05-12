@@ -5,6 +5,20 @@ use Zodream\Template\View;
 $this->title = '联动项列表';
 ?>
 
+<div class="page-tooltip-bar">
+    <p class="tooltip-header">操作提示</p>
+    <ul>
+        <li>当前路径：
+            <b>[<?= $model->name ?>]</b>
+            <?php if($parent):?>
+            <?= $parent->full_name ?>
+            <?php endif;?>
+        </li>
+        <li>多语言只能在编辑中切换；每一级都必须一一对应，不然无法添加；未绑定的自动根据名称进行绑定</li>
+    </ul>
+    <span class="tooltip-toggle"></span>
+</div>
+
 <div class="panel-container">
     <div class="page-search-bar">
 

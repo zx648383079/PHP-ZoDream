@@ -107,6 +107,7 @@ class CategoryRepository {
         $orderItems = [];
         $last = -1;
         $level = -1;
+        $siteId = CMSRepository::siteId();
         foreach (explode("\n", $data['content']) as $line) {
             list($c, $title) = self::splitTitleTag($line);
             if (empty($title)) {
@@ -128,6 +129,7 @@ class CategoryRepository {
             }
             $parentId = $levelItems[$level];
             $model = CategoryModel::createOrThrow(array_merge($data, [
+                'site_id' => $siteId,
                 'parent_id' => $parentId,
                 'title' => $title,
                 'name' => sprintf('%s%d', CMSRepository::generateTableName($title), $level)

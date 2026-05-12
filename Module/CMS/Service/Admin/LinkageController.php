@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
+use Exception;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Repositories\LinkageRepository;
@@ -55,11 +56,27 @@ class LinkageController extends Controller {
         return $this->show(compact('model_list', 'model', 'parent_id', 'parent'));
     }
 
-    public function createDataAction(int $linkage_id, int $parent_id = 0) {
-        return $this->editDataAction(0, $linkage_id, $parent_id);
+    public function createDataAction(int $linkage_id, int $parent_id = 0, int $locale = 0) {
+        if ($locale > 0) {
+            $id = LinkageRepository::localeConvert($linkage_id, $locale);
+            if ($id > 0) {
+                return $this->editData($id);
+            }
+            if ($parent_id > 0) {
+                $parent_id = LinkageRepository::localeConvert($linkage_id, $parent_id);
+                if ($parent_id === 0) {
+                    return $this->redirectWithMessage(url('./@admin/linkage/data', ['id' => $linkage_id]), '上级联动项不存在！');
+                }
+            }
+        }
+        return $this->editData(0, $linkage_id, $parent_id, $locale);
     }
 
-    public function editDataAction(int $id, int $linkage_id = 0, int $parent_id = 0) {
+    public function editDataAction(int $id) {
+        return $this->editData($id);
+    }
+
+    private function editData(int $id, int $linkage_id = 0, int $parent_id = 0, int $locale = 0) {
         $model = LinkageDataModel::findOrNew($id);
         if (!$model->position) {
             $model->position = 99;
@@ -70,8 +87,11 @@ class LinkageController extends Controller {
         if (!$model->parent_id) {
             $model->parent_id = $parent_id;
         }
+        if ($locale > 0 && $id === 0) {
+            $model->locale_group_id = $locale;
+        }
         $linkage = LinkageModel::find($model->linkage_id);
-        $languageItems = LinkageRepository::localeItems($linkage);
+        $languageItems = $id === 0 && $locale === 0 ? [] : LinkageRepository::localeItems($linkage);
         return $this->show('editData', compact('model', 'languageItems', 'linkage'));
     }
 
@@ -85,6 +105,7 @@ class LinkageController extends Controller {
                 'position' => 'int:0,999',
                 'description' => 'string:0,255',
                 'thumb' => 'string:0,255',
+                'locale_group_id' => 'int',
             ]);
             $model = LinkageRepository::dataSave($data);
         } catch (\Exception $ex) {
@@ -96,8 +117,12 @@ class LinkageController extends Controller {
     }
 
     public function deleteDataAction(int $id) {
-        $model = LinkageDataModel::find($id);
-        $model->delete();
+        try {
+            $model = LinkageDataModel::find($id);
+            LinkageRepository::dataRemove($id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
         return $this->renderData([
             'url' => $this->getUrl('linkage/data', ['id' => $model->linkage_id, 'parent_id' => $model->parent_id])
         ]);

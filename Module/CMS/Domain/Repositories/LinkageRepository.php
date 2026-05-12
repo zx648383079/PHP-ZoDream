@@ -77,18 +77,35 @@ class LinkageRepository {
     }
 
     public static function dataSave(array $data) {
-        $id = $data['id'] ?? 0;
+        $id = intval($data['id'] ?? 0);
         unset($data['id']);
-        $model = LinkageDataModel::findOrNew($id);
-        if (LinkageDataModel::where('linkage_id', $model->linkage_id)
-        ->where('parent_id', $model->parent_id)
-        ->where('id', '<>', $id)->where('name', $model->name)->count() > 0) {
-            throw new \Exception('名称已存在');
+        $locale_group_id = intval($data['locale_group_id']);
+        if ($id === 0 && $locale_group_id > 0) {
+            // 尝试进行合并
+            $model = LinkageDataModel::where('linkage_id', $data['linkage_id'])
+                ->where('parent_id', $data['parent_id'])->where('name', $data['name'])
+                ->where('locale_group_id', 0)->first();
+            if (!$model) {
+                $model = new LinkageDataModel();
+            }
+        } else {
+            $model = LinkageDataModel::findOrNew($id);
         }
         $model->load($data);
+        if (LinkageDataModel::where('linkage_id', $model->linkage_id)
+            ->where('parent_id', $model->parent_id)
+            ->where('id', '<>', $model->id)->where('name', $model->name)->count() > 0) {
+            throw new \Exception('名称已存在');
+        }
         $model->createFullName();
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
+        }
+        if ($locale_group_id > 0) {
+            LinkageDataModel::where('id', $locale_group_id)
+                ->update([
+                    'locale_group_id' => $locale_group_id
+                ]);
         }
         CacheRepository::onLinkageUpdated(intval($model->linkage_id));
         return $model;
@@ -96,6 +113,7 @@ class LinkageRepository {
 
     public static function dataRemove(int $id) {
         LinkageDataModel::where('id', $id)->delete();
+        // TODO 删除子项
     }
 
     public static function dataTree(string|int $id, string $lang = ''): array {
@@ -126,5 +144,20 @@ class LinkageRepository {
                 'name' => $item['name']
             ];
         }, $items);
+    }
+
+    public static function localeConvert(int $linkage, int $id = 0): int {
+        if ($id <= 0) {
+            return 0;
+        }
+        $source = LinkageDataModel::where('id', $id)->first('locale_group_id', 'linkage_id');
+        if (intval($source->linkage_id) === $linkage) {
+            return $id;
+        }
+        if (!$source->locale_group_id) {
+            return 0;
+        }
+        return intval(LinkageDataModel::where('locale_group_id', $source->locale_group_id)->where('linkage_id', $linkage)
+            ->value('id'));
     }
 }

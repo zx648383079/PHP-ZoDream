@@ -12,6 +12,7 @@ use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Domain\Scene\SceneInterface;
@@ -292,6 +293,8 @@ class ThemeManager {
         if (empty($themeOption) || !$themeRoot->exist()) {
             return;
         }
+        set_time_limit(0);
+        DB::openCache(false);
         $this->src = $themeRoot;
         $this->setCache(GroupModel::pluck('id', 'name'), 'group');
         $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
@@ -348,7 +351,7 @@ class ThemeManager {
 
     protected function runActionForm(array $data, SceneInterface $scene): void {
         $data['type'] = 1;
-        $this->runActionModel($data);
+        $this->runActionModel($data, $scene);
     }
 
     protected function runActionLinkage(array $data, SceneInterface $scene): void {
@@ -401,14 +404,15 @@ class ThemeManager {
             throw new Exception('数据错误');
         }
         $this->setCache([$model->table => $model->id, $model->id => $model], 'model');
+        CacheRepository::onModelUpdated($model->id);
+        FuncHelper::cache()->clear();
         $scene->setModel($model)->initModel();
-        if ($data['table'] === 'news') {
-            dr($data);
-        }
         foreach ($fields as $field) {
             $field['model_id'] = $model->id;
             $this->runActionField($field, $scene);
         }
+        CacheRepository::onModelUpdated($model->id);
+        FuncHelper::cache()->clear();
     }
 
     protected function runActionField(array $data, SceneInterface $scene): void {
@@ -477,8 +481,10 @@ class ThemeManager {
         if (empty($data['name'])) {
             $data['name'] = CMSRepository::generateTableName($data['title']);
         }
-        $model = CategoryModel::where('name', $data['name'])->first();
+        $siteId = CMSRepository::siteId();
+        $model = CategoryModel::where('name', $data['name'])->where('site_id', $siteId)->first();
         if (empty($model)) {
+            $data['site_id'] = $siteId;
             $model = CategoryModel::create($data);
         }
         if (!$model) {
@@ -488,18 +494,18 @@ class ThemeManager {
         foreach ($children as $item) {
             if (isset($item['action']) && $item['action'] === 'content') {
                 $item['cat_id'] = $model->id;
-                $this->runActionContent($item);
+                $this->runActionContent($item, $scene);
                 continue;
             }
             if (empty($item['type'])) {
                 $item['type'] = $type;
             }
             $item['parent_id'] = $model->id;
-            $this->runActionChannel($item);
+            $this->runActionChannel($item, $scene);
         }
     }
 
-    protected function runActionContent(array $data): void {
+    protected function runActionContent(array $data, SceneInterface $scene): void {
         if (isset($data['cat_id']) && !is_numeric($data['cat_id'])) {
             $data['cat_id'] = $this->getCacheId($data['cat_id']);
         } elseif (isset($data['type'])) {
@@ -507,8 +513,7 @@ class ThemeManager {
         }
         unset($data['type'], $data['action']);
         $cat = $this->getCacheId($data['cat_id'], 'channel');
-        $scene = CMSRepository::scene()
-            ->setModel($this->getCacheId($cat->model_id, 'model'));
+        $scene = $scene->setModel($this->getCacheId($cat->model_id, 'model'));
         $scene->insert($this->formatI18n($data));
     }
 

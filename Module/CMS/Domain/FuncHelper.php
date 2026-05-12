@@ -351,7 +351,7 @@ class FuncHelper {
         return self::mapId($val, 'channel');
     }
 
-    protected static function setChannel(...$data): void {
+    protected static function setChannel(mixed ...$data): void {
         foreach ($data as $item) {
             if (static::cache()->has('channel', $item['id'])) {
                 return;

@@ -23,7 +23,7 @@ $this->title = ($model->id > 0 ? '编辑' : '新增').'联动项';
                     <?= $item['name'] ?>
                 </a>
                 <?php else: ?>
-                <a class="option-item" href="<?=$this->url('./@admin/linkage/create_data', ['linkage_id' => $item['id'], 'parent_id' => $model->parent_id, 'locale' => $model->id])?>">
+                <a class="option-item" href="<?=$this->url('./@admin/linkage/create_data', ['linkage_id' => $item['id'], 'parent_id' => $model->parent_id, 'locale' => $model->id > 0 ? $model->id : $model->locale_group_id])?>">
                     <?= $item['name'] ?>
                 </a>
                 <?php endif; ?>
@@ -46,4 +46,5 @@ $this->title = ($model->id > 0 ? '编辑' : '新增').'联动项';
 
     <input type="hidden" name="linkage_id" value="<?=$model->linkage_id?>">
     <input type="hidden" name="parent_id" value="<?=$model->parent_id?>">
+    <input type="hidden" name="locale_group_id" value="<?=$model->locale_group_id?>">
 <?=Form::close('id')?>
