@@ -7,8 +7,8 @@ use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ContentRepository;
+use Module\CMS\Domain\Repositories\LocaleRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
-use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class ContentController extends Controller {
@@ -66,7 +66,7 @@ class ContentController extends Controller {
                 'cat_id', 'cat', 'scene', 'model',
                 'data', 'tab_list'));
         }
-        $languageItems = SiteRepository::localeItems();
+        $languageItems = LocaleRepository::siteOptions();
         return $this->show('edit', compact('id',
             'cat_id', 'cat', 'scene', 'model',
             'data', 'tab_list', 'languageItems'));

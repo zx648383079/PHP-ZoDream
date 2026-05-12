@@ -8,7 +8,6 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Zodream\Database\Relation;
-use Zodream\Html\Tree;
 
 class LinkageRepository {
     public static function getList(string $keywords = '') {
@@ -123,41 +122,5 @@ class LinkageRepository {
             $id = intval(LinkageModel::where('language', $lang)->where('code', $id)->value('id'));
         }
         return FuncHelper::linkageData($id)->toIdTree();
-    }
-
-    public static function localeItems(LinkageModel $model): array {
-        if (!$model->language) {
-            return [];
-        }
-        $items = LinkageModel::where('code', $model->code)
-            ->where('type', $model->type)
-            ->asArray()
-            ->get('id', 'language', 'name');
-        if ($items < 2) {
-            return [];
-        }
-        return array_map(function ($item) use($model) {
-            return [
-                'selected' => intval($model->id) === intval($item['id']) ,
-                'language' => $item['language'],
-                'id' => intval($item['id']),
-                'name' => $item['name']
-            ];
-        }, $items);
-    }
-
-    public static function localeConvert(int $linkage, int $id = 0): int {
-        if ($id <= 0) {
-            return 0;
-        }
-        $source = LinkageDataModel::where('id', $id)->first('locale_group_id', 'linkage_id');
-        if (intval($source->linkage_id) === $linkage) {
-            return $id;
-        }
-        if (!$source->locale_group_id) {
-            return 0;
-        }
-        return intval(LinkageDataModel::where('locale_group_id', $source->locale_group_id)->where('linkage_id', $linkage)
-            ->value('id'));
     }
 }

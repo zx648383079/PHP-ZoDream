@@ -337,8 +337,6 @@ class ThemeManager {
         }
     }
 
-
-
     protected function runActionCopy(array $data, SceneInterface $scene): void {
         $this->src->directory($data['src'])->copy($this->dist->directory($data['dist']));
     }
@@ -461,6 +459,7 @@ class ThemeManager {
     }
 
     protected function runActionChannel(array $data, SceneInterface $scene): void {
+        $oldTitle = $data['title'];
         $data = $this->formatI18n($data);
         $type = $data['type'] ?? null;
         if ($type === 'link') {
@@ -479,7 +478,7 @@ class ThemeManager {
             $data['groups'] = implode(',', (array)$data['group']);
         }
         if (empty($data['name'])) {
-            $data['name'] = CMSRepository::generateTableName($data['title']);
+            $data['name'] = CMSRepository::generateTableName($oldTitle);
         }
         $siteId = CMSRepository::siteId();
         $model = CategoryModel::where('name', $data['name'])->where('site_id', $siteId)->first();

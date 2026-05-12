@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Domain\Concerns;
 
 use Zodream\Helpers\Json;
-use Zodream\Helpers\Arr;
+use Zodream\Database\Model\DefaultEntityCreator;
 
 trait TableMeta {
 
@@ -35,7 +35,7 @@ trait TableMeta {
                 $items[$key] = $value;
                 continue;
             }
-            $items[$key] = Arr::changeType($items[$key], gettype($value));
+            $items[$key] = DefaultEntityCreator::changeType($items[$key], gettype($value));
         }
         return $items;
     }

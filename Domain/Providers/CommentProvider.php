@@ -10,7 +10,7 @@ use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
-use Zodream\Helpers\Arr;
+use Zodream\Database\Model\DefaultEntityCreator;
 use Zodream\Helpers\Json;
 use Zodream\Html\Page;
 
@@ -222,7 +222,7 @@ class CommentProvider {
         if (empty($data)) {
             return [];
         }
-        return Arr::toRealArr($data, [
+        return DefaultEntityCreator::toRealArr($data, [
             'id' => 'int',
             'target_id' => 'int',
             'user_id' => 'int',

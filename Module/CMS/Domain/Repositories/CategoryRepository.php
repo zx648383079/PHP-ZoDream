@@ -152,5 +152,4 @@ class CategoryRepository {
         }
         return [$count, ltrim(substr($val, $count))];
     }
-
 }

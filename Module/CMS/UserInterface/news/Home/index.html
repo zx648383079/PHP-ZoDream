@@ -23,6 +23,43 @@ var silder = $(".photo .slider").slider({
     </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        {> $i = 0}
+        {channels:group=recommend}
+        {> $i ++}
+        <div class="col-md-{if:$i%2==1,8,4}">
+            <div class="tab-box mt-2">
+                <div class="tab-header">
+                    <div class="tab-item active"><a href="{=channel:$channel,url}">{$channel.title}</a></div>
+                </div>
+                <div class="tab-body">
+                    {contents:category=$channel.id,num=10}
+                    <div class="article-item" title="{$content.title}-{$content.description}">
+                        <div class="item-thumb">
+                            <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$content.thumb}" alt="{$content.title}">
+                        </div>
+                        <div class="item-body">
+                            <div class="item-title">
+                                <a href="{url:$content}">{$content.title}</a>
+                            </div>
+                            <div class="tag-bar">
+                                <span class="tag-item"><i class="fa fa-calendar-alt"></i>{this.ago:$content.created_at}</span>
+                                <span class="tag-item"><i class="fa fa-bookmark"></i>{channel:$content.cat_id,title}</span>
+                            </div>
+                            <div class="item-desc">
+                                {this.text:$content.description,80}
+                            </div>
+                            
+                        </div>
+                    </div>
+                    {/contents}
+                </div>
+            </div>
+        </div>
+        {/channels}
+    </div>
+</div>
 
 <div class="container">
     <div class="row">

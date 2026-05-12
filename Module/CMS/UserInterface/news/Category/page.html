@@ -1,0 +1,42 @@
+{layout:main}
+<div class="banner-bg" style="background-image:url({$channel.image});">
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="path-bar">
+                {__:Location}: 
+                <ul><li><a href="{url:./}">{__:Home}</a></li>{location:}
+                </ul>
+            </div>
+            <div class="article-panel">
+                {for:$items,$item}
+                <div class="article-item">
+                    <div class="item-thumb">
+                        <img class="lazy" src="/assets/images/thumb.jpg" data-src="{$item.thumb}" alt="{$item.title}">
+                    </div>
+                    <div class="item-body">
+                        <div class="item-title">
+                            <a href="{url:$item}">{$item.title}</a>
+                        </div>
+                        <div class="tag-bar">
+                            <span class="tag-item"><i class="fa fa-calendar-alt"></i>{this.ago:$item.created_at}</span>
+                            <span class="tag-item"><i class="fa fa-bookmark"></i>{channel:$item.cat_id,title}</span>
+                        </div>
+                        <div class="item-desc">
+                            {this.text:$item.description,80}
+                        </div>
+                        
+                    </div>
+                </div>
+                {/for}
+
+                {page:$items}
+            </div>
+        </div>
+        <div class="col-md-3">
+            {tpl:layouts/right}
+        </div>
+    </div>
+</div>

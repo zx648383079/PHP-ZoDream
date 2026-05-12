@@ -1,0 +1,80 @@
+{@font-awesome.min.css}
+{@animate.min.css}
+{@zodream.min.css}
+{@cms.min.css}
+{@jquery.min.js}
+{@jquery.lazyload.min.js}
+{@main.min.js}
+{@cms.min.js}
+<!DOCTYPE html>
+<html lang="{$language??'zh-CN'}">
+   <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width, initial-scale=1">
+        <title>{this.title}-{option:title}</title>
+        <meta name="Keywords" content="{this.keywords},{option:keywords}" />
+        <meta name="Description" content="{this.description},{option:description}" />
+        <meta name="author" content="zodream" />
+        <base href="{url:./,false}">
+        <link rel="icon" href="{option:logo}">
+       {header:}
+   </head>
+   <body>
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <a href="{url:/}">
+                        <img src="{option:logo}">
+                    </a>
+                </div>
+                <div class="nav-bar">
+                    <i class="nav-toggle"></i>
+                    <ul>
+                        <li>
+                            <a href="{url:./}">{__:Home}</a>
+                        </li>
+                        {channels:tree=1,group=nav}
+                        <li class="{channelActive:$channel.id,true}">
+                            <a href="{=channel:$channel,url}">{$channel.title}</a>
+                            {if:isset:$channel.children}
+                            <ul class="sub-menu">
+                                {for:$channel.children,$item}
+                                <li>
+                                    <a href="{=channel:$item,url}">{$item.title}</a>
+                                </li>
+                                {/for}
+                            </ul>
+                            {/if}
+                        </li>
+                        {/channels}
+                    </ul>
+                </div>
+                
+            </div>
+        </header>
+        {this.contents:}
+        <footer>
+            <div class="container">
+                <div class="copyright">
+                    Copyright ©{request.host:}, All Rights Reserved.
+                    {$icp_beian=option:icp_beian}
+                    {if:$icp_beian}
+                    <a href="https://beian.miit.gov.cn/" target="_blank">{$icp_beian}
+                    </a>
+                    {/if}
+                    {$pns_beian=option:pns_beian}
+                    {if:$pns_beian}
+                    <p>
+                        <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode={regex:$pns_beian,'/\d+/'}">
+                            <img src="/assets/images/beian.png" alt="备案图标">
+                            {$pns_beian}
+                        </a>
+                    </p>
+                    {/if}
+                </div>
+            </div>
+        </footer>
+        {footer:}
+   </body>
+</html>

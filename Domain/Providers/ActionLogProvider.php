@@ -7,7 +7,7 @@ use Zodream\Database\Migrations\Migration;
 use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Schema\Table;
-use Zodream\Helpers\Arr;
+use Zodream\Database\Model\DefaultEntityCreator;
 
 class ActionLogProvider {
 
@@ -153,7 +153,7 @@ class ActionLogProvider {
         if (empty($data)) {
             return [];
         }
-        return Arr::toRealArr($data, [
+        return DefaultEntityCreator::toRealArr($data, [
             'id' => 'int',
             'item_type' => 'int',
             'item_id' => 'int',

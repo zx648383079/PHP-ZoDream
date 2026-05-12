@@ -5,6 +5,7 @@ namespace Module\CMS\Service\Admin;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
+use Module\CMS\Domain\Repositories\LocaleRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
@@ -76,7 +77,7 @@ class SiteController extends Controller {
 
     public function optionAction(int $id) {
         $model = SiteModel::find($id);
-        $languageItems = SiteRepository::localeItems($model);
+        $languageItems = LocaleRepository::siteOptions($model);
         return $this->show(compact('model', 'languageItems'));
     }
 

@@ -6,6 +6,7 @@ use Exception;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Repositories\LinkageRepository;
+use Module\CMS\Domain\Repositories\LocaleRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class LinkageController extends Controller {
@@ -58,12 +59,12 @@ class LinkageController extends Controller {
 
     public function createDataAction(int $linkage_id, int $parent_id = 0, int $locale = 0) {
         if ($locale > 0) {
-            $id = LinkageRepository::localeConvert($linkage_id, $locale);
+            $id = LocaleRepository::linkageConvert($linkage_id, $locale);
             if ($id > 0) {
                 return $this->editData($id);
             }
             if ($parent_id > 0) {
-                $parent_id = LinkageRepository::localeConvert($linkage_id, $parent_id);
+                $parent_id = LocaleRepository::linkageConvert($linkage_id, $parent_id);
                 if ($parent_id === 0) {
                     return $this->redirectWithMessage(url('./@admin/linkage/data', ['id' => $linkage_id]), '上级联动项不存在！');
                 }
@@ -91,7 +92,7 @@ class LinkageController extends Controller {
             $model->locale_group_id = $locale;
         }
         $linkage = LinkageModel::find($model->linkage_id);
-        $languageItems = $id === 0 && $locale === 0 ? [] : LinkageRepository::localeItems($linkage);
+        $languageItems = $id === 0 && $locale === 0 ? [] : LocaleRepository::linkageOptions($linkage);
         return $this->show('editData', compact('model', 'languageItems', 'linkage'));
     }
 

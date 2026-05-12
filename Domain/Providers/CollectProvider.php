@@ -10,7 +10,7 @@ use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
 use Zodream\Database\Relation;
 use Zodream\Database\Schema\Table;
-use Zodream\Helpers\Arr;
+use Zodream\Database\Model\DefaultEntityCreator;
 use Zodream\Html\Page;
 
 /**
@@ -153,7 +153,7 @@ class CollectProvider {
         if (empty($data)) {
             return [];
         }
-        return Arr::toRealArr($data, [
+        return DefaultEntityCreator::toRealArr($data, [
             'id' => 'int',
             'item_id' => 'int',
             'item_type' => 'int',
