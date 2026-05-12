@@ -39,8 +39,10 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         if ($site < 1) {
             return $next($context);
         }
-        
-        $site = SiteModel::findOrThrow($site);
+        $site = SiteModel::find($site);
+        if (empty($site)) {
+            return $next($context);
+        }
         CMSRepository::site($site);
         UrlRouterMiddleware::enable(false);
         if ($site->language) {

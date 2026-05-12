@@ -28,7 +28,6 @@
             "action": "channel",
             "title": "关于我们",
             "name": "about_us",
-            "type": "@model:news",
             "content": "",
             "group": "nav",
             "category_template": "index",

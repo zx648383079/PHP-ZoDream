@@ -30,7 +30,7 @@ class Controller extends ModuleController {
         }
         $cat_menu = empty($currentSite) ? [] : CategoryModel::tree()->makeTreeForHtml();
         $cat_menu = array_filter($cat_menu, function ($item) {
-            return $item['type'] < 1;
+            return $item['type'] < 1 && $item['model_id'];
         });
         $model_menu = ModelModel::query()->orderBy('position', 'asc')
             ->orderBy('id', 'asc')->get('id', 'name', 'type');

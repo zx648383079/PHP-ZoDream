@@ -138,9 +138,6 @@ class CategoryRepository {
         }
     }
 
-
-
-
     protected static function splitTitleTag(string $val): array {
         $val = trim($val);
         $count = 0;

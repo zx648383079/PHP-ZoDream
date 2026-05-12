@@ -262,7 +262,7 @@ abstract class BaseScene implements SceneInterface {
         }
         $data = Relation::create($items->getPage(), [
             'children' => Relation::make($this->commentQuery(), 'id',
-                'parent_id', Relation::TYPE_MANY)
+            'parent_id', Relation::TYPE_MANY)
         ]);
         return $items->setPage(ModelHelper::bindTwoRelation($data,
             [

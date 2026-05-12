@@ -29,7 +29,7 @@ class Module extends BaseModule implements ISiteMapModule {
         $routes = config('route');
         if (empty($routes['middlewares'])) {
             $routes['middlewares'] = [CMSSeoMiddleware::class];
-        } else {
+        } else if (!in_array(CMSSeoMiddleware::class, $routes['middlewares'])) {
             $routes['middlewares'][] = CMSSeoMiddleware::class;
         }
         config()->set('route', $routes);
