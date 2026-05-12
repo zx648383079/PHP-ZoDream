@@ -149,9 +149,9 @@ final class CacheRepository {
     }
 
     public static function getOptionCache(): array {
-        $site = CMSRepository::siteId();
-        return cache()->getOrSet(self::optionKey($site), function () {
-            $site = CMSRepository::site();
+        $context = CMSRepository::context();
+        return cache()->getOrSet(self::optionKey($context->id()), function () use($context) {
+            $site = $context->source();
             $items = [];
             foreach ($site['options'] as $item) {
                 $items[$item['code']] = Option::formatOption((string)($item['value'] ?? ''), $item['type']);
@@ -170,9 +170,9 @@ final class CacheRepository {
      * @return array
      */
     public static function getMapCache(): array {
-        $site = CMSRepository::siteId();
-        return cache()->getOrSet(self::mapKey($site), function () {
-            $lang = CMSRepository::site()->language;
+        $context = CMSRepository::context();
+        return cache()->getOrSet(self::mapKey($context->id()), function () use($context) {
+            $lang = $context->language();
             $model = ModelModel::query()->selectRaw('id,`table` as name')
                 ->pluck('id', 'name');
             $linkage = [];
@@ -183,15 +183,15 @@ final class CacheRepository {
                 }
                 $linkage[$item['code']] = $item['id'];
             }
-            $channel = CategoryModel::query()->pluck( 'id', 'name');
+            $channel = $context->channelBuilder()->pluck( 'id', 'name');
             return compact('model', 'linkage', 'channel');
         });
     }
 
     public static function getSeoCache(): array {
-        $site = CMSRepository::siteId();
-        return cache()->getOrSet(self::seoKey($site), function () {
-            return ContentModel::query()
+        $context = CMSRepository::context();
+        return cache()->getOrSet(self::seoKey($context->id()), function () use ($context) {
+            return $context->scene()->query()
                 ->where('seo_link', '!=', '')
                 ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
                 ->select('id', 'model_id', 'cat_id', 'seo_link')->asArray()->get();
@@ -221,8 +221,8 @@ final class CacheRepository {
 
     public static function flushDataCache() {
         try {
-            $site = CMSRepository::siteId();
-            cache()->delete(self::mapKey($site));
+            $context = CMSRepository::context();
+            cache()->delete(self::mapKey($context->id()));
         } catch (\Exception) {};
         cache()->delete(self::siteKey());
     }
@@ -235,7 +235,8 @@ final class CacheRepository {
     }
 
     public static function flushChannelCache() {
-        cache()->delete(self::channelKey(CMSRepository::siteId()));
+        $context = CMSRepository::context();
+        cache()->delete(self::channelKey($context->id()));
     }
 
     public static function flushModelCache() {
@@ -246,11 +247,11 @@ final class CacheRepository {
     }
 
     public static function flushArticleCache() {
-        cache()->delete(self::seoKey(CMSRepository::siteId()));
+        cache()->delete(self::seoKey(CMSRepository::context()->id()));
     }
 
     public static function flushOptionCache() {
-        cache()->delete(self::optionKey(CMSRepository::siteId()));
+        cache()->delete(self::optionKey(CMSRepository::context()->id()));
     }
 
     public static function onSiteUpdated(int $id): void {

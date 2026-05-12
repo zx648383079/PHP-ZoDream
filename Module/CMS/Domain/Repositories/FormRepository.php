@@ -26,7 +26,7 @@ class FormRepository {
 
     public static function formInputList(Input $input): array {
         $model = static::getModel($input);
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $field_list = $scene->fieldList();
         $inputItems = [];
         foreach ($field_list as $item) {
@@ -40,7 +40,7 @@ class FormRepository {
         if (empty($model) || $model['type'] != 1) {
             throw new Exception('表单数据错误');
         }
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $id = 0;
         $captcha = $input->string('captcha');
         if (!empty($captcha)) {

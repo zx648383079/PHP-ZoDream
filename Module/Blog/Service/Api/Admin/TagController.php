@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Service\Api\Admin;
 
-use Domain\Model\SearchModel;
 use Module\Blog\Domain\Model\TagModel;
-use Module\Blog\Domain\Model\TagRelationshipModel;
 use Module\Blog\Domain\Repositories\TagRepository;
 
 class TagController extends Controller {

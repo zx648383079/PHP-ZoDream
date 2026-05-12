@@ -29,7 +29,7 @@ class ThemeController extends Controller {
 
     public function applyAction(string $theme) {
         try {
-            (new ThemeManager())->apply($theme);
+            (new ThemeManager())->apply(CMSRepository::context(), $theme);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
@@ -40,7 +40,7 @@ class ThemeController extends Controller {
 
     public function bakAction() {
         try {
-            (new ThemeManager())->pack();
+            (new ThemeManager())->pack(CMSRepository::context());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }
@@ -49,7 +49,7 @@ class ThemeController extends Controller {
 
     public function bakRestoreAction(string $file) {
         try {
-            (new ThemeManager())->unpack($file);
+            (new ThemeManager())->unpack(CMSRepository::context(), $file);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex);
         }

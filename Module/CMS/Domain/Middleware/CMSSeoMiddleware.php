@@ -43,7 +43,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
         if (empty($site)) {
             return $next($context);
         }
-        CMSRepository::site($site);
+        CMSRepository::context($site);
         UrlRouterMiddleware::enable(false);
         if ($site->language) {
             app()->setLocale($site->language);
@@ -173,9 +173,10 @@ class CMSSeoMiddleware implements MiddlewareInterface{
     }
 
     protected static function formatUrl(string $path, array $data = []): string {
+        $context = CMSRepository::context();
         /** @var Uri $uri */
-        $uri = clone FuncHelper::cache()->getOrSet(__FUNCTION__, CMSRepository::siteId(), function () {
-            $site = CMSRepository::site();
+        $uri = clone FuncHelper::cache()->getOrSet(__FUNCTION__, $context->id(), function () use($context) {
+            $site = $context->source();
             $uri = new Uri($site['match_rule']);
             $request = request();
             if (empty($uri->getScheme())) {

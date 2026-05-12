@@ -5,7 +5,6 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -50,7 +49,7 @@ class Linkages extends BaseField {
                 'value' => $items
             ];
         }
-        $url = url('./form/linkage', ['id' => $linkageId, 'lang' => CMSRepository::siteLanguage()]);
+        $url = url('./form/linkage', ['id' => $linkageId, 'lang' => $this->context->language()]);
         $js = <<<JS
 $('#linkage-{$field['id']}').multiSelect({
     data: '{$url}',

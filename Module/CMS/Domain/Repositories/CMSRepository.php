@@ -4,9 +4,10 @@ namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
 use Exception as GlobalException;
+use Module\CMS\Domain\Contexts\CachingSiteContext;
+use Module\CMS\Domain\Contexts\LiveSiteContext;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Zodream\Database\DB;
-use Module\CMS\Domain\Entities\CategoryEntity;
-use Module\CMS\Domain\Entities\SiteLogEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
@@ -15,7 +16,6 @@ use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
-use Module\CMS\Domain\Scene\BaseScene;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Database\Model\Model;
@@ -33,10 +33,7 @@ class CMSRepository {
     const MANAGE_ROLE = 'cms_manage';
     const PREVIEW_KEY = '_preview';
 
-    /**
-     * @var SiteModel
-     */
-    private static mixed $cacheSite;
+    private static SiteContextInterface|null $currentContext = null;
 
     /**
      * @var string
@@ -49,7 +46,7 @@ class CMSRepository {
         return !auth()->guest() && array_key_exists(self::PREVIEW_KEY, $_GET);
     }
 
-    public static function theme() {
+    public static function theme(): string {
         if (!empty(self::$cacheTheme)) {
             return self::$cacheTheme;
         }
@@ -57,10 +54,11 @@ class CMSRepository {
         if (!empty($preview) && !is_numeric($preview)) {
             return self::$cacheTheme = $preview;
         }
-        if (empty(static::site()->theme)) {
+        $currentTheme = static::context()->theme();
+        if (empty($currentTheme)) {
             return self::$cacheTheme = 'default';
         }
-        return self::$cacheTheme = static::site()->theme;
+        return self::$cacheTheme = $currentTheme;
     }
 
     public static function registerLocate(Directory $folder, string|null $language) {
@@ -79,7 +77,7 @@ class CMSRepository {
         $language = '';
         if (empty($theme)) {
             $theme = static::theme();
-            $language = static::site()->language;
+            $language = static::context()->language();
         } elseif ($theme instanceof SiteModel) {
             $language = $theme->language;
             $theme = $theme->theme;
@@ -111,31 +109,19 @@ class CMSRepository {
         });
     }
 
-    /**
-     * @return BaseScene
-     * @throws \Exception
-     */
-    public static function scene() {
-        return app(SceneInterface::class);
-    }
-
-    /**
-     * @return SiteModel
-     * @throws \Exception
-     */
-    public static function site(mixed $model = null) {
-        if (!empty($model)) {
-            static::$cacheSite = $model;
+    public static function context(SiteModel|null $site = null): SiteContextInterface {
+        if (!empty($site)) {
+            static::$currentContext = new CachingSiteContext($site);
         }
-        if (!empty(self::$cacheSite)){
-            return self::$cacheSite;
+        if (!empty(static::$currentContext)) {
+            return static::$currentContext;
         }
         $request = request();
         $site = static::matchSite($request->scheme(), $request->host(), ltrim($request->path(), '/'));
         if ($site < 1) {
             throw new \Exception('无任何站点');
         }
-        return self::$cacheSite = SiteModel::findOrThrow($site);
+        return static::$currentContext = new CachingSiteContext(SiteModel::findOrThrow($site));
     }
 
     public static function matchSite(string $scheme, string $host, string $path, bool $isStrict = false): int {
@@ -179,38 +165,10 @@ class CMSRepository {
         return $default;
     }
 
-    public static function siteId(): int {
-        return intval(static::site()->id);
-    }
-
-    /**
-     * 同组的站点放在一起
-     */
-    public static function tableSiteId(SiteEntity|null $model = null): int {
-        if (empty($model)) {
-            $model = static::site();
-        }
-        if ($model->locale_group_id > 0) {
-            return intval($model->locale_group_id);
-        }
-        return intval($model->id);
-    }
-
-    /**
-     * 判断当前站点是否对表有所有权
-     */
-    public static function isSiteTable(): bool {
-        return static::siteId() === static::tableSiteId();
-    }
-
-    public static function siteLanguage(): string {
-        return (string)static::site()->language;
-    }
-
     public static function generateSite(SiteModel $site) {
-        self::$cacheSite = $site;
-        if (static::isSiteTable()) {
-            CreateCmsTables::createTable(CategoryEntity::tableName(), function (Table $table) {
+        $context = new LiveSiteContext($site);
+        if ($context->isOwer()) {
+            CreateCmsTables::createTable($context->channelTableName(), function (Table $table) {
                 $table->id();
                 $table->uint('site_id');
                 $table->string('name', 100);
@@ -233,7 +191,7 @@ class CMSRepository {
                 $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
                 $table->timestamps();
             });
-            CreateCmsTables::createTable(SiteLogEntity::tableName(), function (Table $table) {
+            CreateCmsTables::createTable($context->logTableName(), function (Table $table) {
                 $table->id();
                 $table->uint('site_id');
                 $table->uint('model_id');
@@ -245,38 +203,35 @@ class CMSRepository {
             });
         }
         
-        static::scene()->boot();
-        (new ThemeManager())->apply($site->theme);
+        $context->scene()->boot();
+        (new ThemeManager())->apply($context, $site->theme);
     }
 
     public static function generateCategoryTable(CategoryModel $model) {
         if ($model->type > 0 || !$model->model) {
             return;
         }
-        static::scene()->setModel($model->model)->initTable();
+        static::context()->scene()->setModel($model->model)->initTable();
     }
 
     public static function removeSite(SiteModel $site) {
         $model_list = ModelModel::query()->get();
-        $old = self::$cacheSite;
-        self::$cacheSite = $site;
-        if (static::isSiteTable()) {
-            CreateCmsTables::dropTable(SiteLogEntity::tableName());
-            CreateCmsTables::dropTable(CategoryEntity::tableName());
+        $context = new LiveSiteContext($site);
+        if ($context->isOwer()) {
+            CreateCmsTables::dropTable($context->logTableName());
+            CreateCmsTables::dropTable($context->channelTableName());
         }
-        $scene = static::scene()->setSite($site);
+        $scene = $context->scene();
         foreach ($model_list as $item) {
             $scene->setModel($item)->removeTable();
         }
         $scene->destroy();
-        self::$cacheSite = $old;
     }
 
     public static function removeModel(ModelModel $model) {
         $site_list = SiteModel::query()->get('id', 'locale_group_id');
-        $scene = static::scene();
         foreach ($site_list as $item) {
-            $scene->setSite($item)
+            (new LiveSiteContext($item))->scene()
             ->setModel($model)->removeTable();
         }
     }
@@ -289,7 +244,7 @@ class CMSRepository {
         }
         $id = session('cms_site');
         if ($id > 0) {
-            static::$cacheSite = SiteModel::find($id);
+            static::context(SiteModel::find($id));
             return;
         }
     }
@@ -298,15 +253,11 @@ class CMSRepository {
      * 创建编辑环境
      */
     public static function useScene(int $modelId, int $siteId = 0): SceneInterface {
-        if ($siteId > 0 && self::siteId() !== $siteId) {
-            static::$cacheSite = SiteModel::findOrThrow($siteId);
+        if ($siteId > 0 && self::context()->id() !== $siteId) {
+            static::context(SiteModel::findOrThrow($siteId));
         }
-        $scene = static::scene();
-        if (empty($scene)) {
-            (new \Module\CMS\Module())->boot();
-            $scene = static::scene();
-        }
-        return $scene->setSite()->setModel(ModelModel::findOrThrow($modelId));
+        $scene = static::context()->scene();
+        return $scene->setModel(ModelModel::findOrThrow($modelId));
     }
 
     public static function generateTableName(string $name): string {
@@ -369,7 +320,7 @@ class CMSRepository {
         return array_map(function($item) use ($model) {
             return [
                 'name' => $item['name'], //sprintf('%s(%s)', $item['name'], $model['name']),
-                'value' => SiteRepository::encodeUrl(self::site(), str_replace('{id}', (string)$item['id'], $model->uri_template))
+                'value' => SiteRepository::encodeUrl(self::context()->source(), str_replace('{id}', (string)$item['id'], $model->uri_template))
             ];
         }, $items);
     }

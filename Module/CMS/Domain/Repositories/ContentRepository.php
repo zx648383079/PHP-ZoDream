@@ -18,7 +18,7 @@ class ContentRepository {
         if ($category <= 0 && $modelId <= 0) {
             throw new Exception('参数不正确');
         }
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         if ($modelId < 1) {
             $modelId = intval(CategoryModel::where('id', $category)
                 ->value('model_id'));
@@ -27,7 +27,7 @@ class ContentRepository {
             }
         }
         $modelModel = ModelRepository::get($modelId);
-        $scene = CMSRepository::scene()->setModel($modelModel);
+        $scene = $context->scene()->setModel($modelModel);
         if (!$scene->initializedModel()) {
             throw new Exception('当前站点未初始化模型');
         }
@@ -42,7 +42,7 @@ class ContentRepository {
             static::formatValue($data['data']);
             $data['data'] = Relation::create($data['data'], [
                 'category' => [
-                    'query' => CategoryModel::query()->select('id', 'title'),
+                    'query' => $context->channelBuilder()->select('id', 'title'),
                     'link' => ['cat_id', 'id'],
                     'type' => Relation::TYPE_ONE
                 ],
@@ -144,7 +144,7 @@ class ContentRepository {
         if ($id < 1) {
             static::apply($site, $category, $modelId);
         }
-        $data['form_data'] = static::form($data, CMSRepository::scene());
+        $data['form_data'] = static::form($data, CMSRepository::context()->scene());
         return $data;
     }
 
@@ -171,15 +171,15 @@ class ContentRepository {
     }
 
     public static function apply(int $site, int $category, int $modelId) {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         if ($modelId < 1) {
-            $modelId = intval(CategoryModel::where('id', $category)
+            $modelId = intval($context->channelBuilder()->where('id', $category)
                 ->value('model_id'));
             if ($modelId < 1) {
                 throw new Exception('栏目不包含模型');
             }
         }
-        return CMSRepository::scene()->setModel(ModelRepository::get($modelId));
+        return $context->scene()->setModel(ModelRepository::get($modelId));
     }
 
     public static function search(int $site, int $model = 0,
@@ -187,16 +187,16 @@ class ContentRepository {
                                   int $channel = 0, array|int $id = [],
                                     int $page = 1, int $perPage = 20,
     ) {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         if ($model < 1) {
-            $model = $channel > 0 ? intval(CategoryModel::where('id', $channel)
+            $model = $channel > 0 ? intval($context->channelBuilder()->where('id', $channel)
                 ->value('model_id')) : 0;
             if ($model < 1) {
                 throw new Exception('栏目不包含模型');
             }
         }
         $modelModel = ModelRepository::get($model);
-        $scene = CMSRepository::scene()->setModel($modelModel);
+        $scene = $context->scene()->setModel($modelModel);
         return $scene->query()->where('model_id', $model)
             ->when($channel > 0, function ($query) use ($channel) {
             $query->where('cat_id', $channel);

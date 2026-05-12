@@ -1,7 +1,6 @@
 <?php
 namespace Module\CMS\Domain\Entities;
 
-
 use Domain\Entities\Entity;
 use Module\CMS\Domain\Repositories\CMSRepository;
 
@@ -17,7 +16,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
  */
 class SiteLogEntity extends Entity {
     public static function tableName(): string {
-        return 'cms_log_'.CMSRepository::tableSiteId();
+        return CMSRepository::context()->logTableName();
     }
 
     protected function rules(): array {

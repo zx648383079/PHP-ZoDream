@@ -3,13 +3,8 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Contexts;
 
 use Module\CMS\Domain\Entities\ModelFieldEntity;
-use Module\CMS\Domain\Scene\SceneInterface;
 
-final class LiveSiteContext implements SiteContextInterface {
-
-    public function scene(): SceneInterface {
-        return app(SceneInterface::class);
-    }
+final class LiveSiteContext extends BaseContext {
 
     public function fieldItems(int $model): array {
         $fieldItems = ModelFieldEntity::where('model_id', $model)

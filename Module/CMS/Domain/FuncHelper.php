@@ -180,8 +180,9 @@ class FuncHelper {
         return static::cache()->getOrSet(__FUNCTION__,
             md5(Json::encode($data)),
             function () use ($data) {
+            $scene = CMSRepository::context()->scene();
             if (isset($data[1]['model_id'])) {
-                $scene = CMSRepository::scene()->setModel(self::model($data[1]['model_id']));
+                $scene->setModel(self::model($data[1]['model_id']));
                 return $scene->search(...$data);
             }
             $category = $data[1]['cat_id'];
@@ -193,7 +194,7 @@ class FuncHelper {
             }
             $children[] = $category;
             $data[1]['cat_id'] = $children;
-            $scene = CMSRepository::scene()->setModel($model);
+            $scene->setModel($model);
             return $scene->search(...$data);
         });
     }
@@ -329,7 +330,7 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $catModel = static::model($cat['model_id']);
-            $scene = CMSRepository::scene()->setModel($catModel);
+            $scene = CMSRepository::context()->scene()->setModel($catModel);
             return $scene->query()->where('id', '<', static::$current['content'])
                 ->orderBy('id', 'desc')->first();
         });
@@ -340,7 +341,7 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, static::$current['content'], function () {
             $cat = static::channel(static::$current['channel'], true);
             $catModel = static::model($cat['model_id']);
-            $scene = CMSRepository::scene()->setModel($catModel);
+            $scene = CMSRepository::context()->scene()->setModel($catModel);
             return $scene->query()->where('id', '>', static::$current['content'])
                 ->orderBy('id', 'asc')->first();
         });
@@ -418,16 +419,13 @@ class FuncHelper {
                 'title', 'keywords', 'description', 'thumb',
                 'updated_at', 'created_at', 'parent_id'];
             $cat = static::channel($category, true);
-            $catModel = static::model($cat['model_id']);
-            $scene = CMSRepository::scene()->setModel($catModel);
-            if ($scene) {
-                foreach ($scene->fieldList() as $item) {
-                    if ($item['is_disable']) {
-                        continue;
-                    }
-                    if (!$item['is_system'] && $item['is_search'] && !in_array($item['field'], $fields)) {
-                        $fields[] = $item['field'];
-                    }
+            $modelFields = CMSRepository::context()->fieldItems(intval($cat['model_id']));
+            foreach ($modelFields as $item) {
+                if ($item['is_disable']) {
+                    continue;
+                }
+                if (!$item['is_system'] && $item['is_search'] && !in_array($item['field'], $fields)) {
+                    $fields[] = $item['field'];
                 }
             }
             return implode(',', $fields);
@@ -546,7 +544,7 @@ class FuncHelper {
             function () use ($id, $category) {
                 $cat = static::channel($category, true);
                 $catModel = static::model($cat['model_id']);
-                $scene = CMSRepository::scene()->setModel($catModel);
+                $scene = CMSRepository::context()->scene()->setModel($catModel);
             return $scene->find($id);
         });
         return self::getContentValue($name, $data);
@@ -569,7 +567,7 @@ class FuncHelper {
         $data = static::cache()->getOrSet(__FUNCTION__, sprintf('%s:%s:%s', $category,
             $model['id'], $user),
             function () use ($model, $category, $user) {
-                $scene = CMSRepository::scene()->setModel($model);
+                $scene = CMSRepository::context()->scene()->setModel($model);
                 return $scene->find(
                     function (Builder $query, $pre, $i) use ($category, $user, $model) {
                         if (!empty($pre) && isset($pre['id'])) {
@@ -772,7 +770,7 @@ class FuncHelper {
         foreach ($data as $item) {
             $items[] = $item['id'];
         }
-        $args = CMSRepository::scene()->extendQuery()->whereIn('id', $items)
+        $args = CMSRepository::context()->scene()->extendQuery()->whereIn('id', $items)
             ->select('id', ...$fields)->pluck(null, 'id');
         $arr = $data instanceof Page ? $data->getPage() : $data;
         foreach ($arr as &$item) {
@@ -860,7 +858,7 @@ class FuncHelper {
                 $data['field'], static::$current['content']);
         }
         $data['name'] = self::translate($data['name']);
-        return CMSRepository::scene()->setModel(static::model(intval($data['model_id'])))
+        return CMSRepository::context()->scene()->setModel(static::model(intval($data['model_id'])))
             ->toInput($data);
     }
 
@@ -868,7 +866,7 @@ class FuncHelper {
         if (!is_array($model)) {
             $model = static::model($model);
         }
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $data = $scene->find(intval($id));
         if (empty($data)) {
             return '';
@@ -976,7 +974,7 @@ class FuncHelper {
                 if (!isset($data[1]['model_id'])) {
                     return new Page(0);
                 }
-                $scene = CMSRepository::scene()->setModel(self::model($data[1]['model_id']));
+                $scene = CMSRepository::context()->scene()->setModel(self::model($data[1]['model_id']));
                 return $scene->searchComment(...$data);
             });
     }

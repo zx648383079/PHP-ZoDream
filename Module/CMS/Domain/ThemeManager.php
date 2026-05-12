@@ -3,16 +3,17 @@ declare(strict_types=1);
 namespace Module\CMS\Domain;
 
 use Domain\Repositories\ExplorerRepository;
+use Module\CMS\Domain\Contexts\LiveSiteContext;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Domain\Repositories\CacheRepository;
+use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Domain\Scene\SceneInterface;
@@ -26,7 +27,7 @@ use Zodream\Helpers\Json;
 use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Error\Exception;
 
-class ThemeManager {
+final class ThemeManager {
 
     /**
      * @var Directory
@@ -87,11 +88,10 @@ class ThemeManager {
         return $i > 4 ? substr($name, 4, $i - 4) : substr($name, 0, $i);
     }
 
-    public function pack(): void {
+    public function pack(SiteModel|SiteContextInterface $site): void {
         set_time_limit(0);
-        $site = CMSRepository::site();
-        $siteId = intval($site['id']);
-        $theme = $site['theme'];
+        $context = $site instanceof SiteContextInterface ? $site : new LiveSiteContext($site);
+        $theme = $context->theme();
         if (empty($theme)) {
             $theme = 'default';
         }
@@ -112,7 +112,7 @@ class ThemeManager {
             unset($data['script']);
         }
         $data['name'] = $theme;
-        $scene = CMSRepository::scene()->setSite($site);
+        $scene = $context->scene();
         $data['script'] = array_merge([
             [
                 'action' => 'copy',
@@ -120,7 +120,7 @@ class ThemeManager {
                 'dist' => 'assets'
             ],
         ], $this->packOption($site), $this->packModel($scene),
-            $this->packChannel(), $this->packContent($scene));
+            $this->packChannel($context), $this->packContent($context, $scene));
 
         $zip = ZipStream::create(ExplorerRepository::bakPath($fileName));
         $themeRoot->map(function ($file) use ($zip) {
@@ -191,14 +191,14 @@ class ThemeManager {
         return $data;
     }
 
-    protected function packChannel(int $parent_id = 0): array {
+    protected function packChannel(SiteContextInterface $context, int $parent_id = 0): array {
         $data = [];
-        $model_list = CategoryModel::query()->where('parent_id', $parent_id)
+        $model_list = $context->channelBuilder()->where('parent_id', $parent_id)
             ->asArray()->get();
         foreach ($model_list as $item) {
             $item['action'] = 'channel';
             $item['setting'] = Json::decode($item['setting']);
-            $children = $this->packChannel($item['id']);
+            $children = $this->packChannel($context, $item['id']);
             if (!empty($children)) {
                 $item['children'] = $children;
             }
@@ -223,7 +223,7 @@ class ThemeManager {
         return $this->getCacheId($item['model_id'], 'model');
     }
 
-    protected function packContent(SceneInterface $scene): array {
+    protected function packContent(SiteContextInterface $context, SceneInterface $scene): array {
         $data = [];
         $model_list = ModelModel::query()->get();
         foreach ($model_list as $model) {
@@ -231,7 +231,7 @@ class ThemeManager {
                 continue;
             }
             if ($model['type'] < 1) {
-                $cats = CategoryModel::where('model_id', $model->id)->pluck('id');
+                $cats = $context->channelBuilder()->where('model_id', $model->id)->pluck('id');
                 if (empty($cats)) {
                     continue;
                 }
@@ -262,7 +262,7 @@ class ThemeManager {
         return $data;
     }
 
-    public function unpack(string $fileName): void {
+    public function unpack(SiteModel|SiteContextInterface $site, string $fileName): void {
         $file = ExplorerRepository::bakPath($fileName);
         if (!$file->exist()) {
             throw new \Exception('备份不存在');
@@ -277,19 +277,21 @@ class ThemeManager {
         if (empty($data)) {
             throw new \Exception('读取失败');
         }
-        $this->applyTheme($data, static::themeRootFolder()->directory($data['name']));
+        $context = $site instanceof SiteContextInterface ? $site : new LiveSiteContext($site);
+        $this->applyTheme($context, $data, static::themeRootFolder()->directory($data['name']));
     }
 
-    public function apply(string $theme): void {
+    public function apply(SiteModel|SiteContextInterface $site, string $theme): void {
         $root = static::themeRootFolder()->directory($theme);
         $file = $root->file('theme.json');
         if (!$file->exist()) {
             return;
         }
-        $this->applyTheme(Json::decode($file->read()), $root);
+        $context = $site instanceof SiteContextInterface ? $site : new LiveSiteContext($site);
+        $this->applyTheme($context, Json::decode($file->read()), $root);
     }
 
-    protected function applyTheme(array $themeOption, Directory $themeRoot): void {
+    protected function applyTheme(SiteContextInterface $context, array $themeOption, Directory $themeRoot): void {
         if (empty($themeOption) || !$themeRoot->exist()) {
             return;
         }
@@ -298,10 +300,9 @@ class ThemeManager {
         $this->src = $themeRoot;
         $this->setCache(GroupModel::pluck('id', 'name'), 'group');
         $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
-        $this->setCache(CategoryModel::pluck('id', 'name'), 'channel');
+        $this->setCache($context->channelBuilder()->where('site_id', $context->id())->pluck('id', 'name'), 'channel');
 
-        $scene = CMSRepository::scene();
-        $this->runScript($themeOption['script'], $scene);
+        $this->runScript($context, $themeOption['script']);
     }
 
     protected function setCache(array $data, string $prefix): void {
@@ -315,7 +316,7 @@ class ThemeManager {
         return $this->cache[$key] ?? 0;
     }
 
-    protected function runScript(array $data, SceneInterface $scene): void {
+    protected function runScript(SiteContextInterface $context, array $data): void {
         usort($data, function ($pre, $next) {
             $maps = ['group' => 1, 'linkage' => 2, 'model' => 3, 'form' => 4, 'field' => 5, 'channel' => 6, 'content' => 7];
             if (!isset($maps[$pre['action']])) {
@@ -332,31 +333,31 @@ class ThemeManager {
         foreach ($data as $item) {
             $method = 'runAction'.Str::studly($item['action']);
             if (method_exists($this, $method)) {
-                $this->{$method}($item, $scene);
+                $this->{$method}($item, $context);
             }
         }
     }
 
-    protected function runActionCopy(array $data, SceneInterface $scene): void {
+    protected function runActionCopy(array $data, SiteContextInterface $context): void {
         $this->src->directory($data['src'])->copy($this->dist->directory($data['dist']));
     }
 
-    protected function runActionGroup(array $data, SceneInterface $scene): void {
+    protected function runActionGroup(array $data, SiteContextInterface $context): void {
         if (!isset($data['data'])) {
             $this->insertGroup($data);
         }
     }
 
-    protected function runActionForm(array $data, SceneInterface $scene): void {
+    protected function runActionForm(array $data, SiteContextInterface $context): void {
         $data['type'] = 1;
-        $this->runActionModel($data, $scene);
+        $this->runActionModel($data, $context);
     }
 
-    protected function runActionLinkage(array $data, SceneInterface $scene): void {
-        $data = $this->formatI18n($data);
+    protected function runActionLinkage(array $data, SiteContextInterface $context): void {
+        $data = $this->formatI18n($data, $context);
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
-        $data['language'] = CMSRepository::siteLanguage();
+        $data['language'] = $context->language();
         $model = LinkageModel::where('code', $data['code'])
             ->where('language', $data['language'])->first();
         if (empty($model)) {
@@ -366,14 +367,17 @@ class ThemeManager {
             throw new Exception('数据错误');
         }
         $this->setCache([$model->code => $model->id, $model->id => $model], 'linkage');
-        $this->runActionLinkageData($items, 0, '', $model->id);
+        $this->runActionLinkageData($context, $items, 0, '', $model->id);
     }
 
-    public function runActionLinkageData(array $data, int $parent_id, string $prefix, int $linkage_id): void {
+    public function runActionLinkageData(SiteContextInterface $context, array $data, 
+        int $parent_id, 
+        string $prefix, 
+        int $linkage_id): void {
         foreach ($data as $item) {
             $children = $item['children'] ?? [];
             unset($item['children']);
-            $item = $this->formatI18n($item);
+            $item = $this->formatI18n($item, $context);
             $item['parent_id'] = $parent_id;
             $item['linkage_id'] = $linkage_id;
             $item['full_name'] = $prefix.' '.$item['name'];
@@ -385,7 +389,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionModel(array $data, SceneInterface $scene): void {
+    protected function runActionModel(array $data, SiteContextInterface $context): void {
         $fields = $data['fields'] ?? [];
         if (isset($data['child'])) {
             $data['child_model'] = $this->getCacheId($data['child']);
@@ -402,15 +406,12 @@ class ThemeManager {
             throw new Exception('数据错误');
         }
         $this->setCache([$model->table => $model->id, $model->id => $model], 'model');
-        CacheRepository::onModelUpdated($model->id);
-        FuncHelper::cache()->clear();
+        $scene = $context->scene();
         $scene->setModel($model)->initModel();
         foreach ($fields as $field) {
             $field['model_id'] = $model->id;
             $this->runActionField($field, $scene);
         }
-        CacheRepository::onModelUpdated($model->id);
-        FuncHelper::cache()->clear();
     }
 
     protected function runActionField(array $data, SceneInterface $scene): void {
@@ -458,9 +459,9 @@ class ThemeManager {
         $scene->addField($model);
     }
 
-    protected function runActionChannel(array $data, SceneInterface $scene): void {
+    protected function runActionChannel(array $data, SiteContextInterface $context): void {
         $oldTitle = $data['title'];
-        $data = $this->formatI18n($data);
+        $data = $this->formatI18n($data, $context);
         $type = $data['type'] ?? null;
         if ($type === 'link') {
             $data['type'] = CategoryEntity::TYPE_LINK;
@@ -480,11 +481,11 @@ class ThemeManager {
         if (empty($data['name'])) {
             $data['name'] = CMSRepository::generateTableName($oldTitle);
         }
-        $siteId = CMSRepository::siteId();
-        $model = CategoryModel::where('name', $data['name'])->where('site_id', $siteId)->first();
+        $siteId = $context->id();
+        $model = $context->channelBuilder()->where('name', $data['name'])->where('site_id', $siteId)->first();
         if (empty($model)) {
             $data['site_id'] = $siteId;
-            $model = CategoryModel::create($data);
+            $model = $context->channelSave($data);
         }
         if (!$model) {
             throw new Exception('数据错误');
@@ -493,18 +494,18 @@ class ThemeManager {
         foreach ($children as $item) {
             if (isset($item['action']) && $item['action'] === 'content') {
                 $item['cat_id'] = $model->id;
-                $this->runActionContent($item, $scene);
+                $this->runActionContent($item, $context);
                 continue;
             }
             if (empty($item['type'])) {
                 $item['type'] = $type;
             }
             $item['parent_id'] = $model->id;
-            $this->runActionChannel($item, $scene);
+            $this->runActionChannel($item, $context);
         }
     }
 
-    protected function runActionContent(array $data, SceneInterface $scene): void {
+    protected function runActionContent(array $data, SiteContextInterface $context): void {
         if (isset($data['cat_id']) && !is_numeric($data['cat_id'])) {
             $data['cat_id'] = $this->getCacheId($data['cat_id']);
         } elseif (isset($data['type'])) {
@@ -512,8 +513,8 @@ class ThemeManager {
         }
         unset($data['type'], $data['action']);
         $cat = $this->getCacheId($data['cat_id'], 'channel');
-        $scene = $scene->setModel($this->getCacheId($cat->model_id, 'model'));
-        $scene->insert($this->formatI18n($data));
+        $scene = $context->scene()->setModel($this->getCacheId($cat->model_id, 'model'));
+        $scene->insert($this->formatI18n($data, $context));
     }
 
     protected function insertGroup(array $item): void {
@@ -529,7 +530,7 @@ class ThemeManager {
         }
     }
 
-    protected function runActionOption(array $data, SceneInterface $scene): void {
+    protected function runActionOption(array $data, SiteContextInterface $context): void {
         $newOptions = [];
         foreach ($data['data'] as $item) {
             if (isset($item['items'])) {
@@ -541,11 +542,11 @@ class ThemeManager {
             unset($item['default'], $item['items'], $item['id']);
             $newOptions[] = $item;
         }
-        CMSRepository::site()->saveOption($newOptions);
+        $context->options($newOptions);
     }
 
-    protected function formatI18n(array $data): array {
-        $lang = CMSRepository::siteLanguage();
+    protected function formatI18n(array $data, SiteContextInterface $context): array {
+        $lang = $context->language();
         $res = [];
         foreach ($data as $key => $item) {
             $i = strpos($key, ':');
@@ -622,18 +623,19 @@ class ThemeManager {
         ];
     }
 
-    public static function clear(): void {
+    public static function clear(SiteModel|SiteContextInterface $site): void {
+        $context = $site instanceof SiteContextInterface ? $site : new LiveSiteContext($site);
         $truncateTables = [
             ModelModel::tableName(),
             ModelFieldModel::tableName(),
-            CategoryModel::tableName(),
+            $context->channelTableName(),
             GroupModel::tableName(),
             LinkageModel::tableName(),
             LinkageDataModel::tableName(),
             ForumModel::tableName()
         ];
         $model_list = ModelModel::query()->get();
-        $scene = CMSRepository::scene();
+        $scene =$context->scene();
         foreach ($model_list as $model) {
             $scene->setModel($model);
             CreateCmsTables::dropTable($scene->getExtendTable());

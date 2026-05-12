@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Upgrades;
 
+use Module\CMS\Domain\Contexts\LiveSiteContext;
 use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
-use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
-use Module\CMS\Module;
+use Module\CMS\Domain\Scene\SingleScene;
 
 /**
  * 升级支持SEO版本
@@ -15,9 +15,6 @@ use Module\CMS\Module;
 class SeoUpgrade {
 
     public function handle(): void {
-        if (empty(CMSRepository::scene())) {
-            (new Module())->boot();
-        }
         $modelItem = ModelModel::query()->where('type', 0)->get();
         foreach ($modelItem as $item) {
             ModelRepository::batchAddField([
@@ -40,8 +37,11 @@ class SeoUpgrade {
     }
 
     private function upgradeSite(SiteModel $site, array $modelItem): void {
-        CMSRepository::site($site);
-        $scene = CMSRepository::scene()->setSite($site);
+        $context = new LiveSiteContext($site);
+        $scene = $context->scene();
+        if (!($scene instanceof SingleScene)) {
+            return;
+        }
         $scene->boot();
         ContentModel::query()->delete();
         $id = 100;

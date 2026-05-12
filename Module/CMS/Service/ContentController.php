@@ -20,7 +20,7 @@ class ContentController extends Controller {
             return $this->redirect('./');
         }
         FuncHelper::$current['model'] = $model['id'];
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $article = $scene->find($id);
         $parent = null;
         if (empty($article)) {

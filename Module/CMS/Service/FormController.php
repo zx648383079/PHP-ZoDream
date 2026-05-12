@@ -13,7 +13,7 @@ class FormController extends Controller {
 
     public function indexAction(Input $input) {
         $model = FormRepository::getModel($input);
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $field_list = FuncHelper::formData($model['id']);
         $form_action = FuncHelper::formAction($model['id']);
         $token = session()->token();

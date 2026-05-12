@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Exception;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Zodream\Helpers\Arr;
@@ -10,17 +11,17 @@ use Zodream\Html\Tree;
 
 class CategoryRepository {
     public static function getList(int $site) {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         $modelItems = Arr::pluck(ModelModel::query()->select('id', '`table`')
             ->get(), null, 'id');
-        $items = CategoryModel::query()->orderBy('position', 'asc')->get();
+        $items = $context->channelBuilder()->orderBy('position', 'asc')->get();
         $countKey = 'content_count';
         foreach ($items as &$item) {
             if ($item['type'] > 0 || !isset($modelItems[$item['model_id']])) {
                 $item[$countKey] = 0;
                 continue;
             }
-            $item[$countKey] = CMSRepository::scene()->setModel($modelItems[$item['model_id']])
+            $item[$countKey] = $context->scene()->setModel($modelItems[$item['model_id']])
                 ->query()->where('model_id', $item['model_id'])
                 ->where('cat_id', $item['id'])->count();
         }
@@ -30,22 +31,42 @@ class CategoryRepository {
     }
 
     public static function get(int $site, int $id) {
-        SiteRepository::apply($site);
-        return CategoryModel::findOrThrow($id, '数据有误');
+        $context = SiteRepository::apply($site);
+        return self::getOrThrow($context, $id);
+    }
+
+    private static function getOrCreate(SiteContextInterface $context, int $id): CategoryModel {
+        if ($id === 0) {
+            return new CategoryModel();
+        }
+        $model = $context->channelBuilder()->where('id', $id)->first();
+        if (empty($model)) {
+            return new CategoryModel();
+        }
+        return $model;
+    }
+
+    private static function getOrThrow(SiteContextInterface $context, int $id): CategoryModel {
+        $model = $context->channelBuilder()->where('id', $id)->first();
+        if (empty($model)) {
+            throw new Exception('数据有误');
+        }
+        return $model;
     }
 
     public static function save(int $site, array $data) {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $model = CategoryModel::findOrNew($id);
+        $model = self::getOrCreate($context, $id);
         if (is_numeric($data['name'])) {
             $data['name'] = sprintf('%s%d',
                 CMSRepository::generateTableName($data['title']),
                 $data['name']);
         }
         $model->load($data);
-        if (!$model->save()) {
+        $context->channelSave($model);
+        if ($model->hasError()) {
             throw new \Exception($model->getFirstError());
         }
         CacheRepository::onChannelUpdated(intval($model->id));
@@ -53,32 +74,34 @@ class CategoryRepository {
     }
 
     public static function remove(int $site, int $id) {
-        SiteRepository::apply($site);
-        CategoryModel::where('id', $id)->delete();
+        $context = SiteRepository::apply($site);
+        $context->channelBuilder()->where('id', $id)->delete();
         CacheRepository::onChannelUpdated($id);
     }
 
     public static function all(int $site) {
-        SiteRepository::apply($site);
-        return (new Tree(CategoryModel::query()->orderBy('position', 'asc')
+        $context = SiteRepository::apply($site);
+        return (new Tree($context->channelBuilder()
+            ->where('site_id', $site)->orderBy('position', 'asc')
             ->get('id', 'title', 'parent_id')))
             ->makeTreeForHtml();
     }
 
     public static function apply(int $site, int $id) {
-        SiteRepository::apply($site);
-        $modelId = CategoryModel::where('id', $id)
+        $context = SiteRepository::apply($site);
+        $modelId = $context->channelBuilder()->where('id', $id)
             ->value('model_id');
         if ($modelId < 1) {
             throw new Exception('栏目不包含模型');
         }
-        return CMSRepository::scene()->setModel(ModelRepository::get(intval($modelId)));
+        return $context->scene()->setModel(ModelRepository::get(intval($modelId)));
     }
 
     public static function batchSave(array $data): void {
+        $context = CMSRepository::context();
         $parent = null;
         if (!empty($data['parent_id'])) {
-            $parent = CategoryModel::findOrThrow($data['parent_id']);
+            $parent = self::getOrThrow($context, $data['parent_id']);
         }
         foreach ([
                      'category_template',
@@ -107,7 +130,7 @@ class CategoryRepository {
         $orderItems = [];
         $last = -1;
         $level = -1;
-        $siteId = CMSRepository::siteId();
+        $siteId = $context->id();
         foreach (explode("\n", $data['content']) as $line) {
             list($c, $title) = self::splitTitleTag($line);
             if (empty($title)) {
@@ -128,7 +151,7 @@ class CategoryRepository {
                 }
             }
             $parentId = $levelItems[$level];
-            $model = CategoryModel::createOrThrow(array_merge($data, [
+            $model = $context->channelSave(array_merge($data, [
                 'site_id' => $siteId,
                 'parent_id' => $parentId,
                 'title' => $title,

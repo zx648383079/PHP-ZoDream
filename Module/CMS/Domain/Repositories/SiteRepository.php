@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
 use Domain\Model\SearchModel;
+use Module\CMS\Domain\Contexts\CachingSiteContext;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Model\SiteModel;
-use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\ThemeManager;
 use Zodream\Http\Uri;
 
@@ -111,15 +112,14 @@ class SiteRepository {
         $model->save();
     }
 
-    public static function apply(int $id): SceneInterface {
-        $scene = CMSRepository::scene();
-        if (CMSRepository::siteId() === $id) {
-            return $scene->setSite();
+    public static function apply(int $id): SiteContextInterface {
+        $context = CMSRepository::context();
+        if ($context->id() === $id) {
+            return $context;
         }
         $model = SiteModel::where('id', $id)->first('id', 'locale_group_id');
-        CMSRepository::site($model);
-        $scene->setSite($model);
-        return $scene;
+        $context = CMSRepository::context($model);
+        return $context;
     }
 
     public static function themeList() {
@@ -134,15 +134,10 @@ class SiteRepository {
      */
     public static function mapTemporary(callable $cb): void {
         $items = SiteModel::query()->get();
-        $source = CMSRepository::site();
-        $scene = CMSRepository::scene();
         foreach ($items as $item) {
-            CMSRepository::site($item);
-            $scene->setSite($item);
-            call_user_func($cb, $scene, $item);
+            $context = new CachingSiteContext($item);
+            call_user_func($cb, $context);
         }
-        CMSRepository::site($source);
-        $scene->setSite($source);
     }
 
     public static function formatStatus(mixed $status): string {

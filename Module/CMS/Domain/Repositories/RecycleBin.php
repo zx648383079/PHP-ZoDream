@@ -4,13 +4,10 @@ namespace Module\CMS\Domain\Repositories;
 
 
 use Domain\Model\SearchModel;
-use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\GroupEntity;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\RecycleBinEntity;
-use Module\CMS\Domain\Model\LinkageDataModel;
-use Module\CMS\Domain\Model\LinkageModel;
 use Zodream\Database\Model\Model;
 use Zodream\Helpers\Json;
 
@@ -37,12 +34,12 @@ final class RecycleBin {
         $success = [];
         foreach ($items as $item) {
             if ($item['site_id'] > 0) {
-                SiteRepository::apply(intval($item['site_id']));
+                $context = SiteRepository::apply(intval($item['site_id']));
             }
             $data = Json::decode($item['data']);
             switch (intval($item['item_type'])) {
                 case SiteRepository::TYPE_CATEGORY:
-                    CategoryEntity::query()->insert($data);
+                    CMSRepository::context()->channelBuilder()->insert($data);
                     break;
                 case SiteRepository::TYPE_GROUP:
                     GroupEntity::query()->insert($data);
@@ -82,7 +79,7 @@ final class RecycleBin {
     public static function addCategory(int $site, array|int $data): void {
         if (is_numeric($data)) {
             $id = intval($data);
-            $data = CategoryEntity::query()->where('id',$id)->asArray()->first();
+            $data = CMSRepository::context()->channelBuilder()->where('id',$id)->asArray()->first();
             if (empty($data)) {
                 return;
             }
@@ -93,7 +90,7 @@ final class RecycleBin {
     public static function addContent(int $site, array|int $data): void {
         if (is_numeric($data)) {
             $id = intval($data);
-            $data = CMSRepository::scene()->find($id);
+            $data = CMSRepository::context()->scene()->find($id);
             if (empty($data)) {
                 return;
             }

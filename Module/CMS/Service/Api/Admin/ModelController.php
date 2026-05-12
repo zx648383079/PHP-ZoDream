@@ -133,7 +133,7 @@ class ModelController extends Controller {
 
     public function restartAction(int $id, int $site) {
         try {
-            SiteRepository::apply($site);
+            $context = SiteRepository::apply($site);
             ModelRepository::restart($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

@@ -5,7 +5,6 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
-use Zodream\Template\View;
 
 class Editor extends BaseField {
 

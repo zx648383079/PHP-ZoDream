@@ -14,7 +14,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
     public function indexAction() {
-        $model_list = CategoryRepository::getList(CMSRepository::siteId());
+        $model_list = CategoryRepository::getList(CMSRepository::context()->id());
         return $this->show(compact('model_list'));
     }
 
@@ -29,7 +29,7 @@ class CategoryController extends Controller {
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->get();
-        $cat_list = CategoryRepository::all(CMSRepository::siteId());
+        $cat_list = CategoryRepository::all(CMSRepository::context()->id());
         if (!empty($id)) {
             $excludes = [$id];
             $cat_list = array_filter($cat_list, function ($item) use (&$excludes) {
@@ -83,7 +83,7 @@ class CategoryController extends Controller {
             $model_list = ModelModel::whereIn('id', $modelIds)
                 ->get();
             foreach ($model_list as $model) {
-                $scene = CMSRepository::scene()->setModel($model);
+                $scene = CMSRepository::context()->scene()->setModel($model);
                 $ids = $scene->query()->whereIn('cat_id', $items)->pluck('id');
                 $scene->remove($ids);
             }
@@ -102,7 +102,7 @@ class CategoryController extends Controller {
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->get();
-        $cat_list = CategoryRepository::all(CMSRepository::siteId());
+        $cat_list = CategoryRepository::all(CMSRepository::context()->id());
         $template_list = $this->getThemeTemplate(true);
         return $this->show('quickly', compact('cat_list',
             'template_list', 'group_list', 'model_list'));
@@ -129,7 +129,7 @@ class CategoryController extends Controller {
     }
 
     protected function getThemeTemplate(bool $hasParent = false): array {
-        $template_list = (new ThemeManager())->loadTemplates(CMSRepository::site()->theme);
+        $template_list = (new ThemeManager())->loadTemplates(CMSRepository::context()->theme());
         $prefix = ['' => '--继承模型--'];
         if ($hasParent) {
             $prefix['@parent'] = '--继承父级栏目--';

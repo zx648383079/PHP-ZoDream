@@ -48,7 +48,7 @@ final class LocaleRepository {
 
     public static function siteOptions(SiteEntity|null $model = null): array {
         if (empty($model)) {
-            $model = CMSRepository::site();
+            $model = CMSRepository::context()->source();
         }
         $locale_group_id = intval($model->locale_group_id);
         if ($locale_group_id === 0) {
@@ -74,14 +74,15 @@ final class LocaleRepository {
         if ($id <= 0) {
             return 0;
         }
-        $source = CategoryEntity::where('id', $id)->first('locale_group_id', 'site_id');
+        $context = CMSRepository::context();
+        $source = $context->channelBuilder()->where('id', $id)->first('locale_group_id', 'site_id');
         if (intval($source->site_id) === $site) {
             return $id;
         }
         if (!$source->locale_group_id) {
             return 0;
         }
-        return intval(CategoryEntity::where('locale_group_id', $source->locale_group_id)->where('site_id', $site)
+        return intval($context->channelBuilder()->where('locale_group_id', $source->locale_group_id)->where('site_id', $site)
             ->value('id'));
     }
 
@@ -89,7 +90,7 @@ final class LocaleRepository {
         if ($id <= 0) {
             return 0;
         }
-        $scene = CMSRepository::scene();
+        $scene = CMSRepository::context()->scene();
         $source = $scene->query()->where('id', $id)->first('locale_group_id', 'site_id');
         if (intval($source->site_id) === $site) {
             return $id;

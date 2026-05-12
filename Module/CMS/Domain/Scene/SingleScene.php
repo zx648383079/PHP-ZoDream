@@ -11,7 +11,7 @@ use Zodream\Database\Schema\Table;
 class SingleScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s', $this->tableSiteId);
+        return sprintf('cms_content_%s', $this->context->tableId());
     }
 
     public function getExtendTable(): string {
@@ -19,12 +19,12 @@ class SingleScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d', $this->tableSiteId);
+        return sprintf('cms_comment_%d', $this->context->tableId());
     }
 
     public function boot(): void {
-        if ($this->isSiteTable()) {
-            CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
+        if ($this->context->isOwer()) {
+            CreateCmsTables::createTable($this->getMainTable(), function (Table $table) {
                 $this->initMainTableField($table);
             });
             $this->initCommentTable();
@@ -46,14 +46,14 @@ class SingleScene extends BaseScene {
     }
 
     public function initTable(): bool {
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             $field_list = array_filter($this->fieldList(), function ($item) {
                 return $item['is_system'] < 1;
             });
             CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($field_list) {
                 $table->column('id')->int(10)->pk(true);
                 foreach ($field_list as $item) {
-                    static::converterTableField($table->column($item['field']), $item);
+                    static::converterTableField($table->column($item['field']), $item, $this->context);
                 }
                 $table->comment($this->model['name']);
             });
@@ -74,14 +74,14 @@ class SingleScene extends BaseScene {
             $this->extendQuery()->whereIn('id', $items)->delete();
             $this->commentQuery()->whereIn('id', $items)->delete();
         }
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             CreateCmsTables::dropTable($this->getExtendTable());
         }
         return true;
     }
 
     public function destroy(): void {
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             CreateCmsTables::dropTable(ContentModel::tableName());
             CreateCmsTables::dropTable($this->getCommentTable());
         } else {
@@ -101,7 +101,7 @@ class SingleScene extends BaseScene {
             return true;
         }
         $table = new Table($this->getExtendTable());
-        static::converterTableField($table->column($field['field']), $field);
+        static::converterTableField($table->column($field['field']), $field, $this->context);
         CreateCmsTables::updateTable($table,
             $table->columns()
         );
@@ -120,7 +120,7 @@ class SingleScene extends BaseScene {
         }
         $table = new Table($this->getExtendTable());
         static::converterTableField($table->column(
-            $oldField['field'])->name($field['field']), $field);
+            $oldField['field'])->name($field['field']), $field, $this->context);
         CreateCmsTables::updateTable($table,
             updateColumns: $table->columns()
         );

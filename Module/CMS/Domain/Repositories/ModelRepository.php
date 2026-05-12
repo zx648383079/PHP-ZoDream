@@ -5,10 +5,9 @@ namespace Module\CMS\Domain\Repositories;
 use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Events\ManageAction;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Domain\Model\SiteModel;
-use Module\CMS\Domain\Scene\SceneInterface;
 use Module\CMS\Domain\Scene\SingleScene;
 
 class ModelRepository {
@@ -78,7 +77,7 @@ class ModelRepository {
         }
         event(new ManageAction('cms_model_edit', '', 32, intval($id)));
         if ($id < 1) {
-            CMSRepository::scene()->setModel($model)->initModel();
+            CMSRepository::context()->scene()->setModel($model)->initModel();
         }
         CacheRepository::onModelUpdated(intval($model->id));
         return $model;
@@ -142,8 +141,8 @@ class ModelRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($id, $model, $old) {
-            $scene->setSite($site)->setModel($model->model);
+        SiteRepository::mapTemporary(function (SiteContextInterface $context) use ($id, $model, $old) {
+            $scene = $context->scene()->setModel($model->model);
             if (!$scene->initializedModel()) {
                 return;
             }
@@ -165,8 +164,8 @@ class ModelRepository {
         if ($model->is_system > 0) {
             throw new \Exception('系统自带字段禁止删除');
         }
-        SiteRepository::mapTemporary(function (SceneInterface $scene, SiteModel $site) use ($model) {
-            $scene->setSite($site)->setModel($model->model);
+        SiteRepository::mapTemporary(function (SiteContextInterface $context) use ($model) {
+            $scene = $context->scene()->setModel($model->model);
             if (!$scene->initializedModel()) {
                 return;
             }
@@ -240,7 +239,7 @@ class ModelRepository {
 
     public static function fieldOption(string $type, int $field): array {
         $model = ModelFieldModel::findOrNew($field);
-        $field = SingleScene::newField($type);
+        $field = SingleScene::newField($type, CMSRepository::context());
         $data = $field->options($model, true);
         return empty($data) || !is_array($data) ? [] : $data;
     }
@@ -268,7 +267,7 @@ class ModelRepository {
 
     public static function restart(int $id): void {
         $model = ModelModel::findOrThrow($id);
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $scene->removeTable();
         $scene->initTable();
     }

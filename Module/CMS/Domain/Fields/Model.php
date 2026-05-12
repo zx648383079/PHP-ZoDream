@@ -5,7 +5,6 @@ namespace Module\CMS\Domain\Fields;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
@@ -51,7 +50,7 @@ class Model extends BaseField {
         }
         $option = static::fieldSetting($field,'option');
 //        $model = ModelModel::find($option['model']);
-//        $items = empty($model) ? [] : CMSRepository::scene()->setModel($model)
+//        $items = empty($model) ? [] : $this->context->scene()->setModel($model)
 //            ->query()->where('model_id', $model->id)->pluck('title', 'id');
 //        return Theme::select($field->field, $items, $value, $field->name, $field->is_required > 0);
         $value = intval($value);
@@ -85,6 +84,6 @@ HTML;
         $option = static::fieldSetting($field,'option');
         $model = FuncHelper::model(intval($option['model']));
         // TODO 临时使用注意事项
-        return (string)CMSRepository::scene()->setModel($model)->query()->where('id', $value)->value('title');
+        return (string)$this->context->scene()->setModel($model)->query()->where('id', $value)->value('title');
     }
 }

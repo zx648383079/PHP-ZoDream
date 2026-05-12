@@ -36,7 +36,7 @@ class CategoryEntity extends Entity {
     const TYPE_LINK = 2; //外链
 
     public static function tableName(): string {
-        return 'cms_category_'.CMSRepository::tableSiteId();
+        return CMSRepository::context()->channelTableName();
     }
 
     public function rules(): array {

@@ -26,7 +26,7 @@ class CommentEntity extends Entity {
     use ExtraRule;
 
     public static function tableName(): string {
-        return 'cms_comment_'.CMSRepository::siteId();
+        return 'cms_comment_'.CMSRepository::tableSiteId();
     }
 
     protected function rules(): array {

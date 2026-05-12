@@ -24,7 +24,7 @@ class Controller extends ModuleController {
     public function prepare() {
         CMSRepository::resetSite();
         try {
-            $currentSite = CMSRepository::site();
+            $currentSite = CMSRepository::context()->source();
         } catch (\Exception $ex) {
             $currentSite = null;
         }

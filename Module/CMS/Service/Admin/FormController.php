@@ -11,7 +11,7 @@ class FormController extends Controller {
     public function indexAction(int $id, string $keywords = '') {
         try {
             $model = ModelModel::find($id);
-            $scene = CMSRepository::scene()->setModel($model);
+            $scene = CMSRepository::context()->scene()->setModel($model);
             $model_list = $scene->search($keywords, [
                 'model_id' => $id
             ], 'id desc');
@@ -34,7 +34,7 @@ class FormController extends Controller {
      */
     public function editAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $data = $id > 0 ? $scene->find($id) : [];
         $tab_list = ModelRepository::fieldGroupByTab($model_id);
         return $this->show('edit', compact('id', 'model_id', 'model', 'scene', 'data', 'tab_list'));
@@ -42,7 +42,7 @@ class FormController extends Controller {
 
     public function saveAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $data = request()->get();
         try {
             if ($id > 0) {
@@ -60,7 +60,7 @@ class FormController extends Controller {
 
     public function deleteAction(int $id, int $model_id) {
         $model = ModelModel::find($model_id);
-        CMSRepository::scene()->setModel($model)->remove($id);
+        CMSRepository::context()->scene()->setModel($model)->remove($id);
         return $this->renderData([
             'url' => $this->getUrl('form', ['id' => $model_id])
         ]);

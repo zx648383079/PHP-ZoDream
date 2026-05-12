@@ -12,7 +12,7 @@ use Zodream\Database\Schema\Table;
 class MultiScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s_%s', $this->tableSiteId, $this->model['table']);
+        return sprintf('cms_content_%s_%s', $this->context->tableId(), $this->model['table']);
     }
 
     public function getExtendTable(): string {
@@ -20,7 +20,7 @@ class MultiScene extends BaseScene {
     }
 
     public function getCommentTable(): string {
-        return sprintf('cms_comment_%d_%s', $this->tableSiteId, $this->model['table']);
+        return sprintf('cms_comment_%d_%s', $this->context->tableId(), $this->model['table']);
     }
 
     public function seoQuery(): SqlBuilder {
@@ -36,7 +36,7 @@ class MultiScene extends BaseScene {
 
 
     public function boot(): void {
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
                 $this->initSeoTableField($table);
             });
@@ -58,7 +58,7 @@ class MultiScene extends BaseScene {
     }
 
     public function initTable(): bool {
-        if (!$this->isSiteTable()) {
+        if (!$this->context->isOwer()) {
             return true;
         }
         $extend_list = array_filter($this->fieldList(), function ($item) {
@@ -70,13 +70,13 @@ class MultiScene extends BaseScene {
         CreateCmsTables::createTable($this->getMainTable(), function (Table $table) use ($field_list) {
             $this->initMainTableField($table);
             foreach ($field_list as $item) {
-                static::converterTableField($table->column($item['field']), $item);
+                static::converterTableField($table->column($item['field']), $item, $this->context);
             }
         });
         CreateCmsTables::createTable($this->getExtendTable(), function (Table $table) use ($extend_list) {
             $table->column('id')->int(10)->pk(true);
             foreach ($extend_list as $item) {
-                static::converterTableField($table->column($item['field']), $item);
+                static::converterTableField($table->column($item['field']), $item, $this->context);
             }
             $table->comment($this->model['name']);
         });
@@ -88,7 +88,7 @@ class MultiScene extends BaseScene {
      * @return mixed
      */
     public function removeTable(): bool {
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             CreateCmsTables::dropTable($this->getMainTable());
             CreateCmsTables::dropTable($this->getExtendTable());
             CreateCmsTables::dropTable($this->getCommentTable());
@@ -108,7 +108,7 @@ class MultiScene extends BaseScene {
     }
 
     public function destroy(): void {
-        if ($this->isSiteTable()) {
+        if ($this->context->isOwer()) {
             CreateCmsTables::dropTable(ContentModel::tableName());
         } else{
             $this->seoQuery()->where('site_id', $this->site)->delete();
@@ -126,7 +126,7 @@ class MultiScene extends BaseScene {
             return true;
         }
         $table = new Table($this->getTableByMain($field['is_main']));
-        static::converterTableField($table->column($field['field']), $field);
+        static::converterTableField($table->column($field['field']), $field, $this->context);
         CreateCmsTables::updateTable($table,
             $table->columns()
         );
@@ -147,7 +147,7 @@ class MultiScene extends BaseScene {
         if ($field['is_main'] == $oldField['is_main']) {
             $table = new Table($this->getTableByMain($field['is_main']));
             static::converterTableField($table->column(
-                $oldField['field'])->name($field['field']), $field);
+                $oldField['field'])->name($field['field']), $field, $this->context);
             CreateCmsTables::updateTable($table,
                 updateColumns: $table->columns()
             );
@@ -200,7 +200,7 @@ class MultiScene extends BaseScene {
         $main['updated_at'] = $main['created_at'] = $timestamp;
         $main['cat_id'] = isset($data['cat_id']) ? intval($data['cat_id']) : 0;
         $main['parent_id'] = isset($data['parent_id']) ? intval($data['parent_id']) : 0;
-        $main['site_id'] = $this->site;
+        $main['site_id'] = $this->context->id();
         $main['model_id'] = $this->modelId();
         $main['user_id'] = auth()->id();
         $id = intval($this->seoQuery()->insert([

@@ -27,7 +27,7 @@ class PermissionController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = PermissionModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }

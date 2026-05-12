@@ -29,7 +29,7 @@ class ContentController extends Controller {
             return $this->renderFailure('模型不存在');
         }
         FuncHelper::$current['model'] = $model->id;
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $data = $scene->find($id);
         if (empty($data)) {
             return $this->renderFailure('内容不存在');

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Helpers\Html;
@@ -11,6 +12,11 @@ use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Database\Model\Model as BaseModel;
 
 abstract class BaseField {
+
+    public function __construct(
+        protected readonly SiteContextInterface $context
+    ) {
+    }
 
     abstract public function converterField(Column $column, ModelFieldModel $field): void;
 

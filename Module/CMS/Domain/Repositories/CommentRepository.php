@@ -20,7 +20,7 @@ class CommentRepository {
             throw new Exception('article is error');
         }
         FuncHelper::$current['model'] = $model['id'];
-        $scene = CMSRepository::scene()->setModel($model);
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $article = $scene->query()->where('id', $article)->first();
         if (!CMSRepository::isPreview() && $article['status'] != SiteRepository::PUBLISH_STATUS_POSTED) {
             throw new Exception('article is error');
@@ -217,14 +217,14 @@ class CommentRepository {
             throw new Exception('model error');
         }
         FuncHelper::$current['model'] = $model['id'];
-        return [CMSRepository::scene()->setModel($model), $model['id']];
+        return [CMSRepository::context()->scene()->setModel($model), $model['id']];
     }
 
     public static function getManageList(int $site, int $article, int|string $category, int|string $model,
                                          string $keywords = '', int $parent_id = 0, int $user = 0,
                                          string $extra = '', int $page = 1, int $prePage = 20)
     {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         /** @var SceneInterface $scene */
         list($scene, $modelId) = static::scene($article, $category, $model);
         $data = [
@@ -240,7 +240,7 @@ class CommentRepository {
 
     public static function manageRemove(int $site, int $id, int $article, int|string $category, int|string $model)
     {
-        SiteRepository::apply($site);
+        $context = SiteRepository::apply($site);
         /** @var SceneInterface $scene */
         list($scene) = static::scene($article, $category, $model);
         if ($scene->removeComment($id)) {
