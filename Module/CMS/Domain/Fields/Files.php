@@ -58,7 +58,27 @@ class Files extends BaseField {
                 'value' => $value
             ];
         }
-        return (string)Theme::file($field['field'], $value, $field['name'], '',
-            $field['is_required'] > 0);
+        return <<<HTML
+<div class="input-group">
+    <label for="{$field['field']}">{$field['name']}</label>
+     <div class="multiple-upload-panel">
+        <div class="panel-header">
+            <input type="text" class="form-control">
+            <a class="btn btn-primary">Upload</a>
+        </div>
+        <div class="panel-body">
+            <div class="upload-item">
+                <span class="item-body">文件</span>
+                <i class="item-close">&times;</i>
+            </div>
+            <div class="upload-item --with-loading">
+                <span class="item-body">文件</span>
+                <i class="item-close">&times;</i>
+                <span class="upload-progress"></span>
+            </div>
+        </div>
+    </div>
+</div>
+HTML;
     }
 }

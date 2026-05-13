@@ -103,7 +103,6 @@ class ModelController extends Controller {
         try {
             $field = ModelRepository::fieldSave($input->get());
         } catch (\Exception $ex) {
-            dr($ex);
             return $this->renderFailure($ex);
         }
         return $this->renderData([

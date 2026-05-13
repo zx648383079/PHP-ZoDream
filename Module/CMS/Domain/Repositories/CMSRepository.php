@@ -274,7 +274,7 @@ class CMSRepository {
         if (empty($name)) {
             return Str::randomByNumber(8);
         }
-        if (preg_match('/^[a-zA-Z ]+$/', $name, $_)) {
+        if (preg_match('/^[a-zA-Z\d ]+$/', $name, $_)) {
             $val = strtolower(trim($name));
         } else {
             $val = PinYin::encode(trim($name), 'all');

@@ -165,7 +165,6 @@ class CodeParser {
                 $lines[] = $plugin->{$method}($item);
                 continue;
             }
-            dr($method);
         }
         return implode(self::NEW_LINE, $lines);
     }
