@@ -6,6 +6,7 @@ use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
+use Module\CMS\Domain\Model\ModelModel;
 
 final class LocaleRepository {
 
@@ -86,11 +87,11 @@ final class LocaleRepository {
             ->value('id'));
     }
 
-    public static function contentConvert(int $site, int $model, int $id = 0): int {
+    public static function articleConvert(int $site, ModelModel $model, int $id = 0): int {
         if ($id <= 0) {
             return 0;
         }
-        $scene = CMSRepository::context()->scene();
+        $scene = CMSRepository::context()->scene()->setModel($model);
         $source = $scene->query()->where('id', $id)->first('locale_group_id', 'site_id');
         if (intval($source->site_id) === $site) {
             return $id;

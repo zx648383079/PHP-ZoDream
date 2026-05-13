@@ -134,9 +134,14 @@ class SiteRepository {
      */
     public static function mapTemporary(callable $cb): void {
         $items = SiteModel::query()->get();
+        $exist = []; // 判断关联站点
         foreach ($items as $item) {
             $context = new CachingSiteContext($item);
+            if (in_array($context->tableId(), $exist)) {
+                continue;
+            }
             call_user_func($cb, $context);
+            $exist[] = $context->tableId();
         }
     }
 

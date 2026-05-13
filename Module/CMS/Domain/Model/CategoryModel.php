@@ -4,8 +4,6 @@ namespace Module\CMS\Domain\Model;
 use Module\CMS\Domain\Entities\CategoryEntity;
 use Module\CMS\Domain\FuncHelper;
 use Zodream\Helpers\Json;
-use Zodream\Helpers\Tree as TreeHelper;
-use Zodream\Html\Tree;
 
 /**
  * Class ContentModel
@@ -91,19 +89,5 @@ class CategoryModel extends CategoryEntity {
             Json::encode($value) : $value);
     }
 
-    /**
-     * @return Tree
-     * @throws \Exception
-     */
-    public static function tree() {
-        return new Tree(static::query()->orderBy('position', 'asc')->all());
-    }
 
-
-    public static function getChildrenWithParent($id) {
-        $data = TreeHelper::getTreeChild(self::query()->orderBy('parent_id', 'asc')
-            ->orderBy('id', 'asc')->get('id', 'parent_id'), $id);
-        $data[] = $id;
-        return $data;
-    }
 }

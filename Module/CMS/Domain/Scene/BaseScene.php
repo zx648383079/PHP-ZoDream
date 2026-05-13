@@ -6,12 +6,9 @@ use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Contexts\SiteContextInterface;
-use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Fields\BaseField;
-use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
-use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\CommentRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
@@ -654,7 +651,7 @@ abstract class BaseScene implements SceneInterface {
         if ($field['is_disable'] > 0) {
             return '';
         }
-        return self::newField($field['type'])->toInput($data[$field['field']] ?? '', $field, $isJson);
+        return self::newField($field['type'], $this->context)->toInput($data[$field['field']] ?? '', $field, $isJson);
     }
 
     /**

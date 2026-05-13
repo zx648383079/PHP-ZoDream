@@ -11,7 +11,7 @@ use Zodream\Database\Schema\Table;
 class SingleScene extends BaseScene {
 
     public function getMainTable(): string {
-        return sprintf('cms_content_%s', $this->context->tableId());
+        return $this->context->articleTableName();
     }
 
     public function getExtendTable(): string {

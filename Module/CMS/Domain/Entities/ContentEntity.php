@@ -23,7 +23,7 @@ use Module\CMS\Domain\Repositories\CMSRepository;
 class ContentEntity extends Entity {
 
     public static function tableName(): string {
-        return 'cms_content_'.CMSRepository::context()->tableId();
+        return CMSRepository::context()->articleTableName();
     }
 
     protected function rules(): array {

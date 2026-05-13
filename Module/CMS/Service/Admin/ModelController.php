@@ -103,7 +103,8 @@ class ModelController extends Controller {
         try {
             $field = ModelRepository::fieldSave($input->get());
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            dr($ex);
+            return $this->renderFailure($ex);
         }
         return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $field->model_id])
@@ -114,7 +115,7 @@ class ModelController extends Controller {
         try {
             $field = ModelRepository::fieldRemove($id);
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
         return $this->renderData([
             'url' => $this->getUrl('model/field', ['id' => $field->model_id])
@@ -125,7 +126,7 @@ class ModelController extends Controller {
         try {
             ModelRepository::fieldToggle($id, [$name]);
         } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
+            return $this->renderFailure($ex);
         }
         return $this->renderData([
             'refresh' => true

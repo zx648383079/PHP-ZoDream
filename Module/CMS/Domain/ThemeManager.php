@@ -193,7 +193,7 @@ final class ThemeManager {
 
     protected function packChannel(SiteContextInterface $context, int $parent_id = 0): array {
         $data = [];
-        $model_list = $context->channelBuilder()->where('parent_id', $parent_id)
+        $model_list = $context->channelBuilder()->where('site_id', $context->id())->where('parent_id', $parent_id)
             ->asArray()->get();
         foreach ($model_list as $item) {
             $item['action'] = 'channel';
@@ -231,7 +231,7 @@ final class ThemeManager {
                 continue;
             }
             if ($model['type'] < 1) {
-                $cats = $context->channelBuilder()->where('model_id', $model->id)->pluck('id');
+                $cats = $context->channelBuilder()->where('site_id', $context->id())->where('model_id', $model->id)->pluck('id');
                 if (empty($cats)) {
                     continue;
                 }
@@ -302,6 +302,19 @@ final class ThemeManager {
         $this->setCache(ModelModel::query()->pluck('id', 'table'), 'model');
         $this->setCache($context->channelBuilder()->where('site_id', $context->id())->pluck('id', 'name'), 'channel');
 
+        if ($context->isLocale()) {
+            $channelItems = $context->channelBuilder()->where('site_id', $context->tableId())
+                ->orderBy('id', 'desc')
+                ->asArray()
+                ->get('id', 'name', 'locale_group_id');
+            foreach($channelItems as $item) {
+                $this->setCache([
+                    $item['name'] => intval($item['locale_group_id'] > 0 ? $item['locale_group_id'] : $item['id'])
+                ], 'locale_channel');
+            }
+            
+        }
+
         $this->runScript($context, $themeOption['script']);
     }
 
@@ -358,6 +371,9 @@ final class ThemeManager {
         $items = $data['data'] ?? [];
         unset($data['data'], $data['action']);
         $data['language'] = $context->language();
+        $locale = LinkageModel::where('code', $data['code'])
+            ->whereNotNull('language')
+            ->orderBy('id', 'asc')->asArray()->first('id', 'language');
         $model = LinkageModel::where('code', $data['code'])
             ->where('language', $data['language'])->first();
         if (empty($model)) {
@@ -366,26 +382,50 @@ final class ThemeManager {
         if (!$model) {
             throw new Exception('数据错误');
         }
+        if ($locale && intval($locale['id']) === intval($model->id)) {
+            // 自身不需要绑定
+            $locale = null;
+        }
         $this->setCache([$model->code => $model->id, $model->id => $model], 'linkage');
-        $this->runActionLinkageData($context, $items, 0, '', $model->id);
+        $this->runActionLinkageData($context, $items, 0, '', $model->id, $locale);
     }
 
     public function runActionLinkageData(SiteContextInterface $context, array $data, 
         int $parent_id, 
         string $prefix, 
-        int $linkage_id): void {
+        int $linkage_id, Array|null $locale): void {
+        $localeParent = empty($locale) ? 0 : intval($locale['parent']);
         foreach ($data as $item) {
             $children = $item['children'] ?? [];
             unset($item['children']);
-            $item = $this->formatI18n($item, $context);
-            $item['parent_id'] = $parent_id;
-            $item['linkage_id'] = $linkage_id;
-            $item['full_name'] = $prefix.' '.$item['name'];
-            $model = LinkageDataModel::create($item);
-            if (!$model || empty($children)) {
+            $next = $this->formatI18n($item, $context);
+            $next['parent_id'] = $parent_id;
+            $next['linkage_id'] = $linkage_id;
+            $next['full_name'] = $prefix.' '.$next['name'];
+            $model = LinkageDataModel::create($next);
+            if (!$model) {
                 continue;
             }
-            $this->runActionLinkageData($children, $model->id, $item['full_name'], $linkage_id);
+            if ($locale) {
+                // 创建关联
+                $link = LinkageDataModel::where('linkage_id', $locale['id'])
+                    ->where('parent_id', $localeParent)
+                    ->where('name', $this->formatI18n($item, $locale['language'])['name'])
+                    ->asArray()->first('id', 'locale_group_id');
+                
+                $locale['parent'] = $model['id']; // 使其无效
+                if ($link) {
+                    $locale['parent'] = intval($link['id']);
+                    LinkageDataModel::whereIn('id', [$link['id'], $model['id']])
+                        ->update([
+                            'locale_group_id' => $link['locale_group_id'] > 0 ? $link['locale_group_id'] : $link['id']
+                        ]);
+                }
+            }
+            if (empty($children)) {
+                continue;
+            }
+            $this->runActionLinkageData($context, $children, $model->id, $next['full_name'], $linkage_id, $locale);
         }
     }
 
@@ -487,8 +527,16 @@ final class ThemeManager {
             $data['site_id'] = $siteId;
             $model = $context->channelSave($data);
         }
-        if (!$model) {
+        if (!$model || !$model->id) {
             throw new Exception('数据错误');
+        }
+        if ($context->isLocale()) {
+            $localeId = $this->getCacheId($data['name'], 'locale_channel');
+            if (!empty($localeId)) {
+                $context->channelBuilder()->whereIn('id', [$localeId, $model['id']])->update([
+                    'locale_group_id' => intval($localeId)
+                ]);
+            }
         }
         $this->setCache([$model->name => $model->id, $model->id => $model], 'channel');
         foreach ($children as $item) {
@@ -545,8 +593,8 @@ final class ThemeManager {
         $context->options($newOptions);
     }
 
-    protected function formatI18n(array $data, SiteContextInterface $context): array {
-        $lang = $context->language();
+    protected function formatI18n(array $data, SiteContextInterface|string $context): array {
+        $lang = is_string($context) ? $context : $context->language();
         $res = [];
         foreach ($data as $key => $item) {
             $i = strpos($key, ':');

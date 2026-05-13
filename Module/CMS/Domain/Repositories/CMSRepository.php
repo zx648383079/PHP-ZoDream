@@ -13,7 +13,6 @@ use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Scene\SceneInterface;
@@ -72,7 +71,7 @@ class CMSRepository {
         FuncHelper::$translateItems = Json::decode($file->read());
     }
 
-    public static function registerView(string|SiteModel $theme = '',
+    public static function registerView(string|SiteModel|SiteContextInterface $theme = '',
                                         ViewFactory|null $provider = null): ViewFactory {
         $language = '';
         if (empty($theme)) {
@@ -81,6 +80,9 @@ class CMSRepository {
         } elseif ($theme instanceof SiteModel) {
             $language = $theme->language;
             $theme = $theme->theme;
+        } else if ($theme instanceof SiteContextInterface) {
+            $language = $theme->language();
+            $theme = $theme->theme();
         }
         if (empty($provider)) {
             $provider = view();
@@ -121,7 +123,14 @@ class CMSRepository {
         if ($site < 1) {
             throw new \Exception('无任何站点');
         }
-        return static::$currentContext = new CachingSiteContext(SiteModel::findOrThrow($site));
+        return static::$currentContext = self::contextFrom($site);
+    }
+
+    public static function contextFrom(SiteModel|int $site) {
+        if (is_int($site)) {
+            $site = SiteModel::findOrThrow($site);
+        }
+        return new CachingSiteContext($site);
     }
 
     public static function matchSite(string $scheme, string $host, string $path, bool $isStrict = false): int {
@@ -167,42 +176,39 @@ class CMSRepository {
 
     public static function generateSite(SiteModel $site) {
         $context = new LiveSiteContext($site);
-        if ($context->isOwer()) {
-            CreateCmsTables::createTable($context->channelTableName(), function (Table $table) {
-                $table->id();
-                $table->uint('site_id');
-                $table->string('name', 100);
-                $table->string('title', 100);
-                $table->uint('type', 1)->default(0);
-                $table->uint('model_id')->default(0);
-                $table->uint('parent_id')->default(0);
-                $table->string('keywords')->default('');
-                $table->string('description')->default('');
-                $table->string('thumb', 100)->default('')->comment('缩略图');
-                $table->string('image', 100)->default('')->comment('主图');
-                $table->text('content')->nullable();
-                $table->string('url', 100)->default('');
-                $table->uint('position', 2)->default(99);
-                $table->string('groups')->default('');
-                $table->string('category_template', 20)->default('');
-                $table->string('list_template', 20)->default('');
-                $table->string('show_template', 20)->default('');
-                $table->text('setting')->nullable();
-                $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
-                $table->timestamps();
-            });
-            CreateCmsTables::createTable($context->logTableName(), function (Table $table) {
-                $table->id();
-                $table->uint('site_id');
-                $table->uint('model_id');
-                $table->uint('item_type', 1)->default(0);
-                $table->uint('item_id');
-                $table->uint('user_id');
-                $table->uint('action');
-                $table->timestamp(Model::CREATED_AT);
-            });
-        }
-        
+        CreateCmsTables::createTable($context->channelTableName(), function (Table $table) {
+            $table->id();
+            $table->uint('site_id');
+            $table->string('name', 100);
+            $table->string('title', 100);
+            $table->uint('type', 1)->default(0);
+            $table->uint('model_id')->default(0);
+            $table->uint('parent_id')->default(0);
+            $table->string('keywords')->default('');
+            $table->string('description')->default('');
+            $table->string('thumb', 100)->default('')->comment('缩略图');
+            $table->string('image', 100)->default('')->comment('主图');
+            $table->text('content')->nullable();
+            $table->string('url', 100)->default('');
+            $table->uint('position', 2)->default(99);
+            $table->string('groups')->default('');
+            $table->string('category_template', 20)->default('');
+            $table->string('list_template', 20)->default('');
+            $table->string('show_template', 20)->default('');
+            $table->text('setting')->nullable();
+            $table->uint('locale_group_id')->default(0)->comment('把多个站点放到同一个组，实现多语言切换');
+            $table->timestamps();
+        });
+        CreateCmsTables::createTable($context->logTableName(), function (Table $table) {
+            $table->id();
+            $table->uint('site_id');
+            $table->uint('model_id');
+            $table->uint('item_type', 1)->default(0);
+            $table->uint('item_id');
+            $table->uint('user_id');
+            $table->uint('action');
+            $table->timestamp(Model::CREATED_AT);
+        });
         $context->scene()->boot();
         (new ThemeManager())->apply($context, $site->theme);
     }
@@ -236,7 +242,7 @@ class CMSRepository {
         }
     }
 
-    public static function resetSite(int $id = 0) {
+    public static function resetSite(int $id = 0): SiteContextInterface|null {
         if ($id > 0) {
             session([
                 'cms_site' => $id
@@ -244,8 +250,12 @@ class CMSRepository {
         }
         $id = session('cms_site');
         if ($id > 0) {
-            static::context(SiteModel::find($id));
-            return;
+            return static::context(SiteModel::find($id));
+        }
+        try {
+            return static::context();
+        } catch (GlobalException) {
+            return null;
         }
     }
 
@@ -279,8 +289,9 @@ class CMSRepository {
                 ['name' => '栏目', 'next' => 'channel'],
             ];
         }
+        $context = self::context();
         if ($step[0] === 'channel') {
-            $items = CategoryModel::query()
+            $items = $context->channelBuilder()->where('site_id', $context->id())
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['title']);
                 })
@@ -320,7 +331,7 @@ class CMSRepository {
         return array_map(function($item) use ($model) {
             return [
                 'name' => $item['name'], //sprintf('%s(%s)', $item['name'], $model['name']),
-                'value' => SiteRepository::encodeUrl(self::context()->source(), str_replace('{id}', (string)$item['id'], $model->uri_template))
+                'value' => SiteRepository::encodeUrl($context->source(), str_replace('{id}', (string)$item['id'], $model->uri_template))
             ];
         }, $items);
     }

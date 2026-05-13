@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
 use Module\CMS\Domain\Model\ModelModel;
-use Module\CMS\Domain\Repositories\CacheRepository;
 use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\LocaleRepository;
@@ -14,22 +12,47 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
     public function indexAction() {
-        $model_list = CategoryRepository::getList(CMSRepository::context()->id());
+        $model_list = CategoryRepository::getList(CMSRepository::context());
         return $this->show(compact('model_list'));
     }
 
-    public function createAction() {
-        return $this->editAction(0);
+    public function createAction(int $site_id = 0, int $parent_id = 0, int $locale = 0) {
+        if ($locale > 0) {
+            $id = LocaleRepository::channelConvert($site_id, $locale);
+            if ($id > 0) {
+                return $this->edit($id, $site_id);
+            }
+            if ($parent_id > 0) {
+                $parent_id = LocaleRepository::channelConvert($site_id, $parent_id);
+                if ($parent_id === 0) {
+                    return $this->redirectWithMessage(url('./@admin/category'), '上级栏目不存在！');
+                }
+            }
+        }
+        return $this->edit(0, $site_id, $parent_id, $locale);
     }
 
     public function editAction(int $id) {
-        $model = CategoryModel::findOrNew($id);
+        return $this->edit($id);
+    }
+
+    private function edit(int $id, int $site_id = 0, int $parent_id = 0, int $locale = 0) {
+        $context = CMSRepository::context();
+        if ($site_id > 0 && $context->id() !== $site_id) {
+            $context = CMSRepository::contextFrom($site_id);
+        }
+        $model = CategoryRepository::getOrCreate($context, $id);
         if (!$model->position) {
             $model->position = 99;
         }
+        if ($id === 0) {
+            $model->site_id = $context->id();
+            $model->parent_id = $parent_id;
+            $model->locale_group_id = $locale;
+        }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->get();
-        $cat_list = CategoryRepository::all(CMSRepository::context()->id());
+        $cat_list = CategoryRepository::all($context);
         if (!empty($id)) {
             $excludes = [$id];
             $cat_list = array_filter($cat_list, function ($item) use (&$excludes) {
@@ -44,29 +67,40 @@ class CategoryController extends Controller {
             });
         }
         $template_list = $this->getThemeTemplate();
-        $languageItems = LocaleRepository::siteOptions();
+        $languageItems = LocaleRepository::siteOptions($context->source());
         return $this->show('edit', compact('model', 'model_list',
             'cat_list',
             'group_list', 'template_list', 'languageItems'));
     }
 
-    public function saveAction(array|string $groups = []) {
-        $model = new CategoryModel();
-        if (!$model->load()) {
-            return $this->renderFailure($model->getFirstError());
+    public function saveAction(Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,100',
+                'title' => 'required|string:0,100',
+                'type' => 'int:0,9',
+                'model_id' => 'int',
+                'site_id' => 'int',
+                'locale_group_id' => 'int',
+                'parent_id' => 'int',
+                'keywords' => 'string:0,255',
+                'description' => 'string:0,255',
+                'image' => 'string:0,100',
+                'thumb' => 'string:0,100',
+                'content' => '',
+                'url' => 'string:0,100',
+                'position' => 'int:0,999',
+                'groups' => '',
+                'category_template' => 'string:0,20',
+                'list_template' => 'string:0,20',
+                'show_template' => 'string:0,20',
+                'setting' => '',
+            ]);
+            CategoryRepository::save(CMSRepository::context(), $data);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        $model->autoIsNew();
-        if ($model->isNewRecord && empty($model->setting)) {
-            $model->setting = [];
-        }
-        if (empty($groups)) {
-            $model->groups = $groups;
-        }
-        if (!$model->save()) {
-            return $this->renderFailure($model->getFirstError());
-        }
-        CMSRepository::generateCategoryTable($model);
-        CacheRepository::onChannelUpdated(intval($model->id));
         return $this->renderData([
             'url' => $this->getUrl('category'),
             'no_jax' => true
@@ -74,22 +108,11 @@ class CategoryController extends Controller {
     }
 
     public function deleteAction(int $id) {
-        $items = CategoryModel::getChildrenWithParent($id);
-        // $cat = CategoryModel::find($id);
-        $modelIds = CategoryModel::whereIn('id', $items)
-            ->where('model_id', '>', 0)
-            ->pluck('model_id');
-        if (empty($modelIds)) {
-            $model_list = ModelModel::whereIn('id', $modelIds)
-                ->get();
-            foreach ($model_list as $model) {
-                $scene = CMSRepository::context()->scene()->setModel($model);
-                $ids = $scene->query()->whereIn('cat_id', $items)->pluck('id');
-                $scene->remove($ids);
-            }
+        try {
+            CategoryRepository::remove(CMSRepository::context(), $id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        CategoryModel::whereIn('id', $items)->delete();
-        CacheRepository::onChannelUpdated($id);
         return $this->renderData([
             'url' => $this->getUrl('category'),
             'no_jax' => true
@@ -102,7 +125,7 @@ class CategoryController extends Controller {
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->get();
-        $cat_list = CategoryRepository::all(CMSRepository::context()->id());
+        $cat_list = CategoryRepository::all(CMSRepository::context());
         $template_list = $this->getThemeTemplate(true);
         return $this->show('quickly', compact('cat_list',
             'template_list', 'group_list', 'model_list'));
@@ -110,7 +133,7 @@ class CategoryController extends Controller {
 
     public function batchSaveAction(Input $input) {
         try {
-            CategoryRepository::batchSave($input->validate([
+            CategoryRepository::batchSave(CMSRepository::context(), $input->validate([
                 'parent_id' => 'int',
                 'model_id' => 'int',
                 'groups' => '',

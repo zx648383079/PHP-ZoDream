@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
-use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
@@ -111,9 +109,9 @@ final class CacheRepository {
     }
 
     public static function getChannelCache(): TreeObject {
-        $site = CMSRepository::siteId();
-        return cache()->getOrSet(self::channelKey($site), function () {
-            return new TreeObject(CategoryModel::query()
+        $context = CMSRepository::context();
+        return cache()->getOrSet(self::channelKey($context->id()), function () use($context) {
+            return new TreeObject($context->channelBuilder()->where('site_id', $context->id())
                 ->orderBy('position', 'asc')
                 ->orderBy('id', 'asc')
                 ->get());
@@ -183,7 +181,7 @@ final class CacheRepository {
                 }
                 $linkage[$item['code']] = $item['id'];
             }
-            $channel = $context->channelBuilder()->pluck( 'id', 'name');
+            $channel = $context->channelBuilder()->where('site_id', $context->id())->pluck( 'id', 'name');
             return compact('model', 'linkage', 'channel');
         });
     }

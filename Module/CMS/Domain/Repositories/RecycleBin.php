@@ -36,10 +36,11 @@ final class RecycleBin {
             if ($item['site_id'] > 0) {
                 $context = SiteRepository::apply(intval($item['site_id']));
             }
+            $context = CMSRepository::context();
             $data = Json::decode($item['data']);
             switch (intval($item['item_type'])) {
                 case SiteRepository::TYPE_CATEGORY:
-                    CMSRepository::context()->channelBuilder()->insert($data);
+                    $context->channelBuilder()->where('site_id', $context->id())->insert($data);
                     break;
                 case SiteRepository::TYPE_GROUP:
                     GroupEntity::query()->insert($data);
@@ -79,7 +80,8 @@ final class RecycleBin {
     public static function addCategory(int $site, array|int $data): void {
         if (is_numeric($data)) {
             $id = intval($data);
-            $data = CMSRepository::context()->channelBuilder()->where('id',$id)->asArray()->first();
+            $context = CMSRepository::context();
+            $data = $context->channelBuilder()->where('site_id', $context->id())->where('id',$id)->asArray()->first();
             if (empty($data)) {
                 return;
             }

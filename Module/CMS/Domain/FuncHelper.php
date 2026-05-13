@@ -1160,7 +1160,7 @@ class FuncHelper {
             'authGuest',
             'authUser',
             'fileName',
-            'isAjax',
+            'isAjax'
         ]);
         $compiler->registerFunc('__', sprintf('%s::%s', static::class, 'translate'));
         static::registerBlock($compiler, 'comments', 'comment');

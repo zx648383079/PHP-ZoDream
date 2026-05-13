@@ -11,6 +11,7 @@ class Controller extends ModuleController {
     public function prepare() {
         CMSRepository::registerView();
         $categories_tree = FuncHelper::channels(['tree' => true]);
-        $this->send(compact('categories_tree'));
+        $language = FuncHelper::option('language');
+        $this->send(compact('categories_tree', 'language'));
     }
 }

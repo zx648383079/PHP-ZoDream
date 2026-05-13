@@ -13,6 +13,11 @@ interface SiteContextInterface {
 
     public function source(): SiteModel;
 
+    /**
+     * 是否有本地化关联
+     */
+    public function isLocale(): bool;
+
     public function tableId(): int;
     public function theme(): string;
 
@@ -25,8 +30,10 @@ interface SiteContextInterface {
 
     public function channelTableName(): string;
     public function logTableName(): string;
+    public function articleTableName(): string;
 
     public function channelBuilder(): SqlBuilder;
+    public function articleBuilder(): SqlBuilder;
     public function channelSave(CategoryEntity|array $model): CategoryEntity;
 
     public function scene(): SceneInterface;

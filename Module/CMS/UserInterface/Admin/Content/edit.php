@@ -48,7 +48,7 @@ $this->title = $id > 0 ? '文章编辑' : '新增文章';
                     <div class="input-group">
                         <label>栏目</label>
                         <select name="cat_id" class="form-control">
-                            <?php foreach($cat_menu as $item):?>
+                            <?php foreach($cat_list as $item):?>
                             <?php if($item['model_id'] == $model->id):?>
                             <option value="<?=$item['id']?>" <?=$cat_id == $item['id'] ? 'selected': '' ?>>
                                 <?php if($item['level'] > 0):?>
@@ -77,4 +77,6 @@ $this->title = $id > 0 ? '文章编辑' : '新增文章';
     <input type="hidden" name="id" value="<?=$id?>">
     <input type="hidden" name="model_id" value="<?=$model->id?>">
     <input type="hidden" name="parent_id" value="<?=$data['parent_id']?>">
+    <input type="hidden" name="site_id" value="<?=$data['site_id']?>">
+    <input type="hidden" name="locale_group_id" value="<?=$data['locale_group_id']?>">
 </form>

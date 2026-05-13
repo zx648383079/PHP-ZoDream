@@ -2,8 +2,8 @@
 namespace Module\CMS\Service\Admin;
 
 use Module\Auth\Domain\Concerns\CheckRole;
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CategoryRepository;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\ModuleController;
 use Zodream\Disk\File;
@@ -22,13 +22,9 @@ class Controller extends ModuleController {
     }
 
     public function prepare() {
-        CMSRepository::resetSite();
-        try {
-            $currentSite = CMSRepository::context()->source();
-        } catch (\Exception $ex) {
-            $currentSite = null;
-        }
-        $cat_menu = empty($currentSite) ? [] : CategoryModel::tree()->makeTreeForHtml();
+        $context = CMSRepository::resetSite();
+        $currentSite = empty($context) ? null : $context->source();
+        $cat_menu = empty($context) ? [] : CategoryRepository::all($context->id());
         $cat_menu = array_filter($cat_menu, function ($item) {
             return $item['type'] < 1 && $item['model_id'];
         });

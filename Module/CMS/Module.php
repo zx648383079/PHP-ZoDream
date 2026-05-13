@@ -4,8 +4,7 @@ namespace Module\CMS;
 
 use Module\CMS\Domain\Middleware\CMSSeoMiddleware;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
-use Module\CMS\Domain\Model\CategoryModel;
-use Module\CMS\Domain\Model\ContentModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\SiteRepository;
 use Module\CMS\Domain\Scene\MultiScene;
 use Module\CMS\Domain\Scene\SceneInterface;
@@ -47,13 +46,15 @@ class Module extends BaseModule implements ISiteMapModule {
     }
 
     public function openLinks(SiteMap $map) {
+        $context = CMSRepository::context();
         $map->add(url('./'), time());
-        $items = CategoryModel::query()->get('id', 'updated_at');
+        $items = $context->channelBuilder()->where('site_id', $context->id())->get('id', 'updated_at');
         foreach ($items as $item) {
             $map->add(url('./category', ['id' => $item->id]),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
         }
-        $items = ContentModel::query()->where('cat_id', '>', 0)
+        $items = $context->articleBuilder()->where('site_id', $context->id())
+            ->where('cat_id', '>', 0)
             ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
             ->asArray()
             ->get('id', 'cat_id', 'model_id', 'created_at');

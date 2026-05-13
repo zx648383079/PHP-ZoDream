@@ -25,7 +25,7 @@
          * 判断是否是评论
          */
         const isComment = () => {
-            const tag = content.substr(pos, 2);
+            const tag = content.substring(pos, pos + 2);
             if (tag === '//') {
                 return true;
             }
@@ -38,7 +38,7 @@
          * 获取评论元素，并移动位置
          */
         const getCommentBock = (): IBlockItem => {
-            const tag = content.substr(pos, 2);
+            const tag = content.substring(pos, pos + 2);
             const start = pos + 2;
             let end = content.indexOf(tag === '//' ? '\n' : '*/', start);
             if (tag !== '//' && end < 0) {
@@ -318,7 +318,7 @@
      */
      function splitRuleName(name: string): string[] {
         name = name.trim();
-        if (name.length < 2) {
+        if (name.length < 2 || name.startsWith('@media')) {
             return [name];
         }
         const tags: any = {
@@ -573,6 +573,9 @@
             if (item.type !== BLOCK_TYPE.STYLE_GROUP) {
                 parent.push(item);
                 return;
+            }
+            if (item.name instanceof Array && item.name[0].startsWith('@media')) {
+                item.children = splitBlock(item.children!);
             }
             const name = findTreeName(typeof item.name === 'object' ? item.name : [item.name]);
             appendBlock(name, item.children as IBlockItem[], parent);

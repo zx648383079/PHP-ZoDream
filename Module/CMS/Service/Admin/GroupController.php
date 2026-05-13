@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Service\Admin;
 
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Model\GroupModel;
-use Module\CMS\Domain\Model\ModelModel;
 
 class GroupController extends Controller {
     public function indexAction(int $type = 0) {

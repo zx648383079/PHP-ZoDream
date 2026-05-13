@@ -6,7 +6,6 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Model\UserSimpleModel;
-use Module\CMS\Domain\Model\CategoryModel;
 use Module\CMS\Domain\Scene\SceneInterface;
 use Zodream\Database\Relation;
 use Zodream\Helpers\Time;
@@ -20,7 +19,7 @@ class ContentRepository {
         }
         $context = SiteRepository::apply($site);
         if ($modelId < 1) {
-            $modelId = intval(CategoryModel::where('id', $category)
+            $modelId = intval($context->channelBuilder()->where('site_id', $context->id())->where('id', $category)
                 ->value('model_id'));
             if ($modelId < 1) {
                 throw new Exception('栏目不包含模型');
@@ -42,7 +41,7 @@ class ContentRepository {
             static::formatValue($data['data']);
             $data['data'] = Relation::create($data['data'], [
                 'category' => [
-                    'query' => $context->channelBuilder()->select('id', 'title'),
+                    'query' => $context->channelBuilder()->where('site_id', $context->id())->select('id', 'title'),
                     'link' => ['cat_id', 'id'],
                     'type' => Relation::TYPE_ONE
                 ],
@@ -173,7 +172,7 @@ class ContentRepository {
     public static function apply(int $site, int $category, int $modelId) {
         $context = SiteRepository::apply($site);
         if ($modelId < 1) {
-            $modelId = intval($context->channelBuilder()->where('id', $category)
+            $modelId = intval($context->channelBuilder()->where('site_id', $context->id())->where('id', $category)
                 ->value('model_id'));
             if ($modelId < 1) {
                 throw new Exception('栏目不包含模型');
@@ -189,7 +188,7 @@ class ContentRepository {
     ) {
         $context = SiteRepository::apply($site);
         if ($model < 1) {
-            $model = $channel > 0 ? intval($context->channelBuilder()->where('id', $channel)
+            $model = $channel > 0 ? intval($context->channelBuilder()->where('site_id', $context->id())->where('id', $channel)
                 ->value('model_id')) : 0;
             if ($model < 1) {
                 throw new Exception('栏目不包含模型');

@@ -92,6 +92,9 @@ $this->registerJs($js);
         <button type="submit" class="btn btn-success">确认保存</button>
         <a class="btn btn-danger" href="javascript:history.go(-1);">取消修改</a>
     </div>
+
+    <input type="hidden" name="site_id" value="<?=$model->site_id?>">
+    <input type="hidden" name="locale_group_id" value="<?=$model->locale_group_id?>">
 <?=Form::close('id')?>
 
 <div class="dialog dialog-box url-dialog" data-type="dialog">

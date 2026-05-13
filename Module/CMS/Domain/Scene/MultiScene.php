@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Migrations\CreateCmsTables;
-use Module\CMS\Domain\Model\ContentModel;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\SqlBuilder;
 use Zodream\Database\DB;
@@ -24,7 +23,7 @@ class MultiScene extends BaseScene {
     }
 
     public function seoQuery(): SqlBuilder {
-        return ContentModel::query();
+        return $this->context->articleBuilder();
     }
 
     public function getTableByMain(mixed $isMain): string {
@@ -36,11 +35,9 @@ class MultiScene extends BaseScene {
 
 
     public function boot(): void {
-        if ($this->context->isOwer()) {
-            CreateCmsTables::createTable(ContentModel::tableName(), function (Table $table) {
-                $this->initSeoTableField($table);
-            });
-        }
+        CreateCmsTables::createTable($this->context->articleTableName(), function (Table $table) {
+            $this->initSeoTableField($table);
+        });
     }
 
 
@@ -58,9 +55,6 @@ class MultiScene extends BaseScene {
     }
 
     public function initTable(): bool {
-        if (!$this->context->isOwer()) {
-            return true;
-        }
         $extend_list = array_filter($this->fieldList(), function ($item) {
             return $item['is_main'] < 1;
         });
@@ -109,7 +103,7 @@ class MultiScene extends BaseScene {
 
     public function destroy(): void {
         if ($this->context->isOwer()) {
-            CreateCmsTables::dropTable(ContentModel::tableName());
+            CreateCmsTables::dropTable($this->context->articleTableName());
         } else{
             $this->seoQuery()->where('site_id', $this->site)->delete();
         }
