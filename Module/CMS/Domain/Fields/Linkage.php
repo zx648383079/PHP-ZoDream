@@ -4,7 +4,6 @@ namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -13,9 +12,9 @@ use Zodream\Template\View;
 
 class Linkage extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+    public function options(bool $isJson = false): array|string {
         $items = LinkageModel::query()->selectRaw('code as id,name')->asArray()->get();
-        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
+        $linkageId = static::fieldSetting($this->field, 'option', 'linkage_id');
         if ($isJson) {
             return [
                 [
@@ -34,16 +33,19 @@ class Linkage extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->uint()->default(0)->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->uint()->default(0)->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
-        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
+    public function toInput(mixed $value, bool $isJson = false): array|string {
+        $linkageId = static::fieldSetting($this->field, 'option', 'linkage_id');
+        if (empty($linkageId)) {
+            return $this->inputTooltip('联动菜单参数配置错误', $isJson);
+        }
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'linkage',
                 'value' => $value
             ];
@@ -51,10 +53,10 @@ class Linkage extends BaseField {
         $value = intval($value);
         $url = url('./form/linkage', ['id' => $linkageId, 'lang' => $this->context->language()]);
         $js = <<<JS
-$('#linkage-{$field['id']}').multiSelect({
+$('#linkage-{$this->field['id']}').multiSelect({
     default: {$value},
     data: '{$url}',
-    tag: '{$field['field']}'
+    tag: '{$this->controlName()}'
 });
 JS;
 
@@ -63,8 +65,8 @@ JS;
             ->registerJs($js, View::JQUERY_READY);
         return <<<HTML
 <div class="input-group">
-    <label for="{$field['field']}">{$field['name']}</label>
-    <div id="linkage-{$field['id']}">
+    <label for="{$this->controlName()}">{$this->controlLabel()}</label>
+    <div id="linkage-{$this->field['id']}">
     
     </div>
 </div>
@@ -72,16 +74,16 @@ HTML;
 
     }
 
-    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
+    public function filterInput(mixed $value, MessageBag $bag): mixed {
         $value = intval($value);
-        if ($field['is_required'] && $value < 1) {
-            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
-                !empty($field['error_message']) ? $field['error_message'] : '必填项'));
+        if ($this->isRequired() && $value < 1) {
+            $bag->add($this->controlName(), sprintf('[%s]%s', $this->controlLabel(),
+                !empty($this->field['error_message']) ? $this->field['error_message'] : '必填项'));
         }
         return $value;
     }
 
-    public function toText($value, ModelFieldModel|array $field): string {
+    public function toText(mixed $value): string {
         return (string)LinkageDataModel::where('id', $value)->value('full_name');
     }
 }

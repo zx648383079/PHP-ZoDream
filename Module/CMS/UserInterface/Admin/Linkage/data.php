@@ -43,7 +43,12 @@ $this->title = '联动项列表';
         <tbody>
         <?php foreach($model_list as $item): ?>
             <tr>
-                <td class="left"><?=$item['name']?></td>
+                <td class="left">
+                    <?=$item['name']?>
+                    <?php if($item->locale_group_id > 0):?>
+                    <a class="locale-icon" href="<?=$this->url('./@admin/linkage/unlink', ['id' => $item->id])?>" title="点击解除本地化绑定"><i class="fa fa-link"></i></a>
+                    <?php endif;?>
+                </td>
                 <td><?=$item['children_count']?></td>
                 <td>
                     <div class="btn-group toggle-icon-text">

@@ -101,10 +101,7 @@ class LinkageRepository {
             throw new \Exception($model->getFirstError());
         }
         if ($locale_group_id > 0) {
-            LinkageDataModel::where('id', $locale_group_id)
-                ->update([
-                    'locale_group_id' => $locale_group_id
-                ]);
+            LocaleRepository::linkageBinding(intval($model->id), $locale_group_id);
         }
         CacheRepository::onLinkageUpdated(intval($model->linkage_id));
         return $model;
@@ -112,6 +109,7 @@ class LinkageRepository {
 
     public static function dataRemove(int $id) {
         LinkageDataModel::where('id', $id)->delete();
+        LocaleRepository::linkageUnlink($id);
         // TODO 删除子项
     }
 

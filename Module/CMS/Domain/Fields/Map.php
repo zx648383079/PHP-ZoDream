@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 class Map extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+    public function options(bool $isJson = false): array|string {
         if ($isJson) {
             return [];
         }
@@ -17,20 +16,20 @@ class Map extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string()->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string()->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'map',
                 'value' => $value
             ];
         }
-        return (string)Theme::text($field['field'], $value, $field['name'], '',
-            $field['is_required'] > 0);
+        return (string)Theme::text($this->controlName(), $value, $this->controlLabel(), '',
+            $this->isRequired());
     }
 }

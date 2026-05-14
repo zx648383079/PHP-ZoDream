@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
-use Module\CMS\Domain\Entities\CategoryEntity;
+use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Entities\LinkageDataEntity;
 use Module\CMS\Domain\Entities\LinkageEntity;
 use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Model\ModelModel;
 
 final class LocaleRepository {
-
 
     public static function linkageOptions(LinkageEntity $model): array {
         if (!$model->language) {
@@ -24,8 +23,8 @@ final class LocaleRepository {
         }
         return array_map(function ($item) use($model) {
             return [
-                'selected' => intval($model->id) === intval($item['id']) ,
-                'language' => $item['language'],
+                'checked' => intval($model->id) === intval($item['id']) ,
+                'value' => $item['language'],
                 'id' => intval($item['id']),
                 'name' => $item['name']
             ];
@@ -63,8 +62,8 @@ final class LocaleRepository {
         }
         return array_map(function ($item) use($model) {
             return [
-                'selected' => intval($model->id) === intval($item['id']) ,
-                'language' => $item['language'],
+                'checked' => intval($model->id) === intval($item['id']) ,
+                'value' => $item['language'],
                 'id' => intval($item['id']),
                 'name' => $item['title']
             ];
@@ -87,19 +86,122 @@ final class LocaleRepository {
             ->value('id'));
     }
 
+    public static function channelBinding(SiteContextInterface $context, int $id, int $localeId) {
+        if ($localeId === 0) {
+            return;
+        }
+        $context->channelBuilder()->whereIn('id', [$id, $localeId])->update([
+            'locale_group_id' => $localeId
+        ]);
+    }
+
+    public static function channelUnlink(SiteContextInterface $context, int $id) {
+        $model = $context->channelBuilder()->where('id', $id)->first('id', 'locale_group_id');
+        if (empty($model)) {
+            $context->channelBuilder()->where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+            return;
+        }
+        if (!$model->locale_group_id) {
+            return;
+        }
+        $locale_group_id = intval($model->locale_group_id);
+        if ($locale_group_id === $id) {
+            $context->channelBuilder()->where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        } else {
+            $context->channelBuilder()->where('id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        }
+    }
+
+    public static function linkageBinding(int $id, int $localeId) {
+        if ($localeId === 0) {
+            return;
+        }
+        LinkageDataEntity::whereIn('id', [$id, $localeId])->update([
+            'locale_group_id' => $localeId
+        ]);
+    }
+
+    public static function linkageUnlink(int $id) {
+        $model = LinkageDataEntity::where('id', $id)->first('id', 'locale_group_id');
+        if (empty($model)) {
+            LinkageDataEntity::where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+            return;
+        }
+        if (!$model->locale_group_id) {
+            return;
+        }
+        $locale_group_id = intval($model->locale_group_id);
+        if ($locale_group_id === $id) {
+            LinkageDataEntity::where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        } else {
+            LinkageDataEntity::where('id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        }
+    }
+
+
+
+    public static function articleBinding(SiteContextInterface $context, ModelModel $model, int $id, int $localeId) {
+        if ($localeId === 0 || $id === 0) {
+            return;
+        }
+        $scene = $context->scene()->setModel($model);
+        $scene->query()->whereIn('id', [$id, $localeId])->update([
+            'locale_group_id' => $localeId
+        ]);
+    }
+
+    public static function articleUnlink(SiteContextInterface $context, ModelModel $model, int $id) {
+        if ($id === 0) {
+            return;
+        }
+        $scene = $context->scene()->setModel($model);
+        $model = $scene->query()->where('id', $id)->first('id', 'locale_group_id');
+        if (empty($model)) {
+            $scene->query()->where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+            return;
+        }
+        if (!$model['locale_group_id']) {
+            return;
+        }
+        $locale_group_id = intval($model['locale_group_id']);
+        if ($locale_group_id === $id) {
+            $scene->query()->where('locale_group_id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        } else {
+            $scene->query()->where('id', $id)->update([
+                'locale_group_id' => 0
+            ]);
+        }
+    }
+
     public static function articleConvert(int $site, ModelModel $model, int $id = 0): int {
         if ($id <= 0) {
             return 0;
         }
         $scene = CMSRepository::context()->scene()->setModel($model);
         $source = $scene->query()->where('id', $id)->first('locale_group_id', 'site_id');
-        if (intval($source->site_id) === $site) {
+        if (intval($source['site_id']) === $site) {
             return $id;
         }
-        if (!$source->locale_group_id) {
+        if (!$source['locale_group_id']) {
             return 0;
         }
-        return intval($scene->query()->where('locale_group_id', $source->locale_group_id)->where('site_id', $site)
+        return intval($scene->query()->where('locale_group_id', $source['locale_group_id'])->where('site_id', $site)
             ->value('id'));
     }
 

@@ -59,13 +59,13 @@ function ajaxForm(url: string, data: any, callback?: (data: IResponse)=>any) {
 }
 
 function formData(item: JQuery): string {
-    let data = [];
+    const data: string[] = [];
     item.find('input,textarea,select').each(function(this: HTMLInputElement) {
         if (this.type && ['radio', 'checkbox'].indexOf(this.type) >= 0 && !this.checked) {
             return;
         }
         data.push(encodeURIComponent( this.name ) + '=' +
-				encodeURIComponent( $(this).val().toString() ))
+				encodeURIComponent( $(this).val()!.toString() ))
     });
     return data.join('&');
 }
@@ -75,7 +75,7 @@ function formData(item: JQuery): string {
  */
 function parseAjax(data: IResponse) {
     if (data.code === 302 || (data.code === 401 && data.url)) {
-        window.location.href = data.url;
+        window.location.href = data.url!;
         return;
     }
     if (data.code !== 200) {
@@ -190,7 +190,7 @@ $(function() {
         let errorTip = $this.data('error') || '提交失败！';
         let callback = $this.data('callback');
         let loading = Dialog.loading();
-        postJson($this.attr('href'), function(data) {
+        postJson($this.attr('href')!, function(data) {
             loading.close();
             if (data.code == 200 && !data.msg) {
                 data.msg = successTip;
@@ -204,7 +204,7 @@ $(function() {
     .on('submit', 'form[data-type=ajax]', function() {
         const $this = $(this);
         const loading = Dialog.loading();
-        ajaxForm($this.attr('action'), $this.serialize(), res => {
+        ajaxForm($this.attr('action')!, $this.serialize(), res => {
             loading.close();
             parseAjax(res);
             if (res.code === 400 && typeof res.message === 'object') {

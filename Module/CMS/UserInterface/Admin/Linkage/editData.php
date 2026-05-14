@@ -18,7 +18,7 @@ $this->title = ($model->id > 0 ? '编辑' : '新增').'联动项';
         </div>
         <div class="select-option-bar">
             <?php foreach($languageItems as $item):?>
-                <?php if($item['selected']): ?>
+                <?php if($item['checked']): ?>
                 <a class="option-item selected">
                     <?= $item['name'] ?>
                 </a>

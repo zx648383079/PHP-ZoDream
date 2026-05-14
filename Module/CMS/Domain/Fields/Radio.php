@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 class Radio extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
-        $value = static::fieldSetting($field, 'option', 'items');
+    public function options(bool $isJson = false): array|string {
+        $value = static::fieldSetting($this->field, 'option', 'items');
         if ($isJson) {
             return [
                 [
@@ -27,26 +26,26 @@ class Radio extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string()->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string()->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
-        $options = static::fieldSetting($field, 'option', 'items');
+    public function toInput(mixed $value, bool $isJson = false): array|string {
+        $options = static::fieldSetting($this->field, 'option', 'items');
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'radio',
                 'value' => $value,
                 'items' => self::textToItems($options)
             ];
         }
-        return (string)Theme::radio($field['field'], self::textToItems($options), $value, $field['name']);
+        return (string)Theme::radio($this->controlName(), self::textToItems($options), $value, $this->controlLabel());
     }
 
-    public function toText(mixed $value, ModelFieldModel|array $field): string {
-        $items = self::textToItems(static::fieldSetting($field, 'option', 'items'));
+    public function toText(mixed $value): string {
+        $items = self::textToItems(static::fieldSetting($this->field, 'option', 'items'));
         return array_key_exists($value, $items) ? (string)$items[$value] : '';
     }
 }

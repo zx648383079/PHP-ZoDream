@@ -239,8 +239,8 @@ class ModelRepository {
 
     public static function fieldOption(string $type, int $field): array {
         $model = ModelFieldModel::findOrNew($field);
-        $field = SingleScene::newField($type, CMSRepository::context());
-        $data = $field->options($model, true);
+        $field = SingleScene::createControl($model, CMSRepository::context());
+        $data = $field->options(true);
         return empty($data) || !is_array($data) ? [] : $data;
     }
 

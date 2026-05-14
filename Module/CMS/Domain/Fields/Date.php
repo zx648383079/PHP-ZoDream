@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -10,8 +9,8 @@ use Zodream\Template\View;
 
 class Date extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+    public function options(bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'has_time' => 1,
             'format' => 'yyyy-mm-dd'
         ]);
@@ -39,28 +38,28 @@ class Date extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string(30)->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string(30)->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'date',
                 'value' => $value
             ];
         }
-        $format = static::fieldSetting($field,'option', 'format');
+        $format = static::fieldSetting($this->field,'option', 'format');
         $js = <<<JS
-$('[name={$field['field']}]').datetimer({
+$('[name={$this->controlName()}]').datetimer({
     format: '{$format}'
 });
 JS;
         view()->registerCssFile('@datetimer.min.css')
             ->registerJsFile('@jquery.datetimer.min.js')
             ->registerJs($js, View::JQUERY_READY);
-        return (string)Theme::text($field['field'], $value, $field['name']);
+        return (string)Theme::text($this->controlName(), $value, $this->controlLabel());
     }
 }

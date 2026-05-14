@@ -55,6 +55,9 @@ $this->title = sprintf('“%s” 的内容列表', empty($cat) ? $model['name'] 
                 <td><?=$item['id']?></td>
                 <td class="left">
                     <a href="<?=$currentSite->url('./content', ['category' => $item['cat_id'], 'model' => $model->id, 'id' => $item['id']])?>" target="_blank"><?=$this->text($item['title'])?></a>
+                    <?php if($item['locale_group_id'] > 0):?>
+                    <a class="locale-icon" href="<?=$this->url('./@admin/content/unlink', ['id' => $item['id'], 'cat_id' => $item['cat_id'], 'model_id' => $model->id])?>" title="点击解除本地化绑定"><i class="fa fa-link"></i></a>
+                    <?php endif;?>
                 </td>
                 <td>
                     <?php if ($item['category']):?>

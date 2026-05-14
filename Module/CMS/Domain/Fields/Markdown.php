@@ -3,15 +3,14 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
 use Infrastructure\HtmlExpand;
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 
 class Markdown extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+    public function options(bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'width' => '',
             'height' => '',
         ]);
@@ -38,24 +37,24 @@ class Markdown extends BaseField {
     }
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->mediumtext()->nullable()->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->mediumtext()->nullable()->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'markdown',
                 'value' => $value
             ];
         }
-        return (string)Theme::textarea($field['field'], $value, $field['name'], '',
-            $field['is_required'] > 0);
+        return (string)Theme::textarea($this->controlName(), $value, $this->controlLabel(), '',
+            $this->isRequired());
     }
 
-    public function toText($value, ModelFieldModel|array $field): string {
-        return HtmlExpand::toHtml($value, true);
+    public function toText(mixed $value): string {
+        return HtmlExpand::toHtml((string)$value, true);
     }
 }

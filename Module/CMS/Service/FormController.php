@@ -11,6 +11,13 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class FormController extends Controller {
 
+    public function prepare() {
+        if (request()->isAjax()) {
+            return;
+        }
+        parent::prepare();
+    }
+
     public function indexAction(Input $input) {
         $model = FormRepository::getModel($input);
         $scene = CMSRepository::context()->scene()->setModel($model);

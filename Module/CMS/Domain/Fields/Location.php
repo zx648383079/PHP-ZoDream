@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Template\View;
 
@@ -10,7 +9,7 @@ class Location extends BaseField {
     
     static bool $isInit = false;
 
-    public function options(ModelFieldModel $field, bool $isJson = false): string|array {
+    public function options(bool $isJson = false): string|array {
         if ($isJson) {
             return [];
         }
@@ -19,15 +18,15 @@ class Location extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string()->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string()->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'location',
                 'value' => $value
             ];
@@ -35,9 +34,9 @@ class Location extends BaseField {
         $html = $this->getDialog();
         return <<<HTML
 <div class="input-group">
-    <label for="{$field['field']}">{$field['name']}</label>
+    <label for="{$this->controlName()}">{$this->controlLabel()}</label>
     <div>
-       <input type="text" id="{$field['field']}" name="{$field['field']}" value="{$value}">
+       <input type="text" id="{$this->controlName()}" name="{$this->controlName()}" value="{$value}">
        <button type="button" class="btn btn-primary" data-type="location">拾取</button>
     </div>
 </div>

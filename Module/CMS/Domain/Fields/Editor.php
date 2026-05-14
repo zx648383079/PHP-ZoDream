@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 class Editor extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+    public function options(bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'width' => '',
             'height' => '',
             'is_mb_auto' => 1,
@@ -53,29 +52,33 @@ class Editor extends BaseField {
     }
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->mediumtext()->nullable()->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->mediumtext()->nullable()->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'editor',
                 'value' => $value
             ];
         }
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'width' => '',
             'height' => '',
             'is_mb_auto' => 1,
             'editor_mode' => 0
         ]);
-        $editor = \Infrastructure\Editor::html($field['field'], $value, $option);
+        $editor = \Infrastructure\Editor::html($this->controlName(), $value, $option);
         return <<<HTML
-<div for="{$field['field']}">{$field['name']}</div>
+<div for="{$this->controlName()}">{$this->controlLabel()}</div>
 {$editor}
 HTML;
+    }
+
+    public function toText(mixed $value): string {
+        return (string)$value;
     }
 }

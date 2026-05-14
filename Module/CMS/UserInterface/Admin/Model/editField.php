@@ -20,12 +20,12 @@ $this->registerJs($js);
     <?php if($model->is_system > 0):?>
     <?php if($model->field !== 'title'):?>
     <?=Form::radio('is_main', ['否', '是'])?>
-    <?=Form::radio('is_required', ['非必填', '必填'])?>
     <?php endif;?>
     <?=Form::text('tip_message')?>
     <?=Form::text('error_message')?>
     <?php else: ?>
     <?=Form::radio('is_main', ['否', '是'])?>
+    <?=Form::radio('is_required', ['非必填', '必填'])?>
     <?=Form::select('type', ModelRepository::FIELD_TYPE_ITEMS)?>
     <div class="option-box">
 

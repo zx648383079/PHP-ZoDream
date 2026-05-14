@@ -4,18 +4,16 @@ namespace Module\CMS\Domain\Fields;
 
 use Module\CMS\Domain\Model\LinkageDataModel;
 use Module\CMS\Domain\Model\LinkageModel;
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
-
 use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Template\View;
 
 class Linkages extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
+    public function options(bool $isJson = false): array|string {
         $items = LinkageModel::query()->selectRaw('code as id,name')->asArray()->get();
-        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
+        $linkageId = static::fieldSetting($this->field, 'option', 'linkage_id');
         if ($isJson) {
             return [
                 [
@@ -34,26 +32,29 @@ class Linkages extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string()->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string()->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
-        $linkageId = static::fieldSetting($field, 'option', 'linkage_id');
+    public function toInput(mixed $value, bool $isJson = false): array|string {
+        $linkageId = static::fieldSetting($this->field, 'option', 'linkage_id');
+        if (empty($linkageId)) {
+            return $this->inputTooltip('联动菜单参数配置错误', $isJson);
+        }
         $items = $this->getItems($value);
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'linkages',
                 'value' => $items
             ];
         }
         $url = url('./form/linkage', ['id' => $linkageId, 'lang' => $this->context->language()]);
         $js = <<<JS
-$('#linkage-{$field['id']}').multiSelect({
+$('#linkage-{$this->field['id']}').multiSelect({
     data: '{$url}',
-    tag: 'add_{$field['field']}'
+    tag: 'add_{$this->controlName()}'
 });
 JS;
 
@@ -67,21 +68,21 @@ JS;
 <div class="selected-item">
     <span class="item-close">&times;</span>
     <div class="item-label">{$item['name']}</div>
-    <input type="hidden" name="{$field['field']}[]" value="{$item['id']}">
+    <input type="hidden" name="{$this->controlName()}[]" value="{$item['id']}">
 </div>
 HTML;
         }
 
         return <<<HTML
 <div class="input-group">
-    <label for="{$field['field']}">{$field['name']}</label>
+    <label for="{$this->controlName()}">{$this->controlLabel()}</label>
      <div class="multi-input-container">
         <div class="selected-container">
             {$html}
         </div>
 
         <div class="add-container">
-            <div id="linkage-{$field['id']}">
+            <div id="linkage-{$this->field['id']}">
         
             </div>
             <div class="btn btn-primary add-item">添加</div>
@@ -92,7 +93,7 @@ HTML;
 
     }
 
-    public function toText($value, ModelFieldModel|array $field): string {
+    public function toText(mixed $value): string {
         $items = static::fromMultipleValue($value);
         if (empty($items)) {
             return '';
@@ -101,11 +102,11 @@ HTML;
             ->pluck('full_name'));
     }
 
-    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
+    public function filterInput(mixed $value, MessageBag $bag): mixed {
         $value = static::toMultipleValue($value);
-        if ($field['is_required'] && empty($value)) {
-            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
-                !empty($field['error_message']) ? $field['error_message'] : '必填项'));
+        if ($this->isRequired() && empty($value)) {
+            $bag->add($this->controlName(), sprintf('[%s]%s', $this->controlLabel(),
+                !empty($this->field['error_message']) ? $this->field['error_message'] : '必填项'));
         }
         return $value;
     }

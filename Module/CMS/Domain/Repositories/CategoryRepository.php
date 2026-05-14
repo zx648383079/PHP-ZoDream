@@ -90,10 +90,7 @@ class CategoryRepository {
             throw new \Exception($model->getFirstError());
         }
         if ($locale_group_id > 0) {
-            $context->channelBuilder()->where('id', $locale_group_id)
-                ->update([
-                    'locale_group_id' => $locale_group_id
-                ]);
+            LocaleRepository::channelBinding($context, intval($model->id), $locale_group_id);
         }
         CacheRepository::onChannelUpdated(intval($model->id));
         return $model;
@@ -115,6 +112,7 @@ class CategoryRepository {
             }
         }
         $context->channelBuilder()->where('site_id', $context->id())->whereIn('id', $items)->delete();
+        LocaleRepository::channelUnlink($context, $id);
         CacheRepository::onChannelUpdated($id);
     }
 

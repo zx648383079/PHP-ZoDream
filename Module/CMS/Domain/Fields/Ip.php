@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
 class Ip extends BaseField {
 
-    public function options(ModelFieldModel $field, bool $isJson = false): array|string {
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+    public function options(bool $isJson = false): array|string {
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'unique' => 0,
         ]);
         if ($isJson) {
@@ -29,19 +28,19 @@ class Ip extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $column->string(120)->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $column->string(120)->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'ip',
                 'value' => $value
             ];
         }
-        return (string)Theme::text($field['field'], $value, $field['name']);
+        return (string)Theme::text($this->controlName(), $value, $this->controlLabel());
     }
 }

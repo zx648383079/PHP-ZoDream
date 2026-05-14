@@ -65,6 +65,23 @@
     }
 }
 
+.locale-icon {
+    margin-left: .4rem;
+    font-size: .8rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center; 
+    justify-content: center;
+    border: 1px solid var(--#{theme.$prefix}border);
+    background-color: var(--#{theme.$prefix}body);
+    &:hover {
+        background-color: var(--#{theme.$prefix}danger);
+        color: var(--#{theme.$prefix}danger-text);
+    }
+}
+
 .multi-input-container {
     .selected-container {
         min-height: 2rem;

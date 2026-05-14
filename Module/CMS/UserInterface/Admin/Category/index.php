@@ -10,6 +10,7 @@ $this->title = '栏目管理';
     <ul>
         <li>栏目分为三类：有文章的、单个页面、外链</li>
         <li>分组表示在前台模板中指定位置显示，默认 “nav” 分组指显示在前台导航栏</li>
+        <li><i class="fa fa-link"></i> 表示存在多语言版本绑定</li>
     </ul>
     <span class="tooltip-toggle"></span>
 </div>
@@ -46,6 +47,9 @@ $this->title = '栏目管理';
                     <span>ￂ<?=str_repeat('ｰ', $item['level'] - 1)?>
                     <?php endif;?>
                     <a href="<?=$currentSite->url('./category', ['id' => $item['id']])?>"><?=$item['title']?></a>
+                    <?php if($item['locale_group_id'] > 0):?>
+                    <a class="locale-icon" href="<?=$this->url('./@admin/category/unlink', ['id' => $item['id']])?>" title="点击解除本地化绑定"><i class="fa fa-link"></i></a>
+                    <?php endif;?>
                 </td>
                 <td><?= empty($item['groups']) ? '-' : __($item['groups']) ?></td>
                 <td><?=intval($item['content_count'])?></td>

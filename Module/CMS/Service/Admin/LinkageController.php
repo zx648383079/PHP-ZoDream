@@ -129,6 +129,13 @@ class LinkageController extends Controller {
         ]);
     }
 
+    public function unlinkAction(int $id) {
+        LocaleRepository::linkageUnlink($id);
+        return $this->renderData([
+            'url' => $this->getUrl('linkage'),
+        ]);
+    }
+
     public function treeAction(int $id) {
         return $this->renderData(LinkageRepository::dataTree($id));
     }

@@ -11,33 +11,79 @@ use Zodream\Helpers\Str;
 use Zodream\Infrastructure\Support\MessageBag;
 use Zodream\Database\Model\Model as BaseModel;
 
-abstract class BaseField {
+abstract class BaseField implements FieldControlInterface {
 
     public function __construct(
-        protected readonly SiteContextInterface $context
+        protected readonly SiteContextInterface $context,
+        protected readonly ModelFieldModel $field,
     ) {
     }
 
-    abstract public function converterField(Column $column, ModelFieldModel $field): void;
+    /**
+     * 字段的名
+     */
+    public function controlName(): string {
+        return $this->field->field;
+    }
 
-    abstract public function options(ModelFieldModel $field, bool $isJson = false): string|array;
+    /**
+     * 字段的显示名
+     */
+    public function controlLabel(): string {
+        return $this->field->name;
+    }
 
-    abstract public function toInput(mixed $value, ModelFieldModel|array $field, bool $isJson = false): array|string;
+    public function isRequired(): bool {
+        return $this->field->is_required > 0;
+    }
 
-    public function filterInput(mixed $value, ModelFieldModel|array $field, MessageBag $bag): mixed {
-        if ($field['is_required'] && is_null($value)) {
-            $bag->add($field['field'], sprintf('[%s]%s', $field['name'],
+    public function isDisabled(): bool {
+        return $this->field->is_disable > 0;
+    }
+
+    abstract public function alterColumn(Column $column): void;
+
+    abstract public function options(bool $isJson = false): string|array;
+
+    abstract public function toInput(mixed $value, bool $isJson = false): array|string;
+
+    public function filterInput(mixed $value, MessageBag $bag): mixed {
+        if ($this->isRequired() && is_null($value)) {
+            $bag->add($this->controlName(), sprintf('[%s]%s', $this->controlLabel(),
                 !empty($field['error_message']) ? $field['error_message'] : '必填项'));
         }
-        if (!is_null($value) && $field['match'] && !preg_match($field['match'], (string)$value, $_)) {
-            $bag->add($field['field'],
-            sprintf('[%s]%s', $field['name'], !empty($field['error_message']) ? $field['error_message'] : '必填项'));
+        if (!is_null($value) && $this->field['match'] && !preg_match($this->field['match'], (string)$value, $_)) {
+            $bag->add($this->controlName(),
+            sprintf('[%s]%s', $this->controlLabel(), !empty($field['error_message']) ? $field['error_message'] : '必填项'));
         }
         return $value.'';
     }
 
-    public function toText(mixed $value, ModelFieldModel|array $field): string {
+    public function toText(mixed $value): string {
         return Html::text((string)$value);
+    }
+
+    public function formatValue(mixed $value): mixed {
+        return $value;
+    }
+
+    public function inputTooltip(string $message, bool $isJson = false): array|string {
+        if ($isJson) {
+            return [
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
+                'type' => 'error',
+                'value' => $message
+            ];
+        }
+        return <<<HTML
+<div class="input-group is-invalid">
+    <label for="{$this->controlName()}">{$this->controlLabel()}</label>
+     <div class="invalid-tooltip">
+        [{$message}]
+    </div>
+</div>
+HTML;
     }
 
     public static function fieldSetting(BaseModel|array $field, string ...$keys): mixed {
@@ -147,6 +193,27 @@ abstract class BaseField {
         foreach ($items as $item) {
             $item = intval($item);
             if ($item < 1 || in_array($item, $data)) {
+                continue;
+            }
+            $data[] = $item;
+        }
+        return $data;
+    }
+
+    public static function toMultipleText(mixed $items): string {
+        $items = static::fromMultipleText($items);
+        return empty($items) ? '' : implode(',', $items);
+    }
+
+    public static function fromMultipleText(mixed $val): array {
+        if (empty($val)) {
+            return [];
+        }
+        $items = is_array($val) ? $val : explode(',', (string)$val);
+        $data = [];
+        foreach ($items as $item) {
+            $item = trim($item);
+            if (empty($item) || in_array($item, $data)) {
                 continue;
             }
             $data[] = $item;

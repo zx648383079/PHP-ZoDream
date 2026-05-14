@@ -4,7 +4,7 @@ function bindField(baseUri: string) {
     $('input[name=name]').on('blur', function() {
         pinyinIfEmpty(field, $(this).val() as string);
     });
-    $('input[name=type]').on('change', function() {
+    $('select[name=type]').on('change', function() {
         $.get(baseUri, {
             id: $('[name=id]').val(),
             type: $(this).val()
@@ -251,6 +251,33 @@ $(function() {
             },
         ]
     });
+
+    const multipleUploader = new Upload(null, {
+        url: UPLOAD_URI,
+        name: 'upfile',
+        template: '{url}',
+        multiple: true,
+        onbefore: function(data: any, element: JQuery) {
+            element.closest('.multiple-upload-panel').addClass('file-uploading');
+            return data;
+        },
+        onafter: function(data: any, element: JQuery) {
+            const target = element.closest('.multiple-upload-panel');
+            if (data.state == 'SUCCESS') {
+               target.trigger('uploaded', data);
+            } else if (data.code === 302) {
+                location.href = data.url;
+            } else {
+                Dialog.tip(data.state ?? '上传失败');
+            }
+            target.removeClass('file-uploading');
+            return false;
+        },
+        onerror: function(error: any, element: JQuery) {
+            Dialog.tip(error.status == 413 ? '文件太大，无法上传' :  '上传失败');
+            element.closest('.multiple-upload-panel').removeClass('file-uploading');
+        }
+    });
     
     $(document).on('click', '.multi-input-container .selected-container .item-close', function() {
         $(this).closest('.selected-item').remove();
@@ -258,18 +285,70 @@ $(function() {
         const $this = $(this);
         const target = $this.closest('.multi-input-container').find('.selected-container');
         const input = $this.closest('.add-container').find('select:last,input,textarea');
+        if (input.length === 0) {
+            return;
+        }
         const val = input.val();
         let label = val;
         if (input[0].nodeName === 'SELECT') {
             const ele = input[0] as HTMLSelectElement;
             label = ele.options[ele.selectedIndex].text;
         }
-        const name = input.attr('name').substring(4);
+        const name = input.attr('name')!.substring(4);
         target.append(`<div class='selected-item'>
         <span class='item-close'>&times;</span>
         <div class='item-label'>${label}</div>
         <input type='hidden' name='${name}[]' value='${val}'>
     </div>`);
+    }).on('click', '.multiple-upload-panel .panel-body .item-close', function() {
+        $(this).parent().remove();
+    }).on('click', '.multiple-upload-panel .panel-header .add-item', function() {
+        const $this = $(this);
+        const target = $this.closest('.multiple-upload-panel');
+        const input = $this.closest('.panel-header').find('input');
+        const val = input.val();
+        if (val) {
+            target.trigger('uploaded', val);
+            input.val('');
+            return;
+        }
+        if (target.hasClass('file-uploading')) {
+            Dialog.tip('文件正在上传中。。。');
+            return;
+        }
+        const filter: string = target.data('type') === 'images' ? 'image/*' : '';
+        multipleUploader.options.filter = filter;
+        if (filter.indexOf('image') < 0) {
+            multipleUploader.options.url = UPLOAD_URI.replace('uploadimage', 'uploadfile');
+        }
+        multipleUploader.start($this);
+    }).on('keydown', '.multiple-upload-panel .panel-header input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).closest('.panel-header').find('.add-item').trigger('click');
+            return;
+        }
+    }).on('uploaded', '.multiple-upload-panel', function(_, args) {
+        if (typeof args === 'string') {
+            args = {
+                url: args,
+                title: args.match(/[^\/\&\?]+$/)
+            };
+        }
+        const target = $(this);
+        const input = target.find('.panel-header input');
+        const targetBody = target.find('.panel-body');
+        const name = input.attr('name')!.substring(4);
+        targetBody.append(target.data('type') === 'images' ? `<div class="large-upload-item">
+            <img class="item-body" src="${args.url}">
+            <i class="item-close">&times;</i>
+            <input type='hidden' name='${name}[]' value='${args.url}'>
+            </div>` : `<div class="upload-item">
+            <span class="item-body">${args.title}</span>
+            <i class="item-close">&times;</i>
+            <input type='hidden' name='${name}[]' value='${args.url}'>
+        </div>`);
     }).on('click', 'button[data-type=publish]', function(e) {
         e.preventDefault();
         const form = $(this).closest('form');
@@ -278,5 +357,18 @@ $(function() {
     }).on('click', '.locale-selector', function(e) {
         e.preventDefault();
         $(this).toggleClass('focus');
+    }).on('click', '.locale-icon', function(e) {
+        e.preventDefault();
+        const $this = $(this);
+        if (!confirm('是否确认解除关联本地化？')) {
+            return;
+        }
+        postJson($this.attr('href'), {}, res => {
+            if (res.code === 200) {
+                $this.remove();
+                return;
+            }
+            parseAjax(res);
+        });
     });
 });

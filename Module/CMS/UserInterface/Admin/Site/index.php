@@ -11,6 +11,7 @@ $this->title = '站点列表';
         <li>站点管理，绑定访问站点域名、路径</li>
         <li>可以更改不同主题，但请注意：更改主题会导致栏目、文章、表单数据清空</li>
         <li>管理不同站点的栏目、文章、表单，只需点击列表中具体站点“操作 -> 管理”即可，显示“管理中”则表示当前管理的站点</li>
+        <li><i class="fa fa-link"></i> 表示存在多语言版本绑定</li>
     </ul>
     <span class="tooltip-toggle"></span>
 </div>
@@ -37,6 +38,9 @@ $this->title = '站点列表';
                        <strong>[默认]</strong>
                     <?php endif;?>
                     <?=$item->title?>
+                    <?php if($item->locale_group_id > 0):?>
+                    <a class="locale-icon" href="<?=$this->url('./@admin/site/unlink', ['id' => $item->id])?>" title="点击解除本地化绑定"><i class="fa fa-link"></i></a>
+                    <?php endif;?>
                 </td>
                 <td><?=$item['language']?></td>
                 <td class="left"><?=$item->match_rule ?: '(空)'?></td>

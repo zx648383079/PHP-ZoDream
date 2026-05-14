@@ -123,10 +123,7 @@ class ContentController extends Controller {
         }
         if ($id > 0) {
             if ($locale_group_id > 0) {
-                $scene->query()->whereIn('id', [$locale_group_id, $id])
-                    ->update([
-                        'locale_group_id' => $locale_group_id
-                    ]);
+                LocaleRepository::articleBinding($context, $model, $id, $locale_group_id);
             }
             event(new ManageAction('cms_content_edit', '', 33, $id));
         }
@@ -147,7 +144,8 @@ class ContentController extends Controller {
     public function deleteAction(int|array $id, int $model_id, int $cat_id = 0) {
         //$cat = CategoryModel::find($cat_id);
         $model = ModelModel::find($model_id);
-        $scene = CMSRepository::context()->scene()
+        $context = CMSRepository::context();
+        $scene = $context->scene()
             ->setModel($model);
         $data = $scene->find(is_array($id) ? intval(current($id)) : intval($id));
         if (!empty($data)) {
@@ -161,6 +159,22 @@ class ContentController extends Controller {
         }
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $queries['parent_id'] = $data['parent_id'];
+        }
+        foreach((array)$id as $item) {
+            LocaleRepository::articleUnlink($context, $model, intval($item));
+        }
+        return $this->renderData([
+            'url' => $this->getUrl('content', $queries)
+        ]);
+    }
+
+    public function unlinkAction(int $id, int $model_id, int $cat_id = 0) {
+        LocaleRepository::articleUnlink(CMSRepository::context(), ModelModel::find($model_id), $id);
+        $queries = [
+            'model_id' => $model_id
+        ];
+        if (config('view.cms_menu_mode', 0) < 1) {
+            $queries['cat_id'] = $cat_id;
         }
         return $this->renderData([
             'url' => $this->getUrl('content', $queries)

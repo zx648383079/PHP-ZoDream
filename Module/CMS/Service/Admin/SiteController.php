@@ -64,6 +64,10 @@ class SiteController extends Controller {
         ]);
     }
 
+    public function unlinkAction(int $id) {
+        return $this->renderFailure('无法解除站点本地化，请改为新增站点');
+    }
+
     public function defaultAction(int $id) {
         try {
             SiteRepository::setDefault($id);

@@ -7,6 +7,8 @@ use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Fields\BaseField;
+use Module\CMS\Domain\Fields\FieldControlInterface;
+use Module\CMS\Domain\Fields\UnknownField;
 use Module\CMS\Domain\Migrations\CreateCmsTables;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Repositories\CommentRepository;
@@ -137,8 +139,8 @@ abstract class BaseScene implements SceneInterface {
             if (!array_key_exists($field['field'], $data)) {
                 continue;
             }
-            $res[$field['field']] = static::newField($field['type'])
-                ->filterInput($data[$field['field']] ?? null, $field, $bag);
+            $res[$field['field']] = static::createControl($field, $this->context)
+                ->filterInput($data[$field['field']] ?? null, $bag);
         }
         if (!$bag->isEmpty()) {
             throw new ValidationException($bag);
@@ -651,7 +653,20 @@ abstract class BaseScene implements SceneInterface {
         if ($field['is_disable'] > 0) {
             return '';
         }
-        return self::newField($field['type'], $this->context)->toInput($data[$field['field']] ?? '', $field, $isJson);
+        return $this->getFieldControl($field)->toInput($data[$field['field']] ?? '', $isJson);
+    }
+
+    public function getFieldControl(string|ModelFieldModel|array $name): FieldControlInterface {
+        if (!is_string($name)) {
+            return self::createControl($name, $this->context);
+        }
+        $field_list = $this->fieldList();
+        foreach($field_list as $field) {
+            if ($field['field'] === $name) {
+                return self::createControl($field, $this->context);
+            }
+        }
+        return new UnknownField();
     }
 
     /**
@@ -680,8 +695,8 @@ abstract class BaseScene implements SceneInterface {
             if (!$isNew && !array_key_exists($field['field'], $data)) {
                 continue;
             }
-            $value = static::newField($field['type'], $this->context)
-                ->filterInput($data[$field['field']] ?? null, $field, $bag);
+            $value = $this->getFieldControl($field)
+                ->filterInput($data[$field['field']] ?? null, $bag);
             if ($field['is_main'] > 0) {
                 $main[$field['field']] = $value;
                 continue;
@@ -696,19 +711,21 @@ abstract class BaseScene implements SceneInterface {
 
     /**
      * @param string $type
-     * @return BaseField
+     * @return FieldControlInterface
      * @throws \Exception
      */
-    public static function newField(string $type, SiteContextInterface $context) {
+    public static function createControl(ModelFieldModel|array $field, SiteContextInterface $context): FieldControlInterface {
+        $field = is_array($field) ? new ModelFieldModel($field) : $field;
         $maps = [
             'switch' => 'SwitchBox',
         ];
+        $type = $field['type'];
         if (isset($maps[$type])) {
             $type = $maps[$type];
         }
         $class = 'Module\CMS\Domain\Fields\\'.Str::studly($type);
         if (class_exists($class)) {
-            return new $class($context);
+            return new $class($context, $field);
         }
         throw new \Exception(
             __('Field "{type}" not exist!', compact('type'))
@@ -717,6 +734,6 @@ abstract class BaseScene implements SceneInterface {
 
     public static function converterTableField(Column $column, 
     ModelFieldModel|array $field, SiteContextInterface $context): void {
-        static::newField($field['type'], $context)->converterField($column, is_array($field) ? new ModelFieldModel($field) : $field);
+        static::createControl($field, $context)->alterColumn($column);
     }
 }

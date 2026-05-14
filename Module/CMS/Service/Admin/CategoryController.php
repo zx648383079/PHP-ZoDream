@@ -12,7 +12,12 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
     public function indexAction() {
-        $model_list = CategoryRepository::getList(CMSRepository::context());
+        try {
+            $context = CMSRepository::context();
+        } catch (\Exception $ex) {
+            return $this->redirectWithMessage($this->getUrl('site'), '请先点击站点“管理”进行下一步操作');
+        }
+        $model_list = CategoryRepository::getList($context);
         return $this->show(compact('model_list'));
     }
 
@@ -116,6 +121,13 @@ class CategoryController extends Controller {
         return $this->renderData([
             'url' => $this->getUrl('category'),
             'no_jax' => true
+        ]);
+    }
+
+    public function unlinkAction(int $id) {
+        LocaleRepository::channelUnlink(CMSRepository::context(), $id);
+        return $this->renderData([
+            'url' => $this->getUrl('category'),
         ]);
     }
 

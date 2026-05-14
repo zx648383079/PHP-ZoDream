@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Fields;
 
-use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Contracts\Column;
 use Zodream\Html\Dark\Theme;
 
@@ -10,8 +9,8 @@ class File extends BaseField {
 
     const DEFAULT_ALLOW = '';
 
-    public function options(ModelFieldModel $field, bool $isJson = false): string|array {
-        $option = static::filterData(static::fieldSetting($field, 'option'), [
+    public function options(bool $isJson = false): string|array {
+        $option = static::filterData(static::fieldSetting($this->field, 'option'), [
             'allow' => static::DEFAULT_ALLOW,
             'size' => '2M',
         ]);
@@ -39,24 +38,37 @@ class File extends BaseField {
 
 
 
-    public function converterField(Column $column, ModelFieldModel $field): void {
-        $len = intval($field->length);
-        $column->string($len > 10 ? $len : 255)->default('')->comment($field->name);
+    public function alterColumn(Column $column): void {
+        $len = intval($this->field->length);
+        $column->string($len > 10 ? $len : 255)->default('')->comment($this->controlLabel());
     }
 
-    public function toInput($value, ModelFieldModel|array $field, bool $isJson = false): array|string {
+    public function toInput(mixed $value, bool $isJson = false): array|string {
         if ($isJson) {
             return [
-                'name' => $field['field'],
-                'label' => $field['name'],
+                'name' => $this->controlName(),
+                'label' => $this->controlLabel(),
                 'type' => 'file',
                 'value' => $value
             ];
         }
-        $option = static::fieldSetting($field, 'option');
-        return (string)Theme::file($field['field'], $value, $field['name'], '',
-            $field['is_required'] > 0)->options([
+        $option = static::fieldSetting($this->field, 'option');
+        return (string)Theme::file($this->controlName(), $value, $this->controlLabel(), '',
+            $this->isRequired())->options([
             'allow' => $option && isset($option['allow']) ? $option['allow'] : self::DEFAULT_ALLOW
         ]);
+    }
+
+    public function toText(mixed $value): string {
+        if (empty($value)) {
+            return '';
+        }
+        return <<<HTML
+        <a href="{$value}" download>下载</a>
+HTML;
+    }
+
+    public function formatValue(mixed $value): mixed {
+        return $value;
     }
 }

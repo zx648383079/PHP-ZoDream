@@ -613,7 +613,14 @@ class FuncHelper {
             });
             return empty($user) ? '' : $user['name'];
         }
+
+
         return $data[$name] ?? null;
+    }
+
+    protected static function formatFieldValue(mixed $model, string $name, mixed $value): mixed {
+        $scene = CMSRepository::context()->scene()->setModel($model);
+        
     }
 
     public static function isChildren(int $parent_id, int $id): int {
@@ -866,7 +873,8 @@ class FuncHelper {
         if (!is_array($model)) {
             $model = static::model($model);
         }
-        $scene = CMSRepository::context()->scene()->setModel($model);
+        $context = CMSRepository::context();
+        $scene = $context->scene()->setModel($model);
         $data = $scene->find(intval($id));
         if (empty($data)) {
             return '';
@@ -877,11 +885,11 @@ class FuncHelper {
         }
         $id = $model['id'];
         return CMSRepository::viewTemporary(function (ViewFactory $factory) use ($fileName,
-            $id, $data) {
+            $id, $data, $context) {
             $field_list = self::formData($id);
             foreach ($field_list as $k => $item) {
-                $field_list[$k]['value'] = BaseScene::newField($item['type'])
-                    ->toText($data[$item['field']], $item);
+                $field_list[$k]['value'] = BaseScene::createControl($item, $context)
+                    ->toText($data[$item['field']]);
             }
             $factory->setLayout('');
             return $factory->render(sprintf('Content/%s', $fileName),
@@ -1068,8 +1076,8 @@ class FuncHelper {
             return '';
         }
         foreach($items as $item) {
-            if ($item['selected']) {
-                return $item['language'];
+            if ($item['checked']) {
+                return $item['value'];
             }
         }
         return '';

@@ -4,6 +4,7 @@ namespace Module\CMS\Service\Admin;
 
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Module\CMS\Domain\Model\ModelModel;
+use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\CMS\Domain\Repositories\ModelRepository;
 use Module\CMS\Domain\Scene\SingleScene;
 use Zodream\Infrastructure\Contracts\Http\Input;
@@ -134,16 +135,20 @@ class ModelController extends Controller {
 
     public function optionAction(string $type, int $id = 0) {
         $this->layout = '';
-        $model = ModelFieldModel::findOrNew($id);
-        $field = SingleScene::newField($type);
-        return $this->showContent($field->options($model));
+        try {
+            $model = ModelFieldModel::findOrNew($id);
+            $field = SingleScene::createControl($model, CMSRepository::context());
+        } catch (\Exception $ex) {
+            return $this->showContent(sprintf('[错误信息: %s]', $ex->getMessage()));
+        }
+        return $this->showContent($field->options());
     }
 
     /**
      * @param $model
      * @throws \Exception
      */
-    private function saveSystemField($model) {
+    private function saveSystemField(ModelFieldModel $model) {
         $model->name = request()->get('name');
         $model->save();
         return $this->renderData([
