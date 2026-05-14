@@ -709,6 +709,24 @@ abstract class BaseScene implements SceneInterface {
         return [$main, $extend];
     }
 
+    public function format(array $data): array {
+        $field_list = $this->fieldList();
+        if (empty($field_list)) {
+            return $data;
+        }
+        $res = [];
+        foreach ($field_list as $field) {
+            if ($field['is_disable']) {
+                continue;
+            }
+            if (!array_key_exists($field['field'], $data)) {
+                continue;
+            }
+            $res[$field['field']] = $this->getFieldControl($field)->formatValue($data[$field['field']]);
+        }
+        return $res;
+    }
+
     /**
      * @param string $type
      * @return FieldControlInterface

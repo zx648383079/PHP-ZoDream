@@ -41,10 +41,11 @@ class ContentController extends Controller {
         if (!empty($parent)) {
             $title = sprintf('%s %s', $parent['title'], $article['title']);
         }
+        $formatted = $scene->format($article);
         return $this->show(
             $channel['model_id'] === $model['id']
                 ? $channel['show_template']
                 : $model['show_template'],
-            compact('channel', 'article', 'title', 'model', 'parent'));
+            compact('channel', 'article', 'formatted', 'title', 'model', 'parent'));
     }
 }

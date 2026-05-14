@@ -137,6 +137,7 @@ class ModelController extends Controller {
         $this->layout = '';
         try {
             $model = ModelFieldModel::findOrNew($id);
+            $model->type = $type;
             $field = SingleScene::createControl($model, CMSRepository::context());
         } catch (\Exception $ex) {
             return $this->showContent(sprintf('[错误信息: %s]', $ex->getMessage()));

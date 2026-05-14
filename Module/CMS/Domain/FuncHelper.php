@@ -164,7 +164,7 @@ class FuncHelper {
         });
     }
 
-    protected static function setModel(...$data): void {
+    protected static function setModel(mixed ...$data): void {
         foreach ($data as $item) {
             static::cache()->trySet('model', $item['id'], $item);
             static::cache()->trySet('model', $item['table'], $item);
@@ -550,7 +550,7 @@ class FuncHelper {
         return self::getContentValue($name, $data);
     }
 
-    public static function formContent($model, $name = null, $category = null, $user = null) {
+    public static function formContent(mixed $model, $name = null, $category = null, $user = null) {
         if (is_array($model)) {
             isset($model['name']) && $name = $model['name'];
             $category = static::getVal($model, ['category', 'cat_id', 'cat', 'channel']);
@@ -613,14 +613,12 @@ class FuncHelper {
             });
             return empty($user) ? '' : $user['name'];
         }
-
-
         return $data[$name] ?? null;
     }
 
     protected static function formatFieldValue(mixed $model, string $name, mixed $value): mixed {
         $scene = CMSRepository::context()->scene()->setModel($model);
-        
+        return $scene->getFieldControl($name)->formatValue($value);
     }
 
     public static function isChildren(int $parent_id, int $id): int {
@@ -645,7 +643,7 @@ class FuncHelper {
         return '';
     }
 
-    protected static function getVal(array $data, $columns, $default = null) {
+    protected static function getVal(array $data, mixed $columns, mixed $default = null) {
         foreach ((array)$columns as $column) {
             if (!empty($column) && isset($data[$column])) {
                 return $data[$column];
@@ -769,7 +767,7 @@ class FuncHelper {
      * @param mixed ...$fields
      * @throws \Exception
      */
-    public static function extendContent(&$data, ...$fields): void {
+    public static function extendContent(mixed &$data, mixed ...$fields): void {
         if (empty($data)) {
             return;
         }

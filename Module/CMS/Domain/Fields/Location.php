@@ -35,8 +35,8 @@ class Location extends BaseField {
         return <<<HTML
 <div class="input-group">
     <label for="{$this->controlName()}">{$this->controlLabel()}</label>
-    <div>
-       <input type="text" id="{$this->controlName()}" name="{$this->controlName()}" value="{$value}">
+    <div class="file-input">
+       <input type="text" id="{$this->controlName()}" class="form-control" name="{$this->controlName()}" value="{$value}">
        <button type="button" class="btn btn-primary" data-type="location">拾取</button>
     </div>
 </div>

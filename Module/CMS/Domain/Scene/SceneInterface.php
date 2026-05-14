@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Scene;
 
 use Module\CMS\Domain\Contexts\SiteContextInterface;
+use Module\CMS\Domain\Fields\FieldControlInterface;
 use Module\CMS\Domain\Model\ModelFieldModel;
 use Zodream\Database\Model\Model;
 use Zodream\Database\Query\Builder;
@@ -129,5 +130,12 @@ interface SceneInterface {
     public function query(): Builder;
 
     public function extendQuery(): Builder;
+
+    public function getFieldControl(string|ModelFieldModel|array $name): FieldControlInterface;
+
+    /**
+     * 对内容的值进行格式化
+     */
+    public function format(array $data): array;
 
 }
