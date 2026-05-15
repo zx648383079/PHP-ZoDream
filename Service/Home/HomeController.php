@@ -23,6 +23,14 @@ class HomeController extends Controller {
         return $this->show(compact('model'));
     }
 
+    public function mapAction(string $point = '', float $x = 0, float $y = 0, string $marker = '') {
+        $this->layout = '';
+        if (!empty($point)) {
+            list($x, $y) = array_map('floatval', explode(',', $point));
+        }
+        return $this->show(compact('x', 'y', 'marker'));
+    }
+
     public function notFoundAction() {
         $request = request();
         $response = response();

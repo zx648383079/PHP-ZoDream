@@ -28,6 +28,7 @@
     "vue": "^3.5.31"
   },
   "devDependencies": {
+    "@types/bmapgl": "^0.0.7",
     "@types/jquery": "^4.0.0",
     "@types/js-cookie": "^3.0.6",
     "gulp-vue2mini": "^1.6.2",

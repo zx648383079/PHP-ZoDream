@@ -2690,7 +2690,9 @@ var EditorModules = [
         parent: EDITOR_ADD_TOOL,
         modal: new EditorMapComponent,
         handler: function (editor, range, data) {
-            editor.insert(__assign({ type: EditorBlockType.AddText }, data), range);
+            editor.insert(__assign({ type: EditorBlockType.AddFrame }, {
+                value: '/home/map?point=' + data.value + '&marker=' + encodeURIComponent(data.mark),
+            }), range);
         }
     },
     // 更多
@@ -3261,6 +3263,7 @@ var DivElement = /** @class */ (function () {
     DivElement.prototype.addFrameExecute = function (range, block) {
         var frame = document.createElement('iframe');
         frame.src = block.value;
+        frame.setAttribute('frameborder', '0');
         this.insertElement(frame, range);
         this.selectNode(frame);
     };

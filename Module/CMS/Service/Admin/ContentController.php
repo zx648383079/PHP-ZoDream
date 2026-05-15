@@ -95,9 +95,17 @@ class ContentController extends Controller {
         $cat_list = CategoryRepository::all($context);
         if ($model->edit_template) {
             CMSRepository::registerView($context);
-            return $this->show($model->edit_template, compact('id',
-                'cat_id', 'cat', 'scene', 'model',
-                'data', 'tab_list', 'languageItems', 'cat_list'));
+            return $this->show($model->edit_template, [
+                'id' => $id,
+                'channel' => $cat,
+                'channel_id' => $cat_id,
+                'scene' => $scene,
+                'model' => $model,
+                'data' => $data,
+                'tab_items' => $tab_list,
+                'language_items' => $languageItems,
+                'channel_items' => $cat_list
+            ]);
         }
         return $this->show('edit', compact('id',
             'cat_id', 'cat', 'scene', 'model',

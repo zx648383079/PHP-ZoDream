@@ -307,7 +307,9 @@ class FuncHelper {
     public static function locationPath(): array {
         $path = static::cache()->getOrSet(__FUNCTION__, __FUNCTION__, function () {
             $path = static::channels()->getParentId(static::$current['channel']);
-            $path[] = static::$current['channel'];
+            if (!empty(static::$current['channel'])) {
+                $path[] = static::$current['channel'];
+            }
             return $path;
         });
         return array_map(function ($id) {
@@ -321,6 +323,9 @@ class FuncHelper {
 
     public static function location(): string {
         return implode('', array_map(function ($item) {
+            if (empty($item['title'])) {
+                return '';
+            }
             return Html::li(Html::a($item['title'],
                 $item['url']));
         }, static::locationPath()));
@@ -1029,11 +1034,14 @@ class FuncHelper {
      * @return string
      * @throws \Exception
      */
-    public static function searchHidden(): string {
+    public static function searchHidden(mixed $params = null): string {
         $data = request()->get();
         unset($data['page'], $data['keywords']);
         if (self::$current['channel'] > 0) {
             $data['category'] = (string)self::$current['channel'];
+        }
+        if (is_array($params)) {
+            $data = array_merge($data, $params);
         }
         $html = '';
         foreach ($data as $key => $value) {
@@ -1041,11 +1049,11 @@ class FuncHelper {
                 continue;
             }
             if (!is_array($value)) {
-                $html .= Form::hidden(HtmlHelper::text($key), HtmlHelper::text($value));
+                $html .= Form::hidden(HtmlHelper::text((string)$key), HtmlHelper::text((string)$value));
                 continue;
             }
             foreach ($value as $val) {
-                $html .= Form::hidden(HtmlHelper::text($key).'[]', HtmlHelper::text($val));
+                $html .= Form::hidden(HtmlHelper::text((string)$key).'[]', HtmlHelper::text((string)$val));
             }
         }
         return $html;
