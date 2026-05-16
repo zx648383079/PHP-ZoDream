@@ -83,7 +83,15 @@ class CategoryRepository {
                 $data['name']);
         }
         $model->load($data);
-        
+        if (!$model->type && !$model->model_id) {
+            if ($model->pareent_id > 0) {
+                $model->model_id = intval($context->channelBuilder()->where('id', $model->pareent_id)
+                ->value('model_id'));
+            }
+            if (!$model->model_id) {
+                throw new Exception('请选择模型');
+            }
+        }
         $model->site_id = $context->id();
         $context->channelSave($model);
         if ($model->hasError()) {

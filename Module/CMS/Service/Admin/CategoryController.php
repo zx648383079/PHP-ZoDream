@@ -54,6 +54,9 @@ class CategoryController extends Controller {
             $model->site_id = $context->id();
             $model->parent_id = $parent_id;
             $model->locale_group_id = $locale;
+            if ($locale > 0) {
+                $model->load($context->channelBuilder()->where('id', $locale)->asArray()->first('name', 'type', 'model_id', 'groups', 'position', 'category_template', 'list_template', 'show_template'));
+            }
         }
         $model_list = ModelModel::where('type', 0)->select('name', 'id')->get();
         $group_list = GroupModel::where('type', 0)->get();

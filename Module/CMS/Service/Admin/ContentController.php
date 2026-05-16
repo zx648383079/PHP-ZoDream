@@ -46,7 +46,7 @@ class ContentController extends Controller {
             }
             $id = LocaleRepository::articleConvert($site_id, $model, $locale);
             if ($id > 0) {
-                return $this->edit($id, $model_id, $site_id);
+                return $this->edit($id, $model_id, 0, $site_id);
             }
             
             if ($parent_id > 0) {
@@ -90,6 +90,11 @@ class ContentController extends Controller {
             'site_id' => $context->id(),
             'locale_group_id' => $locale
         ];
+        if ($id > 0 && !empty($data)) {
+            $cat_id = intval($data['cat_id']);
+            $cat = $context->channelBuilder()->where('site_id', $site_id)
+            ->where('id', $cat_id)->first();
+        }
         $tab_list = ModelRepository::fieldGroupByTab($model->id);
         $languageItems = LocaleRepository::siteOptions($context->source());
         $cat_list = CategoryRepository::all($context);

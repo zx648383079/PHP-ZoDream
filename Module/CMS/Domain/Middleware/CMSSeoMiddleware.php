@@ -30,7 +30,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
             return $next($context);
         }
         $path = $context->path();
-        if (str_starts_with($path, 'open/') || str_contains($path, '/admin/')) {
+        if (str_starts_with($path, 'open/') || str_contains($path, '/admin/') || str_starts_with($path, 'home/')) {
             return $next($context);
         }
         /** @var Input $request */

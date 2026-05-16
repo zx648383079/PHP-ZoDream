@@ -35,7 +35,7 @@ class ContentRepository {
         if ($category > 0) {
             $queries['cat_id'] = $category;
         }
-        $page = $scene->search($keywords, $queries, 'id desc', $page, $perPage, implode(',', array_column($column, 'name')));
+        $page = $scene->search($keywords, $queries, 'id desc', $page, $perPage, implode(',', array_column($column, 'name')).',locale_group_id');
         $data = $page->toArray();
         if (!empty($data['data'])) {
             static::formatValue($data['data']);
