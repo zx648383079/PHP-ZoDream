@@ -48,7 +48,7 @@ class LeadTour {
     }
 
     public get canNext() {
-        return this.index < this.options.items.length - 1;
+        return this.index < this.options.items!.length - 1;
     }
 
     private set overlayStyle(args: any) {
@@ -139,7 +139,7 @@ class LeadTour {
     }
 
     private prepare() {
-        const option = this.options.items[this.index];
+        const option = this.options.items![this.index];
         if (!option.before) {
             this.renderStep(option);
             return;
@@ -152,7 +152,7 @@ class LeadTour {
     }
 
     private refresh() {
-        this.renderStep(this.options.items[this.index]);
+        this.renderStep(this.options.items![this.index]);
     }
 
     private renderStep(data: DialogLeadTourStep, level = 0) {
@@ -197,8 +197,8 @@ class LeadTour {
         const modalWidth = 320;
         this.dialogStyle = this.computeModalStyle(offset, modalWidth, modalHeight);
         this.content = data.content;
-        this.secondaryText = this.canBack ? this.options.backText : this.options.cancelText;
-        this.primaryText = this.canNext ? this.options.nextText : this.options.confirmText;
+        this.secondaryText = this.canBack ? this.options.backText! : this.options.cancelText!;
+        this.primaryText = this.canNext ? this.options.nextText! : this.options.confirmText!;
     }
 
     private computeModalStyle(offset: DOMRect, width: number, height: number): any {

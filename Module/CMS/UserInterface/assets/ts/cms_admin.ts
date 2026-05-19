@@ -188,8 +188,16 @@ $(function() {
                 content: '所有站点',
             },
             {
-                selector: '.panel-container .btn-group:first',
+                selector: '.locale-icon:first',
+                content: '带此图标的表示为多语言关联的站点，其栏目、文章可以进行语言翻译绑定切换',
+            },
+            {
+                selector: () => $('.panel-container .btn-group:first').closest('td'),
                 content: '点击“管理”进行切换站点；“编辑”可以设置站点属性：包括标题、LOGO；“配置”可以设置站点模板的属性：包括备案号、联系方式等',
+            },
+            {
+                selector: () => $('.panel-container .btn-group:first').closest('td').find('a').filter((_, ele) => ele.innerText.indexOf('管理') >= 0).first(),
+                content: '点击“管理”进行管理站点，当变为 “管理中”：这时可以管理当前站点的栏目、文章',
             },
             {
                 selector: () => $('.sidebar-container .menu-item a').filter((_, ele) => ele.innerText.indexOf('栏目') >= 0).first(),
@@ -205,21 +213,39 @@ $(function() {
                 content: '添加栏目',
             },
             {
-                before: () => parseAjaxUri(BASE_URI + 'category/create'),
+                selector: () => $('.tree-table .tree-level-open .btn-group a').filter((_, ele) => ele.innerText.indexOf('编辑') >= 0).first(),
+                content: '编辑栏目',
+            },
+            {
+                before: () => {
+                    const eles = $('.tree-table .locale-icon:first');
+                    if (eles.length === 0) {
+                        return parseAjaxUri(BASE_URI + 'category/create');
+                    }
+                    return eles.closest('.tree-item').find('.btn-group a').filter((_, ele) => ele.innerText.indexOf('编辑') >= 0).first().trigger('click');
+                },
                 selector: '.form-table',
-                content: '表格',
+                content: '栏目的内容表格',
             },
             {
                 selector: '.form-table .tab-header',
-                content: '切换表格内容',
+                content: '点击选项卡可以切换编辑表格字段',
+            },
+            {
+                selector: '.locale-selector',
+                content: '点击下拉选择可以切换其他语言站点的栏目进行添加和编辑',
+            },
+            {
+                selector: () => $('input[name=type]').closest('.input-group'),
+                content: '不同类型需要添加不同的内容: “内容” 需要选择模型，添加文章; “单页/外链” 需要在详情选项卡添加内容/链接',
             },
             {
                 selector: '.form-table .btn-group',
-                content: '保存操作',
+                content: '请不要忘了保存操作',
             },
             {
                 before: () => history.back(),
-                selector: '.tree-table .btn-group:first',
+                selector: () => $('.tree-table .tree-level-open .btn-group').filter((_, ele) => ele.innerText.indexOf('文章') >= 0).first(),
                 content: '针对栏目的操作：“文章”可以添加文章',
             },
             {
@@ -228,13 +254,17 @@ $(function() {
                 content: '当前栏目下的所有文章，不包含子栏目的文章',
             },
             {
+                selector: '.page-search-bar .btn-success',
+                content: '添加文章',
+            },
+            {
                 before: () => $('.page-search-bar .btn-group a').first().trigger('click'),
                 selector: '.form-table',
                 content: '编辑文章的内容',
             },
             {
                 selector: '.form-table .tab-header',
-                content: '切换表格内容，文章的具体内容在“高级”标签下',
+                content: '切换表格内容，文章的具体内容在“高级”选项卡下',
             },
             {
                 selector: '.form-table .btn-group',
