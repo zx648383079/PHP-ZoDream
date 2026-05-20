@@ -43,17 +43,44 @@ class HomeController extends Controller {
      * @param string $base64
      * @return Output
      */
-	protected function upload(string $fieldName, array $config, string $base64 = 'upload') {
+	protected function upload(string $fieldName, 
+	array $config, 
+	string $base64 = 'upload') {
         try {
-            $res = FileRepository::upload($fieldName, $config, $base64);
-            return $this->jsonReturn(array_merge($res, [
-                'state' => 'SUCCESS'
-            ]));
+            $res = $fieldName !== 'files' ? FileRepository::upload($fieldName, $config, $base64): FileRepository::uploadFiles($fieldName);
+            return $this->jsonReturn($fieldName !== 'files' ? array_merge($res, [
+                'state' => 'SUCCESS',
+            ]) : [
+				'success' => true,
+				'time' => date('Y-m-d H:i:s'),
+				'data' => $this->splitFiles($res)
+			]);
         } catch (\Exception $ex) {
-            return $this->jsonReturn([
+            return $this->jsonReturn($fieldName !== 'files' ? [
                 'state' => $ex->getMessage(),
-            ]);
+            ] : [
+				'success' => false,
+				'time' => date('Y-m-d H:i:s'),
+				'data' => [
+					'message' => [$ex->getMessage()]
+				]
+			]);
         }
+	}
+
+	private function splitFiles(array $items): array {
+		$files = [];
+		$isImages = [];
+		$baseurl = '';
+		foreach($items as $item) {
+			$isImages[] = FileRepository::isTypeExtension($item['type'], 'image');
+			$i = strrpos($item['url'], '/');
+			if (empty($baseurl)) {
+				$baseurl = substr($item['url'], 0, $i + 1);
+			}
+			$files[] = substr($item['url'], $i + 1);
+		}
+		return compact('files', 'isImages', 'baseurl');
 	}
 
 	protected function fileList(array $allowFiles, int $listSize, string $path) {
@@ -150,7 +177,7 @@ class HomeController extends Controller {
 	 * 上传文件
 	 */
 	function uploadfileAction() {
-		return $this->upload($this->configs['fileFieldName'], array(
+		return $this->upload(isset($_FILES['files']) ? 'files' : $this->configs['fileFieldName'], array(
             'pathFormat' => $this->configs['filePathFormat'],
             'maxSize' => $this->configs['fileMaxSize'],
             'allowFiles' => $this->configs['fileAllowFiles']

@@ -240,6 +240,14 @@ $(function() {
                 content: '不同类型需要添加不同的内容: “内容” 需要选择模型，添加文章; “单页/外链” 需要在详情选项卡添加内容/链接',
             },
             {
+                selector: () => $('input[name=position]').closest('.input-group'),
+                content: '栏目的排序按设的数字，数字越小越靠前',
+            },
+            {
+                selector: '.form-table .btn-group',
+                content: '请不要忘了保存操作',
+            },
+            {
                 selector: '.form-table .btn-group',
                 content: '请不要忘了保存操作',
             },
@@ -251,7 +259,7 @@ $(function() {
             {
                 before: () => $('.tree-table .btn-group a').filter((_, ele) => ele.innerText.indexOf('文章') >= 0).first().trigger('click'),
                 selector: '.page-multiple-table',
-                content: '当前栏目下的所有文章，不包含子栏目的文章',
+                content: '当前栏目下的所有文章，不包含子栏目的文章，前台文章按更新时间排序，后台文章按创建时间排序',
             },
             {
                 selector: '.page-search-bar .btn-success',
