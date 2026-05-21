@@ -44,6 +44,10 @@ interface IMapBuilder {
      * @param cb 
      */
     location(cb: (e: {x: number, y: number}) => void): IMapBuilder;
+    /**
+     * 截图
+     */
+    snapshot(cb: (image: string) => void): void;
 }
 
 class BaiduMapBuilder implements IMapBuilder {
@@ -110,6 +114,10 @@ class BaiduMapBuilder implements IMapBuilder {
             }     
         }, {enableHighAccuracy: true});
         return this;
+    }
+
+    public snapshot(cb: (image: string) => void): void {
+
     }
 
     public on(event: 'click', cb: (e: {x: number, y: number}) => void): IMapBuilder {

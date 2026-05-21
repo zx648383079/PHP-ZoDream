@@ -13,14 +13,14 @@ final class Editor {
 HTML;
     }
 
-    private static function isUEditor(): bool {
-        return config('view.editor') === 'ueditor';
+    private static function isJodit(): bool {
+        return config('view.editor') === 'jodit';
     }
 
     public static function register(View|ViewFactory $provider): void {
-        if (self::isUEditor()) {
-            $provider->registerJsFile(['/assets/ueditor/ueditor.config.js',
-                '/assets/ueditor/ueditor.all.js']);
+        if (self::isJodit()) {
+            $provider->registerJsFile('@jodit.min.js')
+                ->registerCssFile('@jodit.min.css');
         } else {
             $provider->registerJsFile('@jquery.editor.min.js')
                 ->registerCssFile('@editor.min.css');
@@ -33,11 +33,10 @@ HTML;
             $option['height'] = 400;
         }
         $id = 'editor_'.substr(md5($name), 0, 6);
-        if (self::isUEditor()) {
-            $options = self::getUEditorOptions(isset($option['editor_mode']) && $option['editor_mode'] > 0);
+        if (self::isJodit()) {
+            $options = self::getEditorOptions(isset($option['editor_mode']) && $option['editor_mode'] > 0);
             $js = <<<JS
-UE.delEditor('{$id}');
-UE.getEditor('{$id}', {$options});
+Jodit.make('#{$id}', {$options});
 JS;
         } else {
             $js = <<<JS
@@ -61,27 +60,40 @@ HTML;
         return self::render($provider, $name, $content, $option);
     }
 
-    private static function getUEditorOptions(bool $isSimple): string {
-        if (!$isSimple) {
-            return '{}';
-        }
-        return json_encode([
-            'toolbars' => [
-                [
-                    'fullscreen',
-                    'source',
-                    'undo',
-                    'redo',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'customstyle',
-                    'link',
-                    'simpleupload',
-                    'insertvideo',
-                ]
+    private static function getEditorOptions(bool $isSimple): string {
+        $data = [
+            'language' => 'zh_cn',
+            'uploader' => [
+                'url' => url('/ueditor.php', ['action' => 'uploadfile'], false),
+            ],
+            'cleanHTML' => [
+                'denyTags' => 'script,object,embed'
             ]
-        ]);
+            // 'iframe' => true,
+            // 'iframeBaseUrl' => '/home/map'
+        ];
+        if ($isSimple) {
+            $data['buttons'] = [
+                'bold',
+                'italic',
+                'underline',
+                '|',
+                'ul',
+                'ol',
+                '|',
+                'font',
+                'fontsize',
+                'brush',
+                '|',
+                'image',
+                'link',
+                '|',
+                'align',
+                'undo',
+                'redo'
+            ];
+        }
+        return json_encode($data);
     }
 
 }
