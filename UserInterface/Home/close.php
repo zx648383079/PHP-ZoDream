@@ -2,7 +2,7 @@
 defined('APP_DIR') or exit();
 use Zodream\Template\View;
 /** @var $this View */
-$this->title = __('暂停服务通知');
+$this->title = __('Service Suspension Notice');
 $this->registerCssFile([
     '@zodream.min.css',
     '@home.min.css'

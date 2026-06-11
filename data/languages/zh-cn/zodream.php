@@ -28,6 +28,7 @@ return [
     'loading...' => '加载中...',
     'back home' => '返回首页',
     'error page' => ':(很抱歉，您访问的页面不存在！',
+    'Service Suspension Notice' => '暂停服务通知',
     'home' => '首页',
     'blog' => '个人日记',
     'friend link' => '友情链接',

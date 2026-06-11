@@ -2,7 +2,16 @@
 declare(strict_types=1);
 namespace Infrastructure;
 
+use Zodream\Infrastructure\Contracts\HttpContext;
+
 class Deeplink {
+
+    public static function isSystemRoute(HttpContext $context): bool {
+        $path = $context->path();
+        $routes = explode('/', $path);
+        return in_array($routes[0], ['open', 'auth', 'home'])
+            || in_array('admin', $routes);
+    }
 
     protected static function schema(): string {
         static $cache = '';

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\Blog\Domain\Middleware;
 
+use Infrastructure\Deeplink;
 use Module\Blog\Domain\Helpers\RouterHelper;
 use Module\Blog\Module;
 use Module\Blog\Service\HomeController;
@@ -33,7 +34,7 @@ class BlogSeoMiddleware implements MiddlewareInterface{
             return $next($context);
         }
         $path = $context->path();
-        if (str_starts_with($path, 'open/') || str_contains($path, '/admin/')) {
+        if (Deeplink::isSystemRoute($context)) {
             return $next($context);
         }
         if (!str_starts_with($path, static::modulePath()) || strpos($path, '/',

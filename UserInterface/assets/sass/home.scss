@@ -401,8 +401,8 @@ footer {
     .desc {
         line-height: 1.875rem;
         text-align: center;
-        border-top: 1px dotted #ccc;
-        border-bottom: 1px dotted #ccc;
+        border-top: 1px dotted var(--#{theme.$prefix}border);
+        border-bottom: 1px dotted var(--#{theme.$prefix}border);
     }
     .links {
         margin-top: 0.625rem;
@@ -563,29 +563,30 @@ footer {
 }
 
 .close-page {
-    background-color: #3498db;
+    background-color: var(--#{theme.$prefix}surface);
     .box {
-        width: 648px;
+        width: 40.5rem;
         margin: 10vh auto;
-        background-color: #fff;
-        padding: 50px;
-        border-radius: 5px;
-        box-shadow: var(--#{theme.$prefix}shadow) 0 0 10px;
+        background-color: var(--#{theme.$prefix}body);
+        color: var(--#{theme.$prefix}body-text);
+        padding: 3.125rem;
+        border-radius: 0.3125rem;
+        box-shadow: var(--#{theme.$prefix}shadow) 0 0 0.625rem;
         h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 1.25rem;
         }
         .content {
-            color: #555;
+            color: var(--#{theme.$prefix}meta-text);
         }
     }
 }
 
 .agreement-box {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 1.875rem;
+    margin-bottom: 1.875rem;
     a {
-        color: #1570a6;
+        color: var(--#{theme.$prefix}link-text);
     }
     .update-date {
         .date-value {
@@ -593,15 +594,15 @@ footer {
         }
     }
     .print-bar {
-        margin-top: 20px;
-        background-color: #ececec;
+        margin-top: 1.25rem;
+        background-color: var(--#{theme.$prefix}border);
         text-align: right;
         .print-btn {
             cursor: pointer;
         }
     }
     .title {
-        color: #b63b00;
+        color:  var(--#{theme.$prefix}primary);
         font-size: 2em;
         display: inline-block;
         vertical-align: top;
@@ -610,17 +611,17 @@ footer {
     .nav-list {
         margin-top: .3em;
         li {
-            background-color: #a10000;
+            background-color: var(--#{theme.$prefix}primary);
             cursor: pointer;
             font-size: .9em;
-            color: #fff;
+            color: var(--#{theme.$prefix}primary-text);
             width: 90%;
             padding: 5%;
             margin-bottom: 5px;
             list-style: none;
         }
         a {
-            color: #fff;
+            color: var(--#{theme.$prefix}primary-text);
         }
     }
     .nav-panel {
@@ -628,10 +629,10 @@ footer {
         padding-bottom: .9rem;
         margin-bottom: .7rem;
         .nav-header {
-            color: #a10000;
+            color: var(--#{theme.$prefix}primary);
             font-size: 1.6em;
-            border: 1px solid #a10000;
-            border-left: 2em solid #a10000;
+            border:  1px solid var(--#{theme.$prefix}primary);
+            border-left: 2em solid var(--#{theme.$prefix}primary);
             padding: .2em;
         }
         .nav-desc {
@@ -650,10 +651,10 @@ footer {
 @media (max-width: 40rem) {
     .metro-grid {
         a {
-            width: 120px;
-            height: 40px;
-            line-height: 40px;
-            font-size: 20px;
+            width: 7.5rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            font-size: 1.25rem;
             &.unknow {
                 display: none;
             }

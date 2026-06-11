@@ -18,7 +18,7 @@ class OptionMiddleware implements MiddlewareInterface {
         if (Bot::disallowSpider($request->server('HTTP_USER_AGENT', '-'))) {
             return response()->statusCode(400)->str('Robots not allowed ');
         }
-        if (!str_contains($context->path(), 'admin') && Option::value('site_close')) {
+        if (!$this->isSystemRoute($context) && Option::value('site_close')) {
             return $this->outputClose($context);
         }
         if ($this->isSafetyVerify($context)) {
@@ -26,6 +26,18 @@ class OptionMiddleware implements MiddlewareInterface {
         }
         $this->gray($context);
         return $next($context);
+    }
+
+    private function isSystemRoute(HttpContext $context): bool {
+        $path = $context->path();
+        $routes = explode('/', $path);
+        if (in_array('admin', $routes)) {
+            return true;
+        }
+        if (auth()->guest()) {
+            return in_array($routes[0], ['auth']);
+        }
+        return false;
     }
 
     private function outputClose(HttpContext $context) {

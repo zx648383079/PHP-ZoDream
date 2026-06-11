@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Module\CMS\Domain\Middleware;
 
 use Domain\Middlewares\UrlRouterMiddleware;
+use Infrastructure\Deeplink;
 use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Model\SiteModel;
 use Module\CMS\Domain\Repositories\CacheRepository;
@@ -30,7 +31,7 @@ class CMSSeoMiddleware implements MiddlewareInterface{
             return $next($context);
         }
         $path = $context->path();
-        if (str_starts_with($path, 'open/') || str_contains($path, '/admin/') || str_starts_with($path, 'home/')) {
+        if (Deeplink::isSystemRoute($context)) {
             return $next($context);
         }
         /** @var Input $request */
