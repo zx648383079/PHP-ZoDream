@@ -304,7 +304,7 @@ class AuthRepository {
             throw new Exception($usernameType === 'email' ? '昵称或邮箱已存在' : '昵称或手机号已存在');
         }
         $data = array_merge([
-            'avatar' => '/assets/images/avatar/'.Str::randomInt(0, 48).'.png',
+            'avatar' => '/assets/images/avatar/'.Str::randomInt(0, 1).'.png',
             'sex' => UserModel::SEX_FEMALE
         ], $extra, [
            $usernameType => $username,
