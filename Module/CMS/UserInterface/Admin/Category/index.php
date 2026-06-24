@@ -17,7 +17,13 @@ $this->title = '栏目管理';
 
 <div class="panel-container">
     <div class="page-search-bar">
-
+        <form class="form-horizontal" role="form">
+            <div class="input-group">
+                <label class="sr-only" for="keywords">关键词</label>
+                <input type="text" class="form-control" name="keywords" id="keywords" placeholder="关键词" value="<?=$this->text($keywords)?>">
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
         <div class="btn-group pull-right">
             <a data-type="form" href="<?=$this->url('./@admin/category/quickly')?>" data-title="批量添加实体模型栏目" class="btn btn-primary">快速添加</a>
             <a class="btn btn-success" href="<?=$this->url('./@admin/category/create')?>">新增栏目</a>
@@ -27,7 +33,9 @@ $this->title = '栏目管理';
     <table class="table table-hover tree-table">
         <thead>
         <tr>
+            <?php if (empty($keywords)):?>
             <th class="tree-arrow-td"></th>
+            <?php endif;?>
             <th>ID</th>
             <th>栏目名</th>
             <th>分组</th>
@@ -38,9 +46,11 @@ $this->title = '栏目管理';
         <tbody>
         <?php foreach($model_list as $item):?>
             <tr class="tree-item <?= $item['level'] < 1 ? 'tree-level-open' : 'tree-next-level' ?>" data-level="<?=$item['level']?>">
+                <?php if (empty($keywords)):?>
                 <td class="tree-arrow-td" style="padding-left: <?= $item['level'] * 10 ?>px">
                     <i class="tree-item-arrow" title="点击展开/隐藏子项"></i>
                 </td>
+                <?php endif;?>
                 <td><?=$item['id']?></td>
                 <td class="left">
                     <?php if($item['level'] > 0):?>

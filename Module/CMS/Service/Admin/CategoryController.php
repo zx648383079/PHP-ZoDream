@@ -11,14 +11,14 @@ use Module\CMS\Domain\ThemeManager;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {
-    public function indexAction() {
+    public function indexAction(string $keywords = '') {
         try {
             $context = CMSRepository::context();
         } catch (\Exception $ex) {
             return $this->redirectWithMessage($this->getUrl('site'), '请先点击站点“管理”进行下一步操作');
         }
-        $model_list = CategoryRepository::getList($context);
-        return $this->show(compact('model_list'));
+        $model_list = CategoryRepository::getList($context, $keywords);
+        return $this->show(compact('model_list', 'keywords'));
     }
 
     public function createAction(int $site_id = 0, int $parent_id = 0, int $locale = 0) {

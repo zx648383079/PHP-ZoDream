@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Module\CMS\Domain\Repositories;
 
+use Domain\Model\SearchModel;
 use Exception;
 use Module\CMS\Domain\Contexts\SiteContextInterface;
 use Module\CMS\Domain\Model\CategoryModel;
@@ -11,11 +12,14 @@ use Zodream\Html\Tree;
 use Zodream\Helpers\Tree as TreeHelper;
 
 class CategoryRepository {
-    public static function getList(int|SiteContextInterface $site) {
+    public static function getList(int|SiteContextInterface $site, string $keywords = '') {
         $context = $site instanceof SiteContextInterface ? $site : SiteRepository::apply($site);
         $modelItems = Arr::pluck(ModelModel::query()->select('id', '`table`')
             ->get(), null, 'id');
-        $items = $context->channelBuilder()->where('site_id', $context->id())->orderBy('position', 'asc')->get();
+        $items = $context->channelBuilder()->where('site_id', $context->id())
+            ->when(!empty($keywords), function ($query) use ($keywords) {
+                SearchModel::searchWhere($query, ['title', 'keywords', 'description', 'content'], false, '', $keywords);
+            })->orderBy('position', 'asc')->get();
         $countKey = 'content_count';
         foreach ($items as &$item) {
             if ($item['type'] > 0 || !isset($modelItems[$item['model_id']])) {
@@ -27,6 +31,9 @@ class CategoryRepository {
                 ->where('cat_id', $item['id'])->count();
         }
         unset($item);
+        if (!empty($keywords)) {
+            return $items;
+        }
         return (new Tree($items))
             ->makeTreeForHtml();
     }
