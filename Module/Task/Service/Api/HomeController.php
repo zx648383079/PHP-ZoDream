@@ -140,6 +140,18 @@ class HomeController extends Controller {
         return $this->render($day);
     }
 
+    public function stateAction() {
+        try {
+            $day = TaskRepository::checkState();
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        if ($day === false) {
+            return $this->renderData($day);
+        }
+        return $this->renderData($day, TaskRepository::restTip($day));
+    }
+
     public function checkAction(int $id) {
         try {
             $day = TaskRepository::check($id);

@@ -305,6 +305,11 @@ class TaskRepository {
         return $day;
     }
 
+    public static function checkState() {
+        return TaskDayModel::where('user_id', auth()->id())
+        ->where('status', TaskDayModel::STATUS_RUNNING)->first();
+    }
+
     /**
      * 完成任务
      * @param $id
