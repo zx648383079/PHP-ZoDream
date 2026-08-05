@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Domain\Repositories;
 
 use Module\Finance\Domain\Model\AccountSimpleModel;
 use Module\Finance\Domain\Model\MoneyAccountModel;
 use Exception;
 
-class AccountRepository {
+final class AccountRepository {
 
     /**
      * 获取简单的select

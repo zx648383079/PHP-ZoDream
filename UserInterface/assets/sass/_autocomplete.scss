@@ -1,0 +1,49 @@
+.--autocomplete-control {
+    width: 100%;
+    display: none;
+    position: absolute;
+
+    .--autocomplete-hint {
+        position: absolute;
+        width: 100%;
+        display: none;
+        pointer-events: none;
+
+        span {
+            color: transparent;
+        }
+        &.--with-hint-open {
+            display: block;
+        }
+    }
+
+    .--autocomplete-pane {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .--autocomplete-item {
+        cursor: pointer;
+        strong {
+            /* Highlight Matches */
+        }
+        &:hover {
+            /* Hover State */
+        }
+        &.--with-selected {
+
+        }
+    }
+
+    &.--with-focus {
+
+    }
+    &.--with-closed {
+        
+    }
+    &.--with-open {
+        display: block;
+    }
+}

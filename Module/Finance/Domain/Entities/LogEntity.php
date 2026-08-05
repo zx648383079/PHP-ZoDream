@@ -13,6 +13,7 @@ use Domain\Entities\Entity;
  * @property integer $channel_id
  * @property integer $project_id
  * @property integer $budget_id
+ * @property integer $item_id
  * @property string $remark
  * @property string $happened_at
  * @property string $out_trade_no
@@ -48,6 +49,7 @@ class LogEntity extends Entity {
             'channel_id' => 'int',
             'project_id' => 'int',
             'budget_id' => 'int',
+            'item_id' => 'int',
             'remark' => '',
             'happened_at' => 'required',
             'out_trade_no' => 'string:0,100',
@@ -69,6 +71,7 @@ class LogEntity extends Entity {
             'channel_id' => '渠道',
             'project_id' => '项目',
             'budget_id' => '预算',
+            'item_id' => '所属物品',
             'remark' => '备注',
             'user_id' => 'User Id',
             'out_trade_no' => '交易单号',

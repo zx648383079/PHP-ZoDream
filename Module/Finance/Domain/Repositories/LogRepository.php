@@ -16,22 +16,23 @@ use Zodream\Helpers\Time;
 
 class LogRepository {
 
-    public static function getList(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '', string $goto = '', int $page = 1,
+    public static function getList(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, int $item = 0, string $start_at = '', string $end_at = '', string $goto = '', int $page = 1,
                                    int $per_page = 20) {
         if (!empty($goto)) {
-            $count = static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)
+            $count = static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $item, $start_at, $end_at)
             ->where('happened_at', '>=', $goto)
             ->count();
             $page = (int)ceil((float)$count / $per_page);
         }
-        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->orderBy('happened_at', 'desc')->page($per_page, 'page', $page);
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $item, $start_at, $end_at)->orderBy('happened_at', 'desc')->page($per_page, 'page', $page);
     }
 
     public static function count(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {
-        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $start_at, $end_at)->count();
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, 0, $start_at, $end_at)->count();
     }
 
-    protected static function bindQuery(SqlBuilder $builder, int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = ''): SqlBuilder {
+    protected static function bindQuery(SqlBuilder $builder, int $type = 0, string $keywords = '', 
+    int $account = 0, int $budget = 0, int $item = 0,  string $start_at = '', string $end_at = ''): SqlBuilder {
         return $builder->when($type > 0, function ($query) use ($type) {
             $query->where('type', $type - 1);
         })->when(!empty($keywords), function ($query) {
@@ -40,6 +41,8 @@ class LogRepository {
             $query->where('account_id', $account);
         })->when($budget > 0, function ($query) use ($budget) {
             $query->where('budget_id', $budget);
+        })->when($item > 0, function ($query) use ($item) {
+            $query->where('item_id', $item);
         })->when(!empty($start_at), function ($query) use ($start_at) {
             $query->where('happened_at', '>=', $start_at);
         })->when(!empty($end_at), function ($query) use ($end_at) {

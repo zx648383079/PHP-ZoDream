@@ -232,7 +232,7 @@ class LazyDefaultOptions implements LazyOptions {
 
 ;
 (function ($: any) {
-    $.fn.lazyload = function (options ? : LazyOptions) {
+    $.fn.lazyload = function (options?: LazyOptions) {
         return new Lazy(this, options);
     };
 })(jQuery);

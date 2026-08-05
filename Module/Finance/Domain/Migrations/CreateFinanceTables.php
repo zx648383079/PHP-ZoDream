@@ -1,6 +1,7 @@
 <?php
 namespace Module\Finance\Domain\Migrations;
 
+use Module\Finance\Domain\Entities\ItemEntity;
 use Module\Finance\Domain\Model\BudgetModel;
 use Module\Finance\Domain\Model\ConsumptionChannelModel;
 use Module\Finance\Domain\Model\FinancialProjectModel;
@@ -68,6 +69,7 @@ class CreateFinanceTables extends Migration {
             $table->uint('channel_id')->default(0)->comment('支出时填写消费渠道');
             $table->uint('project_id')->default(0)->comment('收入时填写理财项目');
             $table->uint('budget_id')->default(0)->comment('支出时选择预算');
+            $table->uint('item_id')->default(0)->comment('所属物品');
             $table->text('remark')->nullable()->comment('备注');
             $table->datetime('happened_at')->comment('发生时间');
             $table->string('out_trade_no', 100)->default('')
@@ -90,6 +92,16 @@ class CreateFinanceTables extends Migration {
             $table->decimal('budget', 10, 2)->default(0)->comment('预算');
             $table->decimal('spent', 10, 2)->default(0)->comment('花费');
             $table->uint('cycle', 1)->default(0)->comment('周期');
+            $table->uint('user_id');
+            $table->softDeletes();
+            $table->timestamps();
+        })->append(ItemEntity::tableName(), function(Table $table) {
+            $table->comment('物品报废统计');
+            $table->id();
+            $table->string('name', 50)->comment('预算名');
+            $table->string('remark')->default('')->comment('备注');
+            $table->decimal('price', 10, 2)->default(0)->comment('购买的价格');
+            $table->bool('status')->default(1)->comment('1 正常 0 删除');
             $table->uint('user_id');
             $table->softDeletes();
             $table->timestamps();
