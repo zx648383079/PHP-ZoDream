@@ -1,0 +1,114 @@
+@use 'sass:math';
+@use 'theme';
+@use 'sizes';
+@use 'mixins';
+
+.select--with-search {
+    line-height: #{sizes.$line-height};
+    display: inline-block;
+    width: #{7 * sizes.$line-height};
+    text-align: left;
+    position: relative;
+    .select-input {
+        border: 1px solid var(--#{theme.$prefix}border);
+        padding: 0 .3rem;
+        height: #{sizes.$line-height};
+        box-sizing: border-box;
+        position: relative;
+        user-select: none;
+        @include mixins.iconArrow();
+    }
+    .select-option-bar {
+        position: absolute;
+        display: none;
+        z-index: #{sizes.$zindex-dropdown};
+        width: 100%;
+        background-color: var(--#{theme.$prefix}panel);
+        border: 1px solid var(--#{theme.$prefix}body-text);
+        box-sizing: border-box;
+        box-shadow: 0 6px 6px var(--#{theme.$prefix}shadow);
+    }
+    .search-option-item {
+        position: relative;
+        input {
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            height: #{sizes.$line-height};
+            padding-left: #{sizes.$line-height} - .5rem !important;
+        }
+        .fa {
+            position: absolute;
+            left: .3rem;
+            top: #{math.div(sizes.$line-height, 2) - .4rem};
+            color: var(--#{theme.$prefix}input-icon);
+        }
+    }
+    .loading-option-item {
+        border-top: 1px solid var(--#{theme.$prefix}body-text);
+        color: var(--#{theme.$prefix}input-icon);
+        text-align: center;
+        font-size: .8rem;
+        user-select: none;
+        display: none;
+    }
+    .option-item {
+        border-top: 1px solid var(--#{theme.$prefix}body-text);
+        display: block;
+        padding: 0 .3rem;
+        &:hover {
+            background-color: var(--#{theme.$prefix}input-hovered);
+        }
+        &.selected {
+            background-color: var(--#{theme.$prefix}input-selected);
+        }
+    }
+    &.select-loading {
+        .loading-option-item {
+            display: block;
+        }
+    }
+    &.focus {
+        .select-input {
+            border-color: var(--#{theme.$prefix}input-focus-border);
+            border-bottom: none;
+            &::after {
+                transform: rotate(180deg);
+            }
+        }
+        .select-option-bar {
+            display: block;
+        }
+    }
+}
+
+.--autocomplete-control {
+    width: 100%;
+    display: none;
+    position: relative;
+    .select-input {
+        span {
+            color: transparent;
+        }
+        &.--with-hint-open {
+            display: block;
+        }
+    }
+
+    .select-option-bar {
+    }
+
+    &.--with-focus {
+
+    }
+    &.--with-closed {
+        
+    }
+    &.--with-open {
+        display: block;
+        .select-option-bar {
+            display: block;
+        }
+    }
+}

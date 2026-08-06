@@ -113,7 +113,7 @@ class AutoCompleter {
         // If has selected item & open - confirm it
         if (this.target.hasClass('open')) {
             this.target
-            .find('.--autocomplete-item.--with-selected')
+            .find('.option-item.selected')
             .trigger('click.autocompleter');
         }
 
@@ -142,13 +142,13 @@ class AutoCompleter {
         }
 
         var html =
-        '<div class="autocompleter ' + this.options.customClass!.join(' ') +'" id="autocompleter-' + this.guid + '">';
+        '<div class="select--with-search --autocomplete-control ' + this.options.customClass!.join(' ') +'" id="autocompleter-' + this.guid + '">';
 
         if (this.options.hint) {
-            html += '<div class="--autocomplete-hint"></div>';
+            html += '<div class="select-input"></div>';
         }
 
-        html += '<ul class="--autocomplete-pane"></ul>';
+        html += '<ul class="select-option-bar"></ul>';
         html += '</div>';
 
         this.element.data('autocomplete', 1).after(html);
@@ -159,22 +159,22 @@ class AutoCompleter {
 
         // Bind autocompleter events
         this.target
-            .on('mousedown.autocompleter', '.--autocomplete-item', null,  function(e: any) {
+            .on('mousedown.autocompleter', '.option-item', null,  function(e: any) {
                 that.select(e, $(this));
             })
-            .on('mousedown.autocompleter', '.--autocomplete-pane', null, function () {
+            .on('mousedown.autocompleter', '.select-option-bar', null, function () {
                 return false;
             });
 
         // Bind node events
         this.element
-            .on('keyup.autocompleter', null, this.onKeyup)
+            .on('keyup.autocompleter', null, e => this.onKeyup(e))
             .on('keydown.autocompleter', null, function(e) {
                 that.onKeydown(e, $(this));
             })
-            .on('focus.autocompleter', null, this.onFocus)
-            .on('blur.autocompleter', null, this.onBlur)
-            .on('mousedown.autocompleter', null, this.onMousedown);
+            .on('focus.autocompleter', null, (e, i) => this.onFocus(e, i))
+            .on('blur.autocompleter', null, (e, i) => this.onBlur(e, i))
+            .on('mousedown.autocompleter', null, e => this.onMousedown(e));
     }
 
     private search(query, source) {
@@ -313,9 +313,9 @@ class AutoCompleter {
         this.items = undefined;
         this.$selected = undefined;
         this.index = 0;
-        this.target.find('.--autocomplete-pane').empty();
+        this.target.find('.select-option-bar').empty();
         this.target
-            .find('.--autocomplete-hint')
+            .find('.select-input')
             .removeClass('--with-hint-open')
             .empty();
         this.hintText = '';
@@ -335,11 +335,11 @@ class AutoCompleter {
         let menu = '';
 
         for (let item = 0, count = list.length; item < count; item++) {
-            const classes = ['--autocomplete-item'],
+            const classes = ['option-item'],
             highlightReg = new RegExp(this.queryKeyword, 'gi');
 
             if (this.options.selectFirst && item === 0 && !this.options.changeWhenSelect) {
-                classes.push('--with-selected');
+                classes.push('selected');
             }
 
             let label =
@@ -412,7 +412,7 @@ class AutoCompleter {
                 const hintText = hint.replace(hintReg, '<span>' + this.queryKeyword + '</span>');
 
                 this.target
-                    .find('.--autocomplete-hint')
+                    .find('.select-input')
                     .addClass('--with-hint-open')
                     .html(hintText);
                 this.hintText = hintText;
@@ -421,16 +421,16 @@ class AutoCompleter {
 
         // Update data
         this.ajaxResponse = list;
-        this.target.find('.--autocomplete-pane').html(menu);
-        this.$selected = this.target.find('.--with-selected')
+        this.target.find('.select-option-bar').html(menu);
+        this.$selected = this.target.find('.selected')
             .length
-            ? this.target.find('.--with-selected')
+            ? this.target.find('.selected')
             : undefined;
         this.items = list.length
-            ? this.target.find('.--autocomplete-item')
+            ? this.target.find('.option-item')
             : undefined;
         this.index = this.$selected ? this.items!.index(this.$selected) : -1;
-        this.target.find('.--autocomplete-item').each((i, j) => {
+        this.target.find('.option-item').each((i, j) => {
             $(j).data(this.ajaxResponse[i]);
             this.options.onItem!(this.target, $(j), i, this.ajaxResponse[i]);
         });
@@ -506,15 +506,15 @@ class AutoCompleter {
                 this.index = code === 40 ? next : prev;
 
                 // Update HTML
-                this.items!.removeClass('--with-selected');
+                this.items!.removeClass('selected');
 
                 if (this.index !== -1) {
-                    this.items!.eq(this.index).addClass('--with-selected');
+                    this.items!.eq(this.index).addClass('selected');
                 }
 
-                this.$selected = this.target.find('.--with-selected')
+                this.$selected = this.target.find('.selected')
                     .length
-                    ? this.target.find('.--with-selected')
+                    ? this.target.find('.selected')
                     : undefined;
 
                 if (this.options.changeWhenSelect) {
@@ -542,15 +542,15 @@ class AutoCompleter {
                 this.options.hint &&
                 this.hintText &&
                 this.target
-                .find('.--autocomplete-hint')
+                .find('.select-input')
                 .hasClass('--with-hint-open')
             ) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                var hintOrigin = this.target.find('.--autocomplete-item').length
+                var hintOrigin = this.target.find('.option-item').length
                     ? this.target
-                        .find('.--autocomplete-item')
+                        .find('.option-item')
                         .eq(0)
                         .attr('data-label')
                     : false;
@@ -612,11 +612,9 @@ class AutoCompleter {
             return;
         }
 
-        const data = e.data;
-
-        if (data.$list && !data.focused && !this.element.is(':disabled')) {
+        if (this.items && !this.focused && !this.element.is(':disabled')) {
             if (isMobile && !isFirefoxMobile) {
-                const el = data.$select[0];
+                const el = this.$selected![0];
 
                 if (window.document.createEvent) {
                     // All
@@ -659,8 +657,8 @@ class AutoCompleter {
 
     private closeHelper(e: any) {
         if (
-            $(e.target).hasClass('autocompleter-node') ||
-            $(e.target).parents('.autocompleter').length
+            $(e.target).data('autocomplete') ||
+            $(e.target).parents('.--autocomplete-control').length
         ) {
             return false;
         }
@@ -680,11 +678,11 @@ class AutoCompleter {
             if (
                 this.hintText &&
                 this.target
-                .find('.--autocomplete-hint')
+                .find('.select-input')
                 .hasClass('--with-hint-open')
             ) {
                 this.target
-                .find('.--autocomplete-hint')
+                .find('.select-input')
                 .removeClass('--with-hint-open');
             }
 
@@ -697,11 +695,11 @@ class AutoCompleter {
             if (
                 this.hintText &&
                 !this.target
-                .find('.--autocomplete-hint')
+                .find('.select-input')
                 .hasClass('--with-hint-open')
             ) {
                 this.target
-                .find('.--autocomplete-hint')
+                .find('.select-input')
                 .addClass('--with-hint-open');
             }
 
@@ -720,7 +718,7 @@ class AutoCompleter {
             this.target,
             this.element.val(),
             this.index,
-            this,this.ajaxResponse[this.index]
+            this.ajaxResponse[this.index]
         );
         this.element.trigger('change');
     }

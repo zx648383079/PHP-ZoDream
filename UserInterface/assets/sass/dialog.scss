@@ -9,8 +9,7 @@
 @use "theme";
 @use "prefix";
 @use "loading";
-
-$dialogIndex: 1200;
+@use "sizes";
 
 .fa {
     &.fa-close {
@@ -27,7 +26,7 @@ $dialogIndex: 1200;
     right: 0;
     bottom: 0;
     background: var(--#{theme.$prefix}dialog-mask);
-    z-index: $dialogIndex - 10;
+    z-index: sizes.$zindex-modal-backdrop;
     display: none;
     &.dialog-bg-private {
         position: absolute;
@@ -38,10 +37,10 @@ $dialogIndex: 1200;
 
 .dialog {
     position: fixed;
-    z-index: $dialogIndex;
+    z-index: sizes.$zindex-modal;
     &.dialog-private {
         position: absolute;
-        z-index: $dialogIndex - 1;
+        z-index: sizes.$zindex-modal - 1;
     }
     &.dialog-tip,
     &.dialog-pop,
