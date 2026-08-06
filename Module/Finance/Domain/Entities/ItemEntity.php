@@ -8,6 +8,7 @@ use Domain\Entities\Entity;
  * @property integer $id
  * @property string $name
  * @property float $price
+ * @property integer $type
  * @property integer $status
  * @property string $remark
  * @property integer $user_id
@@ -25,6 +26,7 @@ class ItemEntity extends Entity {
             'name' => 'required|string:0,35',
             'price' => 'numeric',
             'remark' => '',
+            'type' => 'int:0,127',
             'status' => 'bool',
             'user_id' => 'required|int',
             'deleted_at' => 'int',
@@ -38,6 +40,7 @@ class ItemEntity extends Entity {
             'id' => 'Id',
             'name' => '物品名称',
             'price' => '购买金额',
+            'type' => '类型',
             'status' => '状态',
             'remark' => '备注',
             'user_id' => 'User Id',
@@ -49,5 +52,16 @@ class ItemEntity extends Entity {
 
     public function scopeAuth($query) {
         return $query->where('user_id', auth()->id());
+    }
+
+    public function setDeletedAtAttribute($value) {
+        if (!is_numeric($value)) {
+            $value = strtotime($value);
+        }
+        $this->setAttributeToSource('deleted_at', $value < 0 ? 0 : $value);
+    }
+
+    public function getDeletedAtAttribute() {
+        return $this->formatTimeAttribute('deleted_at');
     }
 }

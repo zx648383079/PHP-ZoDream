@@ -101,6 +101,7 @@ class CreateFinanceTables extends Migration {
             $table->string('name', 50)->comment('预算名');
             $table->string('remark')->default('')->comment('备注');
             $table->decimal('price', 10, 2)->default(0)->comment('购买的价格');
+            $table->uint('type', 1)->default(0)->comment('类型');
             $table->bool('status')->default(1)->comment('1 正常 0 删除');
             $table->uint('user_id');
             $table->softDeletes();
