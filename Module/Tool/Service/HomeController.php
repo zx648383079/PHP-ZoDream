@@ -63,4 +63,7 @@ class HomeController extends Controller {
     public function colorAction() {
         return $this->show();
     }
+    public function beastAction() {
+        return $this->show();
+    }
 }

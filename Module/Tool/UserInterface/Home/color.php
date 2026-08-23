@@ -20,8 +20,8 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
     </div>
 </div>
 
-<div class="converter-tip">
-    <h3 class="tip-header">gray</h3>
+<div class="converter-tooltip">
+    <h3 class="tooltip-header">gray</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -105,7 +105,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">red</h3>
+    <h3 class="tooltip-header">red</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -182,7 +182,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">orange</h3>
+    <h3 class="tooltip-header">orange</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -238,7 +238,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">brown</h3>
+    <h3 class="tooltip-header">brown</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -371,7 +371,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">blue</h3>
+    <h3 class="tooltip-header">blue</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -560,7 +560,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">green</h3>
+    <h3 class="tooltip-header">green</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -735,7 +735,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">pink</h3>
+    <h3 class="tooltip-header">pink</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -791,7 +791,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">purple</h3>
+    <h3 class="tooltip-header">purple</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -938,7 +938,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">white</h3>
+    <h3 class="tooltip-header">white</h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -1071,7 +1071,7 @@ $this->description = 'ZoDream在线工具提供颜色在线工具,rgb转换,hex�
             </tr>
         </tbody>
     </table>
-    <h3 class="tip-header">yellow</h3>
+    <h3 class="tooltip-header">yellow</h3>
     <table class="table table-hover">
         <thead>
             <tr>

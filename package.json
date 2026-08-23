@@ -25,14 +25,14 @@
   "dependencies": {
     "bourbon": "^7.3.0",
     "bourbon-neat": "^4.0.0",
-    "vue": "^3.5.31"
+    "vue": "^3.5.41"
   },
   "devDependencies": {
     "@types/bmapgl": "^0.0.7",
-    "@types/jquery": "^4.0.0",
+    "@types/jquery": "^4.0.1",
     "@types/js-cookie": "^3.0.6",
     "gulp-vue2mini": "^1.6.2",
     "tslint": "^6.1.3",
-    "typescript": "^6.0.2"
+    "typescript": "^7.0.2"
   }
 }

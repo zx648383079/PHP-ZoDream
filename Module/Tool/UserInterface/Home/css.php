@@ -7,7 +7,9 @@ $this->description = 'css beautify or css2scss';
 $js = <<<JS
 registerEditor('text/css');
 JS;
-$this->registerJs($js);
+$this->registerJsFile([
+        '@css.parser.min.js',
+    ])->registerJs($js);
 ?>
 <h1>css beautify/css2scss</h1>
 <h3>在下面粘贴你的css 代码，然后点击响应按钮“css美化”或“css2scss”，转化结果会马上出现在下面第二个框中。</h3>
@@ -24,8 +26,8 @@ $this->registerJs($js);
         <textarea id="output" name="" placeholder="输出结果"></textarea>
     </div>
 </div>
-<div class="converter-tip">
-    <div class="tip-header">
+<div class="converter-tooltip">
+    <div class="tooltip-header">
         css 转 scss
     </div>
     <p>

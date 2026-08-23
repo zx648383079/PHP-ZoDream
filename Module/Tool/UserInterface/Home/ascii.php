@@ -20,8 +20,8 @@ $this->description = 'ZoDream在线工具提供ASCII编码解码工具,ASCII转�
         <textarea name="" placeholder="输出结果"></textarea>
     </div>
 </div>
-<div class="converter-tip">
-<h3 class="tip-header">ASCII 编码一览表</h3>
+<div class="converter-tooltip">
+<h3 class="tooltip-header">ASCII 编码一览表</h3>
 <p>ASCII (American Standard Code for Information Interchange): 美国信息交换标准代码）是基于拉丁字母的一套电脑编码系统，主要用于显示现代英语和其他西欧语言。</p>
 <table class="table">
     <thead>

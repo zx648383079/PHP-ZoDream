@@ -1,14 +1,14 @@
-window.exports = {};
+(window as any).exports = {};
 
 function htmlFormat(html: string): string {
-    return window.exports.beautifier.html(html, { indent_size: 4, space_in_empty_paren: true});
+    return (window as any).exports.beautifier.html(html, { indent_size: 4, space_in_empty_paren: true});
 }
 
 function formatJson(json, options?: any) {
-    var reg = null,
-            formatted = '',
-            pad = 0,
-            PADDING = '    ';
+    let reg: RegExp|null = null;
+    let formatted = '';
+    let pad = 0;
+    let PADDING = '    ';
     options = options || {};
     options.newlineAfterColonIfBeforeBraceOrBracket = (options.newlineAfterColonIfBeforeBraceOrBracket === true) ? true : false;
     options.spaceAfterColon = (options.spaceAfterColon === false) ? false : true;
@@ -83,9 +83,9 @@ function unicodeDecode(content: string) {
 
 function strMap(content: string, cb: (str: string, code: number) => string|false|void, link = ''): string {
     if (!content || content.length < 1) {
-        return;
+        return '';
     }
-    let items = [];
+    let items: string[] = [];
     for (let i = 0; i < content.length; i++) {
         const val = cb(content.charAt(i), content.charCodeAt(i));
         if (typeof val === 'boolean' && !val) {
@@ -100,9 +100,9 @@ function strMap(content: string, cb: (str: string, code: number) => string|false
 
 function matchReplace(content: string, reg: RegExp, cb: (matches: string[]) => string): string {
     if (!content || content.length < 1) {
-        return;
+        return '';
     }
-    let res: RegExpExecArray;
+    let res: RegExpExecArray|null;
     let str = content;
     while ((res = reg.exec(content)) != null)  {
         str = str.replace(res[0], cb(res));
@@ -130,7 +130,7 @@ class Color {
     }
 
     public toHex(): string {
-        return '#' + this.hex(this.r) + this.hex(this.g) + this.hex(this.b);
+        return '#' + this.hex(this.r!) + this.hex(this.g!) + this.hex(this.b!);
     }
 
     public toRGB() {
@@ -146,13 +146,15 @@ class Color {
     }
 
     public toARGB() {
-        return '#' + this.hex(Math.round(this.a * 256 - 1)) + this.hex(this.r) + this.hex(this.g) + this.hex(this.b);
+        return '#' + this.hex(Math.round(this.a * 256 - 1)) + this.hex(this.r!) + this.hex(this.g!) + this.hex(this.b!);
     }
 
     public toHSL() {
-        let r = this.r / 255, g = this.g / 255, b = this.b / 255;
+        let r = this.r! / 255, g = this.g! / 255, b = this.b! / 255;
         let max = Math.max(r, g, b), min = Math.min(r, g, b);
-        let h: number, s: number, l = (max + min) / 2;
+        let h = 0;
+        let s: number;
+        let l = (max + min) / 2;
         if (max === min) {
             h = s = 0;
         } else {
@@ -189,7 +191,7 @@ class Color {
     }
 
     public static fromHSL(val: string): Color {
-        let hsl = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(val);
+        let hsl = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g.exec(val)!;
         let h = parseInt(hsl[1]) / 360, s = parseInt(hsl[2]) / 100, l = parseInt(hsl[3]) / 100;
         if (s === 0) {
             return new Color(Math.round(l * 255), Math.round(l * 255), Math.round(l * 255));
@@ -211,12 +213,12 @@ class Color {
     }
 
     public static fromRGBA(val: string): Color {
-        let rgba = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.exec(val);
+        let rgba = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.exec(val)!;
         return new Color(parseInt(rgba[1]), parseInt(rgba[2]), parseInt(rgba[3]), parseFloat(rgba[4] || '1'));
     }
 
     public static fromARGB(val: string): Color {
-        let argb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(val);
+        let argb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(val)!;
         return new Color(parseInt(argb[2], 16), parseInt(argb[3], 16), parseInt(argb[4], 16), parseInt(argb[1], 16) / 255);
     }
 
@@ -225,7 +227,7 @@ class Color {
         let hex = val.replace(rgx, function (_, r: string, g: string, b: string) {
             return r + r + g + g + b + b;
         });
-        let rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        let rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)!;
         return new Color(parseInt(rgb[1], 16), parseInt(rgb[2], 16), parseInt(rgb[3], 16));
     }
 }
@@ -334,25 +336,31 @@ function converter(content: string, type: string): string| number {
             result = new Date(content).getTime();
             break;
         case 'htmltowxml': 
-            result = htmlFormat(this.HTMLtoWXML(content));
+            result = htmlFormat(HTMLtoWXML(content));
             break;
         case 'csstoscss': 
-            result = this.cssToScss(content);
+            result = cssToScss(content);
             break;
         case 'htmlbeautify':
             result = htmlFormat(content);
             break;
         case 'jsbeautify': 
-            result = window.exports.beautifier.js(content, { indent_size: 4, space_in_empty_paren: true});
+            result = (window as any).exports.beautifier.js(content, { indent_size: 4, space_in_empty_paren: true});
             break;
         case 'jsonbeautify': 
             result = formatJson(content);
             break;
         case 'cssbeautify': 
-            result = window.exports.beautifier.css(content, { indent_size: 4, space_in_empty_paren: true});
+            result = (window as any).exports.beautifier.css(content, { indent_size: 4, space_in_empty_paren: true});
             break;
         case 'date': 
             result = new Date(parseInt(content) * 1000).toLocaleString();
+            break;
+        case 'beast_encode':
+            result = new BeastTranslator($('.converter-header input').val() as any).encode(content);
+            break;
+        case 'beast_decode':
+            result = new BeastTranslator($('.converter-header input').val() as any).decode(content);
             break;
         default:
             break;
@@ -360,7 +368,7 @@ function converter(content: string, type: string): string| number {
     return result;
 }
 
-function createScript(src){
+function createScript(src: string){
     var $s = document.createElement('script');
     $s.setAttribute('src',src);
     return $s;
@@ -432,28 +440,37 @@ enum BLOCK_TYPE {
 }
 
 function getAttr(html: string = '<br class="777"/>') {
-    let node = {
+    let node: {
+        tag: string|undefined;
+        attr: any
+    } = {
         tag: undefined,
         attr: {}
-    }, code: string, status: BLOCK_TYPE = BLOCK_TYPE.NONE, pos: number = 0, name: string, value: string, endTag: string,
-        isTag = function(tag, start) {
-            if (['br'].indexOf(tag) >= 0) {
-                return true;
-            }
-            return html.indexOf('</' + tag + '>', start) > 0;
-        },
-        getTag = function() {
-            let tag = '',
-                po = pos;
-            while (po < html.length) {
-                code = html.charAt(po ++);
-                if (code == ' ' || code == '/' || code == '>') {
-                    return isTag(tag, po) ? tag : false;
-                }
-                tag += code;
-            }
-            return false;
+    };
+    let code: string;
+    let status: BLOCK_TYPE = BLOCK_TYPE.NONE;
+    let pos: number = 0;
+    let name = '';
+    let value = '';
+    let endTag: string|undefined;
+    const isTag = function(tag: string, start: number) {
+        if (['br'].indexOf(tag) >= 0) {
+            return true;
         }
+        return html.indexOf('</' + tag + '>', start) > 0;
+    };
+    const getTag = function() {
+        let tag = '',
+            po = pos;
+        while (po < html.length) {
+            code = html.charAt(po ++);
+            if (code == ' ' || code == '/' || code == '>') {
+                return isTag(tag, po) ? tag : false;
+            }
+            tag += code;
+        }
+        return false;
+    }
     while (pos < html.length) {
         code = html.charAt(pos ++);
         if (code == '<' && status == BLOCK_TYPE.NONE) {

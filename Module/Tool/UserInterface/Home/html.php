@@ -7,7 +7,9 @@ $js = <<<JS
 registerEditor('text/html');
 getAttr();
 JS;
-$this->registerJs($js);
+$this->registerJsFile([
+        '@html.parser.min.js',
+    ])->registerJs($js);
 ?>
 
 <div class="converter-box large-box">

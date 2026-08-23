@@ -33,7 +33,7 @@ interface INode {
     const special = makeMap("script,style");
 
     global.HTMLParser = function (html: string, handler) {
-        let index, chars, match, stack = [],
+        let index, chars, match, stack: string[] = [],
             last = html;
 
         while (html) {
@@ -104,7 +104,7 @@ interface INode {
         // Clean up any remaining tags
         parseEndTag();
 
-        function parseStartTag(tag, tagName, rest, unary) {
+        function parseStartTag(tag, tagName: string, rest, unary) {
             tagName = tagName.toLowerCase();
 
             if (block[tagName]) {
@@ -123,7 +123,7 @@ interface INode {
                 stack.push(tagName);
 
             if (handler.start) {
-                let attrs = [];
+                let attrs: any[] = [];
 
                 rest.replace(attr, function (match, name) {
                     let value = arguments[2] ? arguments[2] :

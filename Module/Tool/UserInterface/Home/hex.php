@@ -22,7 +22,7 @@ $this->title = '二/八/十六进制';
         <textarea name="" placeholder="输出结果"></textarea>
     </div>
 </div>
-<div class="converter-tip">
+<div class="converter-tooltip">
     <p>
     二进制前缀：0b 或字符串 \b
     </p>

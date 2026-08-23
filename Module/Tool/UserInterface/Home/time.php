@@ -19,8 +19,8 @@ $this->title = '时间戳在线转换工具';
     </div>
 </div>
 
-<div class="converter-tip">
-    <div class="tip-header">
+<div class="converter-tooltip">
+    <div class="tooltip-header">
     获取当前时间戳
     </div>
     <table>

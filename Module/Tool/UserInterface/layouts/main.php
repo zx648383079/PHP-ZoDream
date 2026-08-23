@@ -22,8 +22,8 @@ $this->registerCssFile([
         '@jquery.pjax.min.js',
         '@jquery.dialog.min.js',
         '@jquery.upload.min.js',
-        '@html.parser.min.js',
-        '@css.parser.min.js',
+        // '@html.parser.min.js',
+        // '@css.parser.min.js',
         '@main.min.js',
         '@admin.min.js',
         '@tool.min.js'
@@ -64,6 +64,11 @@ $this->registerCssFile([
             [
                 '进制',
                 './home/hex',
+                'fa fa-list'
+            ],
+            [
+                '兽音',
+                './home/beast',
                 'fa fa-list'
             ],
          ],
