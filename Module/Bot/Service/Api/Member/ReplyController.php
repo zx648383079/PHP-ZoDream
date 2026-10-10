@@ -13,7 +13,7 @@ class ReplyController extends Controller {
     public function indexAction(string $event = '') {
         try {
             return $this->renderPage(
-                ReplyRepository::getList($this->weChatId(), $event)
+                ReplyRepository::getList($this->botId(), $event)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -34,14 +34,17 @@ class ReplyController extends Controller {
         try {
             $data = $request->validate([
                 'id' => 'int',
+                'title' => 'required|string:0,100',
                 'event' => 'required|string:0,20',
                 'keywords' => 'string:0,60',
                 'match' => 'int:0,127',
                 'content' => 'required',
                 'type' => 'int:0,127',
+                'start_at' => 'string:0,5',
+                'end_at' => 'string:0,5',
                 'status' => 'int:0,127',
             ]);
-            $model = ReplyRepository::save($this->weChatId(), $data);
+            $model = ReplyRepository::save($this->botId(), $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -69,7 +72,7 @@ class ReplyController extends Controller {
     public function allAction(string $keywords = '') {
         try {
             return $this->renderData(
-                FollowRepository::searchFans($this->weChatId(), $keywords)
+                FollowRepository::searchFans($this->botId(), $keywords)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -84,7 +87,7 @@ class ReplyController extends Controller {
             } else if (is_array($content)) {
                 $data = array_merge($content, $data);
             }
-            ReplyRepository::send($this->weChatId(), $to_type, $to, $data);
+            ReplyRepository::send($this->botId(), $to_type, $to, $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -94,7 +97,7 @@ class ReplyController extends Controller {
     public function templateAction() {
         try {
             return $this->renderPage(
-                ReplyRepository::templateList($this->weChatId())
+                ReplyRepository::templateList($this->botId())
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -103,7 +106,7 @@ class ReplyController extends Controller {
 
     public function refreshTemplateAction() {
         try {
-            ReplyRepository::asyncTemplate($this->weChatId());
+            ReplyRepository::asyncTemplate($this->botId());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -150,7 +153,7 @@ class ReplyController extends Controller {
                 'example' => 'string:0,255',
             ]);
             return $this->render(
-                ReplyRepository::templateSave($this->weChatId(), $data)
+                ReplyRepository::templateSave($this->botId(), $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

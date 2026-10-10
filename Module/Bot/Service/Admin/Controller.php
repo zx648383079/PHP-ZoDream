@@ -12,7 +12,7 @@ class Controller extends ModuleController {
     public function __construct() {
         parent::__construct();
         $this->middleware(function (HttpContext $context, callable $next) {
-            if ($this->rules()['*'] === 'w' && empty($this->weChatId())) {
+            if ($this->rules()['*'] === 'w' && empty($this->botId())) {
                 return $this->redirect($this->getUrl('manage'));
             }
             return $next($context);

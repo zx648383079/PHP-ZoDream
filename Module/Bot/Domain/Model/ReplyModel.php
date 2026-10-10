@@ -5,11 +5,14 @@ namespace Module\Bot\Domain\Model;
  *
  * @property integer $id
  * @property integer $bot_id
+ * @property string $title
  * @property string $event
  * @property string $keywords
  * @property integer $match
  * @property string $content
  * @property integer $type
+ * @property string $start_at
+ * @property string $end_at
  * @property integer $updated_at
  * @property integer $created_at
  * @property integer $status
@@ -40,14 +43,17 @@ class ReplyModel extends EditorModel {
     protected function rules(): array {
         return [
             'bot_id' => 'required|int',
+            'title' => 'required|string:0,100',
             'event' => 'required|string:0,20',
             'keywords' => 'string:0,60',
             'match' => 'int:0,127',
             'content' => 'required',
             'type' => 'int:0,127',
+            'start_at' => 'string:0,5',
+            'end_at' => 'string:0,5',
+            'status' => 'int:0,127',
             'updated_at' => 'int',
             'created_at' => 'int',
-            'status' => 'int:0,127',
         ];
     }
 
@@ -58,15 +64,19 @@ class ReplyModel extends EditorModel {
         return [
             'id' => 'ID',
             'bot_id' => '所属微信公众号ID',
+            'title' => '规则名称',
             'event' => '事件',
             'event_name' => '事件名',
             'keywords' => '关键字',
             'match' => '匹配方式',
             'content' => 'Content',
             'type' => 'Type',
+            'start_at' => '生效时间',
+            'end_at' => '失效时间',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'status' => 'Status',
+            
         ];
     }
 

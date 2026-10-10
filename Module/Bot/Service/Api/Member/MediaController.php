@@ -11,7 +11,7 @@ class MediaController extends Controller {
     public function indexAction(string $keywords = '', string $type = '') {
         try {
             return $this->renderPage(MediaRepository::getList(
-                $this->weChatId(),
+                $this->botId(),
                 $keywords, $type));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -45,7 +45,7 @@ class MediaController extends Controller {
                 'url' => 'string:0,255',
             ]);
             return $this->render(
-                MediaRepository::save($this->weChatId(), $data)
+                MediaRepository::save($this->botId(), $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -72,7 +72,7 @@ class MediaController extends Controller {
 
     public function pullAction(string $type = '') {
         try {
-            MediaRepository::pull($this->weChatId(), $type);
+            MediaRepository::pull($this->botId(), $type);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -82,7 +82,7 @@ class MediaController extends Controller {
     public function searchAction(string $keywords = '', string $type = '', int|array $id = 0) {
         try {
             return $this->renderPage(MediaRepository::search(
-                $this->weChatId(),
+                $this->botId(),
                 $keywords, $type, $id));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

@@ -10,7 +10,7 @@ class LogController extends Controller {
     public function indexAction(bool $mark = false) {
         try {
             return $this->renderPage(
-                LogRepository::getList($this->weChatId(), $mark)
+                LogRepository::getList($this->botId(), $mark)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

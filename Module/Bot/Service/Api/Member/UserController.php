@@ -10,7 +10,7 @@ class UserController extends Controller {
     public function indexAction(string $keywords = '', int $group = 0, bool $blacklist = false) {
         try {
             return $this->renderPage(
-                FollowRepository::getList($this->weChatId(), $keywords, $group, $blacklist)
+                FollowRepository::getList($this->botId(), $keywords, $group, $blacklist)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -28,7 +28,7 @@ class UserController extends Controller {
 
     public function refreshAction() {
         try {
-            FollowRepository::async($this->weChatId());
+            FollowRepository::async($this->botId());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -38,7 +38,7 @@ class UserController extends Controller {
     public function searchAction(string $keywords = '', int|array $id = 0) {
         try {
             return $this->renderData(
-                FollowRepository::search($this->weChatId(), $keywords, $id)
+                FollowRepository::search($this->botId(), $keywords, $id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -48,7 +48,7 @@ class UserController extends Controller {
     public function groupSearchAction(string $keywords = '', int|array $id = 0) {
         try {
             return $this->renderData(
-                FollowRepository::groupSearch($this->weChatId(), $keywords, $id)
+                FollowRepository::groupSearch($this->botId(), $keywords, $id)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -57,7 +57,7 @@ class UserController extends Controller {
 
     public function groupAction(string $keywords = '') {
         return $this->renderPage(
-            FollowRepository::groupList($this->weChatId(), $keywords)
+            FollowRepository::groupList($this->botId(), $keywords)
         );
     }
 
@@ -68,7 +68,7 @@ class UserController extends Controller {
                 'name' => 'required|string:0,20',
             ]);
             return $this->render(
-                FollowRepository::groupSave($this->weChatId(), $data)
+                FollowRepository::groupSave($this->botId(), $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -77,7 +77,7 @@ class UserController extends Controller {
 
     public function categoryDeleteAction(int $id) {
         try {
-            FollowRepository::groupRemove($this->weChatId(), $id);
+            FollowRepository::groupRemove($this->botId(), $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

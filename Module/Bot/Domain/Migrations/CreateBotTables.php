@@ -35,11 +35,14 @@ class CreateBotTables extends Migration {
             $table->comment('微信回复');
             $table->id();
             $table->uint('bot_id')->comment('所属微信公众号ID');
+            $table->string('title', 100)->comment('规则名');
             $table->string('event', 20)->comment('事件');
             $table->string('keywords', 60)->default('')->comment('关键词');
             $table->bool('match')->default(0)->comment('关键词匹配模式');
             $table->text('content')->comment('微信返回数据');
             $table->uint('type', 1)->default(0)->comment('素材类型');
+            $table->string('start_at', 5)->default('')->comment('生效时间');
+            $table->string('end_at', 5)->default('')->comment('失效时间');
             $table->bool('status')->default(1)->comment('激活');
             $table->timestamps();
         })->append(MenuModel::tableName(), function(Table $table) {

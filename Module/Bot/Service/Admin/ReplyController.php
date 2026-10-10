@@ -44,10 +44,13 @@ class ReplyController extends Controller {
             $data = $request->validate([
                 'id' => 'int',
                 'event' => 'required|string:0,20',
+                'title' => 'required|string:0,100',
                 'keywords' => 'string:0,60',
                 'match' => 'int:0,127',
                 'content' => 'required',
                 'type' => 'int:0,127',
+                'start_at' => 'string:0,5',
+                'end_at' => 'string:0,5',
                 'status' => 'int:0,127',
             ]);
             ReplyRepository::save($this->botId(), $data);

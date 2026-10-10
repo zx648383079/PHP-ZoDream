@@ -10,7 +10,7 @@ class MenuController extends Controller {
     public function indexAction() {
         try {
             return $this->renderData(
-                MenuRepository::getManageList($this->weChatId())
+                MenuRepository::getManageList($this->botId())
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -33,7 +33,7 @@ class MenuController extends Controller {
                 'content' => 'string:0,500',
                 'parent_id' => 'int',
             ]);
-            $model = MenuRepository::save($this->weChatId(), $data);
+            $model = MenuRepository::save($this->botId(), $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -42,11 +42,11 @@ class MenuController extends Controller {
 
     public function batchSaveAction(array $data) {
         try {
-            MenuRepository::batchSave($this->weChatId(), $data);
+            MenuRepository::batchSave($this->botId(), $data);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderData(MenuRepository::getList($this->weChatId()));
+        return $this->renderData(MenuRepository::getList($this->botId()));
     }
 
     public function deleteAction(int $id) {
@@ -64,7 +64,7 @@ class MenuController extends Controller {
      */
     public function applyAction() {
         try {
-            MenuRepository::async($this->weChatId());
+            MenuRepository::async($this->botId());
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

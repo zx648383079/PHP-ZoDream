@@ -15,7 +15,7 @@ abstract class Controller extends BaseController {
         ];
     }
 
-    public function weChatId(int $id = -1) {
+    public function botId(int $id = -1) {
         static $bot_id = 0;
         if ($id > 0) {
             return $bot_id = $id;

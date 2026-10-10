@@ -11,7 +11,7 @@ class QrcodeController extends Controller {
     public function indexAction(string $keywords = '') {
         try {
             return $this->renderPage(QrcodeRepository::getList(
-                $this->weChatId(),
+                $this->botId(),
                 $keywords));
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
@@ -41,7 +41,7 @@ class QrcodeController extends Controller {
                 'expire_time' => 'int',
             ]);
             return $this->render(
-                QrcodeRepository::save($this->weChatId(), $data)
+                QrcodeRepository::save($this->botId(), $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
