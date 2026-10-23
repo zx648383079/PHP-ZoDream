@@ -20,6 +20,7 @@ class Controller extends ModuleController {
         if ($this->layout === '') {
             return '';
         }
+        view()->registerCssFile('@seo.min.css')->registerJsFile('@seo.min.js');
         return app_path()->file('UserInterface/Admin/layouts/main.php');
     }
 

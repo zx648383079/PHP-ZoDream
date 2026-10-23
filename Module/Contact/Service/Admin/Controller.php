@@ -20,6 +20,7 @@ class Controller extends ModuleController {
         if ($this->layout === '') {
             return '';
         }
+        view()->registerCssFile('@contact.min.css')->registerJsFile('@contact.min.js');
         return app_path()->file('UserInterface/Admin/layouts/main.php');
     }
 }

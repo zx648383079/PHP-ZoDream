@@ -15,6 +15,7 @@ class Controller extends ModuleController {
         if ($this->layout === '') {
             return '';
         }
+        view()->registerCssFile('@checkin.min.css')->registerJsFile('@checkin.min.js');
         return app_path()->file('UserInterface/Admin/layouts/main.php');
     }
 }

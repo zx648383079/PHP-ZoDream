@@ -30,9 +30,6 @@ class Platform implements IAuthPlatform {
 
     const FORMAT_TIME = 'Y-m-d H:i:s';
 
-
-    private $app;
-
     private array $options = [];
 
     private Input $request;
@@ -40,8 +37,8 @@ class Platform implements IAuthPlatform {
     private int $lastRequestTime;
     private int $lastResponseTime;
 
-    public function __construct($app) {
-        $this->app = $app;
+    public function __construct(
+        private readonly PlatformModel $app) {
         $this->request = request();
     }
 
@@ -227,6 +224,9 @@ class Platform implements IAuthPlatform {
     }
 
     private function verifyReferer(): bool {
+        if (app()->isDebug()) {
+            return true;
+        }
         $url = $this->request->referrer();
         if (empty($url)) {
             return false;
