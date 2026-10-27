@@ -22,8 +22,11 @@ class Module extends BaseModule implements Heartbeat {
             return [];
         }
         AuthRepository::pulse();
-        return [
+        $res = [
             'bulletin_count' => UserRepository::getBulletinCount(auth()->id())
         ];
+        return array_filter($res, function ($value) {
+            return $value > 0;
+        });
     }
 }
