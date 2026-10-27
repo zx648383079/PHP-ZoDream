@@ -60,13 +60,13 @@ final class FundAccount {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
-        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
+        $oldMoney = WalletEntity::query()->where('id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) + $money;
         if ($newMoney < 0) {
             return false;
         }
-        WalletEntity::query()->where('user_id', $user_id)->update([
+        WalletEntity::query()->where('id', $user_id)->update([
             'money' => $newMoney
         ]);
         $log = self::log($user_id, $type, $item_id, $money, $newMoney, $remark, $status);
@@ -89,7 +89,7 @@ final class FundAccount {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
-        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
+        $oldMoney = WalletEntity::query()->where('id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) + $money;
         if ($newMoney < 0) {
@@ -99,7 +99,7 @@ final class FundAccount {
         if (empty($log)) {
             return false;
         }
-        WalletEntity::query()->where('user_id', $user_id)->update([
+        WalletEntity::query()->where('id', $user_id)->update([
             'money' => $newMoney
         ]);
         $model = call_user_func($cb, $log);
@@ -136,7 +136,7 @@ final class FundAccount {
             // 不能自己付款给自己
             return false;
         }
-        $oldMoney = WalletEntity::query()->where('user_id', $user_id)
+        $oldMoney = WalletEntity::query()->where('id', $user_id)
             ->value('money');
         $newMoney = floatval($oldMoney) - $money;
         if ($newMoney < 0) {
@@ -146,14 +146,14 @@ final class FundAccount {
         if (empty($log)) {
             return false;
         }
-        $oldMoneyTo = WalletEntity::query()->where('user_id', $toUser)
+        $oldMoneyTo = WalletEntity::query()->where('id', $toUser)
             ->value('money');
         $newMoneyTo = floatval($oldMoneyTo) + $money;
         $logTo = self::log($toUser, $type, 0, $money, $newMoneyTo, $remark, 0);
-        WalletEntity::query()->where('user_id', $user_id)->update([
+        WalletEntity::query()->where('id', $user_id)->update([
             'money' => $newMoney
         ]);
-        WalletEntity::query()->where('user_id', $toUser)->update([
+        WalletEntity::query()->where('id', $toUser)->update([
             'money' => $newMoneyTo
         ]);
         $model = call_user_func($cb, $log, $logTo);
@@ -183,7 +183,7 @@ final class FundAccount {
      * @throws \Exception
      */
     private static function refund(AccountLogEntity $log) {
-        WalletEntity::query()->where('user_id', $log->user_id)
+        WalletEntity::query()->where('id', $log->user_id)
             ->updateDecrement('money', $log->money);
         $log->status = self::STATUS_REFUND;
         return $log->save();

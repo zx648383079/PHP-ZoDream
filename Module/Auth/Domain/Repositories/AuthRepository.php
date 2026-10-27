@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Repositories;
 
 use Exception;
 use Module\Auth\Domain\Events\Login;
-use Module\Auth\Domain\Events\Register;
+use Module\Auth\Domain\Events\AccountCreated;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Entities\OAuthEntity;
@@ -213,7 +213,7 @@ class AuthRepository {
             $extra['parent_id'] = $parent_id;
             return self::createUser($email, $name, $password, $extra);
         });
-        event(new Register($user, request()->ip(), time()));
+        event(new AccountCreated($user, request()->ip(), time()));
         $code = MessageProtocol::generateCode(16, false);
         MessageProtocol::sendCode($email,
             MessageProtocol::EVENT_REGISTER_EMAIL_CODE,
@@ -261,7 +261,7 @@ class AuthRepository {
                 'parent_id' => $parent_id
             ], 'mobile');
         });
-        event(new Register($user, request()->ip(), time()));
+        event(new AccountCreated($user, request()->ip(), time()));
         return self::doLogin($user);
     }
 
@@ -383,7 +383,7 @@ class AuthRepository {
             throw new Exception('系统错误！');
         }
         self::successBindUser($type, $user, $nickname, $openid, $unionId, $platform_id);
-        event(new Register($user, request()->ip(), time()));
+        event(new AccountCreated($user, request()->ip(), time()));
         self::doLogin($user, false, $type);
         return $user;
     }
@@ -615,7 +615,7 @@ class AuthRepository {
         $user = self::createUser($mobile, sprintf('zre_%s', time()), '', [
             'email' => static::emptyEmail()
         ], 'mobile');
-        event(new Register($user, request()->ip(), time()));
+        event(new AccountCreated($user, request()->ip(), time()));
         return self::doLogin($user);
     }
 

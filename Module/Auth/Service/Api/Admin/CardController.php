@@ -70,6 +70,7 @@ class CardController extends Controller {
             $model = RankRepository::save($request->validate([
                 'id' => 'int',
                 'level' => 'required|int',
+                'exp' => 'required|int',
                 'name' => 'required|string:0,32',
                 'icon' => 'string:0,255',
                 'configure' => 'string:0,200',

@@ -93,8 +93,8 @@ class CreateWalletTables extends Migration {
         })->append(WalletEntity::tableName(), function (Table $table) {
             $table->comment('账户资金表');
             $table->id();
-            $table->int('money')->comment('金额');
-            $table->int('credits')->comment('积分');
+            $table->int('money')->default(0)->comment('金额');
+            $table->int('credits')->default(0)->comment('积分');
             $table->string('password')->comment('支付密码');
             $table->timestamps();
         })->append(WalletLogEntity::tableName(), function (Table $table) {

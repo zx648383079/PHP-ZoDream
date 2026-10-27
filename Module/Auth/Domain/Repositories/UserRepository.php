@@ -10,7 +10,7 @@ use Infrastructure\Ip;
 use Module\Auth\Domain\Advanced\CardRepository;
 use Module\Auth\Domain\Advanced\RelationshipRepository;
 use Module\Auth\Domain\Entities\UserEntity;
-use Module\Auth\Domain\Events\CancelAccount;
+use Module\Auth\Domain\Events\AccountCanceled;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
@@ -320,7 +320,7 @@ class UserRepository {
         }
         $user = UserModel::find($id);
         $user->delete();
-        event(new CancelAccount($user, time()));
+        event(new AccountCanceled($user, time()));
         event(new ManageAction('user_remove', $user->name, 5, $user->id));
     }
 

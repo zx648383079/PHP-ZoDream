@@ -16,6 +16,7 @@ class RankEntity extends Entity {
             'name' => 'required|string:0,32',
             'icon' => 'string:0,255',
             'configure' => 'string:0,200',
+            'exp' => 'required|int',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];

@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Entities\AdminLogEntity;
 
-readonly class ManageAction {
+final readonly class ManageAction {
 
     protected string $ip;
     protected int $userId;
@@ -23,7 +23,7 @@ readonly class ManageAction {
     }
 
     public function toLogModel() {
-        return new AdminLogModel([
+        return new AdminLogEntity([
             'ip' => $this->ip,
             'user_id' => $this->userId,
             'item_type' => $this->type,

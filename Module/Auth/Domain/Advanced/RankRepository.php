@@ -9,6 +9,8 @@ use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Model\UserMetaModel;
 
 final class RankRepository {
+    const CACHE_KEY = 'rank_rules';
+
     public static function getList(string $keywords) {
         $page = RankEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
@@ -25,11 +27,13 @@ final class RankRepository {
         if (!$model->save()) {
             throw new Exception($model->getFirstError());
         }
+        cache()->delete(self::CACHE_KEY);
         return $model;
     }
 
     public static function remove(int $id) {
         RankEntity::where('id', $id)->delete();
+        cache()->delete(self::CACHE_KEY);
     }
 
     public static function update(int $user, int $exp) {
@@ -65,7 +69,7 @@ final class RankRepository {
     }
 
     private static function getLevel(int $exp): int {
-        $rules = cache()->getOrSet('rank_rules', function() {
+        $rules = cache()->getOrSet(self::CACHE_KEY, function() {
             $res = RankEntity::orderBy('level', 'asc')
                 ->asArray()
                 ->select('exp', 'level')->get();
@@ -79,7 +83,7 @@ final class RankRepository {
             return array_reverse($res);
         });
         foreach ($rules as $item) {
-            if ($item['min'] < $exp) {
+            if ($item['min'] <= $exp) {
                 return max($item['level'], 0);
             }
         }

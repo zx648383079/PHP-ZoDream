@@ -2,12 +2,12 @@
 namespace Module\Game\CheckIn\Domain\Listeners;
 
 
-use Module\Auth\Domain\Events\CancelAccount;
+use Module\Auth\Domain\Events\AccountCanceled;
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
 
-class CancelAccountListener {
+final class AccountCanceledListener {
 
-    public function __construct(CancelAccount $event) {
+    public function __construct(AccountCanceled $event) {
         CheckInModel::where('user_id', $event->getUserId())->delete();
     }
 }

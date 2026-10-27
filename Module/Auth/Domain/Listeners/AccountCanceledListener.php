@@ -5,7 +5,7 @@ namespace Module\Auth\Domain\Listeners;
 use Module\Auth\Domain\Advanced\Entities\ApplyLogEntity;
 use Module\Auth\Domain\Advanced\Entities\UserEquityEntity;
 use Module\Auth\Domain\Advanced\Entities\UserRelationshipEntity;
-use Module\Auth\Domain\Events\CancelAccount;
+use Module\Auth\Domain\Events\AccountCanceled;
 use Module\Auth\Domain\Entities\ActionLogEntity;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Entities\InviteCodeEntity;
@@ -14,9 +14,9 @@ use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\UserMetaModel;
 
-class CancelAccountListener {
+final class AccountCanceledListener {
 
-    public function __construct(CancelAccount $event) {
+    public function __construct(AccountCanceled $event) {
         BulletinUserModel::where('user_id', $event->getUserId())->delete();
         OAuthEntity::where('user_id', $event->getUserId())->delete();
         UserMetaModel::where('user_id', $event->getUserId())->delete();

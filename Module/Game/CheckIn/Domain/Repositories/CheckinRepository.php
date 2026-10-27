@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Game\CheckIn\Domain\Repositories;
 
-
+use Module\Auth\Domain\Events\RankUpdated;
 use Module\Auth\Domain\Repositories\UserRepository;
 use Module\Game\CheckIn\Domain\Model\CheckInModel;
 use Module\OpenPlatform\Domain\Platform;
@@ -66,6 +66,7 @@ class CheckinRepository {
             FundAccount::change($user,
                 FundAccount::TYPE_CHECK_IN, 0,
                 $model->money, sprintf('连续签到%s天', $running), 1);
+            event(new RankUpdated($user, 1, sprintf('连续签到%s天', $running), FundAccount::TYPE_CHECK_IN, $model->id));
         }
         return $model;
     }

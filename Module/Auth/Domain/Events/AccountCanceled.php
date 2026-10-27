@@ -5,10 +5,10 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\UserModel;
 
-readonly class CancelAccount {
+final readonly class AccountCanceled {
 
     /**
-     * CancelAccount constructor.
+     * AccountCanceled constructor.
      * @param UserModel $user 用户模型
      * @param int $timestamp 注销时间戳
      */

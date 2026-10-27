@@ -6,7 +6,7 @@ use Module\Chat\Domain\Model\ChatHistoryModel;
 use Module\Chat\Domain\Model\MessageModel;
 use Module\Team\Domain\Events\DisbandTeam;
 
-class DisbandTeamListener {
+final class DisbandTeamListener {
 
     public function __construct(DisbandTeam $event) {
         MessageModel::where('group_id', $event->teamId)->delete();

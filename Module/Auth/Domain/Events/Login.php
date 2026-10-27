@@ -5,7 +5,7 @@ namespace Module\Auth\Domain\Events;
 
 use Module\Auth\Domain\Model\UserModel;
 
-readonly class Login {
+final readonly class Login {
 
     /**
      * Create a new event instance.

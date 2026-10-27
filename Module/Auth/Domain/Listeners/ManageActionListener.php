@@ -4,7 +4,7 @@ namespace Module\Auth\Domain\Listeners;
 
 use Module\Auth\Domain\Events\ManageAction;
 
-class ManageActionListener {
+final class ManageActionListener {
 
     public function __construct(ManageAction $event) {
         $model = $event->toLogModel();
