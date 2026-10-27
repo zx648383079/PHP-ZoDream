@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\WebAuthn;
+namespace Module\Auth\Domain\Advanced\WebAuthn;
 
 use Exception;
 use Zodream\Image\QrCode;
@@ -9,7 +9,7 @@ use Zodream\Image\QrCode;
  * 2fa 登录
  * @source https://github.com/RobThree/TwoFactorAuth
  */
-class TwoFactorAuth {
+final class TwoFactorAuth {
     private static string $base32Dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=';
 
     /** @var array<string> */

@@ -14,7 +14,7 @@ class HomeController extends Controller {
     public function checkInAction() {
         try {
             return $this->renderData(
-                CheckinRepository::check()
+                CheckinRepository::check(auth()->id())
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

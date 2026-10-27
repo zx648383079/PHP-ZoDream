@@ -38,7 +38,7 @@ class MicroBlogModel extends Model {
     }
 
     protected function rules(): array {
-        return [
+        $res = [
             'user_id' => 'int',
             'content' => 'required|string:0,140',
             'extra_rule' => '',
@@ -49,11 +49,14 @@ class MicroBlogModel extends Model {
             'collect_count' => 'int',
             'forward_id' => 'int',
             'source' => 'string:0,30',
-            'zone_id' => 'int',
             'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
+        if (AUTH_ADVANCED) {
+            $res['zone_id'] = 'int';
+        }
+        return $res;
     }
 
     protected function labels(): array {

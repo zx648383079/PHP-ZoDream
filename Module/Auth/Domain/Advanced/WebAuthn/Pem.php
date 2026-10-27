@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\WebAuthn;
+namespace Module\Auth\Domain\Advanced\WebAuthn;
 
-class Pem {
+final class Pem {
 
     public static function parsePublicKey(string $val, int $type, bool $isEncode = true): string {
         return static::derToPublicKey(static::parseDer($val, $type, $isEncode));

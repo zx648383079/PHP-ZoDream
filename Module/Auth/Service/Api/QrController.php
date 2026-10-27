@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
-use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\InviteRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
@@ -49,7 +49,7 @@ class QrController extends Controller {
             }
             $user = UserModel::findIdentity($items[0]);
             $user->login();
-            $user->logLogin(true, LoginLogModel::MODE_QR);
+            $user->logLogin(true, LoginLogEntity::MODE_QR);
             $token = auth()->createToken($user);
             event(new TokenCreated($token, $user));
             $data = UserRepository::getCurrentProfile();

@@ -1,8 +1,8 @@
 <?php
-namespace Module\Auth\Domain\Model\Card;
+declare(strict_types = 1);
+namespace Module\Auth\Domain\Advanced\Entities;
 
-
-use Domain\Model\Model;
+use Domain\Entities\Entity;
 
 /**
  *
@@ -16,10 +16,9 @@ use Domain\Model\Model;
  * @property integer $card_id
  * @property integer $exp
  */
-class UserEquityCardModel extends Model {
-
+class UserEquityEntity extends Entity {
     public static function tableName(): string {
-        return 'user_equity_card';
+        return 'adv_user_equity_card';
     }
 
     protected function rules(): array {
@@ -48,6 +47,6 @@ class UserEquityCardModel extends Model {
     }
 
     public function card() {
-        return $this->hasOne(EquityCardModel::class, 'id', 'card_id');
+        return $this->hasOne(EquityCardEntity::class, 'id', 'card_id');
     }
 }

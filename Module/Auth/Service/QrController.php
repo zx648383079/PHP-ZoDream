@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Service;
 
-use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\InviteRepository;
 use Zodream\Image\QrCode;
@@ -37,7 +37,7 @@ class QrController extends Controller {
             }
             $user = UserModel::findIdentity($items[0]);
             $user->login();
-            $user->logLogin(true, LoginLogModel::MODE_QR);
+            $user->logLogin(true, LoginLogEntity::MODE_QR);
             return $this->renderData([
                 'url' => url('/')
             ], '登陆成功');

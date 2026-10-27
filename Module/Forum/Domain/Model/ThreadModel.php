@@ -33,7 +33,7 @@ class ThreadModel extends Model {
     }
 
     protected function rules(): array {
-        return [
+        $res = [
             'forum_id' => 'required|int',
             'classify_id' => 'int',
             'title' => 'required|string:0,200',
@@ -46,11 +46,14 @@ class ThreadModel extends Model {
             'is_closed' => 'int:0,9',
             'is_private_post' => 'int:0,9',
             'top_type' => 'int:0,127',
-            'zone_id' => 'int',
             'status' => 'int:0,127',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
+        if (AUTH_ADVANCED) {
+            $res['zone_id'] = 'int';
+        }
+        return $res;
     }
 
     protected function labels(): array {

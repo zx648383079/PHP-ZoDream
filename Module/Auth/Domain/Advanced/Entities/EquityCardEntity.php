@@ -1,8 +1,8 @@
 <?php
-namespace Module\Auth\Domain\Model\Card;
+declare(strict_types = 1);
+namespace Module\Auth\Domain\Advanced\Entities;
 
-
-use Domain\Model\Model;
+use Domain\Entities\Entity;
 
 /**
  *
@@ -15,10 +15,10 @@ use Domain\Model\Model;
  * @property integer $updated_at
  * @property integer $created_at
  */
-class EquityCardModel extends Model {
-
+class EquityCardEntity extends Entity {
+    
     public static function tableName(): string {
-        return 'equity_card';
+        return 'adv_quity_card';
     }
 
     protected function rules(): array {

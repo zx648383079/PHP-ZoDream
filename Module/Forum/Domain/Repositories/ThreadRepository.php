@@ -7,7 +7,7 @@ use Domain\Model\SearchModel;
 use Exception;
 use Module\Wallet\Domain\FundAccount;
 use Module\Auth\Domain\Repositories\UserRepository;
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Module\Forum\Domain\Model\ForumLogModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadLogModel;
@@ -251,6 +251,9 @@ class ThreadRepository {
     }
 
     private static function checkThreadZone(int|ThreadModel $thread): bool {
+        if (!AUTH_ADVANCED) {
+            return true;
+        }
         $model = !is_numeric($thread) ? $thread : ThreadModel::where('id', $thread)->first('id', 'zone_id');
         return ZoneRepository::check($model['zone_id'], ZoneRepository::authZone());
     }
@@ -394,19 +397,24 @@ class ThreadRepository {
         if (!static::canPublish($userId, $title)) {
             throw new Exception('你的操作太频繁了，请五分钟后再试');
         }
-        $forumZone = intval(ForumModel::where('id', $forum_id)->value('zone_id'));
-        if (!ZoneRepository::check($forumZone, ZoneRepository::authZone())) {
-            throw new Exception('版块分区错误');
-        }
-        $thread = ThreadModel::create([
-            'zone_id' => $forumZone,
+        $threadData = [
             'title' => $title ,
             'forum_id' => $forum_id,
             'classify_id' => $classify_id,
             'user_id' => $userId,
             'is_private_post' => $is_private_post,
             'status' => Option::value('publish_review', false) ? self::REVIEW_STATUS_NONE : self::REVIEW_STATUS_APPROVED,
-        ]);
+        ];
+        if (AUTH_ADVANCED) {
+            $forumZone = intval(ForumModel::where('id', $forum_id)->value('zone_id'));
+            if (!ZoneRepository::check($forumZone, ZoneRepository::authZone())) {
+                throw new Exception('版块分区错误');
+            }
+            $threadData['zone_id'] = $forumZone;
+        }
+
+
+        $thread = ThreadModel::create($threadData);
         if (empty($thread)) {
             throw new Exception('发帖失败');
         }

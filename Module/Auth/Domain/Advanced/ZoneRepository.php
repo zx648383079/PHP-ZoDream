@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Repositories;
+namespace Module\Auth\Domain\Advanced;
 
 use Domain\Model\SearchModel;
 use Exception;
-use Module\Auth\Domain\Entities\ZoneEntity;
+use Module\Auth\Domain\Advanced\Entities\ZoneEntity;
 use Module\Auth\Domain\Exception\AuthException;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Zodream\Database\Contracts\SqlBuilder;

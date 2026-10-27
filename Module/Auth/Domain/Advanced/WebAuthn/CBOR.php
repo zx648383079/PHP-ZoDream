@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\WebAuthn;
+namespace Module\Auth\Domain\Advanced\WebAuthn;
 
 use Exception;
 use InvalidArgumentException;
@@ -8,7 +8,7 @@ use RuntimeException;
 use Zodream\Helpers\BinaryReader;
 use Zodream\Infrastructure\Error\StopException;
 
-class CBOR {
+final class CBOR {
 
     public const MAJOR_TYPE_UNSIGNED_INTEGER = 0b000;
 

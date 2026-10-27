@@ -2,10 +2,17 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 final class ZoneController extends Controller {
+
+    public function rules() {
+        if (!AUTH_ADVANCED) {
+            return ['*' => '!'];
+        }
+        return parent::rules();
+    }
 
     public function indexAction(string $keywords = '') {
         return $this->renderPage(ZoneRepository::manageList($keywords));

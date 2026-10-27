@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Bot\Domain\Adapters\WeChat;
 
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Bot\Domain\Adapters\AdapterEvent;
 use Module\Bot\Domain\Adapters\BasePlatformAdapter;
 use Module\Bot\Domain\Adapters\IPlatformAdapter;

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Repositories;
+namespace Module\Auth\Domain\Advanced;
 
-use Module\Auth\Domain\Entities\UserRelationshipEntity;
+use Module\Auth\Domain\Advanced\Entities\UserRelationshipEntity;
 
 final class RelationshipRepository {
 

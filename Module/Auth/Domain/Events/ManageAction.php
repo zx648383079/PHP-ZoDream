@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Events;
 
-use Module\Auth\Domain\Model\AdminLogModel;
+use Module\Auth\Domain\Entities\AdminLogEntity;
 
 readonly class ManageAction {
 

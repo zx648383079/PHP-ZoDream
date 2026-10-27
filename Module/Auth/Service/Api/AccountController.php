@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Repositories\AccountRepository;
 
 class AccountController extends Controller {
@@ -23,7 +23,7 @@ class AccountController extends Controller {
         if (empty($id) || $id < 1) {
             return $this->renderFailure('请选择解绑的平台');
         }
-        OAuthModel::where('user_id', auth()->id())
+        OAuthEntity::where('user_id', auth()->id())
             ->where('id', $id)->delete();
         return $this->renderData(true);
     }

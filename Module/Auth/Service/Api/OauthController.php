@@ -4,7 +4,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\IAuthPlatform;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
@@ -30,7 +30,7 @@ class OauthController extends Controller {
         try {
             $data = $mini->login($code);
             $user = AuthRepository::oauth(
-                OAuthModel::TYPE_WX_MINI,
+                OAuthEntity::TYPE_WX_MINI,
                 $data['openid'],
                 function () use ($nickname, $gender, $avatar) {
                     return [
@@ -42,7 +42,7 @@ class OauthController extends Controller {
                 }, $data['unionid'] ?? null,
                 $platform->id()
             );
-            AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
+            AuthRepository::updateOAuthData(OAuthEntity::TYPE_WX_MINI,
                 $data['openid'],  $data['session_key'], $data['unionid'] ?? null,
                 $platform->id());
         } catch (\Exception $ex) {
@@ -70,7 +70,7 @@ class OauthController extends Controller {
         $mini = new MiniOAuth($platform->option('mini_auth'));
         try {
             $data = $mini->login($code);
-            AuthRepository::updateOAuthData(OAuthModel::TYPE_WX_MINI,
+            AuthRepository::updateOAuthData(OAuthEntity::TYPE_WX_MINI,
                 $data['openid'],  $data['session_key'], $data['unionid'] ?? null,
                 $platform->id());
         } catch (\Exception $ex) {
@@ -86,7 +86,7 @@ class OauthController extends Controller {
         $platform = app('platform');
         $mini = new MiniOAuth($platform->option('mini_auth'));
         try {
-            $sessionKey = OAuthModel::where('vendor', OAuthModel::TYPE_WX_MINI)
+            $sessionKey = OAuthEntity::where('vendor', OAuthEntity::TYPE_WX_MINI)
                 ->where('platform_id', $platform->id())
                 ->when(auth()->guest(), function ($query) use ($request) {
                     $query->where('platform_id', $request->get('openid'));

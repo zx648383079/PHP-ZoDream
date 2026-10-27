@@ -1,11 +1,10 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Entities;
 
-
-use Domain\Model\Model;
+use Domain\Entities\Entity;
 
 /**
- * Class LoginLogModel
+ * Class LoginLogEntity
  * @property integer $id
  * @property string $ip
  * @property integer $user_id
@@ -14,7 +13,7 @@ use Domain\Model\Model;
  * @property string $mode
  * @property integer $created_at
  */
-class LoginLogModel extends Model {
+class LoginLogEntity extends Entity {
 
     const MODE_WEB = 'web';
     const MODE_TICKET = 'ticket'; // 一次性凭证
@@ -50,35 +49,5 @@ class LoginLogModel extends Model {
         ];
     }
 
-    /**
-     * 纪录登录记录
-     * @param string $user 登录邮箱
-     * @param int $user_id
-     * @param bool $status 成功或失败
-     * @param string $mode 页面登录或其他
-     * @return LoginLogModel
-     * @throws \Exception
-     */
-	public static function addLoginLog(string $user, int $user_id = 0, bool $status = false, string $mode = self::MODE_WEB) {
-		return static::create([
-            'ip' => request()->ip(),
-            'user' => $user,
-            'user_id' => intval($user_id),
-            'status' => $status ? 1 : 0,
-            'mode' => $mode,
-            'created_at' => time()
-        ]);
-	}
-
-    /**
-     * 今天失败登录的次数
-     * @param string $ip
-     * @param integer $time
-     * @return integer
-     */
-	public static function failureCount(string $ip, int $time) {
-	    return self::where('ip', $ip)
-                ->where('status', 0)
-                ->where('created_at', '>=', $time)->count();
-    }
+    
 }

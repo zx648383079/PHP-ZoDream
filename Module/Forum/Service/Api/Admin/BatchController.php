@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Forum\Service\Api\Admin;
 
 use Module\Forum\Domain\Repositories\ForumRepository;
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Zodream\Route\Controller\Concerns\BatchAction;
 
 class BatchController extends Controller {

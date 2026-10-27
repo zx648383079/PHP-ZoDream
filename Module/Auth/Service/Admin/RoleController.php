@@ -5,8 +5,6 @@ namespace Module\Auth\Service\Admin;
 use Domain\Model\SearchModel;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
-use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
-use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Repositories\RoleRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 

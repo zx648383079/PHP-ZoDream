@@ -1,11 +1,11 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Advanced\Entities;
 
-
-use Domain\Model\Model;
+use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class ApplyLogModel
+ * Class ApplyLogEntity
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
@@ -17,10 +17,10 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class ApplyLogModel extends Model {
+class ApplyLogEntity extends Entity {
 
 	public static function tableName(): string {
-        return 'user_apply_log';
+        return 'adv_apply_log';
     }
 
     protected function rules(): array {

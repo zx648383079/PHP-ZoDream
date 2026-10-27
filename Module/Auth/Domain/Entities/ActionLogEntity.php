@@ -1,11 +1,11 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Entities;
 
-
-use Domain\Model\Model;
+use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class ActionLogModel
+ * Class ActionLogEntity
  * @property integer $id
  * @property string $ip
  * @property integer $user_id
@@ -13,7 +13,7 @@ use Domain\Model\Model;
  * @property string $remark
  * @property integer $created_at
  */
-class ActionLogModel extends Model {
+class ActionLogEntity extends Entity {
 
 	public static function tableName(): string {
         return 'user_action_log';
@@ -44,22 +44,4 @@ class ActionLogModel extends Model {
         return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
-
-    /**
-     * 用户操作记录
-     * @param int $user_id
-     * @param $action
-     * @param string $remark
-     * @return ActionLogModel
-     * @throws \Exception
-     */
-	public static function addLog($user_id, $action, $remark = '') {
-		return static::create([
-            'ip' => request()->ip(),
-            'user_id' => $user_id,
-            'action' => $action,
-            'remark' => $remark,
-            'created_at' => time()
-        ]);
-	}
 }

@@ -25,18 +25,21 @@ class ForumController extends Controller {
 
     public function saveAction(Input $input) {
         try {
-            $data = $input->validate([
+            $validRules = [
                 'id' => 'int',
                 'name' => 'required|string:0,100',
                 'thumb' => 'string:0,100',
                 'description' => 'string:0,255',
                 'parent_id' => 'int',
-                'zone_id' => 'int',
                 'type' => 'int:0,99',
                 'position' => 'int:0,999',
                 'classifies' => '',
                 'moderators' => '',
-            ]);
+            ];
+            if (AUTH_ADVANCED) {
+                $validRules['zone_id'] = 'int';
+            }
+            $data = $input->validate($validRules);
             return $this->render(
                 ForumRepository::save($data)
             );

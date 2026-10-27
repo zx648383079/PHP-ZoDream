@@ -4,7 +4,7 @@ namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
 use Module\Auth\Domain\Exception\AuthException;
-use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Repositories\AccountRepository;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Module\Auth\Domain\Repositories\UserRepository;
@@ -57,7 +57,7 @@ class LoginController extends Controller {
         } catch (\Exception $ex) {
             if (!empty($account) && ($ex->getCode() < 1009 || $ex->getCode() === 1015)) {
                 // TODO 加入2fa 验证失败，防止暴力破解
-                LoginLogModel::addLoginLog($account, 0, false);
+                AccountRepository::addLoginLog($account, 0, false);
             }
             if ($ex->getCode() === 1009) {
                 return $this->renderFailure([

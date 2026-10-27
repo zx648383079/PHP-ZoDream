@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Service;
 
 use Module\Auth\Domain\Exception\AuthException;
-use Module\Auth\Domain\Model\LoginLogModel;
 use Module\Auth\Domain\Model\UserModel;
+use Module\Auth\Domain\Repositories\AccountRepository;
 use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\Auth\Domain\Repositories\CaptchaRepository;
 use Zodream\Infrastructure\Contracts\Http\Output;
@@ -41,7 +42,7 @@ class HomeController extends Controller {
             ]);
         }
         $time = strtotime(date('Y-m-d 00:00:00'));
-        $count = LoginLogModel::failureCount($request->ip(), $time);
+        $count = AccountRepository::failureCount($request->ip(), $time);
         $isCaptcha = false;
         if ($count > 2) {
             $count = intval($count / 3);
@@ -82,7 +83,7 @@ class HomeController extends Controller {
         } catch (\Exception $ex) {
             // 是否需要显示验证码
             if (!empty($email) && ($ex->getCode() < 1009 || $ex->getCode() === 1015)) {
-                LoginLogModel::addLoginLog($email, 0, false);
+                AccountRepository::addLoginLog($email, 0, false);
             }
             return $this->renderFailure($ex->getMessage(), $ex->getCode());
         }

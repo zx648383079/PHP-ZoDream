@@ -28,19 +28,22 @@ class ForumModel extends Model {
 
 
     protected function rules(): array {
-        return [
+        $res = [
             'name' => 'required|string:0,100',
             'thumb' => 'string:0,100',
             'description' => 'string:0,255',
             'parent_id' => 'int',
             'thread_count' => 'int',
             'post_count' => 'int',
-            'zone_id' => 'int',
             'type' => 'int:0,99',
             'position' => 'int:0,999',
             'created_at' => 'int',
             'updated_at' => 'int',
         ];
+        if (AUTH_ADVANCED) {
+            $res['zone_id'] = 'int';
+        }
+        return $res;
     }
 
     protected function labels(): array {

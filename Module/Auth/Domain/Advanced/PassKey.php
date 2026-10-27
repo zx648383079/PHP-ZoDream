@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Repositories;
+namespace Module\Auth\Domain\Advanced;
 
 use Exception;
 use Module\Auth\Domain\Exception\AuthException;
-use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\UserModel;
-use Module\Auth\Domain\WebAuthn\CBOR;
-use Module\Auth\Domain\WebAuthn\Pem;
-use Module\Auth\Domain\WebAuthn\TwoFactorAuth;
+use Module\Auth\Domain\Advanced\WebAuthn\CBOR;
+use Module\Auth\Domain\Advanced\WebAuthn\Pem;
+use Module\Auth\Domain\Advanced\WebAuthn\TwoFactorAuth;
+use Module\Auth\Domain\Repositories\AuthRepository;
 use Module\OpenPlatform\Domain\Platform;
 use Module\SEO\Domain\Option;
 use Zodream\Helpers\BinaryReader;
@@ -26,11 +27,11 @@ final class PassKey {
     }
 
     public static function isOpen2FA(int $userId): bool {
-        return OAuthModel::where('user_id', $userId)->where('vendor', OAuthModel::TYPE_2FA)->count() > 0;
+        return OAuthEntity::where('user_id', $userId)->where('vendor', OAuthEntity::TYPE_2FA)->count() > 0;
     }
 
     public static function check2FA(UserModel $model) {
-        $data = OAuthModel::where('user_id', $model->id)->where('vendor', OAuthModel::TYPE_2FA)->first();
+        $data = OAuthEntity::where('user_id', $model->id)->where('vendor', OAuthEntity::TYPE_2FA)->first();
         if (empty($data)) {
             return;
         }
@@ -39,7 +40,7 @@ final class PassKey {
             if ($recoveryCode !== $data['identity']) {
                 throw new Exception('Recovery code error');
             }
-            OAuthModel::where('user_id', $model->id)->where('vendor', OAuthModel::TYPE_2FA)->delete();
+            OAuthEntity::where('user_id', $model->id)->where('vendor', OAuthEntity::TYPE_2FA)->delete();
         }
         $provider = new TwoFactorAuth(self::host(false));
         $code = request('twofa_code');
@@ -67,13 +68,13 @@ final class PassKey {
         if (empty($data) || !$provider->verifyCode($data['secret_key'], $code)) {
             throw new Exception('动态码错误');
         }
-        if (OAuthModel::where('user_id', $userId)->where('vendor', OAuthModel::TYPE_2FA)
+        if (OAuthEntity::where('user_id', $userId)->where('vendor', OAuthEntity::TYPE_2FA)
         ->count() > 0) {
             throw new Exception('非法操作');
         }
-        OAuthModel::create([
+        OAuthEntity::create([
             'user_id' => $userId,
-            'vendor' => OAuthModel::TYPE_2FA,
+            'vendor' => OAuthEntity::TYPE_2FA,
             'identity' => $data['recovery_code'],
             'data' => $data['secret_key'],
         ]);
@@ -143,9 +144,9 @@ final class PassKey {
     protected static function saveCredential(string $credentialId, string $publicKey,
                                              int $alg = -7): void {
         $key = Pem::parsePublicKey($publicKey, $alg === -7 ? 2 : 3, false);
-        OAuthModel::create([
+        OAuthEntity::create([
             'user_id' => auth()->id(),
-            'vendor' => OAuthModel::TYPE_WEBAUTHN,
+            'vendor' => OAuthEntity::TYPE_WEBAUTHN,
             'identity' => $credentialId,
             'data' => $key,
             'platform_id' => Platform::platformId()
@@ -194,9 +195,9 @@ final class PassKey {
      * @throws \Exception
      */
     protected static function loadCredential(int $userId, string $credentialId,  string $signature, array $credential) {
-        $key = OAuthModel::where('user_id', $userId)
+        $key = OAuthEntity::where('user_id', $userId)
             ->where('identity', $credentialId)
-            ->where('vendor', OAuthModel::TYPE_WEBAUTHN)
+            ->where('vendor', OAuthEntity::TYPE_WEBAUTHN)
             ->where('platform_id', Platform::platformId())
             ->value('data');
         if (empty($key)) {
@@ -211,7 +212,7 @@ final class PassKey {
             CBOR::decodeBase64($signature), $pkey, \OPENSSL_ALGO_SHA256)) {
             throw new \Exception('signature is error');
         }
-        AuthRepository::loginUserId($userId, LoginLogModel::MODE_WEBAUTHN);
+        AuthRepository::loginUserId($userId, LoginLogEntity::MODE_WEBAUTHN);
     }
 
     private static function hash(string $val): string {

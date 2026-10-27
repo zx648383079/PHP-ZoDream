@@ -4,8 +4,10 @@ namespace Module\Auth\Domain\Model;
 
 
 use Module\Auth\Domain\Entities\Concerns\UserTrait;
+use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
 use Module\Auth\Domain\Model\Concerns\UserRoleTrait;
+use Module\Auth\Domain\Repositories\AccountRepository;
 use Zodream\Database\Model\UserModel as BaseModel;
 use Zodream\Helpers\Security\Hash;
 
@@ -74,11 +76,11 @@ class UserModel extends BaseModel {
      * 更改为手动记录状态
      * @param bool $status
      * @param string $model
-     * @return LoginLogModel
+     * @return LoginLogEntity
      * @throws \Exception
      */
-    public function logLogin(bool $status = true, string $model = LoginLogModel::MODE_WEB) {
-        return LoginLogModel::addLoginLog($this->email, $this->id, $status, $model);
+    public function logLogin(bool $status = true, string $model = LoginLogEntity::MODE_WEB) {
+        return AccountRepository::addLoginLog($this->email, $this->id, $status, $model);
     }
 
     public static function validateEmail(string $email): bool {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Module\Auth\Domain\Repositories;
 
-use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
@@ -19,10 +19,10 @@ final class StatisticsRepository {
         $user_yesterday = $user_count < 1 ? 0 : UserModel::where('created_at', '<', $todayStart)
             ->where('created_at', '>=', $yesterdayStart)->count();
 
-        $login_today = LoginLogModel::where('status', 1)->where('created_at', '>=', $todayStart)
+        $login_today = LoginLogEntity::where('status', 1)->where('created_at', '>=', $todayStart)
             ->groupBy('user_id')
             ->count();
-        $login_yesterday = LoginLogModel::where('status', 1)->where('created_at', '<', $todayStart)
+        $login_yesterday = LoginLogEntity::where('status', 1)->where('created_at', '<', $todayStart)
             ->where('created_at', '>=', $yesterdayStart)
             ->groupBy('user_id')
             ->count();
@@ -42,15 +42,17 @@ final class StatisticsRepository {
         if ($user->parent_id > 0) {
             $data['parent'] = UserRepository::basic($user->parent_id);
         }
-        $data['oauth_count'] = OAuthModel::where('user_id', $user->id)->count();
-        $data['last_login'] = LoginLogModel::where('user_id', $user->id)
+        $data['oauth_count'] = OAuthEntity::where('user_id', $user->id)->count();
+        $data['last_login'] = LoginLogEntity::where('user_id', $user->id)
             ->where('status', 1)->orderBy('created_at', 'desc')
             ->first();
-        $data['login_ip'] = LoginLogModel::where('user_id', $user->id)
+        $data['login_ip'] = LoginLogEntity::where('user_id', $user->id)
             ->where('status', 1)->groupBy('ip')
             ->selectRaw('ip,COUNT(*) as count')->orderBy('count', 'desc')
             ->first();
-        $data['card_items'] = CardRepository::getUserCard($user->id);
+        if (AUTH_ADVANCED) {
+            $data['card_items'] = \Module\Auth\Domain\Advanced\CardRepository::getUserCard($user->id);
+        }
         $roleId = UserRoleModel::where('user_id', $user->id)->pluck('role_id');
         $roleItems = empty($roleId) ? [] : RoleModel::whereIn('id', $roleId)->asArray()->get('name', 'display_name');
         $data['role_items'] = [];

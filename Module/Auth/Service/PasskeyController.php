@@ -2,11 +2,14 @@
 declare(strict_types=1);
 namespace Module\Auth\Service;
 
-use Module\Auth\Domain\Repositories\PassKey;
+use Module\Auth\Domain\Advanced\PassKey;
 
 class PasskeyController extends Controller {
 
     public function rules() {
+        if (!AUTH_ADVANCED) {
+            return ['*' => '!'];
+        }
         return [
             'index' => '?',
             'login' => '?',

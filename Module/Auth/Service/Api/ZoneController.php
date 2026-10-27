@@ -2,10 +2,13 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 
 final class ZoneController extends Controller {
     public function rules() {
+        if (!AUTH_ADVANCED) {
+            return ['*' => '!'];
+        }
         return [
             '*' => '@',
         ];

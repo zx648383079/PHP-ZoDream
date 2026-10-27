@@ -7,12 +7,14 @@ use Domain\Model\ModelHelper;
 use Domain\Model\SearchModel;
 use Exception;
 use Infrastructure\Ip;
+use Module\Auth\Domain\Advanced\CardRepository;
+use Module\Auth\Domain\Advanced\RelationshipRepository;
 use Module\Auth\Domain\Entities\UserEntity;
 use Module\Auth\Domain\Events\CancelAccount;
 use Module\Auth\Domain\Events\ManageAction;
 use Module\Auth\Domain\Helpers;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
-use Module\Auth\Domain\Model\LoginLogModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
@@ -71,8 +73,17 @@ class UserRepository {
     }
 
     public static function getPublicProfile(int $id, string $extra = ''): array {
+        $keys = ['id', 'name', 
+            'avatar', 
+            'mobile', 'email', 
+            'sex', 'status', 'activated_at', 
+            'created_at'
+        ];
+        if (AUTH_ADVANCED) {
+            $keys[] = 'rank_level';
+        }
         $user = UserModel::where('id', $id)
-            ->first(['id', 'name', 'avatar', 'mobile', 'email', 'sex', 'status', 'activated_at', 'created_at']);
+            ->first($keys);
         if (empty($user)) {
             throw new Exception(__('Not found user'));
         }
@@ -101,15 +112,20 @@ class UserRepository {
         }
         $userId = intval($data['id']);
         $extraWords = explode(',', $extra);
-        foreach ([
+        $vaildKeys = [
             'last_ip',
-            'card_items',
              'bulletin_count',
-             'today_checkin',
-             'post_count',
-             'following_count',
-             'follower_count',
-                 ] as $word) {
+        ];
+        if (AUTH_ADVANCED) {
+            $vaildKeys = array_merge($vaildKeys, [
+                'card_items', 
+                'post_count',
+                'today_checkin',
+                'following_count',
+                'follower_count',
+             ]);
+        }
+        foreach ($vaildKeys as $word) {
             if (!in_array($word, $extraWords)) {
                 continue;
             }
@@ -120,9 +136,12 @@ class UserRepository {
             }
             $data[$word] = call_user_func($func, $userId);
         }
-        if (RelationshipRepository::containsRelationship($extraWords)) {
-            $data = array_merge($data, RelationshipRepository::relationship(auth()->id(), $userId));
+        if (AUTH_ADVANCED) {
+            if (RelationshipRepository::containsRelationship($extraWords)) {
+                $data = array_merge($data, RelationshipRepository::relationship(auth()->id(), $userId));
+            }
         }
+        
         return $data;
     }
 
@@ -132,13 +151,16 @@ class UserRepository {
     }
 
     public static function getLastIp(int $user): string {
-         return Helpers::hideIp((string)LoginLogModel::where('user_id', $user)
+         return Helpers::hideIp((string)LoginLogEntity::where('user_id', $user)
              ->where('status', 1)->orderBy('created_at', 'desc')
              ->value('ip'));
     }
 
     public static function getCardItems(int $user): array {
-        return CardRepository::getUserCard($user);
+        if (AUTH_ADVANCED) {
+            return CardRepository::getUserCard($user);
+        }
+        return [];
     }
 
     public static function getBulletinCount(int $user): int {
@@ -146,18 +168,30 @@ class UserRepository {
     }
 
     public static function getPostCount(int $user): int {
+        if (!AUTH_ADVANCED) {
+            return 0;
+        }
         return BlogRepository::getPostCount($user);
     }
 
     public static function getFollowingCount(int $user): int {
+        if (!AUTH_ADVANCED) {
+            return 0;
+        }
         return RelationshipRepository::followingCount($user);
     }
 
     public static function getFollowerCount(int $user): int {
+        if (!AUTH_ADVANCED) {
+            return 0;
+        }
         return RelationshipRepository::followerCount($user);
     }
 
     public static function getTodayCheckin(int $user): bool {
+        if (!AUTH_ADVANCED) {
+            return true;
+        }
         return CheckinRepository::todayIsChecked($user);
     }
 
@@ -295,8 +329,10 @@ class UserRepository {
         $model = self::get($user);
         $data = $model->toArray();
         $data['roles'] = UserRoleModel::where('user_id', $user)->pluck('role_id');
-        $data['zone_id'] = intval(UserMetaModel::where('user_id', $user)
+        if (AUTH_ADVANCED) {
+            $data['zone_id'] = intval(UserMetaModel::where('user_id', $user)
             ->where('name', 'zone_id')->value('content'));
+        }
         return $data;
     }
 

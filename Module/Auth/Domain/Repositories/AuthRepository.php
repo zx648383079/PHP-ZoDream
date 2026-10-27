@@ -6,9 +6,8 @@ use Exception;
 use Module\Auth\Domain\Events\Login;
 use Module\Auth\Domain\Events\Register;
 use Module\Auth\Domain\Exception\AuthException;
-use Module\Auth\Domain\Model\ActionLogModel;
-use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\LoginLogEntity;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
 use Module\Auth\Domain\Model\UserModel;
 use Module\MessageService\Domain\Repositories\MessageProtocol;
@@ -57,7 +56,7 @@ class AuthRepository {
     public static function loginPreCheck(string $ip, string $account, string $captcha = '') {
         $today = strtotime(date('Y-m-d 00:00:00'));
         // 判断 ip 是否登录次数过多
-        $count = LoginLogModel::where('ip', $ip)
+        $count = LoginLogEntity::where('ip', $ip)
             ->where('status', 0)
             ->where('created_at', '>=', $today)->count();
         if ($count > 20) {
@@ -67,7 +66,7 @@ class AuthRepository {
             return;
         }
         // 判断 账号 是否登录失败过多
-        $count = LoginLogModel::where('user', $account)
+        $count = LoginLogEntity::where('user', $account)
             ->where('status', 0)
             ->where('created_at', '>=', $today)->count();
         if ($count > 10) {
@@ -127,7 +126,9 @@ class AuthRepository {
         if (!UserRepository::isActive($user)) {
             throw AuthException::invalidLogin();
         }
-        PassKey::check2FA($user);
+        if (AUTH_ADVANCED) {
+            \Module\Auth\Domain\Advanced\PassKey::check2FA($user);
+        }
         return static::loginUser($user, $remember, $replaceToken);
     }
 
@@ -326,7 +327,7 @@ class AuthRepository {
     }
 
     private static function doLogin(UserModel $user, bool $remember = false,
-                                    string $vendor = LoginLogModel::MODE_WEB): bool {
+                                    string $vendor = LoginLogEntity::MODE_WEB): bool {
         $user->login($remember);
         $request = request();
         event(new Login($user, $request->server('HTTP_USER_AGENT', ''), $request->ip(), time()));
@@ -347,7 +348,7 @@ class AuthRepository {
         if (BanRepository::isBanOAuth($openid, $unionId, $type, $platform_id)) {
             throw AuthException::disableAccount();
         }
-        $user = OAuthModel::findUserWithUnion($openid, $unionId, $type, $platform_id);
+        $user = OAuthEntity::findUserWithUnion($openid, $unionId, $type, $platform_id);
         if (!empty($user)) {
             if (!UserRepository::isActive($user)) {
                 throw AuthException::disableAccount();
@@ -388,7 +389,7 @@ class AuthRepository {
     }
 
     private static function successBindUser(string $type, $user, string $nickname, string $openid, string|null $unionId = null, $platform_id = 0) {
-        OAuthModel::bindUser($user, $openid, $unionId, $type, $nickname, $platform_id);
+        OAuthEntity::bindUser($user, $openid, $unionId, $type, $nickname, $platform_id);
     }
 
     /**
@@ -478,7 +479,7 @@ class AuthRepository {
         if (!$user->save()) {
             throw new Exception($user->getFirstError());
         }
-        ActionLogModel::addLog($user->id, 'password', '重置密码');
+        AccountRepository::addActionLog($user->id, 'password', '重置密码');
         return true;
     }
 
@@ -531,13 +532,13 @@ class AuthRepository {
     public static function createAdmin(string $email, string $password) {
         $user = self::createUser($email, 'admin', $password);
         UserRoleModel::query()->insert([
-           'user_id' => $user->id,
+            'user_id' => $user->id,
             'role_id' => 1
         ]);
     }
 
     public static function updateOAuthData(string $type, string $openid, string|null $data, string|null $unionId = null, int $platform_id = 0) {
-        $model = OAuthModel::where('vendor', $type)
+        $model = OAuthEntity::where('vendor', $type)
             ->where('platform_id', $platform_id)
             ->where('identity', $openid)->first();
         if (!empty($model)) {
@@ -545,7 +546,7 @@ class AuthRepository {
             return $model->save();
         }
         if (empty($unionId)) {
-            return OAuthModel::create([
+            return OAuthEntity::create([
                 'user_id' => 0,
                 'nickname' => '',
                 'vendor' => $type,
@@ -555,9 +556,9 @@ class AuthRepository {
                 'platform_id' => $platform_id,
             ]);
         }
-        $model = OAuthModel::findWithUnion($unionId, $type, $platform_id);
+        $model = OAuthEntity::findWithUnion($unionId, $type, $platform_id);
         if (empty($model)) {
-            return OAuthModel::create([
+            return OAuthEntity::create([
                 'user_id' => 0,
                 'nickname' => '',
                 'vendor' => $type,
@@ -567,7 +568,7 @@ class AuthRepository {
                 'platform_id' => $platform_id,
             ]);
         }
-        return OAuthModel::create([
+        return OAuthEntity::create([
             'user_id' => $model->user_id,
             'nickname' => $model->nickname,
             'vendor' => $type,
@@ -578,7 +579,7 @@ class AuthRepository {
         ]);
     }
 
-    public static function loginUserId(int $id, string $vendor = LoginLogModel::MODE_WEB): void {
+    public static function loginUserId(int $id, string $vendor = LoginLogEntity::MODE_WEB): void {
         static::loginUser(UserModel::findIdentity($id), vendor: $vendor);
     }
 
@@ -593,7 +594,7 @@ class AuthRepository {
     private static function loginUser(UserModel $user,
                                       bool $remember = false,
                                       bool $replaceToken = true,
-                                      string $vendor = LoginLogModel::MODE_WEB): bool {
+                                      string $vendor = LoginLogEntity::MODE_WEB): bool {
         if (!UserRepository::isActive($user)) {
             throw AuthException::disableAccount();
         }
@@ -711,7 +712,7 @@ class AuthRepository {
         if ($userId <= 0 || !$autoLogin) {
             return $userId;
         }
-        static::loginUserId($userId, LoginLogModel::MODE_TICKET);
+        static::loginUserId($userId, LoginLogEntity::MODE_TICKET);
         return $userId;
     }
 }

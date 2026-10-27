@@ -4,18 +4,19 @@ namespace Module\Auth\Domain\Migrations;
 use Module\Auth\Domain\Entities\InviteCodeEntity;
 use Module\Auth\Domain\Entities\InviteLogEntity;
 use Module\Auth\Domain\Entities\UserEntity;
-use Module\Auth\Domain\Entities\UserRelationshipEntity;
-use Module\Auth\Domain\Entities\ZoneEntity;
-use Module\Auth\Domain\Model\ActionLogModel;
-use Module\Auth\Domain\Model\AdminLogModel;
-use Module\Auth\Domain\Model\ApplyLogModel;
-use Module\Auth\Domain\Model\BanAccountModel;
+use Module\Auth\Domain\Advanced\Entities\UserRelationshipEntity;
+use Module\Auth\Domain\Advanced\Entities\ZoneEntity;
+use Module\Auth\Domain\Entities\ActionLogEntity;
+use Module\Auth\Domain\Entities\AdminLogEntity;
+use Module\Auth\Domain\Advanced\Entities\ApplyLogEntity;
+use Module\Auth\Domain\Entities\BanAccountEntity;
 use Module\Auth\Domain\Model\Bulletin\BulletinModel;
 use Module\Auth\Domain\Model\Bulletin\BulletinUserModel;
-use Module\Auth\Domain\Model\Card\EquityCardModel;
-use Module\Auth\Domain\Model\Card\UserEquityCardModel;
-use Module\Auth\Domain\Model\LoginLogModel;
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Advanced\Entities\EquityCardEntity;
+use Module\Auth\Domain\Advanced\Entities\UserEquityEntity;
+use Module\Auth\Domain\Advanced\Entities\RankEntity;
+use Module\Auth\Domain\Entities\LoginLogEntity;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
@@ -48,15 +49,18 @@ class CreateAuthTables extends Migration {
             $table->date('birthday')->default(date('Y-m-d'));
             $table->uint('parent_id')->default(0);
             $table->string('token', 60)->default(0);
+            if (AUTH_ADVANCED) {
+                $table->uint('rank_level', 4)->default(0)->comment('等级');
+            }
             $table->uint('status', 2)->default(UserModel::STATUS_ACTIVE)->comment('账户的是否有限状态');
             $table->timestamp('activated_at')->comment('最后活跃的时间');
             $table->timestamps();
-        })->append(OAuthModel::tableName(), function(Table $table) {
+        })->append(OAuthEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
             $table->uint('platform_id')->default(0)->comment('平台id');
             $table->string('nickname', 30)->default('')->comment('昵称');
-            $table->string('vendor', 20)->default(OAuthModel::TYPE_QQ);
+            $table->string('vendor', 20)->default('');
             $table->string('unionid', 100)->default('')->comment('联合id');
             $table->string('identity', 100);
             $table->text('data')->nullable();
@@ -66,35 +70,12 @@ class CreateAuthTables extends Migration {
             $table->uint('user_id');
             $table->string('name', 100);
             $table->text('content');
-        })->append(UserRelationshipEntity::tableName(), function(Table $table) {
-            $table->comment('用户关系表');
-            $table->uint('user_id');
-            $table->uint('link_id')->comment('被联系的人');
-            $table->uint('type', 1)->default(0)->comment('具体关系');
-            $table->timestamp(Model::CREATED_AT);
-        })->append(BanAccountModel::tableName(), function(Table $table) {
+        })->append(BanAccountEntity::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id')->default(0);
             $table->string('item_key', 100);
             $table->uint('item_type', 2)->default(0);
             $table->uint('platform_id')->default(0)->comment('平台id');
-            $table->timestamps();
-        })->append(EquityCardModel::tableName(), function(Table $table) {
-            $table->comment('有期限的权益卡');
-            $table->id();
-            $table->string('name', 32);
-            $table->string('icon');
-            $table->string('configure', 200)->default('');
-            $table->uint('status', 2)->default(0);
-            $table->timestamps();
-        })->append(UserEquityCardModel::tableName(), function(Table $table) {
-            $table->comment('用户的权益卡');
-            $table->id();
-            $table->uint('user_id');
-            $table->uint('card_id');
-            $table->uint('exp')->default(0);
-            $table->uint('status', 2)->default(0);
-            $table->timestamp('expired_at');
             $table->timestamps();
         })->append(InviteCodeEntity::tableName(), function(Table $table) {
             $table->comment('邀请码生成');
@@ -114,16 +95,62 @@ class CreateAuthTables extends Migration {
             $table->uint('code_id')->default(0);
             $table->uint('status', 1)->default(0);
             $table->timestamps();
-        })->append(ZoneEntity::tableName(), function(Table $table) {
-            $table->comment('分区');
-            $table->id();
-            $table->string('name', 30);
-            $table->string('icon')->default('');
-            $table->string('description')->default('');
-            $table->bool('is_open')->default(0);
-            $table->uint('status', 1)->default(0);
-            $table->timestamps();
         });
+        if (AUTH_ADVANCED) {
+            $this->append(ZoneEntity::tableName(), function(Table $table) {
+                $table->comment('分区');
+                $table->id();
+                $table->string('name', 30);
+                $table->string('icon')->default('');
+                $table->string('description')->default('');
+                $table->bool('is_open')->default(0);
+                $table->uint('status', 1)->default(0);
+                $table->timestamps();
+            })->append(RankEntity::tableName(), function(Table $table) {
+                $table->comment('等级系统');
+                $table->id();
+                $table->uint('level', 4);
+                $table->string('name', 32);
+                $table->string('icon')->default('');
+                $table->uint('exp')->default(0);
+                $table->string('configure', 200)->default('');
+                $table->timestamps();
+            })->append(EquityCardEntity::tableName(), function(Table $table) {
+                $table->comment('有期限的权益卡');
+                $table->id();
+                $table->string('name', 32);
+                $table->string('icon');
+                $table->string('configure', 200)->default('');
+                $table->uint('status', 2)->default(0);
+                $table->timestamps();
+            })->append(UserEquityEntity::tableName(), function(Table $table) {
+                $table->comment('用户的权益卡');
+                $table->id();
+                $table->uint('user_id');
+                $table->uint('card_id');
+                $table->uint('exp')->default(0);
+                $table->uint('status', 2)->default(0);
+                $table->timestamp('expired_at');
+                $table->timestamps();
+            })->append(UserRelationshipEntity::tableName(), function(Table $table) {
+                $table->comment('用户关系表');
+                $table->uint('user_id');
+                $table->uint('link_id')->comment('被联系的人');
+                $table->uint('type', 1)->default(0)->comment('具体关系');
+                $table->timestamp(Model::CREATED_AT);
+            })->append(ApplyLogEntity::tableName(), function (Table $table) {
+                $table->comment('用户申请记录');
+                $table->id();
+                $table->uint('user_id');
+                $table->uint('type', 1)->default(0);
+                $table->uint('item_type', 2)->default(0)->comment('向谁发起请求');
+                $table->uint('item_id')->default(0);
+                $table->int('money')->default(0);
+                $table->string('remark')->default('');
+                $table->uint('status', 2)->default(0);
+                $table->timestamps();
+            });
+        }
         $this->createLog();
         $this->createRole();
         $this->createBulletin();
@@ -200,17 +227,17 @@ class CreateAuthTables extends Migration {
     }
 
     public function createLog() {
-        $this->append(LoginLogModel::tableName(), function (Table $table) {
+        $this->append(LoginLogEntity::tableName(), function (Table $table) {
             $table->comment('账户登录日志表');
             $table->id();
             $table->string('ip', 120);
             $table->uint('user_id')->default(0);
             $table->string('user', 100)->comment('登陆账户');
             $table->bool('status')->default(0);
-            $table->string('mode', 20)->default(LoginLogModel::MODE_WEB);
+            $table->string('mode', 20)->default(LoginLogEntity::MODE_WEB);
             $table->uint('platform_id')->default(0)->comment('平台id');
             $table->timestamp(Model::CREATED_AT);
-        })->append(ActionLogModel::tableName(), function (Table $table) {
+        })->append(ActionLogEntity::tableName(), function (Table $table) {
             $table->comment('操作记录');
             $table->id();
             $table->string('ip', 120);
@@ -218,7 +245,7 @@ class CreateAuthTables extends Migration {
             $table->string('action', 30);
             $table->string('remark')->default('');
             $table->timestamp(Model::CREATED_AT);
-        })->append(AdminLogModel::tableName(), function (Table $table) {
+        })->append(AdminLogEntity::tableName(), function (Table $table) {
             $table->comment('管理员操作记录');
             $table->id();
             $table->string('ip', 120);
@@ -228,17 +255,6 @@ class CreateAuthTables extends Migration {
             $table->string('action', 30);
             $table->string('remark')->default('');
             $table->timestamp(Model::CREATED_AT);
-        })->append(ApplyLogModel::tableName(), function (Table $table) {
-            $table->comment('用户申请记录');
-            $table->id();
-            $table->uint('user_id');
-            $table->uint('type', 1)->default(0);
-            $table->uint('item_type', 2)->default(0)->comment('向谁发起请求');
-            $table->uint('item_id')->default(0);
-            $table->int('money')->default(0);
-            $table->string('remark')->default('');
-            $table->uint('status', 2)->default(0);
-            $table->timestamps();
         });
     }
 }

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Bot\Domain\Scene;
 
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Bot\Domain\Model\UserModel as WxUserModel;
 

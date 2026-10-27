@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Entities;
+namespace Module\Auth\Domain\Advanced\Entities;
 
 use Domain\Entities\Entity;
 
@@ -13,10 +13,10 @@ use Domain\Entities\Entity;
  */
 class UserRelationshipEntity extends Entity {
     public static function tableName(): string {
-        return 'user_relationship';
+        return 'adv_relationship';
     }
 
-    protected  string $primaryKey = '';
+    protected string $primaryKey = '';
 
     protected function rules(): array {
         return [

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Bot\Domain\Adapters;
 
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\Auth\Domain\Model\UserModel;
 use Module\Bot\Domain\MessageReply;
 use Module\Bot\Domain\Model\BotModel;

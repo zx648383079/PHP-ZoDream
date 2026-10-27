@@ -3,6 +3,7 @@ namespace Module\Auth\Domain\Entities;
 
 
 use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
 /**
  *
  * 邀请码
@@ -47,5 +48,10 @@ class InviteCodeEntity extends Entity {
             'type' => 'Type',
             'token' => 'Token',
         ];
+    }
+
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 }

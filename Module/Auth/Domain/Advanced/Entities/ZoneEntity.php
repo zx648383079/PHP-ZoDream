@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Module\Auth\Domain\Entities;
+namespace Module\Auth\Domain\Advanced\Entities;
 
 use Domain\Entities\Entity;
 
@@ -16,9 +16,8 @@ use Domain\Entities\Entity;
  */
 class ZoneEntity extends Entity {
 
-    public static function tableName(): string
-    {
-        return 'user_zone';
+    public static function tableName(): string {
+        return 'adv_zone';
     }
 
     protected function rules(): array {

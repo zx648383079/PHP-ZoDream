@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Repositories;
+namespace Module\Auth\Domain\Advanced;
 
 use Domain\Model\SearchModel;
 use Exception;
-use Module\Auth\Domain\Model\Card\EquityCardModel;
-use Module\Auth\Domain\Model\Card\UserEquityCardModel;
+use Module\Auth\Domain\Advanced\Entities\EquityCardEntity;
+use Module\Auth\Domain\Advanced\Entities\UserEquityEntity;
 use Zodream\Helpers\Time;
 
 final class CardRepository {
 
     public static function getList(string $keywords) {
-        $page = EquityCardModel::query()->when(!empty($keywords), function ($query) {
+        $page = EquityCardEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
         })->orderBy('id', 'desc')->page();
-        $page->map(function (EquityCardModel $item) {
-            $item['amount'] = UserEquityCardModel::where('card_id', $item->id)
+        $page->map(function (EquityCardEntity $item) {
+            $item['amount'] = UserEquityEntity::where('card_id', $item->id)
                 ->count();
             return $item;
         });
@@ -25,7 +25,7 @@ final class CardRepository {
     public static function save(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        $model = $id > 0 ? EquityCardModel::findOrThrow($id) : new EquityCardModel();
+        $model = $id > 0 ? EquityCardEntity::findOrThrow($id) : new EquityCardEntity();
         $model->load($data);
         $model->user_id = auth()->id();
         if (!$model->save()) {
@@ -35,12 +35,12 @@ final class CardRepository {
     }
 
     public static function remove(int $id) {
-        EquityCardModel::where('id', $id)->delete();
-        UserEquityCardModel::where('card_id', $id)->delete();
+        EquityCardEntity::where('id', $id)->delete();
+        UserEquityEntity::where('card_id', $id)->delete();
     }
 
     public static function userCardList(int $user) {
-        return UserEquityCardModel::query()->with('card')
+        return UserEquityEntity::query()->with('card')
             ->where('user_id', $user)
             ->orderBy('expired_at', 'desc')
             ->page();
@@ -55,12 +55,12 @@ final class CardRepository {
      * @throws Exception
      */
     public static function recharge(int $user, int $card, int $second) {
-        $model = EquityCardModel::findOrThrow($card);
-        /** @var UserEquityCardModel $log */
-        $log = UserEquityCardModel::where('card_id', $card)->where('user_id', $user)->first();
+        $model = EquityCardEntity::findOrThrow($card);
+        /** @var UserEquityEntity $log */
+        $log = UserEquityEntity::where('card_id', $card)->where('user_id', $user)->first();
         $now = time();
         if (empty($log)) {
-            UserEquityCardModel::create([
+            UserEquityEntity::create([
                 'user_id' => $user,
                 'card_id' => $model->id,
                 'status' => 1,
@@ -74,7 +74,7 @@ final class CardRepository {
     }
 
     public static function search(string $keywords, array|int $id) {
-        return EquityCardModel::query()
+        return EquityCardEntity::query()
             ->when(!empty($id), function ($query) use ($id) {
                 if (is_array($id)) {
                     $query->whereIn('id', $id);
@@ -92,12 +92,12 @@ final class CardRepository {
             $data['expired_at'] = strtotime($data['expired_at']);
         }
         $data['status'] = $data['expired_at'] > time() ? 1 : 0;
-        /** @var UserEquityCardModel $log */
-        $log = UserEquityCardModel::where('user_id', $data['user_id'])
+        /** @var UserEquityEntity $log */
+        $log = UserEquityEntity::where('user_id', $data['user_id'])
             ->where('card_id', $data['card_id'])
             ->first();
         if (empty($log)) {
-            return UserEquityCardModel::createOrThrow($data);
+            return UserEquityEntity::createOrThrow($data);
         }
         $log->load($data);
         if ($log->save()) {
@@ -108,13 +108,13 @@ final class CardRepository {
     }
 
     public static function getUserCard(int $user): array {
-        $items = UserEquityCardModel::with('card')->where('user_id', $user)
+        $items = UserEquityEntity::with('card')->where('user_id', $user)
             ->where('status', 1)
             ->where('expired_at', '>', time())
             ->orderBy('card_id', 'desc')->get();
         $data = [];
         foreach ($items as $item) {
-            /**@var UserEquityCardModel $item  */
+            /**@var UserEquityEntity $item  */
             if (!$item->card) {
                 continue;
             }

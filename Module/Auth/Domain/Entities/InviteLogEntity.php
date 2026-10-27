@@ -2,6 +2,7 @@
 namespace Module\Auth\Domain\Entities;
 
 use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
 /**
  * 邀请记录
  * @property integer $id
@@ -41,4 +42,12 @@ class InviteLogEntity extends Entity {
         ];
     }
 
+
+    public function user() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
+    }
+
+    public function inviter() {
+        return $this->hasOne(UserSimpleModel::class, 'id', 'parent_id');
+    }
 }

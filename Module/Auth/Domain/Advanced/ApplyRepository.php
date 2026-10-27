@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Repositories;
+namespace Module\Auth\Domain\Advanced;
 
-use Module\Auth\Domain\Model\ApplyLogModel;
+use Module\Auth\Domain\Advanced\Entities\ApplyLogEntity;
 use Domain\Model\SearchModel;
 use Exception;
 
@@ -14,7 +14,7 @@ final class ApplyRepository {
     const int STATUS_DELETED = 99;
 
     public static function getList(string $keywords = '', int $type = 0, int $user = 0) {
-        return ApplyLogModel::with('user')
+        return ApplyLogEntity::with('user')
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
             })
@@ -25,7 +25,7 @@ final class ApplyRepository {
     }
 
     public static function change(int $id, int $status) {
-        $model = ApplyLogModel::findOrThrow($id);
+        $model = ApplyLogEntity::findOrThrow($id);
         if ($model->status == $status) {
             return $model;
         }
@@ -36,7 +36,7 @@ final class ApplyRepository {
 
 
     public static function receiveCancel(int $user, int $itemType, int $itemId) {
-        ApplyLogModel::where('user_id', $user)
+        ApplyLogEntity::where('user_id', $user)
                 ->where('item_type', $itemType)
                 ->where('status', self::STATUS_NONE)
                 ->where('item_id', $itemId)->update([
@@ -46,7 +46,7 @@ final class ApplyRepository {
     }
 
     public static function receiveClear(int $itemType, int $itemId) {
-        ApplyLogModel::where('item_type', $itemType)
+        ApplyLogEntity::where('item_type', $itemType)
                 ->where('item_id', $itemId)
                 ->where('status', self::STATUS_NONE)
                 ->update([
@@ -56,7 +56,7 @@ final class ApplyRepository {
     }
 
     public static function receive(int $user, int $itemType, int $itemId, int $status) {
-        ApplyLogModel::where('user_id', $user)
+        ApplyLogEntity::where('user_id', $user)
             ->where('item_type', $itemType)
             ->where('status', self::STATUS_NONE)
             ->where('item_id', $itemId)->update([
@@ -66,7 +66,7 @@ final class ApplyRepository {
     }
 
     public static function receiveCreate(int $user, int $itemType, int $itemId, string $remark) {
-        ApplyLogModel::create([
+        ApplyLogEntity::create([
             'item_type' => $itemType,
             'item_id' => $itemId,
             'remark' => $remark,
@@ -76,7 +76,7 @@ final class ApplyRepository {
     }
 
     public static function receiveSearch(int $itemType, int $itemId) {
-        return ApplyLogModel::with('user')
+        return ApplyLogEntity::with('user')
             ->where('item_type', $itemType)
             ->where('item_id', $itemId)
             ->orderBy('status', 'asc')
@@ -84,7 +84,7 @@ final class ApplyRepository {
     }
 
     public static function receiveUnread(int $itemType, int $itemId, int $lastAt = 0): int {
-        return ApplyLogModel::where('item_type', $itemType)
+        return ApplyLogEntity::where('item_type', $itemType)
             ->where('item_id', $itemId)
             ->where('status', self::STATUS_NONE)
             ->when($lastAt > 0, function ($query) use ($lastAt) {
@@ -93,7 +93,7 @@ final class ApplyRepository {
     }
 
     public static function receiveAny(int $user, int $itemType, int $itemId): bool {
-        return ApplyLogModel::where('item_type', $itemType)
+        return ApplyLogEntity::where('item_type', $itemType)
             ->where('item_id', $itemId)
             ->where('user_id', $user)->count() > 0;
     }

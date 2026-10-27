@@ -1,7 +1,7 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Entities;
 
-use Domain\Model\Model;
+use Domain\Entities\Entity;
 
 /**
  * 禁止注册登录的账户
@@ -13,7 +13,7 @@ use Domain\Model\Model;
  * @property integer $updated_at
  * @property integer $created_at
  */
-class BanAccountModel extends Model {
+class BanAccountEntity extends Entity {
 
     public static function tableName(): string {
         return 'user_ban_account';

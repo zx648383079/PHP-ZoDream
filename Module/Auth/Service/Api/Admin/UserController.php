@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
 use Module\Auth\Domain\Repositories\UserRepository;
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class UserController extends Controller {
@@ -45,9 +45,11 @@ class UserController extends Controller {
         }catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        $zoneId = intval($request->get('zone_id'));
-        if ($zoneId > 0) {
-            ZoneRepository::userChange($model->id, $zoneId);
+        if (AUTH_ADVANCED) {
+            $zoneId = intval($request->get('zone_id'));
+            if ($zoneId > 0) {
+                ZoneRepository::userChange($model->id, $zoneId);
+            }
         }
         return $this->render($model);
     }

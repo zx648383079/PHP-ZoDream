@@ -5,8 +5,6 @@ namespace Module\Auth\Domain\Repositories;
 use Domain\Model\Model;
 use Module\Auth\Domain\Entities\InviteCodeEntity;
 use Module\Auth\Domain\Entities\InviteLogEntity;
-use Module\Auth\Domain\Model\InviteCodeModel;
-use Module\Auth\Domain\Model\InviteLogModel;
 use Zodream\Helpers\Str;
 
 class InviteRepository {
@@ -20,7 +18,7 @@ class InviteRepository {
     const STATUS_REJECT = 3;      // 拒绝登录
 
     public static function codeList(string $keywords = '', int $user = 0) {
-        return InviteCodeModel::with('user')
+        return InviteCodeEntity::with('user')
             ->where('type', self::TYPE_CODE)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $query->where('token', $keywords);
@@ -46,14 +44,14 @@ class InviteRepository {
     /**
      * 判断邀请码是否有效
      * @param string $code
-     * @return InviteCodeModel|null
+     * @return InviteCodeEntity|null
      */
-    public static function findCode(string $code): ?InviteCodeModel {
+    public static function findCode(string $code): InviteCodeEntity|null {
         if (empty($code)) {
             return null;
         }
-        /** @var InviteCodeModel $model */
-        $model = InviteCodeModel::where('token', $code)
+        /** @var InviteCodeEntity $model */
+        $model = InviteCodeEntity::where('token', $code)
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
@@ -73,7 +71,7 @@ class InviteRepository {
     }
 
     public static function logList(string $keywords = '', int $user = 0, int $inviter = 0) {
-        return InviteLogModel::with('user', 'inviter')
+        return InviteLogEntity::with('user', 'inviter')
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $query->where('token', $keywords);
             })->when($user > 0, function ($query) use ($user) {

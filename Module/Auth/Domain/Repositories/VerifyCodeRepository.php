@@ -17,7 +17,7 @@ final class VerifyCodeRepository {
     /**
      * 发送验证码
      * @param array{to_type: string, to: string|null, event: string} $data
-     * @return void
+     * @return array
      */
     public static function sendCode(array $data): array {
         $data = self::filter($data);

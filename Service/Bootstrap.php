@@ -10,5 +10,9 @@ if (version_compare(PHP_VERSION, '8.2.0', '<'))  {
     die('require PHP > 8.2.0 !');
 }
 defined('DEBUG') or define('DEBUG', true);                  //是否开启测试模式
+
+defined('AUTH_ADVANCED') or define('AUTH_ADVANCED', true);  // 定义账号的完善的等级
+
+
 define('APP_DIR', $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__));            //定义路径
 require_once __DIR__.'/../vendor/autoload.php';

@@ -1,11 +1,12 @@
 <?php
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Entities;
 
-use Domain\Model\Model;
+use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Auth\Domain\Model\UserModel;
 
 /**
- * Class OAuthModel
- * @package Domain\Model\Auth
+ * Class OAuthEntity
  * @property integer $id
  * @property integer $user_id
  * @property integer $platform_id
@@ -16,7 +17,7 @@ use Domain\Model\Model;
  * @property string $data
  * @property integer $created_at
  */
-class OAuthModel extends Model {
+class OAuthEntity extends Entity {
 
     const TYPE_QQ = 'qq';
     const TYPE_WX = 'wx';

@@ -6,7 +6,7 @@ use Domain\Model\SearchModel;
 use Domain\Providers\ActionLogProvider;
 use Domain\Providers\CommentProvider;
 use Module\Auth\Domain\Repositories\BulletinRepository;
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Module\SEO\Domain\Repositories\EmojiRepository;
 use Module\MicroBlog\Domain\LinkRule;
 use Module\Auth\Domain\Model\UserModel;
@@ -49,20 +49,24 @@ class MicroRepository {
         if (auth()->guest()) {
             return new Page(0);
         }
-        $zoneId = ZoneRepository::authZone();
-        if (empty($zoneId)) {
-            if ($user !== auth()->id()) {
-                return new Page(0);
+        $query = MicroBlogModel::with('user', 'attachment');
+        if (AUTH_ADVANCED) {
+            $zoneId = ZoneRepository::authZone();
+            if (empty($zoneId)) {
+                if ($user !== auth()->id()) {
+                    return new Page(0);
+                }
+                $user = auth()->id();
             }
-            $user = auth()->id();
+            $query->where(function($query) use ($zoneId) {
+                $query->where('zone_id', $zoneId)->orWhere('user_id', auth()->id());
+            });
         }
-        return MicroBlogModel::with('user', 'attachment')
+        return $query
             ->when($id > 0, function($query) use ($id) {
                 $query->where('id', $id);
             })
-            ->where(function($query) use ($zoneId) {
-                $query->where('zone_id', $zoneId)->orWhere('user_id', auth()->id());
-            })
+            
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
                     return $query->orderBy('created_at', 'desc');
@@ -142,6 +146,9 @@ class MicroRepository {
     }
 
     private static function checkZone(int|MicroBlogModel $source): bool {
+        if (!AUTH_ADVANCED) {
+            return true;
+        }
         $model = !is_numeric($source) ? $source : MicroBlogModel::where('id', $source)->first('id', 'zone_id', 'user_id');
         if (intval($model['user_id']) === auth()->id()) {
             return true;
@@ -155,13 +162,16 @@ class MicroRepository {
     }
 
     public static function createWithRule(string $content, array $extraRules = [], array $files = [], string $source = 'web') {
-        $model = MicroBlogModel::createOrThrow([
-            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
+        $postData = [
             'user_id' => auth()->id(),
             'content' => Html::text($content),
             'source' => $source,
             'status' => Option::value('publish_review', false) ? self::REVIEW_STATUS_NONE : self::REVIEW_STATUS_APPROVED,
-        ]);
+        ];
+        if (AUTH_ADVANCED) {
+            $postData['zone_id'] = ZoneRepository::getIdOrThrow(auth()->id());
+        }
+        $model = MicroBlogModel::createOrThrow($postData);
         $extraRules = array_merge(
             $extraRules,
             self::at($content, $model->id),
@@ -352,14 +362,17 @@ class MicroRepository {
         if (!self::checkZone($source)) {
             throw new Exception('数据错误');
         }
-        $model = MicroBlogModel::create([
-            'zone_id' => ZoneRepository::getIdOrThrow(auth()->id()),
+        $postData = [
             'user_id' => auth()->id(),
             'content' => $content,
             'forward_id' => $source->id,
             'forward_count' => 1,
             'source' => 'web'
-        ]);
+        ];
+        if (AUTH_ADVANCED) {
+            $postData['zone_id'] = ZoneRepository::getIdOrThrow(auth()->id());
+        }
+        $model = MicroBlogModel::create($postData);
         if (!$model) {
             throw new Exception('转发失败');
         }

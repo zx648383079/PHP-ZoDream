@@ -3,12 +3,15 @@ declare(strict_types=1);
 namespace Module\Auth\Service\Api;
 
 use Module\Auth\Domain\Events\TokenCreated;
-use Module\Auth\Domain\Repositories\PassKey;
+use Module\Auth\Domain\Advanced\PassKey;
 use Module\Auth\Domain\Repositories\UserRepository;
 
 class PasskeyController extends Controller {
 
     public function rules() {
+        if (!AUTH_ADVANCED) {
+            return ['*' => '!'];
+        }
         return [
             'index' => '?',
             'login' => '?',

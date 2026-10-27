@@ -22,7 +22,7 @@ class HomeController extends Controller {
     public function checkInAction() {
         try {
             return $this->renderData(
-                CheckinRepository::check(CheckinRepository::formatMethod())
+                CheckinRepository::check(auth()->id(), CheckinRepository::formatMethod())
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());

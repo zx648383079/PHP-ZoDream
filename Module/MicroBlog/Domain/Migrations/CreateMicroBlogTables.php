@@ -23,7 +23,9 @@ class CreateMicroBlogTables extends Migration {
         $this->append(MicroBlogModel::tableName(), function(Table $table) {
             $table->id();
             $table->uint('user_id');
-            $table->uint('zone_id')->default(0);
+            if (AUTH_ADVANCED) {
+                $table->uint('zone_id')->default(0);
+            }
             $table->string('content', 255);
             $table->string('extra_rule', 500)->default('')
                 ->comment('内容的一些附加规则');

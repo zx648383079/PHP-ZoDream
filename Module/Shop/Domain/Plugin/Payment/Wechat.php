@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Payment;
 
-use Module\Auth\Domain\Model\OAuthModel;
+use Module\Auth\Domain\Entities\OAuthEntity;
 use Module\OpenPlatform\Domain\Platform;
 use Module\Shop\Domain\Plugin\BasePayment;
 use Module\Shop\Domain\Plugin\IPaymentPlugin;

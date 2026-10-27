@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Forum\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Auth\Domain\Repositories\ZoneRepository;
+use Module\Auth\Domain\Advanced\ZoneRepository;
 use Module\Forum\Domain\Model\ForumClassifyModel;
 use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ForumModeratorModel;
@@ -31,8 +31,10 @@ final class ForumRepository {
 
     public static function getFull(int $id, bool $full = true) {
         $model = ForumModel::findOrThrow($id, '数据有误');
-        if (!ZoneRepository::check($model->zone_id, ZoneRepository::authZone())) {
-            throw new \Exception('无法访问此板块');
+        if (AUTH_ADVANCED) {
+            if (!ZoneRepository::check($model->zone_id, ZoneRepository::authZone())) {
+                throw new \Exception('无法访问此板块');
+            }
         }
         $model->classifies = ForumClassifyModel::where('forum_id', $id)
             ->orderBy('id', 'asc')->get();
@@ -53,9 +55,12 @@ final class ForumRepository {
         if (!$model->save()) {
             throw new \Exception($model->getFirstError());
         }
-        ThreadModel::where('forum_id', $model->id)->update([
-            'zone_id' => $model->zone_id
-        ]);
+        if (AUTH_ADVANCED) {
+            ThreadModel::where('forum_id', $model->id)->update([
+                'zone_id' => $model->zone_id
+            ]);
+        }
+        
         if (isset($data['classifies'])) {
             foreach ($data['classifies'] as $item) {
                 $item['forum_id'] = $model->id;

@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Module\Auth\Domain\Model;
+namespace Module\Auth\Domain\Entities;
 
-use Domain\Model\Model;
+use Domain\Entities\Entity;
+use Module\Auth\Domain\Model\UserSimpleModel;
 
 /**
- * Class AdminLogModel
+ * Class AdminLogEntity
  * @property integer $id
  * @property string $ip
  * @property integer $user_id
@@ -15,7 +16,7 @@ use Domain\Model\Model;
  * @property string $remark
  * @property integer $created_at
  */
-class AdminLogModel extends Model {
+class AdminLogEntity extends Entity {
 
 	public static function tableName(): string {
         return 'user_admin_log';

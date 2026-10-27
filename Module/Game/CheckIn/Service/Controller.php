@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\CheckIn\Service;
 
 use Module\ModuleController;
