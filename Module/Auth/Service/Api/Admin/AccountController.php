@@ -2,21 +2,10 @@
 declare(strict_types=1);
 namespace Module\Auth\Service\Api\Admin;
 
-use Module\Auth\Domain\Repositories\AccountRepository;
-use Module\Auth\Domain\Repositories\ApplyRepository;
+use Module\Auth\Domain\Advanced\ApplyRepository;
 use Module\Auth\Domain\Repositories\StatisticsRepository;
 
 class AccountController extends Controller {
-
-
-    public function rechargeAction(int $user, float $money, string $remark, int $type = 0) {
-        try {
-            AccountRepository::recharge($user, $money, $remark, $type);
-        } catch (\Exception $ex) {
-            return $this->renderFailure($ex->getMessage());
-        }
-        return $this->renderData(true);
-    }
 
     public function applyAction(string $keywords = '', int $user = 0) {
         return $this->renderPage(ApplyRepository::getList($keywords, 0, $user));

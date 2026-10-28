@@ -58,9 +58,9 @@ final class AccountRepository {
     }
 
     public static function actionLog(string $keywords = '', int $user = 0) {
-        return ActionLogEntity::when($user > 0, function ($query) use ($user) {
-            $query->where('user_id', $user);
-        })
+        return ActionLogEntity::with('user')->when($user > 0, function ($query) use ($user) {
+                $query->where('user_id', $user);
+            })
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
             })

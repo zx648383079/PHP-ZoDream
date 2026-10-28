@@ -2,6 +2,7 @@
 namespace Module\Wallet\Domain\Entities;
 
 use Domain\Entities\Entity;
+
 /**
  * 
  * @property integer $id

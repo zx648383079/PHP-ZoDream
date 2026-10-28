@@ -4,7 +4,7 @@ namespace Domain\Model;
 
 use Zodream\Database\Contracts\SqlBuilder;
 
-class SearchModel {
+final class SearchModel {
 
     /**
      * 根据关键词进行分词

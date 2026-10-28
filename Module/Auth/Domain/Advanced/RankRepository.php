@@ -68,8 +68,58 @@ final class RankRepository {
         }
     }
 
+    /**
+     * 刷新所有等级 
+     */
+    public static function refresh() {
+        set_time_limit(0);
+        $per_page = 500;
+        $offset = 0;
+        while (true) {
+            $items = UserMetaModel::where('name', 'rank_exp')
+                ->limit($offset, $per_page)
+                ->asArray()
+                ->get('user_id', 'content');
+            foreach ($items as $item) {
+                UserEntity::where('id', $item['user_id'])->update([
+                    'rank_level' => self::getLevel(intval($item['content']))
+                ]);
+            }
+            if (count($items) < $per_page) {
+                break;
+            }
+            $offset += $per_page;
+        }
+        
+    }
+
+    /**
+     * 获取下一等级的经验
+     */
+    public static function nextLevel(int $exp): int {
+        $rules = self::cacheRules();
+        for ($i = count($rules) - 1; $i >= 0; $i --) {
+            $item = $rules[$i];
+            if ($item['min'] > $exp) {
+                return intval($item['min']);
+            }
+        }
+        return $exp + 99;
+    }
+
+
     private static function getLevel(int $exp): int {
-        $rules = cache()->getOrSet(self::CACHE_KEY, function() {
+        $rules = self::cacheRules();
+        foreach ($rules as $item) {
+            if ($item['min'] <= $exp) {
+                return max($item['level'], 0);
+            }
+        }
+        return 0;
+    }
+
+    private static function cacheRules(): array {
+        return cache()->getOrSet(self::CACHE_KEY, function() {
             $res = RankEntity::orderBy('level', 'asc')
                 ->asArray()
                 ->select('exp', 'level')->get();
@@ -82,11 +132,5 @@ final class RankRepository {
             unset($item);
             return array_reverse($res);
         });
-        foreach ($rules as $item) {
-            if ($item['min'] <= $exp) {
-                return max($item['level'], 0);
-            }
-        }
-        return 0;
     }
 }

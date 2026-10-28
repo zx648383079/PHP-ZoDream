@@ -8,6 +8,7 @@ use Module\Auth\Domain\Model\RBAC\PermissionModel;
 use Module\Auth\Domain\Model\RBAC\RoleModel;
 use Module\Auth\Domain\Model\RBAC\RolePermissionModel;
 use Module\Auth\Domain\Model\RBAC\UserRoleModel;
+use Module\Auth\Domain\Model\UserMetaModel;
 use Module\Auth\Domain\Model\UserModel;
 
 final class StatisticsRepository {
@@ -52,6 +53,14 @@ final class StatisticsRepository {
             ->first();
         if (AUTH_ADVANCED) {
             $data['card_items'] = \Module\Auth\Domain\Advanced\CardRepository::getUserCard($user->id);
+            $rankExp = intval(UserMetaModel::where('user_id', $user->id)
+                    ->where('name', 'rank_exp')->value('content'));
+            $data['rank'] = [
+                'level' => $user['rank_level'],
+                'exp' => $rankExp,
+                'next_exp' => \Module\Auth\Domain\Advanced\RankRepository::nextLevel($rankExp)
+            ];
+            $data['wallet'] = \Module\Wallet\Domain\Repositories\WalletRepository::get($user->id);
         }
         $roleId = UserRoleModel::where('user_id', $user->id)->pluck('role_id');
         $roleItems = empty($roleId) ? [] : RoleModel::whereIn('id', $roleId)->asArray()->get('name', 'display_name');

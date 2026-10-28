@@ -14,7 +14,7 @@ class UserController extends Controller {
 
     public function profileAction(int $id) {
         try {
-            $model = UserRepository::get($id);
+            $model = UserRepository::manageProfile($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

@@ -39,9 +39,18 @@ final class FundAccount {
      * @return AccountLogEntity
      */
     public static function log(
-        int $user_id, int $type, int $item_id, float $money, float $total_money, string $remark, int $status = 0) {
+        int $user_id, int $type, 
+        int $item_id, 
+        float $money, 
+        float $total_money, 
+        string $remark, 
+        int $status = self::STATUS_WAITING_PAY) {
+        $credits = $total_credits = 0;
         return AccountLogEntity::create(
-            compact('user_id', 'type', 'item_id', 'money', 'total_money', 'remark', 'status'));
+            compact('user_id', 'type', 
+            'item_id', 'money', 
+            'total_money', 
+            'remark', 'status', 'credits', 'total_credits'));
     }
 
     /**
@@ -56,7 +65,8 @@ final class FundAccount {
      * @throws \Exception
      */
     public static function change(
-        int $user_id, int $type, int $item_id, float $money, string $remark, int $status = 1) {
+        int $user_id, int $type, int $item_id, float $money, string $remark, 
+        int $status = self::STATUS_PAID) {
         if (empty($user_id)) {
             $user_id = auth()->id();
         }
@@ -69,7 +79,10 @@ final class FundAccount {
         WalletEntity::query()->where('id', $user_id)->update([
             'money' => $newMoney
         ]);
-        $log = self::log($user_id, $type, $item_id, $money, $newMoney, $remark, $status);
+        $log = self::log($user_id, 
+            $type, $item_id, 
+            $money, $newMoney, 
+            $remark, $status);
         return $log->id;
     }
 
@@ -95,7 +108,7 @@ final class FundAccount {
         if ($newMoney < 0) {
             return false;
         }
-        $log = self::log($user_id, $type, 0, $money, $newMoney, $remark, 0);
+        $log = self::log($user_id, $type, 0, $money, $newMoney, $remark, self::STATUS_WAITING_PAY);
         if (empty($log)) {
             return false;
         }
@@ -142,14 +155,14 @@ final class FundAccount {
         if ($newMoney < 0) {
             return false;
         }
-        $log = self::log($user_id, $type, 0, -$money, $newMoney, $remark, 0);
+        $log = self::log($user_id, $type, 0, -$money, $newMoney, $remark, self::STATUS_WAITING_PAY);
         if (empty($log)) {
             return false;
         }
         $oldMoneyTo = WalletEntity::query()->where('id', $toUser)
             ->value('money');
         $newMoneyTo = floatval($oldMoneyTo) + $money;
-        $logTo = self::log($toUser, $type, 0, $money, $newMoneyTo, $remark, 0);
+        $logTo = self::log($toUser, $type, 0, $money, $newMoneyTo, $remark, self::STATUS_WAITING_PAY);
         WalletEntity::query()->where('id', $user_id)->update([
             'money' => $newMoney
         ]);

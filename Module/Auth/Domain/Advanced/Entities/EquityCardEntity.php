@@ -18,7 +18,7 @@ use Domain\Entities\Entity;
 class EquityCardEntity extends Entity {
     
     public static function tableName(): string {
-        return 'adv_quity_card';
+        return 'adv_equity_card';
     }
 
     protected function rules(): array {

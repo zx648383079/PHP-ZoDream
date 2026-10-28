@@ -86,4 +86,13 @@ class CardController extends Controller {
         return $this->renderData(true);
     }
 
+    public function rankRefreshAction() {
+        try {
+            RankRepository::refresh();
+        }catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
 }

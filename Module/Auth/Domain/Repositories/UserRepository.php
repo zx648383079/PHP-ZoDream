@@ -103,6 +103,9 @@ class UserRepository {
         $data = static::format($user);
         $data['country'] = Ip::country(request()->ip());
         $data['is_admin'] = $user->isAdministrator() || $user->hasRole('shop_admin');
+        if (AUTH_ADVANCED) {
+            $data['wallet'] = \Module\Wallet\Domain\Repositories\WalletRepository::get($user->id);
+        }
         return self::appendExtraData($data, $extra);
     }
 
@@ -324,14 +327,23 @@ class UserRepository {
         event(new ManageAction('user_remove', $user->name, 5, $user->id));
     }
 
-    public static function manageDetail(int $user): array
-    {
+    public static function manageDetail(int $user): array {
         $model = self::get($user);
         $data = $model->toArray();
         $data['roles'] = UserRoleModel::where('user_id', $user)->pluck('role_id');
         if (AUTH_ADVANCED) {
             $data['zone_id'] = intval(UserMetaModel::where('user_id', $user)
             ->where('name', 'zone_id')->value('content'));
+            $data['wallet'] = \Module\Wallet\Domain\Repositories\WalletRepository::get($user);
+        }
+        return $data;
+    }
+
+    public static function manageProfile(int $user): array {
+        $model = self::get($user);
+        $data = $model->toArray();
+        if (AUTH_ADVANCED) {
+            $data['wallet'] = \Module\Wallet\Domain\Repositories\WalletRepository::get($user);
         }
         return $data;
     }
