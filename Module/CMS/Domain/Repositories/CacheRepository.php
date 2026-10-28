@@ -189,7 +189,8 @@ final class CacheRepository {
     public static function getSeoCache(): array {
         $context = CMSRepository::context();
         return cache()->getOrSet(self::seoKey($context->id()), function () use ($context) {
-            return $context->scene()->query()
+            return $context->articleBuilder()
+                ->where('site_id', $context->id())
                 ->where('seo_link', '!=', '')
                 ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
                 ->select('id', 'model_id', 'cat_id', 'seo_link')->asArray()->get();

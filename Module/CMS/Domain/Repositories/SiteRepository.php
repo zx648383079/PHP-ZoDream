@@ -127,6 +127,13 @@ class SiteRepository {
     }
 
     /**
+     * @return SiteModel[]
+     */
+    public static function publishList(): array {
+        return SiteModel::where('status', self::PUBLISH_STATUS_POSTED)->get();
+    }
+
+    /**
      * 遍历全部站点
      * @param callable $cb
      * @return void

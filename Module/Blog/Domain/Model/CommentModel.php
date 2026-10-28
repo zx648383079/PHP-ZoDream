@@ -1,6 +1,7 @@
 <?php
 namespace Module\Blog\Domain\Model;
 
+use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Blog\Domain\Entities\CommentEntity;
 
 
@@ -35,6 +36,10 @@ class CommentModel extends CommentEntity {
 
     public function blog() {
 	    return $this->hasOne(BlogSimpleModel::class, 'id', 'blog_id');
+    }
+
+    public function user() {
+	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
     }
 
     public function getReplyCount() {

@@ -22,7 +22,7 @@ class CommentController extends Controller {
         }
     }
 
-    public function deleteAction(int $id) {
+    public function deleteAction(array|int $id) {
         CommentRepository::remove($id);
         return $this->renderData(true);
     }

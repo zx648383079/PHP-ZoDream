@@ -6,7 +6,6 @@ use Domain\Model\SearchModel;
 use Infrastructure\LinkRule;
 use Module\Auth\Domain\Model\UserSimpleModel;
 use Module\Auth\Domain\Repositories\BulletinRepository;
-use Module\Blog\Domain\Entities\BlogEntity;
 use Module\Blog\Domain\Model\BlogLogModel;
 use Module\Blog\Domain\Model\BlogMetaModel;
 use Module\Blog\Domain\Model\BlogModel;
@@ -33,7 +32,7 @@ class CommentRepository {
     public static function getList(int $blog_id, int $parent_id = 0, bool $is_hot = false, string $sort = 'created_at',
                                     string $order = 'desc', int $per_page = 20) {
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, ['created_at', 'id', 'agree_count']);
-        $query = $parent_id > 0 ? CommentModel::query() : CommentPageModel::with('replies');
+        $query = $parent_id > 0 ? CommentModel::with('user') : CommentPageModel::with('replies', 'user');
         return $query->where([
                 'blog_id' => $blog_id,
                 'parent_id' => $parent_id
@@ -154,7 +153,7 @@ class CommentRepository {
      */
     public static function commentList(int $blog = 0, string $keywords = '', string $email = '',
                                    string $name = '') {
-        return CommentFullModel::with('blog')
+        return CommentFullModel::with('blog', 'user')
             ->when($blog > 0, function ($query) use ($blog) {
                 $query->where('blog_id', $blog);
             })->when(!empty($email), function ($query) use ($email) {
@@ -166,8 +165,12 @@ class CommentRepository {
             })->orderBy('id', 'desc')->page();
     }
 
-    public static function remove(int $id) {
-        CommentModel::where('id', $id)->delete();
+    public static function remove(array|int $id) {
+        $items = ModelHelper::parseArrInt($id);
+        if (empty($items)) {
+            return;
+        }
+        CommentModel::whereIn('id', $items)->delete();
     }
 
     /**

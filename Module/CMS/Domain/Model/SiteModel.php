@@ -1,7 +1,6 @@
 <?php
 namespace Module\CMS\Domain\Model;
 
-use Domain\Model\Model;
 use Module\CMS\Domain\Entities\SiteEntity;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Zodream\Helpers\Json;

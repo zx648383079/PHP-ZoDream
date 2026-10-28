@@ -26,7 +26,7 @@ class ContentModel extends ContentEntity {
     protected $extend_data = null;
 
     public static function getExtendTable(string $table): string {
-        return sprintf('content_%s_%s', CMSRepository::tableSiteId(), $table);
+        return sprintf('content_%s_%s', CMSRepository::context()->id(), $table);
     }
 
     public function category() {

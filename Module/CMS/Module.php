@@ -46,22 +46,26 @@ class Module extends BaseModule implements ISiteMapModule {
     }
 
     public function openLinks(SiteMap $map) {
-        $context = CMSRepository::context();
-        $map->add(url('./'), time());
-        $items = $context->channelBuilder()->where('site_id', $context->id())->get('id', 'updated_at');
-        foreach ($items as $item) {
-            $map->add(url('./category', ['id' => $item->id]),
-                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
-        }
-        $items = $context->articleBuilder()->where('site_id', $context->id())
-            ->where('cat_id', '>', 0)
-            ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
-            ->asArray()
-            ->get('id', 'cat_id', 'model_id', 'created_at');
-        foreach ($items as $item) {
-            $map->add(CMSSeoMiddleware::encodeUrl($item, true),
-                Time::format(intval($item['created_at'])),
-                SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
+        $sites = SiteRepository::publishList();
+        foreach($sites as $site) {
+            $context = CMSRepository::context($site);
+            $map->add(url('./'), time());
+            $items = $context->channelBuilder()->where('site_id', $context->id())->get('id', 'updated_at');
+            foreach ($items as $item) {
+                $map->add(url('./category', ['id' => $item->id]),
+                    $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
+            }
+            $items = $context->articleBuilder()
+                ->where('site_id', $context->id())
+                ->where('cat_id', '>', 0)
+                ->where('status', SiteRepository::PUBLISH_STATUS_POSTED)
+                ->asArray()
+                ->get('id', 'cat_id', 'model_id', 'created_at');
+            foreach ($items as $item) {
+                $map->add(CMSSeoMiddleware::encodeUrl($item, true),
+                    Time::format(intval($item['created_at'])),
+                    SiteMap::CHANGE_FREQUENCY_WEEKLY, .4);
+            }
         }
     }
 }
