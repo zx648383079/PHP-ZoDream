@@ -66,8 +66,8 @@ class CheckinRepository {
             FundAccount::change($user,
                 FundAccount::TYPE_CHECK_IN, 0,
                 $model->money, sprintf('连续签到%s天', $running), 1);
-            event(new RankUpdated($user, 1, sprintf('连续签到%s天', $running), FundAccount::TYPE_CHECK_IN, $model->id));
         }
+        event(new RankUpdated($user, 1, sprintf('连续签到%s天', $running), FundAccount::TYPE_CHECK_IN, $model->id));
         return $model;
     }
 
