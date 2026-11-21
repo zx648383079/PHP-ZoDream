@@ -1,4 +1,6 @@
-$shadow: rgba(33,33,33,.7);
+@use 'theme';
+
+
 .flex-box {
     display: flex;
     flex-flow: column wrap;
@@ -7,60 +9,60 @@ $shadow: rgba(33,33,33,.7);
     height: auto;
     .item {
         box-sizing: border-box;
-        padding: 10px;
-        max-width: 300px;
+        padding: 0.625rem;
+        max-width: 18.75rem;
         counter-increment: item-counter;
         text-decoration: none;
-        background: #ffc;
+        background-color: var(--#{theme.$prefix}panel);
         display: block;
         position: relative;
-        box-shadow: 3px 3px 4px $shadow;
-        margin: 20px 10px auto;
+        box-shadow: 0.1875rem 0.1875rem 0.25rem var(--#{theme.$prefix}shadow);
+        margin: 1.25rem 0.625rem auto;
         transform-origin: 50% 0;
         &::before {
             content: " ";
             position: absolute;
-            left: calc(50% - 10px);
-            width: 20px;
-            height: 20px;
-            background-color: #ffc;
+            left: calc(50% - 0.625rem);
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: var(--#{theme.$prefix}panel);
             top: 0px;
             display: block;
-            border: 5px solid #767;
+            border: 0.3125rem solid var(--#{theme.$prefix}border);
             border-radius: 50%;
-            box-shadow: 2px 2px 3px $shadow;
+            box-shadow: 0.125rem 0.125rem 0.1875rem var(--#{theme.$prefix}shadow);
         }
         .item-content {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 10px;
+            align-items: start;
+            padding: 0.625rem;
             height: auto;
-            font-size: 20px;
-            color: #686868;
+            font-size: 1.25rem;
+            color: var(--#{theme.$prefix}body-text);
             box-sizing: border-box;
-            border: 1px solid #ccc;
+            border: 1px solid var(--#{theme.$prefix}border);
             word-break: break-all;
         }
         .fa-times {
             display: none;
             position: absolute;
-            border: 3px solid;
+            border: 0.1875rem solid;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 1.25rem;
+            height: 1.25rem;
             text-align: center;
-            right: -10px;
-            background-color: #fff;
-            top: -10px;
+            right: -0.625rem;
+            background-color: var(--#{theme.$prefix}danger-text);
+            top: -0.625rem;
             text-decoration: none;
-            color: #f00;
-            line-height: 15px;
+            color: var(--#{theme.$prefix}danger);
+            line-height: 0.9375rem;
         }
         .item-time {
-            color: #ccc;
-            font-size: 12px;
+            color: var(--#{theme.$prefix}meta-text);
+            font-size: 0.75rem;
             span {
                 &:last-child {
                     float: right;
@@ -68,7 +70,7 @@ $shadow: rgba(33,33,33,.7);
             }
         }
         &:hover {
-            box-shadow: 5px 5px 7px $shadow;
+            box-shadow: 0.3125rem 0.3125rem 0.4375rem var(--#{theme.$prefix}shadow);
             &::before {
                 box-shadow: none;
             }
@@ -78,30 +80,30 @@ $shadow: rgba(33,33,33,.7);
         }
         &.new-item {
             &::before {
-                background-color: #f00;
+                background-color: var(--#{theme.$prefix}danger);
             }
             .item-content {
                 padding: 0;
             }
             textarea {
-                padding: 10px;
-                width: 280px;
+                padding: 0.625rem;
+                width: 17.5rem;
                 background: transparent;
                 border: none;
                 resize: none;
-                height: 200px;
+                height: 12.5rem;
                 outline: 0;
-                font-size: 16px;
-                line-height: 20px;
+                font-size: 1rem;
+                line-height: 1.25rem;
             }
             .item-action {
                 padding: 0.325rem 0.325rem 0;
                 height: 1.25rem;
-                color: #777;
+                color: var(--#{theme.$prefix}body-text);
                 display: flex;
                 justify-content: space-between;
                 .fa-check {
-                    color: green;
+                    color: var(--#{theme.$prefix}success);
                 }
             }
             .pull-right {
@@ -117,69 +119,69 @@ $shadow: rgba(33,33,33,.7);
 }
 
 .search-box {
-    width: 320px;
-    margin: 30px auto;
-    line-height: 40px;
+    width: 20rem;
+    margin: 1.875rem auto;
+    line-height: 2.5rem;
     .search-input {
         width: 100%;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid var(--#{theme.$prefix}border);
         display: grid;
-        grid-template: 40px / 40px 1fr;
+        grid-template: 2.5rem / 2.5rem 1fr;
         input {
-            height: 40px;
+            height: 2.5rem;
             border: none;
             outline: 0;
-            font-size: 20px;
+            font-size: 1.25rem;
         }
         button {
             background: transparent;
             border: none;
-            width: 40px;
-            font-size: 20px;
+            width: 2.5rem;
+            font-size: 1.25rem;
         }
     }
 }
 .more-load {
     text-align: center;
-    line-height: 30px;
-    color: #ccc;
+    line-height: 1.875rem;
+    color: var(--#{theme.$prefix}meta-text);
 }
 
 .note-row {
     position: relative;
-    background-color: #fff;
-    margin-bottom: 10px;
+    background-color: var(--#{theme.$prefix}panel);
+    margin-bottom: 0.625rem;
     .item-content {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        padding: 10px;
+        align-items: start;
+        padding: 0.625rem;
         height: auto;
-        font-size: 20px;
-        color: #686868;
+        font-size: 1.25rem;
+        color: var(--#{theme.$prefix}meta-text);
         box-sizing: border-box;
-        border: 1px solid #ccc;
+        border: 1px solid var(--#{theme.$prefix}border);
         word-break: break-all;
     }
     .fa-times {
         position: absolute;
-        border: 3px solid;
+        border: 0.1875rem solid;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 2.5rem;
+        height: 2.5rem;
         text-align: center;
-        right: -10px;
-        background-color: #fff;
-        top: -10px;
+        right: -0.625rem;
+        background-color: var(--#{theme.$prefix}danger-text);
+        top: -0.625rem;
         text-decoration: none;
-        color: #ccc;
-        line-height: 35px;
+        color: var(--#{theme.$prefix}meta-text);
+        line-height: 2.1875rem;
     }
     .item-time {
-        padding: 0 10px;
-        color: #ccc;
-        font-size: 12px;
+        padding: 0 0.625rem;
+        color: var(--#{theme.$prefix}meta-text);
+        font-size: 0.75rem;
         span {
             &:last-child {
                 float: right;
@@ -187,12 +189,12 @@ $shadow: rgba(33,33,33,.7);
         }
     }
     &:hover {
-        box-shadow: 5px 5px 7px $shadow;
+        box-shadow: 0.3125rem 0.3125rem 0.4375rem var(--#{theme.$prefix}shadow);
         &::before {
             box-shadow: none;
         }
         .fa-times {
-            color: #f00;
+            color: var(--#{theme.$prefix}danger);
         }
     }
 }

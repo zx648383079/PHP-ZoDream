@@ -1,9 +1,7 @@
 <?php
 namespace Module\Note\Domain\Model;
 
-use Domain\Model\Model;
-use Module\Auth\Domain\Model\UserModel;
-use Module\Auth\Domain\Model\UserSimpleModel;
+use Module\Note\Domain\Entities\NoteEntity;
 use Zodream\Helpers\Time;
 use Zodream\Infrastructure\Support\Html;
 
@@ -12,39 +10,16 @@ use Zodream\Infrastructure\Support\Html;
  * @property integer $id
  * @property string $content
  * @property integer $user_id
- * @property integer $is_notice
+ * @property integer $topic_id
+ * @property string $extra_rule
+ * @property string $properties
+ * @property integer $status
  * @property integer $created_at
+ * @property integer $updated_at
  */
-class NoteModel extends Model {
+class NoteModel extends NoteEntity {
 
-    protected array $append = ['editable', 'html'];
-
-	public static function tableName(): string {
-        return 'note';
-    }
-
-	protected function rules(): array {
-		return [
-            'content' => 'string:0,255',
-            'user_id' => 'required|int',
-            'is_notice' => 'int:0,9',
-            'status' => 'int:0,9',
-            'created_at' => 'int',
-        ];
-	}
-
-	protected function labels(): array {
-		return [
-            'id' => 'Id',
-            'content' => 'Content',
-            'user_id' => 'User Id',
-            'created_at' => 'Created At',
-        ];
-	}
-
-	public function user() {
-	    return $this->hasOne(UserSimpleModel::class, 'id', 'user_id');
-    }
+    protected array $append = ['html'];
 
     public function getHtmlAttribute() {
 	    $args = explode("\n", str_replace(["\t", ' '], ['    ', '&nbsp;'], strip_tags($this->content)));

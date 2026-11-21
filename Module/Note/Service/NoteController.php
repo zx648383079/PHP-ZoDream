@@ -8,9 +8,11 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 
 class NoteController extends ModuleController {
 
-	protected array $rules = array(
-		'*' => '@'
-	);
+	public function rules() {
+        return [
+            '*' => '@'
+        ];
+    }
 
     public function saveAction(Input $input) {
         try {
