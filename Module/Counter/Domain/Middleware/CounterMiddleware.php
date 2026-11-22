@@ -28,6 +28,7 @@ class CounterMiddleware implements MiddlewareInterface {
             || str_starts_with($path, 'auth')
             || str_starts_with($path, 'to')
             || str_starts_with($path, 'admin.php')
+            || str_ends_with($path, 'keep-alive')
             || strpos($path, 'admin') > 3) {
             return;
         }

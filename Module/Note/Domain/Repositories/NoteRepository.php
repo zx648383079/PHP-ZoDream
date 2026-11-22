@@ -98,7 +98,7 @@ final class NoteRepository {
         if ($userId > 0) {
             $model->user_id = $userId;
         }
-        if ($id > 0 && $model->topic_id < 1 && preg_match('/^#(\S+?)#(\s|$)/', $data['content'], $match)) {
+        if ($id === 0 && $model->topic_id < 1 && preg_match('/^#(\S+?)#\s/', $data['content'], $match)) {
             $model->topic_id = TopicEntity::where('title', trim($match[1]))
                 ->where('user_id', $userId)->value('id');
             if ($model->topic_id < 1) {
@@ -146,11 +146,11 @@ final class NoteRepository {
         if ($id > self::SYSTEM_TOPIC_MAX && $model->user_id != auth()->id() && $model->status !== self::STATUS_VISIBLE) {
             throw new Exception('topic is private');
         }
-        $items = NoteModel::with('user')->orderBy('id', 'asc')
+        $items = NoteModel::with('user')->where('topic_id', $id)->orderBy('id', 'asc')
             ->get();
         $res = $model->toArray();
         $res['user'] = $model->user;
-        $res['is_editable'] = !auth()->guest() && ($model->user_id != auth()->id() || auth()->user()->isAdministrator());
+        $res['is_editable'] = !auth()->guest() && ($model->user_id == auth()->id() || auth()->user()->isAdministrator());
         $res['data'] = $items;
         return $res;
     }
@@ -183,6 +183,30 @@ final class NoteRepository {
         }
         $model->delete();
         NoteEntity::where('topic_id', $id)->delete();
+    }
+
+    public static function topicBatchSave(array $data): void {
+        $topic = intval($data['id']);
+        $items = $data['items'];
+        unset($data['id'], $data['items']);
+        $model = TopicEntity::where('id', $topic)->first();
+        if ($model->user_id != auth()->id() && !auth()->user()->isAdministrator()) {
+            throw new Exception('无权限修改');
+        }
+        $model->load($data);
+        $model->save();
+        if (empty($items) || !is_array($items)) {
+            return;
+        }
+        foreach($items as $item) {
+            $id = intval($item['id']);
+            if ($id === 0) {
+                continue;
+            }
+            NoteEntity::where('topic_id', $model->id)->where('id', $id)->update([
+                'properties' => $item['properties']
+            ]);
+        }
     }
 
     public static function suggestion(string $keywords) {
