@@ -10,7 +10,7 @@ $this->set([
 ?>
 
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li class="active">
@@ -28,10 +28,10 @@ $this->set([
         <div class="group-body">
             <?php foreach($group['children'] as $item):?>
             <div class="forum-item">
-                <div class="thumb">
+                <div class="item-thumb">
                     <img src="<?=$this->asset($item['thumb'] ?: 'images/zd.jpg')?>" alt="">
                 </div>
-                <div class="info">
+                <div class="item-body">
                     <div class="name">
                         <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item['name']?></a>
                         <?php if($item->today_count > 0):?>
@@ -42,7 +42,7 @@ $this->set([
                     <?php if($item->last_thread):?>
                     <div class="last-thread">
                         <a href="<?=$this->url('./thread', ['id' => $item->last_thread->id])?>"><?=$this->text($item->last_thread->title, 10)?></a>
-                        <?=$item->last_thread->updated_at?> <?=$this->text($item->last_thread->user->name)?>
+                        <?=$this->ago($item->last_thread->updated_at)?>
                     </div>
                     <?php endif;?>
                 </div>

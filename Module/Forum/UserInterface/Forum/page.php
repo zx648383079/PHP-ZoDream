@@ -40,7 +40,7 @@ use Zodream\Template\View;
         </div>
         <div class="time">
             <em data-action="user" data-id="<?=$item->user_id?>"><?=$this->text($item->user->name)?></em>
-            <em><?=$item->updated_at?></em>
+            <em><?=$this->ago($item->updated_at)?></em>
         </div>
         <div class="count">
             <em><?=$item->post_count?></em>
@@ -49,7 +49,7 @@ use Zodream\Template\View;
         <div class="reply">
             <?php if($item->last_post):?>
             <em><?=$this->text($item->last_post->user->name)?></em>
-            <em><?=$item->last_post->updated_at?></em>
+            <em><?=$this->ago($item->last_post->updated_at)?></em>
             <?php endif;?>
         </div>
     </div>

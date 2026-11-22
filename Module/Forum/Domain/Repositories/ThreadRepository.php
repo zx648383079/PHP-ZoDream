@@ -471,9 +471,9 @@ class ThreadRepository {
 
 
     public static function getFull(int $id, bool $isSee = false) {
-        if (auth()->guest()) {
-            throw new Exception('数据错误');
-        }
+        // if (auth()->guest()) {
+        //     throw new Exception('数据错误');
+        // }
         if ($isSee) {
             ThreadModel::query()->where('id', $id)
                 ->updateIncrement('view_count');

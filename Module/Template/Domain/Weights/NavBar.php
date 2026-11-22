@@ -106,7 +106,7 @@ HTML;
 
     private function renderAccount(): string {
         if (auth()->guest()) {
-            $loginUrl = url('/auth');
+            $loginUrl = url('/auth', ['redirect_uri' => request()->url()]);
             $loginLabel = __('Sign in');
             return <<<HTML
 <li>

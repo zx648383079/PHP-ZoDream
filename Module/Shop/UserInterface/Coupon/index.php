@@ -8,7 +8,7 @@ $this->title = '领券中心';
 <div class="coupon-page">
     <div class="container">
 
-        <ul class="path">
+        <ul class="route-bar">
             <li>
                 <a href="<?=$this->url('./')?>">首页</a>
             </li>

@@ -6,6 +6,8 @@ $this->registerCssFile('@forum.min.css')
     ->registerJsFile([
         '@jquery.upload.min.js',
         '@forum.min.js'
-    ])->registerJs(sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=uploadimage";', $this->url('./', false)), View::HTML_HEAD);
+    ])->registerJs(
+        sprintf('var BASE_URI = "%s";var UPLOAD_URI="/ueditor.php?action=";', $this->url('./', false)), 
+        View::HTML_HEAD);
 ?>
 <div class="demo-tip"></div>

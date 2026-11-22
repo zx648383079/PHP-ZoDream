@@ -7,7 +7,7 @@ $this->extend('layouts/header');
 ?>
 
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
@@ -66,10 +66,10 @@ $this->extend('layouts/header');
             <div class="post-content">
                 <form data-type="ajax" action="<?=$this->url('./thread/reply')?>" method="post">
                     <div class="editor">
-                        <textarea name="content" required></textarea>
+                        <textarea name="content" class="form-control" placeholder="输入内容" required></textarea>
                     </div>
                     <div class="footer">
-                        <button class="btn">发表回复</button>
+                        <button class="btn btn-default">发表回复</button>
                         <input type="hidden" name="thread_id" value="<?=$thread->id?>">
                     </div>
                 </form>

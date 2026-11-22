@@ -7,7 +7,7 @@ $this->extend('layouts/header');
 ?>
 
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
@@ -32,10 +32,10 @@ $this->extend('layouts/header');
         <div class="group-body">
             <?php foreach($forum_list as $item):?>
             <div class="forum-item">
-                <div class="thumb">
+                <div class="item-thumb">
                     <img src="<?=$this->asset('images/zd.jpg')?>" alt="">
                 </div>
-                <div class="info">
+                <div class="item-body">
                     <div class="name">
                         <a href="<?=$this->url('./forum', ['id' => $item->id])?>"><?=$item['name']?></a>
                         <span>(1)</span>
@@ -44,7 +44,7 @@ $this->extend('layouts/header');
                     <?php if($item->last_thread):?>
                     <div class="last-thread">
                         <a href="<?=$this->url('./thread', ['id' => $item->last_thread->id])?>"><?=$this->text($item->last_thread->title, 10)?></a>
-                        <?=$item->last_thread->updated_at?> <?=$this->text($item->last_thread->user->name)?>
+                        <?=$this->ago($item->last_thread->updated_at)?>
                     </div>
                     <?php endif;?>
                 </div>
@@ -64,20 +64,20 @@ $this->extend('layouts/header');
         <div class="header">快速发帖</div>
         <form data-type="ajax" action="<?=$this->url('./thread/create')?>" method="post">
             <div class="title">
-                <select name="classify_id">
+                <select name="classify_id" class="form-control">
                     <option value="0">选择主题分类</option>
                     <?php foreach($classify_list as $item):?>
                     <option value="<?=$item->id?>"><?=$item->name?></option>
                     <?php endforeach;?>
                 </select>
-                <input type="text" name="title" required>
+                <input type="text" class="form-control" name="title" placeholder="输入内容" required>
             </div>
             
             <div class="editor">
-                <textarea name="content" required></textarea>
+                <textarea name="content" class="form-control" placeholder="输入内容" required></textarea>
             </div>
             <div class="footer">
-                <button class="btn">发表帖子</button>
+                <button class="btn btn-default">发表帖子</button>
                 <input type="hidden" name="forum_id" value="<?=$forum->id?>">
             </div>
         </form>

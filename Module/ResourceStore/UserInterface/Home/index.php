@@ -10,7 +10,7 @@ $this->registerCssFile('@demo.min.css')
 
 
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li class="active">

@@ -8,7 +8,7 @@ $this->title = $category->name;
 <div class="category-page">
     <div class="container">
 
-        <ul class="path">
+        <ul class="route-bar">
             <li>
                 <a href="<?=$this->url('./')?>">Home</a>
             </li>

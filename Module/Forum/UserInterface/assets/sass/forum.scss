@@ -1,10 +1,11 @@
+@use 'theme';
 .forum-group {
-    background-color: #fff;
-    margin: 10px 0;
+    background-color: var(--#{theme.$prefix}panel);
+    margin: 0.625rem 0;
     .group-header {
-        line-height: 50px;
-        border-bottom: 1px solid #333;
-        padding: 0 20px;
+        line-height: 3.125rem;
+        border-bottom: 1px solid var(--#{theme.$prefix}border);
+        padding: 0 1.25rem;
     }
     .group-body {
         display: flex;
@@ -12,40 +13,42 @@
         justify-items: center;
         flex-wrap: wrap;
         justify-content: space-between;
-        .forum-item {
-            position: relative;
-            padding-left: 100px;
-            height: 100px;
-            width: 300px;
-            transition: all 1s;
-            border-bottom: 1px dotted;
-            margin: 5px;
-            .thumb {
-                position: absolute;
-                left: 0;
-                width: 80px;
-                height: 80px;
-                img {
-                    max-width: 100%;
-                    height: 100px;
-                }
+    }
+    .forum-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        height: 6.25rem;
+        width: 18.75rem;
+        transition: all 1s;
+        border-bottom: 1px dotted;
+        margin: 5px;
+        .item-thumb {
+            width: 5rem;
+            height: 5rem;
+            img {
+                max-width: 100%;
+                object-fit: contain;
             }
-            .info {
-                color: #888;
-                .name {
-                    line-height: 30px;
-                    color: #333;
-                    font-weight: 700;
-                }
+        }
+        .item-body {
+            flex: 1;
+            color: var(--#{theme.$prefix}meta-text);
+            .name {
+                line-height: 1.875rem;
+                color: var(--#{theme.$prefix}body-text);
+                font-weight: 700;
             }
-            .last-thread {
-                a {
-                    color: #369;
-                }
+        }
+        .last-thread {
+            font-size: .8rem;
+            a {
+                color: var(--#{theme.$prefix}link-text);
             }
-            &:hover {
-                box-shadow: rgba(#333, .7) 0 0 10px;
-            }
+        }
+        &:hover {
+            box-shadow: 0 0 10px var(--#{theme.$prefix}shadow);
         }
     }
 }
@@ -55,7 +58,7 @@
         border-bottom: 1px solid;
         display: grid;
         grid-template-columns: 1fr 105px 60px 105px;
-        background-color: #fff;
+        background-color: var(--#{theme.$prefix}panel);
         line-height: 30px;
         .count {
             font-size: 12px;
@@ -78,7 +81,7 @@
             }
         }
         &:hover {
-            background-color: rgba(#333, .2);
+            background-color: rgba(var(--#{theme.$prefix}mask-rgb), .2);
         }
     }
 }
@@ -86,18 +89,18 @@
 .thread-item .name,
 .thread-title {
     .fa-fire {
-        color: red;
+        color: var(--#{theme.$prefix}danger);
     }
     .tag-item {
-        color: #007CD5;
+        color: var(--#{theme.$prefix}link-text);
         display: inline-block;
         font-style: normal;
         a {
-            color: #007CD5; 
+            color: var(--#{theme.$prefix}link-text);
         }
     }
     .fa-lock {
-        color: #fcb716;
+        color: var(--#{theme.$prefix}warning);
     }
 }
 
@@ -108,15 +111,16 @@
         grid-template-columns: 160px 1fr;
         .count,
         .post-user {
-            background-color: #E5EDF2;
+            background-color: var(--#{theme.$prefix}surface-child);
+            color: var(--#{theme.$prefix}surface-text);
         }
         .title,
         .post-content {
-            background-color: #fff;
+            background-color: var(--#{theme.$prefix}panel);
         }
     }
     .thread-title {
-        border-bottom: 4px solid #f4f4f4;
+        border-bottom: 4px solid var(--#{theme.$prefix}border);
         line-height: 40px;
         .count {
             text-align: center;
@@ -126,7 +130,7 @@
         }
     }
     .post-item {
-        border-bottom: 4px solid #f4f4f4;
+        border-bottom: 4px solid var(--#{theme.$prefix}border);
         .post-user {
             text-align: center;
             .avatar {
@@ -139,7 +143,7 @@
         .post-content .header,
         .post-user .name {
             line-height: 30px;
-            border-bottom: 1px dotted #ccc;
+            border-bottom: 1px dotted var(--#{theme.$prefix}border);
         }
         .post-content {
             position: relative;
@@ -154,44 +158,47 @@
                 padding: 0 20px;
                 word-break: break-word;
                 a {
-                    color: #369;
+                    color: var(--#{theme.$prefix}link-text);
                 }
             }
             .last-time {
                 text-align: right;
-                color: #888;
+                color: var(--#{theme.$prefix}meta-text);
             }
             .footer {
                 padding: 0 20px;
-                border-top: 1px dotted #888;
+                border-top: 1px dotted var(--#{theme.$prefix}border);
                 position: absolute;
                 width: 100%;
                 bottom: 0;
                 line-height: 30px;
             }
             .quote {
-                background-color: #F9F9F9;
+                background-color: var(--#{theme.$prefix}secondary);
                 margin: 10px 0;
                 padding: 10px 35px;
                 zoom: 1;
-                color: #666;
+                color:  var(--#{theme.$prefix}secondary-text);
                 position: relative;
                 overflow: hidden;
+                a {
+                    color:  var(--#{theme.$prefix}secondary-text);
+                }
+                &::before,
+                &::after {
+                    position: absolute;
+                    color: var(--#{theme.$prefix}border);
+                    font-size: 5rem;
+                }
                 &::before {
                     content: "“";
-                    position: absolute;
-                    font-size: 80px;
                     left: -45px;
                     top: -12px;
-                    color: #ccc;
                 }
                 &::after {
                     content: "”";
-                    position: absolute;
-                    font-size: 80px;
                     right: -45px;
                     bottom: -53px;
-                    color: #ccc;
                 }
             }
         }
@@ -199,12 +206,10 @@
             .post-content {
                 textarea {
                     width: 100%;
-                    height: 200px;
+                    height: 12.5rem;
                     resize: none;
-                }
-                .btn {
-                    background-color: #333;
-                    color: #fff;
+                    padding: .4rem;
+                    background-color: var(--#{theme.$prefix}body);
                 }
             } 
         }
@@ -214,60 +219,56 @@
 .thread-highlight {
     .name,
     .title {
-        color: #a10000;
+        color: var(--#{theme.$prefix}danger);
         font-weight: 700;
         a {
-            color: #a10000;
+            color: var(--#{theme.$prefix}danger);
         }
     }
 }
 
 .thread-new-box {
-    margin: 30px 0;
+    margin: 1.875rem 0;
     .header {
-        line-height: 30px;
-        background-color: #fff;
-        padding-left: 20px;
+        line-height: 1.875rem;
+        background-color: var(--#{theme.$prefix}panel);
+        padding-left: 1.25rem;
     }
     .title {
         select, 
         input {
-            height: 30px;
+            height: 1.875rem;
         }
         input {
-            width: calc(100% - 150px);
+            width: calc(100% - 9.375rem);
         }
     }
     textarea {
         width: 100%;
-        height: 200px;
+        height: 12.5rem;
         resize: none;
-        padding: 3px;
-    }
-    .btn {
-        background-color: #333;
-        color: #fff;
+        padding: .4rem;
     }
 }
 
 .hide-locked-node,
 .hide-open-node {
     overflow: hidden;
-    margin: 10px 0;
-    padding: 8px 8px 8px 24px;
-    border: 1px dashed #FF9A9A;
-    background: #FBF1E1;
+    margin: 0.625rem 0;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    border: 1px dashed var(--#{theme.$prefix}danger);
+    background-color: var(--#{theme.$prefix}tertiary);
     zoom: 1;
 }
 .hide-locked-node {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 .hide-open-node {
     background-color: transparent;
     >.node-tip {
-        margin-bottom: 10px;
-        color: #F66;
-        font-size: 12px;
+        margin-bottom: 0.625rem;
+        color: var(--#{theme.$prefix}danger);
+        font-size: 0.75rem;
         text-align: center;       
     }
 }
@@ -275,10 +276,10 @@
     margin: 10px 0;
     padding: 8px 8px 8px 24px;
     line-height: 30px;
-    color: #aaa;
+    color: var(--#{theme.$prefix}meta-text);
     p {
         &:first-child {
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
             font-weight: 500;
         }
     }
@@ -287,20 +288,48 @@
     }
 }
 
-.path {
-    line-height: 40px;
+.coupon-open-node {
+    --#{theme.$prefix}node-border: var(--#{theme.$prefix}danger);
+    line-height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: .4rem;
+    .node-body {
+        border: 1px dashed var(--#{theme.$prefix}node-border);
+        background-color: var(--#{theme.$prefix}tertiary);
+        padding: 0 .4rem;
+        border-radius: .25rem 0 0 .25rem;
+        text-align: center;
+    }
+    .copy-icon {
+        display: inline-block;
+        padding: 0 .4rem;
+        line-height: 2rem;
+        background-color: var(--#{theme.$prefix}primary);
+        color: var(--#{theme.$prefix}primary-text);
+        user-select: none;
+        cursor: pointer;
+        border-radius: 0 .25rem .25rem 0;
+    }
+    &.--with-expire {
+        --#{theme.$prefix}node-border: var(--#{theme.$prefix}border);
+        .node-body {
+            text-decoration: line-through;
+        }
+    }
 }
 
 .editor {
     .editor-plugin {
-        background-color: #fff;
+        background-color: var(--#{theme.$prefix}panel);
         .fa {
             display: inline-block;
             padding: 0 5px;
             cursor: pointer;
-            line-height: 30px;
+            line-height: 1.875rem;
             &:hover {
-                background-color: #ccc;
+                background-color: var(--#{theme.$prefix}input-hovered);
             }
         }
     }
@@ -321,12 +350,12 @@
     .vote-progress {
         display: inline-block;
         width: 200px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--#{theme.$prefix}border);
         height: 14px;
         position: relative;
         .vote-value {
             width: 0%;
-            background-color: #ebc9c9;
+            background-color: var(--#{theme.$prefix}secondary);
             height: 12px;
             overflow: hidden;
             line-height: 12px;
@@ -349,7 +378,7 @@
     color: inherit;
     cursor: pointer;
     .link-body {
-        background-color: #f6f6f6;
+        background-color: var(--#{theme.$prefix}body);
         display: flex;
         justify-content: space-between;
         padding: 12px;
@@ -364,21 +393,21 @@
         font-size: 16px;
         font-weight: 500;
         line-height: 1.25;
-        color: #121212;
+        color: var(--#{theme.$prefix}body-text);
     }
     .link-meta {
         display: flex;
         margin-top: 4px;
         font-size: 14px;
         line-height: 20px;
-        color: #999;
+        color: var(--#{theme.$prefix}meta-text);
         white-space: nowrap;
     }
     .link-logo {
         display: flex;
         justify-content: center;
-        background-color: #ebebeb;
-        color: #d3d3d3;
+        background-color: var(--#{theme.$prefix}surface-child);
+        color: var(--#{theme.$prefix}surface-text);
         object-fit: cover;
         border-radius: inherit;
         img {
@@ -389,7 +418,7 @@
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .forum-group,
     .thread-list,
     .thread-new-box,
@@ -479,8 +508,8 @@
             display: none;
         }
     }
-    .path {
-        margin-left: -15px;
+    .route-bar {
+        margin-left: -0.9375rem;
         li {
             padding: 0;
         }

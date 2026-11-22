@@ -21,7 +21,7 @@ class Editor {
         this.bindEvent();
     }
 
-    public range: IRange;
+    public range?: IRange;
     public textField: HTMLTextAreaElement;
     private events: {[key: string]: Function} = {};
     private upload: any;
@@ -46,7 +46,7 @@ class Editor {
         let html = '';
         for (const item of Editor.plugins) {
             html += '<i class="fa '+ item.icon +'" data-name="'+ item.name +'" title="' + item.title +'"></i>';
-            this.on(item.name, item.handle);
+            this.on(item.name!, item.handle);
         }
         this.element.prepend('<div class="editor-plugin">' + html + '</div>');
     }
@@ -54,7 +54,7 @@ class Editor {
     private bindEvent() {
         let that = this;
         this.element.on('keydown', 'textarea', function(e) {
-            if (e.keyCode === 9) {
+            if (e.key === 'Tab') {
                 e.preventDefault();
                 that.saveRange();
                 that.insertTab();
@@ -115,7 +115,7 @@ class Editor {
     /**
      * getBlock
      */
-    public getBlock(): string {
+    public getBlock(): string|null {
         if (!this.range) {
             return null;
         }
@@ -161,9 +161,9 @@ class Editor {
     }
 
     private getBlockTag(x: number, val: string) {
-        let tag = [];
+        const tag: string[] = [];
         while (x < val.length) {
-            let code = val.charAt(x);
+            const code = val.charAt(x);
             if (code === ' ' || code === '>') {
                 break;
             }
@@ -180,7 +180,7 @@ class Editor {
         if (!this.isInAttr()) {
             return this.insert('    ', 4, true);
         }
-        let x = this.range.start;
+        let x = this.range!.start;
         let val = this.textField.value;
         while (true) {
             let code = val.charAt(x);
@@ -189,14 +189,15 @@ class Editor {
             }
             x ++;
         }
-        this.range.start = x + 1;
-        this.range.end = Math.max(x + 1, this.range.end)
+        this.range!.start = x + 1;
+        this.range!.end = Math.max(x + 1, this.range!.end)
         this.focus();
     }
 
     public insert(val: string, move: number = 0, focus: boolean = true) {
         this.checkRange();
-        this.textField.value = this.textField.value.substr(0, this.range.start) + val + this.textField.value.substr(this.range.start);
+        const range = this.range!;
+        this.textField.value = this.textField.value.substring(0, range.start) + val + this.textField.value.substring(range.start);
         this.move(move);
         if (!focus) {
             return;
@@ -209,11 +210,12 @@ class Editor {
      */
     public replace(val: (str: string) => string | string, move: number = 0, focus: boolean = true) {
         this.checkRange();
-        if (this.range.start === this.range.end) {
+        const range = this.range!;
+        if (range.start === range.end) {
             return this.insert(typeof val === 'function' ? val('') : val, move, focus);
         }
-        const str = typeof val === 'function' ? val(this.textField.value.substr(this.range.start, this.range.end - this.range.start)) : val;
-        this.textField.value = this.textField.value.substr(0, this.range.start)+ str + this.textField.value.substr(this.range.end);
+        const str = typeof val === 'function' ? val(this.textField.value.substring(range.start, range.end)) : val;
+        this.textField.value = this.textField.value.substring(0, range.start)+ str + this.textField.value.substring(range.end);
         this.move(move);
         if (!focus) {
             return;
@@ -242,7 +244,7 @@ class Editor {
     public at(parent: number, user: string) {
         let val = '<at parent="' + parent + '">'+ user +'</at>';
         this.textField.value = val + this.textField.value.replace(/<at[\s\S]+<\/at>/, '');
-        $('html,body').animate({scrollTop: this.element.offset().top + 'px'}, 500);
+        $('html,body').animate({scrollTop: this.element.offset()!.top + 'px'}, 500);
         this.focus();
     }
 
@@ -264,6 +266,27 @@ class Editor {
             });
         }
         this.upload.options.filter = allow;
+        let action = 'uploadfile';
+        switch (allow.split('/')[0]) {
+            case 'image':
+                action = 'uploadimage';
+                break;
+            case 'audio':
+            case 'video':
+                action = 'uploadvideo';
+                break;
+            default:
+                break;
+        }
+        this.upload.options.url = UPLOAD_URI + action;
+        this.upload.options.onafter = function(data: any) {
+            if (data.state == 'SUCCESS') {
+                cb.call(_that, data.url, data);
+            } else if (data.code === 302) {
+                location.href = data.url;
+            }
+            return false;
+        };
         this.upload.start();
     }
 
@@ -285,10 +308,11 @@ class Editor {
         if (x === 0) {
             return;
         }
-        x = this.range.start + x;
+        const range = this.range!;
+        x = range.start + x;
         this.range = {
             start: x,
-            end: Math.max(x, this.range.end)
+            end: Math.max(x, range.end)
         };
     }
 
@@ -297,8 +321,9 @@ class Editor {
      */
     public focus() {
         this.checkRange();
-        this.textField.selectionStart = this.range.start;
-        this.textField.selectionEnd = this.range.end;
+        const range = this.range!;
+        this.textField.selectionStart = range.start;
+        this.textField.selectionEnd = range.end;
         this.textField.focus();
     }
 
@@ -372,6 +397,12 @@ Editor.plugin('fa-link', '插入链接', function(tag) {
     }
     this.insert('<a href=""></a>', 9, true);
 });
+Editor.plugin('fa-credit-card', '插入优惠码', function(tag) {
+    if (tag && tag !== 'hide') {
+        return;
+    }
+    this.insert('<coupon expire="" amount=""></coupon>', 28, true);
+});
 Editor.plugin('fa-chart-bar', '插入投票', function(tag) {
     if (tag) {
         return;
@@ -391,31 +422,47 @@ $(function() {
     let editor = new Editor($('.editor'));
     $('.thread-box').on('click', '.post-item [data-action="reply"]', function(e) {
         e.preventDefault();
-        let box = $(this).closest('.post-item');
+        const box = $(this).closest('.post-item');
         editor.at(box.data('id'), box.find('.post-user .name').text());
     }).on('click', '[data-action="toggle"]', function(e) {
         e.preventDefault();
-        let $this = $(this);
+        const $this = $(this);
         if (!confirm('您确定要' + $this.text())) {
             return;
         }
-        postJson($this.attr('href'), parseAjax);
+        postJson($this.attr('href')!, parseAjax);
     }).on('click', 'a[data-action=confirm]', function(e) {
         e.preventDefault();
-        let $this = $(this);
+        const $this = $(this);
         if (!confirm($this.data('message'))) {
             return;
         }
-        postJson($this.attr('href'), res => {
+        postJson($this.attr('href')!, res => {
             if (res.code != 200) {
                 parseAjax(res);
                 return;
             }
             $('#post-' + res.data.id + ' .content').html(res.data.content);
         });
+    }).on('click', '*[data-action=copy]', function(e) {
+        e.preventDefault();
+        const $this = $(this);
+        if (!$this.hasClass('fa-copy')) {
+            return;
+        }
+        navigator.clipboard.writeText($this.prev('.node-body').text()).then(
+            () => {
+                Dialog.tip(`Copy successfully`);
+            },
+            () => {
+                Dialog.tip(`Copy failed`);
+            }
+        );
+        $this.removeClass('fa-copy').addClass('fa-check');
+        setTimeout(() => $this.removeClass('fa-check').addClass('fa-copy'), 5000);
     }).on('submit', 'form[data-action=ajax]', function() {
-        let $this = $(this);
-        postJson($this.attr('action'), $this.serialize(), res => {
+        const $this = $(this);
+        postJson($this.attr('action')!, $this.serialize(), res => {
             if (res.code != 200) {
                 parseAjax(res);
                 return;
@@ -427,8 +474,8 @@ $(function() {
     $('.thread-list').on('click', '.thread-item a', function(e) {
         e.stopPropagation();
     }).on('click', '.thread-item', function() {
-        window.location.href = $(this).find('a.title').attr('href');
+        window.location.href = $(this).find('a.title').attr('href')!;
     }).on('mouseover', '*[data-action=user]', function() {
-        let $this = $(this);
+        const $this = $(this);
     });
 });

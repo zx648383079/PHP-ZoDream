@@ -6,7 +6,7 @@ $this->title = '题库首页';
 $this->extend('layouts/main');
 ?>
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li class="active">

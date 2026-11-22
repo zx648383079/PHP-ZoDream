@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Service;
-
 
 use Module\Forum\Domain\Error\StopNextException;
 use Module\Forum\Domain\Model\ForumClassifyModel;
-use Module\Forum\Domain\Model\ForumModel;
 use Module\Forum\Domain\Model\ThreadModel;
 use Module\Forum\Domain\Model\ThreadPostModel;
 use Module\Forum\Domain\Parsers\Parser;

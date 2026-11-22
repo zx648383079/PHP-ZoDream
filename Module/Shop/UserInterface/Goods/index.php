@@ -13,7 +13,7 @@ $this->registerCssFile('@slider.min.css')
 
 <div class="goods-page">
     <div class="container">
-        <ul class="path">
+        <ul class="route-bar">
             <li>
                 <a href="<?=$this->url('./')?>">Home</a>
             </li>

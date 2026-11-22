@@ -122,6 +122,7 @@ class Parser extends Page {
             'audio' => AudioNode::class,
             'at' => AtNode::class,
             'vote' => VoteNode::class,
+            'coupon' => CouponNode::class
         ];
         foreach ($data as $key => $item) {
             $this->register($key, $item);
@@ -207,7 +208,7 @@ class Parser extends Page {
         ];
     }
 
-    public function cleanText($html) {
+    public function cleanText(string $html): string {
         foreach ($this->nodeItems as $node => $value) {
             $html = preg_replace(
                 sprintf('#<%s(\s+([^\<\>]+))?>([\s\S]*?)</%s>#i', $node, $node),
@@ -216,15 +217,24 @@ class Parser extends Page {
         return htmlspecialchars($html);
     }
 
-    private function parseAttributes($attr) {
+    private function parseAttributes(string $attr): array {
         if (empty($attr)) {
             return [];
         }
         $matches = [];
-        if (preg_match_all('#([\w_-]+)="?([^"]+)#', $attr, $matches, PREG_SET_ORDER)) {
-            return array_column($matches, 2, 1);
+        if (!preg_match_all('#([\w-]+)(?:\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\']+)))?#', $attr, $matches, PREG_SET_ORDER)) {
+            return [];
         }
-        return [];
+        $data = [];
+        foreach($matches as $item) {
+            $key = $item[1];
+            $value = true;
+            if (count($item) > 2) {
+                $value = end($item);
+            }
+            $data[$key] = $value;
+        }
+        return $data;
     }
 
     /**

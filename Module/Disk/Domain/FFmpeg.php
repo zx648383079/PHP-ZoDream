@@ -187,7 +187,7 @@ class FFmpeg {
                 $val = join(',', $val);
             }
             $val = strval($val);
-            if (is_numeric($item) && is_integer($item)) {
+            if (is_numeric($item) && is_int($item)) {
                 $items[] = $val;
                 continue;
             }

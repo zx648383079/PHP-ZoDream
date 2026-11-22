@@ -6,7 +6,7 @@ $this->title = $article->title;
 ?>
 <div class="article-page">
     <div class="container side-box">
-        <ul class="path">
+        <ul class="route-bar">
             <li>
                 <a href="<?=$this->url('./')?>">Home</a>
             </li>

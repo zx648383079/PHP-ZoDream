@@ -22,14 +22,14 @@ use Module\Forum\Domain\Model\ThreadModel;
         </div>
         <?php if($item->grade < 1):?>
         <div class="post-content">
-            <div class="header">
+            <div class="header" title="<?= $item->created_at ?>">
                 <i class="fa fa-user"></i>
-                发表于 <?=$item->created_at?>
+                发表于 <?=$this->ago($item->created_at)?>
                 <div class="action">
                   
                 </div>
             </div>
-            <div class="last-time">最后编辑于 <?=$item->updated_at?></div>
+            <div class="last-time" title="<?= $item->updated_at ?>">最后编辑于 <?=$this->ago($item->updated_at)?></div>
             <div class="content">
                 <?=$item->content?>
             </div>
@@ -51,12 +51,12 @@ use Module\Forum\Domain\Model\ThreadModel;
         </div>
         <?php else:?>
         <div class="post-content">
-            <div class="header">
+            <div class="header" title="<?= $item->created_at ?>">
                 <i class="fa fa-user"></i>
                 <?php if($thread->user_id == $item->user_id):?>
                 <span>楼主</span>
                 <?php endif;?>
-                发表于 <?=$item->created_at?>
+                发表于 <?=$this->ago($item->created_at)?>
                 <div class="action">
                     <?=$item->grade?>楼
                 </div>

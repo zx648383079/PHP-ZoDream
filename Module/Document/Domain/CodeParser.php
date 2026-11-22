@@ -197,7 +197,7 @@ class CodeParser {
                 ];
                 continue;
             }
-            if (is_integer($item)) {
+            if (is_int($item)) {
                 $package[$name][] = [
                     'name' => $key,
                     'type' => self::TYPE_INT

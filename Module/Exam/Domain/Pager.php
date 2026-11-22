@@ -176,7 +176,7 @@ class Pager implements ArrayAble {
             $this->items[$i]['dynamic'] ?? null,
             $this->finished);
         foreach (['right', 'answer' => 'your_answer', 'score' => 'max_score'] as $key => $name) {
-            if (is_integer($key)) {
+            if (is_int($key)) {
                 $key = $name;
             }
             if (isset($this->items[$i][$key])) {

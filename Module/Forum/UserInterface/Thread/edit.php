@@ -7,7 +7,7 @@ $this->extend('layouts/header');
 ?>
 
 <div class="container">
-    <ul class="path">
+    <ul class="route-bar">
         <li>
             <a href="<?=$this->url('/')?>" class="fa fa-home"></a>
         </li><li>
@@ -27,7 +27,7 @@ $this->extend('layouts/header');
         <div class="header">编辑帖子【<?=$thread->title?>】</div>
         <form data-type="ajax" action="<?=$this->url('./thread/update')?>" method="post">
             <div class="title">
-                <select name="classify_id">
+                <select name="classify_id" class="form-control">
                     <option value="0">选择主题分类</option>
                     <?php foreach($classify_list as $item):?>
                     <?php if($item->id == $thread->classify_id):?>
@@ -37,14 +37,14 @@ $this->extend('layouts/header');
                     <?php endif;?>
                     <?php endforeach;?>
                 </select>
-                <input type="text" name="title" required value="<?=$thread->title?>">
+                <input type="text" name="title" class="form-control" placeholder="输入内容" required value="<?=$thread->title?>">
             </div>
             
             <div class="editor">
-                <textarea name="content" required><?=$post->content?></textarea>
+                <textarea name="content" class="form-control" placeholder="输入内容" required><?=$post->content?></textarea>
             </div>
             <div class="footer">
-                <button class="btn">保存帖子</button>
+                <button class="btn btn-default">保存帖子</button>
                 <input type="hidden" name="id" value="<?=$thread->id?>">
             </div>
         </form>
