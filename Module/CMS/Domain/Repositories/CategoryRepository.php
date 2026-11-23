@@ -19,7 +19,7 @@ class CategoryRepository {
         $items = $context->channelBuilder()->where('site_id', $context->id())
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['title', 'keywords', 'description', 'content'], false, '', $keywords);
-            })->orderBy('position', 'asc')->get();
+            })->orderBy('position', SORT_ASC)->get();
         $countKey = 'content_count';
         foreach ($items as &$item) {
             if ($item['type'] > 0 || !isset($modelItems[$item['model_id']])) {
@@ -134,7 +134,7 @@ class CategoryRepository {
     public static function all(int|SiteContextInterface $site) {
         $context = $site instanceof SiteContextInterface ? $site : SiteRepository::apply($site);
         return (new Tree($context->channelBuilder()
-            ->where('site_id', $context->id())->orderBy('position', 'asc')
+            ->where('site_id', $context->id())->orderBy('position', SORT_ASC)
             ->get('id', 'title', 'parent_id', 'type', 'model_id')))
             ->makeTreeForHtml();
     }
@@ -142,8 +142,8 @@ class CategoryRepository {
 
     public static function getChildrenWithParent(SiteContextInterface $context, int $id) {
         $data = TreeHelper::getTreeChild($context->channelBuilder()
-            ->where('site_id', $context->id())->orderBy('parent_id', 'asc')
-            ->orderBy('id', 'asc')->get('id', 'parent_id'), $id);
+            ->where('site_id', $context->id())->orderBy('parent_id', SORT_ASC)
+            ->thenBy('id', SORT_ASC)->get('id', 'parent_id'), $id);
         $data[] = $id;
         return $data;
     }

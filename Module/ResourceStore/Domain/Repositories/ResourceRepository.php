@@ -87,15 +87,15 @@ class ResourceRepository {
             ->when(!empty($sort), function ($query) use ($sort, $order) {
                 if (is_array($sort)) {
                     // 增加直接放id
-                    $query->whereIn('id', $sort)->orderBy('created_at', 'desc');
+                    $query->whereIn('id', $sort)->orderBy('created_at', SORT_DESC);
                     return;
                 }
                 if ($sort === 'new') {
-                    $query->orderBy('created_at', 'desc');
+                    $query->orderBy('created_at', SORT_DESC);
                     return;
                 }
                 if ($sort === 'trending') {
-                    $query->where('is_commercial', 1)->orderBy('price', 'asc');
+                    $query->where('is_commercial', 1)->orderBy('price', SORT_ASC);
                     return;
                 }
                 if ($sort === 'free') {
@@ -103,7 +103,7 @@ class ResourceRepository {
                     return;
                 }
                 if ($sort === 'hot') {
-                    $query->orderBy('download_count', 'desc');
+                    $query->orderBy('download_count', SORT_DESC);
                     return;
                 }
                 list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
@@ -126,7 +126,7 @@ class ResourceRepository {
                                    int $user = 0, string $tag = '',
                                    string|array $sort = 'created_at',
                                    string|int|bool $order = 'desc') {
-        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->limit($count)->get();
+        return self::getListQuery($keywords, $category, $user, $tag, $sort, $order)->take($count)->get();
     }
 
     public static function get(int $id): ResourceModel {
@@ -289,7 +289,7 @@ class ResourceRepository {
     public static function suggestion(string $keywords) {
         return ResourceModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['title'], false, '', $keywords);
-        })->limit(4)->asArray()->get('id', 'title');
+        })->take(4)->asArray()->get('id', 'title');
     }
 
     public static function getManageList(string $keywords = '', int $user = 0, int $category = 0) {
@@ -301,7 +301,7 @@ class ResourceRepository {
                 $query->where('user_id', $user);
             })->when(!empty($keywords), function ($query) use ($keywords)  {
                 SearchModel::searchWhere($query, ['title'], true, '', $keywords);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfList(string $keywords = '', int $category = 0) {
@@ -312,7 +312,7 @@ class ResourceRepository {
             ->where('user_id', auth()->id())
             ->when(!empty($keywords), function ($query) use ($keywords)  {
                 SearchModel::searchWhere($query, ['title'], true, '', $keywords);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
     
 
@@ -345,7 +345,7 @@ class ResourceRepository {
             ->when(!empty($keywords), function($query) use ($keywords) {
                 // SearchModel::searchWhere($query, ['name'], false, '', $keywords);
             })
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->page();
     }
 
@@ -392,7 +392,7 @@ class ResourceRepository {
             ->when($file > 0, function ($query) use ($file) {
                 $query->where('id', $file);
             }, function ($query) {
-                $query->where('file_type', 0)->orderBy('file_type', 'asc');
+                $query->where('file_type', 0)->orderBy('file_type', SORT_ASC);
             })->first();
         if (empty($fileModel)) {
             throw new Exception('没有可下载的文件');

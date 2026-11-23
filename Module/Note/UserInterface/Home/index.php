@@ -31,7 +31,7 @@ $this->extend('layouts/main');
     <?php $this->extend('./page');?>
 </div>
 <?php if($model_list->hasMore()):?>
-<div class="more-load" data-page="<?=$model_list->getIndex()?>" data-target=".flex-box" data-url="<?=$this->url(['page' => null])?>">
+<div class="more-load" data-page="<?=$model_list->getCurrentPage()?>" data-target=".flex-box" data-url="<?=$this->url(['page' => null])?>">
 加载中。。。
 </div>
 <?php endif;?>

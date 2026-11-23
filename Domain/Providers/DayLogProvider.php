@@ -82,7 +82,7 @@ class DayLogProvider {
         return $this->dayQuery()
                 ->where('item_type', $itemType)
                 ->where('item_id', $itemId)
-                ->where('action', $action)->where('happen_day', $to)->count() > 0;
+                ->where('action', $action)->where('happen_day', $to)->any();
     }
 
     protected function addCount(int $itemType, int $itemId, int $action, string $to, int $start, int $end) {
@@ -252,7 +252,7 @@ class DayLogProvider {
             ->where('created_at', '>=', $start)
              ->groupBy('item_id')
              ->selectRaw('item_id, COUNT(*) as count')
-             ->orderBy('count', 'desc')->get();
+             ->orderBy('count', SORT_DESC)->get();
     }
 
     public function sortByWeek(int $itemType, int $action): array {
@@ -262,7 +262,7 @@ class DayLogProvider {
             ->where('action', $action)
             ->whereIn('happen_day', $dayItems)
             ->selectRaw('item_id, SUM(happen_count) as count')
-            ->orderBy('count', 'desc')->get();
+            ->orderBy('count', SORT_DESC)->get();
     }
 
     public function sortByMonth(int $itemType, int $action): array {
@@ -272,7 +272,7 @@ class DayLogProvider {
             ->where('action', $action)
             ->whereIn('happen_day', $dayItems)
             ->selectRaw('item_id, SUM(happen_count) as count')
-            ->orderBy('count', 'desc')->get();
+            ->orderBy('count', SORT_DESC)->get();
     }
 
     public function sortByYear(int $itemType, int $action): array {

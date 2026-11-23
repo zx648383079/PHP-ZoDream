@@ -13,7 +13,7 @@ final class CardRepository {
     public static function getList(string $keywords) {
         $page = EquityCardEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
         $page->map(function (EquityCardEntity $item) {
             $item['amount'] = UserEquityEntity::where('card_id', $item->id)
                 ->count();
@@ -42,7 +42,7 @@ final class CardRepository {
     public static function userCardList(int $user) {
         return UserEquityEntity::query()->with('card')
             ->where('user_id', $user)
-            ->orderBy('expired_at', 'desc')
+            ->orderBy('expired_at', SORT_DESC)
             ->page();
     }
 
@@ -111,7 +111,7 @@ final class CardRepository {
         $items = UserEquityEntity::with('card')->where('user_id', $user)
             ->where('status', 1)
             ->where('expired_at', '>', time())
-            ->orderBy('card_id', 'desc')->get();
+            ->orderBy('card_id', SORT_DESC)->get();
         $data = [];
         foreach ($items as $item) {
             /**@var UserEquityEntity $item  */

@@ -7,7 +7,7 @@ class CategoryController extends Controller {
 
     public function indexAction() {
         $term_list = TermModel::withCount('blog')
-            ->orderBy('id', 'desc')->all();
+            ->orderBy('id', SORT_DESC)->get();
         return $this->renderData($term_list);
     }
 

@@ -6,7 +6,7 @@ use Module\Game\Bank\Domain\Model\BankLogModel;
 class LogController extends Controller {
 
     public function indexAction() {
-        $model_list = BankLogModel::with('user', 'product')->orderBy('id', 'desc')->page();
+        $model_list = BankLogModel::with('user', 'product')->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 }

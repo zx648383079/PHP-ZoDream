@@ -18,7 +18,7 @@ class TopicRepository extends TagBase {
     public static function newList(string $keywords = '', int $perPage = 20) {
         return static::query()->when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, [static::$nameKey], false, '', $keywords);
-        })->orderBy('id', 'desc')->page($perPage);
+        })->orderBy('id', SORT_DESC)->page($perPage);
     }
 
     public static function get(int $id) {

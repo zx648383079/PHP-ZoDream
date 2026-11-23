@@ -18,7 +18,7 @@ $this->registerJs($js, View::JQUERY_READY);
     <span class="tooltip-toggle"></span>
 </div>
 <a href="<?=$this->url('./miner')?>">雇佣矿工</a>
-<h4>[<?=$player->name?>](<?=$miner_list->getTotal()?>/<?=$player->house->amount?>)</h4>
+<h4>[<?=$player->name?>](<?=$miner_list->getTotalItems()?>/<?=$player->house->amount?>)</h4>
 <div class="miner-box">
     <?php foreach($miner_list as $item):?>
     <div class="item">

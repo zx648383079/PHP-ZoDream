@@ -34,7 +34,7 @@ class BonusModel extends Model {
         $data = BonusLogModel::query()->where(['bonus_id' => $this->id])->select([
             'num' => 'COUNT(*)',
             'money' => 'SUM(money)'
-        ])->asArray()->one();
+        ])->asArray()->first();
         if ($this->money === $data['money']) {
             $this->status = self::STATUS_END;
             $this->save();

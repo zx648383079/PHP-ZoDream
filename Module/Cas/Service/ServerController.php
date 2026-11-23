@@ -60,7 +60,7 @@ class ServerController extends Controller {
             return $this->renderFailure('无效的 service');
         }
         $model = TicketModel::where('service', $service)
-            ->where('ticket', $ticket)->one();
+            ->where('ticket', $ticket)->first();
         if (empty($model) || $model->isExpired()) {
             return $this->renderFailure('无效的 ticket');
 //            return join(PHP_EOL, [
@@ -81,7 +81,7 @@ class ServerController extends Controller {
             return;
         }
         $model = TicketModel::where('service', $service)
-            ->where('ticket', $ticket)->one();
+            ->where('ticket', $ticket)->first();
         if (empty($model)) {
             return $this->renderResponse([
                 'serviceResponse' => [

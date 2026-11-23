@@ -105,7 +105,7 @@ class CodeParser {
 
     public function formatFieldItem($name, $api_id, $kind, $parent_id = 0) {
         $fields = FieldModel::where('kind', $kind)->where('api_id', $api_id)
-            ->where('parent_id', $parent_id)->all();
+            ->where('parent_id', $parent_id)->get();
         if ($kind != FieldModel::KIND_RESPONSE && empty($fields)) {
             return [];
         }

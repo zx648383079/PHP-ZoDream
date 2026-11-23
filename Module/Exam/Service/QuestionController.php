@@ -13,7 +13,7 @@ class QuestionController extends Controller {
             $model = QuestionModel::find($id);
         } elseif ($course > 0) {
             $model = QuestionModel::where('course_id', $course)
-                ->orderBy('id asc')->first();
+                ->orderBy('id', SORT_ASC)->first();
         }
         if (!isset($model) || empty($model)) {
             return $this->goBack();
@@ -27,7 +27,7 @@ class QuestionController extends Controller {
     }
 
     public function checkAction(array $question) {
-        $this->layout = false;
+        $this->layout = '';
         $items = [];
         $results = session(self::CACHE_KEY, []);
         foreach ($question as $id => $item) {
@@ -45,7 +45,7 @@ class QuestionController extends Controller {
 
     private function getCard($id, $course) {
         $data = QuestionModel::where('course_id', $course)
-            ->orderBy('id asc')->pluck('id');
+            ->orderBy('id', SORT_ASC)->pluck('id');
         $items = [];
         $previous_url = $next_url = null;
         $results = session(self::CACHE_KEY, []);

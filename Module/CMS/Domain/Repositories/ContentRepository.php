@@ -208,6 +208,6 @@ class ContentRepository {
                 }
                 $query->where('id', $id);
             })->select('id','title','thumb')
-            ->orderBy('created_at', 'desc')->page($perPage, page: $page);
+            ->orderBy('created_at', SORT_DESC)->page($perPage, page: $page);
     }
 }

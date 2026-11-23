@@ -43,5 +43,5 @@ use Zodream\Template\View;
 </div>
 <?php endforeach;?>
 <?php if($comment_list->hasMore()):?>
-   <div class="load-more" data-page="<?=$comment_list->getIndex() + 1?>">加载更多</div>
+   <div class="load-more" data-page="<?=$comment_list->getCurrentPage() + 1?>">加载更多</div>
 <?php endif;?>

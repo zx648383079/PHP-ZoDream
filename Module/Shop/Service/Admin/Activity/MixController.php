@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class MixController extends Controller {
 
     public function indexAction() {
-        $model_list = ActivityModel::where('type', ActivityModel::TYPE_MIX)->orderBy('id', 'desc')->page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_MIX)->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 

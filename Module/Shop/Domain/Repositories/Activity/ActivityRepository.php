@@ -55,7 +55,7 @@ class ActivityRepository {
     }
 
     public static function timeList(int $length = 5, string $start_at = '') {
-        $model_list = ActivityTimeModel::orderBy('start_at', 'asc')->get();
+        $model_list = ActivityTimeModel::orderBy('start_at', SORT_ASC)->get();
         if (empty($model_list)) {
             return [];
         }

@@ -23,7 +23,7 @@ final class SiteRepository {
                 $query->where('cat_id', $category);
             })->when(!empty($domain), function ($query) use ($domain) {
                 $query->where('domain', $domain);
-            })->orderBy('score', 'desc')->page();
+            })->orderBy('score', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -38,19 +38,19 @@ final class SiteRepository {
     }
 
     public static function categories() {
-        return (new Tree(CategoryModel::query()->orderBy('id', 'desc')->get()))->makeTree();
+        return (new Tree(CategoryModel::query()->orderBy('id', SORT_DESC)->get()))->makeTree();
     }
 
     public static function recommend(int $category): array {
         return SiteModel::where('cat_id', $category)->where('top_type', '>', 0)
-            ->orderBy('top_type', 'desc')->orderBy('id', 'asc')->get();
+            ->orderBy('top_type', SORT_DESC)->thenBy('id', SORT_ASC)->get();
     }
 
     public static function recommendGroup(int $category = 0): array {
         $catItems = CategoryModel::where('id', $category)
             ->orWhere('parent_id', $category)
-            ->orderBy('parent_id', 'asc')
-            ->orderBy('id', 'asc')
+            ->orderBy('parent_id', SORT_ASC)
+            ->thenBy('id', SORT_ASC)
             ->get();
         if (empty($catItems)) {
             return [];
@@ -60,7 +60,7 @@ final class SiteRepository {
             $catId[] = $item['id'];
         }
         $items = SiteModel::whereIn('cat_id', $catId)->where('top_type', '>', 0)
-            ->orderBy('top_type', 'desc')->orderBy('id', 'asc')->get();
+            ->orderBy('top_type', SORT_DESC)->thenBy('id', SORT_ASC)->get();
         if (empty($items)) {
             return [];
         }

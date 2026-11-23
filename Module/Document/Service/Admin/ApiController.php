@@ -102,7 +102,7 @@ class ApiController extends Controller {
     }
 
     public function debugResultAction(string $url, string $method, array $request = [], array $header = []) {
-        $this->layout = false;
+        $this->layout = '';
         $request = ModelHelper::formArr($request);
         $header = ModelHelper::formArr($header);
         return $this->show(
@@ -115,7 +115,7 @@ class ApiController extends Controller {
     }
 
     public function editFieldAction(int $id, int $kind = 0, int $parent_id = 0, int $api_id = 0) {
-        $this->layout = false;
+        $this->layout = '';
         $model = $id > 0 ? ApiRepository::fieldSelf($id) :
             new FieldModel(compact('kind',  'parent_id', 'api_id'));
         return $this->show('editField', compact('model'));
@@ -160,7 +160,7 @@ class ApiController extends Controller {
     }
 
     public function refreshFieldAction(int $kind = 1, int $api_id = 0) {
-        $this->layout = false;
+        $this->layout = '';
         if ($kind === FieldModel::KIND_RESPONSE) {
             $response_fields = $this->getFieldList($api_id, FieldModel::KIND_RESPONSE);
             $response_fields = (new Tree($response_fields))->makeTreeForHtml();

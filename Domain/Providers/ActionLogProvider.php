@@ -122,7 +122,7 @@ class ActionLogProvider {
         }
         return $this->query()->where('user_id', auth()->id())
             ->where('item_type', $type)->where('item_id', $id)->where('action', $action)
-            ->count() > 0;
+            ->any();
     }
 
     public function insert(array $data): void {

@@ -1,17 +1,6 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-/**
- * Created by PhpStorm.
- * User: zx648
- * Date: 2016/10/15
- * Time: 21:00
- */
-use Domain\Model\Model;
-use Module\Book\Domain\Entities\BookEntity;
-use Module\Book\Domain\Repositories\BookRepository;
-use Zodream\Database\Model\Query;
-use Zodream\Helpers\Time;
 
 
 /**

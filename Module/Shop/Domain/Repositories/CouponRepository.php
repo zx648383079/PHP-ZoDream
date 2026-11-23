@@ -34,7 +34,7 @@ class CouponRepository {
                 $query->where('used_at', '>', 0);
             })->pluck('coupon_id');
         if (empty($ids)) {
-            return (new Page(0))->setPage([]);
+            return (new Page(0))->setItems([]);
         }
         return CouponModel::whereIn('id', $ids)
             ->when($status == 2, function ($query) {
@@ -149,7 +149,7 @@ class CouponRepository {
             throw new \Exception('优惠码错误');
         }
         $log = CouponLogModel::where('serial_number', $code)
-            ->where('user_id', 0)->orderBy('id', 'desc')->first();
+            ->where('user_id', 0)->orderBy('id', SORT_DESC)->first();
         if (empty($log)) {
             throw new \Exception('优惠码错误');
         }
@@ -163,7 +163,7 @@ class CouponRepository {
             throw new \Exception('优惠码错误');
         }
         $log = CouponLogModel::where('serial_number', $code)
-            ->where('user_id', 0)->orderBy('id', 'desc')->first();
+            ->where('user_id', 0)->orderBy('id', SORT_DESC)->first();
         if (empty($log)) {
             throw new \Exception('优惠码错误');
         }

@@ -13,14 +13,14 @@ final class AccountRepository {
      * @return array|null
      */
     public static function getItems() {
-        return AccountSimpleModel::auth()->orderBy('id', 'asc')->get();
+        return AccountSimpleModel::auth()->orderBy('id', SORT_ASC)->get();
     }
 
     /**
      * @return MoneyAccountModel[]
      */
     public static function all() {
-        return MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
+        return MoneyAccountModel::auth()->orderBy('id', SORT_DESC)->get();
     }
 
     /**

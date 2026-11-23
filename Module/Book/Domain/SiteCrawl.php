@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain;
 
 use Module\Book\Domain\Spiders\AutoSpider;
@@ -21,7 +22,7 @@ use Zodream\Spider\Support\Uri;
 
 class SiteCrawl {
 
-    static $maps = [
+    static array $maps = [
         'www.qu.la' => BiQuGe::class,
         'www.biquge5200.cc' => CBiQuGe::class,
         'www.biquge11.com' => CBiQuGe::class,
@@ -130,7 +131,7 @@ class SiteCrawl {
 
     }
 
-    public function addUri(Uri $uri) {
+    public function addUri(Uri $uri): bool {
         if (!$this->isHost($uri) || $this->hasUri($uri)) {
             return false;
         }
@@ -138,25 +139,25 @@ class SiteCrawl {
         return true;
     }
 
-    protected function getUri($uri) {
+    protected function getUri(mixed $uri) {
         return $uri instanceof Uri ? $uri->setFragment(null)->encode(false) : $uri;
     }
 
-    public function isHost($host) {
+    public function isHost(mixed $host) {
         $host = $host instanceof Uri ? $host->getHost() : $host;
         return $host == $this->host->getHost();
     }
 
-    public function hasUri($uri) {
+    public function hasUri(mixed $uri): bool {
         $uri = $this->getUri($uri);
         return in_array($uri, $this->uri_pool) || in_array($uri, $this->old_pool);
     }
 
     /**
      * @param $host
-     * @return BaseSpider|bool
+     * @return BaseSpider
      */
-    public static function getSpider($host) {
+    public static function getSpider(mixed $host): BaseSpider {
         $host = $host instanceof Uri ? $host->getHost() : $host;
         if (isset(self::$maps[$host])) {
             $class = self::$maps[$host];

@@ -57,8 +57,8 @@ HTML;
             ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_BUY)
             ->where('user_id', auth()->id())
-            ->where('node_index', $this->attr(Parser::UID_KEY))->count();
-        if ($count > 0) {
+            ->where('node_index', $this->attr(Parser::UID_KEY))->any();
+        if ($count) {
             return true;
         }
         if (!$this->page->isUnderAction($this)) {
@@ -119,14 +119,14 @@ HTML;
 HTML;
     }
 
-    private function isHide() {
+    private function isHide(): bool {
         if (auth()->guest()) {
             return true;
         }
         if (auth()->id() == $this->page->getModel()->user_id) {
             return false;
         }
-        return ThreadPostModel::where('thread_id', $this->page->threadId())
-            ->where('user_id', auth()->id())->count() < 1;
+        return !ThreadPostModel::where('thread_id', $this->page->threadId())
+            ->where('user_id', auth()->id())->any();
     }
 }

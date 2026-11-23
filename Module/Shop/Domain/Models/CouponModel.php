@@ -39,7 +39,7 @@ class CouponModel extends CouponEntity {
         if (auth()->guest()) {
             return true;
         }
-        return CouponLogModel::where('coupon_id', $this->id)->where('user_id', auth()->id())
-                ->count() < 1;
+        return !CouponLogModel::where('coupon_id', $this->id)->where('user_id', auth()->id())
+                ->any();
     }
 }

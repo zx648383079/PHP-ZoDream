@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service\Admin;
 
 
@@ -6,10 +7,10 @@ use Domain\Model\SearchModel;
 use Module\Book\Domain\Model\BookCategoryModel;
 
 class CategoryController extends Controller {
-    public function indexAction($keywords = null) {
+    public function indexAction(string $keywords = '') {
         $model_list = BookCategoryModel::withCount('book')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->all();
+        })->get();
         return $this->show(compact('model_list'));
     }
 
@@ -17,7 +18,7 @@ class CategoryController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = BookCategoryModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -32,7 +33,7 @@ class CategoryController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         BookCategoryModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('category')

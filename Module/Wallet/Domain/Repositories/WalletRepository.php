@@ -29,7 +29,7 @@ final class WalletRepository {
             })->when(!empty($items), function ($query) use ($items) {
                 $query->whereIn('type', $items);
             })
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
     }
 
     /**

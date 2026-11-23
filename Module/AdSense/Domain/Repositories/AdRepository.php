@@ -150,7 +150,7 @@ final class AdRepository {
                     return;
                 }
                 $query->where('position_id', $positionId);
-            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function manageGet(int $id) {
@@ -179,7 +179,7 @@ final class AdRepository {
         return AdPositionEntity::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
-            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function managePosition(int $id) {

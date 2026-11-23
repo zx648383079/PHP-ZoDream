@@ -78,7 +78,7 @@ class CartController extends Controller {
     }
 
     public function recommendAction() {
-        $like_goods = GoodsSimpleModel::limit(7)->all();
+        $like_goods = GoodsSimpleModel::take(7)->get();
         return $this->renderData($like_goods);
     }
 }

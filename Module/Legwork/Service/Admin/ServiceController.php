@@ -13,7 +13,7 @@ class ServiceController extends Controller {
             SearchModel::searchWhere($query, 'name');
             })->when($cat_id > 0, function ($query) use ($cat_id) {
                 $query->where('cat_id', $cat_id);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
         $cat_list = CategoryModel::query()->get();
         return $this->show(compact('items', 'keywords', 'cat_list', 'cat_id'));
     }

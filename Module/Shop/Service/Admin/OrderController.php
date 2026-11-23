@@ -31,15 +31,15 @@ class OrderController extends Controller {
                 }
                 $query->whereIn('id', explode(',', $orderId));
             })
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
         $status_list = OrderModel::$status_list;
         return $this->show(compact('model_list', 'series_number', 'status_list', 'status', 'log_id'));
     }
 
     public function infoAction($id) {
         $order = OrderModel::find($id);
-        $goods_list = OrderGoodsModel::where('order_id', $id)->all();
-        $address = OrderAddressModel::where('order_id', $id)->one();
+        $goods_list = OrderGoodsModel::where('order_id', $id)->get();
+        $address = OrderAddressModel::where('order_id', $id)->first();
         $user = UserModel::find($order->user_id);
         $delivery = DeliveryModel::where('order_id', $id)->first();
         return $this->show(compact('order', 'goods_list', 'address', 'user', 'delivery'));
@@ -50,8 +50,8 @@ class OrderController extends Controller {
         if ($order->status != OrderModel::STATUS_PAID_UN_SHIP) {
             return $this->redirectWithMessage($this->getUrl('order'), '订单状态有误');
         }
-        $goods_list = OrderGoodsModel::where('order_id', $id)->all();
-        $address = OrderAddressModel::where('order_id', $id)->one();
+        $goods_list = OrderGoodsModel::where('order_id', $id)->get();
+        $address = OrderAddressModel::where('order_id', $id)->first();
         $shipping_list = ShippingModel::all();
         return $this->show(compact('order', 'goods_list', 'address', 'shipping_list'));
     }

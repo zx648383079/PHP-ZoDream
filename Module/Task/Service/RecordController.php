@@ -20,7 +20,7 @@ class RecordController extends Controller {
             list($start_at, $end_at) = Time::month($time);
         }
         $day_list = ReviewRepository::statistics($start_at, $end_at, $ignore);
-        $this->layout = false;
+        $this->layout = '';
         $chart = $chart === 'table' ? $chart : 'chart';
         return $this->show($chart, compact('date', 'type', 'day_list'));
     }

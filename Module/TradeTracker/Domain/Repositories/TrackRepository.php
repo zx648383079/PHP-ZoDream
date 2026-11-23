@@ -52,7 +52,7 @@ final class TrackRepository {
             'b',
             'a.product_id=b.product_id and a.price=b.price'
         )
-        ->alias('a')->selectRaw('a.*')->orderBy('created_at', 'desc')->page();
+        ->alias('a')->selectRaw('a.*')->orderBy('created_at', SORT_DESC)->page();
     }
 
 
@@ -137,7 +137,7 @@ final class TrackRepository {
             'type' => $data['type'],
         ])->where('created_at', '<=', $data['created_at'])
         // 不超过1小时的可以合并
-        ->where('created_at', '>', $data['created_at'] - 3600)->orderBy('created_at', 'desc')->asArray()->first();
+        ->where('created_at', '>', $data['created_at'] - 3600)->orderBy('created_at', SORT_DESC)->asArray()->first();
         if ($exist && ($exist['price'] == $data['price'] || $exist['created_at'] == $data['created_at'])) {
             return;
         }

@@ -42,7 +42,7 @@ class CreateAdTables extends Migration {
         RoleRepository::newPermission([
             'ad_manage' => '广告管理'
         ]);
-        if (AdPositionEntity::query()->count() > 0) {
+        if (AdPositionEntity::query()->any()) {
             return;
         }
         $data = [

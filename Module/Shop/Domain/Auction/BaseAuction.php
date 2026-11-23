@@ -81,7 +81,7 @@ abstract class BaseAuction {
      */
     protected function maxLog() {
        return AuctionLogModel::where('act_id', $this->model->id)
-           ->orderBy('bid', 'desc')
+           ->orderBy('bid', SORT_DESC)
            ->first();
     }
 

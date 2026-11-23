@@ -21,7 +21,7 @@ class WarehouseRepository {
         $goods = WarehouseGoodsModel::whereIn('warehouse_id', $idItems)
             ->where('goods_id', $goodsId)
             ->where('product_id', $productId)
-            ->orderBy('amount', 'desc')
+            ->orderBy('amount', SORT_DESC)
             ->first();
         if (empty($goods)) {
             return null;
@@ -47,7 +47,7 @@ class WarehouseRepository {
         $amount = WarehouseGoodsModel::whereIn('warehouse_id', $idItems)
             ->where('goods_id', $goodsId)
             ->where('product_id', $productId)
-            ->orderBy('amount', 'desc')
+            ->orderBy('amount', SORT_DESC)
             ->value('amount');
         return intval($amount);
     }
@@ -64,8 +64,8 @@ class WarehouseRepository {
         $count = WarehouseGoodsModel::whereIn('warehouse_id', $idItems)
             ->where('goods_id', $goodsId)
             ->where('product_id', $productId)
-            ->orderBy('amount', 'desc')
-            ->limit(1)
+            ->orderBy('amount', SORT_DESC)
+            ->take(1)
             ->updateIncrement('amount', $amount);
         return $count > 0;
     }

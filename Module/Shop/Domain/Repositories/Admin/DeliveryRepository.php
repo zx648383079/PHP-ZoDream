@@ -13,8 +13,8 @@ class DeliveryRepository {
             ->with('goods', 'user', 'order')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name', 'shipping_name', 'logistics_number', 'tel']);
-            })->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')->page();
+            })->orderBy('status', SORT_ASC)
+            ->thenBy('id', SORT_DESC)->page();
     }
 
     public static function remove(int $id) {

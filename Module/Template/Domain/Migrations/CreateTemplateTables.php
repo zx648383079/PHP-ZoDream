@@ -132,7 +132,7 @@ class CreateTemplateTables extends Migration {
         RoleRepository::newPermission([
             'visual_manage' => '模板管理'
         ]);
-        if (ThemeCategoryEntity::query()->count() > 0) {
+        if (ThemeCategoryEntity::query()->any()) {
             return;
         }
         ThemeCategoryEntity::query()->insert([

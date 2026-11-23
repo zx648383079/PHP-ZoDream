@@ -90,7 +90,7 @@ final class CartRepository {
             throw new \Exception(sprintf('商品【%s】已下架', $goods->name));
         }
         $box = AttributeRepository::getProductAndPriceWithProperties($properties, $goods->id);
-        if (empty($box['product']) && ProductEntity::where('goods_id', $id)->count() > 0) {
+        if (empty($box['product']) && ProductEntity::where('goods_id', $id)->any()) {
             return [$goods, $box['product'], false];
         }
         if (!GoodsRepository::canBuy($goods, $amount, $properties)) {

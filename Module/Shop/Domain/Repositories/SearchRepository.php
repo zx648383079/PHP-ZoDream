@@ -11,7 +11,7 @@ use Zodream\Database\Contracts\SqlBuilder;
 class SearchRepository {
 
     public static function hotKeywords(): array {
-        return GoodsModel::query()->limit(5)->pluck('name');
+        return GoodsModel::query()->take(5)->pluck('name');
     }
 
     public static function filterItems(string $keywords = '', int $category = 0, int $brand = 0) {

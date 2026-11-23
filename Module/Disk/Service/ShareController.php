@@ -46,16 +46,16 @@ class ShareController extends Controller {
     public function allAction() {
         $models = ShareModel::alias('s')
             ->leftJoin('user u', ['u.id' => 's.user_id'])
-            ->where(['s.mode' => 'public'])
-            ->orderBy('s.create_at desc')
-            ->select('s.id as id, s.title as title, s.create_at as create_at, u.id as user_id, u.username as username, u.avatar as avatar')
-            ->asArray()->all();
+            ->where('s.mode', 'public')
+            ->orderBy('s.create_at', SORT_DESC)
+            ->selectRaw('s.id as id, s.title as title, s.create_at as create_at, u.id as user_id, u.username as username, u.avatar as avatar')
+            ->asArray()->get();
         return $this->show('all', [
             'models' => $models
         ]);
     }
 
-    public function listAction($share, $id = 0, $offset = 0, $length = 20) {
+    public function listAction(int $share, int $id = 0, int $offset = 0, int $length = 20) {
         $model = ShareModel::find($share);
         if (empty($model) || !$this->canView($model)) {
             return $this->renderFailure('分享不存在！');
@@ -66,13 +66,13 @@ class ShareController extends Controller {
                 ->left('disk_file f', 'd.file_id', 'f.id')
                 ->where('s.share_id', $model->id)
                 ->select('d.*', 'f.extension', 'f.size')
-                ->limit($length)->offset($offset)->asArray()->all();
+                ->take($length)->offset($offset)->asArray()->get();
             return $this->renderData($data);
         }
         $data = DiskModel::alias('d')
             ->where('d.parent_id', $id)
             ->select('d.*', 'f.extension', 'f.size')
-            ->limit($length)->offset($offset)->asArray()->all();
+            ->take($length)->offset($offset)->asArray()->get();
         return $this->renderData($data);
     }
 
@@ -92,9 +92,9 @@ class ShareController extends Controller {
             ->leftJoin('share s', ['su.share_id' => 's.id'])
             ->leftJoin('user u', ['u.id' => 's.user_id'])
             ->where(['su.user_id' => $user])
-            ->orderBy('s.create_at desc')
-            ->select('s.id as id, s.title as title, s.create_at as create_at, u.id as user_id, u.username as username, u.avatar as avatar')
-            ->all();
+            ->orderBy('s.create_at', SORT_DESC)
+            ->selectRaw('s.id as id, s.title as title, s.create_at as create_at, u.id as user_id, u.username as username, u.avatar as avatar')
+            ->get();
         return $this->show('me', compact('models'));
     }
 
@@ -105,7 +105,7 @@ class ShareController extends Controller {
 //            ->leftJoin('disk_file f', 'd.file_id', 'f.id')
             ->where('s.user_id', auth()->id())
             ->select('s.name', 's.id', 's.mode', 's.created_at',
-                's.view_count', 's.down_count', 's.save_count')->asArray()->all();
+                's.view_count', 's.down_count', 's.save_count')->asArray()->get();
         return $this->renderData($models);
     }
 
@@ -136,7 +136,7 @@ class ShareController extends Controller {
         return $this->renderData(null, '保存成功！');
     }
 
-    protected function canView(ShareModel $model) {
+    protected function canView(ShareModel $model): bool {
         if (auth()->id() == $model->user_id) {
             return true;
         }
@@ -150,8 +150,7 @@ class ShareController extends Controller {
             return false;
         }
         if ($model->mode == ShareModel::SHARE_PRIVATE) {
-            $count = ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->count();
-            return $count > 0;
+            return ShareUserModel::where(['share_id' => $model->id, 'user_id' => auth()->id()])->any();
         }
         return true;
     }

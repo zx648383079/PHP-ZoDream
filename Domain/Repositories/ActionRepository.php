@@ -36,7 +36,7 @@ abstract class ActionRepository {
         return static::query()->where('item_id', $item_id)
             ->where('item_type', $item_type)
             ->where('user_id', auth()->id())
-            ->where('action', $action)->count() > 0;
+            ->where('action', $action)->any();
     }
 
     /**

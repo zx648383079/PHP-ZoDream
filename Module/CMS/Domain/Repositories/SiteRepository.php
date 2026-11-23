@@ -32,7 +32,7 @@ class SiteRepository {
         return SiteModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['title']);
-            })->orderBy('id', 'asc')->page();
+            })->orderBy('id', SORT_ASC)->page();
     }
 
     public static function get(int $id) {
@@ -170,7 +170,7 @@ class SiteRepository {
             return CacheRepository::getSiteCache();
         }
         $data = SiteModel::query()->asArray()
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->get('id', 'is_default', 'match_rule');
         return array_map(function ($item) {
             return [

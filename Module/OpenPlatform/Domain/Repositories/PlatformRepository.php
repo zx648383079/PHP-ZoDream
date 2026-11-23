@@ -11,7 +11,7 @@ class PlatformRepository {
     public static function getList(string $keywords = '') {
         return PlatformModel::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->orderBy('status', 'desc')->page();
+        })->orderBy('status', SORT_DESC)->page();
     }
 
     public static function get(int $id) {

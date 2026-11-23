@@ -12,7 +12,7 @@ final class RecipeRepository {
         return RecipeEntity::where('store_id', StoreRepository::own())
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name'], true, '', $keywords);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 }

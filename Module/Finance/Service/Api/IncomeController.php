@@ -11,9 +11,9 @@ class IncomeController extends Controller {
             $month = date('Y-m');
         }
         $time = strtotime($month);
-        $income_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', 'desc')->all();
-        $expenditure_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', 'desc')->all();
-        $log_list = LogModel::auth()->month($time)->orderBy('happened_at', 'desc')->all();
+        $income_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', SORT_DESC)->get();
+        $expenditure_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', SORT_DESC)->get();
+        $log_list = LogModel::auth()->month($time)->orderBy('happened_at', SORT_DESC)->get();
         $day_length = date('t', $time);
         $income_days = LogModel::getMonthLogs($income_list, $day_length);
         $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);

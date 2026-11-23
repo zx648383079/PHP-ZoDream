@@ -10,7 +10,7 @@ class BudgetRepository {
 
     public static function getList() {
         /** @var Page $page */
-        $page = BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', 'desc')->page();
+        $page = BudgetModel::auth()->where('deleted_at', 0)->orderBy('id', SORT_DESC)->page();
         return $page->map(function (BudgetModel $item) {
             $remain = $item->remain;
             return array_merge($item->toArray(), compact('remain'));
@@ -19,7 +19,7 @@ class BudgetRepository {
 
     public static function all() {
         return BudgetModel::auth()->where('deleted_at', 0)
-            ->orderBy('id', 'desc')->get('id', 'name');
+            ->orderBy('id', SORT_DESC)->get('id', 'name');
     }
 
     public static function refreshSpent() {

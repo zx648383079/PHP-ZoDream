@@ -4,7 +4,6 @@ namespace Module\Shop\Service\Mobile;
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
-use Module\Shop\Domain\Models\ShippingModel;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
 use Module\Shop\Domain\Repositories\ShippingRepository;
@@ -20,7 +19,7 @@ class CashierController extends Controller {
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./mobile', '请选择结算的商品');
         }
-        $address = AddressModel::where('user_id', auth()->id())->one();
+        $address = AddressModel::where('user_id', auth()->id())->first();
         $order = OrderModel::preview($goods_list);
         $shipping_list = empty($address) ? [] : ShippingRepository::getByAddress($address);
         $payment_list = PaymentModel::all();

@@ -40,7 +40,7 @@ class InvoiceController extends Controller {
     }
 
     public function logAction() {
-        $model_list = InvoiceModel::where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+        $model_list = InvoiceModel::where('user_id', auth()->id())->orderBy('id', SORT_DESC)->page();
         return $this->renderPage($model_list);
     }
 

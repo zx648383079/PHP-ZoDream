@@ -21,7 +21,7 @@ final class ApplyRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['remark']);
             })->where('type', $type)
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function change(int $id, int $status) {
@@ -79,8 +79,8 @@ final class ApplyRepository {
         return ApplyLogEntity::with('user')
             ->where('item_type', $itemType)
             ->where('item_id', $itemId)
-            ->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_ASC)
+            ->thenBy('id', SORT_DESC)->page();
     }
 
     public static function receiveUnread(int $itemType, int $itemId, int $lastAt = 0): int {
@@ -95,6 +95,6 @@ final class ApplyRepository {
     public static function receiveAny(int $user, int $itemType, int $itemId): bool {
         return ApplyLogEntity::where('item_type', $itemType)
             ->where('item_id', $itemId)
-            ->where('user_id', $user)->count() > 0;
+            ->where('user_id', $user)->any();
     }
 }

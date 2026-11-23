@@ -11,7 +11,7 @@ class LogRepository {
         return MessageHistoryModel::with('to_user', 'from_user')->where('bot_id', $bot_id)
             ->when($mark !== false, function ($query) use ($mark) {
                 $query->where('is_mark', intval($mark));
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -22,7 +22,7 @@ class LogRepository {
             })
             ->when($mark !== false, function ($query) use ($mark) {
                 $query->where('is_mark', intval($mark));
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
     public static function mark(int $id) {

@@ -25,7 +25,7 @@ final class NoteRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -56,7 +56,7 @@ final class NoteRepository {
                     $query->where('user_id', auth()->id())
                     ->where('status', self::STATUS_HIDE);
                 });
-            })->orderBy('created_at', 'desc')
+            })->orderBy('created_at', SORT_DESC)
             ->page($perPage);
     }
 
@@ -134,7 +134,7 @@ final class NoteRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -146,7 +146,7 @@ final class NoteRepository {
         if ($id > self::SYSTEM_TOPIC_MAX && $model->user_id != auth()->id() && $model->status !== self::STATUS_VISIBLE) {
             throw new Exception('topic is private');
         }
-        $items = NoteModel::with('user')->where('topic_id', $id)->orderBy('id', 'asc')
+        $items = NoteModel::with('user')->where('topic_id', $id)->orderBy('id', SORT_ASC)
             ->get();
         $res = $model->toArray();
         $res['user'] = $model->user;
@@ -212,13 +212,13 @@ final class NoteRepository {
     public static function suggestion(string $keywords) {
         return NoteModel::when(!empty($keywords), function($query) {
             SearchModel::searchWhere($query, ['content']);
-        })->groupBy('content')->limit(4)->pluck('content');
+        })->groupBy('content')->take(4)->pluck('content');
     }
 
     public static function getNewList(int $limit) {
         return NoteModel::with('user', 'topic')->where('topic_id',
             LocalizeRepository::browserLanguageIsDefault() ? 2 : 1)
-            ->orderBy('created_at', 'desc')->limit($limit ?? 5)->get();
+            ->orderBy('created_at', SORT_DESC)->take($limit ?? 5)->get();
     }
 
     public static function change(int $id, array $data) {

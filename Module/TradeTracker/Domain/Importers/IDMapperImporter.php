@@ -96,7 +96,7 @@ class IDMapperImporter {
     }
 
     private function bindChannelProduct(int $channelId, int $productId, string|int $hashName = ''): void {
-        $exist = ChannelProductEntity::where('product_id', $productId)->where('channel_id', $channelId)->count() > 0;
+        $exist = ChannelProductEntity::where('product_id', $productId)->where('channel_id', $channelId)->any();
         if ($exist) {
             return;
         }

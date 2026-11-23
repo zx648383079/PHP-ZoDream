@@ -11,7 +11,7 @@ class CouponRepository {
         return CouponModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -37,7 +37,7 @@ class CouponRepository {
         return CouponLogModel::with('user')->where('coupon_id', $coupon)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $query->where('serial_number', $keywords);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function codeGenerate(int $coupon, int $amount) {

@@ -8,9 +8,9 @@ final class LiveSiteContext extends BaseContext {
 
     public function fieldItems(int $model): array {
         $fieldItems = ModelFieldEntity::where('model_id', $model)
-                ->orderBy('position', 'asc')
-                ->orderBy('is_system', 'desc')
-                ->orderBy('id', 'asc')
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('is_system', SORT_DESC)
+                ->thenBy('id', SORT_ASC)
                 ->get();
         return array_map(function ($item) {
             return $item->toArray();

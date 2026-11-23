@@ -17,7 +17,7 @@ final class SiteRepository {
             $query->where('user_id', $user);
         })->when(!empty($domain), function ($query) use ($domain) {
             $query->whereLike('`domain`', $domain);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -60,7 +60,7 @@ final class SiteRepository {
     public static function exist(SiteModel $model): bool {
         return SiteModel::where('`schema`', $model->schema)
             ->where('`domain`', $model->domain)
-            ->where('id', '<>', $model->id)->count() > 0;
+            ->where('id', '<>', $model->id)->any();
     }
 
     public static function check(string $domain, int $id = 0): ?SiteModel {
@@ -77,7 +77,7 @@ final class SiteRepository {
             return null;
         }
         $host = parse_url($link, PHP_URL_HOST);
-        return SiteModel::query()->where('`domain`', $host)->orderBy('id', 'desc')->first();
+        return SiteModel::query()->where('`domain`', $host)->orderBy('id', SORT_DESC)->first();
     }
 
     public static function scoring(array $data) {
@@ -97,7 +97,7 @@ final class SiteRepository {
 
     public static function getScoreLog(int $site) {
         return SiteScoringLogModel::where('site_id', $site)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SORT_DESC)
             ->page();
     }
 

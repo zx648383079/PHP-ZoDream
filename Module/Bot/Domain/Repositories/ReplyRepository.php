@@ -28,7 +28,7 @@ class ReplyRepository {
         return ReplyModel::where('bot_id', $bot_id)
             ->when(!empty($event), function ($query) use ($event) {
                 $query->where('event', $event);
-            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function manageList(int $bot_id = 0, string $event = '') {
@@ -37,7 +37,7 @@ class ReplyRepository {
             })
             ->when(!empty($event), function ($query) use ($event) {
                 $query->where('event', $event);
-            })->orderBy('status', 'desc')->orderBy('id', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -214,8 +214,8 @@ class ReplyRepository {
         $data = ReplyModel::where('event', AdapterEvent::Message->getEventName())
             ->where('bot_id', $bot_id)
             ->where('status', 1)
-            ->orderBy('`match`', 'asc')
-            ->orderBy('updated_at', 'asc')
+            ->orderBy('`match`', SORT_ASC)
+            ->orderBy('updated_at', SORT_ASC)
             ->get('id', 'keywords', '`match`');
         $args = [];
         foreach ($data as $item) {

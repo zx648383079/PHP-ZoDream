@@ -50,7 +50,7 @@ class DiskController extends Controller {
             return $this->renderFailure('不能为空！');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
-            ->whereIn('id', (array)$id)->all();
+            ->whereIn('id', (array)$id)->get();
         foreach ($model_list as $item) {
             $item->softDeleteThis();
         }
@@ -143,7 +143,7 @@ class DiskController extends Controller {
         if (empty($data['md5']) || empty($data['name'])) {
             return $this->renderFailure('不能为空！');
         }
-        $model = FileModel::where('md5', $data['md5'])->one();
+        $model = FileModel::where('md5', $data['md5'])->first();
         if (empty($model)) {
             // 保存文件名等待上传获取
             session()->set('file_'.$data['md5'], $data['name']);
@@ -197,9 +197,9 @@ class DiskController extends Controller {
         return $this->renderData($model);
     }
 
-    public function folderAction($id) {
+    public function folderAction(int $id) {
         $data = DiskModel::auth()->where('parent_id', $id)->where('file_id', 0)
-            ->select('id,name,parent_id')->asArray()->all();
+            ->select('id,name,parent_id')->asArray()->get();
         return $this->renderData($data);
     }
 
@@ -218,7 +218,7 @@ class DiskController extends Controller {
             return $this->renderFailure('移动目标不是文件夹');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
-            ->whereIn('id', (array)$id)->all();
+            ->whereIn('id', (array)$id)->get();
         foreach ($model_list as $item) {
             $item->moveTo($disk);
         }
@@ -240,7 +240,7 @@ class DiskController extends Controller {
             return $this->renderFailure('移动目标不是文件夹');
         }
         $model_list = DiskModel::auth()->where('deleted_at', 0)
-            ->whereIn('id', (array)$id)->all();
+            ->whereIn('id', (array)$id)->get();
         foreach ($model_list as $item) {
             $item->copyTo($disk);
         }

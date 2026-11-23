@@ -14,7 +14,7 @@ class HomeController extends Controller {
         }
         $miner_list = PlayerMinerModel::with('miner', 'area')
             ->where('player_id', $player->id)->page();
-        $area_list = AreaModel::query()->all();
+        $area_list = AreaModel::query()->get();
         return $this->show(compact('player', 'miner_list', 'area_list'));
     }
 }

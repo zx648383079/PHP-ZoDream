@@ -185,8 +185,8 @@ abstract class BaseScene implements SceneInterface {
             ->when($id > 0, function ($query) use ($id) {
                 $query->where('id', '<>', $id);
             })
-            ->where('title', $data['title'])->count();
-        if ($count > 0) {
+            ->where('title', $data['title'])->any();
+        if ($count) {
             throw new \Exception('标题重复');
         }
     }
@@ -240,15 +240,15 @@ abstract class BaseScene implements SceneInterface {
             $query->orderBy($order);
         })->page($perPage, 'page', $page);
         if (empty($extra) || !str_contains($extra, 'children')) {
-            return $items->setPage(Relation::create($items->getPage(), [
+            return $items->setItems(Relation::create($items->getItems(), [
                 'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
             ]));
         }
-        $data = Relation::create($items->getPage(), [
+        $data = Relation::create($items->getItems(), [
             'children' => Relation::make($this->commentQuery(), 'id',
             'parent_id', Relation::TYPE_MANY)
         ]);
-        return $items->setPage(ModelHelper::bindTwoRelation($data,
+        return $items->setItems(ModelHelper::bindTwoRelation($data,
             [
                 'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
             ]));
@@ -507,7 +507,7 @@ abstract class BaseScene implements SceneInterface {
         if ($isPage) {
             return $query->page($perPage, 'page', $page);
         }
-        return new Page($query->limit(max(($page - 1) * $page, 0), $perPage)->get(),
+        return new Page($query->skip(max(($page - 1) * $page, 0))->take($perPage)->get(),
             $perPage, 'page', $page
         );
     }

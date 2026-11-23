@@ -92,8 +92,8 @@ class TicketModel extends Model {
      * @param bool $checkExpired
      * @return static
      */
-    public static function getByTicket($ticket, $checkExpired = true) {
-        $record = static::where('ticket', $ticket)->one();
+    public static function getByTicket(string $ticket, bool $checkExpired = true) {
+        $record = static::where('ticket', $ticket)->first();
         if (!$record) {
             return null;
         }
@@ -112,7 +112,7 @@ class TicketModel extends Model {
      * @return static
      */
     public static function findByService($service) {
-        return self::where('service_url', $service)->one();
+        return self::where('service_url', $service)->first();
     }
 
     /**
@@ -120,7 +120,7 @@ class TicketModel extends Model {
      * @return static[]
      */
     public static function findByUser($user_id) {
-        return self::where('user_id', $user_id)->all();
+        return self::where('user_id', $user_id)->get();
     }
 
     public function sendLogout() {

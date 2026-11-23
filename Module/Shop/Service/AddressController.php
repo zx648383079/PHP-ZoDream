@@ -16,7 +16,7 @@ class AddressController extends Controller {
     public function indexAction() {
         $model_list = AddressRepository::getList();
         if (request()->isAjax()) {
-            $this->layout = false;
+            $this->layout = '';
             return $this->show('page', compact('model_list'));
         }
         return $this->sendWithShare()->show(compact('model_list'));

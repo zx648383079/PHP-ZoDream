@@ -126,8 +126,8 @@ class VisualFactory {
         } else {
             $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')->first();
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('id', SORT_ASC)->first();
         }
         if (empty($pageModel)) {
             throw new \Exception('page not found');
@@ -162,8 +162,8 @@ class VisualFactory {
         } else {
             $pageModel = SitePageModel::where('site_id', $siteModel->id)
                 ->where('status', PageRepository::PUBLISH_STATUS_POSTED)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')->first();
+                ->orderBy('position', SORT_ASC)
+                ->orderBy('id', SORT_ASC)->first();
         }
         if (empty($pageModel)) {
             throw new \Exception('page not found');

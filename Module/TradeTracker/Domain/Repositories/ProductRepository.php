@@ -53,7 +53,7 @@ final class ProductRepository {
             ];
         }
         $channelId = ChannelProductEntity::where('product_id', $id)->pluck('channel_id');
-        $data['channel_items'] = empty($channelId) ? [] : ChannelEntity::whereIn('id', $channelId)->orderBy('id', 'asc')->get();
+        $data['channel_items'] = empty($channelId) ? [] : ChannelEntity::whereIn('id', $channelId)->orderBy('id', SORT_ASC)->get();
         return $data;
     }
 
@@ -83,7 +83,7 @@ final class ProductRepository {
             }
             $query->where('created_at', '<=', is_numeric($endAt) ? intval($endAt) : strtotime($endAt));
         })
-        ->orderBy('created_at', 'asc')
+        ->orderBy('created_at', SORT_ASC)
         ->get();
         return array_map(function(TradeEntity $item) {
             $data = $item->toArray();

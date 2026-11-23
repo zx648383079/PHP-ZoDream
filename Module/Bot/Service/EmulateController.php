@@ -17,7 +17,7 @@ class EmulateController extends Controller {
         $menu_list = MenuModel::with('children')->where('bot_id', $wx->id)->where('parent_id', 0)
             ->get();
         $news_list = MediaModel::where('bot_id', $wx->id)->where('type', MediaModel::TYPE_NEWS)
-            ->orderBy('created_at', 'desc')->limit(6)
+            ->orderBy('created_at', SORT_DESC)->take(6)
             ->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')->get();
         return $this->show(compact('wx', 'menu_list', 'news_list'));
     }

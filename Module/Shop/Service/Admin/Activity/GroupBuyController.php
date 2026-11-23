@@ -8,7 +8,7 @@ use Module\Shop\Service\Admin\Controller;
 class GroupBuyController extends Controller {
 
     public function indexAction() {
-        $model_list = ActivityModel::where('type', ActivityModel::TYPE_GROUP_BUY)->orderBy('id', 'desc')->page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_GROUP_BUY)->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 

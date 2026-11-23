@@ -87,7 +87,7 @@ class WaiterRepository {
     public static function isWaiter(int $id): bool {
         return WaiterModel::where('user_id', $id)
             ->where('status', WaiterModel::STATUS_ALLOW)
-            ->count() > 0;
+            ->any();
     }
 
     public static function serviceList(string $keywords = '', int $category = 0, bool $all = false) {
@@ -127,7 +127,7 @@ class WaiterRepository {
             }, function ($query) {
                 $query->where('status', '>=', OrderModel::STATUS_UN_PAY);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function taking($id) {
@@ -180,7 +180,7 @@ class WaiterRepository {
             ->where('waiter_id', 0)
             ->whereIn('service_id', $serviceId)
             ->where('status', OrderModel::STATUS_PAID_UN_TAKING)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->select([
                 'id',
                 'user_id',

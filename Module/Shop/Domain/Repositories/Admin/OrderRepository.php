@@ -88,7 +88,7 @@ class OrderRepository {
                 }
                 $query->whereIn('id', explode(',', $orderId));
             })
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function get(int $id, bool $full = false) {
@@ -99,7 +99,7 @@ class OrderRepository {
         $data = $order->toArray();
         $data['status_label'] = $order->status_label;
         $data['goods_list'] = OrderGoodsModel::where('order_id', $id)->get();
-        $data['address'] = OrderAddressModel::where('order_id', $id)->one();
+        $data['address'] = OrderAddressModel::where('order_id', $id)->first();
         $data['user'] = $order->user;
         $data['delivery'] = DeliveryModel::where('order_id', $id)->first();
         return $data;

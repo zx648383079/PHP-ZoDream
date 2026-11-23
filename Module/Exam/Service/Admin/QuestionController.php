@@ -18,7 +18,7 @@ class QuestionController extends Controller {
                 SearchModel::searchWhere($query, 'name');
             })->when(!empty($course), function ($query) use ($course) {
                 $query->where('course_id', intval($course));
-            })->where('parent_id', 0)->orderBy('id', 'desc')->page();
+            })->where('parent_id', 0)->orderBy('id', SORT_DESC)->page();
         $cat_list = CourseModel::tree()->makeTreeForHtml();
         return $this->show(compact('items', 'cat_list', 'course', 'keywords'));
     }
@@ -33,7 +33,7 @@ class QuestionController extends Controller {
         $option_list = [];
         if (!$model->isNewRecord) {
             $option_list = QuestionOptionModel::where('question_id', $model->id)
-                ->orderBy('id', 'asc')->get();
+                ->orderBy('id', SORT_ASC)->get();
         }
         return $this->show('edit', compact('model', 'cat_list', 'option_list'));
     }
@@ -44,9 +44,9 @@ class QuestionController extends Controller {
         $model->type = intval($type);
         if (!$model->isNewRecord && $model->type < 2) {
             $option_list = QuestionOptionModel::where('question_id', $model->id)
-                ->orderBy('id', 'asc')->get();
+                ->orderBy('id', SORT_ASC)->get();
         }
-        $this->layout = false;
+        $this->layout = '';
         return $this->show(compact('model', 'option_list'));
     }
 
@@ -93,7 +93,7 @@ class QuestionController extends Controller {
             return $this->renderFailure('请输入标题');
         }
         if (QuestionModel::where('title', $title)
-                ->where('course_id', $request->get('course_id'))->count() > 0) {
+                ->where('course_id', $request->get('course_id'))->any()) {
             return $this->renderFailure('已存在同名题目');
         }
         $model = new QuestionModel();

@@ -20,7 +20,7 @@ class RssRepository {
         $model_list = BlogModel::query()->with('term')
             ->where('open_type', PublishRepository::OPEN_PUBLIC)
             ->where('language', LocalizeRepository::browserLanguage())
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->get('id', 'term_id', 'title', 'edit_type', 'content', 'programming_language', 'created_at');
         $metaItems = static::getMeta();
         foreach ($model_list as $item) {

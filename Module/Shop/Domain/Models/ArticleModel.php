@@ -30,9 +30,9 @@ class ArticleModel extends ArticleEntity {
     }
 
     public static function getHelps(){
-        $data = ArticleCategoryModel::where('parent_id', 2)->all();
+        $data = ArticleCategoryModel::where('parent_id', 2)->get();
         foreach ($data as $item) {
-            $item->children = static::where('cat_id', $item->id)->all();
+            $item->children = static::where('cat_id', $item->id)->get();
         }
         return $data;
     }

@@ -19,7 +19,7 @@ class ActivityRepository {
         /** @var Page $page */
         $page = $query->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('type', $type)->orderBy('id', 'desc')->page();
+        })->where('type', $type)->orderBy('id', SORT_DESC)->page();
         $page->map(function ($item) {
             if ($item->type === ActivityModel::TYPE_MIX) {
                 return static::formatMix($item);
@@ -102,7 +102,7 @@ class ActivityRepository {
     }
 
     public static function timeList() {
-        return ActivityTimeModel::orderBy('start_at asc')->get();
+        return ActivityTimeModel::orderBy('start_at', SORT_ASC)->get();
     }
 
     public static function time(int $id) {

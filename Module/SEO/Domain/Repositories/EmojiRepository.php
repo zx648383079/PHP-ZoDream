@@ -21,7 +21,7 @@ class EmojiRepository {
             SearchModel::searchWhere($query, ['name']);
         })->when($cat_id > 0, function ($query) use ($cat_id) {
             $query->where('cat_id', $cat_id);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -189,7 +189,7 @@ class EmojiRepository {
         }
         return cache()->getOrSet(self::CACHE_KEY, function () {
            return Arr::format(EmojiCategoryModel::with('items')
-               ->orderBy('id', 'asc')->get());
+               ->orderBy('id', SORT_ASC)->get());
         });
     }
 

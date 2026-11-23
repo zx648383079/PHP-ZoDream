@@ -18,7 +18,7 @@ final class RelationshipRepository {
      */
     public static function is(int $me, int $user, int $type): bool {
         return UserRelationshipEntity::where('user_id', $me)->where('link_id', $user)
-            ->where('type', $type)->count() > 0;
+            ->where('type', $type)->any();
     }
 
     public static function count(int $user, int $type): int {
@@ -133,8 +133,8 @@ final class RelationshipRepository {
         }
         $count = UserRelationshipEntity::where('user_id', $me)->where('link_id', $user)
             ->where('type', $type)
-            ->count();
-        if ($count < 1) {
+            ->any();
+        if (!$count) {
             return 0;
         }
         return self::userAlsoIs($me, $user, $type) ? 2 : 1;
@@ -143,7 +143,7 @@ final class RelationshipRepository {
     public static function userAlsoIs(int $me, int $user, int $type): bool {
         return UserRelationshipEntity::where('user_id', $user)->where('link_id', $me)
             ->where('type', $type)
-            ->count() > 0;
+            ->any();
     }
 
     /**

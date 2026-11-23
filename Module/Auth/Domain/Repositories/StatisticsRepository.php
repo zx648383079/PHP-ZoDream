@@ -45,11 +45,11 @@ final class StatisticsRepository {
         }
         $data['oauth_count'] = OAuthEntity::where('user_id', $user->id)->count();
         $data['last_login'] = LoginLogEntity::where('user_id', $user->id)
-            ->where('status', 1)->orderBy('created_at', 'desc')
+            ->where('status', 1)->orderBy('created_at', SORT_DESC)
             ->first();
         $data['login_ip'] = LoginLogEntity::where('user_id', $user->id)
             ->where('status', 1)->groupBy('ip')
-            ->selectRaw('ip,COUNT(*) as count')->orderBy('count', 'desc')
+            ->selectRaw('ip,COUNT(*) as count')->orderBy('count', SORT_DESC)
             ->first();
         if (AUTH_ADVANCED) {
             $data['card_items'] = \Module\Auth\Domain\Advanced\CardRepository::getUserCard($user->id);

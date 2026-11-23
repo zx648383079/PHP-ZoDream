@@ -41,7 +41,7 @@ class ProjectRepository {
             ->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type - 1);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function getSelfList(string $keywords = '', int $type = 0) {
@@ -50,7 +50,7 @@ class ProjectRepository {
                 SearchModel::searchWhere($query, 'name');
             })->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type - 1);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     /**
@@ -112,8 +112,8 @@ class ProjectRepository {
         }
         $count = ProjectVersionModel::where('project_id', $id)
             ->where('name', $version)
-            ->count();
-        if ($count > 0) {
+            ->any();
+        if ($count) {
             throw new Exception('版本号已存在');
         }
         $project = static::getSelf($id);
@@ -136,7 +136,7 @@ class ProjectRepository {
         $mapId = [];
         $items = PageModel::query()->where('project_id', $project)
             ->where('version_id', $srcVersion)
-            ->orderBy('parent_id', 'asc')->asArray()->get();
+            ->orderBy('parent_id', SORT_ASC)->asArray()->get();
         foreach ($items as $item) {
             $item['version_id'] = $distVersion;
             if ($item['parent_id'] > 0) {
@@ -152,7 +152,7 @@ class ProjectRepository {
         $mapId = [];
         $items = ApiModel::query()->where('project_id', $project)
             ->where('version_id', $srcVersion)
-            ->orderBy('parent_id', 'asc')->asArray()->get();
+            ->orderBy('parent_id', SORT_ASC)->asArray()->get();
         foreach ($items as $item) {
             $item['version_id'] = $distVersion;
             if ($item['parent_id'] > 0) {
@@ -167,7 +167,7 @@ class ProjectRepository {
         }
         $fieldMap = [];
         $items = FieldModel::whereIn('api_id', array_keys($mapId))
-            ->orderBy('parent_id', 'asc')->asArray()->get();
+            ->orderBy('parent_id', SORT_ASC)->asArray()->get();
         foreach ($items as $item) {
             $item['api_id'] = $mapId[$item['api_id']];
             if ($item['parent_id'] > 0) {
@@ -196,19 +196,19 @@ class ProjectRepository {
     }
 
     public static function all() {
-        return ProjectModel::orderBy('id', 'asc')
+        return ProjectModel::orderBy('id', SORT_ASC)
             ->get('id', 'name');
     }
 
     public static function allSelf() {
         return ProjectModel::where('user_id', auth()->id())
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->get('id', 'name');
     }
 
     public static function versionAll(int $id) {
         $items = ProjectVersionModel::where('project_id', $id)
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->get();
         array_unshift($items, ['id' => 0, 'name' => 'main']);
         return $items;
@@ -228,7 +228,7 @@ class ProjectRepository {
                     return;
                 }
                 $query->orWhere('user_id', auth()->id());
-            })->count() > 0;
+            })->any();
     }
 
     public static function page(int $project, int $id) {
@@ -250,6 +250,6 @@ class ProjectRepository {
     public static function suggest(string $keywords) {
         return ProjectModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->where('status', ProjectModel::STATUS_PUBLIC)->limit(4)->get('id', 'name');
+        })->where('status', ProjectModel::STATUS_PUBLIC)->take(4)->get('id', 'name');
     }
 }

@@ -59,7 +59,7 @@ class CreateSEOTables extends Migration {
     }
 
     public function seed(): void {
-        if (OptionModel::query()->count() > 0) {
+        if (OptionModel::query()->any()) {
             return;
         }
         OptionModel::group('基本', function () {

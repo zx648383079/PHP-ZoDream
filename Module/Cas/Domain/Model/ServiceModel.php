@@ -48,8 +48,8 @@ class ServiceModel extends BaseModel {
      * @param bool $check
      * @return static
      */
-    public static function findByUrl(Uri $url, $check = true) {
-        $service = self::where('host', $url->getHost())->one();
+    public static function findByUrl(Uri $url, bool $check = true) {
+        $service = self::where('host', $url->getHost())->first();
         return empty($service) || ($check && !$service->enabled) ? false : $service;
     }
 }

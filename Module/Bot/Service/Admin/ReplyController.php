@@ -31,7 +31,7 @@ class ReplyController extends Controller {
         $model = ReplyModel::findOrNew($id);
         $request = request();
         if ($request->has('type')) {
-            $this->layout = false;
+            $this->layout = '';
             $model->type = $request->get('type');
             return $this->show('/Admin/layouts/editor', compact('model'));
         }

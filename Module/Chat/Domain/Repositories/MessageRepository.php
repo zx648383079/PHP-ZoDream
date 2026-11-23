@@ -159,7 +159,7 @@ class MessageRepository {
                     $query->where('group_id', 0)
                     ->where('receive_id', $id);
                 })
-                ->orderBy('created_at', 'desc')->limit(10)->get();
+                ->orderBy('created_at', SORT_DESC)->take(10)->get();
             $data = array_reverse($data);
         } else {
             $data = MessageModel::with('user', 'receive')
@@ -170,7 +170,7 @@ class MessageRepository {
                         ->where('receive_id', $id);
                 })
                 ->where('created_at', '>=', $startTime)
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', SORT_ASC)
                 ->get();
         }
         $next_time = time() + 1;

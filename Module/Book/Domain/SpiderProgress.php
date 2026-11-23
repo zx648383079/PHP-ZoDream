@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain;
 
 use Module\Book\Domain\Model\BookAuthorModel;
@@ -96,12 +97,12 @@ class SpiderProgress extends Progress {
         return 0;
     }
 
-    public function play($item) {
+    public function play(mixed $item) {
         static::asyncChapters($this->getSpider(), $this->options['book'], $item);
     }
 
     public static function asyncChapters(
-        GetBookInterface $spider, $book_id, $chapter) {
+        GetBookInterface $spider, int $book_id,  mixed $chapter) {
         $item = $spider->chapter($chapter['url']);
         if (empty($item)) {
             $model = new BookChapterModel([

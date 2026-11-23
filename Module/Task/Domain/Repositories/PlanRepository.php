@@ -12,7 +12,7 @@ final class PlanRepository {
         return TaskPlanModel::with('task')
             ->where('plan_type', $type)
             ->where('user_id', auth()->id())
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
 

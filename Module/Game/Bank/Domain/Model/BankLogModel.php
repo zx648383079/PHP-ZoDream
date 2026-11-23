@@ -79,7 +79,7 @@ class BankLogModel extends Model {
      * @return bool
      * @throws \Exception
      */
-    public static function invest($user_id, $product_id, $money) {
+    public static function invest(int $user_id, int $product_id, float|int $money) {
         $product = BankProductModel::find($product_id);
         if (empty($product) || $product->min_amount > $money) {
             return false;

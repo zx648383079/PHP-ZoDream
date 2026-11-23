@@ -12,7 +12,7 @@ final class GradeRepository {
         ProjectRepository::isSelfOrThrow($project);
         return RuleGradeEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('project_id', $project)->orderBy('grade', 'asc')->page();
+        })->where('project_id', $project)->orderBy('grade', SORT_ASC)->page();
     }
 
     public static function makerGenerate(int $project, array $data) {
@@ -58,8 +58,8 @@ final class GradeRepository {
 
     private static function makerAdd(int $project, int $grade, float|int $exp) {
         $count = RuleGradeEntity::where('project_id', $project)
-            ->where('grade', $grade)->count();
-        if ($count > 0) {
+            ->where('grade', $grade)->any();
+        if ($count) {
             RuleGradeEntity::where('project_id', $project)
                 ->where('grade', $grade)->update([
                     'exp' => $exp

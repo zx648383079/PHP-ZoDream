@@ -46,7 +46,7 @@ class BlogRepository {
         foreach ($items as $item) {
             $item['term']['name'] = LocalizeRepository::formatValueWidthPrefix($item['term'], 'name');
         }
-        return $page->setPage($items);
+        return $page->setItems($items);
     }
 
 
@@ -57,7 +57,7 @@ class BlogRepository {
         $page = self::bindQuery(BlogSimpleModel::query(), $sort, $category, $keywords,
             $user, $language, $programming_language,
             $tag)
-            ->limit($limit ?? 5)->get();
+            ->take($limit ?? 5)->get();
         if (!empty($language)) {
             return $page;
         }
@@ -91,16 +91,16 @@ class BlogRepository {
             ->when(!empty($sort), function ($query) use ($sort) {
                 if (is_array($sort)) {
                     // 增加直接放id
-                    return $query->whereIn('id', $sort)->orderBy('created_at', 'desc');
+                    return $query->whereIn('id', $sort)->orderBy('created_at', SORT_DESC);
                 }
                 if ($sort === 'new') {
-                    return $query->orderBy('created_at', 'desc');
+                    return $query->orderBy('created_at', SORT_DESC);
                 }
                 if ($sort === 'recommend' || $sort === 'best') {
-                    return $query->orderBy('recommend_count', 'desc');
+                    return $query->orderBy('recommend_count', SORT_DESC);
                 }
                 if ($sort === 'hot') {
-                    return $query->orderBy('comment_count', 'desc');
+                    return $query->orderBy('comment_count', SORT_DESC);
                 }
                 return $query;
             })->when(!empty($keywords), function ($query) {
@@ -154,7 +154,7 @@ class BlogRepository {
         $items = BlogModel::query()// ->where('parent_id', 0)
             ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
             ->where('status', PublishRepository::REVIEW_STATUS_APPROVED)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SORT_DESC)
             ->where('language', LocalizeRepository::browserLanguage())
             ->asArray()->get('id', 'title', 'language', 'parent_id', 'created_at');
 //        $items = LocalizeRepository::formatList(
@@ -342,7 +342,7 @@ class BlogRepository {
         return BlogSimpleModel::where('id', '<', $id)
             ->where('language', $language)
             ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->first();
     }
 
@@ -350,7 +350,7 @@ class BlogRepository {
         return BlogSimpleModel::where('id', '>', $id)
             ->where('language', $language)
             ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->first();
     }
 
@@ -395,7 +395,7 @@ class BlogRepository {
                     'item_type' => BlogLogModel::TYPE_BLOG,
                     'item_id' => $model->id,
                     'action' => BlogLogModel::ACTION_REAL_RULE
-                ])->count() > 0 ? 2 : 1;
+                ])->any() ? 2 : 1;
         }
         return 1;
     }
@@ -414,7 +414,7 @@ class BlogRepository {
 
     public static function isSelf(int $id): bool {
         return  BlogModel::where('id', $id)->where('user_id', auth()->id())
-            ->count() > 0;
+            ->any();
     }
 
     /**
@@ -483,7 +483,7 @@ class BlogRepository {
         return BlogLogModel::with('user', 'blog')
             ->where('item_id', $blog)
             ->where('item_type', BlogLogModel::TYPE_BLOG)
-            ->orderBy('created_at desc')
+            ->orderBy('created_at', SORT_DESC)
             ->page();
     }
 

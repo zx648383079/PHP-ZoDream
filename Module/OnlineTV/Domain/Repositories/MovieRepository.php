@@ -26,7 +26,7 @@ final class MovieRepository extends CRUDRepository {
             ->when(!empty($keywords), function($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['title'], false, '', $keywords);
             })
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->page();
     }
 
@@ -48,7 +48,7 @@ final class MovieRepository extends CRUDRepository {
     public static function fileList(int $movie, int $series = 0) {
         return MovieFileModel::where('movie_id', $movie)
             ->where('series_id', $series)
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->page();
     }
 
@@ -160,19 +160,19 @@ final class MovieRepository extends CRUDRepository {
 
     public static function seriesFull(int $movie) {
         return MovieSeriesModel::with('files')->where('movie_id', $movie)
-            ->orderBy('episode', 'asc')
-            ->orderBy('id', 'asc')
+            ->orderBy('episode', SORT_ASC)
+            ->orderBy('id', SORT_ASC)
             ->get();
     }
 
     public static function suggestion(string $keywords) {
         return MovieModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['title'], false, '', $keywords);
-        })->limit(4)->asArray()->get('id', 'title');
+        })->take(4)->asArray()->get('id', 'title');
     }
 
     public static function recommend() {
-        return static::query()->limit(6)->get(self::MOVIE_PAGE_FILED);
+        return static::query()->take(6)->get(self::MOVIE_PAGE_FILED);
     }
 
     public static function download(int $id): string {

@@ -28,8 +28,8 @@ class Controller extends ModuleController {
         $cat_menu = array_filter($cat_menu, function ($item) {
             return $item['type'] < 1 && $item['model_id'];
         });
-        $model_menu = ModelModel::query()->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->get('id', 'name', 'type');
+        $model_menu = ModelModel::query()->orderBy('position', SORT_ASC)
+            ->thenBy('id', SORT_ASC)->get('id', 'name', 'type');
         $this->send(compact('cat_menu', 'model_menu', 'currentSite'));
     }
 

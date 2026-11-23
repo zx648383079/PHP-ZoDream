@@ -75,8 +75,8 @@ class CourseRepository {
             }, function ($query) use ($course) {
                 $query->where('course_id', 0);
             })
-            ->orderBy('course_id', 'asc')
-            ->orderBy('grade', 'asc')->get();
+            ->orderBy('course_id', SORT_ASC)
+            ->thenBy('grade', SORT_ASC)->get();
         $data = [];
         $exist = [];
         foreach ($items as $item) {
@@ -141,6 +141,6 @@ class CourseRepository {
                 });
             }, function ($query) use ($course) {
                 $query->where('course_id', 0);
-            })->orderBy('course_id', 'desc')->value('name') ?? '';
+            })->orderBy('course_id', SORT_DESC)->value('name') ?? '';
     }
 }

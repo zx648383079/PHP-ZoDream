@@ -16,7 +16,7 @@ final class PageRepository {
             $query->where('site_id', $site);
         })->when(!empty($domain), function ($query) use ($domain) {
             $query->whereLike('link', '%'. $domain .'%');
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -60,7 +60,7 @@ final class PageRepository {
 
     public static function exist(PageModel $model): bool {
         return PageModel::where('link', $model->link)
-                ->where('id', '<>', $model->id)->count() > 0;
+                ->where('id', '<>', $model->id)->any();
     }
 
     public static function check(string $link, int $id = 0): ?PageModel {

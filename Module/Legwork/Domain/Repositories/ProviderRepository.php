@@ -120,7 +120,7 @@ class ProviderRepository {
             ->when($waiter_id > 0, function ($query) use ($waiter_id) {
                 $query->where('waiter_id', $waiter_id);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function order(int $id) {
@@ -158,7 +158,7 @@ class ProviderRepository {
 
     public static function hasService(int $id): bool {
         return ServiceModel::where('id', $id)->where('user_id', auth()->id())
-            ->count() > 0;
+            ->any();
     }
 
     public static function categoryList(

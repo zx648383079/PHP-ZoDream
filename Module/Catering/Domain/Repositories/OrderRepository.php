@@ -13,7 +13,7 @@ final class OrderRepository {
             ->when($store > 0, function ($query) use ($store) {
                 $query->where('store_id', $store);
             })
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -25,7 +25,7 @@ final class OrderRepository {
                 $query->where('user_id', $user);
             })
             ->where('store_id', StoreRepository::own())
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 }

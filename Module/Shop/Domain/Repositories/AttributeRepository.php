@@ -118,7 +118,7 @@ final class AttributeRepository {
             return [];
         }
         $attr_list = AttributeModel::where('group_id', $group)
-            ->where('type', '>', 0)->orderBy('position asc')->orderBy('type asc')
+            ->where('type', '>', 0)->orderBy('position', SORT_ASC)->thenBy('type', SORT_ASC)
             ->get('id', 'name', 'type');
         if (empty($attr_list)) {
             return [];
@@ -138,7 +138,7 @@ final class AttributeRepository {
             return [];
         }
         $attr_list = AttributeUniqueModel::where('group_id', $group)
-            ->where('type', 0)->orderBy('position asc')->orderBy('type asc')
+            ->where('type', 0)->orderBy('position', SORT_ASC)->thenBy('type', SORT_ASC)
             ->get('id', 'name', 'property_group');
         if (empty($attr_list)) {
             return [];
@@ -181,7 +181,7 @@ final class AttributeRepository {
             return compact('properties', 'static_properties');
         }
         $attr_list = AttributeEntity::where('group_id', $group)
-            ->orderBy('position asc')->orderBy('type asc')
+            ->orderBy('position', SORT_ASC)->thenBy('type', SORT_ASC)
             ->get('id', 'name', 'property_group', 'type');
         if (empty($attr_list)) {
             return compact('properties', 'static_properties');

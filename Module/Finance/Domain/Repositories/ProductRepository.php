@@ -11,7 +11,7 @@ class ProductRepository {
      * @return FinancialProductModel[]
      */
     public static function all() {
-        return FinancialProductModel::auth()->orderBy('id', 'desc')->all();
+        return FinancialProductModel::auth()->orderBy('id', SORT_DESC)->get();
     }
 
     /**

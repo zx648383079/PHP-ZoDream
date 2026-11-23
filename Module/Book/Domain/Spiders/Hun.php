@@ -1,9 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
-
-use Module\Book\Domain\Model\BookAuthorModel;
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
 
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
@@ -14,19 +11,19 @@ class Hun extends BaseSpider {
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
-        return preg_match('#^/?hunhun/\d+/\d+/?$#i', $uri->getPath(), $match);
+    public function isCatalogPage(Uri $uri): bool {
+        return !!preg_match('#^/?hunhun/\d+/\d+/?$#i', $uri->getPath(), $match);
     }
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
-        return preg_match('#^/?hunhun/\d+/\d+/\d+\.html$#i', $uri->getPath(), $match);
+    public function isContentPage(Uri $uri): bool {
+        return !!preg_match('#^/?hunhun/\d+/\d+/\d+\.html$#i', $uri->getPath(), $match);
     }
 
-    public function decode(Html $html) {
+    public function decode(Html $html): Html {
         $content = $html->getHtml();
         //$html->setHtml(iconv('gb2312', 'utf-8//IGNORE', $content));
         $html->setHtml(mb_convert_encoding($content, 'utf-8', 'GB2312, ASCII, UTF-8, GBK, BIG5'));
@@ -38,7 +35,7 @@ class Hun extends BaseSpider {
      * @param Uri $uri
      * @return array
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         //$author = $html->find('#info p', 0)->text;
         //$author = explode('：', $author, 2);
         //$path = $html->find('#fmimg img', 0)->src;
@@ -55,7 +52,7 @@ class Hun extends BaseSpider {
      * @param Uri $baseUri
      * @return array[]
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $uris = [];
        $html->matches('#\<li[^\>\<]+\>\<div\sclass="novel_num"\>\</div\>\<a\shref="(\d+)\.html"\>(.+?)\</a\>\</li\>#',
            function ($match) use (&$uris, $baseUri) {
@@ -81,7 +78,7 @@ class Hun extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         if ($html->isEmpty()) {
             return [];
         }

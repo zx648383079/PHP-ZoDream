@@ -74,7 +74,7 @@ class GoodsModel extends GoodsEntity {
         if (auth()->guest()) {
             return false;
         }
-        return CollectModel::where('user_id', auth()->id())->where('goods_id', $this->id)->count() > 0;
+        return CollectModel::where('user_id', auth()->id())->where('goods_id', $this->id)->any();
     }
 
     public function getCommentCountAttribute() {

@@ -12,7 +12,7 @@ class ProjectRepository {
      * @return FinancialProjectModel[]
      */
     public static function all() {
-        return FinancialProjectModel::auth()->with('product')->orderBy('id', 'desc')->all();
+        return FinancialProjectModel::auth()->with('product')->orderBy('id', SORT_DESC)->get();
     }
 
     /**

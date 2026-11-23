@@ -56,7 +56,7 @@ final class AppRepository {
                 $query->where('cat_id', $category);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -69,7 +69,7 @@ final class AppRepository {
             ->page();
         foreach ($page as $item) {
             $item['size'] = AppFileModel::where('app_id', $item['id'])
-                ->orderBy('version_id', 'desc')->orderBy('created_at', 'desc')
+                ->orderBy('version_id', SORT_DESC)->orderBy('created_at', SORT_DESC)
                 ->value('size');
         }
         return $page;
@@ -82,10 +82,10 @@ final class AppRepository {
         string|array $sort = 'created_at',
         string|int|bool $order = 'desc') {
         $items = self::getListQuery($keywords, $category, $sort, $order)
-            ->limit($count)->get();
+            ->take($count)->get();
         foreach ($items as $item) {
             $item['size'] = AppFileModel::where('app_id', $item['id'])
-                ->orderBy('version_id', 'desc')->orderBy('created_at', 'desc')
+                ->orderBy('version_id', SORT_DESC)->orderBy('created_at', SORT_DESC)
                 ->value('size');
         }
         return $items;
@@ -102,10 +102,10 @@ final class AppRepository {
             })
             ->when($category > 0, function ($query) use ($category) {
                 $query->where('cat_id', $category);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->when(!empty($sort), function ($query) use ($sort, $order) {
                 if ($sort === 'new') {
-                    $query->orderBy('created_at', 'desc');
+                    $query->orderBy('created_at', SORT_DESC);
                     return;
                 }
                 if ($sort === 'free') {
@@ -113,7 +113,7 @@ final class AppRepository {
                     return;
                 }
                 if ($sort === 'hot') {
-                    $query->orderBy('download_count', 'desc');
+                    $query->orderBy('download_count', SORT_DESC);
                     return;
                 }
                 list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
@@ -181,13 +181,13 @@ final class AppRepository {
             ->when(!empty($keywords), function($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name'], false, '', $keywords);
             })
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 
     public static function versionCreate(array $data) {
         static::getSelf($data['app_id']);
-        if (AppVersionModel::where('app_id', $data['app_id'])->where('name', $data['name'])->count()) {
+        if (AppVersionModel::where('app_id', $data['app_id'])->where('name', $data['name'])->any()) {
             throw new Exception('版本号已存在');
         }
         $model = new AppVersionModel();
@@ -207,7 +207,7 @@ final class AppRepository {
     public static function suggestion(string $keywords) {
         return AppModel::when(!empty($keywords), function($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], false, '', $keywords);
-        })->limit(4)->pluck('name');
+        })->take(4)->pluck('name');
     }
 
     public static function packageList(int $software, int $version = 0, string $keywords = '')
@@ -219,7 +219,7 @@ final class AppRepository {
             ->when($version > 0, function($query) use ($version) {
                 $query->where('version_id', $version);
             })
-            ->orderBy('id', 'asc')
+            ->orderBy('id', SORT_ASC)
             ->page();
     }
 
@@ -250,7 +250,7 @@ final class AppRepository {
         $data['version'] = AppVersionModel::when($version > 0, function ($query) use ($version) {
             $query->where('id', $version);
         }, function ($query) {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('id', SORT_DESC);
         })->where('app_id', $id)->first();
         if (!$data['version']) {
             throw new Exception('应用为空或没有相关版本');
@@ -287,13 +287,13 @@ final class AppRepository {
                 continue;
             }
             $lastVersion = AppVersionModel::where('app_id', $package->id)
-                ->orderBy('id', 'desc')->first();
+                ->orderBy('id', SORT_DESC)->first();
             if (empty($lastVersion) || $lastVersion->name === $version) {
                 continue;
             }
             $file = AppFileModel::where('app_id', $package->id)
                 ->where('version_id', $lastVersion->id)
-                ->orderBy('url_type', 'asc')
+                ->orderBy('url_type', SORT_ASC)
                 ->first();
             if (empty($file)) {
                 continue;

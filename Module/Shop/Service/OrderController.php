@@ -19,7 +19,7 @@ class OrderController extends Controller {
     public function indexAction($status = 0) {
         $order_list = OrderRepository::getList(intval($status));
         if (request()->isAjax()) {
-            $this->layout = false;
+            $this->layout = '';
             return $this->show('page', compact('order_list'));
         }
         $order_subtotal = OrderRepository::getSubtotal();
@@ -28,8 +28,8 @@ class OrderController extends Controller {
 
     public function detailAction(int $id) {
         $order = OrderModel::find($id);
-        $goods_list = OrderGoodsModel::where('order_id', $id)->all();
-        $address = OrderAddressModel::where('order_id', $id)->one();
+        $goods_list = OrderGoodsModel::where('order_id', $id)->get();
+        $address = OrderAddressModel::where('order_id', $id)->first();
         return $this->sendWithShare()->show(compact('order', 'goods_list', 'address'));
     }
 

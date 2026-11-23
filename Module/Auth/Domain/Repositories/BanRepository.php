@@ -73,10 +73,10 @@ final class BanRepository {
 
     public static function isBan(string $itemKey, int $itemType = -1, int $platformId = 0): bool {
         if ($itemType < 0) {
-            return BanAccountEntity::where('item_key', $itemKey)->count() > 0;
+            return BanAccountEntity::where('item_key', $itemKey)->any();
         }
         return BanAccountEntity::where('item_key', $itemKey)
-                ->where('item_type', $itemType)->where('platform_id', $platformId)->count() > 0;
+                ->where('item_type', $itemType)->where('platform_id', $platformId)->any();
     }
 
     public static function isBanOAuth(string $openid, string|null $unionId, string $vendor, int $platformId): bool {

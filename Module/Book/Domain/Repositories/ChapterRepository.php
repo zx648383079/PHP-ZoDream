@@ -17,8 +17,8 @@ class ChapterRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
             })
-            ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->page();
+            ->orderBy('position', SORT_ASC)
+            ->orderBy('created_at', SORT_ASC)->page();
     }
 
     public static function get(int $id) {
@@ -125,7 +125,7 @@ class ChapterRepository {
         }
         return BookBuyLogModel::where('book_id', $bookId)
             ->where('chapter_id', $chapterId)
-            ->where('user_id', auth()->id())->count() > 0;
+            ->where('user_id', auth()->id())->any();
     }
 
     public static function move(int $id, int $before = 0, int $after = 0) {

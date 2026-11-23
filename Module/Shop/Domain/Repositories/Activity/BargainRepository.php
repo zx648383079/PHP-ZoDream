@@ -55,7 +55,7 @@ class BargainRepository {
     public static function logList(int $activity) {
         return BargainLogModel::with('user')
             ->where('act_id', $activity)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -75,7 +75,7 @@ class BargainRepository {
     {
         return BargainLogModel::with('user')
             ->where('act_id', $activity)
-            ->where('bargain_id', $log)->orderBy('id', 'desc')->page();
+            ->where('bargain_id', $log)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function apply(int $id)

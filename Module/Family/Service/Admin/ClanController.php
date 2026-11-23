@@ -50,7 +50,7 @@ class ClanController extends Controller {
 
     public function metaAction(int $clan_id) {
         $items = ClanMetaModel::where('clan_id', $clan_id)
-            ->orderBy('created_at', 'desc')->select('id', 'name')->page();
+            ->orderBy('created_at', SORT_DESC)->select('id', 'name')->page();
         return $this->show(compact('items', 'clan_id'));
     }
 

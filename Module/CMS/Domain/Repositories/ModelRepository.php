@@ -43,8 +43,8 @@ class ModelRepository {
         $items = ModelModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['title']);
-            })->orderBy('position', 'asc')
-            ->orderBy('id', 'desc')->page();
+            })->orderBy('position', SORT_ASC)
+            ->thenBy('id', SORT_DESC)->page();
         if ($items->isEmpty()) {
             return $items;
         }
@@ -65,7 +65,7 @@ class ModelRepository {
         }
         if ($id > 0) {
             unset($data['table'], $data['type']);
-        } elseif (ModelModel::where('`table`', $data['table'])->count() > 0) {
+        } elseif (ModelModel::where('`table`', $data['table'])->any()) {
             throw new \Exception('表名已存在');
         }
         $model->load($data);
@@ -102,9 +102,9 @@ class ModelRepository {
 
     public static function fieldList(int $model) {
         return ModelFieldModel::query()
-            ->where('model_id', $model)->orderBy('position', 'asc')
-            ->orderBy('is_system', 'desc')
-            ->orderBy('id', 'asc')->get();
+            ->where('model_id', $model)->orderBy('position', SORT_ASC)
+            ->thenBy('is_system', SORT_DESC)
+            ->thenBy('id', SORT_ASC)->get();
     }
 
     public static function field(int $id) {
@@ -133,7 +133,7 @@ class ModelRepository {
         if (ModelFieldModel::where('`field`', $model->field)
                 ->where('id', '<>', $id)
                 ->where('model_id', $model->model_id)
-                ->count() > 0) {
+                ->any()) {
             throw new \Exception('字段已存在');
         }
         $old = $id > 0 ? $model->get() : [];

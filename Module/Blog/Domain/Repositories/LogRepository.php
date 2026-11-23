@@ -70,6 +70,6 @@ final class LogRepository {
         return BlogLogModel::where('user_id', $userId)
             ->where('item_type', $type)
             ->where('action', $action)
-            ->where('item_id', $id)->count() > 0;
+            ->where('item_id', $id)->any();
     }
 }

@@ -13,7 +13,7 @@ class CommentRepository {
             })
             ->where('item_type', $item_type)
             ->where('item_id', $item_id)
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function create(array $data) {
@@ -92,6 +92,6 @@ class CommentRepository {
     }
 
     public static function recommend(int $limit = 6) {
-        return CommentModel::with('goods', 'user', 'images')->where('item_type', 0)->limit($limit)->get();
+        return CommentModel::with('goods', 'user', 'images')->where('item_type', 0)->take($limit)->get();
     }
 }

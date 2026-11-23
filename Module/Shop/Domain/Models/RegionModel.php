@@ -41,7 +41,7 @@ class RegionModel extends Model {
      * @throws \Exception
      */
 	public static function tree() {
-        return new Tree(static::query()->select('id', 'name', 'parent_id')->asArray()->all());
+        return new Tree(static::query()->select('id', 'name', 'parent_id')->asArray()->get());
     }
 
     /**

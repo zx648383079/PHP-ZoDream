@@ -35,7 +35,7 @@ class Option {
         $data = [];
         /** @var OptionModel[]  $items */
         try {
-            $items = OptionModel::query()->orderBy('position', 'desc')->get('code', 'value', 'type');
+            $items = OptionModel::query()->orderBy('position', SORT_DESC)->get('code', 'value', 'type');
         } catch (\Exception) {
             $items = [];
         }

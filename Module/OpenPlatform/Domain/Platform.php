@@ -295,9 +295,8 @@ class Platform implements IAuthPlatform {
      * @return bool
      */
     public function verifyToken(string $token): bool {
-        $count = UserTokenModel::where('platform_id', $this->id())
-            ->where('token', $token)->where('expired_at', '>', time())->count();
-        return $count > 0;
+        return UserTokenModel::where('platform_id', $this->id())
+            ->where('token', $token)->where('expired_at', '>', time())->any();
     }
 
     public function __sleep(): array {

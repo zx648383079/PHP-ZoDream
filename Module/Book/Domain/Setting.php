@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain;
 
 use Module\Auth\Domain\Model\UserMetaModel;
@@ -10,9 +11,9 @@ class Setting {
 
     const KEY = 'book_settings';
 
-    protected $isNew = true;
+    protected bool $isNew = true;
 
-    protected $isChange = false;
+    protected bool $isChange = false;
 
     protected $__attributes = [];
 
@@ -72,7 +73,7 @@ class Setting {
         return UserMetaModel::updateArr(self::KEY, $this->__attributes);
     }
 
-    public function setAttribute($key, $value = null) {
+    public function setAttribute(mixed $key, mixed $value = null) {
         if (!is_array($key)
             && isset($this->__attributes[$key])
             && $this->__attributes[$key] == $value) {

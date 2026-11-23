@@ -38,7 +38,7 @@ $goods_url = $this->url('./mobile/goods', ['id' => $id]);
     </div>
 
     <?php if($comment_list->hasMore()):?>
-    <div class="more-load" data-page="<?=$comment_list->getIndex()?>" data-target="#comments" data-url="<?=$this->url(['page' => null])?>">
+    <div class="more-load" data-page="<?=$comment_list->getCurrentPage()?>" data-target="#comments" data-url="<?=$this->url(['page' => null])?>">
     加载中。。。
     </div>
     <?php endif;?>

@@ -1,13 +1,6 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-/**
- * Created by PhpStorm.
- * User: zx648
- * Date: 2016/10/15
- * Time: 21:00
- */
-use Domain\Model\Model;
 use Module\Book\Domain\Entities\BookEntity;
 use Module\Book\Domain\Repositories\BookRepository;
 use Zodream\Database\Model\Query;
@@ -42,7 +35,7 @@ class BookModel extends BookEntity {
 
     protected array $append = ['status_label'];
 
-    public $classify_list = [
+    public array $classify_list = [
         '无分级',
         18 => '成人级',
     ];
@@ -99,7 +92,7 @@ class BookModel extends BookEntity {
     }
 
     public function getFirstChapterAttribute() {
-        return BookChapterModel::where('book_id', $this->id)->orderBy('id', 'asc')->one();
+        return BookChapterModel::where('book_id', $this->id)->orderBy('id', SORT_ASC)->first();
     }
 
     public function getStatusLabelAttribute() {
@@ -117,7 +110,7 @@ class BookModel extends BookEntity {
      * @return BookChapterModel
      */
     public function getLastChapterAttribute() {
-        return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', 'desc')->first();
+        return BookChapterModel::where('book_id', $this->id)->orderBy('created_at', SORT_DESC)->first();
     }
 
     public function getChapterCountAttribute() {
@@ -149,6 +142,6 @@ class BookModel extends BookEntity {
      */
     public function isExist() {
         return static::where('name', $this->name)
-            ->where('id', '<>', $this->id)->count() > 0;
+            ->where('id', '<>', $this->id)->any();
     }
 }

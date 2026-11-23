@@ -22,6 +22,6 @@ class LotteryRepository {
     public static function logList(int $id)
     {
         return LotteryLogModel::with('user')
-            ->where('act_id', $id)->orderBy('id', 'desc')->page();
+            ->where('act_id', $id)->orderBy('id', SORT_DESC)->page();
     }
 }

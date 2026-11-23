@@ -24,7 +24,7 @@ class EmulateRepository {
         }
         $model->menu_list = MenuRepository::getList($model->id);
         $model->news_list = MediaModel::where('bot_id', $model->id)->where('type', MediaModel::TYPE_NEWS)
-            ->orderBy('created_at', 'desc')->limit(6)
+            ->orderBy('created_at', SORT_DESC)->take(6)
             ->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')
             ->get();
         return $model;

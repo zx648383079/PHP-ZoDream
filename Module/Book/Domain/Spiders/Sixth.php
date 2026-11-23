@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 use Exception;
@@ -13,16 +12,16 @@ class Sixth extends BaseSpider {
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
-        return preg_match('#^/?\d+/\d+/?$#i', $uri->getPath(), $match);
+    public function isCatalogPage(Uri $uri): bool {
+        return !!preg_match('#^/?\d+/\d+/?$#i', $uri->getPath(), $match);
     }
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
-        return preg_match('#^/?\d+/\d+/\d+\.html$#i', $uri->getPath(), $match);
+    public function isContentPage(Uri $uri): bool {
+        return !!preg_match('#^/?\d+/\d+/\d+\.html$#i', $uri->getPath(), $match);
     }
 
     /**
@@ -30,7 +29,7 @@ class Sixth extends BaseSpider {
      * @param Uri $uri
      * @return array
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         //$author = $html->find('#info p', 0)->text;
         //$author = explode('：', $author, 2);
         //$path = $html->find('#fmimg img', 0)->src;
@@ -47,7 +46,7 @@ class Sixth extends BaseSpider {
      * @param Uri $baseUri
      * @return array[]
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $uris = [];
         $html->find('#chapterlist', 0)->matches('#<a[^<>]+href="(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i',
             function ($match) use (&$uris, $baseUri) {
@@ -73,7 +72,7 @@ class Sixth extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         if ($html->isEmpty()) {
             return [];
         }

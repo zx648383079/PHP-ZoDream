@@ -11,7 +11,7 @@ class AgreementRepository{
     public static function getList(string $keywords = '') {
         return AgreementModel::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name', 'title']);
-        })->orderBy('created_at', 'desc')->page();
+        })->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function get(int $id) {
@@ -23,7 +23,7 @@ class AgreementRepository{
         $data = $model->toArray();
         $data['languages'] = LocalizeRepository::formatLanguageList(AgreementModel::where('name', $model->name)
             ->where('status', $model->status)
-            ->orderBy('created_at', 'asc')->asArray()
+            ->orderBy('created_at', SORT_ASC)->asArray()
             ->get('id', LocalizeRepository::LANGUAGE_COLUMN_KEY)
             , false);
         return $data;
@@ -32,7 +32,7 @@ class AgreementRepository{
     public static function getByName(string $name) {
         $model = LocalizeRepository::getByKey(
             AgreementModel::where('status', 1)
-                ->orderBy('id', 'desc'),
+                ->orderBy('id', SORT_DESC),
             'name',
             $name
         );

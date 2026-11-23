@@ -80,14 +80,14 @@ class CommentProvider {
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['content'], false, '', $keywords);
             })->orderBy($sort, $order)->page();
-        $data = $page->getPage();
+        $data = $page->getItems();
         if (empty($data)) {
             return $page;
         }
         $data = Relation::create($this->formatList($data), [
             'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
         ]);
-        $page->setPage($data);
+        $page->setItems($data);
         return $page;
     }
 

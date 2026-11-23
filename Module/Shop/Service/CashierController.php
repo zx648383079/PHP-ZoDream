@@ -50,14 +50,14 @@ class CashierController extends Controller {
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
-        $this->layout = false;
+        $this->layout = '';
         $data = $order->toArray();
         $data['checkout'] = $this->renderHtml('total', compact('order'));
         return $this->renderData($data);
     }
 
     public function editAddressAction(int $id = 0, $prev = 0) {
-        $this->layout = false;
+        $this->layout = '';
         $address = $id > 0 ? AddressModel::findOrNew($id) : null;
         if ($id > 0) {
             $prev = $id;
@@ -66,7 +66,7 @@ class CashierController extends Controller {
     }
 
     public function addressAction(int $id) {
-        $this->layout = false;
+        $this->layout = '';
         $address = AddressModel::find($id);
         return $this->show(empty($address) ? 'addressEdit' : 'address', compact('address'));
     }
@@ -78,12 +78,12 @@ class CashierController extends Controller {
         } catch (\Exception $ex) {
             return $this->showContent('false,'.$ex->getMessage());
         }
-        $this->layout = false;
+        $this->layout = '';
         return $this->show('address', compact('address'));
     }
 
     public function addressListAction($selected) {
-        $this->layout = false;
+        $this->layout = '';
         $address_list = AddressRepository::getList();
         return $this->show('addressList', compact('address_list', 'selected'));
     }

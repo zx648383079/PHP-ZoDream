@@ -124,7 +124,7 @@ class WxAdapter extends BasePlatformAdapter implements IPlatformAdapter {
     }
     protected function replyNews(MessageResponse $response, int $newsId) {
         $model_list = MediaModel::where('id', $newsId)
-            ->orWhere('parent_id', $newsId)->orderBy('parent_id', 'asc')->get();
+            ->orWhere('parent_id', $newsId)->orderBy('parent_id', SORT_ASC)->get();
         foreach ($model_list as $item) {
             /** @var $item MediaModel */
             $picUrl = MediaModel::where('type', MediaModel::TYPE_IMAGE)

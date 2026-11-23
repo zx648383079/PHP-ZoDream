@@ -211,7 +211,7 @@ final class LocaleRepository {
         }
         $items = SiteEntity::where('theme', $model->theme)
             ->where('id', '<>', $model->id)
-            ->whereNotNull('language')->orderBy('id', 'asc')
+            ->whereNotNull('language')->orderBy('id', SORT_ASC)
             ->get('id', 'language', 'locale_group_id');
         if (count($items) < 1) {
             return false;

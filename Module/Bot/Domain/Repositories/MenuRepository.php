@@ -9,13 +9,13 @@ use Zodream\Html\Tree;
 class MenuRepository {
 
     public static function getList(int $bot_id) {
-        return (new Tree(MenuModel::where('bot_id', $bot_id)->orderBy('parent_id', 'asc')->get()))
+        return (new Tree(MenuModel::where('bot_id', $bot_id)->orderBy('parent_id', SORT_ASC)->get()))
             ->makeTree();
     }
 
     public static function getManageList(int $bot_id) {
         AccountRepository::isSelf($bot_id);
-        return (new Tree(MenuModel::where('bot_id', $bot_id)->orderBy('parent_id', 'asc')->get()))
+        return (new Tree(MenuModel::where('bot_id', $bot_id)->orderBy('parent_id', SORT_ASC)->get()))
             ->makeTree();
     }
 

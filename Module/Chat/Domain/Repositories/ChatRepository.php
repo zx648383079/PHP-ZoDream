@@ -14,7 +14,7 @@ class ChatRepository {
     public static function histories() {
         /** @var Page $page */
         $page = ChatHistoryModel::where('user_id', auth()->id())
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('updated_at', SORT_DESC)
             ->page();
         $userIds = [];
         $groupIds = [];
@@ -77,8 +77,8 @@ class ChatRepository {
                                            int $message = 0, int $messageCount = 0) {
         $count = ChatHistoryModel::where('item_type', $type)
             ->where('item_id', $id)
-            ->where('user_id', $user_id)->count();
-        if ($count > 0) {
+            ->where('user_id', $user_id)->any();
+        if ($count) {
             ChatHistoryModel::where('item_type', $type)
                 ->where('item_id', $id)
                 ->where('user_id', $user_id)->update([

@@ -18,7 +18,7 @@ class AuthorizeController extends Controller {
     public function indexAction() {
         $model_list = TokenPageModel::with('platform')
             ->where('user_id', auth()->id())
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
         return $this->renderPage($model_list);
     }
 

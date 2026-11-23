@@ -10,8 +10,8 @@ class TaskController extends Controller {
 
     public function indexAction() {
         $items = TaskModel::where('user_id', auth()->id())
-            ->orderBy('status', 'desc')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_DESC)
+            ->thenBy('id', SORT_DESC)->page();
         return $this->show(compact('items'));
     }
 
@@ -75,8 +75,8 @@ class TaskController extends Controller {
         $items = TaskDayModel::with('task')
             ->where('user_id', auth()->id())
             ->where('today', $time)
-            ->orderBy('status', 'desc')
-            ->orderBy('id', 'desc')
+            ->orderBy('status', SORT_DESC)
+            ->thenBy('id', SORT_DESC)
             ->page();
         return $this->show(compact('items', 'task_list'));
     }

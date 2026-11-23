@@ -22,17 +22,17 @@ class HomeController extends Controller {
     }
 
     public function newAction() {
-        $new_goods = GoodsRepository::getRecommendQuery('is_new')->all();
+        $new_goods = GoodsRepository::getRecommendQuery('is_new')->get();
         return $this->renderData(compact('new_goods'));
     }
 
     public function bestAction() {
-        $best_goods = GoodsRepository::getRecommendQuery('is_best')->limit(7)->all();
+        $best_goods = GoodsRepository::getRecommendQuery('is_best')->take(7)->get();
         return $this->renderData(compact('best_goods'));
     }
 
     public function categoryAction() {
-        $this->layout = false;
+        $this->layout = '';
         $floor_categories = CategoryRepository::getHomeFloor();
         return $this->renderData($this->renderHtml(compact('floor_categories')));
     }

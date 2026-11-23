@@ -6,7 +6,7 @@ use Module\Game\Bank\Domain\Model\BankProductModel;
 class ProductController extends Controller {
 
     public function indexAction() {
-        $model_list = BankProductModel::orderBy('id', 'desc')->page();
+        $model_list = BankProductModel::orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 
@@ -14,7 +14,7 @@ class ProductController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = BankProductModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -29,7 +29,7 @@ class ProductController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         BankProductModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => url('./@admin/product')

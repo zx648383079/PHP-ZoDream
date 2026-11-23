@@ -148,7 +148,7 @@ class DiskModel extends Model {
         app('db')->execute($sql);
         // 修复 parent_id
         $data = DiskModel::where('left_id', '>', $left)->where('right_id', '<', $left + $diff + 1)->select('id', 'left_id', 'right_id', 'parent_id')
-            ->orderBy('left_id', 'asc')->asArray()->all();
+            ->orderBy('left_id', SORT_ASC)->asArray()->get();
         $parent_map = [];
         $map = [];
         foreach ($data as $item) {
@@ -219,7 +219,7 @@ class DiskModel extends Model {
      * @return static[]
      */
     public function getChildren() {
-        return static::where('parent_id', $this->id)->all() ;
+        return static::where('parent_id', $this->id)->get() ;
     }
 
     /**
@@ -227,7 +227,7 @@ class DiskModel extends Model {
      * @return mixed
      */
     public function getAllChildren() {
-        return static::where('left_id', '>', $this->left_id)->where('right_id', '<', $this->right_id)->all();
+        return static::where('left_id', '>', $this->left_id)->where('right_id', '<', $this->right_id)->get();
     }
 
     /**
@@ -358,7 +358,7 @@ class DiskModel extends Model {
      * @param DiskModel[] $files
      * @return bool
      */
-    public function isIn($files) {
+    public function isIn($files): bool {
         foreach ((array)$files as $file) {
             if ($this->id == $file->id ||
                 ($this->left_id > $file->left_id && $this->right_id < $file->right_id)) {
@@ -368,11 +368,10 @@ class DiskModel extends Model {
         return false;
     }
 
-    public function isSameName() {
-        $count = static::where('id', '<>', $this->id)
+    public function isSameName(): bool {
+        return static::where('id', '<>', $this->id)
             ->where('user_id', auth()->id())
-            ->where('parent_id', $this->parent_id)->where('name', $this->name)->count();
-        return $count > 0;
+            ->where('parent_id', $this->parent_id)->where('name', $this->name)->any();
     }
 
     /**
@@ -381,7 +380,7 @@ class DiskModel extends Model {
      * @throws \Exception
      */
     public static function findOneByAuth($id) {
-        return static::auth()->where('id', $id)->one();
+        return static::auth()->where('id', $id)->first();
     }
 
     /**

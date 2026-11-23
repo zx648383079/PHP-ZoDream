@@ -1,9 +1,7 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-use Domain\Model\Model;
-use Zodream\Html\Page;
-use Zodream\Infrastructure\Cookie;
+use Module\Book\Domain\Entities\HistoryEntity;
 
 
 /**
@@ -16,36 +14,10 @@ use Zodream\Infrastructure\Cookie;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BookHistoryModel extends Model {
+class BookHistoryModel extends HistoryEntity {
 
     protected array $append = ['book', 'chapter'];
 
-    public static function tableName(): string {
-        return 'book_history';
-    }
-
-    protected function rules(): array {
-        return [
-            'user_id' => 'required|int',
-            'book_id' => 'required|int',
-            'chapter_id' => 'int',
-            'progress' => 'int',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels(): array {
-        return [
-            'id' => 'Id',
-            'user_id' => 'User Id',
-            'book_id' => 'Book Id',
-            'chapter_id' => 'Chapter Id',
-            'progress' => 'Progress',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-        ];
-    }
 
     public function book() {
         return $this->hasOne(BookSimpleModel::class, 'id', 'book_id');

@@ -43,7 +43,7 @@ class LinkageRepository {
     public static function exist(array|LinkageModel $data): bool {
         return LinkageModel::where('id', '<>', intval($data['id']))
             ->where('code', $data['code'])
-            ->where('language', $data['language'] ?? '')->count() > 0;
+            ->where('language', $data['language'] ?? '')->any();
     }
 
     public static function remove(int $id) {

@@ -8,7 +8,7 @@ use Exception;
 class MinerController extends Controller {
 
     public function indexAction() {
-        $miner_list = MinerModel::query()->all();
+        $miner_list = MinerModel::query()->get();
         return $this->show(compact('miner_list'));
     }
 

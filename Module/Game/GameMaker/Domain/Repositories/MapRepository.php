@@ -135,7 +135,7 @@ final class MapRepository {
         ProjectRepository::isSelfOrThrow($project);
         return MapAreaEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('parent_id', $parent)->where('project_id', $project)->orderBy('id', 'desc')->page();
+        })->where('parent_id', $parent)->where('project_id', $project)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function makerAreaGet(int $project, int $id) {
@@ -166,7 +166,7 @@ final class MapRepository {
         ProjectRepository::isSelfOrThrow($project);
         return MapItemEntity::where('project_id', $project)
             ->where('map_id', $map)
-            ->orderBy('item_type', 'asc')->page();
+            ->orderBy('item_type', SORT_ASC)->page();
     }
 
     public static function makerItemSave(array $data) {

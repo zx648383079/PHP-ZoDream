@@ -23,7 +23,7 @@ class ReviewController extends Controller {
             $end_at = $time + 86399;
         }
         $log_list = ReviewRepository::logList($start_at, $end_at, true);
-        $this->layout = false;
+        $this->layout = '';
         return $this->show($type, compact('log_list', 'start_at', 'end_at'));
     }
 }

@@ -64,14 +64,14 @@ class CollectProvider {
             ->when($itemId > 0, function ($query) use ($itemId, $itemType) {
                 $query->where('item_id', $itemId)->where('item_type', $itemType);
             })->orderBy($sort, $order)->page();
-        $data = $page->getPage();
+        $data = $page->getItems();
         if (empty($data)) {
             return $page;
         }
         $data = Relation::create($data, [
             'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
         ]);
-        $page->setPage($data);
+        $page->setItems($data);
         return $page;
     }
 
@@ -106,7 +106,7 @@ class CollectProvider {
     public function has(int $itemId, int $itemType = 0): bool {
         return $this->query()->where('item_id', $itemId)
             ->where('item_type', $itemType)
-            ->where('user_id', auth()->id())->count() > 0;
+            ->where('user_id', auth()->id())->any();
     }
 
     public function save(array $data): array {

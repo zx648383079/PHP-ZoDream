@@ -12,9 +12,9 @@ class ArticleRepository {
 
     public static function getHelps(){
         $catId = 2;
-        $data = ArticleCategoryModel::where('parent_id', $catId)->all();
+        $data = ArticleCategoryModel::where('parent_id', $catId)->get();
         foreach ($data as $item) {
-            $item->children = ArticleSimpleModel::where('cat_id', $item->id)->all();
+            $item->children = ArticleSimpleModel::where('cat_id', $item->id)->get();
         }
         $data = array_merge(ArticleSimpleModel::where('cat_id', $catId)->get(), $data);
         return $data;

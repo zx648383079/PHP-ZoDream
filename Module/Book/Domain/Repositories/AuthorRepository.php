@@ -11,6 +11,10 @@ use Zodream\Database\Contracts\SqlBuilder;
 
 class AuthorRepository extends CRUDRepository {
 
+    const STATUS_NONE = 0;
+    const STATUS_ALLOW = 1;
+    const STATUS_DISALLOW = 2;
+
     public static function search(string $keywords = '', int|array $id = 0) {
         return SearchModel::searchOption(
             BookAuthorModel::query()->select('id', 'name', 'avatar'),

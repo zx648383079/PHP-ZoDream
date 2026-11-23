@@ -14,7 +14,7 @@ final class StaffRepository {
             ->when($role > 0, function ($query) use ($role) {
                 $query->where('role_id', $role);
             })
-            ->orderBy('user_id', 'desc')
+            ->orderBy('user_id', SORT_DESC)
             ->page();
     }
 

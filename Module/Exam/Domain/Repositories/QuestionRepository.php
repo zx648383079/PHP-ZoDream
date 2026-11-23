@@ -25,7 +25,7 @@ class QuestionRepository {
                 $query->where('course_grade', $grade);
             })->when($filter, function ($query) {
                 $query->where('type', '<', 5);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         $data->map(function ($item) {
             $data = $item->toArray();
             $data['course_grade_format'] = CourseRepository::formatGrade($item->course_id, $item->course_grade);
@@ -49,7 +49,7 @@ class QuestionRepository {
                 $query->where('user_id', $user);
             })->when($grade > 0, function ($query) use ($grade) {
                 $query->where('course_grade', $grade);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         if ($full) {
             $data->map(function ($item) {
                 $item['editable'] = $item->user_id === auth()->id();
@@ -156,7 +156,7 @@ class QuestionRepository {
                 $query->where('image', $data['image']);
             })
             ->where('user_id', $userId)
-            ->count() > 0;
+            ->any();
     }
 
     public static function selfSave(array $data, bool $addKid = true) {
@@ -199,7 +199,7 @@ class QuestionRepository {
     }
 
     public static function check(string $title, int $id = 0) {
-        return QuestionModel::with('course', 'user')->where('title', $title)->where('id', '<>', $id)->orderBy('id', 'desc')->get();
+        return QuestionModel::with('course', 'user')->where('title', $title)->where('id', '<>', $id)->orderBy('id', SORT_DESC)->get();
     }
 
     public static function suggestion(string $keywords, int $course = 0) {
@@ -209,7 +209,7 @@ class QuestionRepository {
                 })
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['title']);
-                })->orderBy('id', 'desc')->limit(5)->get('id', 'title', 'course_id', 'type', 'easiness');
+                })->orderBy('id', SORT_DESC)->take(5)->get('id', 'title', 'course_id', 'type', 'easiness');
     }
 
     public static function crawlSave(array $data) {

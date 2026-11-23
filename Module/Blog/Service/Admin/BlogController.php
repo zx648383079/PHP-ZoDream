@@ -12,7 +12,7 @@ class BlogController extends Controller {
 
     public function indexAction(string $keywords = '', int $term_id = 0, int $type = 0) {
         $items = PublishRepository::getList($keywords, $term_id, 0, $type);
-        $term_list = TermModel::select('id', 'name')->all();
+        $term_list = TermModel::select('id', 'name')->get();
         return $this->show(compact('items', 'term_list', 'keywords', 'term_id', 'type'));
     }
 
@@ -26,7 +26,7 @@ class BlogController extends Controller {
         } catch (\Exception $ex) {
             return $this->redirectWithMessage($this->getUrl('blog'), $ex->getMessage());
         }
-        $term_list = TermModel::select('id', 'name')->all();
+        $term_list = TermModel::select('id', 'name')->get();
         $tags = $model->isNewRecord ? [] : TagRepository::getTags($model->id);
         $metaItems = BlogMetaModel::getOrDefault($id);
         return $this->show('edit', compact('model', 'term_list', 'tags', 'metaItems'));

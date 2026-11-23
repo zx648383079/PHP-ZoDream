@@ -10,7 +10,7 @@ class OrderController extends Controller {
             ->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
         $status_list = OrderModel::$status_list;
         return $this->show(compact('items', 'status_list', 'status'));
     }

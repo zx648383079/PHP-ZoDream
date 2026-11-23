@@ -29,12 +29,12 @@ final class CategoryRepository extends CRUDRepository {
             if (in_array('recommend', $extra)) {
                 $item['recommend_items'] = MovieModel::query()->where('cat_id', $item['id'])
                     ->orderBy('release_date')
-                        ->limit(6)->get(MovieRepository::MOVIE_PAGE_FILED);
+                        ->take(6)->get(MovieRepository::MOVIE_PAGE_FILED);
             }
             if (in_array('new', $extra)) {
                 $item['new_items'] =
-                    MovieModel::query()->where('cat_id', $item['id'])->orderBy('updated_at', 'desc')
-                        ->limit(5)->get(MovieRepository::MOVIE_PAGE_FILED);
+                    MovieModel::query()->where('cat_id', $item['id'])->orderBy('updated_at', SORT_DESC)
+                        ->take(5)->get(MovieRepository::MOVIE_PAGE_FILED);
             }
         }
 
@@ -73,7 +73,7 @@ final class CategoryRepository extends CRUDRepository {
     }
 
     public static function recommend() {
-        return CategoryModel::limit(6)->get();
+        return CategoryModel::query()->take(6)->get();
     }
 
     public static function search(string $keywords = '', int|array $id = 0) {

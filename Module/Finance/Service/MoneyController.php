@@ -13,18 +13,18 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class MoneyController extends Controller {
 
     public function indexAction() {
-        $account_list = MoneyAccountModel::auth()->all();
+        $account_list = MoneyAccountModel::auth()->get();
         $total = 0;
         foreach ($account_list as $item) {
             $total += $item->total;
         }
-        $product_list = FinancialProductModel::auth()->all();
-        $project_list = FinancialProjectModel::auth()->select('name', 'money')->all();
+        $product_list = FinancialProductModel::auth()->get();
+        $project_list = FinancialProjectModel::auth()->select('name', 'money')->get();
         return $this->show(compact('account_list', 'total', 'product_list', 'project_list'));
     }
 
     public function accountAction() {
-        $items = MoneyAccountModel::auth()->orderBy('id', 'desc')->all();
+        $items = MoneyAccountModel::auth()->orderBy('id', SORT_DESC)->get();
         return $this->show(compact('items'));
     }
 
@@ -67,7 +67,7 @@ class MoneyController extends Controller {
     }
 
     public function projectAction() {
-        $items = FinancialProjectModel::auth()->with('product')->orderBy('id', 'desc')->all();
+        $items = FinancialProjectModel::auth()->with('product')->orderBy('id', SORT_DESC)->get();
         return $this->show(compact('items'));
     }
 
@@ -81,8 +81,8 @@ class MoneyController extends Controller {
         } catch (\Exception $ex) {
             return $this->redirectWithMessage('./money/project', $ex->getMessage());
         }
-        $product_list = FinancialProductModel::auth()->all();
-        $account_list = MoneyAccountModel::auth()->all();
+        $product_list = FinancialProductModel::auth()->get();
+        $account_list = MoneyAccountModel::auth()->get();
         return $this->show('create_project', compact('model', 'product_list', 'account_list'));
     }
 
@@ -105,7 +105,7 @@ class MoneyController extends Controller {
     }
 
     public function confirmEarningsAction(int $id) {
-        $this->layout = false;
+        $this->layout = '';
         try {
             $model = ProjectRepository::get($id);
         } catch (\Exception $ex) {
@@ -126,7 +126,7 @@ class MoneyController extends Controller {
     }
 
     public function productAction() {
-        $items = FinancialProductModel::auth()->orderBy('id', 'desc')->all();
+        $items = FinancialProductModel::auth()->orderBy('id', SORT_DESC)->get();
         return $this->show(compact('items'));
     }
 

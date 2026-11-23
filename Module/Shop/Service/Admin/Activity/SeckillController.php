@@ -45,7 +45,7 @@ class SeckillController extends Controller {
     }
 
     public function timeAction($id = 0) {
-        $model_list = ActivityTimeModel::orderBy('start_at asc')->all();
+        $model_list = ActivityTimeModel::orderBy('start_at', SORT_ASC)->get();
         return $this->show(compact('model_list', 'id'));
     }
 
@@ -99,7 +99,7 @@ class SeckillController extends Controller {
         if (!empty($del)) {
             SeckillGoodsModel::where('act_id', $act_id)->where('time_id', $time_id)->whereIn('goods_id', $del)->delete();
         }
-        $this->layout = false;
+        $this->layout = '';
         $model_list = SeckillGoodsModel::with('goods')->where('act_id', $act_id)->where('time_id', $time_id)->page();
         return $this->show('goodsBody', compact('model_list'));
     }

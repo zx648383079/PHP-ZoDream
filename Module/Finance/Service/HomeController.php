@@ -21,9 +21,9 @@ class HomeController extends Controller {
         $y_expenditure = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->sum('money');
         $y_income_count = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->count();
         $y_expenditure_count = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->count();
-        $account_list = MoneyAccountModel::auth()->all();
+        $account_list = MoneyAccountModel::auth()->get();
 
-        $project_list = FinancialProjectModel::auth()->all();
+        $project_list = FinancialProjectModel::auth()->get();
 
         return $this->show(compact('now_income', 'now_income_count', 'now_expenditure',
             'now_expenditure_count', 'y_income', 'y_income_count',

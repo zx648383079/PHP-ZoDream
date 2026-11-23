@@ -14,7 +14,7 @@ final class ZoneRepository {
     public static function userZone(): array {
         $lastAt = auth()->guest() ? 0 : intval(UserMetaModel::where('user_id', auth()->id())
             ->where('name', 'zone_at')->value('content'));
-        $data = ZoneEntity::query()->where('status', 1)->orderBy('id', 'asc')->get();
+        $data = ZoneEntity::query()->where('status', 1)->orderBy('id', SORT_ASC)->get();
         $activated_at = 0;
         $selected = [];
         if ($lastAt > 0) {
@@ -33,7 +33,7 @@ final class ZoneRepository {
     }
 
     public static function all(): array {
-        return ZoneEntity::query()->where('status', 1)->orderBy('id', 'asc')->get();
+        return ZoneEntity::query()->where('status', 1)->orderBy('id', SORT_ASC)->get();
     }
 
     public static function save(int $user, array|int $zoneId) {
@@ -85,7 +85,7 @@ final class ZoneRepository {
         return ZoneEntity::query()
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, 'name', false, '', $keywords);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 

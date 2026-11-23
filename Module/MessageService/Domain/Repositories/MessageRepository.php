@@ -76,7 +76,7 @@ final class MessageRepository {
                 SearchModel::searchWhere($query, ['name', 'title']);
             })->when($type > 0, function ($query) use ($type) {
                 $query->where('type', $type);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->select('id', 'type', 'name', 'title', 'target_no', 'status', 'created_at')
             ->page();
     }
@@ -111,7 +111,7 @@ final class MessageRepository {
                 $del[] = $item['id'];
                 continue;
             }
-            if (TemplateEntity::where('id', '<>', $item['id'])->where('name', $item['name'])->count() > 0) {
+            if (TemplateEntity::where('id', '<>', $item['id'])->where('name', $item['name'])->any()) {
                 $del[] = $item['id'];
                 continue;
             }
@@ -147,7 +147,7 @@ final class MessageRepository {
                 SearchModel::searchWhere($query, ['target', 'template_name']);
             })->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
-            })->orderBy('id', 'desc')->select('id', 'target', 'template_name', 'status', 'message',
+            })->orderBy('id', SORT_DESC)->select('id', 'target', 'template_name', 'status', 'message',
                 'created_at')->page();
     }
 
@@ -165,7 +165,7 @@ final class MessageRepository {
 
     public static function insertIf(string $name, string $title, string $content,
                                     int $type = MessageProtocol::TYPE_TEXT): void {
-        if (TemplateEntity::where('name', $name)->count() > 0 ||
+        if (TemplateEntity::where('name', $name)->any() ||
             empty($content)) {
             return;
         }

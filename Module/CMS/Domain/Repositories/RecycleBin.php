@@ -119,8 +119,8 @@ final class RecycleBin {
                 return;
             }
             $data['items'] = LinkageDataEntity::query()->where('linkage_id', $id)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')->asArray()->get();
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('id', SORT_ASC)->asArray()->get();
         }
         self::add(0, SiteRepository::TYPE_LINKAGE, $data['name'], $data);
     }

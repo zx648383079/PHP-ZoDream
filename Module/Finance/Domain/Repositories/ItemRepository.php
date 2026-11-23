@@ -11,7 +11,7 @@ final class ItemRepository {
     public static function getList(string $keywords = '') {
         $items = ItemEntity::auth()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['remark', 'name']);
-        })->orderBy('status', 'asc')->orderBy('id', 'desc')->asArray()->page();
+        })->orderBy('status', SORT_ASC)->thenBy('id', SORT_DESC)->asArray()->page();
         $now = time();
 
         $items->map(function(array $item) use ($now) {
@@ -21,7 +21,7 @@ final class ItemRepository {
             return $item;
         });
         $res = $items->toArray();
-        if ($items->getIndex() === 1) {
+        if ($items->getCurrentPage() === 1) {
             $res['subtotal'] = self::subtotal();
         }
         return $res;

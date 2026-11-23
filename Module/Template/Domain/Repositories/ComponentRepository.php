@@ -33,7 +33,7 @@ final class ComponentRepository {
             $query->where('user_id', $user);
         })->when($category > 0, function ($query) use ($category) {
             $query->where('cat_id', $category);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function manageGet(int $id)
@@ -114,7 +114,7 @@ final class ComponentRepository {
             SearchModel::searchWhere($query, ['name'], true, '', $keywords);
         })->where('user_id', auth()->id())->when($category > 0, function ($query) use ($category) {
             $query->where('cat_id', $category);
-        })->where('type', $type)->orderBy('id', 'desc')->page();
+        })->where('type', $type)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfGet(int $id) {
@@ -177,7 +177,7 @@ final class ComponentRepository {
 
     protected static function removeFile(ThemeComponentEntity $model) {
         $exist = SiteComponentModel::where('component_id', $model->id)
-            ->where('path', $model->path)->count() > 0;
+            ->where('path', $model->path)->any();
         if ($exist) {
             return;
         }
@@ -205,7 +205,7 @@ final class ComponentRepository {
     public static function suggestion(string $keywords = '') {
         return ThemeComponentModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->where('status', self::STATUS_APPROVED)->limit(4)->get();
+        })->where('status', self::STATUS_APPROVED)->take(4)->get();
     }
 
     public static function dialogList(string $keywords = '', int $category = 0,
@@ -225,13 +225,13 @@ final class ComponentRepository {
             })->where(function ($query) {
                 $query->where('status', self::STATUS_APPROVED)
                     ->orWhere('user_id', auth()->id());
-            })->orderBy('status', 'desc')->orderBy('created_at', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('created_at', SORT_DESC)->page();
     }
 
     public static function recommend(int $type) {
         return ThemeComponentModel::with('category')->where('type', $type)
             ->where('status', self::STATUS_APPROVED)
-            ->limit(10)->get();
+            ->take(10)->get();
     }
 
     public static function selfImport(array $file): void {

@@ -13,14 +13,14 @@ final class CharacterRepository {
         ProjectRepository::isSelfOrThrow($project);
         return CharacterEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('project_id', $project)->orderBy('id', 'desc')->page();
+        })->where('project_id', $project)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function makerIdentityList(int $project, string $keywords) {
         ProjectRepository::isSelfOrThrow($project);
         return CharacterIdentityEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('project_id', $project)->orderBy('id', 'desc')->page();
+        })->where('project_id', $project)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function makerIdentitySave(array $data) {
@@ -39,7 +39,7 @@ final class CharacterRepository {
     public static function makerIdentityRemove(int $project, int $id) {
         ProjectRepository::isSelfOrThrow($project);
         if (CharacterEntity::where('project_id', $project)
-            ->where('identity_id', $id)->count() > 0) {
+            ->where('identity_id', $id)->any()) {
             CharacterIdentityEntity::where('project_id', $project)
                 ->where('id', $id)->update([
                     'status' => 9,

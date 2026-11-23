@@ -28,7 +28,7 @@ class PageController extends Controller {
         }
         $page = PageModel::find($evaluate->page_id);
         $question_list = PageQuestionModel::with('question')
-            ->where('evaluate_id', $evaluate->id)->orderBy('id', 'asc')->get();
+            ->where('evaluate_id', $evaluate->id)->orderBy('id', SORT_ASC)->get();
         $items = [];
         foreach ($question_list as $i => $item) {
             $args = $item->format($i + 1, true);
@@ -61,7 +61,7 @@ class PageController extends Controller {
         $model->status = 1;
         $model->spent_time = $model->getSpentTime();
         $question_list = PageQuestionModel::with('question')
-            ->where('evaluate_id', $model->id)->orderBy('id', 'asc')->get();
+            ->where('evaluate_id', $model->id)->orderBy('id', SORT_ASC)->get();
         foreach ($question_list as $item) {
             $right = $item->question->check($item->answer, $item->content);
             $item->status =
@@ -89,7 +89,7 @@ class PageController extends Controller {
         }
         $page = PageModel::find($evaluate->page_id);
         $question_list = PageQuestionModel::with('question')
-            ->where('evaluate_id', $evaluate->id)->orderBy('id', 'asc')->get();
+            ->where('evaluate_id', $evaluate->id)->orderBy('id', SORT_ASC)->get();
         $items = [];
         foreach ($question_list as $i => $item) {
             $args = $item->format($i + 1, true);

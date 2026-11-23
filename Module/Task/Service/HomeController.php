@@ -14,7 +14,7 @@ class HomeController extends Controller {
     }
 
     public function panelAction() {
-        $this->layout = false;
+        $this->layout = '';
         $model_list = DayRepository::getList(date('Y-m-d'));
         $last_log = TaskLogModel::where('user_id', auth()->id())
             ->where('status', '>', 1)

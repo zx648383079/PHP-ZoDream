@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Service\Admin;
 
 use Module\Counter\Domain\Repositories\StateRepository;
@@ -10,46 +11,46 @@ class HomeController extends Controller {
     }
 
     public function todayAction() {
-        $this->layout = false;
+        $this->layout = '';
         return $this->show(StatisticsRepository::today());
     }
 
 
     public function trendAction() {
-        $this->layout = false;
+        $this->layout = '';
         return $this->show();
     }
 
     public function searchWordAction() {
-        $this->layout = false;
+        $this->layout = '';
         $items = StateRepository::searchKeywords(...StateRepository::getTimeInput());
         $items = array_splice($items, 0, 10);
         return $this->show(compact('items'));
     }
 
     public function sourceAction() {
-        $this->layout = false;
+        $this->layout = '';
         $items = StateRepository::allSource(...StateRepository::getTimeInput());
         $items = array_splice($items, 0, 10);
         return $this->show(compact('items'));
     }
 
     public function enterAction() {
-        $this->layout = false;
-        $items = StateRepository::enterUrl(...StateRepository::getTimeInput())->getPage();
+        $this->layout = '';
+        $items = StateRepository::enterUrl(...StateRepository::getTimeInput())->getItems();
         $items = array_splice($items, 0, 10);
         return $this->show(compact('items'));
     }
 
     public function urlAction() {
-        $this->layout = false;
-        $items = StateRepository::allUrl(...StateRepository::getTimeInput())->getPage();
+        $this->layout = '';
+        $items = StateRepository::allUrl(...StateRepository::getTimeInput())->getItems();
         $items = array_splice($items, 0, 10);
         return $this->show(compact('items'));
     }
 
     public function districtAction() {
-        $this->layout = false;
+        $this->layout = '';
         return $this->show();
     }
 }

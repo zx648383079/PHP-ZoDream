@@ -21,7 +21,7 @@ abstract class Model extends BaseModel {
      * @throws \Exception
      */
     public static function refreshPk(callable $cb, string $key = 'id'): void {
-        $data = static::query()->orderBy($key, 'asc')->pluck($key);
+        $data = static::query()->orderBy($key, SORT_ASC)->pluck($key);
         $i = 1;
         foreach ($data as $id) {
             if ($id == $i) {

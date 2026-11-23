@@ -3,12 +3,8 @@ declare(strict_types=1);
 namespace Module\Document\Domain\Repositories;
 
 use Exception;
-use Module\Document\Domain\MockRule;
 use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
-use Zodream\Helpers\Arr;
-use Zodream\Helpers\Json;
-use Zodream\Helpers\Xml;
 use Zodream\Html\Tree;
 
 class ApiRepository {
@@ -17,7 +13,7 @@ class ApiRepository {
         $data = ApiModel::where('project_id', $project)
             ->where('version_id', $version)
             ->select('id', 'name', 'parent_id', 'type')
-            ->orderBy('id', 'asc')->asArray()->get();
+            ->orderBy('id', SORT_ASC)->asArray()->get();
         return (new Tree($data))->makeTree();
     }
 

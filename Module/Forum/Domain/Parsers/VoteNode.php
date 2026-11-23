@@ -76,7 +76,7 @@ HTML;
         return compact('items', 'total');
     }
 
-    private function isShowForm() {
+    private function isShowForm(): bool {
         if (auth()->guest()) {
             return false;
         }
@@ -87,8 +87,8 @@ HTML;
             ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_VOTE)
             ->where('user_id', auth()->id())
-            ->where('node_index', $this->attr(Parser::UID_KEY))->count();
-        if ($count > 0) {
+            ->where('node_index', $this->attr(Parser::UID_KEY))->any();
+        if ($count) {
             return false;
         }
         if (!$this->page->isUnderAction($this)) {

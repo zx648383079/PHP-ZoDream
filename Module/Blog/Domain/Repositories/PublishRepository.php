@@ -49,11 +49,11 @@ final class PublishRepository {
                 $query->where('publish_status', '<>', self::PUBLISH_STATUS_AUTO_SAVE);
             })->when(!empty($language), function ($query) use ($language) {
                 $query->where('language', $language);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         $items->map(function ($item) {
             $isLocal = $item['parent_id'] > 0;
             if (!$isLocal) {
-                $isLocal = BlogModel::where('parent_id', $item['id'])->count() > 0;
+                $isLocal = BlogModel::where('parent_id', $item['id'])->any();
             }
             $item['is_localization'] = $isLocal;
             return $item;
@@ -89,7 +89,7 @@ final class PublishRepository {
         }
         $model = BlogModel::where('user_id', auth()->id())
             ->where('publish_status', self::PUBLISH_STATUS_AUTO_SAVE)
-            ->orderBy('parent_id', 'asc')
+            ->orderBy('parent_id', SORT_ASC)
             ->first();
         if (empty($model)) {
             $data = new BlogModel();
@@ -126,7 +126,7 @@ final class PublishRepository {
         if (empty($language)) {
             $model = BlogModel::where('user_id', auth()->id())
                 ->where('publish_status', self::PUBLISH_STATUS_DRAFT)
-                ->orderBy('parent_id', 'asc')
+                ->orderBy('parent_id', SORT_ASC)
                 ->first();
         } else {
             $model = BlogModel::where('user_id', auth()->id())

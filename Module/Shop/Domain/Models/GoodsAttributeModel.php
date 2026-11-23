@@ -18,9 +18,8 @@ class GoodsAttributeModel extends GoodsAttributeEntity {
 
 
     public function checkValue() {
-        $count = static::where('goods_id', $this->goods_id)->where('attribute_id', $this->attribute_id)->where('value', $this->value)
-            ->where('id', '<>', $this->id)->count();
-        return $count < 1;
+        return !static::where('goods_id', $this->goods_id)->where('attribute_id', $this->attribute_id)->where('value', $this->value)
+            ->where('id', '<>', $this->id)->any();
     }
 
     /**

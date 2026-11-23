@@ -49,7 +49,7 @@ final class MusicRepository extends CRUDRepository {
     public static function suggestion(string $keywords) {
         return MusicModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], false, '', $keywords);
-        })->limit(4)->asArray()->get('id', 'name');
+        })->take(4)->asArray()->get('id', 'name');
     }
 
     public static function download(int $id): string {

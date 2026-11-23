@@ -7,7 +7,7 @@ use Module\Shop\Service\Admin\Controller;
 class DiscountController extends Controller {
 
     public function indexAction() {
-        $model_list = ActivityModel::where('type', ActivityModel::TYPE_DISCOUNT)->orderBy('id', 'desc')->page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_DISCOUNT)->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 

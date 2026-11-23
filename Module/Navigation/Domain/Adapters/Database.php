@@ -21,13 +21,13 @@ class Database implements ISearchAdapter {
             return $this->emptyPage();
         }
         $page = new Page($pageIdItems);
-        $pageIdItems = $page->getPage();
+        $pageIdItems = $page->getItems();
         if (empty($pageIdItems)) {
             return $page;
         }
         $items = PageModel::with('site')->whereIn('id', array_column($pageIdItems, 'id'))
-            ->orderBy('score', 'desc')->get();
-        $page->setPage($this->mergeWord($items, $wordItems, $pageIdItems));
+            ->orderBy('score', SORT_DESC)->get();
+        $page->setItems($this->mergeWord($items, $wordItems, $pageIdItems));
         return $page;
     }
 
@@ -59,7 +59,7 @@ class Database implements ISearchAdapter {
             $wordIds[] = $item['id'];
         }
         $items = PageKeywordModel::whereIn('word_id', $wordIds)
-            ->orderBy('is_official', 'desc')->get();
+            ->orderBy('is_official', SORT_DESC)->get();
         if (empty($items)) {
             return [];
         }

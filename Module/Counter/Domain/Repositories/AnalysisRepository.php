@@ -43,7 +43,7 @@ final class AnalysisRepository
             $query->where('ip', $ip);
         })->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['pathname', 'queries'], false);
-        })->orderBy('created_at', 'desc')
+        })->orderBy('created_at', SORT_DESC)
             ->page($per_page, 'page', $page);
         $res->map(function (LogModel $item) {
             $data = $item->toArray();

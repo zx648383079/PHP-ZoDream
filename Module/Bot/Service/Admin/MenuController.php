@@ -26,14 +26,14 @@ class MenuController extends Controller {
         $model = MenuModel::findOrNew($id);
         $request = request();
         if ($request->has('type')) {
-            $this->layout = false;
+            $this->layout = '';
             $model->type = $request->get('type');
             return $this->show('/Admin/layouts/editor', compact('model'));
         }
         if ($model->parent_id < $parent_id) {
             $model->parent_id = $parent_id;
         }
-        $menu_list = MenuModel::where('parent_id', 0)->all();
+        $menu_list = MenuModel::where('parent_id', 0)->get();
         return $this->show('edit', compact('model', 'menu_list'));
     }
 

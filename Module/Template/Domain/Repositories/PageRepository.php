@@ -28,8 +28,8 @@ final class PageRepository {
         if (!SiteRepository::isSelf($site)) {
             throw new \Exception('site is error');
         }
-        return SitePageModel::where('site_id', $site)->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->page();
+        return SitePageModel::where('site_id', $site)->orderBy('position', SORT_ASC)
+            ->thenBy('id', SORT_ASC)->page();
     }
 
     public static function save(array $data) {
@@ -156,7 +156,7 @@ final class PageRepository {
         $items = SitePageWeightModel::query()
             ->where('parent_id', $parent_id)
             ->where('parent_index', $parent_index)
-            ->where('id', '<>', $currenId)->orderBy('position', 'asc')
+            ->where('id', '<>', $currenId)->orderBy('position', SORT_ASC)
             ->asArray()->get('id', 'position');
         $maxPos = count($items) + 1;
         if ($currentPos < 1 || $currentPos > $maxPos) {
@@ -314,8 +314,8 @@ final class PageRepository {
     }
 
     public static function weightSearch(int $pageId): array {
-        $items = SitePageWeightModel::where('page_id', $pageId)->orderBy('parent_id', 'asc')
-            ->orderBy('parent_index', 'asc')->get();
+        $items = SitePageWeightModel::where('page_id', $pageId)->orderBy('parent_id', SORT_ASC)
+            ->orderBy('parent_index', SORT_ASC)->get();
         $items = Relation::create($items, [
             Relation::MERGE_RELATION_KEY => Relation::make(SiteWeightModel::select('id', 'title'), 'weight_id', 'id')
         ]);

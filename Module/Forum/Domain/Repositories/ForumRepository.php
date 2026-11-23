@@ -23,7 +23,7 @@ final class ForumRepository {
         $model = ForumModel::findOrThrow($id, '数据有误');
         if ($full) {
             $model->classifies = ForumClassifyModel::where('forum_id', $id)
-                ->orderBy('id', 'asc')->get();
+                ->orderBy('id', SORT_ASC)->get();
             $model->moderators;
         }
         return $model;
@@ -37,7 +37,7 @@ final class ForumRepository {
             }
         }
         $model->classifies = ForumClassifyModel::where('forum_id', $id)
-            ->orderBy('id', 'asc')->get();
+            ->orderBy('id', SORT_ASC)->get();
         if ($full) {
             $model->moderators;
             $model->children = static::children($id, false);
@@ -143,7 +143,7 @@ final class ForumRepository {
         return ZoneRepository::where(ThreadModel::with('user'), $zoneId)
             ->where('forum_id', $id)
             ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
-            ->orderBy('id', 'desc')->first('id', 'title', 'user_id', 'view_count',
+            ->orderBy('id', SORT_DESC)->first('id', 'title', 'user_id', 'view_count',
             'post_count',
             'collect_count', 'updated_at');
     }

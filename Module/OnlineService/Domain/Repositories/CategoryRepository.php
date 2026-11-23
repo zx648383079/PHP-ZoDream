@@ -111,14 +111,14 @@ class CategoryRepository {
 
     public static function wordAll() {
         return CategoryModel::with('words')
-            ->orderBy('id', 'asc')->get();
+            ->orderBy('id', SORT_ASC)->get();
     }
 
     public static function hasService(int $userId): bool {
-        return CategoryUserModel::where('user_id', $userId)->count() > 0;
+        return CategoryUserModel::where('user_id', $userId)->any();
     }
 
     public static function hasWord(int $word): bool {
-        return CategoryWordModel::where('id', $word)->count() > 0;
+        return CategoryWordModel::where('id', $word)->any();
     }
 }

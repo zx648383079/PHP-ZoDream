@@ -96,12 +96,12 @@ class BookRepository {
     protected static function sortByClick(Builder $query, string $type, int $page = 1, int $per_page = 20) {
         $logs = static::clickLogs($type);
         $pager = new Page(count($logs), $per_page, $page);
-        if (empty($logs) || $pager->getTotal() < $pager->getStart()) {
-            return $pager->setPage([]);
+        if (empty($logs) || $pager->getTotalItems() < $pager->getItemsOffset()) {
+            return $pager->setItems([]);
         }
-        $logs = array_splice($logs, $pager->getStart(), $pager->getPageSize());
+        $logs = array_splice($logs, $pager->getItemsOffset(), $pager->getPerPage());
         if (empty($logs)) {
-            return $pager->setPage([]);
+            return $pager->setItems([]);
         }
         $logs = array_column($logs, 'count', 'item_id');
         $book_list = $query->whereIn('id', array_keys($logs))->get();
@@ -117,7 +117,7 @@ class BookRepository {
             }
             return -1;
         });
-        return $pager->setPage($book_list);
+        return $pager->setItems($book_list);
     }
 
     public static function clickLogs(string $type) {
@@ -151,7 +151,7 @@ class BookRepository {
             ->when($status >= 0, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function getSelfList(string $keywords = '', int $category = 0) {
@@ -161,7 +161,7 @@ class BookRepository {
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })->where('user_id', auth()->id())
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function detail(int $id) {
@@ -192,9 +192,9 @@ class BookRepository {
             throw new \Exception('小说不存在');
         }
         $model->chapters = (new Tree(BookChapterModel::where('book_id', $model->id)
-            ->orderBy('parent_id', 'asc')
-            ->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->get()))->makeTree();
+            ->orderBy('parent_id', SORT_ASC)
+            ->thenBy('position', SORT_ASC)
+            ->thenBy('id', SORT_ASC)->get()))->makeTree();
         return $model;
     }
 
@@ -214,8 +214,8 @@ class BookRepository {
     }
 
     public static function saveSelf(array $data) {
-        if (isset($data['id']) && $data['id'] > 0 && BookModel::where('user_id', auth()->id())
-        ->where('id', $data['id'])->count() < 1) {
+        if (isset($data['id']) && $data['id'] > 0 && !BookModel::where('user_id', auth()->id())
+        ->where('id', $data['id'])->any()) {
             throw new \Exception('操作失败');
         }
         $data['user_id'] = auth()->id();
@@ -234,16 +234,16 @@ class BookRepository {
 
     public static function chapters(int $book) {
         return (new Tree(BookChapterModel::where('book_id', $book)
-            ->orderBy('parent_id', 'asc')
-            ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->get()))->makeTree();
+            ->orderBy('parent_id', SORT_ASC)
+            ->thenBy('position', SORT_ASC)
+            ->thenBy('created_at', SORT_ASC)->get()))->makeTree();
     }
 
     public static function chapter(int $id, int $book = 0) {
         $chapter = $id > 0 ?
             BookChapterModel::find($id) : BookChapterModel::where('book_id', $book)
-                ->orderBy('position', 'asc')
-                ->orderBy('created_at', 'asc')
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('created_at', SORT_ASC)
                 ->first();
         if (empty($chapter)) {
             throw new \Exception('id 错误！');
@@ -272,9 +272,9 @@ class BookRepository {
 
     public static function refreshPosition(int $book) {
         $data = BookChapterModel::where('book_id', $book)
-            ->orderBy('parent_id', 'asc')
-            ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->get('id', 'position');
+            ->orderBy('parent_id', SORT_ASC)
+            ->thenBy('position', SORT_ASC)
+            ->thenBy('created_at', SORT_ASC)->get('id', 'position');
         $position = 0;
         foreach ($data as $item) {
             $position ++;
@@ -309,7 +309,7 @@ class BookRepository {
 
     public static function isSelf(int $id): bool {
         return BookModel::where('user_id', auth()->id())->where('id', $id)
-            ->count() > 0;
+            ->any();
     }
 
     public static function overSelf(int $id) {
@@ -323,7 +323,7 @@ class BookRepository {
     }
 
     public static function checkOpen(int $id) {
-        $isOpen = BookModel::isOpen()->where('id', $id)->count() > 0;
+        $isOpen = BookModel::isOpen()->where('id', $id)->any();
         if (!$isOpen) {
             throw new \Exception('书籍不存在');
         }
@@ -332,13 +332,13 @@ class BookRepository {
 
     public static function getHot() {
         return BookModel::isOpen()
-            ->limit(4)->pluck('name');
+            ->take(4)->pluck('name');
     }
 
     public static function suggestion(string $keywords = '') {
         return BookModel::isOpen()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->limit(4)->pluck('name');
+        })->take(4)->pluck('name');
     }
 
     /**

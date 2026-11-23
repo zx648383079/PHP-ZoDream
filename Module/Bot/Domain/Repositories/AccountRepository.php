@@ -53,8 +53,8 @@ class AccountRepository {
     }
 
     public static function isSelf(int $id) {
-        $count = BotModel::where('id', $id)->where('user_id', auth()->id())->count();
-        if ($count < 1) {
+        $count = BotModel::where('id', $id)->where('user_id', auth()->id())->any();
+        if (!$count) {
             throw new \Exception('无权限管理');
         }
         return true;

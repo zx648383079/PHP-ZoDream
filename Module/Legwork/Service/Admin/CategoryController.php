@@ -9,7 +9,7 @@ class CategoryController extends Controller {
     public function indexAction($keywords = '') {
         $items = CategoryModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('items', 'keywords'));
     }
 

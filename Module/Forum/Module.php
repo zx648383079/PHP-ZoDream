@@ -16,13 +16,13 @@ class Module extends BaseModule implements ISiteMapModule {
 
     public function openLinks(SiteMap $map) {
 //        $map->add(url('./'), time());
-//        $items = ForumModel::orderBy('id', 'desc')
+//        $items = ForumModel::orderBy('id', SORT_DESC)
 //            ->get('id', 'updated_at');
 //        foreach ($items as $item) {
 //            $map->add(url('./forum', ['id' => $item->id]),
 //                $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .1);
 //        }
-//        $items = ThreadModel::orderBy('id', 'desc')
+//        $items = ThreadModel::orderBy('id', SORT_DESC)
 //            ->get('id', 'updated_at');
 //        foreach ($items as $item) {
 //            $map->add(url('./thread', ['id' => $item->id]),

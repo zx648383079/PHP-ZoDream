@@ -43,9 +43,9 @@ class GoodsController extends Controller {
                 $query->where('deleted_at', '>', 0);
             }, function ($query) {
                 $query->where('deleted_at', 0);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
-        $brand_list = BrandModel::select('id', 'name')->all();
+        $brand_list = BrandModel::select('id', 'name')->get();
         return $this->show(compact('model_list', 'cat_list', 'brand_list', 'keywords', 'cat_id', 'brand_id', 'sort'));
     }
 
@@ -61,9 +61,9 @@ class GoodsController extends Controller {
         $model = GoodsModel::findOrDefault($id, [
             'stock' => 1, 'weight' => 0, 'status' => GoodsModel::STATUS_SALE]);
         $cat_list = CategoryModel::tree()->makeTreeForHtml();
-        $brand_list = BrandModel::select('id', 'name')->all();
-        $group_list = AttributeGroupModel::all();
-        $gallery_list = GoodsGalleryModel::where('goods_id', $id)->all();
+        $brand_list = BrandModel::select('id', 'name')->get();
+        $group_list = AttributeGroupModel::query()->get();
+        $gallery_list = GoodsGalleryModel::where('goods_id', $id)->get();
         return $this->show('edit', compact('model', 'cat_list', 'brand_list', 'group_list', 'gallery_list'));
     }
 
@@ -204,16 +204,16 @@ class GoodsController extends Controller {
                 $query->where('brand_id', intval($brand_id));
             })->when($just_selected, function ($query) use ($selected) {
             $query->whereIn('id', $selected);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         if (request()->wantsJson()) {
             return $this->renderData($model_list);
         }
         if (!$simple) {
             $cat_list = CategoryModel::tree()->makeTreeForHtml();
-            $brand_list = BrandModel::select('id', 'name')->all();
+            $brand_list = BrandModel::select('id', 'name')->get();
             $this->send(compact('cat_id', 'cat_list', 'brand_id', 'brand_list', 'just_selected', 'keywords'));
         }
-        $this->layout = false;
+        $this->layout = '';
         return $this->show(compact('model_list', 'selected', 'simple'));
     }
 

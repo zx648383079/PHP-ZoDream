@@ -41,7 +41,7 @@ class PagerRepository {
         if (empty($log)) {
             return null;
         }
-        $items = PageQuestionModel::with('question')->where('evaluate_id', $log->id)->orderBy('id', 'asc')->get();
+        $items = PageQuestionModel::with('question')->where('evaluate_id', $log->id)->orderBy('id', SORT_ASC)->get();
         $pager = new Pager();
         $pager->id = $log->id;
         $pager->pageId = $model->id;
@@ -132,7 +132,7 @@ class PagerRepository {
             $model = QuestionModel::find($id);
         } elseif ($course > 0) {
             $model = QuestionModel::where('course_id', $course)
-                ->orderBy('id asc')->first();
+                ->orderBy('id', SORT_ASC)->first();
         }
         if (!isset($model) || empty($model)) {
             throw new \Exception('题目不存在');
@@ -155,7 +155,7 @@ class PagerRepository {
 
     public static function questionCard(int $course) {
         $data = QuestionModel::where('course_id', $course)
-            ->orderBy('id asc')->pluck('id');
+            ->orderBy('id', SORT_ASC)->pluck('id');
         $items = [];
         foreach ($data as $i => $item) {
             $items[] = [
@@ -210,7 +210,7 @@ class PagerRepository {
             ->where('status', PageEvaluateEntity::STATUS_NONE)->first() : PageEvaluateModel::where('user_id', auth()->id())
             ->where('page_id', $pager->pageId)
             ->where('status', PageEvaluateEntity::STATUS_NONE)
-            ->orderBy('id', 'desc')->first();
+            ->orderBy('id', SORT_DESC)->first();
         $isNew = empty($model);
         if ($isNew) {
             $model = PageEvaluateModel::create([

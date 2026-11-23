@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service\Admin;
 
 
@@ -32,7 +33,7 @@ class AuthorController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         BookAuthorModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('author')

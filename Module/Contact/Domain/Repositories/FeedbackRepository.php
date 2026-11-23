@@ -27,7 +27,7 @@ class FeedbackRepository {
     public static function getList(string $keywords = '', int $perPage = 20) {
         $items = FeedbackModel::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name', 'content']);
-        })->where('open_status', 1)->orderBy('id', 'desc')->page($perPage);
+        })->where('open_status', 1)->orderBy('id', SORT_DESC)->page($perPage);
         foreach ($items as $item) {
             $item['name'] = Helpers::hideName($item['name']);
             $item['email'] = Helpers::hideEmail($item['email']);

@@ -1,36 +1,34 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
-use Module\Book\Domain\Model\BookAuthorModel;
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
 class BiQuGeLu extends BaseSpider {
 
-    protected $matchCatalog = '#^/?book/\d+/?$#i';
+    protected string $matchCatalog = '#^/?book/\d+/?$#i';
 
-    protected $matchContent = '#^/?book/\d+/\d+\.html$#i';
+    protected string $matchContent = '#^/?book/\d+/\d+\.html$#i';
 
-    protected $sort = true;
+    protected bool $sort = true;
 
-    protected $matchList = '#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
+    protected string $matchList = '#<a[^<>]+href="/book/(\d+)/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
-        return preg_match($this->matchCatalog, $uri->getPath(), $match);
+    public function isCatalogPage(Uri $uri): bool {
+        return !!preg_match($this->matchCatalog, $uri->getPath(), $match);
     }
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
-        return preg_match($this->matchContent, $uri->getPath(), $match);
+    public function isContentPage(Uri $uri): bool {
+        return !!preg_match($this->matchContent, $uri->getPath(), $match);
     }
 
     /**
@@ -38,7 +36,7 @@ class BiQuGeLu extends BaseSpider {
      * @param Uri $uri
      * @return array
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         return [
             'name' => $html->find('.info h2', 0)->text,
         ];
@@ -49,7 +47,7 @@ class BiQuGeLu extends BaseSpider {
      * @param Uri $baseUri
      * @return array[]
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $uris = [];
         $html->find('.listmain', 0)->matches($this->matchList,
             function ($match) use (&$uris, $baseUri) {
@@ -88,7 +86,7 @@ class BiQuGeLu extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         if ($html->isEmpty()) {
             return [];
         }

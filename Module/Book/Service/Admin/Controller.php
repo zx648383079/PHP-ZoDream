@@ -18,7 +18,7 @@ class Controller extends ModuleController {
         ];
     }
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(string $path, array $args = []) {
         return url('./@admin/'.$path, $args);
     }
 }

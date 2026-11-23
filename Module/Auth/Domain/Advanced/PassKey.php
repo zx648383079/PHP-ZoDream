@@ -27,7 +27,7 @@ final class PassKey {
     }
 
     public static function isOpen2FA(int $userId): bool {
-        return OAuthEntity::where('user_id', $userId)->where('vendor', OAuthEntity::TYPE_2FA)->count() > 0;
+        return OAuthEntity::where('user_id', $userId)->where('vendor', OAuthEntity::TYPE_2FA)->any();
     }
 
     public static function check2FA(UserModel $model) {
@@ -69,7 +69,7 @@ final class PassKey {
             throw new Exception('动态码错误');
         }
         if (OAuthEntity::where('user_id', $userId)->where('vendor', OAuthEntity::TYPE_2FA)
-        ->count() > 0) {
+        ->any()) {
             throw new Exception('非法操作');
         }
         OAuthEntity::create([

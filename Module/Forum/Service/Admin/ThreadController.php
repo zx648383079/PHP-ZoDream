@@ -14,7 +14,7 @@ class ThreadController extends Controller {
                 SearchModel::searchWhere($query, 'title');
             })->when(!empty($forum_id), function ($query) use ($forum_id) {
                 $query->where('forum_id', intval($forum_id));
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         $forum_list = ForumModel::tree()->makeTreeForHtml();
         return $this->show(compact('items', 'forum_list', 'forum_id'));
     }

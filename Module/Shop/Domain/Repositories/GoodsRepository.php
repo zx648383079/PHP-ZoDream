@@ -222,9 +222,9 @@ class GoodsRepository {
     }
 
     public static function homeRecommend(): array {
-        $hot_products = GoodsRepository::getRecommendQuery('is_hot')->all();
-        $new_products = GoodsRepository::getRecommendQuery('is_new')->all();
-        $best_products = GoodsRepository::getRecommendQuery('is_best')->all();
+        $hot_products = GoodsRepository::getRecommendQuery('is_hot')->get();
+        $new_products = GoodsRepository::getRecommendQuery('is_new')->get();
+        $best_products = GoodsRepository::getRecommendQuery('is_best')->get();
         return compact('hot_products', 'new_products', 'best_products');
     }
 

@@ -300,13 +300,13 @@ class GoodsRepository {
     }
 
     public static function attributeList(int $group_id, int $goods_id = 0) {
-        $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position asc')->orderBy('type asc')->asArray()->get();
+        $attr_list = AttributeModel::where('group_id', $group_id)->orderBy('position', SORT_ASC)->thenBy('type', SORT_ASC)->asArray()->get();
         foreach ($attr_list as &$item) {
             $item['default_value'] = empty($item['default_value']) || $item['input_type'] < 1 ? [] : explode("\n", trim($item['default_value']));
             $item['attr_items'] = GoodsAttributeModel::where('goods_id', $goods_id)->where('attribute_id', $item['id'])->get();
         }
         unset($item);
-        $product_list = ProductModel::where('goods_id', $goods_id)->orderBy('id asc')->get();
+        $product_list = ProductModel::where('goods_id', $goods_id)->orderBy('id', SORT_ASC)->get();
         return compact('attr_list', 'product_list');
     }
 
@@ -353,7 +353,7 @@ class GoodsRepository {
 
 
     public static function hasSeriesNumber($sn) {
-        return GoodsModel::where('series_number', $sn)->count() > 0;
+        return GoodsModel::where('series_number', $sn)->any();
     }
 
     public static function generateSn() {
@@ -373,7 +373,7 @@ class GoodsRepository {
         return GoodsCardModel::where('goods_id', $goods)
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 $query->where('card_no', $keywords);
-            })->orderBy('order_id', 'asc')->orderBy('id', 'desc')->page();
+            })->orderBy('order_id', SORT_ASC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function cardGenerate(int $goods, int $amount = 1) {

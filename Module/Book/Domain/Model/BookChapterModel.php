@@ -1,13 +1,6 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-/**
- * Created by PhpStorm.
- * User: zx648
- * Date: 2016/10/15
- * Time: 21:00
- */
-use Domain\Model\Model;
 use Module\Book\Domain\Entities\ChapterEntity;
 use Module\Book\Domain\Repositories\ChapterRepository;
 
@@ -51,16 +44,16 @@ class BookChapterModel extends ChapterEntity {
 
     public function getPreviousAttribute() {
         return static::where('id', '<', $this->id)->where('book_id', $this->book_id)
-            ->orderBy('position', 'desc')
-            ->orderBy('id desc')->select('id, title')->one();
+            ->orderBy('position', SORT_DESC)
+            ->thenBy('id', SORT_DESC)->select('id', 'title')->first();
     }
 
     public function getNextAttribute() {
         return static::where('id', '>', $this->id)
             ->where('book_id', $this->book_id)
-            ->orderBy('position', 'asc')
-            ->orderBy('id asc')
-            ->select('id, title')->one();
+            ->orderBy('position', SORT_ASC)
+            ->thenBy('id', SORT_ASC)
+            ->select('id', 'title')->first();
     }
 
     public function save(bool $force = false): mixed {

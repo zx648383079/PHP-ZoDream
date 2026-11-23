@@ -20,7 +20,7 @@ final class AffiliateRepository {
                 $query->where('user_id', $user);
             })->when($status > 0, function ($query) use ($status) {
                 $query->where('status', $status);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function option() {
@@ -151,8 +151,8 @@ final class AffiliateRepository {
         while (true) {
             $items = AffiliateLogModel::where('item_type', AffiliateLogModel::TYPE_ORDER)
                 ->where('item_id', $order->id)
-                ->orderBy('id', 'asc')
-                ->limit($begin, $prePage)->get();
+                ->orderBy('id', SORT_ASC)
+                ->skip($begin)->take($prePage)->get();
             foreach ($items as $item) {
                 $item->status = AffiliateLogModel::STATUS_ARRIVAL;
                 $item->save();

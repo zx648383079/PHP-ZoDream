@@ -88,7 +88,7 @@ class FinancialProjectModel extends Model {
 
     public function getWeekIncome() {
         $data = [0, 0, 0, 0, 0, 0, 0];
-        $log_list = LogModel::auth()->week(time())->where('project_id', $this->id)->all();
+        $log_list = LogModel::auth()->week(time())->where('project_id', $this->id)->get();
         foreach ($log_list as $item) {
             $day = date('w', strtotime($item->happened_at));
             if ($day < 1) {

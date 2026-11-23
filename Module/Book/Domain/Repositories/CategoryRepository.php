@@ -10,7 +10,7 @@ use Zodream\Database\Contracts\SqlBuilder;
 
 class CategoryRepository extends CRUDRepository {
     public static function all() {
-        return BookCategoryModel::orderBy('id', 'asc')->get();
+        return BookCategoryModel::orderBy('id', SORT_ASC)->get();
     }
 
     public static function getList(string $keywords = '') {

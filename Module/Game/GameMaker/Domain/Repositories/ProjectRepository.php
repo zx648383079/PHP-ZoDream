@@ -12,7 +12,7 @@ final class ProjectRepository {
     public static function selfList(string $keywords = '') {
         return ProjectEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+        })->where('user_id', auth()->id())->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfGet(int $id) {
@@ -37,7 +37,7 @@ final class ProjectRepository {
 
     public static function isSelf(int $project): bool {
         return ProjectEntity::where('id', $project)
-            ->where('user_id', auth()->id())->count() > 0;
+            ->where('user_id', auth()->id())->any();
     }
 
     public static function isSelfOrThrow(int $project) {
@@ -70,6 +70,6 @@ final class ProjectRepository {
     public static function getList(string $keywords) {
         return ProjectEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('status', 1)->orderBy('id', 'desc')->page();
+        })->where('status', 1)->orderBy('id', SORT_DESC)->page();
     }
 }

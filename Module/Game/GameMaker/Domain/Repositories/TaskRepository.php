@@ -12,7 +12,7 @@ final class TaskRepository {
         ProjectRepository::isSelfOrThrow($project);
         return TaskEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name']);
-        })->where('project_id', $project)->orderBy('id', 'desc')->page();
+        })->where('project_id', $project)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function makerSave(array $data) {

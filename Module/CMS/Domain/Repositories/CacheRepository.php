@@ -102,8 +102,8 @@ final class CacheRepository {
         }
         return cache()->getOrSet(self::linkageKey($id), function () use ($id) {
             return new TreeObject(LinkageDataModel::query()->where('linkage_id', $id)
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('id', SORT_ASC)
                 ->get());
         }, 0);
     }
@@ -112,8 +112,8 @@ final class CacheRepository {
         $context = CMSRepository::context();
         return cache()->getOrSet(self::channelKey($context->id()), function () use($context) {
             return new TreeObject($context->channelBuilder()->where('site_id', $context->id())
-                ->orderBy('position', 'asc')
-                ->orderBy('id', 'asc')
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('id', SORT_ASC)
                 ->get());
         });
     }
@@ -134,9 +134,9 @@ final class CacheRepository {
             }
             $data = $model->toArray();
             $fieldItems = ModelFieldModel::where('model_id', $id)
-                ->orderBy('position', 'asc')
-                ->orderBy('is_system', 'desc')
-                ->orderBy('id', 'asc')
+                ->orderBy('position', SORT_ASC)
+                ->thenBy('is_system', SORT_DESC)
+                ->thenBy('id', SORT_ASC)
                 ->get();
             $data['field_items'] = [];
             foreach ($fieldItems as $item) {
@@ -205,7 +205,7 @@ final class CacheRepository {
         return cache()->getOrSet(self::siteKey(), function () {
             $data = SiteModel::where('status', SiteRepository::PUBLISH_STATUS_POSTED)
                 ->asArray()
-                ->orderBy('id', 'asc')
+                ->orderBy('id', SORT_ASC)
                 ->get('id', 'is_default', 'match_rule');
             return array_map(function ($item) {
                 return [

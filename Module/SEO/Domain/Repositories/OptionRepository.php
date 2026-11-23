@@ -14,8 +14,8 @@ class OptionRepository {
     public static function getEditList(): array {
         /** @var OptionModel[]  $items */
         $items = OptionModel::query()->where('visibility', '>', 0)
-            ->orderBy('parent_id', 'asc')
-            ->orderBy('position', 'desc')->get();
+            ->orderBy('parent_id', SORT_ASC)
+            ->thenBy('position', SORT_DESC)->get();
         return (new Tree($items))->makeTree();
     }
 
@@ -23,7 +23,7 @@ class OptionRepository {
         $data = [];
         /** @var OptionModel[]  $items */
         $items = OptionModel::query()->where('visibility', '>', 1)
-            ->orderBy('position', 'desc')->get('code', 'value', 'type');
+            ->orderBy('position', SORT_DESC)->get('code', 'value', 'type');
         foreach ($items as $item) {
             $data[$item->code] = Option::formatOption((string)$item->getAttributeSource('value'), $item->type);
         }
@@ -37,7 +37,7 @@ class OptionRepository {
         if (empty($data['name'])) {
             throw new Exception('名称不能为空');
         }
-        if (OptionModel::where('name', $data['name'])->count() > 0) {
+        if (OptionModel::where('name', $data['name'])->any()) {
             throw new Exception('名称已存在');
         }
         if ($data['type'] == 'group') {
@@ -49,7 +49,7 @@ class OptionRepository {
         if (empty($data['code']) || $data['parent_id'] < 1) {
             throw new Exception('别名不能为空');
         }
-        if (OptionModel::where('code', $data['code'])->count() > 0) {
+        if (OptionModel::where('code', $data['code'])->any()) {
             throw new Exception('别名已存在');
         }
         return OptionModel::create($data);
@@ -70,14 +70,14 @@ class OptionRepository {
             throw new  Exception('分组不能改成项');
         }
         $model->load($data);
-        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->count() > 0) {
+        if (OptionModel::where('name', $model['name'])->where('id', '<>', $id)->any()) {
             throw new Exception('名称重复');
         }
         if ($model->type !== 'group') {
             if (!$model->code || $model->parent_id < 1) {
                 throw new Exception('别名不能为空');
             }
-            if (OptionModel::where('code', $model->code)->where('id', '<>', $id)->count() > 0) {
+            if (OptionModel::where('code', $model->code)->where('id', '<>', $id)->any()) {
                 throw new Exception('别名已存在');
             }
         }

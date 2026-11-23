@@ -47,7 +47,7 @@ class OrderRepository {
             ->when($waiter_id > 0, function ($query) use ($waiter_id) {
                 $query->where('waiter_id', $waiter_id);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function getSelfList(string $keywords = '', int $status = 0, int $id = 0) {
@@ -70,7 +70,7 @@ class OrderRepository {
             ->when($id > 0, function ($query) use ($id) {
                 $query->where('id', $id);
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function pay(OrderModel $order) {

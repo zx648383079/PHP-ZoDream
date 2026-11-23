@@ -14,7 +14,7 @@ final class RankRepository {
     public static function getList(string $keywords) {
         $page = RankEntity::query()->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->orderBy('level', 'asc')->page();
+        })->orderBy('level', SORT_ASC)->page();
         return $page;
     }
 
@@ -77,7 +77,7 @@ final class RankRepository {
         $offset = 0;
         while (true) {
             $items = UserMetaModel::where('name', 'rank_exp')
-                ->limit($offset, $per_page)
+                ->skip($offset)->take($per_page)
                 ->asArray()
                 ->get('user_id', 'content');
             foreach ($items as $item) {
@@ -120,7 +120,7 @@ final class RankRepository {
 
     private static function cacheRules(): array {
         return cache()->getOrSet(self::CACHE_KEY, function() {
-            $res = RankEntity::orderBy('level', 'asc')
+            $res = RankEntity::orderBy('level', SORT_ASC)
                 ->asArray()
                 ->select('exp', 'level')->get();
             $max = 0;

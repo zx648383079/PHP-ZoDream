@@ -34,13 +34,13 @@ class ThreadRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
             })
-            ->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_ASC)
+            ->orderBy('id', SORT_DESC)->page();
         if ($items->count() == 0) {
             return $items;
         }
         $idItems = [];
-        foreach ($items->getPage() as $item)
+        foreach ($items->getItems() as $item)
         {
             $idItems[] = $item['id'];
         }
@@ -115,7 +115,7 @@ class ThreadRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'content');
             })
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
         $items->map(function (ThreadPostModel $item) {
             $data = $item->toArray();
@@ -200,7 +200,7 @@ class ThreadRepository {
 
     private static function getParticipant(int $threadId, int $exclude): array {
         $idItems = ThreadPostModel::where('thread_id', $threadId)
-        ->where('user_id', '<>', $exclude)->selectRaw('distinct user_id')->limit(5)->pluck('user_id');
+        ->where('user_id', '<>', $exclude)->selectRaw('distinct user_id')->take(5)->pluck('user_id');
         return UserSimpleModel::whereIn('id', $idItems)->get();
     }
 
@@ -224,8 +224,8 @@ class ThreadRepository {
         $data = ZoneRepository::where(ThreadModel::with('user', 'classify'), $zoneId)
             ->where('forum_id', $forum)
             ->where('top_type', '>', 0)
-            ->orderBy('top_type', 'desc')
-            ->orderBy('id', 'desc')->get();
+            ->orderBy('top_type', SORT_DESC)
+            ->thenBy('id', SORT_DESC)->get();
         foreach ($data as $item) {
             $item->last_post = static::lastPost($item->id);
             $item->is_new = static::isNew($item);
@@ -246,7 +246,7 @@ class ThreadRepository {
         return $query
             ->where('thread_id', $thread)
 //            ->where('grade', 0)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->first('id', 'user_id', 'created_at');
     }
 
@@ -270,8 +270,8 @@ class ThreadRepository {
                     $query->where('user_id', $user_id);
                 })
                 ->where('thread_id', $thread_id)
-                ->orderBy('grade', 'asc')
-                ->orderBy('created_at', 'asc')->pluck('id');
+                ->orderBy('grade', SORT_ASC)
+                ->thenBy('created_at', SORT_ASC)->pluck('id');
             $count = empty($maps) ? false : array_search($post_id, $maps);
             if ($count === false) {
                 throw new Exception('找不到该回帖');
@@ -280,7 +280,7 @@ class ThreadRepository {
         }
         list($sort, $order) = SearchModel::checkSortOrder($sort, $order, [
             'grade', 'status'
-        ], 'asc');
+        ], SORT_ASC);
         /** @var Page<ThreadPostModel> $items */
         $items = ThreadPostModel::with('user', 'thread')
             ->when($user_id > 0, function ($query) use ($user_id) {
@@ -291,9 +291,9 @@ class ThreadRepository {
             })
             ->where('thread_id', $thread_id)
             ->orderBy($sort, $order)
-            ->orderBy('created_at', 'asc')
+            ->thenBy('created_at', SORT_ASC)
             ->page($per_page, 'page', $page);
-        $data = $items->getPage();
+        $data = $items->getItems();
         foreach ($data as $item) {
             $item->is_public_post = $item->getIsPublicPostAttribute();
             $item->content = $item->is_public_post ? Parser::create($item, request())
@@ -306,7 +306,7 @@ class ThreadRepository {
             }
             return 0;
         });
-        return $items->setPage($data);
+        return $items->setItems($data);
     }
 
     public static function selfPostList(string $keywords = '') {
@@ -316,7 +316,7 @@ class ThreadRepository {
                 SearchModel::searchWhere($query, ['content'], false, '', $keywords);
             })
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', SORT_ASC)
             ->page();
     }
 
@@ -504,8 +504,8 @@ class ThreadRepository {
         $model->reward_items = ThreadLogModel::with('user')
             ->where('item_type', ThreadLogModel::TYPE_THREAD)
             ->where('item_id', $id)
-            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', 'desc')
-            ->limit(5)->get();
+            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', SORT_DESC)
+            ->take(5)->get();
         return $model;
     }
 
@@ -665,14 +665,14 @@ class ThreadRepository {
         return ZoneRepository::where(ThreadSimpleModel::query(), ZoneRepository::authZone())
         ->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
-        })->limit(4)->get();
+        })->take(4)->get();
     }
 
     public static function rewardList(int $item_id, int $item_type = 0) {
         return ThreadLogModel::with('user')
             ->where('item_type', $item_type)
             ->where('item_id', $item_id)
-            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', 'desc')
+            ->where('action', ThreadLogModel::ACTION_REWARD)->orderBy('id', SORT_DESC)
             ->page();
     }
 

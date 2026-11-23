@@ -40,13 +40,13 @@ class ReportRepository {
     }
 
     public static function check(ReportModel $model): bool {
-        return ReportModel::where('item_id', $model->item_id)
+        return !ReportModel::where('item_id', $model->item_id)
             ->where('item_type', $model->item_type)
             ->when($model->user_id > 0, function ($query) use ($model) {
                 $query->where('user_id', $model->user_id);
             }, function ($query) use ($model) {
                 $query->where('ip', $model->ip);
-            })->where('status', 0)->count() < 1;
+            })->where('status', 0)->any();
     }
 
     public static function quickCreate(int $itemType, int $itemId, string $content, int|string $type = 99): ReportModel {

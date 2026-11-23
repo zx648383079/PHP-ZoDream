@@ -11,7 +11,7 @@ class BrandRepository {
     }
 
     public static function recommend() {
-        $items = BrandModel::query()->limit(4)->get();
+        $items = BrandModel::query()->take(4)->get();
         foreach ($items as $item) {
             $item['price'] = GoodsModel::where('brand_id', $item->id)
                 ->min('price');

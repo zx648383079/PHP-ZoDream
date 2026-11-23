@@ -11,7 +11,7 @@ class SettingController extends Controller {
     public function indexAction() {
         $group_list = OptionModel::where('parent_id', 0)
             ->where('type', 'group')
-            ->orderBy('position', 'asc', 'id', 'asc')->all();
+            ->orderBy('position', SORT_ASC)->thenBy('id', SORT_ASC)->get();
         return $this->show(compact('group_list'));
     }
 

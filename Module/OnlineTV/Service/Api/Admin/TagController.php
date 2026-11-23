@@ -19,7 +19,7 @@ class TagController extends Controller {
 
     public function allAction() {
         return $this->renderData(
-            TVRepository::tag()->all()
+            TVRepository::tag()->get()
         );
     }
 }

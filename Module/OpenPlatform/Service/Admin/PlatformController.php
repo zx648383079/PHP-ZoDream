@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 class PlatformController extends Controller {
 
     public function indexAction() {
-        $model_list = PlatformModel::orderBy('status', 'desc')->page();
+        $model_list = PlatformModel::orderBy('status', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 

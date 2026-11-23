@@ -1,7 +1,7 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Book\Domain\Entities\AuthorEntity;
 
 
 /**
@@ -16,37 +16,9 @@ use Domain\Model\Model;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BookAuthorModel extends Model {
+class BookAuthorModel extends AuthorEntity {
 
-    const STATUS_NONE = 0;
-    const STATUS_ALLOW = 1;
-    const STATUS_DISALLOW = 2;
 
-    public static function tableName(): string {
-        return 'book_author';
-    }
-
-    protected function rules(): array {
-        return [
-            'name' => 'required|string:0,100',
-            'avatar' => 'string:0,200',
-            'description' => 'string:0,200',
-            'user_id' => 'int',
-            'status' => 'int:0,127',
-            'created_at' => 'int',
-            'updated_at' => 'int',
-        ];
-    }
-
-    protected function labels(): array {
-        return [
-            'id' => 'Id',
-            'name' => '笔名',
-            'avatar' => '头像',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
-        ];
-    }
 
     public function getUrlAttribute() {
         return url('./author', ['id' => $this->id]);
@@ -61,12 +33,12 @@ class BookAuthorModel extends Model {
      * @param $name
      * @return static
      */
-    public static function findOrNewByName($name) {
+    public static function findOrNewByName(string $name) {
         $name = trim($name);
         if (empty($name)) {
             $name = '未知';
         }
-        $model = static::where('name', $name)->one();
+        $model = static::where('name', $name)->first();
         if (!empty($model)) {
             return $model;
         }
@@ -75,7 +47,7 @@ class BookAuthorModel extends Model {
         ]);
     }
 
-    public static function findIdByName($name) {
+    public static function findIdByName(string $name) {
         return static::findOrNewByName($name)->id;
     }
 }

@@ -29,7 +29,7 @@ class CategoryRepository {
             }
             $item['goods_list'] = GoodsRepository::getRecommendQuery('is_hot')
                 ->whereIn('cat_id', CategoryModel::getChildrenWithParent($item['id']))
-                ->limit(4)->all();
+                ->take(4)->get();
             $item['url'] = url('./category', ['id' => $item['id']]);
             $floor_categories[] = $item;
         }

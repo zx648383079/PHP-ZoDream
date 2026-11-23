@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Service\Admin;
 
 use Module\Auth\Domain\Concerns\AdminRole;
@@ -12,7 +13,7 @@ class Controller extends ModuleController {
 
     protected File|string $layout = '/Admin/layouts/main';
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(string $path, array $args = []) {
         return url('./@admin/'.$path, $args);
     }
 }

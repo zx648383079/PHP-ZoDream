@@ -7,7 +7,7 @@ use Module\Shop\Service\Admin\Controller;
 class LotteryController extends Controller {
 
     public function indexAction() {
-        $model_list = ActivityModel::where('type', ActivityModel::TYPE_LOTTERY)->orderBy('id', 'desc')->page();
+        $model_list = ActivityModel::where('type', ActivityModel::TYPE_LOTTERY)->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 

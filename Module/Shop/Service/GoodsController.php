@@ -21,22 +21,22 @@ class GoodsController extends Controller {
         if (empty($goods)) {
             return $this->redirect('./');
         }
-        $gallery_list = GoodsGalleryModel::where('goods_id', $id)->all();
+        $gallery_list = GoodsGalleryModel::where('goods_id', $id)->get();
         return $this->sendWithShare()->show(compact('goods', 'gallery_list'));
     }
 
     public function recommendAction(int $id) {
-        $goods_list = GoodsSimpleModel::limit(7)->all();
+        $goods_list = GoodsSimpleModel::query()->take(7)->get();
         return $this->renderData(compact('goods_list'));
     }
 
     public function hotAction(int $id) {
-        $goods_list = GoodsSimpleModel::limit(7)->all();
+        $goods_list = GoodsSimpleModel::query()->take(7)->get();
         return $this->renderData(compact('goods_list'));
     }
 
     public function commentAction(int $id, $page = -1) {
-        $this->layout = false;
+        $this->layout = '';
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();
         if ($page > 0) {
@@ -47,8 +47,8 @@ class GoodsController extends Controller {
     }
 
     public function issueAction(int $id) {
-        $this->layout = false;
-        $issue_list = GoodsIssueModel::whereIn('goods_id', [$id, 0])->all();
+        $this->layout = '';
+        $issue_list = GoodsIssueModel::whereIn('goods_id', [$id, 0])->get();
         return $this->show(compact('issue_list'));
     }
 

@@ -19,7 +19,7 @@ trait EditPlatformOption {
     }
 
     public function editOptionAction(int $platform_id) {
-        $this->layout = false;
+        $this->layout = '';
         $platform = PlatformModel::findWithAuth($platform_id);
         if (empty($platform)) {
             return '';

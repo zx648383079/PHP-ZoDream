@@ -81,7 +81,7 @@ final class CategoryRepository extends CRUDRepository {
         if (in_array('items', $extraTags)) {
             foreach ($items as $item) {
                 $item->items = ResourceModel::where('cat_id', $item->id)
-                    ->limit(5)->get(ResourceRepository::RES_PAGE_FILED);
+                    ->take(5)->get(ResourceRepository::RES_PAGE_FILED);
             }
         }
         return $items;

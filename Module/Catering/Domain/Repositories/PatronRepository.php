@@ -16,7 +16,7 @@ final class PatronRepository {
             ->when($group > 0, function ($query) use ($group) {
                 $query->where('group_id', $group);
             })
-            ->orderBy('user_id', 'desc')
+            ->orderBy('user_id', SORT_DESC)
             ->page();
     }
 

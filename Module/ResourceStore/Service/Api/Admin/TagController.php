@@ -19,7 +19,7 @@ class TagController extends Controller {
 
     public function allAction() {
         return $this->renderData(
-            ResourceRepository::tag()->all()
+            ResourceRepository::tag()->get()
         );
     }
 }

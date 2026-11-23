@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Service\Admin;
 
 use Module\Counter\Domain\Repositories\StateRepository;
@@ -10,7 +11,7 @@ class TrendController extends Controller {
         return $this->show(compact('items'));
     }
 
-    public function timeAction($start_at = null, $end_at = null) {
+    public function timeAction(string $start_at = '', string $end_at = '') {
         $items = new Page(0);
         return $this->show(compact('items', 'start_at', 'end_at'));
     }

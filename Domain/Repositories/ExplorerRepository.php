@@ -259,7 +259,7 @@ final class ExplorerRepository {
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, 'name', true, '', $keywords);
             })->whereIn('extension', explode('|', FileRepository::typeExtension($type)))
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
         return $items->map(function (array $item) use ($type, $storage) {
             if ($type === 'image') {
                 $item['thumb'] = $storage->toPublicUrl($item['path']);
@@ -275,7 +275,7 @@ final class ExplorerRepository {
                 SearchModel::searchWhere($query, 'name', true, '', $keywords);
             })->when($tag > 0, function ($query) use ($tag) {
                 $query->where('folder', $tag);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         return $items->map(function ($item) {
             $item['url'] = static::tryPublicUrl($item['folder'], $item['path']);
             return $item;

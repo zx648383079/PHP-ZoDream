@@ -15,7 +15,7 @@ class HomeController extends Controller {
     public function suggestAction(string $keywords = '') {
         $data = CourseModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-         })->limit(4)->get();
+         })->take(4)->get();
         return $this->renderData($data);
     }
 }

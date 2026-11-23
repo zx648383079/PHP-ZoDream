@@ -71,11 +71,11 @@ class ShareModel extends Model {
     }
 
     public function getFile($id = null) {
-        $shareFiles = DiskModel::whereIn('id', ShareFileModel::where('share_id', $this->id)->pluck('disk_id'))->all();
+        $shareFiles = DiskModel::whereIn('id', ShareFileModel::where('share_id', $this->id)->pluck('disk_id'))->get();
         if (empty($id)) {
             return $shareFiles;
         }
-        $files = DiskModel::whereIn('id', (array)$id)->all();
+        $files = DiskModel::whereIn('id', (array)$id)->get();
         return array_filter($files, function (DiskModel $file) use ($shareFiles) {
             return $file->isIn($shareFiles);
         });

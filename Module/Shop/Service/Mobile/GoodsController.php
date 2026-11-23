@@ -1,7 +1,6 @@
 <?php
 namespace Module\Shop\Service\Mobile;
 
-use Module\Shop\Domain\Models\AttributeModel;
 use Module\Shop\Domain\Models\CommentModel;
 use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Repositories\AttributeRepository;
@@ -10,18 +9,18 @@ use Zodream\Html\Page;
 
 class GoodsController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction(int $id) {
         $goods = GoodsModel::find($id);
         if (empty($goods)) {
             return $this->redirect($this->getUrl(''));
         }
-        $goods_list = GoodsModel::where('is_best', 1)->limit(3)->all();
+        $goods_list = GoodsModel::where('is_best', 1)->take(3)->get();
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
-            ->where('item_id', $id)->limit(3)->all();
+            ->where('item_id', $id)->take(3)->get();
         return $this->show(compact('goods', 'goods_list', 'comment_list'));
     }
 
-    public function priceAction($id, $amount = 1, $properties = null) {
+    public function priceAction(int $id, int $amount = 1, mixed $properties = null) {
         try {
             $properties = AttributeRepository::formatPostProperties($properties);
             return $this->renderData(
@@ -32,7 +31,7 @@ class GoodsController extends Controller {
         }
     }
 
-    public function commentAction($id) {
+    public function commentAction(int $id) {
         /** @var Page $goods_list */
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();

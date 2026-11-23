@@ -13,24 +13,23 @@ class ShareRepository {
         $ids = TaskShareUserModel::where('user_id', auth()->id())
             ->where('deleted_at', 0)->pluck('share_id');
         return TaskShareModel::with('task', 'user')
-            ->whereIn('id', $ids)->orderBy('id', 'desc')->page();
+            ->whereIn('id', $ids)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function myList() {
         return TaskShareModel::with('task')
-            ->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+            ->where('user_id', auth()->id())->orderBy('id', SORT_DESC)->page();
     }
 
-    public static function isShareUser(array|int $taskIds, int $user_id) {
+    public static function isShareUser(array|int $taskIds, int $user_id): bool {
         $shareIds = TaskShareModel::whereIn('task_id', (array)$taskIds)
             ->pluck('id');
         if (empty($shareIds)) {
             return false;
         }
-        $count = TaskShareUserModel::whereIn('share_id', $shareIds)
+        return TaskShareUserModel::whereIn('share_id', $shareIds)
             ->where('user_id', $user_id)
-            ->where('deleted_at', 0)->count();
-        return $count > 0;
+            ->where('deleted_at', 0)->any();
     }
 
     public static function create(array $data) {

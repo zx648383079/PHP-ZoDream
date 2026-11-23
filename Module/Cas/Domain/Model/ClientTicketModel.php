@@ -43,7 +43,7 @@ class ClientTicketModel extends Model {
      * @param $ticket
      * @return static
      */
-    public function findByTicket($ticket) {
-        return self::where('ticket', $ticket)->one();
+    public function findByTicket(string $ticket) {
+        return self::where('ticket', $ticket)->first();
     }
 }

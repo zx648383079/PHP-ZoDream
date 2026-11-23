@@ -56,12 +56,12 @@ class GameAdapter implements IGameAdapter {
 
     protected function executeIdentityQuery() {
         return CharacterIdentityEntity::where('project_id', $this->project['id'])
-            ->orderBy('id', 'desc')->get();
+            ->orderBy('id', SORT_DESC)->get();
     }
 
     protected function executeDescentQuery() {
         return DescentEntity::where('project_id', $this->project['id'])
-            ->orderBy('id', 'desc')->get();
+            ->orderBy('id', SORT_DESC)->get();
     }
 
     protected function executeCharacterCreate(array $data) {
@@ -69,8 +69,8 @@ class GameAdapter implements IGameAdapter {
             throw new \Exception('昵称错误');
         }
         $count = CharacterEntity::where('project_id', $this->project['id'])
-            ->where('nickname', $data['name'])->count();
-        if ($count > 0) {
+            ->where('nickname', $data['name'])->any();
+        if ($count) {
             throw new \Exception('昵称已存在');
         }
         $descent = DescentEntity::where('project_id', $this->project['id'])
@@ -236,7 +236,7 @@ class GameAdapter implements IGameAdapter {
 
     protected function executeCheckinOwn() {
         $last = CheckLogEntity::where('user_id', $this->character['id'])
-            ->where('project_id', $this->project['id'])->orderBy('created_at', 'desc')->first();
+            ->where('project_id', $this->project['id'])->orderBy('created_at', SORT_DESC)->first();
         $today = strtotime(date('Y-m-d 00:00:00'));
         if ($last && $last->getAttributeSource('created_at') > $today) {
             throw new \Exception('已签到');
@@ -267,7 +267,7 @@ class GameAdapter implements IGameAdapter {
         $todayStart = strtotime(date('Y-m-d 00:00:00'));
         return CheckLogEntity::where('project_id', $this->project['id'])
             ->where('user_id', $this->character['id'])->where('created_at', '>=', $todayStart)
-            ->count() > 0;
+            ->any();
     }
 
     protected function executeTaskOwn(array $data) {

@@ -91,7 +91,7 @@ class HomeController extends Controller {
     public function suggestAction(string $keywords) {
         $data = BlogSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
-        })->limit(4)->get();
+        })->take(4)->get();
         return $this->renderData($data);
     }
 

@@ -18,7 +18,7 @@ class RouterHelper {
         $data = cache()->getOrSet(static::CACHE_KEY, function () {
             return BlogMetaModel::where('name', 'seo_link')
                 ->whereNotNull('content')
-                ->orderBy('id', 'asc')
+                ->orderBy('id', SORT_ASC)
                 ->asArray()
                 ->get('content', 'blog_id');
         });
@@ -62,19 +62,19 @@ class RouterHelper {
         $map->add(url('./archives'), time());
         $items = BlogModel::where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
             ->where('status', PublishRepository::REVIEW_STATUS_APPROVED)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->get('id', 'language', 'updated_at');
         foreach ($items as $item) {
             $map->add(BlogSeoMiddleware::encodeUrl($item['id'], $item['language']),
                 $item->updated_at, SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
-        $items = TermModel::orderBy('id', 'desc')
+        $items = TermModel::orderBy('id', SORT_DESC)
             ->get('id');
         foreach ($items as $item) {
             $map->add(url('./', ['category' => $item->id]),
                 time(), SiteMap::CHANGE_FREQUENCY_WEEKLY, .8);
         }
-        $items = TagModel::orderBy('id', 'desc')
+        $items = TagModel::orderBy('id', SORT_DESC)
             ->get('name');
         foreach ($items as $item) {
             $map->add(url('./', ['tag' => $item->name]),

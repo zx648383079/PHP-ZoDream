@@ -42,7 +42,7 @@ class SketchBoxProvider {
         $logList = $this->query()->where('item_type', $this->itemType)
             ->where('item_id', $target)
             ->where('user_id', auth()->id())
-            ->orderBy('updated_at', 'desc')->get('id');
+            ->orderBy('updated_at', SORT_DESC)->get('id');
         $saveData = [
             'item_type' => $this->itemType,
             'item_id' => $target,
@@ -76,7 +76,7 @@ class SketchBoxProvider {
         return $this->query()->where('item_type', $this->itemType)
             ->where('item_id', $target)
             ->where('user_id', auth()->id())
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('updated_at', SORT_DESC)
             ->get('id', 'ip', 'updated_at', 'created_at');
     }
 
@@ -84,7 +84,7 @@ class SketchBoxProvider {
         $data = $this->query()->where('item_type', $this->itemType)
             ->where('item_id', $target)
             ->where('user_id', auth()->id())
-            ->orderBy('updated_at', 'desc')->first('data');
+            ->orderBy('updated_at', SORT_DESC)->first('data');
         if (empty($data)) {
             return null;
         }

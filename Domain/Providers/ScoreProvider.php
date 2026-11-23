@@ -74,14 +74,14 @@ class ScoreProvider {
             ->when($fromId > 0, function ($query) use ($fromId, $fromType) {
                 $query->where('from_id', $fromId)->where('from_type', $fromType);
             })->orderBy($sort, $order)->page();
-        $data = $page->getPage();
+        $data = $page->getItems();
         if (empty($data)) {
             return $page;
         }
         $data = Relation::create($data, [
             'user' => Relation::make(UserSimpleModel::query(), 'user_id', 'id')
         ]);
-        $page->setPage($data);
+        $page->setItems($data);
         return $page;
     }
 
@@ -121,7 +121,7 @@ class ScoreProvider {
             ->where('item_type', $itemType)
             ->where('user_id', auth()->id())
             ->where('from_type', $fromType)
-            ->where('from_id', $fromId)->count() > 0;
+            ->where('from_id', $fromId)->any();
     }
 
     public function save(array $data): array {

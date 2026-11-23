@@ -84,7 +84,7 @@ class UserModel extends BaseModel {
     }
 
     public static function validateEmail(string $email): bool {
-	    return !empty($email) && self::where('email', $email)->count() < 1;
+	    return !empty($email) && !self::where('email', $email)->any();
     }
 
     public static function getRememberTokenName(): string {

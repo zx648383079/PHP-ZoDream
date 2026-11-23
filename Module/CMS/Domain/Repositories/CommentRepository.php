@@ -192,8 +192,8 @@ class CommentRepository {
         /** @var SceneInterface $scene */
         list($scene, $_) = static::scene($article, $category, $model);
         $count = $scene->commentQuery()->where('id', $id)->where('user_id', auth()->id())
-            ->count();
-        if ($count < 1) {
+            ->any();
+        if (!$count) {
             throw new Exception('操作失败');
         }
         if ($scene->removeComment($id)) {

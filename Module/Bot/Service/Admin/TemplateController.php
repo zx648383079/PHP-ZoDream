@@ -8,7 +8,7 @@ use Zodream\Infrastructure\Contracts\Http\Input;
 class TemplateController extends Controller {
     public function indexAction(int $type = 0) {
         if (request()->isAjax()) {
-            $this->layout = false;
+            $this->layout = '';
         }
         $model_list = TemplateRepository::getList($type);
         return $this->show(request()->isAjax() ? 'page' : 'index', compact('model_list'));

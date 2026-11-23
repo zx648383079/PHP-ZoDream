@@ -112,7 +112,7 @@ class ShortRepository {
     }
 
     public static function check(string $short): bool {
-        return ShortUrlModel::query()->where('short_url', $short)->count() < 1;
+        return !ShortUrlModel::query()->where('short_url', $short)->any();
     }
 
     public static function getManageList(
@@ -124,7 +124,7 @@ class ShortRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -140,7 +140,7 @@ class ShortRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 

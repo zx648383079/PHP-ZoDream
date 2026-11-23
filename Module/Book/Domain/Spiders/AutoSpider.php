@@ -1,22 +1,20 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
-use Zodream\Helpers\Json;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
 class AutoSpider extends BaseSpider {
 
     const TITLE = '#<title>(.+?)</title>#i';
-    private $isFirst = true;
+    private bool $isFirst = true;
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
+    public function isCatalogPage(Uri $uri): bool {
         $first = $this->isFirst;
         $this->isFirst = false;
         return $first;
@@ -26,11 +24,11 @@ class AutoSpider extends BaseSpider {
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
+    public function isContentPage(Uri $uri): bool {
         return !$this->isFirst;
     }
 
-    public function decode(Html $html) {
+    public function decode(Html $html): Html {
         $charset = $html->matchValue('/<meta[^\<]*charset=([^<]*)[\"\']/', 1);
         if (empty($charset)) {
             return $html;
@@ -50,7 +48,7 @@ class AutoSpider extends BaseSpider {
      * @param $html
      * @return array
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         return [
             'name' => $this->getTitle($html->getHtml()),
             'cover' => '',
@@ -63,7 +61,7 @@ class AutoSpider extends BaseSpider {
      * @param Uri $baseUri
      * @return array
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $html = $this->cleanHtml($html->getHtml());
         $tags = $this->getTagMaps($html);
         $data = $this->getContent($tags, $html);
@@ -79,7 +77,7 @@ class AutoSpider extends BaseSpider {
         return $args;
     }
 
-    protected function getAbsoluteUri($url, Uri $baseUri) {
+    protected function getAbsoluteUri(string $url, Uri $baseUri) {
         if (str_contains($url, '//')) {
             return $url;
         }
@@ -96,7 +94,7 @@ class AutoSpider extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         $html = $html->getHtml();
         $title = $this->getTitle($html);
         $html = $this->cleanHtml($html);
@@ -112,8 +110,7 @@ class AutoSpider extends BaseSpider {
         ];
     }
 
-    public function getContent(array $tags, $html)
-    {
+    public function getContent(array $tags, string $html): string|array {
         for ($index = count($tags) - 1; $index >= 0; $index--) {
             if (isset($tags[$index]['center']) && $tags[$index]['center']) {
                 break;
@@ -137,13 +134,13 @@ class AutoSpider extends BaseSpider {
         return Html::toText($content);
     }
 
-    protected function getContentStart(array $tags, $index) {
+    protected function getContentStart(array $tags, int $index) {
         return $index >= 1 ? $tags[$index - 1]['index'] + 1 : 0;
     }
 
 
 
-    protected function getChaptersEnd(array $tags, $index) {
+    protected function getChaptersEnd(array $tags, int $index) {
         $count = count($tags);
         while ($index + 2 < $count) {
             if ($tags[$index + 1]['count'] < 10 &&
@@ -156,7 +153,7 @@ class AutoSpider extends BaseSpider {
         return $index + 1 > $count ? -1 : ($tags[$index + 1]['index'] + 1);
     }
 
-    protected function getChaptersStart(array $tags, $index) {
+    protected function getChaptersStart(array $tags, int $index) {
         while ($index >= 2) {
             if ($tags[$index - 1]['count'] < 10 &&
                 $tags[$index - 1]['tag'] !== 'dt' &&
@@ -169,7 +166,7 @@ class AutoSpider extends BaseSpider {
         return $tags[$index]['index'];
     }
 
-    public function getChapters($start, $end, $html) {
+    public function getChapters(int $start, int $end, string $html): array {
         $content = $end > 0 ? substr($html, $start, $end - $start)
             : substr($html, $start);
         if (preg_match_all('#<a href="(.+?)">(.+?)</a>#i', $content, $matches, PREG_SET_ORDER)) {
@@ -183,7 +180,7 @@ class AutoSpider extends BaseSpider {
         return [];
     }
 
-    public function getCleanContent($html) {
+    public function getCleanContent(string $html): string|array {
         $html = $this->cleanHtml($html);
         return $this->getContent($this->getTagMaps($html), $html);
     }
@@ -193,7 +190,7 @@ class AutoSpider extends BaseSpider {
      * @param $html
      * @return array
      */
-    protected function getTagMaps($html) {
+    protected function getTagMaps(string $html): array {
         $maps = [];
         $tag = false;
         $len = strlen($html);
@@ -236,7 +233,7 @@ class AutoSpider extends BaseSpider {
 
     }
 
-    protected function getTitle($html) {
+    protected function getTitle(string $html): string {
         if (!preg_match(self::TITLE, $html, $match)) {
             return '';
         };
@@ -244,7 +241,7 @@ class AutoSpider extends BaseSpider {
         return $title;
     }
 
-    protected function cleanHtml($html) {
+    protected function cleanHtml(string $html): string {
         $html = preg_replace('#<head>([\s\S]+?)</head>#', '', $html);
         $html = preg_replace('/<!--[\s\S]*?-->/is', '', $html);
         $html = preg_replace('/\s+/is', ' ', $html);
@@ -265,7 +262,7 @@ class AutoSpider extends BaseSpider {
 
     }
 
-    protected function cleanAttribute($matches, $tag) {
+    protected function cleanAttribute(array $matches, string $tag) {
         if (preg_match('/'.$tag.'\s?=[\s"\']?(\S+)["\']/i', $matches[2], $match)) {
             return sprintf(' %s="%s"', $tag, $match[1]);
         }
@@ -277,7 +274,7 @@ class AutoSpider extends BaseSpider {
      * @param $maps
      * @return array
      */
-    protected function mergeTags(array $maps) {
+    protected function mergeTags(array $maps): array {
         $data = [];
         $prev = false;
         for ($i = count($maps) - 1; $i >= 0; $i--) {
@@ -328,7 +325,7 @@ class AutoSpider extends BaseSpider {
      * @param array $maps
      * @return array
      */
-    protected function compactTags(array $maps) {
+    protected function compactTags(array $maps): array {
         $i = count($maps);
         while ($i > 1) {
             $i --;

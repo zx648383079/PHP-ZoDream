@@ -50,7 +50,7 @@ class NavigationModel extends Model {
     }
 
     public static function getByType() {
-        $model_list = static::where('visible', 1)->all();
+        $model_list = static::where('visible', 1)->get();
         $data = [
             'middle' => [],
             'top' => [],

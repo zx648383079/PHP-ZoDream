@@ -15,7 +15,7 @@ class MediaRepository {
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
             })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function manageList(int $bot_id = 0, string $keywords = '', string $type = '') {
@@ -27,7 +27,7 @@ class MediaRepository {
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
             })->select('id', 'title', 'type', 'media_id', 'parent_id', 'thumb', 'created_at')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function get(int $id) {

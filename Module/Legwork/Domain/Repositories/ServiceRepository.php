@@ -87,7 +87,7 @@ class ServiceRepository {
         return ServiceWaiterModel::where('user_id', $user_id)
                 ->where('service_id', $id)
                 ->where('status', ServiceWaiterModel::STATUS_ALLOW)
-                ->count() > 0;
+                ->any();
     }
 
     public static function waiterList(int $id, string $keywords = '', int $status = 0) {

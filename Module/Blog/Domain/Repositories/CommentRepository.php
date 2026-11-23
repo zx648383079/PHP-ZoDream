@@ -37,7 +37,7 @@ class CommentRepository {
                 'blog_id' => $blog_id,
                 'parent_id' => $parent_id
             ])->when($is_hot, function ($query) {
-                $query->where('agree_count', '>', 0)->orderBy('agree_count desc');
+                $query->where('agree_count', '>', 0)->orderBy('agree_count', SORT_DESC);
             })->where('approved', 1)
             ->orderBy($sort, $order)
             ->page($per_page);
@@ -61,7 +61,7 @@ class CommentRepository {
         }
         $last = CommentModel::where('blog_id', $data['blog_id'])
             ->where('parent_id', $parentId)
-            ->orderBy('position desc')->first();
+            ->orderBy('position', SORT_DESC)->first();
         $data['parent_id'] = $parentId;
         $data['position'] = empty($last) ? 1 : ($last->position + 1);
         $data['approved'] = Option::value('comment_approved', false) ? 0 : 1;
@@ -141,7 +141,7 @@ class CommentRepository {
         return CommentModel::where([
             'blog_id' => $blog_id,
             'parent_id' => 0,
-        ])->where('agree_count', '>', 0)->orderBy('agree_count desc')->limit($limit)->get();
+        ])->where('agree_count', '>', 0)->orderBy('agree_count', SORT_DESC)->take($limit)->get();
     }
 
     /**
@@ -162,7 +162,7 @@ class CommentRepository {
                 SearchModel::searchWhere($query, 'content');
             })->when(!empty($name), function ($query) {
                 SearchModel::searchWhere($query, 'name', false, 'name');
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function remove(array|int $id) {
@@ -194,7 +194,7 @@ class CommentRepository {
 
     public static function newList() {
         return CommentModel::with('blog')
-            ->where('approved', 1)->orderBy('created_at', 'desc')->limit(4)->get();
+            ->where('approved', 1)->orderBy('created_at', SORT_DESC)->take(4)->get();
     }
 
     public static function report(int $id) {
@@ -277,7 +277,7 @@ class CommentRepository {
      */
     public static function lastCommentator(string $email): array {
         $data = CommentModel::where('email', $email)
-            ->orderBy('created_at', 'desc')->first('name', 'email', 'url');
+            ->orderBy('created_at', SORT_DESC)->first('name', 'email', 'url');
         if (empty($data)) {
             throw new Exception('not found');
         }

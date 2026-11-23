@@ -80,7 +80,7 @@ final class SiteRepository extends CRUDRepository {
             SearchModel::searchWhere($query, ['title', 'name'], true, '', $keywords);
         })->when($user > 0, function ($query) use ($user) {
             $query->where('user_id', $user);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function manageGetPage(string $keywords = '', int $site = 0) {
@@ -88,7 +88,7 @@ final class SiteRepository extends CRUDRepository {
             SearchModel::searchWhere($query, ['title', 'name'], true, '', $keywords);
         })->when($site > 0, function ($query) use ($site) {
             $query->where('site_id', $site);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function manageToggle(int $id) {
@@ -119,7 +119,7 @@ final class SiteRepository extends CRUDRepository {
     {
         return SiteModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['title', 'name'], true, '', $keywords);
-        })->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+        })->where('user_id', auth()->id())->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfSave(array $data)
@@ -238,7 +238,7 @@ final class SiteRepository extends CRUDRepository {
         }
         $page = SitePageModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['title', 'name'], true, '', $keywords);
-        })->where('site_id', $site)->orderBy('id', 'desc')->page();
+        })->where('site_id', $site)->orderBy('id', SORT_DESC)->page();
         foreach ($page as $item) {
             $item->is_default = $item->id === $siteModel->default_page_id;
         }
@@ -295,7 +295,7 @@ final class SiteRepository extends CRUDRepository {
         }
         return SiteComponentModel::when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], true, '', $keywords);
-        })->where('type', $type)->where('site_id', $site)->orderBy('id', 'desc')->page();
+        })->where('type', $type)->where('site_id', $site)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfAddComponent(array|int $site, array|int $id)
@@ -310,7 +310,7 @@ final class SiteRepository extends CRUDRepository {
                     throw new \Exception('数据有误');
                 }
                 if (SiteComponentModel::where('site_id', $siteId)
-                        ->where('component_id', $itemId)->count() > 0) {
+                        ->where('component_id', $itemId)->any()) {
                     continue;
                 }
                 SiteComponentModel::createOrThrow([
@@ -352,7 +352,7 @@ final class SiteRepository extends CRUDRepository {
 
     public static function isSelf(int $site): bool {
         return SiteModel::where('user_id', auth()->id())
-            ->where('id', $site)->count() > 0;
+            ->where('id', $site)->any();
     }
 
     public static function getShareList(string $keywords = '', int $user = 0,

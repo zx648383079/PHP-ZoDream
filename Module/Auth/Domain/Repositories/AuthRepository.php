@@ -300,8 +300,8 @@ class AuthRepository {
                                        array $extra = [],
                                        string $usernameType = 'email') {
         $count = UserModel::where($usernameType, $username)->orWhere('name', $name)
-            ->count();
-        if ($count > 0) {
+            ->any();
+        if ($count) {
             throw new Exception($usernameType === 'email' ? '昵称或邮箱已存在' : '昵称或手机号已存在');
         }
         $data = array_merge([
@@ -495,7 +495,7 @@ class AuthRepository {
             }
             if ($key === 'name' && UserModel::where('name', $value)
                     ->where('id', '<>', $user->id)
-                    ->count() > 0) {
+                    ->any()) {
                 throw new Exception('昵称已被占用');
             }
             $user->{$key} = $value;
@@ -629,7 +629,7 @@ class AuthRepository {
             !in_array($data['name'], ['email', 'mobile'])) {
             throw new Exception('数据错误');
         }
-        if (UserModel::where($data['name'], $data['value'])->count() > 0) {
+        if (UserModel::where($data['name'], $data['value'])->any()) {
             throw new Exception('账户已被使用');
         }
         /** @var UserModel $user */
@@ -667,7 +667,7 @@ class AuthRepository {
             return;
         }
         if (UserModel::where('email', $email)
-            ->where('status', '>', UserModel::STATUS_UN_CONFIRM)->count()) {
+            ->where('status', '>', UserModel::STATUS_UN_CONFIRM)->any()) {
             return;
         }
         throw new Exception('验证邮件已失效');

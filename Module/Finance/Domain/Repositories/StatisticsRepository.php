@@ -69,7 +69,7 @@ final class StatisticsRepository {
             $startAt = date('Y-01-01');
         }
         $data = BudgetModel::auth()->where('deleted_at', 0)
-            ->orderBy('id', 'asc')->asArray()->get('id', 'name');
+            ->orderBy('id', SORT_ASC)->asArray()->get('id', 'name');
         $res = [];
         foreach($data as $item) {
             $id = intval($item['id']);
@@ -88,7 +88,7 @@ final class StatisticsRepository {
             })
             ->when(!empty($endAt), function ($query) use ($endAt) {
                 $query->where('happened_at', '<=', $endAt);
-            })->orderBy('day', 'asc')
+            })->orderBy('day', SORT_ASC)
             ->groupBy('day', 'budget_id')
             ->asArray()->each(function($item) use(&$res) {
                 $id = intval($item['budget_id']);
@@ -122,14 +122,14 @@ final class StatisticsRepository {
             })
             ->when(!empty($endAt), function ($query) use ($endAt) {
                 $query->where('happened_at', '<=', $endAt);
-            })->orderBy('day', 'asc')->asArray()->get();
+            })->orderBy('day', SORT_ASC)->asArray()->get();
         $expenditureItems = LogModel::auth()->sumByDate($format)->where('type', LogEntity::TYPE_EXPENDITURE)
             ->when(!empty($startAt), function ($query) use ($startAt) {
                 $query->where('happened_at', '>=', $startAt);
             })
             ->when(!empty($endAt), function ($query) use ($endAt) {
                 $query->where('happened_at', '<=', $endAt);
-            })->orderBy('day', 'asc')->asArray()->get();
+            })->orderBy('day', SORT_ASC)->asArray()->get();
         $data = [];
         foreach ($incomeItems as $item) {
             $data[$item['day']] = [

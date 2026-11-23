@@ -17,12 +17,12 @@ class ChatRepository {
                 ->when($lastId > 0, function ($query) use ($lastId) {
                     $query->where('id', '<', $lastId);
                 })
-                ->orderBy('created_at', 'desc')->limit(10)->get();
+                ->orderBy('created_at', SORT_DESC)->take(10)->get();
             $data = array_reverse($data);
         } else {
             $data = MessageModel::with('user')->where('session_id', $sessionId)
                 ->where('created_at', '>=', $startTime)
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', SORT_ASC)
                 ->get();
         }
         foreach ($data as $item) {

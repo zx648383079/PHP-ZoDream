@@ -64,7 +64,7 @@ final class StateListener
                 ->where('user_agent', $state->user_agent)
                 ->where('session_id', $state->session_id)
                 ->where('created_at', '<=', $state->getTimeOrNow('enter_at'))
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', SORT_DESC)
                 ->value('id');
         if ($logId < 1) {
             return;
@@ -79,8 +79,8 @@ final class StateListener
         }
         if ($state->status === CounterState::STATUE_LEAVE) {
             StayTimeLogModel::where('log_id', $logId)
-                ->where('leave_at', 0)->orderBy('id', 'desc')
-                ->limit(1)
+                ->where('leave_at', 0)->orderBy('id', SORT_DESC)
+                ->take(1)
                 ->update([
                     'status' => $state->status,
                     'leave_at' => $state->getTimeOrNow('leave_at')

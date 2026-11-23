@@ -16,12 +16,12 @@ class FamilyController extends Controller {
                 SearchModel::searchWhere($query, 'name');
             })->when(!empty($clan_id), function ($query) use ($clan_id) {
                 $query->where('clan_id', intval($clan_id));
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         if ($request->isAjax() && !$request->isPjax()) {
-            $this->layout = false;
+            $this->layout = '';
             return $this->show('dialogBody', compact('model_list'));
         }
-        $clan_list = ClanModel::select('id', 'name')->all();
+        $clan_list = ClanModel::select('id', 'name')->get();
         return $this->show(compact('items', 'clan_list', 'clan_id', 'keywords'));
     }
 
@@ -40,11 +40,11 @@ class FamilyController extends Controller {
         if ($model->clan_id < 1 && $clan_id > 0) {
             $model->clan_id = $clan_id;
         }
-        $clan_list = ClanModel::select('id', 'name')->all();
+        $clan_list = ClanModel::select('id', 'name')->get();
         $parent_list = FamilyModel::query()->where('id', '<>', $id)->get('id', 'name');
         $spouse_list = [];
         if ($model->id > 0) {
-            $spouse_list = FamilySpouseModel::with('spouse')->where('family_id', $model->id)->orderBy('start_at', 'asc')->get();
+            $spouse_list = FamilySpouseModel::with('spouse')->where('family_id', $model->id)->orderBy('start_at', SORT_ASC)->get();
             if ($model->spouse_id > 0) {
                 usort($spouse_list, function ($a, $b) use ($model) {
                     if ($a->spouse_id == $model->spouse_id) {

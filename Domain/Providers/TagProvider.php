@@ -105,7 +105,7 @@ class TagProvider {
     public function suggest(string $keywords = '', int $count = 5): array {
         return $this->tagQuery()->when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], false, '', $keywords);
-        })->limit($count)->pluck('name');
+        })->take($count)->pluck('name');
     }
 
     public function all() {

@@ -7,6 +7,7 @@ use Module\Counter\Domain\Model\LogModel;
 use Module\Counter\Domain\Model\StayTimeLogModel;
 use Zodream\Html\Page;
 use Zodream\Infrastructure\Support\UserAgent;
+use Zodream\Database\Contracts\SqlBuilder;
 
 class StateRepository {
 
@@ -62,7 +63,7 @@ class StateRepository {
     }
 
     public static function currentStay() {
-        $items = StayTimeLogModel::query()->orderBy('id', 'desc')->page();
+        $items = StayTimeLogModel::query()->orderBy('id', SORT_DESC)->page();
         $items->map(function ($item) {
            return static::formatAgent($item);
         });
@@ -275,7 +276,7 @@ class StateRepository {
         $items = JumpLogModel::query()
             ->where('created_at', '>=', $start_at)
             ->where('created_at', '<', $end_at)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SORT_DESC)
             ->page();
         $items->map(function ($item) {
             return static::formatAgent($item);
@@ -295,5 +296,269 @@ class StateRepository {
         $item['os'] = UserAgent::os($agent);
         $item['browser'] = UserAgent::browser($agent);
         return $item;
+    }
+
+        /**
+     * 获取每天的状态
+     * @param SqlBuilder|null $where
+     * @return array
+     */
+    public static function getDayStatus(SqlBuilder|null $where = null) {
+        return self::getStatus($where, 'DAYOFMONTH', 31);
+    }
+
+    /**
+     * 获取每小时的状态
+     * @param SqlBuilder|null $where
+     * @return array
+     */
+    public static function getHourStatus(SqlBuilder|null $where = null) {
+        return self::getStatus($where, 'HOUR', 24);
+    }
+
+    public static function getWeekStatus(SqlBuilder|null $where = null) {
+        return self::getStatus($where, 'DAYOFWEEK', 7);
+    }
+
+    public static function getMonthStatus(SqlBuilder|null $where = null) {
+        return self::getStatus($where, 'MONTH', 12);
+    }
+
+    public static function getYearStatus(SqlBuilder|null $where = null) {
+        return self::getStatus($where, 'YEAR');
+    }
+
+    /**
+     * 获取IP最后访问时间及来路
+     * @return Query
+     */
+    public static function getLastQuery() {
+        return LogModel::query()->selectRaw('ip, MAX(created_at) as created_at, referrer')
+            ->groupBy(1)->orderBy('2', SORT_DESC);
+    }
+
+    /**
+     * 获取所有的月份
+     * @param string|array $where
+     * @return array
+     */
+    public static function geAllMonth(SqlBuilder|null $where = null) {
+        return LogModel::query()
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, DAYOFMONTH(created_at) as day, COUNT(*) as count,COUNT(DISTINCT ip) as countIp')
+            ->groupBy('1,2,3')->orderBy('1,2,3')->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名访问的网址
+     * @param array|string $where
+     * @return mixed
+     */
+    public static function geTopUrl(SqlBuilder|null $where = null) {
+        return LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('url, COUNT(*) as count')
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名访问者的IP
+     * @param array|string $where
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function geTopIp(SqlBuilder|null $where = null) {
+        return LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('ip, COUNT(*) as count')
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名访问者浏览器
+     * @param array|string $where
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function geTopBrowser(SqlBuilder|null $where = null) {
+        return LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('user_agent as browser, COUNT(*) as count')
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名访问者系统
+     * @param array|string $where
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function geTopOs(SqlBuilder|null $where = null) {
+        return LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('user_agent as os, COUNT(*) as count')
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名访问者国家
+     * @param array|string $where
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function geTopCountry(SqlBuilder|null $where = null) {
+        return LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->selectRaw('RIGHT(ip,INSTR(REVERSE(ip), ".")-1) as country, COUNT(*) as count')
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+    }
+
+    /**
+     * 获取前三十名搜索引擎来源
+     * @param array|string $where
+     * @return mixed
+     */
+    public static function getTopSearch(SqlBuilder|null $where = null) {
+        $data = LogModel::selectRaw('referrer_pathname,COUNT(*) as count')
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })
+            ->whereRaw("(INSTR(referrer_pathname,'?q=') OR INSTR(referrer_pathname, '?wd=') OR INSTR(referrer_pathname,'?p=') OR INSTR(referrer_pathname,'?query=') OR INSTR(referrer_pathname,'?qkw=') OR INSTR(referrer_pathname,'?search=') OR INSTR(referrer_pathname,'?qr=') OR INSTR(referrer_pathname,'?string='))")
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(30)->get();
+        $args = [];
+        $urls = [];
+        foreach ($data as $item) {
+            if(preg_match('#//([\w\.]+?)/.*?\?[a-z]+=([^&]+)#i', $item['referrer_pathname'], $match)) {
+                if (!array_key_exists($match[1], $urls)) {
+                    $urls[$match[1]] = 0;
+                }
+                $count = intval($item['count']);
+                $urls[$match[1]] += $count;
+                $tags = explode(' ', urldecode($match[2]));
+                if (!array_key_exists($match[2], $args)) {
+                    $args[$match[2]] = 0;
+                }
+                $args[$match[2]] += $count;
+                if (count($tags) == 1) {
+                    continue;
+                }
+                foreach ($tags as $tag) {
+                    if (empty($tag)) {
+                        continue;
+                    }
+                    if (!array_key_exists($tag, $args)) {
+                        $args[$tag] = 0;
+                    }
+                    $args[$tag] += $count;
+                }
+            }
+        }
+        arsort($args);
+        arsort($urls);
+        return [
+            $args,
+            $urls
+        ];
+    }
+
+    /**
+     * 获取前三十名外链
+     * @param array|string $where
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function getTopReferer(SqlBuilder|null $where = null) {
+        if (empty($where)) {
+            $where = [];
+        }
+        if (!is_array($where)) {
+            $where = (array)$where;
+        }
+        $allUrls = LogModel::query()->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->select('url')->get();
+        $search = '%'.request()->host().'%';
+        $args = LogModel::selectRaw('referrer_hostname,COUNT(*) as count')
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })
+            ->where('referrer_hostname', 'NOT LIKE', $search)
+            ->groupBy('1')->orderBy('2', SORT_DESC)->take(20)->get();
+        $urls = LogModel::where('url')->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->where('referrer_hostname', 'NOT LIKE', $search)->get();
+        return [
+            $args,
+            $urls,
+            $allUrls
+        ];
+    }
+
+    /**
+     * @param $where
+     * @param string $type
+     * @param null $length
+     * @return array
+     */
+    public static function getStatus(SqlBuilder|null $where = null, $type = 'DAYOFMONTH', $length = null) {
+        $flowCount = [];
+        $i = 0;
+        if (empty($length)) {
+            $i = 2015;
+            $length = date('Y') + 1;
+        } else if ($length != 24) {
+            $i = 1;
+            $length ++;
+        }
+        for (; $i < $length; $i++) {
+            $flowCount[$i] = [
+                0, // PV总计
+                0,  // UV
+                0   //IP
+            ];
+        }
+        $args = LogModel::selectRaw($type.'(created_at) as d, COUNT(*) as c')
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->groupBy('1')->orderBy('1', SORT_ASC)->get();
+        $max = 0;
+        foreach ($args as $item) {
+            if (!array_key_exists($item['d'], $flowCount)) {
+                continue;
+            }
+            $flowCount[$item['d']][0] = intval($item['c']);
+            if ($item['c'] > $max) {
+                $max = $item['c'];
+            }
+        }
+
+        $uvs = $ips = LogModel::selectRaw($type.'(create_at) as d, session')
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->groupBy('1,2')->orderBy('1', SORT_ASC)->get();
+        foreach ($uvs as $item) {
+            if (!array_key_exists($item['d'], $flowCount)) {
+                continue;
+            }
+            $flowCount[$item['d']][1] ++;
+        }
+
+        $ips = LogModel::selectRaw($type.'(created_at) as d, ip')
+            ->when(!empty($where), function($query) use ($where) {
+                $query->whereRaw($where);
+            })->groupBy('1,2')->orderBy('1', SORT_ASC)->get();
+        foreach ($ips as $item) {
+            if (!array_key_exists($item['d'], $flowCount)) {
+                continue;
+            }
+            $flowCount[$item['d']][2] ++;
+        }
+        return [
+            $flowCount,
+            $max,
+            $args,
+            $ips
+        ];
     }
 }

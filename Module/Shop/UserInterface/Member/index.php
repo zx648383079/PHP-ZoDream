@@ -48,7 +48,7 @@ $this->header_tpl = './user_header';
 
             <div class="panel un-order-box">
                 <div class="panel-header">
-                    <span>未完成订单（<?=$order_list->getTotal()?>）</span>
+                    <span>未完成订单（<?=$order_list->getTotalItems()?>）</span>
                     <a href="<?=$this->url('./order')?>">查看全部订单</a>
                 </div>
                 <div class="panel-body">

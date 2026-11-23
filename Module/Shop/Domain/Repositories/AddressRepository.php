@@ -10,7 +10,7 @@ class AddressRepository {
 
     public static function getList() {
         return Address::with('region')->where('user_id', auth()->id())
-            ->orderBy('id desc')->page();;
+            ->orderBy('id', SORT_DESC)->page();;
     }
 
     public static function get($id) {
@@ -83,6 +83,6 @@ class AddressRepository {
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 SearchModel::searchWhere($query, ['name', 'address', 'tel'], false, '', $keywords);
             })
-            ->orderBy('id', 'desc')->page();;
+            ->orderBy('id', SORT_DESC)->page();;
     }
 }

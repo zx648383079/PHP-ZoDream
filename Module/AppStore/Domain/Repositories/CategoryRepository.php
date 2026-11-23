@@ -68,12 +68,12 @@ final class CategoryRepository extends CRUDRepository {
     }
 
     public static function recommend(string $extra = '') {
-        $items = CategoryModel::limit(5)->get();
+        $items = CategoryModel::query()->take(5)->get();
         $extraTags = explode(',', $extra);
         if (in_array('items', $extraTags)) {
             foreach ($items as $item) {
                 $item->items = AppModel::where('cat_id', $item->id)
-                    ->limit(5)->get(AppRepository::SOFTWARE_PAGE_FILED);
+                    ->take(5)->get(AppRepository::SOFTWARE_PAGE_FILED);
             }
         }
         return $items;

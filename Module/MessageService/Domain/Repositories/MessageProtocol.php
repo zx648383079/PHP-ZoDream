@@ -110,7 +110,7 @@ class MessageProtocol {
             ->when($type === static::RECEIVE_TYPE_MOBILE, function ($query) {
                 $query->where('type', static::TYPE_TEXT);
             }, function ($query) {
-                $query->orderBy('type', 'desc');
+                $query->orderBy('type', SORT_DESC);
             })
             ->first();
         if (empty($template)) {

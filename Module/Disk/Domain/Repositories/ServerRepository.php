@@ -13,7 +13,7 @@ final class ServerRepository {
         return ServerModel::when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function saveServer(array $data) {
@@ -31,7 +31,7 @@ final class ServerRepository {
         return FileModel::when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function saveFile(array $data) {

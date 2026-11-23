@@ -52,5 +52,5 @@ use Zodream\Template\View;
 </div>
 <?php endforeach;?>
 <?php if($comment_list->hasMore()):?>
-   <div class="load-more" data-page="<?=$comment_list->getIndex() + 1?>"><?=__('Load More')?></div>
+   <div class="load-more" data-page="<?=$comment_list->getCurrentPage() + 1?>"><?=__('Load More')?></div>
 <?php endif;?>

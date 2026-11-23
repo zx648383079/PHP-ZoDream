@@ -38,7 +38,7 @@ class CreateNoteTables extends Migration {
         RoleRepository::newPermission([
             'note_manage' => '便签管理'
         ]);
-        if (TopicEntity::query()->count() > 0) {
+        if (TopicEntity::query()->any()) {
             return;
         }
         TopicEntity::query()->insert([

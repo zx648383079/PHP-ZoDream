@@ -17,7 +17,7 @@ class Txt {
         //return preg_match('/^(\d|\d{2}|1\d{0,2})$/', trim($line));
     }
 
-    public function save(BookModel $book, string $title, $content) {
+    public function save(BookModel $book, string $title, string|array $content) {
         if (is_array($content)) {
             $content = implode(PHP_EOL, $content);
         }
@@ -30,7 +30,7 @@ class Txt {
         $model->save();
     }
 
-    public function invoke($file, $book = null) {
+    public function invoke(mixed $file, mixed $book = null) {
         if (!$file instanceof File) {
             $file = new File($file);
         }

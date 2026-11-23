@@ -17,7 +17,7 @@ final class StoreRepository {
                 SearchModel::searchWhere($query, ['name'], true, '', $keywords);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -51,8 +51,8 @@ final class StoreRepository {
         }
         $userId = auth()->id();
         $has_store = StoreEntity::where('user_id', $userId)
-            ->count() > 0;
-        $is_waiter = $has_store || StoreStaffEntity::where('user_id', $userId)->count() > 0;
+            ->any();
+        $is_waiter = $has_store || StoreStaffEntity::where('user_id', $userId)->any();
         return compact('has_store', 'is_waiter');
     }
 

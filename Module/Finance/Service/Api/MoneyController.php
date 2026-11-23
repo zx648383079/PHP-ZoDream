@@ -15,7 +15,7 @@ class MoneyController extends Controller {
             $total += $item->total;
         }
         $product_list = ProjectRepository::all();
-        $project_list = FinancialProjectModel::auth()->select('name', 'money')->all();
+        $project_list = FinancialProjectModel::auth()->select('name', 'money')->get();
         return $this->render(compact('account_list', 'total', 'product_list', 'project_list'));
     }
 

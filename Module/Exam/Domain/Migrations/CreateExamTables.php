@@ -174,7 +174,7 @@ class CreateExamTables extends Migration {
     }
 
     private function insertGrade() {
-        if (CourseGradeEntity::where('course_id', 0)->count() > 0) {
+        if (CourseGradeEntity::where('course_id', 0)->any()) {
             return;
         }
         $items = [

@@ -187,7 +187,7 @@ final class FundAccount {
 
     public static function isBought(int $id, int $type = self::TYPE_DEFAULT): bool {
         return AccountLogEntity::where('item_id', $id)
-                ->where('type', $type)->count() > 0;
+                ->where('type', $type)->any();
     }
 
     /**

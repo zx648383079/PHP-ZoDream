@@ -12,7 +12,7 @@ class MicroController extends Controller {
         $items  = MicroBlogModel::with('user')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['content']);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('items'));
     }
 

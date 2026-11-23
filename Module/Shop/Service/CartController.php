@@ -8,7 +8,7 @@ use Module\Shop\Domain\Repositories\CartRepository;
 class CartController extends Controller {
 
     public function indexAction() {
-        $like_goods = GoodsSimpleModel::limit(7)->all();
+        $like_goods = GoodsSimpleModel::take(7)->get();
         $cart = CartRepository::load();
         return $this->sendWithShare()->show(compact('like_goods', 'cart'));
     }

@@ -10,7 +10,7 @@ final class AddressRepository {
 
     public static function getList() {
         return AddressEntity::where('user_id', auth()->id())
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 }

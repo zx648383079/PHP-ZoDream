@@ -150,7 +150,7 @@ class MockRepository {
      */
     public static function getMockData(int $api_id, int $parent_id = 0) {
         $api_id = $api_id ? $api_id : 0;
-        $fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $api_id)->where('parent_id', $parent_id)->all();
+        $fields = FieldModel::where('kind', FieldModel::KIND_RESPONSE)->where('api_id', $api_id)->where('parent_id', $parent_id)->get();
         $data = [];
         foreach ($fields as $k => $v){
             $name = $v['name'];

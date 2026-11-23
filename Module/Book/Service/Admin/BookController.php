@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service\Admin;
 
 
@@ -11,7 +12,7 @@ use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Repositories\BookRepository;
 
 class BookController extends Controller {
-    public function indexAction($keywords = null, $cat_id = null, $author_id = null, $classify = 0) {
+    public function indexAction(string $keywords = '', int $cat_id = 0, int $author_id = 0, int $classify = 0) {
         $model_list = BookModel::with('category', 'author')
             //->withCount('chapter')
             ->when(!empty($keywords), function ($query) {
@@ -22,9 +23,9 @@ class BookController extends Controller {
                 $query->where('author_id', intval($author_id));
             })->when(is_numeric($classify), function ($query) use ($classify) {
                 $query->where('classify', intval($classify));
-            })->orderBy('id', 'desc')->page();
-        $cat_list = BookCategoryModel::select('id', 'name')->all();
-        $author_list = BookAuthorModel::select('id', 'name')->all();
+            })->orderBy('id', SORT_DESC)->page();
+        $cat_list = BookCategoryModel::select('id', 'name')->get();
+        $author_list = BookAuthorModel::select('id', 'name')->get();
         return $this->show(compact('model_list', 'cat_list', 'author_list', 'keywords', 'cat_id', 'classify', 'author_id'));
     }
 
@@ -32,10 +33,10 @@ class BookController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = BookModel::findOrNew($id);
-        $cat_list = BookCategoryModel::select('id', 'name')->all();
-        $author_list = BookAuthorModel::select('id', 'name')->all();
+        $cat_list = BookCategoryModel::select('id', 'name')->get();
+        $author_list = BookAuthorModel::select('id', 'name')->get();
         return $this->show('edit', compact('model', 'cat_list', 'author_list'));
     }
 
@@ -69,12 +70,12 @@ class BookController extends Controller {
         ]);
     }
 
-    public function chapterAction($book, $keywords = null) {
+    public function chapterAction(int $book, string $keywords = '') {
         $book = BookModel::find($book);
         $model_list = BookChapterModel::where('book_id', $book->id)
             ->when(!empty($keywords), function ($query) {
                 BookModel::searchWhere($query, 'title');
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list',  'book', 'keywords'));
     }
 
@@ -100,7 +101,7 @@ class BookController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteChapterAction($id) {
+    public function deleteChapterAction(int $id) {
         $model = BookChapterModel::find($id);
         $model->delete();
         BookChapterBodyModel::where('id', $id)->delete();

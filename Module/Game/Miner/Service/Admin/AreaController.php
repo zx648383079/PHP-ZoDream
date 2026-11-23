@@ -6,7 +6,7 @@ use Module\Game\Miner\Domain\Model\AreaModel;
 class AreaController extends Controller {
 
     public function indexAction() {
-        $model_list = AreaModel::orderBy('id', 'desc')->page();
+        $model_list = AreaModel::orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 
@@ -14,7 +14,7 @@ class AreaController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = AreaModel::findOrNew($id);
         return $this->show('edit', compact('model'));
     }
@@ -29,7 +29,7 @@ class AreaController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         AreaModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => url('./@admin/area')

@@ -52,14 +52,14 @@ class Tree {
         return $this->query()
             ->where($this->leftKey, '>', $left)
             ->where($this->rightKey, '<', $right)
-            ->orderBy($this->leftKey, 'asc')->get();
+            ->orderBy($this->leftKey, SORT_ASC)->get();
     }
 
     public function getPath($left, $right) {
         return $this->query()
             ->where($this->leftKey, '<', $left)
             ->where($this->rightKey, '>', $right)
-            ->orderBy($this->leftKey, 'asc')->get();
+            ->orderBy($this->leftKey, SORT_ASC)->get();
     }
 
     public function create($parent, $position = 0, $data = []) {

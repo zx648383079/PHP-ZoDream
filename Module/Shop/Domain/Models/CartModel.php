@@ -55,7 +55,7 @@ class CartModel extends CartEntity implements ICartItem {
      * @return static[]
      */
     public static function getAllGoods() {
-        return static::with('goods')->belongOwn()->all();
+        return static::with('goods')->belongOwn()->get();
     }
 
     /**
@@ -64,11 +64,11 @@ class CartModel extends CartEntity implements ICartItem {
      * @return static[]
      */
     public static function getSomeGoods($args) {
-        return static::with('goods')->belongOwn()->whereIn('id', $args)->all();
+        return static::with('goods')->belongOwn()->whereIn('id', $args)->get();
     }
 
     public static function getSomeByGoods($args) {
-        return static::with('goods')->belongOwn()->whereIn('goods_id', $args)->all();
+        return static::with('goods')->belongOwn()->whereIn('goods_id', $args)->get();
     }
 
     public function scopeBelongOwn($query) {

@@ -13,7 +13,7 @@ class HistoryRepository {
             return false;
         }
         return BookHistoryModel::where('user_id', auth()->id())
-            ->where('book_id', $id)->count() > 0;
+            ->where('book_id', $id)->any();
     }
 
     public static function log(BookChapterModel $chapter) {
@@ -65,7 +65,7 @@ class HistoryRepository {
 
     public static function hasHistory($book_id) {
         return BookHistoryModel::where('book_id', $book_id)
-                ->where('user_id', auth()->id())->count() > 0;
+                ->where('user_id', auth()->id())->any();
     }
 
     /**
@@ -91,6 +91,6 @@ class HistoryRepository {
             $arg->progress = 0;
             $items[] = $arg;
         }
-        return $page->setPage($items);
+        return $page->setItems($items);
     }
 }

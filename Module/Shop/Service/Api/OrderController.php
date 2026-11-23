@@ -47,7 +47,7 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        $address = OrderAddressModel::where('order_id', $id)->one();
+        $address = OrderAddressModel::where('order_id', $id)->first();
         $data = $order->toArray();
         $data['address'] = $address;
         return $this->render($data);
@@ -59,7 +59,7 @@ class OrderController extends Controller {
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
-        $address = OrderAddressModel::where('order_id', $id)->one();
+        $address = OrderAddressModel::where('order_id', $id)->first();
         $data = $order->toArray();
         $data['address'] = $address;
         return $this->render($data);
@@ -143,8 +143,8 @@ class OrderController extends Controller {
         $goods->save();
         $count = OrderGoodsModel::where('order_id', $goods->order_id)
             ->where('comment_id', 0)
-            ->where('status', OrderModel::STATUS_RECEIVED)->count();
-        if ($count < 1) {
+            ->where('status', OrderModel::STATUS_RECEIVED)->any();
+        if (!$count) {
             OrderLogModel::finish(OrderModel::find($goods->order_id));
         }
         return $this->render(['data' => true]);

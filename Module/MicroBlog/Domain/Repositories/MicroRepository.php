@@ -69,10 +69,10 @@ class MicroRepository {
             
             ->when(!empty($sort), function ($query) use ($sort) {
                 if ($sort == 'new') {
-                    return $query->orderBy('created_at', 'desc');
+                    return $query->orderBy('created_at', SORT_DESC);
                 }
                 if ($sort == 'recommend') {
-                    return $query->orderBy('recommend_count', 'desc');
+                    return $query->orderBy('recommend_count', SORT_DESC);
                 }
             })->when(!empty($keywords) && $id < 1, function ($query) {
                 SearchModel::searchWhere($query, ['content']);
@@ -112,8 +112,8 @@ class MicroRepository {
                 }
                 $query->whereIn('id', $itemId);
             })
-            ->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')
+            ->orderBy('status', SORT_ASC)
+            ->thenBy('id', SORT_DESC)
             ->page();
     }
 

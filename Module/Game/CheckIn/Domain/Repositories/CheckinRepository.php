@@ -33,7 +33,7 @@ class CheckinRepository {
         if ($userId < 1) {
             return false;
         }
-        return CheckInModel::today()->where('user_id', $userId)->count() > 0;
+        return CheckInModel::today()->where('user_id', $userId)->any();
     }
 
     /**
@@ -43,7 +43,7 @@ class CheckinRepository {
         if ($user === 0) {
             throw new \Exception('请先登录', 401);
         }
-        $last = CheckInModel::where('user_id', $user)->orderBy('created_at', 'desc')->first();
+        $last = CheckInModel::where('user_id', $user)->orderBy('created_at', SORT_DESC)->first();
         $today = strtotime(date('Y-m-d 00:00:00'));
         if ($last && $last->getAttributeSource('created_at') > $today) {
             throw new \Exception('签到失败');
@@ -81,13 +81,13 @@ class CheckinRepository {
         $start_at = strtotime(date($date.' 00:00:00'));
         $end_at = strtotime(date($date.' 23:59:59'));
         $count = CheckInModel::time($start_at, $end_at)->where('user_id', $user)
-            ->count();
-        if ($count > 0) {
+            ->any();
+        if ($count) {
             return false;
         }
         $last = CheckInModel::where('user_id', $user)
             ->where('created_at', '<', $start_at)
-            ->orderBy('created_at', 'desc')->one();
+            ->orderBy('created_at', SORT_DESC)->first();
         $running = 1;
         if (!empty($last)) {
             $running = $last->running + 1;
@@ -106,14 +106,14 @@ class CheckinRepository {
         // 处理连续问题
         $first = CheckInModel::where('user_id', $user)
             ->where('created_at', '>', $end_at)
-            ->orderBy('created_at', 'asc')->one();
+            ->orderBy('created_at', SORT_ASC)->first();
         if (empty($first) || $first->getAttributeSource('created_at') - $end_at > 86400) {
             return false;
         }
         $last = CheckInModel::where('user_id', $user)
             ->where('id', '>', $first->id)
             ->where('running', 1)
-            ->orderBy('created_at', 'asc')->one();
+            ->orderBy('created_at', SORT_ASC)->first();
         CheckInModel::query()->where('user_id', $user)
             ->where('created_at', '>=', $first->getAttributeSource('created_at'))
             ->where('created_at', '<', $last->getAttributeSource('created_at'))
@@ -129,9 +129,8 @@ class CheckinRepository {
         if ($user < 1) {
             return false;
         }
-        $count = static::today()->where('user_id', $user)
-            ->count();
-        return $count < 1;
+        return !static::today()->where('user_id', $user)
+            ->any();
     }
 
     private static function getCheckInMoney(int $day): int {
@@ -206,7 +205,7 @@ class CheckinRepository {
                 }
                 $query->whereIn('user_id', $userId);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SORT_DESC)
             ->page();
     }
 }

@@ -1,14 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
 use Domain\Model\Model;
-use Module\Book\Domain\Model\BookAuthorModel;
-use Module\Book\Domain\Model\BookCategoryModel;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
-
-use Module\Book\Domain\SiteCrawl;
 use Module\Book\Domain\SpiderProgress;
 use Zodream\Spider\Spider;
 use Zodream\Spider\Support\Html;
@@ -16,15 +13,15 @@ use Zodream\Spider\Support\Uri;
 
 abstract class BaseSpider implements GetBookInterface {
 
-    protected $start = null;
+    protected string|null $start = null;
 
-    protected $isNewChapter = true;
+    protected bool $isNewChapter = true;
 
     /**
-     * @param null $start
+     * @param string $start
      * @return BaseSpider
      */
-    public function setStart($start) {
+    public function setStart(string|null $start) {
         $this->start = $start;
         return $this;
     }
@@ -77,7 +74,7 @@ abstract class BaseSpider implements GetBookInterface {
         $this->downloadChapter($book, $chapters, $next);
     }
 
-    protected function isNewChapter($num) {
+    protected function isNewChapter(string $num): bool {
         if ($this->isNewChapter || empty($this->start)) {
             return true;
         }
@@ -92,7 +89,7 @@ abstract class BaseSpider implements GetBookInterface {
         return false;
     }
 
-    protected function getRealBook($book) {
+    protected function getRealBook(mixed $book): BookModel|null {
         if (is_array($book)) {
             $book = SpiderProgress::createBook($book);
         }
@@ -113,7 +110,7 @@ abstract class BaseSpider implements GetBookInterface {
         return BookModel::where('name', $book->name)->first();
     }
 
-    public function decode(Html $html) {
+    public function decode(Html $html): Html {
         return $html;
     }
 
@@ -121,33 +118,33 @@ abstract class BaseSpider implements GetBookInterface {
      * @param Uri $uri
      * @return boolean
      */
-    abstract public function isCatalogPage(Uri $uri);
+    abstract public function isCatalogPage(Uri $uri): bool;
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    abstract public function isContentPage(Uri $uri);
+    abstract public function isContentPage(Uri $uri): bool;
 
     /**
      * @param $html
      * @return array
      */
-    abstract public function getBook(Html $html, Uri $uri);
+    abstract public function getBook(Html $html, Uri $uri): array;
 
     /**
      * @param Html $html
      * @param Uri $baseUri
      * @return array
      */
-    abstract public function getCatalog(Html $html, Uri $baseUri);
+    abstract public function getCatalog(Html $html, Uri $baseUri): array;
 
     /**
      * @param Html $html
      * @param Uri|null $uri
      * @return array
      */
-    abstract public function getChapter(Html $html, Uri|null $uri = null);
+    abstract public function getChapter(Html $html, Uri|null $uri = null): array;
 
     public function book(string $uri): array {
         return cache()->getOrSet('book_spider_book_'.$uri, function () use ($uri) {
@@ -165,7 +162,7 @@ abstract class BaseSpider implements GetBookInterface {
     }
 
 
-    public static function toText($html) {
+    public static function toText(string $html): string {
         $html = Html::toText($html);
         $args = explode(PHP_EOL, $html);
         return implode(PHP_EOL, array_map(function ($line) {
@@ -178,7 +175,7 @@ abstract class BaseSpider implements GetBookInterface {
         }, $args));
     }
 
-    protected function debug($content) {
+    protected function debug(string $content): void {
         if (!request()->isCli()) {
             return;
         }

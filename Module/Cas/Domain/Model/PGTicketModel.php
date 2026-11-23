@@ -68,7 +68,7 @@ class PGTicketModel extends BaseModel {
     }
 
     public static function getByTicket($ticket, $checkExpired = true) {
-        $record = static::where('ticket', $ticket)->one();
+        $record = static::where('ticket', $ticket)->first();
         if (!$record) {
             return null;
         }

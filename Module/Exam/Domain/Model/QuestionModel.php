@@ -45,11 +45,11 @@ class QuestionModel extends QuestionEntity {
     }
 
     public function option_items() {
-        return $this->hasMany(QuestionOptionModel::class, 'question_id',  'id')->orderBy('id', 'asc');
+        return $this->hasMany(QuestionOptionModel::class, 'question_id',  'id')->orderBy('id', SORT_ASC);
     }
 
     public function analysis_items() {
-        return $this->hasMany(QuestionAnalysisModel::class, 'question_id', 'id')->orderBy('type', 'asc');
+        return $this->hasMany(QuestionAnalysisModel::class, 'question_id', 'id')->orderBy('type', SORT_ASC);
     }
 
     public function format($order = null, $dynamicItems = null, bool $hasAnswer = false, bool $shuffle = true) {
@@ -83,7 +83,7 @@ class QuestionModel extends QuestionEntity {
         }
         if ($this->type < 2) {
             $option_list = QuestionOptionModel::where('question_id', $this->id)
-                ->orderBy('id', 'asc')->get();
+                ->orderBy('id', SORT_ASC)->get();
             if ($shuffle) {
                 shuffle($option_list);
             }

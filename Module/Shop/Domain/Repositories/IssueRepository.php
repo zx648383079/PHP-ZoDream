@@ -19,7 +19,7 @@ final class IssueRepository {
                 SearchModel::searchWhere($query, ['question', 'answer']);
             })
             ->where('status', '<', self::STATUS_DELETE)
-            ->orderBy('status', 'desc')->page();
+            ->orderBy('status', SORT_DESC)->page();
     }
 
     public static function create(int $item_id, string $content) {
@@ -48,7 +48,7 @@ final class IssueRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['question', 'answer']);
             })
-            ->orderBy('status', 'asc')->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_ASC)->thenBy('id', SORT_DESC)->page();
     }
 
     public static function manageSave(array $data) {

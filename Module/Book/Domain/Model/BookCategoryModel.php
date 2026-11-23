@@ -1,7 +1,7 @@
 <?php
 namespace Module\Book\Domain\Model;
 
-use Domain\Model\Model;
+use Module\Book\Domain\Entities\CategoryEntity;
 
 
 /**
@@ -11,25 +11,7 @@ use Domain\Model\Model;
  * @property string $name
  * @property integer $created_at
  */
-class BookCategoryModel extends Model {
-    public static function tableName(): string {
-        return 'book_category';
-    }
-
-    protected function rules(): array {
-        return [
-            'name' => 'required|string:0,100',
-            'created_at' => 'int',
-        ];
-    }
-
-    protected function labels(): array {
-        return [
-            'id' => 'Id',
-            'name' => '分类',
-            'created_at' => '创建时间',
-        ];
-    }
+class BookCategoryModel extends CategoryEntity {
 
     public function book() {
         return $this->hasMany(BookModel::class, 'cat_id', 'id');
@@ -40,15 +22,15 @@ class BookCategoryModel extends Model {
     }
 
     public function getBookListAttribute() {
-        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', SORT_DESC)->take(10)->get();
     }
 
     public function getMonthBookAttribute() {
-        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', SORT_DESC)->take(10)->get();
     }
 
     public function getWeekBookAttribute() {
-        return BookModel::where('cat_id', $this->id)->orderBy('click_count', 'desc')->limit(10)->all();
+        return BookModel::where('cat_id', $this->id)->orderBy('click_count', SORT_DESC)->take(10)->get();
     }
 
     public function getUrlAttribute() {
@@ -60,11 +42,11 @@ class BookCategoryModel extends Model {
     }
 
     public function getRecommendBookAttribute() {
-        return $this->recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->limit(4)->all();
+        return $this->recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->take(4)->get();
     }
 
     public function getBestRecommendBookAttribute() {
-        return $this->best_recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->limit(5)->all();
+        return $this->best_recommend_book = BookModel::ofClassify()->where('cat_id', $this->id)->take(5)->get();
     }
 
     /**
@@ -72,12 +54,12 @@ class BookCategoryModel extends Model {
      * @param $name
      * @return static
      */
-    public static function findOrNewByName($name) {
+    public static function findOrNewByName(string $name) {
         $name = trim($name);
         if (empty($name)) {
-            return static::orderBy('id', 'asc')->first();
+            return static::orderBy('id', SORT_ASC)->first();
         }
-        $model = static::where('name', $name)->one();
+        $model = static::where('name', $name)->first();
         if (!empty($model)) {
             return $model;
         }
@@ -86,7 +68,7 @@ class BookCategoryModel extends Model {
         ]);
     }
 
-    public static function findIdByName($name) {
+    public static function findIdByName(string $name) {
         return static::findOrNewByName($name)->id;
     }
 }

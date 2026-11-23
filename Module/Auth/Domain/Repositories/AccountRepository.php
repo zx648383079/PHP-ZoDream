@@ -22,7 +22,7 @@ final class AccountRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     /**
@@ -64,7 +64,7 @@ final class AccountRepository {
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'ip');
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     /**
@@ -92,7 +92,7 @@ final class AccountRepository {
             })
             ->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')
+            })->orderBy('id', SORT_DESC)
             ->page();
     }
 

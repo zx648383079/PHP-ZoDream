@@ -13,7 +13,7 @@ class SessionRepository {
             SearchModel::searchWhere($query, ['name', 'ip']);
         })->when($status > 0, function ($query) use ($status) {
             $query->where('status', $status - 1);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function myList() {
@@ -26,7 +26,7 @@ class SessionRepository {
                     ->where('service_id', auth()->id())
                     ->where('updated_at', '>', time() - 86400);
             });
-        })->orderBy('id', 'desc')->get();
+        })->orderBy('id', SORT_DESC)->get();
         foreach ($data as $item) {
             if (!$item->user) {
                 $item->user = [

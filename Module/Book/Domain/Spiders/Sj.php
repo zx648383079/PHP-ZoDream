@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
-use Module\Book\Domain\Model\BookAuthorModel;
-use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
@@ -13,7 +12,7 @@ class Sj extends BaseSpider {
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
+    public function isCatalogPage(Uri $uri): bool {
         return preg_match('#^/?book/\d+/?$#i', $uri->getPath(), $match);
     }
 
@@ -21,7 +20,7 @@ class Sj extends BaseSpider {
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
+    public function isContentPage(Uri $uri): bool {
         return preg_match('#^/?book/\d+/\d+\.html$#i', $uri->getPath(), $match);
     }
 
@@ -30,7 +29,7 @@ class Sj extends BaseSpider {
      * @param Uri $uri
      * @return BookModel
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         //$author = $html->find('#info p', 0)->text;
         //$author = explode('：', $author, 2);
         //$path = $html->find('#fmimg img', 0)->src;
@@ -47,7 +46,7 @@ class Sj extends BaseSpider {
      * @param Uri $baseUri
      * @return array[]
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $uris = [];
         $html->find('#info', 2)->matches('#<a[^<>]+href="(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i',
             function ($match) use (&$uris, $baseUri) {
@@ -73,7 +72,7 @@ class Sj extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         if ($html->isEmpty()) {
             return [];
         }

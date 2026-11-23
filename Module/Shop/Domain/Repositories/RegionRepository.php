@@ -11,7 +11,7 @@ class RegionRepository {
         return RegionModel::where('parent_id', $parent)
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
-            })->all();
+            })->get();
     }
 
     public static function getPath(int $id) {

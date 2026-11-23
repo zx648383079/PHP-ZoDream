@@ -54,7 +54,7 @@ class AuctionRepository {
     public static function auctionLogList(int $activity) {
         return AuctionLogModel::with('user')
             ->where('act_id', $activity)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->page();
     }
 

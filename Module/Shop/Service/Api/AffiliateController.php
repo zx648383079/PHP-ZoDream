@@ -17,13 +17,13 @@ class AffiliateController extends Controller {
 
     public function userAction() {
         $user_list = UserSimpleModel::where('parent_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
         return $this->renderPage($user_list);
     }
 
     public function orderAction() {
         $log_list = AffiliateLogModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
         return $this->renderPage($log_list);
     }
 

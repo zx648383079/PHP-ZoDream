@@ -7,11 +7,11 @@ use Module\Game\Bank\Domain\Model\BankProductModel;
 class HomeController extends Controller {
 
     public function indexAction() {
-        $model_list = BankProductModel::orderBy('risk', 'asc')->orderBy('earnings', 'asc')->orderBy('id', 'desc')->page();
+        $model_list = BankProductModel::orderBy('risk', SORT_ASC)->thenBy('earnings', SORT_ASC)->thenBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list'));
     }
 
-    public function investAction($id, $money) {
+    public function investAction(int $id, float|int $money) {
         if (auth()->user()->money < $money) {
             return $this->renderFailure('您的账户金额不足');
         }

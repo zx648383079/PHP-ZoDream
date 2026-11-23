@@ -1,36 +1,34 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Spiders;
 
-use Module\Book\Domain\Model\BookAuthorModel;
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
 
 class Qb extends BaseSpider {
 
-    protected $matchCatalog = '#^/?xiaoshuo/\d+/\d+/?$#i';
+    protected string $matchCatalog = '#^/?xiaoshuo/\d+/\d+/?$#i';
 
-    protected $matchContent = '#^/?xiaoshuo/\d+/\d+/\d+\.html$#i';
+    protected string $matchContent = '#^/?xiaoshuo/\d+/\d+/\d+\.html$#i';
 
-    protected $sort = true;
+    protected bool $sort = true;
 
-    protected $matchList = '#<a[^<>]+href="/xiaoshuo/\d+/\d+/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
+    protected string $matchList = '#<a[^<>]+href="/xiaoshuo/\d+/\d+/(\d+)\.html"[^<>]*>([\S\s]+?)</a>#i';
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isCatalogPage(Uri $uri) {
-        return preg_match($this->matchCatalog, $uri->getPath(), $match);
+    public function isCatalogPage(Uri $uri): bool {
+        return !!preg_match($this->matchCatalog, $uri->getPath(), $match);
     }
 
     /**
      * @param Uri $uri
      * @return boolean
      */
-    public function isContentPage(Uri $uri) {
-        return preg_match($this->matchContent, $uri->getPath(), $match);
+    public function isContentPage(Uri $uri): bool {
+        return !!preg_match($this->matchContent, $uri->getPath(), $match);
     }
 
     /**
@@ -38,7 +36,7 @@ class Qb extends BaseSpider {
      * @param Uri $uri
      * @return array
      */
-    public function getBook(Html $html, Uri $uri) {
+    public function getBook(Html $html, Uri $uri): array {
         $info = $html->find('.book .info', 0);
         $author = $info->find('.small span', 0)->text;
         $author = explode('：', $author, 2)[1];
@@ -58,7 +56,7 @@ class Qb extends BaseSpider {
      * @param Uri $baseUri
      * @return array[]
      */
-    public function getCatalog(Html $html, Uri $baseUri) {
+    public function getCatalog(Html $html, Uri $baseUri): array {
         $uris = [];
         $html->find('.listmain', 0)->matches($this->matchList,
             function ($match) use (&$uris, $baseUri) {
@@ -97,7 +95,7 @@ class Qb extends BaseSpider {
      * @param Uri|null $uri
      * @return array
      */
-    public function getChapter(Html $html, Uri|null $uri = null) {
+    public function getChapter(Html $html, Uri|null $uri = null): array {
         if ($html->isEmpty()) {
             return [];
         }

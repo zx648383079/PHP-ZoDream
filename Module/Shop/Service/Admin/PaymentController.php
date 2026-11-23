@@ -22,7 +22,7 @@ class PaymentController extends Controller {
     public function editAction($id) {
         $model = PaymentModel::findOrNew($id);
         $pay_list = PaymentRepository::getPlugins();
-        $shipping_list = ShippingModel::select('id', 'name')->all();
+        $shipping_list = ShippingModel::select('id', 'name')->get();
         return $this->show('edit', compact('model', 'pay_list', 'shipping_list'));
     }
 

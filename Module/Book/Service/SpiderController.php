@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Service;
 
 use Module\Book\Domain\Repositories\SpiderRepository;
@@ -25,7 +26,7 @@ class SpiderController extends Controller {
 
 
 
-    public function indexAction($site = null, $url = null, $start = null) {
+    public function indexAction(string|null $site = null, string|null $url = null, string|null $start = null) {
         if (empty($site)) {
             return $this->crawlBook($url, $start);
         }
@@ -33,13 +34,13 @@ class SpiderController extends Controller {
     }
 
 
-    public function importAction($file, $book = 0) {
+    public function importAction(string $file, int $book = 0) {
         $txt = new Txt();
         $txt->invoke($file, $book);
         return $this->showContent('导入执行完成！');
     }
 
-    protected function crawlSite($site) {
+    protected function crawlSite(string $site) {
         $uri = new Uri($site);
         $spider = SiteCrawl::getSpider($uri);
         if (empty($spider)) {
@@ -55,7 +56,7 @@ class SpiderController extends Controller {
      * @param $start
      * @throws \Exception
      */
-    protected function crawlBook($url, $start = null) {
+    protected function crawlBook(string $url, string|null $start = null) {
         $uri = new Uri($url);
         $spider = SiteCrawl::getSpider($uri);
         if (empty($spider)) {

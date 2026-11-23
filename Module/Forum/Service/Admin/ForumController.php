@@ -36,7 +36,7 @@ class ForumController extends Controller {
                 return true;
             });
             $classify_list = ForumClassifyModel::where('forum_id', $id)
-                ->orderBy('id', 'asc')->all();
+                ->orderBy('id', SORT_ASC)->get();
         }
         return $this->show('edit', compact('model', 'forum_list', 'classify_list'));
     }

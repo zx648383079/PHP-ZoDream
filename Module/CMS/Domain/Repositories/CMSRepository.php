@@ -295,7 +295,7 @@ class CMSRepository {
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['title']);
                 })
-                ->orderBy('position', 'asc')
+                ->orderBy('position', SORT_ASC)
                 ->asArray()
                 ->get('id', 'name', 'title');
             return array_map(function($item) {
@@ -325,7 +325,7 @@ class CMSRepository {
                 ->when(!empty($keywords), function ($query) {
                     SearchModel::searchWhere($query, ['name']);
                 })
-                ->orderBy('position', 'asc')
+                ->orderBy('position', SORT_ASC)
                 ->asArray()
                 ->get('id', 'name');
         return array_map(function($item) use ($model) {

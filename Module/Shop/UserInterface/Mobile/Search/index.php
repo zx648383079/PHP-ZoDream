@@ -14,7 +14,7 @@ $this->extend('../layouts/search_back');
     </div>
 
     <?php if($goods_list->hasMore()):?>
-    <div class="more-load" data-page="<?=$goods_list->getIndex()?>" data-target=".goods-list" data-url="<?=$this->url(['page' => null])?>">
+    <div class="more-load" data-page="<?=$goods_list->getCurrentPage()?>" data-target=".goods-list" data-url="<?=$this->url(['page' => null])?>">
     加载中。。。
     </div>
     <?php endif;?>

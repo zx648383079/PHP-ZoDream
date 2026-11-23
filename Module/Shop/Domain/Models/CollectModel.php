@@ -48,7 +48,7 @@ class CollectModel extends Model {
 
     public static function exist($goods) {
         return self::where('goods_id', $goods)
-            ->where('user_id', auth()->id())->count() > 0;
+            ->where('user_id', auth()->id())->any();
     }
 
 

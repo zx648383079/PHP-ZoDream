@@ -36,7 +36,7 @@ final class ManagerRepository {
     public static function productSave(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        if (ProductEntity::where('unique_code', $data['unique_code'])->where('id', '<>', $id)->count() > 0) {
+        if (ProductEntity::where('unique_code', $data['unique_code'])->where('id', '<>', $id)->any()) {
             throw new Exception('已存在');
         }
         $model = ProductEntity::findOrNew($id);
@@ -52,7 +52,7 @@ final class ManagerRepository {
             if ($channelId < 0) {
                 continue;
             }
-            $exist = ChannelProductEntity::where('product_id', $model->id)->where('channel_id', $channelId)->count() > 0;
+            $exist = ChannelProductEntity::where('product_id', $model->id)->where('channel_id', $channelId)->any();
             if ($exist) {
                 continue;
             }
@@ -73,13 +73,13 @@ final class ManagerRepository {
     public static function channelList(string $keywords = '') : Page {
         return ChannelEntity::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, ['name', 'short_name']);
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function channelSave(array $data) {
         $id = $data['id'] ?? 0;
         unset($data['id']);
-        if (ChannelEntity::where('short_name', $data['short_name'])->where('id', '<>', $id)->count() > 0) {
+        if (ChannelEntity::where('short_name', $data['short_name'])->where('id', '<>', $id)->any()) {
             throw new Exception('已存在');
         }
         $model = ChannelEntity::findOrNew($id);
@@ -103,7 +103,7 @@ final class ManagerRepository {
             return $query->where('channel_id', $channel);
         })->when($type > 0, function ($query) use ($type) {
             return $query->where('type', $type - 1);
-        })->orderBy('created_at', 'desc')->page();
+        })->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function logAdd(array $data) {

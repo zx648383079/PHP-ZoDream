@@ -77,6 +77,6 @@ class ArticleRepository {
 
     public static function categoryAll() {
         return (new Tree(ArticleCategoryModel::query()
-            ->orderBy('position', 'asc')->get('id', 'name', 'parent_id')))->makeTreeForHtml();
+            ->orderBy('position', SORT_ASC)->get('id', 'name', 'parent_id')))->makeTreeForHtml();
     }
 }

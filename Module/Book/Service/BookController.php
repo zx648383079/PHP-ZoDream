@@ -33,8 +33,8 @@ class BookController extends Controller {
         }
         $cat = BookCategoryModel::find($book->cat_id);
         $chapter_list = BookChapterModel::where('book_id', $id)
-            ->orderBy('position', 'asc')
-            ->orderBy('created_at', 'asc')->all();
+            ->orderBy('position', SORT_ASC)
+            ->thenBy('created_at', SORT_ASC)->get();
         return $this->show(compact('book', 'cat', 'chapter_list'));
     }
 

@@ -14,7 +14,7 @@ class RoleController extends Controller {
 
     public function relationAction(int $id) {
         $role = BookRoleModel::find($id);
-        $relation = RoleRelationModel::where('role_id', $id)->orWhere('role_link', $id)->all();
+        $relation = RoleRelationModel::where('role_id', $id)->orWhere('role_link', $id)->get();
         return $this->render(compact('role', 'relation'));
     }
 }

@@ -42,7 +42,7 @@ HTML;
     public function render(EditorModel $reply, MessageReply $response) {
         $items = [];
         $model_list = MediaModel::where('id', $reply->content)
-            ->orWhere('parent_id', $reply->content)->orderBy('parent_id', 'asc')->get();
+            ->orWhere('parent_id', $reply->content)->orderBy('parent_id', SORT_ASC)->get();
         foreach ($model_list as $item) {
             /** @var $item MediaModel */
             $picUrl = MediaModel::where('type', MediaModel::TYPE_IMAGE)

@@ -23,9 +23,9 @@ class IncomeController extends Controller {
             $month = date('Y-m');
         }
         $time = strtotime($month);
-        $income_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', 'desc')->all();
-        $expenditure_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', 'desc')->all();
-        $log_list = LogModel::auth()->month($time)->orderBy('happened_at', 'desc')->all();
+        $income_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_INCOME)->orderBy('happened_at', SORT_DESC)->get();
+        $expenditure_list = LogModel::auth()->month($time)->where('type', LogModel::TYPE_EXPENDITURE)->orderBy('happened_at', SORT_DESC)->get();
+        $log_list = LogModel::auth()->month($time)->orderBy('happened_at', SORT_DESC)->get();
         $day_length = date('t', $time);
         $income_days = LogModel::getMonthLogs($income_list, $day_length);
         $expenditure_days = LogModel::getMonthLogs($expenditure_list, $day_length);
@@ -69,10 +69,10 @@ class IncomeController extends Controller {
         if (empty($model->happened_at)) {
             $model->happened_at = Time::format();
         }
-        $channel_list = ConsumptionChannelModel::auth()->all();
-        $account_list = MoneyAccountModel::auth()->all();
-        $project_list = FinancialProjectModel::auth()->all();
-        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->all();
+        $channel_list = ConsumptionChannelModel::auth()->get();
+        $account_list = MoneyAccountModel::auth()->get();
+        $project_list = FinancialProjectModel::auth()->get();
+        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->get();
         return $this->show('create_log', compact('model', 'channel_list', 'account_list', 'project_list', 'budget_list'));
     }
 
@@ -95,10 +95,10 @@ class IncomeController extends Controller {
     }
 
     public function batchEditLogAction() {
-        $channel_list = ConsumptionChannelModel::auth()->all();
-        $account_list = MoneyAccountModel::auth()->all();
-        $project_list = FinancialProjectModel::auth()->all();
-        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->all();
+        $channel_list = ConsumptionChannelModel::auth()->get();
+        $account_list = MoneyAccountModel::auth()->get();
+        $project_list = FinancialProjectModel::auth()->get();
+        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->get();
         return $this->show(compact('channel_list', 'account_list', 'project_list', 'budget_list'));
     }
 
@@ -141,9 +141,9 @@ class IncomeController extends Controller {
     }
 
     public function addDayLogAction() {
-        $channel_list = ConsumptionChannelModel::auth()->all();
-        $account_list = MoneyAccountModel::auth()->all();
-        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->all();
+        $channel_list = ConsumptionChannelModel::auth()->get();
+        $account_list = MoneyAccountModel::auth()->get();
+        $budget_list = BudgetModel::auth()->where('deleted_at', 0)->get();
         return $this->show('create_day_log', compact('channel_list', 'account_list', 'budget_list'));
     }
 
@@ -157,7 +157,7 @@ class IncomeController extends Controller {
     }
 
     public function channelAction(){
-        $items = ConsumptionChannelModel::auth()->orderBy('id', 'desc')->all();
+        $items = ConsumptionChannelModel::auth()->orderBy('id', SORT_DESC)->get();
         return $this->show(compact('items'));
     }
 

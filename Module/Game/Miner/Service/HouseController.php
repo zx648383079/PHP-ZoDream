@@ -8,7 +8,7 @@ use Exception;
 class HouseController extends Controller {
 
     public function indexAction() {
-        $house_list = HouseModel::query()->all();
+        $house_list = HouseModel::query()->get();
         $player = PlayerModel::findCurrent();
         return $this->show(compact('house_list', 'player'));
     }

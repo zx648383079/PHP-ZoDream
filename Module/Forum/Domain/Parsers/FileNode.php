@@ -137,8 +137,8 @@ HTML;
             ->where('item_id', $this->page->postId())
             ->where('action', ThreadLogModel::ACTION_DOWNLOAD)
             ->where('user_id', auth()->id())
-            ->where('node_index', $this->attr(Parser::UID_KEY))->count();
-        if ($count > 0) {
+            ->where('node_index', $this->attr(Parser::UID_KEY))->any();
+        if ($count) {
             return true;
         }
         if (!$this->page->isUnderAction($this)) {

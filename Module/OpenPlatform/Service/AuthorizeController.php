@@ -10,7 +10,7 @@ class AuthorizeController extends Controller {
 
     public function indexAction() {
         $platform_list = PlatformSimpleModel::where('allow_self', 1)->where('status', 1)->get();
-        $model_list = UserTokenModel::with('platform')->where('user_id', auth()->id())->orderBy('id', 'desc')->page();
+        $model_list = UserTokenModel::with('platform')->where('user_id', auth()->id())->orderBy('id', SORT_DESC)->page();
         return $this->show(compact('model_list', 'platform_list'));
     }
 

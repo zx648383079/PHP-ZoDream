@@ -1,19 +1,17 @@
 <?php
-namespace Module\Book\Domain\Model;
+declare(strict_types=1);
+namespace Module\Book\Domain\Entities;
 
-use Domain\Model\Model;
-
+use Domain\Entities\Entity;
 /**
- * Class BookBuyLogModel
- * @package Module\Book\Domain\Model
+ * 
  * @property integer $id
  * @property integer $book_id
  * @property integer $chapter_id
  * @property integer $user_id
  * @property integer $created_at
  */
-class BookBuyLogModel extends Model {
-
+class BuyLogEntity extends Entity {
     public static function tableName(): string {
         return 'book_buy_log';
     }

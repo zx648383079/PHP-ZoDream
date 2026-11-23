@@ -59,7 +59,7 @@ class ThreadController extends Controller {
             'grade' => 0,
         ])->first();
         $classify_list = ForumClassifyModel::where('forum_id', $thread->forum_id)
-            ->orderBy('id', 'asc')->all();
+            ->orderBy('id', SORT_ASC)->get();
         return $this->show(compact('thread', 'post', 'classify_list'));
     }
 

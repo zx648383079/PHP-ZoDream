@@ -42,7 +42,7 @@ final class OrderRepository {
             ->when(!empty($keywords), function ($query) use ($keywords) {
                 Order::searchWhere($query, ['series_number']);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SORT_DESC)
             ->page();
     }
 

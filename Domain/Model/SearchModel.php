@@ -91,17 +91,21 @@ final class SearchModel {
      * @param string $sort
      * @param bool|int|string $order
      * @param string[] $sort_list 允许的sort值， 默认取第一个值
-     * @param string $default_order
+     * @param int $default_order
      * @return array [sort, order]
      */
     public static function checkSortOrder(string $sort, bool|int|string $order,
-                                          array $sort_list, string $default_order = 'desc') {
+                                          array $sort_list, int $default_order = SORT_DESC) {
         if (is_bool($order)) {
-            $order = $order ? 'desc' : 'asc';
+            $order = $order ? SORT_DESC : SORT_ASC;
         } elseif (is_numeric($order)) {
-            $order = $order > 0 ? 'desc' : 'asc';
-        } elseif (!in_array(strtolower($order), ['desc', 'asc'])) {
-            $order = $default_order;
+            $order = $order > 0 ? SORT_DESC : SORT_ASC;
+        } else {
+            $order = match(strtolower($order)) {
+                'desc' => SORT_DESC,
+                'asc' => SORT_ASC,
+                default => $default_order
+            };
         }
         if (!in_array($sort, $sort_list)) {
             $sort = reset($sort_list);
@@ -138,7 +142,7 @@ final class SearchModel {
             }
             $query->where($key, $value);
         }
-        return $query->limit($perPage)->get();
+        return $query->take($perPage)->get();
     }
 
     private static function getPerPage(array $queries = [], int $default = 20): int {

@@ -16,16 +16,16 @@ class SearchController extends Controller {
     }
 
     public function topAction() {
-        $click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $month_click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $week_click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $month_recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $week_recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', 'desc')->limit(10)->all();
-        $size_bang = BookModel::ofClassify()->isOpen()->orderBy('size', 'desc')->limit(10)->all();
+        $click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $month_click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $week_click_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $month_recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $week_recommend_bang = BookModel::ofClassify()->isOpen()->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $size_bang = BookModel::ofClassify()->isOpen()->orderBy('size', SORT_DESC)->take(10)->get();
 
-        $new_book = BookModel::ofClassify()->isOpen()->where('size < 50000')->orderBy('created_at', 'desc')->orderBy('click_count', 'desc')->limit(10)->all();
-        $over_book = BookModel::ofClassify()->isOpen()->where('over_at > 0')->orderBy('click_count', 'desc')->limit(10)->all();
+        $new_book = BookModel::ofClassify()->isOpen()->where('size < 50000')->orderBy('created_at', SORT_DESC)->orderBy('click_count', SORT_DESC)->take(10)->get();
+        $over_book = BookModel::ofClassify()->isOpen()->where('over_at > 0')->orderBy('click_count', SORT_DESC)->take(10)->get();
 
 
         return $this->show(compact('click_bang', 'month_click_bang', 'week_click_bang', 'recommend_bang', 'month_recommend_bang', 'week_recommend_bang', 'size_bang', 'new_book', 'over_book'));

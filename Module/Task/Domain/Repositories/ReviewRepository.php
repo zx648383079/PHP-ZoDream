@@ -23,7 +23,7 @@ class ReviewRepository {
     public static function statistics(string $start_at, string $end_at, bool $ignoreEmpty = false) {
         $data = TaskDayModel::with('logs')->time($start_at, $end_at)
             ->where('user_id', auth()->id())
-            ->orderBy('today', 'asc')->get();
+            ->orderBy('today', SORT_ASC)->get();
         $days = Time::rangeDate($start_at, $end_at);
         return self::formatStatistics($days, $data, $ignoreEmpty);
     }
@@ -32,7 +32,7 @@ class ReviewRepository {
         $data = TaskDayModel::with('logs')
             ->where('today', $day)
             ->where('user_id', auth()->id())
-            ->orderBy('today', 'asc')->get();
+            ->orderBy('today', SORT_ASC)->get();
         $items = self::formatStatistics([$day], $data);
         return reset($items);
     }
@@ -50,7 +50,7 @@ class ReviewRepository {
             ->where('created_at', '>=', $start_at)
             ->where('created_at', '<=', $end_at)
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'asc');
+            ->orderBy('created_at', SORT_ASC);
         if ($isAll) {
             return $query->get();
         }

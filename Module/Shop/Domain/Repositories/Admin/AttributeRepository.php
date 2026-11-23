@@ -15,7 +15,7 @@ final class AttributeRepository {
     public static function getList(int $group, string $keywords = '') {
         return AttributeModel::with('group')->when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], false, '', $keywords);
-        })->where('group_id', $group)->orderBy('id', 'desc')
+        })->where('group_id', $group)->orderBy('id', SORT_DESC)
             ->page();
     }
 
@@ -42,7 +42,7 @@ final class AttributeRepository {
     public static function groupList(string $keywords = '') {
         return AttributeGroupEntity::query()->when(!empty($keywords), function ($query) use ($keywords) {
             SearchModel::searchWhere($query, ['name'], false, '', $keywords);
-        })->orderBy('id', 'desc')
+        })->orderBy('id', SORT_DESC)
             ->page();
     }
 

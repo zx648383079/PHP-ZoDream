@@ -46,7 +46,7 @@ final class ClientRepository {
         return ClientFileModel::when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'name');
             })
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('id', SORT_DESC)->page();
     }
 
     public static function rootFolder(): Directory {

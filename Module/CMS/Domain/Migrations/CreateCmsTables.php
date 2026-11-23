@@ -107,7 +107,7 @@ class CreateCmsTables extends Migration {
         RoleRepository::newPermission([
             CMSRepository::MANAGE_ROLE => 'CMS管理'
         ]);
-        if (SiteEntity::query()->count() > 0) {
+        if (SiteEntity::query()->any()) {
             return;
         }
         CMSRepository::generateSite(SiteModel::create([

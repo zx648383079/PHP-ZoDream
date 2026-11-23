@@ -100,7 +100,7 @@ class EmulateAdapter implements IReplyAdapter {
 
     protected function replyNews(int $newsId) {
         $items = MediaModel::where('id', $newsId)
-            ->orWhere('parent_id', $newsId)->orderBy('parent_id', 'asc')->get();
+            ->orWhere('parent_id', $newsId)->orderBy('parent_id', SORT_ASC)->get();
         return [
             'type' => 'news',
             'items' => array_map(function ($item) {

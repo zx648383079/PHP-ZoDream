@@ -11,7 +11,7 @@ class ChannelRepository {
      * @return ConsumptionChannelModel[]
      */
     public static function all() {
-        return ConsumptionChannelModel::auth()->orderBy('id', 'desc')->all();
+        return ConsumptionChannelModel::auth()->orderBy('id', SORT_DESC)->get();
     }
 
     /**

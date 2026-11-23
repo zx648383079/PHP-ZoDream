@@ -247,8 +247,8 @@ class StorageProvider {
             throw new \Exception('not found file');
         }
         $count = $this->quoteQuery()->where('file_id', $id)
-            ->where('item_id', $itemId)->where('item_type', $itemType)->count();
-        if ($count > 0) {
+            ->where('item_id', $itemId)->where('item_type', $itemType)->any();
+        if ($count) {
             return;
         }
         $this->quoteQuery()->insert([
@@ -306,7 +306,7 @@ class StorageProvider {
                 return;
             }
             $md5 = $file->md5();
-            if (static::query()->where('md5', $md5)->count() > 0) {
+            if (static::query()->where('md5', $md5)->any()) {
                 return;
             }
             $path = $file->getRelative($this->root);

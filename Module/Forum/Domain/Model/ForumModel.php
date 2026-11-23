@@ -88,7 +88,7 @@ class ForumModel extends Model {
     // public function getLastThreadAttribute() {
 	//     return ThreadModel::query()->where('forum_id', $this->id)
     //         ->where('status', ThreadRepository::REVIEW_STATUS_APPROVED)
-    //         ->orderBy('id', 'desc')->first();
+    //         ->orderBy('id', SORT_DESC)->first();
     // }
 
     public static function tree() {
@@ -104,7 +104,7 @@ class ForumModel extends Model {
 	    if (!empty($data)) {
 	        return $data;
         }
-        return $data = static::query()->all();
+        return $data = static::query()->get();
     }
 
     public static function findById(int $id) {

@@ -87,19 +87,19 @@ class FriendRepository {
             throw new \Exception('用户不存在');
         }
         $count = FriendModel::where('belong_id', $user)
-            ->where('user_id', auth()->id())->count();
+            ->where('user_id', auth()->id())->any();
         FriendModel::create([
             'name' => $userModel->name,
             'classify_id' => $group,
             'user_id' => $userModel->id,
             'belong_id' => auth()->id(),
-            'status' => $group > 0 && $count > 0 ? 1 : 0,
+            'status' => $group > 0 && $count ? 1 : 0,
         ]);
         $logCount = ApplyRepository::receiveAny($user, Constants::TYPE_FRIEND, auth()->id());
         if ($logCount) {
             ApplyRepository::receive($user, Constants::TYPE_FRIEND, auth()->id(), ApplyRepository::STATUS_CONFIRM);
         }
-        if ($count > 0) {
+        if ($count) {
             FriendModel::where('belong_id', $user)
                 ->where('user_id', auth()->id())->update([
                    'status' => $group > 0 ? 1 : 0,
@@ -132,17 +132,17 @@ class FriendRepository {
                 throw new \Exception('分组错误');
             }
         }
-        $count = FriendModel::where('belong_id', auth()->id())->where('user_id', $user)->count();
-        if ($count < 0) {
+        $count = FriendModel::where('belong_id', auth()->id())->where('user_id', $user)->any();
+        if (!$count) {
             throw new \Exception('好友错误');
         }
         $followed = FriendModel::where('belong_id', $user)
-            ->where('user_id', auth()->id())->count();
+            ->where('user_id', auth()->id())->any();
         FriendModel::where('user_id', $user)->where('belong_id', auth()->id())->update([
             'classify_id' => $group,
-            'status' => $followed > 0 && $group > 0 ? 1 : 0
+            'status' => $followed && $group > 0 ? 1 : 0
         ]);
-        if ($followed > 0) {
+        if ($followed) {
             FriendModel::where('belong_id', $user)
                 ->where('user_id', auth()->id())->update([
                     'status' => $group < 1 ? 0 : 1,
@@ -208,7 +208,7 @@ class FriendRepository {
             return true;
         }
         return FriendClassifyModel::where('user_id', auth()->id())
-            ->where('id', $id)->count() > 0;
+            ->where('id', $id)->any();
     }
 
     /**

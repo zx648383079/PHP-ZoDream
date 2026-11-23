@@ -25,7 +25,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         foreach ($page as $item) {
             $items[] = $this->formatPageFile($root, $item);
         }
-        return $page->setPage($items);
+        return $page->setItems($items);
     }
 
     public function search(string $keywords, string $type): Page {
@@ -46,7 +46,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         foreach ($page as $item) {
             $items[] = $this->formatPageFile($root, $item);
         }
-        return $page->setPage($items);
+        return $page->setItems($items);
     }
 
     private function formatPageFile(Directory $root, FileObject $item): array {

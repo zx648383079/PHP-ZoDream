@@ -45,7 +45,7 @@ class TaskLogModel extends TaskLogEntity {
                     ->orWhere('child_id', $task_id);
             })
             ->whereIn('status', [self::STATUS_NONE, self::STATUS_PAUSE])
-            ->orderBy('id', 'desc')
+            ->orderBy('id', SORT_DESC)
             ->first();
     }
 }

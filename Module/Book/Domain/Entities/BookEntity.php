@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Entities;
 
 use Domain\Entities\Entity;

@@ -12,8 +12,8 @@ class DayRepository {
             ->where('user_id', auth()->id())
             ->where('amount', '>', 0)
             ->where('today', $day)
-            ->orderBy('status', 'desc')
-            ->orderBy('id', 'asc')->page();
+            ->orderBy('status', SORT_DESC)
+            ->thenBy('id', SORT_ASC)->page();
     }
 
     public static function detail(int $id) {

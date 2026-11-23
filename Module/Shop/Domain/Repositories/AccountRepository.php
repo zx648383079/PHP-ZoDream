@@ -16,7 +16,7 @@ class AccountRepository {
 
     public static function bankCardList() {
         $card_list = BankCardModel::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
         foreach ($card_list as $item) {
             $item['icon'] = url()->asset('assets/images/wap_logo.png');
         }

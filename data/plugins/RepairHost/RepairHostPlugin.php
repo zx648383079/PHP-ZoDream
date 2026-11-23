@@ -65,8 +65,8 @@ final class RepairHostPlugin implements IPlugin {
         $size = 30;
         $offset = 0;
         while (true) {
-            $items = DB::table($table)->orderBy($primaryKey, 'asc')
-                ->limit($offset, $size)->get($primaryKey, ...$keys);
+            $items = DB::table($table)->orderBy($primaryKey, SORT_ASC)
+                ->skip($offset)->take($size)->get($primaryKey, ...$keys);
             foreach ($items as $item) {
                 $data = [];
                 foreach ($keys as $key) {

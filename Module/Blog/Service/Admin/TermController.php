@@ -13,7 +13,7 @@ class TermController extends Controller {
     }
 
     public function indexAction(string $keywords = '') {
-        $term_list = TermModel::withCount('blog')->orderBy('id', 'desc')->all();
+        $term_list = TermModel::withCount('blog')->orderBy('id', SORT_DESC)->get();
         return $this->show(compact('term_list'));
     }
 

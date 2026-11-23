@@ -57,14 +57,14 @@ final class TeamRepository {
         })->whereNotIn('id', $ids)->where('open_type', 0)->page();
     }
 
-    public static function canable(int $id) {
+    public static function canable(int $id): bool {
         return TeamUserEntity::where('user_id', auth()->id())->where('team_id', $id)
-            ->count() > 0;
+            ->any();
     }
 
-    public static function manageable(int $id) {
+    public static function manageable(int $id): bool {
         return TeamEntity::where('id', $id)
-            ->where('user_id', auth()->id())->count() > 0;
+            ->where('user_id', auth()->id())->any();
     }
 
     public static function agree(int $user, int $id) {
@@ -72,7 +72,7 @@ final class TeamRepository {
             throw new \Exception('无权限处理');
         }
         if (TeamUserEntity::where('user_id', $user)->where('team_id', $id)
-            ->count() > 0) {
+            ->any()) {
             throw new \Exception('已处理过');
         }
         $userModel = UserRepository::basic($user);
@@ -94,7 +94,7 @@ final class TeamRepository {
         if (static::canable($id)) {
             throw new \Exception('你已加入该群');
         }
-        if (TeamEntity::where('id', $id)->count() < 1) {
+        if (!TeamEntity::where('id', $id)->any()) {
             throw new \Exception('群不存在');
         }
         ApplyRepository::receiveCreate(auth()->id(), Constants::TYPE_TEAM, $id, $remark);

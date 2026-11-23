@@ -75,8 +75,8 @@ class LogModel extends LogEntity {
     public static function createIfNot($data) {
         $count = static::query()->where('user_id', $data['user_id'])
             ->where('out_trade_no', $data['out_trade_no'])
-            ->count();
-        if ($count > 0) {
+            ->any();
+        if ($count) {
             return false;
         }
         return static::create($data);

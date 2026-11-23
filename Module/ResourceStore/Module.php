@@ -42,7 +42,7 @@ class Module extends BaseModule implements ICustomRouteModule {
 
     public function openLinks(SiteMap $map) {
         $map->add(url('./'), time());
-        $items = ResourceModel::orderBy('id', 'desc')
+        $items = ResourceModel::orderBy('id', SORT_DESC)
             ->where('status', ResourceRepository::REVIEW_STATUS_APPROVED)
             ->get('id', 'updated_at');
         foreach ($items as $item) {

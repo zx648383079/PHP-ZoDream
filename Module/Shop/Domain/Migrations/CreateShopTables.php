@@ -250,8 +250,8 @@ class CreateShopTables extends Migration {
     }
 
     private function findOrNewById(Builder $query, array $data) {
-        $count = (clone $query)->where('id', $data['id'])->count();
-        if ($count > 0) {
+        $count = (clone $query)->where('id', $data['id'])->any();
+        if ($count) {
             return;
         }
         $query->insert($data);

@@ -9,8 +9,8 @@ class TrashRepository {
         return DiskModel::with('file')
             ->auth()
             ->where('deleted_at', '>', 0)
-            ->orderBy('deleted_at', 'desc')
-            ->orderBy('id', 'asc')
+            ->orderBy('deleted_at', SORT_DESC)
+            ->thenBy('id', SORT_ASC)
             ->page();
     }
 

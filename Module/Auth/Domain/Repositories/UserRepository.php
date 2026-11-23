@@ -155,7 +155,7 @@ class UserRepository {
 
     public static function getLastIp(int $user): string {
          return Helpers::hideIp((string)LoginLogEntity::where('user_id', $user)
-             ->where('status', 1)->orderBy('created_at', 'desc')
+             ->where('status', 1)->orderBy('created_at', SORT_DESC)
              ->value('ip'));
     }
 
@@ -228,7 +228,7 @@ class UserRepository {
     public static function searchUser(string $keywords = '') {
         return UserSimpleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-        })->orderBy('id', 'desc')->page();
+        })->orderBy('id', SORT_DESC)->page();
     }
 
     /**

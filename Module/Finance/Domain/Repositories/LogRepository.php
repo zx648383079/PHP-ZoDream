@@ -24,7 +24,7 @@ class LogRepository {
             ->count();
             $page = (int)ceil((float)$count / $per_page);
         }
-        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $item, $start_at, $end_at)->orderBy('happened_at', 'desc')->page($per_page, 'page', $page);
+        return static::bindQuery(LogModel::auth(), $type, $keywords, $account, $budget, $item, $start_at, $end_at)->orderBy('happened_at', SORT_DESC)->page($per_page, 'page', $page);
     }
 
     public static function count(int $type = 0, string $keywords = '', int $account = 0, int $budget = 0, string $start_at = '', string $end_at = '') {
@@ -64,7 +64,7 @@ class LogRepository {
                     return;
                 }
                 $query->where('id', $id);
-            })->orderBy('happened_at', 'desc')->page();
+            })->orderBy('happened_at', SORT_DESC)->page();
     }
 
     /**
@@ -133,7 +133,7 @@ class LogRepository {
         }
         $exclude = [];
         $items = LogModel::auth()->whereIn('id', $items)
-            ->orderBy('happened_at', 'desc')->asArray()
+            ->orderBy('happened_at', SORT_DESC)->asArray()
             ->get('id', 'type', 'account_id', 'money', 'frozen_money', 'remark');
         if (count($items) < 2) {
             throw new Exception('数据错误');
@@ -219,7 +219,7 @@ class LogRepository {
         LogModel::auth()->where(function ($query) use ($keywords) {
             SearchModel::search($query, 'remark', false, '', $keywords);
         })->where('happened_at', '<', $end_at)
-        ->orderBy('happened_at', 'desc')->asArray()
+        ->orderBy('happened_at', SORT_DESC)->asArray()
         ->each(function(array $item) use(&$items, &$exclude) {
             $key = sprintf('%s_%s', date('ym', strtotime($item['happened_at'])), $item['type']);
             if (!isset($items[$key])) {

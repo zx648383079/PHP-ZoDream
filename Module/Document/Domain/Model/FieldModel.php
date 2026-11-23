@@ -120,14 +120,14 @@ class FieldModel extends Model {
         return true;
     }
 
-    public function check(array $exits) {
+    public function check(array $exits): bool {
         if (empty($exits)) {
             return true;
         }
-        return self::where('kind', $this->kind)->where('api_id', $this->api_id)
+        return !self::where('kind', $this->kind)->where('api_id', $this->api_id)
             ->where('parent_id', intval($this->parent_id))->where('name', $this->name)
                 ->whereIn('id', $exits)
-                ->where('id', '<>', $this->id)->count() < 1;
+                ->where('id', '<>', $this->id)->any();
     }
 
 

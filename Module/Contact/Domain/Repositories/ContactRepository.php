@@ -12,7 +12,7 @@ class ContactRepository {
 
     public static function friendLink(): array {
         return FriendLinkModel::where('status', 1)->asArray()
-            ->orderBy('updated_at', 'asc')->get('name', 'logo', 'brief', 'url');
+            ->orderBy('updated_at', SORT_ASC)->get('name', 'logo', 'brief', 'url');
     }
 
     /**

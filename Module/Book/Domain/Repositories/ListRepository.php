@@ -12,7 +12,7 @@ class ListRepository {
         return BookListModel::with('user', 'items')
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, 'title');
-            })->orderBy('created_at', 'desc')->page();
+            })->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function detail(int $id) {

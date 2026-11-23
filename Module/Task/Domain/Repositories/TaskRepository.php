@@ -22,8 +22,8 @@ class TaskRepository {
                 return $query->where('status', '>=', 5);
             })
             ->where('parent_id', $parent_id)
-            ->orderBy('status', 'desc')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_DESC)
+            ->thenBy('id', SORT_DESC)->page();
     }
 
     public static function detail($id) {
@@ -66,8 +66,8 @@ class TaskRepository {
 
     public static function getActiveTask() {
         return TaskModel::where('user_id', auth()->id())
-            ->orderBy('status', 'desc')
-            ->orderBy('id', 'asc')
+            ->orderBy('status', SORT_DESC)
+            ->thenBy('id', SORT_ASC)
             ->where('status', '>=', TaskModel::STATUS_NONE)->get();
     }
 
@@ -97,7 +97,7 @@ class TaskRepository {
         if ($day->status == TaskDayModel::STATUS_PAUSE) {
             $log_list = TaskLogModel::where('task_id', $day->task_id)
                 ->whereIn('status', [TaskLogModel::STATUS_NONE, TaskLogModel::STATUS_PAUSE])
-                ->orderBy('id', 'desc')
+                ->orderBy('id', SORT_DESC)
                 ->get();
             $log = null;
             foreach ($log_list as $item) {

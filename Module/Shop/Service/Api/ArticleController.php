@@ -8,7 +8,7 @@ use Module\Shop\Domain\Repositories\ArticleRepository;
 
 class ArticleController extends Controller {
 
-    public function indexAction($id = 0, $category = 0, $keywords = null) {
+    public function indexAction(int $id = 0, int $category = 0, string $keywords = '') {
         if ($id > 0) {
             return $this->detailAction($id);
         }
@@ -23,7 +23,7 @@ class ArticleController extends Controller {
         return $this->renderPage($model_list);
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $article = ArticleModel::find($id);
         return $this->render($article);
     }
@@ -36,15 +36,15 @@ class ArticleController extends Controller {
         return $this->renderData(ArticleRepository::getNotices());
     }
 
-    public function categoryAction($parent_id = 0) {
-        $cat_list = ArticleCategoryModel::where('parent_id', $parent_id)->all();
+    public function categoryAction(int $parent_id = 0) {
+        $cat_list = ArticleCategoryModel::where('parent_id', $parent_id)->get();
         return $this->render($cat_list);
     }
 
-    public function suggestAction($keywords) {
+    public function suggestAction(string $keywords) {
         $data = ArticleModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'title');
-        })->limit(4)->get('id', 'title');
+        })->take(4)->get('id', 'title');
         return $this->render(compact('data'));
     }
 }

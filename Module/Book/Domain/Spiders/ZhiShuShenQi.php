@@ -3,14 +3,11 @@ declare(strict_types = 1);
 namespace Module\Book\Domain\Spiders;
 
 
-use Module\Book\Domain\Model\BookChapterModel;
-use Module\Book\Domain\Model\BookModel;
 use Zodream\Http\Http;
-use Zodream\Infrastructure\Error\Exception;
 
 class ZhiShuShenQi implements GetBookInterface {
 
-    public function search($keywords) {
+    public function search(string $keywords): array {
             $data = (new Http())->url('http://api.zhuishushenqi.com/book/fuzzy-search', [
                 'query' => $keywords
             ])->json();

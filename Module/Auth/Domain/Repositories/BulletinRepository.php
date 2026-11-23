@@ -58,8 +58,8 @@ class BulletinRepository {
                 $query->where('id', '<', $lastId);
             })
             ->where('user_id', auth()->id())
-            ->orderBy('status', 'asc')
-            ->orderBy('bulletin_id', 'desc')->page();
+            ->orderBy('status', SORT_ASC)
+            ->thenBy('bulletin_id', SORT_DESC)->page();
         $systemUser = static::SYSTEM_USER;
         $systemUser['avatar'] = url()->asset($systemUser['avatar']);
         $deleteUser = [
@@ -120,8 +120,8 @@ class BulletinRepository {
     }
 
     public static function canSend(): bool {
-        return BulletinModel::where('user_id', auth()->id())->where('created_at', '>',
-            time() - 300)->count() < 1;
+        return !BulletinModel::where('user_id', auth()->id())->where('created_at', '>',
+            time() - 300)->any();
     }
 
     public static function doAction(int $id, array|string $action) {
@@ -176,8 +176,8 @@ class BulletinRepository {
         }
         $model->delete();
         $count = BulletinUserModel::where('user_id', '<>', auth()->id())
-            ->where('bulletin_id', $id)->count();
-        if ($count < 1) {
+            ->where('bulletin_id', $id)->any();
+        if (!$count) {
             BulletinModel::where('id', $id)->delete();
         }
     }

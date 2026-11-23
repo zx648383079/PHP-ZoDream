@@ -24,8 +24,8 @@ final class RoleRepository {
         }
         $id = isset($data['id']) ? intval($data['id']) : 0;
         $count = RoleModel::query()->where('id', '<>', $id)
-            ->where('name', $data['name'])->count();
-        if ($count > 0) {
+            ->where('name', $data['name'])->any();
+        if ($count) {
             throw new Exception('已存在角色');
         }
         $model = new RoleModel();
@@ -144,8 +144,8 @@ final class RoleRepository {
         }
         $id = isset($data['id']) ? intval($data['id']) : 0;
         $count = PermissionModel::query()->where('id', '<>', $id)
-            ->where('name', $data['name'])->count();
-        if ($count > 0) {
+            ->where('name', $data['name'])->any();
+        if ($count) {
             throw new Exception('已存在权限');
         }
         $model = new PermissionModel();

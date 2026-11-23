@@ -12,7 +12,7 @@ class EvaluateRepository {
                 // SearchModel::searchWhere($query, ['title']);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function selfList(string $keywords = '') {

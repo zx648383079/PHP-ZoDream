@@ -13,7 +13,7 @@ class PageRepository {
         $data = PageModel::where('project_id', $project)
             ->where('version_id', $version)
             ->select('id', 'name', 'parent_id', 'type')
-            ->orderBy('id', 'asc')->asArray()->get();
+            ->orderBy('id', SORT_ASC)->asArray()->get();
         return (new Tree($data))->makeTree();
     }
 

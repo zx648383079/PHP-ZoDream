@@ -20,8 +20,8 @@ final class ManageRepository {
                 SearchModel::searchWhere($query, ['title', 'programming_language']);
             })
             ->where('publish_status', PublishRepository::PUBLISH_STATUS_POSTED)
-            ->orderBy('status', 'asc')
-            ->orderBy('id', 'desc')->page();
+            ->orderBy('status', SORT_ASC)
+            ->thenBy('id', SORT_DESC)->page();
         $items->map(function (BlogModel $item) {
             $data = $item->toArray();
             $data['content'] = BlogRepository::renderContent($item);

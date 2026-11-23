@@ -101,7 +101,7 @@ class WarehouseRepository {
                 $query->where('goods_id', $goods);
             })->when($product > 0, function ($query) use ($product) {
                 $query->where('product_id', $product);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function goodsChange(array $data) {

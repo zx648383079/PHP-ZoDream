@@ -70,12 +70,12 @@ class GoodsController extends Controller {
     }
 
     public function recommendAction(int $id) {
-        $goods_list = GoodsRepository::getRecommendQuery('is_best')->limit(3)->get();
+        $goods_list = GoodsRepository::getRecommendQuery('is_best')->take(3)->get();
         return $this->render($goods_list);
     }
 
     public function hotAction(int $id) {
-        $goods_list = GoodsRepository::getRecommendQuery('is_hot')->limit(7)->get();
+        $goods_list = GoodsRepository::getRecommendQuery('is_hot')->take(7)->get();
         return $this->render($goods_list);
     }
 

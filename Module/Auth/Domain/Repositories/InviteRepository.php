@@ -24,7 +24,7 @@ class InviteRepository {
                 $query->where('token', $keywords);
             })->when($user > 0, function ($query) use ($user) {
                 $query->where('user_id', $user);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function codeCreate(int $amount = 1, string|int $expiredAt = '') {
@@ -38,7 +38,7 @@ class InviteRepository {
             ->where(function ($query) {
                 $query->where('expired_at', '>', time())
                     ->orWhere('expired_at', 0);
-            })->count() > 0;
+            })->any();
     }
 
     /**
@@ -78,7 +78,7 @@ class InviteRepository {
                 $query->where('user_id', $user);
             })->when($inviter > 0, function ($query) use ($inviter) {
                 $query->where('parent_id', $inviter);
-            })->orderBy('id', 'desc')->page();
+            })->orderBy('id', SORT_DESC)->page();
     }
 
     public static function addLog(InviteCodeEntity $model, mixed $userId) {

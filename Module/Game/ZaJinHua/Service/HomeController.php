@@ -1,11 +1,7 @@
 <?php
 namespace Module\Game\ZaJinHua\Service;
 
-use Module\Game\Bank\Domain\Model\BankLogModel;
-use Module\Game\Bank\Domain\Model\BankProductModel;
 use Module\Game\ZaJinHua\Domain\Player;
-use Module\Game\ZaJinHua\Domain\Poker;
-use Module\Game\ZaJinHua\Domain\Room;
 use Exception;
 
 class HomeController extends Controller {
@@ -17,7 +13,7 @@ class HomeController extends Controller {
             $player->clear();
         }
         if (request()->isPjax()) {
-            $this->layout = false;
+            $this->layout = '';
         }
         return $this->show(compact('player'));
     }
@@ -31,7 +27,7 @@ class HomeController extends Controller {
             $message = $ex->getMessage();
         }
         if (request()->isPjax()) {
-            $this->layout = false;
+            $this->layout = '';
         }
         return $this->show('index', compact('player', 'message'));
     }

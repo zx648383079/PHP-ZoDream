@@ -23,7 +23,7 @@ class CategoryController extends Controller {
             $extra = explode(',', $extra);
             if (in_array('goods_list', $extra)) {
                 $data['goods_list'] = GoodsSimpleModel::whereIn('cat_id', $model->getFamily())
-                    ->where('is_best', 1)->all();
+                    ->where('is_best', 1)->get();
             }
             if (in_array('children', $extra)) {
                 $data['children'] = $this->formatCategory(CategoryModel::getChildrenItem($id));

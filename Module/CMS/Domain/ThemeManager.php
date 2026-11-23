@@ -304,7 +304,7 @@ final class ThemeManager {
 
         if ($context->isLocale()) {
             $channelItems = $context->channelBuilder()->where('site_id', $context->tableId())
-                ->orderBy('id', 'desc')
+                ->orderBy('id', SORT_DESC)
                 ->asArray()
                 ->get('id', 'name', 'locale_group_id');
             foreach($channelItems as $item) {
@@ -373,7 +373,7 @@ final class ThemeManager {
         $data['language'] = $context->language();
         $locale = LinkageModel::where('code', $data['code'])
             ->whereNotNull('language')
-            ->orderBy('id', 'asc')->asArray()->first('id', 'language');
+            ->orderBy('id', SORT_ASC)->asArray()->first('id', 'language');
         $model = LinkageModel::where('code', $data['code'])
             ->where('language', $data['language'])->first();
         if (empty($model)) {

@@ -337,7 +337,7 @@ class FuncHelper {
             $catModel = static::model($cat['model_id']);
             $scene = CMSRepository::context()->scene()->setModel($catModel);
             return $scene->query()->where('id', '<', static::$current['content'])
-                ->orderBy('id', 'desc')->first();
+                ->orderBy('id', SORT_DESC)->first();
         });
         return static::getContentValue($name, $data);
     }
@@ -348,7 +348,7 @@ class FuncHelper {
             $catModel = static::model($cat['model_id']);
             $scene = CMSRepository::context()->scene()->setModel($catModel);
             return $scene->query()->where('id', '>', static::$current['content'])
-                ->orderBy('id', 'asc')->first();
+                ->orderBy('id', SORT_ASC)->first();
         });
         return static::getContentValue($name, $data);
     }
@@ -782,7 +782,7 @@ class FuncHelper {
         }
         $args = CMSRepository::context()->scene()->extendQuery()->whereIn('id', $items)
             ->select('id', ...$fields)->pluck(null, 'id');
-        $arr = $data instanceof Page ? $data->getPage() : $data;
+        $arr = $data instanceof Page ? $data->getItems() : $data;
         foreach ($arr as &$item) {
             foreach ($fields as $field) {
                 $item[$field] = $args[$item['id']][$field];
@@ -790,7 +790,7 @@ class FuncHelper {
         }
         unset($item);
         if ($data instanceof Page) {
-            $data->setPage($arr);
+            $data->setItems($arr);
         } else {
             $data = $arr;
         }

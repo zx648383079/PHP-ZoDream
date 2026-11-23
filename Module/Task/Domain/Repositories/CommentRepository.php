@@ -21,7 +21,7 @@ class CommentRepository {
             ->pluck('id');
         $taskIds[] = $task_id;
         return TaskCommentModel::with('user')
-            ->whereIn('task_id', $taskIds)->orderBy('id', 'desc')->page();
+            ->whereIn('task_id', $taskIds)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function create(array $data) {
@@ -41,7 +41,7 @@ class CommentRepository {
                         ->orWhere('child_id', $task->id);
                 })
                 ->where('created_at', '>', time() - 3600)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', SORT_DESC)
                 ->value('id');
         }
         $comment = TaskCommentModel::create([
@@ -70,8 +70,8 @@ class CommentRepository {
             return;
         }
         $count = TaskModel::query()->where('task_id', $comment->task_id)
-            ->where('user_id', auth()->id())->count();
-        if ($count < 1) {
+            ->where('user_id', auth()->id())->any();
+        if (!$count) {
             throw new \Exception('无权限操作');
         }
         $comment->delete();

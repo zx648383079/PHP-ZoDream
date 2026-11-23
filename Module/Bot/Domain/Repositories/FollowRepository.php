@@ -18,8 +18,8 @@ class FollowRepository {
                 $query->where('group_id', $group);
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['note_name', 'nickname']);
-            })->orderBy('status', 'desc')->orderBy('is_black', 'asc')
-            ->orderBy('subscribe_at', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('is_black', SORT_ASC)
+            ->thenBy('subscribe_at', SORT_DESC)->page();
     }
 
     public static function manageList(int $bot_id = 0, string $keywords = '', int $group = 0, bool $blacklist = false) {
@@ -32,8 +32,8 @@ class FollowRepository {
                 $query->where('group_id', $group);
             })->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['note_name', 'nickname']);
-            })->orderBy('status', 'desc')->orderBy('is_black', 'asc')
-            ->orderBy('subscribe_at', 'desc')->page();
+            })->orderBy('status', SORT_DESC)->thenBy('is_black', SORT_ASC)
+            ->thenBy('subscribe_at', SORT_DESC)->page();
     }
 
     public static function add(int $bot_id, string $openid, array $info = []) {

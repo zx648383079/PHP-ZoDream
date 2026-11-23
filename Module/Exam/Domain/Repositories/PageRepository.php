@@ -24,7 +24,7 @@ class PageRepository {
                 $query->where('course_id', $course);
             })->when($grade > 0, function ($query) use ($grade) {
                 $query->where('course_grade', $grade);
-            })->orderBy('end_at', 'desc')->orderBy('id', 'desc')->page();
+            })->orderBy('end_at', SORT_DESC)->thenBy('id', SORT_DESC)->page();
         $data->map(function ($item) {
             $data = $item->toArray();
             $data['course_grade_format'] = CourseRepository::formatGrade($item->course_id, $item->course_grade);
@@ -227,7 +227,7 @@ class PageRepository {
                 }
                 $query->whereIn('user_id', $users);
             })
-            ->orderBy('created_at', 'desc')->page();
+            ->orderBy('created_at', SORT_DESC)->page();
     }
 
     public static function evaluateRemove(int $id, int $user = 0) {
@@ -244,21 +244,21 @@ class PageRepository {
     }
 
     public static function can(int $id) {
-        return PageModel::where('id', $id)->where('user_id', auth()->id())->count() > 0;
+        return PageModel::where('id', $id)->where('user_id', auth()->id())->any();
     }
 
     public static function suggestion(string $keywords) {
         return PageModel::query()
             ->when(!empty($keywords), function ($query) {
                 SearchModel::searchWhere($query, ['name']);
-            })->orderBy('end_at', 'desc')->limit(5)->get();
+            })->orderBy('end_at', SORT_DESC)->take(5)->get();
     }
 
     public static function evaluateDetail(int $id) {
         $model = PageEvaluateModel::findOrThrow($id, '不存在');
         $data = $model->toArray();
         /** @var PageQuestionModel[] $items */
-        $items = PageQuestionModel::with('question')->where('evaluate_id', $id)->orderBy('id', 'asc')->get();
+        $items = PageQuestionModel::with('question')->where('evaluate_id', $id)->orderBy('id', SORT_ASC)->get();
         $data['user'] = $model->user;
         $data['page'] = PageModel::where('id', $model->page_id)->first();
         $data['data'] = [];

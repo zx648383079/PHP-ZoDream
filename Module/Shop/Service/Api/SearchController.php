@@ -11,14 +11,14 @@ class SearchController extends Controller {
     }
 
     public function keywordsAction() {
-        $data = GoodsModel::query()->limit(5)->pluck('name');
+        $data = GoodsModel::query()->take(5)->pluck('name');
         return $this->render(compact('data'));
     }
 
-    public function tipsAction($keywords) {
+    public function tipsAction(string $keywords) {
         $data = GoodsModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
-            })->limit(10)->pluck('name');
+            })->take(10)->pluck('name');
         return $this->render(compact('data'));
     }
 }

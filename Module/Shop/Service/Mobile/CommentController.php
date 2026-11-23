@@ -74,8 +74,8 @@ class CommentController extends Controller {
         $goods->save();
         $count = OrderGoodsModel::where('order_id', $goods->order_id)
             ->where('comment_id', 0)
-            ->where('status', OrderModel::STATUS_RECEIVED)->count();
-        if ($count < 1) {
+            ->where('status', OrderModel::STATUS_RECEIVED)->any();
+        if (!$count) {
             OrderLogModel::finish(OrderModel::find($goods->order_id));
         }
         return $this->renderData([

@@ -10,14 +10,14 @@ class PageGenerator {
         if ($type < 2) {
             return static::createId(QuestionModel::where('course_id', $course)
                 ->where('type', '<', 5)
-                ->orderBy('id', 'asc')->get('id'), $type > 0)
+                ->orderBy('id', SORT_ASC)->get('id'), $type > 0)
                 ->setTitle($type < 1 ? '顺序练习' : '随机练习');
         }
         if ($type === 3) {
             return static::createId(QuestionModel::where('course_id', $course)
                 ->where('type', '<', 5)
                 ->where('easiness', '>', 5)
-                ->orderBy('id', 'asc')->get('id'), true)
+                ->orderBy('id', SORT_ASC)->get('id'), true)
                 ->setTitle('难题练习');
         }
         $rules = [];
@@ -45,7 +45,7 @@ class PageGenerator {
                 ->where('type', $item['type'])
                 ->whereNotIn('id', $exist)
                 ->orderBy('RAND()')
-                ->limit($item['amount'])
+                ->take(intval($item['amount']))
                 ->pluck('id');
             foreach ($args as $id) {
                 $exist[] = $id;

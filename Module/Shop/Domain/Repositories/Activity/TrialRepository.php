@@ -36,7 +36,7 @@ class TrialRepository {
             $userId = auth()->id();
         }
         return TrialLogModel::where('act_id', $id)->where('user_id', $userId)
-            ->count() > 0;
+            ->any();
     }
 
     public static function get(int $id, bool $full)
@@ -56,7 +56,7 @@ class TrialRepository {
     public static function logList(int $id)
     {
         return TrialLogModel::with('user')
-            ->where('act_id', $id)->orderBy('id', 'desc')->page();
+            ->where('act_id', $id)->orderBy('id', SORT_DESC)->page();
     }
 
     public static function apply(int $id)

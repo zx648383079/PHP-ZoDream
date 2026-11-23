@@ -9,14 +9,14 @@ use Zodream\Database\Relation;
 final class CollectRepository {
 
     public static function all() {
-        $items = CollectGroupModel::where('user_id', auth()->id())->orderBy('position', 'asc')
-            ->orderBy('id', 'asc')->get();
+        $items = CollectGroupModel::where('user_id', auth()->id())->orderBy('position', SORT_ASC)
+            ->thenBy('id', SORT_ASC)->get();
         if (empty($items)) {
             return $items;
         }
         return Relation::create($items, [
-            'items' => Relation::make(CollectModel::where('user_id', auth()->id())->orderBy('position', 'asc')
-                ->orderBy('id', 'asc'), 'id', 'group_id', Relation::TYPE_MANY),
+            'items' => Relation::make(CollectModel::where('user_id', auth()->id())->orderBy('position', SORT_ASC)
+                ->thenBy('id', SORT_ASC), 'id', 'group_id', Relation::TYPE_MANY),
         ]);
     }
 
@@ -42,10 +42,10 @@ final class CollectRepository {
         return $model;
     }
 
-    private static function check(CollectModel $model) {
-        return CollectModel::where('link', $model->link)
+    private static function check(CollectModel $model): bool {
+        return !CollectModel::where('link', $model->link)
             ->where('user_id', $model->user_id)->where('id', '<>', intval($model->id))
-            ->count() < 1;
+            ->any();
     }
 
     public static function getDefaultGroup($user) {
@@ -97,7 +97,7 @@ final class CollectRepository {
     }
 
     public static function isCollected(string $link): bool {
-        return CollectModel::where('link', $link)->where('user_id', auth()->id())->count() > 0;
+        return CollectModel::where('link', $link)->where('user_id', auth()->id())->any();
     }
 
     public static function batchSave(array $data) {
