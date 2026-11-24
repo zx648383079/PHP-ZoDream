@@ -34,14 +34,36 @@ final class ValidateTest extends TestCase {
         $data = Validator::filter([
             'a' => '1',
             'b' => null,
-            'c' => 'aa'
+            'c' => 'aa',
+            'd' => [
+                'e' => '1'
+            ],
+            'e' => [
+                [
+                    'd' => '1'
+                ]
+            ],
+            'f' => 3,
+            'h' => [
+                '9','6',3,4
+            ]
         ], [
             'a' => 'int:1,100',
-            'c' => 'string:1,9'
+            'c' => 'string:1,9',
+            'f' => Validator::requiredIf(true),
+            'e' => Validator::array([
+                'd' => 'int',
+            ]),
+            'd' => Validator::map([
+                'e' => 'int'
+            ]),
+            'h' => Validator::array('int:3'),
         ]);
-        $this->assertEquals(count($data), 2);
+
+        $this->assertEquals(count($data), 6);
         $this->assertEquals($data['a'], 1);
         $this->assertEquals($data['c'], 'aa');
+        $this->assertEquals($data['h'][0], 9);
     }
 
     #[DataProvider('ruleProvider')]

@@ -7,15 +7,16 @@ use Domain\Providers\ActionLogProvider;
 use Domain\Providers\DayLogProvider;
 use Domain\Providers\ScoreProvider;
 use Domain\Providers\TagProvider;
-use Module\Book\Domain\Model\BookBuyLogModel;
+use Module\Book\Domain\Entities\BookEventEntity;
+use Module\Book\Domain\Entities\BookMetaEntity;
+use Module\Book\Domain\Entities\BookRoleEntity;
+use Module\Book\Domain\Entities\BuyLogEntity;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Module\Book\Domain\Model\BookFullModel;
 use Module\Book\Domain\Model\BookHistoryModel;
 use Module\Book\Domain\Model\BookModel;
 use Module\Book\Domain\Model\BookPageModel;
-use Module\Book\Domain\Model\BookRoleModel;
-use Module\Book\Domain\Model\BookSourceModel;
 use Module\Book\Domain\Model\ListItemModel;
 use Zodream\Database\Model\Query;
 use Zodream\Database\Query\Builder;
@@ -23,6 +24,9 @@ use Zodream\Html\Page;
 use Zodream\Html\Tree;
 
 class BookRepository {
+
+    const META_MAP_KEY = 'map';
+    const META_ROLE_KEY = 'role_relation';
 
     const BASE_KEY = 'book';
     const DEFAULT_COVER = '/assets/images/book_default.jpg';
@@ -55,7 +59,7 @@ class BookRepository {
      * @param array $id
      * @param int $category
      * @param string $keywords
-     * @param bool $top
+     * @param string $top
      * @param int $status
      * @param int $author
      * @param int $page
@@ -65,7 +69,7 @@ class BookRepository {
     public static function getList($id = [],
                                    int $category = 0,
                                    string $keywords = '',
-                                   string|bool $top = false,
+                                   string $top = '',
                                    int $status = 0,
                                    int $author = 0,
                                    int $page = 1, int $per_page = 20) {
@@ -349,11 +353,11 @@ class BookRepository {
         BookModel::refreshPk(function ($old_id, $new_id) {
             foreach ([
                          BookChapterModel::class,
-                         BookSourceModel::class,
                          BookHistoryModel::class,
-                         BookBuyLogModel::class,
-                         BookRoleModel::class,
-                         ListItemModel::class
+                         BuyLogEntity::class,
+                         BookRoleEntity::class,
+                         ListItemModel::class,
+                         BookEventEntity::class
                      ] as $class) {
                 /** @var Query $query */
                 $query = call_user_func($class.'::query');
@@ -361,6 +365,9 @@ class BookRepository {
                     'book_id' => $new_id
                 ]);
             }
+            BookMetaEntity::query()->where('target_id', $old_id)->update([
+                'target_id' => $new_id
+            ]);
             self::log()->query()->where('item_type', self::LOG_TYPE_BOOK)->where('item_id', $old_id)->update([
                 'item_id' => $new_id
             ]);
@@ -375,7 +382,7 @@ class BookRepository {
         BookChapterModel::refreshPk(function ($old_id, $new_id) {
             foreach ([
                          BookHistoryModel::class,
-                         BookBuyLogModel::class,
+                         BuyLogEntity::class,
                      ] as $class) {
                 /** @var Query $query */
                 $query = call_user_func($class.'::query');

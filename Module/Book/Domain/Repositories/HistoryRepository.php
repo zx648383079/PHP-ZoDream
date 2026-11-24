@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
 use Module\Book\Domain\Model\BookChapterModel;
@@ -63,7 +64,7 @@ class HistoryRepository {
         return empty($history) ? [] : unserialize($history);
     }
 
-    public static function hasHistory($book_id) {
+    public static function hasHistory(int $book_id) {
         return BookHistoryModel::where('book_id', $book_id)
                 ->where('user_id', auth()->id())->any();
     }

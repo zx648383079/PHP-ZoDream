@@ -115,6 +115,8 @@ class CreateBookTables extends Migration {
             $table->string('name', 200);
             $table->string('location', 200)->default('')->comment('地点');
             $table->string('role', 200)->default('')->comment('设计角色');
+            $table->datetime('start_at')->default('')->comment('开始时间');
+            $table->datetime('end_at')->default('')->comment('结束时间');
             $table->text('time_node', 200)->default('')->comment('时间节点');
             $table->timestamps();
         })->append(ListEntity::tableName(), function(Table $table) {

@@ -28,6 +28,8 @@ class BookEventEntity extends Entity {
             'location' => 'string:0,200',
             'role' => 'string:0,200',
             'time_node' => '',
+            'start_at' => 'datetime',
+            'end_at' => 'datetime',
             'updated_at' => 'int',
             'created_at' => 'int',
         ];

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Module\Book\Domain\Repositories;
 
 use Domain\Model\SearchModel;
-use Module\Book\Domain\Model\BookBuyLogModel;
+use Module\Book\Domain\Entities\BuyLogEntity;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
 use Zodream\Html\Page;
@@ -123,7 +123,7 @@ class ChapterRepository {
         if (auth()->guest()) {
             return false;
         }
-        return BookBuyLogModel::where('book_id', $bookId)
+        return BuyLogEntity::where('book_id', $bookId)
             ->where('chapter_id', $chapterId)
             ->where('user_id', auth()->id())->any();
     }
