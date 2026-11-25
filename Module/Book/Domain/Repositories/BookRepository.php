@@ -7,9 +7,7 @@ use Domain\Providers\ActionLogProvider;
 use Domain\Providers\DayLogProvider;
 use Domain\Providers\ScoreProvider;
 use Domain\Providers\TagProvider;
-use Module\Book\Domain\Entities\BookEventEntity;
 use Module\Book\Domain\Entities\BookMetaEntity;
-use Module\Book\Domain\Entities\BookRoleEntity;
 use Module\Book\Domain\Entities\BuyLogEntity;
 use Module\Book\Domain\Model\BookChapterBodyModel;
 use Module\Book\Domain\Model\BookChapterModel;
@@ -24,9 +22,6 @@ use Zodream\Html\Page;
 use Zodream\Html\Tree;
 
 class BookRepository {
-
-    const META_MAP_KEY = 'map';
-    const META_ROLE_KEY = 'role_relation';
 
     const BASE_KEY = 'book';
     const DEFAULT_COVER = '/assets/images/book_default.jpg';
@@ -355,9 +350,7 @@ class BookRepository {
                          BookChapterModel::class,
                          BookHistoryModel::class,
                          BuyLogEntity::class,
-                         BookRoleEntity::class,
                          ListItemModel::class,
-                         BookEventEntity::class
                      ] as $class) {
                 /** @var Query $query */
                 $query = call_user_func($class.'::query');

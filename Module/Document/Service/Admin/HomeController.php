@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Document\Service\Admin;
 
 use Module\Document\Domain\Repositories\ProjectRepository;

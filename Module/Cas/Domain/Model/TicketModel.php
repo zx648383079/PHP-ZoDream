@@ -4,8 +4,7 @@ namespace Module\Cas\Domain\Model;
 
 use Domain\Model\Model;
 use Zodream\Helpers\Json;
-use Zodream\Helpers\Str;
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 use Zodream\Http\Uri;
 
 /**
@@ -111,7 +110,7 @@ class TicketModel extends Model {
      * @param $service
      * @return static
      */
-    public static function findByService($service) {
+    public static function findByService(string $service) {
         return self::where('service_url', $service)->first();
     }
 
@@ -119,12 +118,12 @@ class TicketModel extends Model {
      * @param $user_id
      * @return static[]
      */
-    public static function findByUser($user_id) {
+    public static function findByUser(int $user_id) {
         return self::where('user_id', $user_id)->get();
     }
 
     public function sendLogout() {
         $uri = new Uri($this->service_url);
-        (new Http($uri->addPath('logout')))->get();
+        (new HttpClient($uri->addPath('logout')))->get();
     }
 }

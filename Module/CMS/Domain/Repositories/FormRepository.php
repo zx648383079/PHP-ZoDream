@@ -90,7 +90,7 @@ class FormRepository {
                     return FuncHelper::formRender($model, $id);
                 });
             } catch (Exception $ex) {
-                logger()->error($ex->getMessage());
+                logger()->error($ex->getMessage(), ['exception' => $ex]);
             }
         }
         return $res;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Document\Service\Admin;
 
 use Domain\Model\ModelHelper;
@@ -44,7 +45,7 @@ class ApiController extends Controller {
         return $this->show('edit', compact('model', 'project', 'tree_list', 'response_fields', 'request_fields', 'header_fields'));
     }
 
-    private function getFieldList($id, $kind) {
+    private function getFieldList(int $id, int $kind) {
         $query = FieldModel::where('kind', $kind);
         if ($id > 0) {
             return $query->where('api_id', $id)->get();

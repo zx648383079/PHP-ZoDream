@@ -1,7 +1,7 @@
 <?php
 namespace Module\Cas\Domain;
 
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 
 
 
@@ -56,7 +56,7 @@ class Client {
         if ($renew) {
             return $uri->addData('renew', 'true');
         }
-        $data = (new Http($uri))->json();
+        $data = (new HttpClient($uri))->json();
         if ($data['code'] != 200) {
             return false;
         }

@@ -8,7 +8,7 @@ use Module\Disk\Domain\Model\ClientFileModel;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileSystem;
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 
 final class ClientRepository {
 
@@ -35,7 +35,7 @@ final class ClientRepository {
             throw new Exception('server error');
         }
         $data['token'] = config('disk.server_token');
-        $http = new Http($serverUrl);
+        $http = new HttpClient($serverUrl);
         $http->parameters($data)->setOption(CURLOPT_RETURNTRANSFER, 1)
             ->setOption(CURLOPT_FOLLOWLOCATION, 1)
             ->setOption(CURLOPT_AUTOREFERER, 1);

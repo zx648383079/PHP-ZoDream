@@ -238,10 +238,10 @@ i {
     .input-group {
         display: flex;
         margin-bottom: .3rem;
-        select {
+        select.form-control {
             --#{theme.$prefix}input-width: 6.25rem;
         }
-        textarea {
+        textarea.form-control {
             padding: .5rem;
             --#{theme.$prefix}input-width: 12.5rem;
             min-height: sizes.$line-height * 3;
@@ -255,7 +255,7 @@ i {
         }        
         >div {
             flex: 1;
-            textarea {
+            textarea.form-control {
                 width: 100%;
                 resize: vertical;
             }

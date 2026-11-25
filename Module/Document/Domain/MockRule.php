@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Document\Domain;
 
 use Zodream\Helpers\Str;
@@ -6,31 +7,28 @@ use Zodream\Helpers\Time;
 
 class MockRule {
 
-    public $name;
-    public $rule;
-    public $value;
-
     /**
      * 随机字符串
      * @param $rule
      * @param $value
      * @return bool|string
      */
-    public function string($rule, $value = null) {
+    public function string(string|int $rule, string|null $value = null): string {
         $chars  = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $value = $value ? : $chars;
         $string = '';
-        if(false !== strpos($rule, '-')) {
+        if(is_string($rule) && false !== strpos($rule, '-')) {
             list($min, $max) = explode('-', $rule);
             $max = $max > strlen($value) ? strlen($value) - 1 : $max;
-            return substr(str_shuffle($value), 0, mt_rand($min, $max));
+            return substr(str_shuffle($value), 0, mt_rand(intval($min), intval($max)));
         }
-        if(is_numeric($rule)){
+        if(is_numeric($rule)) {
             for ( $i = 0; $i < $rule; $i++ ){
                 $string .= $value[mt_rand(0, strlen($value) - 1)];
             }
             return $string;
         }
+        return '';
     }
 
     /**
@@ -39,12 +37,12 @@ class MockRule {
      * @param $value
      * @return int|string
      */
-    public function number($rule, $value = null){
+    public function number(string|int $rule, string|null $value = null): string|int {
         $numbers  = '0123456789';
         $value = $value ?: $numbers;
-        if (false !== strpos($rule, '-')){
+        if (is_string($rule) && false !== strpos($rule, '-')){
             list($min, $max) = explode('-', $rule);
-            return mt_rand($min, $max);
+            return (string)mt_rand(intval($min), intval($max));
         }
         if(is_numeric($rule)){
             $number = '';
@@ -62,10 +60,10 @@ class MockRule {
      * @param $decimal
      * @return string
      */
-    public function float($rule, $decimal) {
+    public function float(string $rule, string $decimal): string {
         if(false !== strpos($decimal, '-')){
             list($min, $max) = explode('-', $decimal);
-            $length = mt_rand($min, $max);
+            $length = mt_rand(intval($min), intval($max));
         }else{
             $length = $decimal;
         }
@@ -79,7 +77,7 @@ class MockRule {
      * @param $rule
      * @return string
      */
-    public function boolean($rule) {
+    public function boolean(string $rule): string {
         if($rule === ''){
             $rule = $this->number('0-1');
         }
@@ -89,6 +87,7 @@ class MockRule {
         if(0 === $rule){
             return 'false';
         }
+        return 'false';
     }
 
     /**
@@ -96,8 +95,8 @@ class MockRule {
      * @param $rule
      * @param $value
      */
-    public function object($rule, $value) {
-
+    public function object(string $rule, string|null $value = null): string {
+        return '';
     }
 
     /**
@@ -106,12 +105,12 @@ class MockRule {
      * @param $value
      * @return mixed
      */
-    public function arr($rule, $value) {
+    public function arr(string $rule, array|null $value = null): array {
         $data = [];
         if(false !== strpos($rule, '-')){
             list($min, $max) = explode('-', $rule);
             $max = $max > count($value) ? count($value)-1 : $max;
-            $count = mt_rand($min, $max);
+            $count = mt_rand(intval($min), intval($max));
         }else{
             $count = $rule > count($value) ? count($value) -1: $rule;
         }
@@ -133,7 +132,7 @@ class MockRule {
      * 随机中文名
      * @return string
      */
-    public function cn_name() {
+    public function cn_name(): string {
         $xing_data = array('赵','钱','孙','李','周','吴','郑','王','冯','陈','褚','卫','蒋','沈','韩','杨','朱','秦','尤','许','何','吕','施','张','孔','曹','严','华','金','魏','陶','姜','戚','谢','邹','喻','柏','水','窦','章','云','苏','潘','葛','奚','范','彭','郎','鲁','韦','昌','马','苗','凤','花','方','任','袁','柳','鲍','史','唐','费','薛','雷','贺','倪','汤','滕','殷','罗','毕','郝','安','常','傅','卞','齐','元','顾','孟','平','黄','穆','萧','尹','姚','邵','湛','汪','祁','毛','狄','米','伏','成','戴','谈','宋','茅','庞','熊','纪','舒','屈','项','祝','董','梁','杜','阮','蓝','闵','季','贾','路','娄','江','童','颜','郭','梅','盛','林','钟','徐','邱','骆','高','夏','蔡','田','樊','胡','凌','霍','虞','万','支','柯','管','卢','莫','柯','房','裘','缪','解','应','宗','丁','宣','邓','单','杭','洪','包','诸','左','石','崔','吉','龚','程','嵇','邢','裴','陆','荣','翁','荀','于','惠','甄','曲','封','储','仲','伊','宁','仇','甘','武','符','刘','景','詹','龙','叶','幸','司','黎','溥','印','怀','蒲','邰','从','索','赖','卓','屠','池','乔','胥','闻','莘','党','翟','谭','贡','劳','逄','姬','申','扶','堵','冉','宰','雍','桑','寿','通','燕','浦','尚','农','温','别','庄','晏','柴','瞿','阎','连','习','容','向','古','易','廖','庾','终','步','都','耿','满','弘','匡','国','文','寇','广','禄','阙','东','欧','利','师','巩','聂','关','荆','司马','上官','欧阳','夏侯','诸葛','闻人','东方','赫连','皇甫','尉迟','公羊','澹台','公冶','淳于','单于','太叔','申屠','公孙','仲孙','轩辕','令狐','徐离','宇文','长孙','慕容','司徒','司空','勾');
         $ming_data = array('伟','刚','勇','毅','俊','峰','强','军','平','保','东','文','辉','力','明','永','健','世','广','志','义','兴','良','海','山','仁','波','宁','贵','福','生','龙','元','全','国','胜','学','祥','才','发','武','新','利','清','飞','彬','富','顺','信','子','杰','涛','昌','成','康','星','光','天','达','安','岩','中','茂','进','林','有','坚','和','彪','博','诚','先','敬','震','振','壮','会','思','群','豪','心','邦','承','乐','绍','功','松','善','厚','庆','磊','民','友','裕','河','哲','江','超','浩','亮','政','谦','亨','奇','固','之','轮','翰','朗','伯','宏','言','若','鸣','朋','斌','梁','栋','维','启','克','伦','翔','旭','鹏','泽','晨','辰','士','以','建','家','致','树','炎','德','行','时','泰','盛','雄','琛','钧','冠','策','腾','楠','榕','风','航','弘','秀','娟','英','华','慧','巧','美','娜','静','淑','惠','珠','翠','雅','芝','玉','萍','红','娥','玲','芬','芳','燕','彩','春','菊','兰','凤','洁','梅','琳','素','云','莲','真','环','雪','荣','爱','妹','霞','香','月','莺','媛','艳','瑞','凡','佳','嘉','琼','勤','珍','贞','莉','桂','娣','叶','璧','璐','娅','琦','晶','妍','茜','秋','珊','莎','锦','黛','青','倩','婷','姣','婉','娴','瑾','颖','露','瑶','怡','婵','雁','蓓','纨','仪','荷','丹','蓉','眉','君','琴','蕊','薇','菁','梦','岚','苑','婕','馨','瑗','琰','韵','融','园','艺','咏','卿','聪','澜','纯','毓','悦','昭','冰','爽','琬','茗','羽','希','欣','飘','育','滢','馥','筠','柔','竹','霭','凝','晓','欢','霄','枫','芸','菲','寒','伊','亚','宜','可','姬','舒','影','荔','枝','丽','阳','妮','宝','贝','初','程','梵','罡','恒','鸿','桦','骅','剑','娇','纪','宽','苛','灵','玛','媚','琪','晴','容','睿','烁','堂','唯','威','韦','雯','苇','萱','阅','彦','宇','雨','洋','忠','宗','曼','紫','逸','贤','蝶','菡','绿','蓝','儿','翠','烟');
         $first_name  = $xing_data[mt_rand(0, count($xing_data)-1)];
@@ -147,8 +146,7 @@ class MockRule {
      * 随机英文名
      * @return string
      */
-    public function en_name() {
-
+    public function en_name(): string {
         $data = array(
             'Mary',
             'Allen',
@@ -167,7 +165,7 @@ class MockRule {
         return $data[mt_rand(0, count($data)-1)];
     }
 
-    public function app_name($rule) {
+    public function app_name(string $rule): string {
         static $i = -1;
         $data = ['QQ', '微信', '微博', '百度', 'Github', 'Google', 'Paypal', '支付宝', '小米', 'Bing', '哔哩哔哩'];
         $en_data = ['qq', 'weixin', 'weibo', 'baidu', 'github', 'google', 'paypal', 'alipay', 'mi', 'bing', 'bilibili'];
@@ -186,7 +184,7 @@ class MockRule {
      * @param string $type
      * @return mixed
      */
-    public function goods($type='name') {
+    public function goods(string $type='name'): string {
         $data = [];
         switch ($type) {
             case 'name':
@@ -234,10 +232,10 @@ class MockRule {
      * @param int $decimal 精度
      * @return string
      */
-    public function price($rule, $decimal) {
-        $rule = $rule ? $rule : $this->number(1);
+    public function price(string $rule, mixed $decimal): string {
+        $rule = $rule ? $rule : $this->number('1');
         $decimal = $decimal ? $decimal : 2;
-        return $this->float($rule, (int)$decimal);
+        return $this->float($rule, (string)$decimal);
 
     }
 
@@ -246,7 +244,7 @@ class MockRule {
      * @param string $format
      * @return false|string
      */
-    public function date($format) {
+    public function date(string|null $format): string {
         if (empty($format)) {
             $format = 'Y-m-d H:i:s';
         }
@@ -258,7 +256,7 @@ class MockRule {
      * @param string $format 颜色格式
      * @return string
      */
-    public function color($format = 'hex') {
+    public function color(string $format = 'hex'): string {
         $colors = array();
         for($i = 0; $i < 6; $i ++){
             $colors[] = dechex(rand(0,15));
@@ -270,6 +268,7 @@ class MockRule {
             case 'rgb':
                 return $this->hex2rgb($hex);
         }
+        return $hex;
     }
 
     /**
@@ -279,7 +278,7 @@ class MockRule {
      * @param array $suffixs
      * @return string
      */
-    public function url($protocols = array(),$domains = array(), $suffixs = array()) {
+    public function url(array $protocols = [], array $domains = [], array $suffixs = []): string {
         if (!$protocols){
             $data = array('http', 'https');
         } else {
@@ -306,7 +305,7 @@ class MockRule {
      * 随机邮箱
      * @return string
      */
-    public function email() {
+    public function email(): string {
         $data = array(
             '@qq.com','@163.com','@126.com','@sina.com.cn','@139.com','@hotmail.com','@gmail.com','@yahoo.com'
         );
@@ -322,7 +321,7 @@ class MockRule {
      * 随机手机号
      * @return string
      */
-    public function mobile() {
+    public function mobile(): string {
         $data = array(
             130,131,132,133,134,135,136,137,138,139,144,147,150,151,152,153,155,156,157,158,159,176,177,178,180,181,182,183,184,185,186,187,188,189,
         );
@@ -331,11 +330,11 @@ class MockRule {
 
     }
 
-    public function avatar() {
+    public function avatar(): string {
         return url()->asset(sprintf('images/avatar/%d.png', Str::randomInt(0, 48)));
     }
 
-    public function time($rule) {
+    public function time(mixed $rule): int {
         if ($rule == 13) {
             return Time::millisecond();
         }
@@ -347,7 +346,7 @@ class MockRule {
      * @param string $format
      * @return mixed
      */
-    public function bank($format = 'title') {
+    public function bank(string $format = 'title'): string {
         $data = array(
             'ICBC'=> '中国工商银行',
             'CCB' => '中国建设银行',
@@ -369,9 +368,8 @@ class MockRule {
             $data = ['6225365271562822', '6227003325370110828', '6222023803013297860', '9558820200001323775'];
             $key = array_rand($data, 1);
             return $data[$key];
-
         }
-
+        return '';
     }
 
     /**
@@ -379,7 +377,7 @@ class MockRule {
      * @param string $format
      * @return mixed
      */
-    public function country($format = 'title') {
+    public function country(string $format = 'title'): string {
         $data = array(
             'CHN'=> '中国',
             'USA' => '美国',
@@ -396,16 +394,17 @@ class MockRule {
         $key = array_rand($data, 1);
         if($format == 'abbr'){
             return $key;
-        }elseif ($format == 'title'){
+        } elseif ($format == 'title'){
             return $data[$key];
         }
+        return '';
     }
 
     /**
      * 随机区域
      * @return mixed
      */
-    public function region() {
+    public function region(): string {
         $data = array(
             '华东', '华南', '华中', '华北', '西北', '西南', '东北', '港澳台',
         );
@@ -419,7 +418,7 @@ class MockRule {
      * @param string $format
      * @return mixed
      */
-    public function province($format = 'title') {
+    public function province(string $format = 'title'): string {
         $data = array(
             '110000' => '北京市',
             '120000' => '天津市',
@@ -463,6 +462,7 @@ class MockRule {
         } elseif ($format == 'title'){
             return $data[$key];
         }
+        return '';
     }
 
     /**
@@ -470,7 +470,7 @@ class MockRule {
      * @param string $format
      * @return mixed
      */
-    public function city($format = 'title') {
+    public function city(string $format = 'title'): string {
         $data = array(
             '110100' => '北京市',
             '120100' => '天津市',
@@ -508,10 +508,10 @@ class MockRule {
         $key = array_rand($data, 1);
         if($format == 'code'){
             return $key;
-        }elseif ($format == 'title'){
+        } elseif ($format == 'title'){
             return $data[$key];
         }
-
+        return '';
     }
 
     /**
@@ -519,7 +519,7 @@ class MockRule {
      * @param string $format
      * @return mixed
      */
-    public function district($format = 'title') {
+    public function district(string $format = 'title'): string {
         $data = array(
             '110101' => '东城区',
             '120101' => '和平区',
@@ -561,22 +561,22 @@ class MockRule {
         } elseif ($format == 'title'){
             return $data[$key];
         }
-
+        return '';
     }
 
     /**
      * 随机邮编
      * @return int|string
      */
-    public function zip() {
-        return $this->number('100000-860000');
+    public function zip(): string {
+        return (string)$this->number('100000-860000');
     }
 
     /**
      * 随机IP(v4)
      * @return string
      */
-    public function ip() {
+    public function ip(): string {
         return $this->get_rand_ip();
     }
 
@@ -584,7 +584,7 @@ class MockRule {
      * 随机中国大陆身份证
      * @return string
      */
-    public function id_card() {
+    public function id_card(): string {
         return $this->get_rand_id_card();
     }
 
@@ -596,7 +596,9 @@ class MockRule {
      * @param $text_color
      * @return string
      */
-    public function image($size, $background_color = null, $text = null, $text_color = null) {
+    public function image(string|null $size, 
+        string|null $background_color = null, 
+        string|null $text = null, string|null $text_color = null): string {
 
         $width  = $this->number('100-500');
         $length = $this->number('200-400');
@@ -626,7 +628,7 @@ class MockRule {
      * @param string $type
      * @return string
      */
-    public function message($type = 'success') {
+    public function message(string $type = 'success'): string {
         if($type == 'success'){
             $message = '成功消息';
         }else{
@@ -640,8 +642,8 @@ class MockRule {
      * @param $hex
      * @return string
      */
-    private function hex2rgb($hex) {
-        $color = str_replace('#','',$hex);
+    private function hex2rgb(string $hex): string {
+        $color = str_replace('#', '', $hex);
         $rgb = array(
             hexdec(substr($color,0,2)),
             hexdec(substr($color,2,2)),
@@ -656,23 +658,23 @@ class MockRule {
      * 获取随机ip
      * @return string
      */
-    private function get_rand_ip() {
+    private function get_rand_ip(): string {
         $ip_long = array(
-            array('607649792', '608174079'), //36.56.0.0-36.63.255.255
-            array('975044608', '977272831'), //58.30.0.0-58.63.255.255
-            array('999751680', '999784447'), //59.151.0.0-59.151.127.255
-            array('1019346944', '1019478015'), //60.194.0.0-60.195.255.255
-            array('1038614528', '1039007743'), //61.232.0.0-61.237.255.255
-            array('1783627776', '1784676351'), //106.80.0.0-106.95.255.255
-            array('1947009024', '1947074559'), //116.13.0.0-116.13.255.255
-            array('1987051520', '1988034559'), //118.112.0.0-118.126.255.255
-            array('2035023872', '2035154943'), //121.76.0.0-121.77.255.255
-            array('2078801920', '2079064063'), //123.232.0.0-123.235.255.255
-            array('-1950089216', '-1948778497'), //139.196.0.0-139.215.255.255
-            array('-1425539072', '-1425014785'), //171.8.0.0-171.15.255.255
-            array('-1236271104', '-1235419137'), //182.80.0.0-182.92.255.255
-            array('-770113536', '-768606209'), //210.25.0.0-210.47.255.255
-            array('-569376768', '-564133889'), //222.16.0.0-222.95.255.255
+            array(607649792, 608174079), //36.56.0.0-36.63.255.255
+            array(975044608, 977272831), //58.30.0.0-58.63.255.255
+            array(999751680, 999784447), //59.151.0.0-59.151.127.255
+            array(1019346944, 1019478015), //60.194.0.0-60.195.255.255
+            array(1038614528, 1039007743), //61.232.0.0-61.237.255.255
+            array(1783627776, 1784676351), //106.80.0.0-106.95.255.255
+            array(1947009024, 1947074559), //116.13.0.0-116.13.255.255
+            array(1987051520, 1988034559), //118.112.0.0-118.126.255.255
+            array(2035023872, 2035154943), //121.76.0.0-121.77.255.255
+            array(2078801920, 2079064063), //123.232.0.0-123.235.255.255
+            array(-1950089216, -1948778497), //139.196.0.0-139.215.255.255
+            array(-1425539072, -1425014785), //171.8.0.0-171.15.255.255
+            array(-1236271104, -1235419137), //182.80.0.0-182.92.255.255
+            array(-770113536, -768606209), //210.25.0.0-210.47.255.255
+            array(-569376768, -564133889), //222.16.0.0-222.95.255.255
         );
 
         $rand_key = mt_rand(0, 14);
@@ -687,8 +689,7 @@ class MockRule {
      * 获取随机身份证号
      * @return string
      */
-    private function get_rand_id_card() {
-
+    private function get_rand_id_card(): string {
         $identity_card = '';
         //身份证起止年月 eg：1990年12月31日 mktime(0,0,0,12,31,1990)
         $year_start = mktime(0,0,0,1,1,1950);
@@ -957,32 +958,31 @@ class MockRule {
             654024,654025,654026,654027,654028,654201,654202,654221,654223,654224,654225,654226,
             654301,654321,654322,654323,654324,654325,654326,659001,659002,659003,659004);
 
-        function calc_suffix_d ($base){
+        function calc_suffix_d(string $base): string {
             if (strlen($base) <> 17){
                 die('Invalid Length');
             }
             $factor = array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);
             $sums = 0;
-            for ($i=0;$i< 17;$i++){
-
+            for ($i=0; $i< 17; $i++) {
                 $sums += substr($base,$i,1) * $factor[$i];
             }
 
             $mods = $sums % 11;//10X98765432
 
-            switch ($mods){
-                case 0: return '1';break;
-                case 1: return '0';break;
-                case 2: return 'x';break;
-                case 3: return '9';break;
-                case 4: return '8';break;
-                case 5: return '7';break;
-                case 6: return '6';break;
-                case 7: return '5';break;
-                case 8: return '4';break;
-                case 9: return '3';break;
-                case 10: return '2';break;
-
+            switch ($mods) {
+                case 0: return '1';
+                case 1: return '0';
+                case 2: return 'x';
+                case 3: return '9';
+                case 4: return '8';
+                case 5: return '7';
+                case 6: return '6';
+                case 7: return '5';
+                case 8: return '4';
+                case 9: return '3';
+                case 10: return '2';
+                default: return '0';
             }
 
         }

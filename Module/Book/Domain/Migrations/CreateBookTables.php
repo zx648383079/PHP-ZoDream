@@ -12,8 +12,6 @@ use Module\Book\Domain\Entities\HistoryEntity;
 use Module\Book\Domain\Entities\ListEntity;
 use Module\Book\Domain\Entities\BookMetaEntity;
 use Module\Book\Domain\Entities\BookEntity;
-use Module\Book\Domain\Entities\BookEventEntity;
-use Module\Book\Domain\Entities\BookRoleEntity;
 use Module\Book\Domain\Entities\ListItemEntity;
 use Module\Book\Domain\Repositories\BookRepository;
 use Module\Book\Domain\Repositories\ChapterRepository;
@@ -46,12 +44,6 @@ class CreateBookTables extends Migration {
             $table->uint('source_type', 2)->default(0)->comment('来源类型，原创或转载');
             $table->softDeletes();
             $table->timestamps();
-        })->append(BookMetaEntity::tableName(), function(Table $table) {
-            $table->comment('小说附加信息');
-            $table->id();
-            $table->uint('target_id');
-            $table->string('name', 50);
-            $table->string('content')->default('');
         })->append(ChapterEntity::tableName(), function(Table $table) {
             $table->comment('小说章节');
             $table->id();
@@ -99,25 +91,20 @@ class CreateBookTables extends Migration {
             $table->uint('chapter_id');
             $table->uint('user_id');
             $table->timestamp('created_at');
-        })->append(BookRoleEntity::tableName(), function(Table $table) {
-            $table->comment('小说角色');
+        })->append(BookMetaEntity::tableName(), function(Table $table) {
+            $table->comment('小说角色及设定相关附加信息');
             $table->id();
-            $table->uint('book_id');
+            $table->uint('target_id');
+            $table->uint('type', 1)->default(0)->comment('类型');
+            $table->uint('link_id')->default(0)->comment('关联');
             $table->string('name', 50);
             $table->string('avatar', 200)->default('');
             $table->string('description', 200)->default('');
-            $table->string('identity', 20)->default('')->comment('身份：主角或');
-            $table->string('properties', 200)->default('');
-        })->append(BookEventEntity::tableName(), function(Table $table) {
-            $table->comment('小说事件大纲');
-            $table->id();
-            $table->uint('book_id');
-            $table->string('name', 200);
-            $table->string('location', 200)->default('')->comment('地点');
-            $table->string('role', 200)->default('')->comment('设计角色');
-            $table->datetime('start_at')->default('')->comment('开始时间');
-            $table->datetime('end_at')->default('')->comment('结束时间');
-            $table->text('time_node', 200)->default('')->comment('时间节点');
+            $table->string('keywords')->default('')->comment('身份：主角或');
+            $table->text('content')->default('')->comment('身份：主角或');
+            $table->string('properties')->default('');
+            $table->datetime('start_at')->default('0000-01-01 00:00:00')->comment('开始时间');
+            $table->datetime('end_at')->default('0000-01-01 00:00:00')->comment('结束时间');
             $table->timestamps();
         })->append(ListEntity::tableName(), function(Table $table) {
             $table->comment('书单');

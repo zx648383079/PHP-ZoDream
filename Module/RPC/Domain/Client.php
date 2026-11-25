@@ -2,7 +2,7 @@
 namespace Module\RPC\Domain;
 
 use Zodream\Helpers\Json;
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 use Exception;
 
 class Client {
@@ -49,7 +49,7 @@ class Client {
      */
     public function invoke($method, $params = null, $id = null) {
         $data = $this->format($method, $params, $id);
-        $response = (new Http($this->url))
+        $response = (new HttpClient($this->url))
             ->header($this->headers)
             ->encode()
             ->maps($data)

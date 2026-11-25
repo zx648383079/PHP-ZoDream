@@ -4,15 +4,12 @@ namespace Module\Document\Domain\Repositories;
 
 use Exception;
 use Module\Document\Domain\MockRule;
-use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\FieldModel;
 use Zodream\Helpers\Arr;
 use Zodream\Helpers\Json;
 use Zodream\Helpers\Xml;
-use Zodream\Html\Tree;
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 use Zodream\Http\Uri;
-use Zodream\Infrastructure\Contracts\Http\Input;
 
 class MockRepository {
 
@@ -56,7 +53,7 @@ class MockRepository {
             $url->setData($params);
             $params = [];
         }
-        $http = new Http($url);
+        $http = new HttpClient($url);
         if ($method === 'POST') {
             if (!empty($params)) {
                 $http->maps($params);
@@ -204,7 +201,7 @@ class MockRepository {
         return $data;
     }
 
-    public static function parseChildren($content, FieldModel $model) {
+    public static function parseChildren(mixed $content, FieldModel $model) {
         if (is_null($content)) {
             $model->type = 'null';
         }
@@ -214,10 +211,6 @@ class MockRepository {
         }
         if (is_float($content)) {
             $model->type = 'float';
-            return;
-        }
-        if (is_double($content)) {
-            $model->type = 'double';
             return;
         }
         if (is_numeric($content)) {

@@ -106,44 +106,42 @@ class BookController extends Controller {
             return $this->renderFailure('book is error');
         }
         return $this->render(
-            RoleRepository::all($book)
+            RoleRepository::roleAll($book)
         );
     }
 
-    public function roleSaveAction(Input $input) {
+    public function roleSaveAction(int $book, Input $input) {
         try {
             $data = $input->validate([
                 'id' => 'int',
-                'book_id' => 'required|int',
                 'name' => 'required|string:0,50',
                 'avatar' => 'string:0,200',
                 'description' => 'string:0,200',
-                'character' => 'string:0,20',
-                'x' => 'string:0,20',
-                'y' => 'string:0,20',
+                'keywords' => 'string:0,20',
+                'properties' => 'string',
                 'link_id' => 'int',
                 'link_title' => 'string'
             ]);
             return $this->render(
-                RoleRepository::save($data)
+                RoleRepository::roleSave($book, $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
-    public function roleDeleteAction(int $id) {
+    public function roleDeleteAction(int $book, int $id) {
         try {
-            RoleRepository::remove($id);
+            RoleRepository::roleRemove($book, $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
         return $this->renderData(true);
     }
 
-    public function linkAddAction(int $from, int $to, string $title = '') {
+    public function linkAddAction(int $book, int $from, int $to, string $title = '') {
         try {
-            RoleRepository::linkAdd(RoleRepository::bookId($from, $to), $from, $to, $title);
+            RoleRepository::linkAdd($book, $from, $to, $title);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -151,9 +149,6 @@ class BookController extends Controller {
     }
 
     public function linkSaveAction(int $book, array $items) {
-        if (BookRepository::isSelf($book)) {
-            return $this->renderFailure('book is error');
-        }
         try {
             RoleRepository::linkSave($book, $items);
         } catch (\Exception $ex) {
@@ -162,9 +157,9 @@ class BookController extends Controller {
         return $this->renderData(true);
     }
 
-    public function linkDeleteAction(int $from, int $to) {
+    public function linkDeleteAction(int $book, int $from, int $to) {
         try {
-            RoleRepository::linkRemove(RoleRepository::bookId($from, $to), $from, $to);
+            RoleRepository::linkRemove($book, $from, $to);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -191,35 +186,103 @@ class BookController extends Controller {
     }
 
     public function eventAction(int $book, string $keywords = '', string $time = '') {
-        if (BookRepository::isSelf($book)) {
-            return $this->renderFailure('book is error');
+        try {
+            $res = RoleRepository::eventList($book, $keywords, $time);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
         }
-        return $this->renderPage(RoleRepository::eventList($book, $keywords, $time));
+        return $this->renderPage($res);
     }
 
-    public function eventSaveAction(Input $input) {
+    public function eventSaveAction(int $book, Input $input) {
         try {
             $data = $input->validate([
                 'id' => 'int',
-                'book_id' => 'required|int',
                 'name' => 'required|string:0,200',
-                'location' => 'string:0,200',
-                'role' => 'string:0,200',
-                'time_node' => '',
+                'keywords' => 'string:0,200',
+                'content' => '',
                 'start_at' => 'datetime',
                 'end_at' => 'datetime',
             ]);
             return $this->render(
-                RoleRepository::eventSave($data)
+                RoleRepository::eventSave($book, $data)
             );
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
     }
 
-    public function eventDeleteAction(int $id) {
+    public function eventDeleteAction(int $book, int $id) {
         try {
-            RoleRepository::eventRemove($id);
+            RoleRepository::eventRemove($book, $id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function outlineAction(int $book, string $keywords = '') {
+        try {
+            $res = RoleRepository::outlineList($book, $keywords);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderPage($res);
+    }
+
+    public function outlineSaveAction(int $book, Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,200',
+                'keywords' => 'string:0,200',
+                'content' => '',
+            ]);
+            return $this->render(
+                RoleRepository::outlineSave($book, $data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function outlineDeleteAction(int $book, int $id) {
+        try {
+            RoleRepository::outlineRemove($book, $id);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderData(true);
+    }
+
+    public function ruleAction(int $book, string $keywords = '') {
+        try {
+            $res = RoleRepository::ruleList($book, $keywords);
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+        return $this->renderPage($res);
+    }
+
+    public function ruleSaveAction(int $book, Input $input) {
+        try {
+            $data = $input->validate([
+                'id' => 'int',
+                'name' => 'required|string:0,200',
+                'keywords' => 'string:0,200',
+                'content' => '',
+            ]);
+            return $this->render(
+                RoleRepository::ruleSave($book, $data)
+            );
+        } catch (\Exception $ex) {
+            return $this->renderFailure($ex->getMessage());
+        }
+    }
+
+    public function ruleDeleteAction(int $book, int $id) {
+        try {
+            RoleRepository::ruleRemove($book, $id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

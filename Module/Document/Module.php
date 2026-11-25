@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Document;
 
 use Module\Document\Domain\Migrations\CreateDocumentTables;
-use Module\Document\Domain\Model\ApiModel;
 use Module\Document\Domain\Model\PageModel;
 use Module\Document\Domain\Model\ProjectModel;
 use Module\SEO\Domain\ISiteMapModule;

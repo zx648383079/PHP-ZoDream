@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Module\Book\Domain\Spiders;
 
 
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 
 class ZhiShuShenQi implements GetBookInterface {
 
     public function search(string $keywords): array {
-            $data = (new Http())->url('http://api.zhuishushenqi.com/book/fuzzy-search', [
+            $data = (new HttpClient())->url('http://api.zhuishushenqi.com/book/fuzzy-search', [
                 'query' => $keywords
             ])->json();
             if (!$data['ok']) {
@@ -27,7 +27,7 @@ class ZhiShuShenQi implements GetBookInterface {
     }
 
     public function book(string $id): array {
-        $data = (new Http())->url('http://api.zhuishushenqi.com/book/'.$id)->json();
+        $data = (new HttpClient())->url('http://api.zhuishushenqi.com/book/'.$id)->json();
         if (array_key_exists('ok', $data) && $data['ok'] === false) {
             return [];
         }
@@ -43,7 +43,7 @@ class ZhiShuShenQi implements GetBookInterface {
     }
 
     public function chapters(string $book): array {
-        $data = (new Http())->url('http://api.zhuishushenqi.com/mix-atoc/'.$book, [
+        $data = (new HttpClient())->url('http://api.zhuishushenqi.com/mix-atoc/'.$book, [
             'view' => 'chapters'
         ])->json();
         if (!$data['ok']) {
@@ -58,7 +58,7 @@ class ZhiShuShenQi implements GetBookInterface {
     }
 
     public function chapter(string $url): array {
-        $data = (new Http())->url('http://chapterup.zhuishushenqi.com/chapter/'.$url)->json();
+        $data = (new HttpClient())->url('http://chapterup.zhuishushenqi.com/chapter/'.$url)->json();
         if (!$data['ok']) {
             return [];
         }

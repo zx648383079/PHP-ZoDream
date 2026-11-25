@@ -1,7 +1,7 @@
 <?php
 namespace Module\Cas\Domain\Model;
 
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 use Zodream\Http\Uri;
 
 /**
@@ -96,7 +96,7 @@ class PGTicketModel extends BaseModel {
             'pgtIou' => $pgtiou,
         ];
         $new_uri = clone $pgtUrl;
-        $http = new Http($new_uri->addData($query));
+        $http = new HttpClient($new_uri->addData($query));
         $http->get();
         return $http->getStatusCode() == 200;
     }

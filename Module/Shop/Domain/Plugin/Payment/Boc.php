@@ -5,7 +5,7 @@ namespace Module\Shop\Domain\Plugin\Payment;
 use Module\Shop\Domain\Plugin\BasePayment;
 use Module\Shop\Domain\Plugin\IPaymentPlugin;
 use Zodream\Disk\File;
-use Zodream\Http\Http;
+use Zodream\Http\HttpClient;
 use Zodream\Infrastructure\Support\Process;
 
 class Boc extends BasePayment implements IPaymentPlugin {
@@ -240,7 +240,7 @@ class Boc extends BasePayment implements IPaymentPlugin {
     }
 
     private function request($path, array $data) {
-        $res = (new Http($this->getUrl($path)))
+        $res = (new HttpClient($this->getUrl($path)))
             ->maps($data)->post();
         if (empty($res)) {
             return $res;

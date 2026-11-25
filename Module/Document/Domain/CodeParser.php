@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Document\Domain;
 
 use Module\Document\Domain\Model\ApiModel;
@@ -31,9 +32,9 @@ class CodeParser {
     /**
      * @var ParserInterface[]
      */
-    private $instances = [];
+    private array $instances = [];
 
-    protected $plugins = [
+    protected array $plugins = [
         CSharp::class,
         Dart::class,
         Go::class,
@@ -42,7 +43,7 @@ class CodeParser {
         Unknow::class,
     ];
 
-    protected $languages = [];
+    protected array $languages = [];
 
     protected function boot() {
         if (!empty($this->instances)) {
@@ -77,7 +78,7 @@ class CodeParser {
         return $this->languages;
     }
 
-    public function formatHttp($api_id, $lang) {
+    public function formatHttp(int $api_id, string $lang) {
         $api = ApiModel::find($api_id);
         $name = str_replace(['/', '.'], '_', trim($api->uri, '/'));
         $lines = [
@@ -89,7 +90,7 @@ class CodeParser {
         return implode(self::NEW_LINE, $lines);
     }
 
-    public function formatField($api_id, $kind, $name, $lang, $parent_id = 0) {
+    public function formatField(int $api_id, int $kind, string $name, string $lang, int $parent_id = 0) {
         if (empty($name)) {
             $name = 'object_item';
         }
@@ -103,7 +104,7 @@ class CodeParser {
         return implode(self::NEW_LINE, $files);
     }
 
-    public function formatFieldItem($name, $api_id, $kind, $parent_id = 0) {
+    public function formatFieldItem(string $name, int $api_id, int $kind, int $parent_id = 0) {
         $fields = FieldModel::where('kind', $kind)->where('api_id', $api_id)
             ->where('parent_id', $parent_id)->get();
         if ($kind != FieldModel::KIND_RESPONSE && empty($fields)) {
@@ -137,7 +138,7 @@ class CodeParser {
         return $package;
     }
 
-    public function formatJson($data, $name, $lang) {
+    public function formatJson(mixed $data, string $name, string $lang) {
         if (is_string($data)) {
             $data = Json::decode($data);
         }
@@ -156,7 +157,7 @@ class CodeParser {
         return implode(self::NEW_LINE, $files);
     }
 
-    public function formatAttribute(array $data, $lang) {
+    public function formatAttribute(array $data, string $lang) {
         $lines = [];
         $plugin = $this->plugin($lang);
         foreach ($data as $item) {
@@ -169,11 +170,11 @@ class CodeParser {
         return implode(self::NEW_LINE, $lines);
     }
 
-    public function formatPackage($name, $attributes, array $package, $lang) {
+    public function formatPackage(string $name, string $attributes, array $package, string $lang) {
         return $this->plugin($lang)->formatPackage($name, $attributes, $package);
     }
 
-    public function formatItem($data, $name) {
+    public function formatItem(array $data, string $name) {
         $package = [$name => []];
         foreach ($data as $key => $item) {
             if (is_null($item)) {
@@ -204,17 +205,10 @@ class CodeParser {
                 ];
                 continue;
             }
-            if (is_float($item) && strlen(preg_replace('/\d+\./', '', $item)) < 4) {
+            if (is_float($item)) {
                 $package[$name][] = [
                     'name' => $key,
                     'type' => self::TYPE_FLOAT
-                ];
-                continue;
-            }
-            if (is_double($item)) {
-                $package[$name][] = [
-                    'name' => $key,
-                    'type' => self::TYPE_DOUBLE
                 ];
                 continue;
             }
