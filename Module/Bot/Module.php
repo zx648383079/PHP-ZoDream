@@ -5,7 +5,6 @@ namespace Module\Bot;
 use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Module\Bot\Domain\Migrations\CreateBotTables;
-use Module\Bot\Domain\Model\MediaModel;
 use Module\Bot\Service\PlatformController;
 use Zodream\Infrastructure\Contracts\Http\Output;
 use Zodream\Infrastructure\Contracts\HttpContext;
@@ -21,9 +20,11 @@ class Module extends BaseModule implements ISiteMapModule, ICustomRouteModule {
 
     public function invokeRoute(string $path, HttpContext $context): null|string|Output {
         if (preg_match('#^/?platform/([^/]*)/message#', $path, $match)) {
-            return $this->invokeController(
+            return $this->invokeAction(
                 PlatformController::class,
-                'message', [
+                'message', 
+                $context,
+                [
                     'openid' => $match[1]
                 ]);
         }

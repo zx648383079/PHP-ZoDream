@@ -27,7 +27,7 @@ final class RouteTest extends TestCase {
     }
 
     #[DataProvider('pathProvider')]
-    public function testMatch(string $module, string $pathInfo, string $script, $path) {
+    public function testMatch(string $module, string $pathInfo, string $script, string $path) {
         $this->assertTrue(RouteHelper::startWithRoute($pathInfo, $module));
         $this->assertEquals(RouteHelper::getPathInfo($path, $script), $pathInfo);
     }
