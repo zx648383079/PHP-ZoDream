@@ -102,7 +102,7 @@ class BookController extends Controller {
     }
 
     public function roleAction(int $book) {
-        if (BookRepository::isSelf($book)) {
+        if (!BookRepository::isSelf($book)) {
             return $this->renderFailure('book is error');
         }
         return $this->render(
@@ -167,14 +167,14 @@ class BookController extends Controller {
     }
 
     public function mapAction(int $book) {
-        if (BookRepository::isSelf($book)) {
+        if (!BookRepository::isSelf($book)) {
             return $this->renderFailure('book is error');
         }
         return $this->renderData(RoleRepository::mapGet($book));
     }
 
     public function mapSaveAction(int $book, array $items) {
-        if (BookRepository::isSelf($book)) {
+        if (!BookRepository::isSelf($book)) {
             return $this->renderFailure('book is error');
         }
         try {
