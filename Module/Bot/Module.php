@@ -11,7 +11,7 @@ use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ISiteMapModule, ICustomRouteModule {
+final class Module extends BaseModule implements ISiteMapModule, ICustomRouteModule {
 
 
     public function getMigration() {

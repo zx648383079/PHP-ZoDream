@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Counter\Domain\Events;
 
 use Zodream\Infrastructure\Contracts\Http\Input as Request;

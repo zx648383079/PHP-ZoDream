@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Module\ModuleController;
@@ -6,10 +7,9 @@ use Module\Shop\Domain\Models\CategoryModel;
 use Module\Shop\Domain\Repositories\ArticleRepository;
 use Module\Shop\Domain\Repositories\CartRepository;
 use Module\Shop\Domain\Repositories\ShopRepository;
-use Module\Shop\Module;
 use Zodream\Disk\File;
 
-class Controller extends ModuleController {
+abstract class Controller extends ModuleController {
     protected File|string $layout = 'main';
 
     public function __construct() {

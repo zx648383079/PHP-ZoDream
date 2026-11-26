@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service;
 
 use Module\Legwork\Domain\Model\OrderModel;
@@ -8,8 +9,8 @@ use Zodream\Infrastructure\Contracts\Http\Input as Request;
 
 class OrderController extends Controller {
 
-    public function indexAction($status = 0, $id = 0) {
-        $order_list = OrderRepository::getSelfList($status, $id);
+    public function indexAction(int $status = 0, int $id = 0) {
+        $order_list = OrderRepository::getSelfList('', $status, $id);
         $status_list = OrderModel::$status_list;
         return $this->show(compact('order_list', 'status_list', 'status'));
     }
@@ -30,11 +31,11 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function payAction($id) {
+    public function payAction(int $id) {
         return $this->redirectWithMessage('./', '网页版暂不支持支付');
     }
 
-    public function commentAction($id, $rank = 10) {
+    public function commentAction(int $id, int $rank = 10) {
         try {
             OrderRepository::comment($id, $rank);
         } catch (\Exception $ex) {
@@ -45,7 +46,7 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(int $id) {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {

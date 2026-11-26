@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\CollectModel;
 
 class StoreController extends Controller {
 
-    public function indexAction($id) {
+    public function indexAction(int $id) {
         return $this->render([
             'id' => $id,
             'name' => '我的店铺',
@@ -16,8 +17,7 @@ class StoreController extends Controller {
         ]);
     }
 
-    public function toggleCollectAction($id) {
-        $id = intval($id);
+    public function toggleCollectAction(int $id) {
         if (CollectModel::exist($id)) {
             CollectModel::remove($id);
             return $this->render(['data' => false]);

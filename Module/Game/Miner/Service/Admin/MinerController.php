@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\Miner\Service\Admin;
 
 use Module\Game\Miner\Domain\Model\MinerModel;

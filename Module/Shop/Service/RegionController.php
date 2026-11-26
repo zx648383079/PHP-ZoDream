@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Module\Shop\Domain\Models\RegionModel;
@@ -23,7 +24,7 @@ class RegionController extends Controller {
         return $this->renderData(RegionModel::cacheTree());
     }
 
-    public function importAction(Input $input, $file = null) {
+    public function importAction(Input $input, string|null $file = null) {
         $file = $this->getFile($file, $input);
         if (empty($file)) {
             return;
@@ -33,7 +34,7 @@ class RegionController extends Controller {
         return '导入完成';
     }
 
-    private function getFile($file, Input $input) {
+    private function getFile(string|null $file, Input $input) {
         if (!empty($file) && is_file($file)) {
             return new File($file);
         }

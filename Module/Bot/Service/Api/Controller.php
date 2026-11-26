@@ -4,7 +4,7 @@ namespace Module\Bot\Service\Api;
 
 use Module\ModuleController as RestController;
 
-class Controller extends RestController {
+abstract class Controller extends RestController {
 
 
 }

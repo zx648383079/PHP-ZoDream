@@ -60,7 +60,7 @@ $this->registerJs($js)
                     <h4>配送方式：</h4>
                     <?php foreach($shipping_list as $item):?>
                     <span class="radio-label">
-                        <input type="radio" id="shipping<?=$item->id?>" name="shipping" value="<?=$item->id?>">
+                        <input type="radio" id="shipping<?=$item->id?>" name="shipping" value="<?=$item->code?>">
                         <label for="shipping<?=$item->id?>"><?=$item->name?></label>
                     </span>
                     <?php endforeach;?>
@@ -69,7 +69,7 @@ $this->registerJs($js)
                     <h4>支付方式：</h4>
                     <?php foreach($payment_list as $item):?>
                     <span class="radio-label">
-                        <input type="radio" id="payment<?=$item->id?>" name="payment" value="<?=$item->id?>">
+                        <input type="radio" id="payment<?=$item->id?>" name="payment" value="<?=$item->code?>">
                         <label for="payment<?=$item->id?>"><?=$item->name?></label>
                     </span>
                     <?php endforeach;?>

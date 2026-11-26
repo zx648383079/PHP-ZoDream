@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Listeners;
 
 
@@ -11,7 +12,7 @@ use Module\Shop\Domain\Models\PayLogModel;
  * 支付成功监听
  * @package Module\Shop\Domain\Listeners
  */
-class PaySuccessListener {
+final class PaySuccessListener {
 
     public function __construct(PaySuccess $pay) {
         $type = $pay->getType();

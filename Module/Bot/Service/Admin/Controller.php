@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Bot\Service\Admin;
 
 use Module\ModuleController;
 use Zodream\Disk\File;
 use Zodream\Infrastructure\Contracts\HttpContext;
 
-class Controller extends ModuleController {
+abstract class Controller extends ModuleController {
 
     protected File|string $layout = '/Admin/layouts/main';
 
@@ -25,7 +26,7 @@ class Controller extends ModuleController {
         ];
     }
 
-    protected function getUrl($path, $args = []) {
+    protected function getUrl(string $path, array $args = []) {
         return url('./@admin/'.$path, $args);
     }
 

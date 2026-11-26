@@ -13,18 +13,7 @@ class CouponNode extends Node {
         $expire = empty($val) ? 0 : strtotime($val);
         $val = $this->attr('amount');
         $amount = is_numeric($val) ? intval($val) : -1;
-        if ($type === 'json') {
-            return [
-                'tag' => 'coupon',
-                'content' => $content,
-                'expire' => $expire,
-                'amount' => $amount
-            ];
-        }
-        $cls = '';
-        if (($expire > 0 && $expire < time()) || $amount === 0) {
-            $cls = ' --with-expire';
-        }
+        $isExpired = ($expire > 0 && $expire < time()) || $amount === 0;
         $alt = '剩余次数：';
         if ($amount < 0) {
             $alt .= '不限';
@@ -34,6 +23,19 @@ class CouponNode extends Node {
         if ($expire > 0) {
             $alt = '，截至日期：'.Time::format($expire);
         }
+        if ($type === 'json') {
+            return [
+                'tag' => 'coupon',
+                'content' => $content,
+                'alt' => $alt,
+                'is_expired' => $isExpired
+            ];
+        }
+        $cls = '';
+        if ($isExpired) {
+            $cls = ' --with-expire';
+        }
+        
         return <<<HTML
 <div class="coupon-open-node{$cls}" title="{$alt}">
     <div class="node-body">{$content}</div>

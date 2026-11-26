@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 
@@ -21,7 +22,7 @@ class InvoiceController extends Controller {
         return $this->render($order_list);
     }
 
-    public function titleAction($id = 0) {
+    public function titleAction(int $id = 0) {
         if (empty($id)) {
             $model_list = InvoiceTitleModel::where('user_id', auth()->id())->page();
             return $this->renderPage($model_list);

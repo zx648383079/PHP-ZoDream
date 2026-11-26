@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Module\Legwork\Service\Api\Admin;
 
-use Module\Legwork\Domain\Repositories\CategoryRepository;
 use Module\Legwork\Domain\Repositories\ProviderRepository;
 
 class ProviderController extends Controller {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 use Module\ModuleController;
@@ -6,7 +7,7 @@ use Module\Shop\Domain\Repositories\ShopRepository;
 use Zodream\Disk\File;
 
 
-class Controller extends ModuleController {
+abstract class Controller extends ModuleController {
 
     protected File|string $layout = '/Mobile/layouts/main';
     public function __construct() {

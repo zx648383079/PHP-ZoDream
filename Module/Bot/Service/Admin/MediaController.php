@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Bot\Service\Admin;
 
 use Module\Bot\Domain\Model\MediaModel;

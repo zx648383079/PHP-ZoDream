@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Exam\Domain\Model;
 
 use Module\Exam\Domain\Entities\QuestionAnalysisEntity;

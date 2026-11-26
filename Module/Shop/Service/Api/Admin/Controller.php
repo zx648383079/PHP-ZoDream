@@ -5,7 +5,7 @@ namespace Module\Shop\Service\Api\Admin;
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController as RestController;
 
-class Controller extends RestController {
+abstract class Controller extends RestController {
 
     use CheckRole;
 

@@ -22,7 +22,7 @@ class OrderController extends Controller {
         return $this->renderData($data);
     }
 
-    public function payAction($id) {
+    public function payAction(int $id) {
         /** @var OrderModel $order */
         $order = OrderModel::query()
             ->where('user_id', auth()->id())
@@ -42,7 +42,7 @@ class OrderController extends Controller {
         return $this->renderData($data);
     }
 
-    public function commentAction($id, $rank = 10) {
+    public function commentAction(int $id, int $rank = 10) {
         try {
             OrderRepository::comment($id, $rank);
         } catch (\Exception $ex) {
@@ -51,7 +51,7 @@ class OrderController extends Controller {
         return $this->renderData(true);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(int $id) {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {

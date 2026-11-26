@@ -17,7 +17,7 @@ class PlatformController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = PlatformModel::findOrNew($id);
         if ($id > 0 && $model->user_id !== auth()->id()) {
             return $this->redirectWithMessage('./', '应用错误！');
@@ -47,7 +47,7 @@ class PlatformController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         PlatformModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->renderData([
             'url' => url('./platform')

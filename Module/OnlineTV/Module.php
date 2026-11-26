@@ -6,7 +6,7 @@ use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\OnlineTV\Domain\Migrations\CreateTVTables;
 
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateTVTables();

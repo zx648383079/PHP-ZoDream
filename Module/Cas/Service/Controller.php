@@ -1,11 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Service;
 
 use Module\ModuleController;
 
-class Controller extends ModuleController {
-
-    public function prepare() {
-
-    }
+abstract class Controller extends ModuleController {
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service;
 
 use Module\Auth\Domain\Model\UserModel;
@@ -18,7 +19,7 @@ class ShareController extends Controller {
         ];
     }
     
-    public function indexAction($id, Request $request) {
+    public function indexAction(int $id, Request $request) {
         if ($request->isPost()) {
             session()->set(self::PASSWORD_KEY, $request->get('password'));
         }
@@ -76,7 +77,7 @@ class ShareController extends Controller {
         return $this->renderData($data);
     }
 
-    public function userAction($id) {
+    public function userAction(int $id) {
         $user = UserModel::find($id);
         $models = ShareModel::all(['user_id' => $id, 'mode' => 'public']);
         return $this->show('user', compact('user', 'models'));
@@ -109,7 +110,7 @@ class ShareController extends Controller {
         return $this->renderData($models);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(array|int $id) {
         $row = ShareModel::auth()->whereIn('id', (array)$id)->delete();
         if (empty($row)) {
             return $this->renderFailure('服务器错误!');
@@ -119,7 +120,7 @@ class ShareController extends Controller {
         ]);
     }
 
-    public function saveAction($id, $file, $parent = 0) {
+    public function saveAction(int $id, string $file, int $parent = 0) {
         $model = ShareModel::find($id);
         if (!$this->canView($model)) {
             return  $this->renderFailure('无法保存分享!');

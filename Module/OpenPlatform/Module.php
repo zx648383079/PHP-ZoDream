@@ -17,7 +17,7 @@ use Zodream\Route\ModuleRoute;
 use Zodream\Route\Response\Rest;
 use Zodream\Route\Response\RestResponse;
 
-class Module extends BaseModule implements ICustomRouteModule {
+final class Module extends BaseModule implements ICustomRouteModule {
 
     private static bool $isBooted = false;
 

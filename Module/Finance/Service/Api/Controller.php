@@ -4,7 +4,7 @@ namespace Module\Finance\Service\Api;
 
 use Module\ModuleController as RestController;
 
-class Controller extends RestController {
+abstract class Controller extends RestController {
 
     public function rules() {
         return ['*' => '@'];

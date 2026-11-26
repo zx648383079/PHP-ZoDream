@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Auction;
 
 use Module\Shop\Domain\Models\Activity\AuctionLogModel;
@@ -15,7 +16,7 @@ class DutchAuction extends BaseAuction implements AuctionInterface {
 
     protected int $minusPrice = 1; // 多少钱
 
-    public function setLog($data) {
+    public function setLog(AuctionLogModel|array $data) {
         parent::setLog($data);
         if (!$this->isPreAuction()) {
             $this->data->bid = $this->getPrice();

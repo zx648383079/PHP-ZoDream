@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Service;
 
 use Module\Cas\Domain\Client;
@@ -9,7 +10,7 @@ use Zodream\Service\Config;
 
 class ClientController extends Controller {
 
-    public function indexAction($ticket = null) {
+    public function indexAction(string $ticket = '') {
         if (empty($ticket)) {
             return $this->redirect(Client::getServerLoginURL());
         }
@@ -29,7 +30,7 @@ class ClientController extends Controller {
      * @return \Zodream\Infrastructure\Http\Response
      * @throws \Exception
      */
-    public function logoutAction($ticket) {
+    public function logoutAction(string $ticket) {
         if (!Client::handleLogoutRequests()) {
             return $this->renderFailure('IP error');
         }
@@ -38,7 +39,7 @@ class ClientController extends Controller {
         return $this->renderData();
     }
 
-    protected function validate($ticket) {
+    protected function validate(string $ticket) {
         $userClass = Config::auth('model');
         if (empty($userClass)) {
             return $this->renderFailure('user is error!', 401);

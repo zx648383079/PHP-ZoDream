@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 
-use Module\Shop\Domain\Models\RegionModel;
 use Module\Shop\Domain\Repositories\AddressRepository;
 
 class AddressController extends Controller {
@@ -65,7 +65,7 @@ class AddressController extends Controller {
         return $this->render($address);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             AddressRepository::remove($id);
         } catch (\Exception $ex) {
@@ -74,7 +74,7 @@ class AddressController extends Controller {
         return $this->render(['data' => true]);
     }
 
-    public function defaultAction($id) {
+    public function defaultAction(int $id) {
         try {
             AddressRepository::setDefault($id);
         } catch (\Exception $ex) {

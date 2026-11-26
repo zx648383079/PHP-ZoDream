@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Bot\Domain;
 
 use Module\Bot\Domain\Editors\Event;

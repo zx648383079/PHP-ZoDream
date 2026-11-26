@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Models;
 
 use Module\Shop\Domain\Entities\BrandEntity;

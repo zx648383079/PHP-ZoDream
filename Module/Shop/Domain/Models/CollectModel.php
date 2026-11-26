@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Models;
 
 
@@ -39,20 +40,20 @@ class CollectModel extends Model {
     }
 
 
-    public static function add($goods) {
+    public static function add(int $goods) {
         return static::create([
            'user_id' => auth()->id(),
            'goods_id' => $goods,
         ]);
     }
 
-    public static function exist($goods) {
+    public static function exist(int $goods) {
         return self::where('goods_id', $goods)
             ->where('user_id', auth()->id())->any();
     }
 
 
-    public static function remove($goods) {
+    public static function remove(int $goods) {
         return self::where('goods_id', $goods)
             ->where('user_id', auth()->id())->delete();
     }

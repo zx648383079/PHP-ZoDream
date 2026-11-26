@@ -5,7 +5,7 @@ namespace Module\Shop\Service\Api;
 use Module\ModuleController as RestController;
 use Module\Shop\Domain\Repositories\ShopRepository;
 
-class Controller extends RestController {
+abstract class Controller extends RestController {
 
     public function __construct() {
         parent::__construct();

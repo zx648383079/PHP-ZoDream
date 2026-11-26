@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
-use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Repositories\OrderRepository;
 
 
@@ -16,8 +16,8 @@ class OrderController extends Controller {
         ];
     }
 
-    public function indexAction($status = 0) {
-        $order_list = OrderRepository::getList(intval($status));
+    public function indexAction(int $status = 0) {
+        $order_list = OrderRepository::getList($status);
         if (request()->isAjax()) {
             $this->layout = '';
             return $this->show('page', compact('order_list'));
@@ -48,7 +48,7 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(int $id) {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {
@@ -59,7 +59,7 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function repurchaseAction($id) {
+    public function repurchaseAction(int $id) {
         try {
             OrderRepository::repurchase($id);
         } catch (\Exception $ex) {

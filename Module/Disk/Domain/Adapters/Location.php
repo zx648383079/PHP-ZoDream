@@ -16,7 +16,7 @@ use Zodream\Html\Page;
 
 class Location extends BaseDiskAdapter implements IDiskAdapter {
 
-    public function catalog($id, $path): Page {
+    public function catalog(string|int $id, string $path): Page {
         $root = $this->root();
         $folder = empty($id) ? $root : $root->directory($id);
         $items = $folder->children();
@@ -61,7 +61,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         ];
     }
 
-    private function formatFile(File $item, $fileId) {
+    private function formatFile(File $item, string|int $fileId) {
         $data = [
             'size' => $item->size(),
             'extension' => strtolower($item->getExtension()),
@@ -84,7 +84,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         return $data;
     }
 
-    public function remove($id) {
+    public function remove(string|int $id) {
         $root = $this->root();
         $file = $root->file($id);
         if (!$file->exist()) {
@@ -93,14 +93,14 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         $file->delete();
     }
 
-    protected function getRealFolder($path) {
+    protected function getRealFolder(string $path) {
         if (!empty($path) && is_dir($path)) {
             return new Directory($path);
         }
         return parent::getRealFolder($path);
     }
 
-    public function create(string $name, $parentId = '')
+    public function create(string $name, string|int $parentId = '')
     {
         $root = $this->root();
         $folder = empty($parentId) ? $root : $root->directory($parentId);
@@ -108,7 +108,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         return $this->formatPageFile($root, $item);
     }
 
-    public function uploadFile(array $fileData, string $md5, string $name, string|int  $parentId = '') {
+    public function uploadFile(array $fileData, string $md5, string $name, string|int $parentId = '') {
         set_time_limit(0);
         $root = $this->root();
         $file = $this->makeFile($name, $parentId);
@@ -183,7 +183,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         ];
     }
 
-    public function rename($id, string $name)
+    public function rename(string|int $id, string $name)
     {
         $root = $this->root();
         $file = $root->file($id);
@@ -210,7 +210,7 @@ class Location extends BaseDiskAdapter implements IDiskAdapter {
         // TODO: Implement move() method.
     }
 
-    public function file($id): array
+    public function file(string|int $id): array
     {
         $root = $this->root();
         $file = $root->file($id);

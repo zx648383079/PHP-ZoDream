@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Chat\Domain\Model;
 
 use Domain\Model\Model;

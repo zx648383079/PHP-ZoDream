@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service;
 
 use Domain\Repositories\FileRepository;
@@ -21,7 +22,7 @@ class FileController extends Controller {
         ];
     }
 
-    public function indexAction($id) {
+    public function indexAction(string|int $id) {
         try {
             $disk = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {
@@ -41,7 +42,7 @@ class FileController extends Controller {
         return $this->show($name, compact('disk'));
     }
 
-    public function plistAction($id, Output $response) {
+    public function plistAction(string|int $id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -59,7 +60,7 @@ class FileController extends Controller {
             url('./download', ['id' => $id]), '', '', ''), 'plist');
     }
 
-    public function qrAction($id, Output $response) {
+    public function qrAction(string|int $id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -78,7 +79,7 @@ class FileController extends Controller {
         return $response->image($image);
     }
 
-    public function m3u8Action($id, Output $response) {
+    public function m3u8Action(string|int $id, Output $response) {
         $response->allowCors();
         try {
             $this->enableThrow();
@@ -135,7 +136,7 @@ class FileController extends Controller {
         return $context->make(ModuleRoute::class)->tryInvokeAction($this, $action, $vars, $context);
     }
 
-    public function tsAction($name, Output $response) {
+    public function tsAction(string $name, Output $response) {
         $response->allowCors();
         $length = strlen($name);
         $id = substr($name, 0, $length - 6);
@@ -151,7 +152,7 @@ class FileController extends Controller {
      * @param Output $response
      * @return mixed
      */
-    public function subtitlesAction($id, Output $response) {
+    public function subtitlesAction(string|int $id, Output $response) {
         $response->allowCors();
         try {
             $this->enableThrow();
@@ -166,7 +167,7 @@ class FileController extends Controller {
         return $response->export($vtt);
     }
 
-    public function lyricsAction($id, Output $response) {
+    public function lyricsAction(string|int $id, Output $response) {
         $response->allowCors();
         try {
             $this->enableThrow();
@@ -180,7 +181,7 @@ class FileController extends Controller {
         return $response->file($data['path']);
     }
 
-    public function musicAction($id, Output $response) {
+    public function musicAction(string|int $id, Output $response) {
         $response->allowCors();
         try {
             $this->enableThrow();
@@ -197,7 +198,7 @@ class FileController extends Controller {
         return $response->file($data['path']);
     }
 
-    public function videoAction($id, Output $response) {
+    public function videoAction(string|int $id, Output $response) {
         $response->allowCors();
         try {
             $this->enableThrow();
@@ -214,7 +215,7 @@ class FileController extends Controller {
         return $response->file($data['path'], 0);
     }
 
-    public function imageAction($id, Output $response) {
+    public function imageAction(string|int $id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);
@@ -226,7 +227,7 @@ class FileController extends Controller {
         return $response->setParameter($data['path']);
     }
 
-    public function thumbAction($id, Output $response) {
+    public function thumbAction(string|int $id, Output $response) {
         try {
             $this->enableThrow();
             $data = DiskRepository::driver()->file($id);

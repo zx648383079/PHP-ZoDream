@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Domain\Repositories\FileRepository;
@@ -35,7 +36,7 @@ class GoodsController extends Controller {
         return $this->renderData(compact('goods_list'));
     }
 
-    public function commentAction(int $id, $page = -1) {
+    public function commentAction(int $id, int $page = -1) {
         $this->layout = '';
         $comment_list = CommentModel::with('images', 'user')->where('item_type', 0)
             ->where('item_id', $id)->page();

@@ -12,7 +12,7 @@ class OrderController extends Controller {
         );
     }
 
-    public function takingAction($id) {
+    public function takingAction(int $id) {
         try {
             WaiterRepository::taking($id);
         } catch (\Exception $ex) {
@@ -21,7 +21,7 @@ class OrderController extends Controller {
         return $this->renderData(true);
     }
 
-    public function takenAction($id) {
+    public function takenAction(int $id) {
         try {
             WaiterRepository::taken($id);
         } catch (\Exception $ex) {

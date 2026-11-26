@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Api;
 
 use Module\Auth\Domain\Concerns\CheckRole;

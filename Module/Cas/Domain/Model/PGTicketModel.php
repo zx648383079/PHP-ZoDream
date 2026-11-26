@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Domain\Model;
 
 use Zodream\Http\HttpClient;
@@ -59,7 +60,7 @@ class PGTicketModel extends BaseModel {
         return json_decode($this->getAttributeSource('proxies'), true);
     }
 
-    public function setProxiesAttribute($value) {
+    public function setProxiesAttribute(mixed $value) {
         //can not modify an existing record
         if ($this->id) {
             return;
@@ -67,7 +68,7 @@ class PGTicketModel extends BaseModel {
         $this->setAttributeSource('proxies', json_encode($value));
     }
 
-    public static function getByTicket($ticket, $checkExpired = true) {
+    public static function getByTicket(string $ticket, bool $checkExpired = true) {
         $record = static::where('ticket', $ticket)->first();
         if (!$record) {
             return null;
@@ -75,7 +76,7 @@ class PGTicketModel extends BaseModel {
         return ($checkExpired && $record->isExpired()) ? null : $record;
     }
 
-    public static function invalidTicketByUser($user_id) {
+    public static function invalidTicketByUser(int $user_id) {
         static::where('user_id', $user_id)->delete();
     }
 
@@ -90,7 +91,7 @@ class PGTicketModel extends BaseModel {
         );
     }
 
-    public function call(Uri $pgtUrl, $pgtiou) {
+    public function call(Uri $pgtUrl, string $pgtiou) {
         $query = [
             'pgtId'  => $this->ticket,
             'pgtIou' => $pgtiou,

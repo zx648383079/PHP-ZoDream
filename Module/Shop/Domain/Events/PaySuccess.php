@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Events;
 
 use Module\Shop\Domain\Models\PayLogModel;
@@ -7,7 +8,7 @@ use Module\Shop\Domain\Models\PayLogModel;
  * 支付记录支付成功事件
  * @package Module\Shop\Domain\Events
  */
-class PaySuccess {
+final class PaySuccess {
     /**
      * @var PayLogModel
      */

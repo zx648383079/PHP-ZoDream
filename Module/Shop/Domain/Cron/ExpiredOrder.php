@@ -3,13 +3,12 @@ declare(strict_types=1);
 namespace Module\Shop\Domain\Cron;
 
 use Module\Shop\Domain\Cart\Store;
-use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Repositories\OrderRepository;
 
-class ExpiredOrder {
+final class ExpiredOrder {
 
     public function __construct() {
         $this->cancelExpiredOrder();

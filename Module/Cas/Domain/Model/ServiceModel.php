@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Domain\Model;
 
 use Zodream\Http\Uri;

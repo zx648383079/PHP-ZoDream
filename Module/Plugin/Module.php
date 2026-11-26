@@ -6,7 +6,7 @@ use Domain\MenuLoader;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\Plugin\Domain\Migrations\CreatePluginTables;
 
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreatePluginTables();

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Catering\Domain\Models;
 
 use Domain\Concerns\TableMeta;

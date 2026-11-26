@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\RPC\Domain;
 
 use Zodream\Helpers\Json;
@@ -7,17 +8,17 @@ use Exception;
 
 class Client {
 
-    protected $version = '2.0';
-    protected $url;
-    protected $notification = false;
-    protected $headers = [
+    protected string $version = '2.0';
+    protected string $url;
+    protected bool $notification = false;
+    protected array $headers = [
         'Content-type' => 'application/json',
 //        'X-RPC-Auth-Session' => '', // 共享session id
 //        'X-RPC-Auth-Username' => '',   // 先使用账号密码登录获取 session id 以后就传session id
 //        'X-RPC-Auth-Password' => ''
     ];
 
-    public function __construct($url) {
+    public function __construct(string $url) {
         $this->setUrl($url);
     }
 
@@ -25,7 +26,7 @@ class Client {
      * @param mixed $url
      * @return Client
      */
-    public function setUrl($url) {
+    public function setUrl(string $url) {
         $this->url = $url;
         return $this;
     }
@@ -47,7 +48,7 @@ class Client {
      * @return array|bool|mixed
      * @throws Exception
      */
-    public function invoke($method, $params = null, $id = null) {
+    public function invoke(array|string $method, mixed $params = null, mixed $id = null) {
         $data = $this->format($method, $params, $id);
         $response = (new HttpClient($this->url))
             ->header($this->headers)
@@ -80,7 +81,7 @@ class Client {
             ? $response['result'][0] :  $response['result'];
     }
 
-    protected function format($method, $params = null, $id = null) {
+    protected function format(array|string $method, mixed $params = null, mixed $id = null) {
         $id = empty($id) ? 1 : intval($id);
         $jsonrpc = $this->version;
         if (!is_array($method)) {
@@ -118,7 +119,7 @@ class Client {
         return $data;
     }
 
-    public function __call($name, $arguments) {
+    public function __call(string $name, array $arguments) {
         return $this->invoke($name, ...$arguments);
     }
 

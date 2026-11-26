@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\OrderGoodsModel;
@@ -12,7 +13,7 @@ class RefundController extends Controller {
         ];
     }
 
-    public function indexAction($status = 0) {
+    public function indexAction(int $status = 0) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->whereIn('status', [OrderModel::STATUS_PAID_UN_SHIP,
                 OrderModel::STATUS_SHIPPED, OrderModel::STATUS_RECEIVED, OrderModel::STATUS_FINISH])
@@ -20,7 +21,7 @@ class RefundController extends Controller {
         return $this->renderPage($goods_list);
     }
 
-    public function goodsAction($goods = 0, $order = 0) {
+    public function goodsAction(int $goods = 0, int $order = 0) {
         if (empty($goods) && empty($order)) {
             return $this->renderFailure('请选择售后的商品');
         }

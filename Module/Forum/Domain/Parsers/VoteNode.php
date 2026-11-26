@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum\Domain\Parsers;
 
 use Module\Forum\Domain\Model\ThreadLogModel;

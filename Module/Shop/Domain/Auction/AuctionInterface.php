@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 namespace Module\Shop\Domain\Auction;
+
+use Module\Shop\Domain\Models\Activity\AuctionLogModel;
+
 /**
  * 拍卖方式的接口
  * @package Module\Auction\Infrastructure
@@ -12,7 +15,7 @@ interface AuctionInterface {
      * @param $data
      * @return static
      */
-    public function setLog($data);
+    public function setLog(AuctionLogModel|array $data);
 
     /**
      * 根据时间判断是否能拍

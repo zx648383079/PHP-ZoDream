@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Migrations;
 
 use Module\Auth\Domain\Repositories\RoleRepository;

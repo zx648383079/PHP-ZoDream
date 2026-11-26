@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop;
 
 use Module\Schedule\Domain\ScheduleAble;
@@ -7,7 +8,7 @@ use Module\Shop\Domain\Cron\ExpiredOrder;
 use Module\Shop\Domain\Migrations\CreateShopTables;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ScheduleAble {
+final class Module extends BaseModule implements ScheduleAble {
     public function getMigration() {
         return new CreateShopTables();
     }

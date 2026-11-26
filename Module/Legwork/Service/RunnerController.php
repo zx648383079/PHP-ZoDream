@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service;
 
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\Legwork\Domain\Model\OrderModel;
-use Module\Legwork\Domain\Repositories\RunnerRepository;
+use Module\Legwork\Domain\Repositories\WaiterRepository;
 
 class RunnerController extends Controller {
 
@@ -16,19 +17,19 @@ class RunnerController extends Controller {
     }
 
     public function indexAction() {
-        $order_list = RunnerRepository::waitTakingList();
+        $order_list = WaiterRepository::waitTakingList();
         return $this->show(compact('order_list'));
     }
 
-    public function orderAction($status = 0) {
-        $order_list = RunnerRepository::getOrders($status);
+    public function orderAction(int $status = 0) {
+        $order_list = WaiterRepository::orderList('', $status);
         $status_list = OrderModel::$status_list;
         return $this->show(compact('order_list', 'status', 'status_list'));
     }
 
-    public function takingAction($id) {
+    public function takingAction(int $id) {
         try {
-            RunnerRepository::taking($id);
+            WaiterRepository::taking($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }
@@ -37,9 +38,9 @@ class RunnerController extends Controller {
         ], '已成功接单');
     }
 
-    public function takenAction($id) {
+    public function takenAction(int $id) {
         try {
-            RunnerRepository::taken($id);
+            WaiterRepository::taken($id);
         } catch (\Exception $ex) {
             return $this->renderFailure($ex->getMessage());
         }

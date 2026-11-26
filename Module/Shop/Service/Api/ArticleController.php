@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Domain\Model\SearchModel;

@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
-use Module\Shop\Domain\Repositories\CartRepository;
+use Module\Shop\Domain\Repositories\CashierRepository;
 use Exception;
 use Module\Shop\Domain\Repositories\ShippingRepository;
 
@@ -14,8 +15,8 @@ use Module\Shop\Domain\Repositories\ShippingRepository;
  */
 class CashierController extends Controller {
 
-    public function indexAction($cart = '', $type = 0) {
-        $goods_list = CartRepository::getGoodsList($cart, $type);
+    public function indexAction(string $cart = '', int $type = 0) {
+        $goods_list = CashierRepository::getGoodsList($cart, $type);
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./mobile', '请选择结算的商品');
         }
@@ -27,9 +28,9 @@ class CashierController extends Controller {
     }
 
 
-    public function checkoutAction($address, $shipping, $payment, $cart = '', $type = 0) {
+    public function checkoutAction(int $address, string $shipping, string $payment, int $coupon = 0, mixed $cart = '', int $type = 0) {
         try {
-            $order = CartRepository::checkout($address, $shipping, $payment, $cart, $type);
+            $order = CashierRepository::checkout($address, $shipping, $payment, $cart, $type);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
@@ -38,17 +39,17 @@ class CashierController extends Controller {
         ]);
     }
 
-    public function previewAction($address, $shipping = 0, $payment = 0, $cart = '', $type = 0) {
+    public function previewAction(int $address, string $shipping = '', string $payment = '', int $coupon = 0, mixed $cart = '', int $type = 0) {
         try {
-            $goods_list = CartRepository::getGoodsList($cart, $type);
-            $order = CartRepository::preview($goods_list, $address, $shipping, $payment);
+            $goods_list = CashierRepository::getGoodsList($cart, $type);
+            $order = CashierRepository::preview($goods_list, $address, $shipping, $payment);
         } catch (Exception $e) {
             return $this->renderFailure($e->getMessage());
         }
         return $this->renderData($order);
     }
 
-    public function payAction($id) {
+    public function payAction(int $id) {
         $order = OrderModel::find($id);
         if ($order->status != OrderModel::STATUS_UN_PAY) {
             return $this->redirectWithMessage($this->getUrl('order'), '不能支付此订单');

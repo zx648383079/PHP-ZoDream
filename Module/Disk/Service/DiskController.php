@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service;
 
 use Domain\Model\SearchModel;
@@ -9,7 +10,6 @@ use Module\Disk\Domain\Model\ShareFileModel;
 use Module\Disk\Domain\Model\ShareModel;
 use Module\Disk\Domain\Model\ShareUserModel;
 use Module\Disk\Domain\Repositories\DiskRepository;
-use Zodream\Database\Command;
 use Zodream\Disk\Directory;
 use Zodream\Disk\File;
 use Zodream\Disk\FileObject;
@@ -33,7 +33,7 @@ class DiskController extends Controller {
     }
 
 
-    public function listAction($id = 0, $path = '', string $type = '') {
+    public function listAction(string|int $id = 0, string $path = '', string $type = '') {
         $data = DiskRepository::driver()->catalog($id, $path);
         $data->map(function ($file) {
             if (isset($file['file']) && isset($file['file']['url']) && !empty($file['file']['url'])) {
@@ -247,7 +247,7 @@ class DiskController extends Controller {
         return $this->renderData('成功');
     }
 
-    public function usersAction($name = null) {
+    public function usersAction(string|null $name = null) {
         $data = UserModel::where('id', '<>', auth()->id())->when(!empty($name), function ($query) {
             SearchModel::searchWhere($query, 'name', false, 'name');
         })->get('name', 'id');
@@ -293,7 +293,7 @@ class DiskController extends Controller {
         });
     }
 
-    public function getUrl($file) {
+    public function getUrl(array $file) {
         if ($file['type'] == FileModel::TYPE_MUSIC) {
             return url('./file/music', ['id' => $file['id']]);
         }

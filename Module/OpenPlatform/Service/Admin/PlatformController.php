@@ -12,7 +12,7 @@ class PlatformController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = PlatformModel::find($id);
         return $this->show(compact('model'));
     }
@@ -34,7 +34,7 @@ class PlatformController extends Controller {
         return $this->renderFailure($model->getFirstError());
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         PlatformModel::where('id', $id)->delete();
         return $this->renderData([
             'url' => $this->getUrl('platform')

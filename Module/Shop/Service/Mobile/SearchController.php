@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 use Domain\Model\SearchModel;
@@ -8,7 +9,7 @@ use Zodream\Html\Page;
 
 class SearchController extends Controller {
 
-    public function indexAction($keywords = null, $cat_id = 0, $brand_id = 0) {
+    public function indexAction(string $keywords = '', int $cat_id = 0, int $brand_id = 0) {
         if (empty($keywords) && $cat_id < 1 && $brand_id < 1) {
             return $this->emptyAction();
         }

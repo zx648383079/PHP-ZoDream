@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\CMS\Domain\Model;
 
 use Module\CMS\Domain\Entities\CategoryEntity;

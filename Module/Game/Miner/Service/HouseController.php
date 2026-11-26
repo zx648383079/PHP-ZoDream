@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\Miner\Service;
 
 use Module\Game\Miner\Domain\Model\HouseModel;

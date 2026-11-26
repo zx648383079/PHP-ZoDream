@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service\Admin;
 
 use Domain\Model\SearchModel;
@@ -6,7 +7,7 @@ use Module\Legwork\Domain\Model\CategoryModel;
 
 class CategoryController extends Controller {
 
-    public function indexAction($keywords = '') {
+    public function indexAction(string $keywords = '') {
         $items = CategoryModel::when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
             })->orderBy('id', SORT_DESC)->page();
@@ -17,7 +18,7 @@ class CategoryController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = CategoryModel::findOrNew($id);
         if (empty($model)) {
             return $this->redirectWithMessage($this->getUrl('category'), '分类不存在！');
@@ -25,7 +26,7 @@ class CategoryController extends Controller {
         return $this->show('edit', compact('model'));
     }
 
-    public function saveAction($id = 0) {
+    public function saveAction(int $id = 0) {
         $model = CategoryModel::findOrNew($id);
         if (!$model->load()) {
             return $this->renderFailure($model->getFirstError());
@@ -38,7 +39,7 @@ class CategoryController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         CategoryModel::where('id', $id)->delete();
         return $this->renderData([
             'refresh' => true

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 
@@ -16,7 +17,7 @@ class CommentController extends Controller {
         ];
     }
 
-    public function indexAction($status = 0) {
+    public function indexAction(int $status = 0) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->when($status > 0, function ($query) {
                 $query->where('comment_id', '>', 0);
@@ -27,14 +28,14 @@ class CommentController extends Controller {
         return $this->show(compact('goods_list', 'status'));
     }
 
-    public function createAction($goods = 0, $order = 0) {
+    public function createAction(int $goods = 0, int $order = 0) {
         $goods_list = OrderGoodsModel::where('user_id', auth()->id())
             ->where('comment_id', 0)
             ->where('status', OrderModel::STATUS_RECEIVED)
             ->when($goods > 0, function ($query) use ($goods) {
-                $query->where('id', intval($goods));
+                $query->where('id', $goods);
             }, function ($query) use ($order) {
-                $query->where('order_id', intval($order));
+                $query->where('order_id', $order);
             })->get();
         if (empty($goods_list)) {
             return $this->redirectWithMessage($this->getUrl('comment'), '请选择商品');
@@ -42,10 +43,10 @@ class CommentController extends Controller {
         return $this->show(compact('goods_list'));
     }
 
-    public function saveAction($goods, $content, $images = [], $rank = 5) {
+    public function saveAction(int $goods, string $content, array $images = [], int $rank = 5) {
         $goods = OrderGoodsModel::where('user_id', auth()->id())
             ->where('comment_id', 0)
-            ->where('status', OrderModel::STATUS_RECEIVED)->where('id', intval($goods))
+            ->where('status', OrderModel::STATUS_RECEIVED)->where('id', $goods)
             ->first();
         if (empty($goods)) {
             return $this->renderFailure('可评价的商品不存在');

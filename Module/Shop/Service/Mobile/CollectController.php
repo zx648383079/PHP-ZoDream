@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Models\CollectModel;
@@ -16,19 +17,19 @@ class CollectController extends Controller {
         return $this->show(compact('goods_list'));
     }
 
-    public function addAction($id) {
+    public function addAction(int $id) {
         if (!CollectModel::exist($id)) {
             CollectModel::add($id);
         }
         return $this->renderData();
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         CollectModel::remove($id);
-        return $this->renderData();
+        return $this->renderData(true);
     }
 
-    public function toggleAction($id) {
+    public function toggleAction(int $id) {
         $id = intval($id);
         if (CollectModel::exist($id)) {
             CollectModel::remove($id);

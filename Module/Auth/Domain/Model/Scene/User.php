@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Auth\Domain\Model\Scene;
 
 use Module\Auth\Domain\Model\UserModel;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\ResourceStore\Service\Admin;
 
 use Module\ResourceStore\Domain\Models\PostModel;

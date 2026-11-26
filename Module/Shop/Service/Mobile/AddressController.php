@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 
@@ -14,7 +15,7 @@ class AddressController extends Controller {
         ];
     }
 
-    public function indexAction($selected = 0) {
+    public function indexAction(int $selected = 0) {
         $model_list = AddressRepository::getList();
         return $this->show(compact('model_list', 'selected'));
     }
@@ -23,7 +24,7 @@ class AddressController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = $id > 0 ? AddressRepository::get($id) : new Address();
         if (!$model) {
             $this->redirect($this->getUrl('address'));
@@ -43,7 +44,7 @@ class AddressController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             AddressRepository::remove($id);
         } catch (\Exception $ex) {
@@ -54,7 +55,7 @@ class AddressController extends Controller {
         ]);
     }
 
-    public function defaultAction($id) {
+    public function defaultAction(int $id) {
         try {
             AddressRepository::setDefault($id);
         } catch (\Exception $ex) {

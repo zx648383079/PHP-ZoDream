@@ -25,7 +25,7 @@ class AuthorizeController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         UserTokenModel::where('id', $id)->where('user_id', auth()->id())->delete();
         return $this->renderData([
             'url' => url('./authorize')

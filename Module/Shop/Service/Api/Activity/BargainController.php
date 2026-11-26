@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Module\Shop\Service\Api\Activity;
 
 use Module\Shop\Domain\Repositories\Activity\BargainRepository;
-use Module\Shop\Domain\Repositories\Activity\TrialRepository;
 use Module\Shop\Service\Api\Controller;
 
 class BargainController extends Controller {

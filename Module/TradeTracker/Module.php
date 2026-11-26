@@ -5,7 +5,7 @@ namespace Module\TradeTracker;
 use Module\TradeTracker\Domain\Migrations\CreateTradeTrackerTables;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateTradeTrackerTables();

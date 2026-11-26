@@ -161,7 +161,7 @@ class Boc extends BasePayment implements IPaymentPlugin {
         ];
     }
 
-    protected function getUrl($path) {
+    protected function getUrl(string $path) {
         return sprintf('https://%s/PGWPortal/%s', $this->getConf('debug') ? '101.231.206.170' : 'ebspay.boc.cn', trim($path, '/'));
     }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Wallet\Domain\Models;
 
 use Module\Auth\Domain\Model\UserSimpleModel;

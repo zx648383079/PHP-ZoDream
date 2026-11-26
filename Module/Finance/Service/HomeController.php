@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Service;
 
 use Module\Finance\Domain\Model\FinancialProjectModel;

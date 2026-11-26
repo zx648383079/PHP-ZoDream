@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Domain\Model;
 
 
@@ -67,7 +68,7 @@ class TicketModel extends Model {
             ? [] : Json::decode($this->__attributes['proxies'], true);
     }
 
-    public function setProxiesAttribute($value) {
+    public function setProxiesAttribute(mixed $value) {
         //can not modify an existing record
         if ($this->id) {
             return;

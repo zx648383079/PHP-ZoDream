@@ -9,7 +9,7 @@ use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ISiteMapModule {
+final class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateDocumentTables();

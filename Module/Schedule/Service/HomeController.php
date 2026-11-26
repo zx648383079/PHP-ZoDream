@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Schedule\Service;
 
 use Module\Schedule\Domain\Scheduler;

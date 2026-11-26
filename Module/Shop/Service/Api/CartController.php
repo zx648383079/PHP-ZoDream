@@ -14,7 +14,7 @@ class CartController extends Controller {
         return $this->render($cart);
     }
 
-    public function addAction(int $goods, int $amount = 1, $properties = null) {
+    public function addAction(int $goods, int $amount = 1, string|array $properties = '') {
         try {
             $properties = AttributeRepository::formatPostProperties($properties);
             if (!CartRepository::addGoods($goods, $amount, $properties)) {
@@ -29,7 +29,7 @@ class CartController extends Controller {
         return $this->render(CartRepository::load());
     }
 
-    public function updateGoodsAction(int $goods, int $amount = 1, $properties = null) {
+    public function updateGoodsAction(int $goods, int $amount = 1, string|array $properties = '') {
         try {
             $properties = AttributeRepository::formatPostProperties($properties);
             if (!CartRepository::updateGoods($goods, $amount, $properties)) {
@@ -44,7 +44,7 @@ class CartController extends Controller {
         return $this->render(CartRepository::load());
     }
 
-    public function updateAction($id, $amount) {
+    public function updateAction(int $id, int $amount) {
         try {
             CartRepository::updateAmount($id, $amount);
         } catch (\Exception $ex) {

@@ -88,8 +88,7 @@ final class CashierRepository {
         })->where('serial_number', $couponCode)->where('order_id', 0)->first();
     }
 
-    public static function getShipping(string $code): ShippingModel|null
-    {
+    public static function getShipping(string $code): ShippingModel|null {
         return ShippingModel::where('code', $code)->first();
     }
 

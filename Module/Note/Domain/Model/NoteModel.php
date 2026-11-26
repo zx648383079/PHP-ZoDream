@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note\Domain\Model;
 
 use Module\Note\Domain\Entities\NoteEntity;

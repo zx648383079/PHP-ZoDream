@@ -5,7 +5,7 @@ namespace Module\AdSense\Service\Api\Admin;
 use Module\Auth\Domain\Concerns\AdminRole;
 use Module\ModuleController as BaseController;
 
-class Controller extends BaseController {
+abstract class Controller extends BaseController {
 
     use AdminRole;
 }

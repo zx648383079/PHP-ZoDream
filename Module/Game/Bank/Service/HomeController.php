@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\Bank\Service;
 
 use Module\Game\Bank\Domain\Model\BankLogModel;

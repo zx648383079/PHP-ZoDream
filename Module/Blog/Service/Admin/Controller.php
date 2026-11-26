@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Admin;
 
 use Module\Auth\Domain\Concerns\CheckRole;
 use Module\ModuleController;
 use Zodream\Disk\File;
 
-class Controller extends ModuleController {
+abstract class Controller extends ModuleController {
 
     use CheckRole;
 
@@ -17,7 +18,7 @@ class Controller extends ModuleController {
         ];
     }
 
-    protected function getUrl(mixed$path, array $args = []) {
+    protected function getUrl(mixed $path, array $args = []) {
         return url('./@admin/'.$path, $args);
     }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Family\Domain\Migrations;
 
 use Module\Family\Domain\Model\ClanMetaModel;

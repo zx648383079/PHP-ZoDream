@@ -37,7 +37,7 @@ a {
             display: inline-block;
             height: 45px;
             line-height: 45px;
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
         }
         &.active {
             a {
@@ -562,7 +562,7 @@ footer,
             a {
                 border: var(--#{theme.$prefix}border);
                 border-radius: 2px;
-                color: #333;
+                color: var(--#{theme.$prefix}body-text);
                 padding: 0 2px;
                 line-height: 16px;
             }
@@ -725,7 +725,7 @@ footer,
 .cart-box {
     .cart-group-item {
         margin: 5px 0;
-        background-color: #fff;
+        background-color: var(--#{theme.$prefix}panel);
         .group-header {
             line-height: 30px;
             padding: 0 13px;
@@ -1077,7 +1077,7 @@ footer,
         .content {
             line-height: 20px;
             font-size: 14px;
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
             margin-bottom: 10px;
             word-break: break-word;
         }
@@ -1179,14 +1179,14 @@ footer,
         background-color: #f7f7f7;
         padding-top: 7px;
         .text {
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
             font-size: 10px;
         }
         .time {
             color: #e93b3d;
             font-size: 12px;
             span {
-                background-color: #fff;
+                background-color: var(--#{theme.$prefix}panel);
                 border: 1px solid #ccc;
             }
         }
@@ -1237,7 +1237,7 @@ footer,
         position: relative;
         line-height: 46px;
         font-size: 16px;
-        color: #333;
+        color: var(--#{theme.$prefix}body-text);
         img {
             position: absolute;
             left: 10px;
@@ -1257,7 +1257,7 @@ footer,
         .stock {
             word-break: break-all;
             font-size: 12px;
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
             line-height: 1.4em;
             padding-right: 10px;
             overflow: hidden;
@@ -1300,7 +1300,7 @@ footer,
                     margin-left: 10px;
                     margin-bottom: 10px;
                     border-radius: 4px;
-                    color: #333;
+                    color: var(--#{theme.$prefix}body-text);
                     background-color: #f7f7f7;
                     font-size: 14px;
                     cursor: pointer;
@@ -1555,7 +1555,7 @@ footer,
             height: 3.125rem;
             line-height: 3.125rem;
             border-radius: 50%;
-            background: #333;
+            background: var(--#{theme.$prefix}body-text);
             color: var(--#{theme.$prefix}surface-text);
             text-align: center;
             img {
@@ -1916,7 +1916,7 @@ footer,
         border-top: none;
         a {
             &.active {
-                border-bottom: 2px solid #333;
+                border-bottom: 2px solid var(--#{theme.$prefix}border);
             }
         }
     }
@@ -2195,12 +2195,12 @@ footer,
 	.image-item {
 		display: inline-block;
 		position: relative;
-		background-color: #fff;
+		background-color: var(--#{theme.$prefix}panel);
 		.fa {
 			position: absolute;
 			top: 0;
 			right: 0;
-			background: rgba(#333, .2);
+			background-color: rgba(#333, .2);
 			border-radius: 50%;
 			display: block;
 			width: 20px;
@@ -2228,11 +2228,11 @@ footer,
     top: 38%;
     .dialog-header {
         background-color: var(--#{theme.$prefix}panel);
-        color: #333;
+        color: var(--#{theme.$prefix}body-text);
         border: none;
         .dialog-close {
             background-color: var(--#{theme.$prefix}panel);
-            color: #333;
+            color: var(--#{theme.$prefix}body-text);
         }
         .dialog-title {
             font-weight: 700;

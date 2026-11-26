@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Model;
 
 use Domain\Model\Model;

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-use Module\Shop\Domain\Models\BrandModel;
-use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Repositories\Admin\BrandRepository;
 use Zodream\Infrastructure\Contracts\Http\Input;
 

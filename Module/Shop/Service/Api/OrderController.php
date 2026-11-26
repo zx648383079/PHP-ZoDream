@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api;
 
 use Module\Shop\Domain\Models\CommentImageModel;
@@ -7,7 +8,6 @@ use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
 use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
-use Module\Shop\Domain\Models\Scene\Order;
 use Module\Shop\Domain\Repositories\OrderRepository;
 
 class OrderController extends Controller {

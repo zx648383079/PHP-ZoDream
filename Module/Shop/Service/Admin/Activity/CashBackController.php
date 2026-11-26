@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Admin\Activity;
 
 use Module\Shop\Domain\Models\Activity\ActivityModel;

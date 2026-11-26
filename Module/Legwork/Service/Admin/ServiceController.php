@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service\Admin;
 
 use Domain\Model\ModelHelper;
@@ -8,7 +9,7 @@ use Module\Legwork\Domain\Model\ServiceModel;
 
 class ServiceController extends Controller {
 
-    public function indexAction($keywords = '', $cat_id = 0) {
+    public function indexAction(string $keywords = '', int $cat_id = 0) {
         $items = ServiceModel::with('category')->when(!empty($keywords), function ($query) {
             SearchModel::searchWhere($query, 'name');
             })->when($cat_id > 0, function ($query) use ($cat_id) {
@@ -22,7 +23,7 @@ class ServiceController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         $model = ServiceModel::findOrNew($id);
         if (empty($model)) {
             return $this->redirectWithMessage($this->getUrl('service'), '服务不存在！');
@@ -31,7 +32,7 @@ class ServiceController extends Controller {
         return $this->show('edit', compact('model', 'cat_list'));
     }
 
-    public function saveAction($id = 0, $form = []) {
+    public function saveAction(int $id = 0, array $form = []) {
         $model = ServiceModel::findOrNew($id);
         if (!$model->load()) {
             return $this->renderFailure($model->getFirstError());
@@ -47,7 +48,7 @@ class ServiceController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         ServiceModel::where('id', $id)->delete();
         return $this->renderData([
             'refresh' => true

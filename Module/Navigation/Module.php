@@ -8,7 +8,7 @@ use Zodream\Route\Controller\Module as BaseModule;
 /**
  * 搜索引擎模块
  */
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateNavigationTables();

@@ -1,10 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Api\Admin;
 
-use Module\Shop\Domain\Models\CategoryModel;
-use Module\Shop\Domain\Models\GoodsModel;
 use Module\Shop\Domain\Repositories\Admin\CategoryRepository;
-use Zodream\Html\Tree;
 use Zodream\Infrastructure\Contracts\Http\Input;
 
 class CategoryController extends Controller {

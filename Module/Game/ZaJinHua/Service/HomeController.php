@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Game\ZaJinHua\Service;
 
 use Module\Game\ZaJinHua\Domain\Player;
@@ -18,7 +19,7 @@ class HomeController extends Controller {
         return $this->show(compact('player'));
     }
 
-    public function doAction($action, $money = 0) {
+    public function doAction(string $action, int $money = 0) {
         $player = Player::load();
         $message = null;
         try {

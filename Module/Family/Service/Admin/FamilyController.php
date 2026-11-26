@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Family\Service\Admin;
 
 use Domain\Model\ModelHelper;

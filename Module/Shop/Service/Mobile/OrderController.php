@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 use Module\Shop\Domain\Models\OrderAddressModel;
 use Module\Shop\Domain\Models\OrderGoodsModel;
-use Module\Shop\Domain\Models\OrderLogModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Repositories\OrderRepository;
 
@@ -16,19 +16,19 @@ class OrderController extends Controller {
         ];
     }
 
-    public function indexAction($status = 0) {
+    public function indexAction(int $status = 0) {
         $order_list = OrderRepository::getList($status);
         return $this->show(compact('order_list', 'status'));
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         $order = OrderModel::where('id', $id)->where('user_id', auth()->id())->first();
         $goods_list = OrderGoodsModel::where('order_id', $id)->get();
         $address = OrderAddressModel::where('order_id', $id)->first();
         return $this->show(compact('order', 'goods_list', 'address'));
     }
 
-    public function receiveAction($id) {
+    public function receiveAction(int $id) {
         try {
             OrderRepository::receive($id);
         } catch (\Exception $ex) {
@@ -39,7 +39,7 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function cancelAction($id) {
+    public function cancelAction(int $id) {
         try {
             OrderRepository::cancel($id);
         } catch (\Exception $ex) {
@@ -50,7 +50,7 @@ class OrderController extends Controller {
         ]);
     }
 
-    public function repurchaseAction($id) {
+    public function repurchaseAction(int $id) {
         try {
             OrderRepository::repurchase($id);
         } catch (\Exception $ex) {

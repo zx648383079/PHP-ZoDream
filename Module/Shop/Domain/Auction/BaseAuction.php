@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Auction;
 
 use Module\Wallet\Domain\FundAccount;
@@ -20,7 +21,7 @@ abstract class BaseAuction {
     ) {
     }
 
-    public function setLog($data) {
+    public function setLog(AuctionLogModel|array $data) {
         $this->data = is_array($data) ? new AuctionLogModel($data) : $data;
         if ($this->data->user_id < 1) {
             $this->data->user_id = auth()->id();
@@ -85,7 +86,7 @@ abstract class BaseAuction {
            ->first();
     }
 
-    protected function config(string $key = '', $default = null) {
+    protected function config(string $key = '', mixed $default = null): mixed {
         if (empty($key)) {
             return $this->configure;
         }

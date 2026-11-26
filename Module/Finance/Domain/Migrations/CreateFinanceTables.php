@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Finance\Domain\Migrations;
 
 use Module\Finance\Domain\Entities\ItemEntity;

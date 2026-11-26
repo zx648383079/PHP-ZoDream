@@ -2,18 +2,17 @@
 declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
-use Zodream\Domain\Upload\BaseUpload;
 use Zodream\Html\Page;
 
 interface IDiskAdapter {
 
-    public function catalog($id, $path): Page;
+    public function catalog(string|int $id, string $path): Page;
 
     public function search(string $keywords, string $type): Page;
 
-    public function remove($id);
+    public function remove(string|int $id);
 
-    public function create(string $name, $parentId = '');
+    public function create(string $name, string|int $parentId = '');
 
     /**
      * 上传单个文件
@@ -52,11 +51,11 @@ interface IDiskAdapter {
      */
     public function uploadCheck(string $md5, string $name, string|int $parentId = ''): array;
 
-    public function rename($id, string $name);
+    public function rename(string|int $id, string $name);
 
     public function copy(array $data);
 
     public function move(array $data);
 
-    public function file($id): array;
+    public function file(string|int $id): array;
 }

@@ -13,7 +13,7 @@ use Module\SEO\Domain\SiteMap;
 use Zodream\Helpers\Time;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ISiteMapModule {
+final class Module extends BaseModule implements ISiteMapModule {
 
     public function boot() {
         app()->scoped(SceneInterface::class, MultiScene::class);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 
@@ -26,7 +27,7 @@ class AddressController extends Controller {
         return $this->editAction(0);
     }
 
-    public function editAction($id) {
+    public function editAction(int $id) {
         if (request()->isAjax()) {
             return $this->infoAction($id);
         }
@@ -37,7 +38,7 @@ class AddressController extends Controller {
         return $this->show('edit', compact('model'));
     }
 
-    public function infoAction($id) {
+    public function infoAction(int $id) {
         $address = AddressRepository::get($id);
         return $this->renderData($address);
     }
@@ -54,7 +55,7 @@ class AddressController extends Controller {
         ]);
     }
 
-    public function deleteAction($id) {
+    public function deleteAction(int $id) {
         try {
             AddressRepository::remove($id);
         } catch (\Exception $ex) {
@@ -65,7 +66,7 @@ class AddressController extends Controller {
         ]);
     }
 
-    public function defaultAction($id) {
+    public function defaultAction(int $id) {
         try {
             AddressRepository::setDefault($id);
         } catch (\Exception $ex) {

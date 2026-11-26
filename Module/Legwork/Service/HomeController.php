@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Service;
 
 use Domain\Model\SearchModel;

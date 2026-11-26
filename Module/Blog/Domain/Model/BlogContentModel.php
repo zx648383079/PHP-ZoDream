@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Domain\Model;
 
 use Module\Blog\Domain\Repositories\BlogRepository;

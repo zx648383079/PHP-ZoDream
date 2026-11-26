@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Service;
 
 use Module\Disk\Domain\Repositories\DiskRepository;
@@ -11,7 +12,7 @@ use Zodream\Infrastructure\Contracts\Http\Output;
  */
 class DownloadController extends Controller {
     
-    public function indexAction($id, Output $response) {
+    public function indexAction(string|int $id, Output $response) {
         try {
             $data = DiskRepository::driver()->file($id);
         } catch (\Exception $ex) {

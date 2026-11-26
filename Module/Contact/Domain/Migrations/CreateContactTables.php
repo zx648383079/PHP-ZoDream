@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Contact\Domain\Migrations;
 
 use Module\Contact\Domain\Model\FeedbackModel;

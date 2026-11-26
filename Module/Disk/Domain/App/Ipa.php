@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\App;
 
 
@@ -55,7 +56,7 @@ XML;
 
 
 
-    public static function getPlist($name, $bundle_id, $url, $icon, $version, $icon2x) {
+    public static function getPlist(string $name, string $bundle_id, string $url, string $icon, string $version, string $icon2x): string {
         $data = compact('name', 'bundle_id', 'url', 'icon', 'icon2x', 'version');
         $content = self::TEMPLATE;
         foreach ($data as $key => $item) {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Domain;
 
 use Zodream\Infrastructure\Support\Html;

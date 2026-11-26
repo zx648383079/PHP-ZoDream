@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service;
 
 use Module\Shop\Domain\Models\AddressModel;
 use Module\Shop\Domain\Models\OrderModel;
 use Module\Shop\Domain\Models\PaymentModel;
 use Module\Shop\Domain\Repositories\AddressRepository;
-use Module\Shop\Domain\Repositories\CartRepository;
 use Exception;
 use Module\Shop\Domain\Repositories\CashierRepository;
 use Module\Shop\Domain\Repositories\ShippingRepository;
@@ -16,7 +16,7 @@ use Module\Shop\Domain\Repositories\ShippingRepository;
  */
 class CashierController extends Controller {
 
-    public function indexAction($cart = '', int $type = 0) {
+    public function indexAction(mixed $cart = '', int $type = 0) {
         $goods_list = CashierRepository::getGoodsList($cart, $type);
         if (empty($goods_list)) {
             return $this->redirectWithMessage('./', '请选择结算的商品');
@@ -32,7 +32,7 @@ class CashierController extends Controller {
     }
 
 
-    public function checkoutAction(int $address, int $shipping, int $payment, int $coupon = 0, $cart = '', int $type = 0) {
+    public function checkoutAction(int $address, string $shipping, string $payment, int $coupon = 0, mixed $cart = '', int $type = 0) {
         try {
             $order = CashierRepository::checkout(auth()->id(), $address, $shipping, $payment, $coupon, '', $cart, $type);
         } catch (Exception $e) {
@@ -43,7 +43,7 @@ class CashierController extends Controller {
         ], '提交订单成功！');
     }
 
-    public function previewAction(int $address, int $shipping = 0, int $payment = 0, int $coupon = 0, $cart = '', int $type = 0) {
+    public function previewAction(int $address, string $shipping = '', string $payment = '', int $coupon = 0, mixed $cart = '', int $type = 0) {
         try {
             $goods_list = CashierRepository::getGoodsList($cart, $type);
             $order = CashierRepository::preview(auth()->id(), $goods_list, $address, $shipping, $payment, $coupon);
@@ -56,7 +56,7 @@ class CashierController extends Controller {
         return $this->renderData($data);
     }
 
-    public function editAddressAction(int $id = 0, $prev = 0) {
+    public function editAddressAction(int $id = 0, int $prev = 0) {
         $this->layout = '';
         $address = $id > 0 ? AddressModel::findOrNew($id) : null;
         if ($id > 0) {
@@ -82,7 +82,7 @@ class CashierController extends Controller {
         return $this->show('address', compact('address'));
     }
 
-    public function addressListAction($selected) {
+    public function addressListAction(int $selected) {
         $this->layout = '';
         $address_list = AddressRepository::getList();
         return $this->show('addressList', compact('address_list', 'selected'));

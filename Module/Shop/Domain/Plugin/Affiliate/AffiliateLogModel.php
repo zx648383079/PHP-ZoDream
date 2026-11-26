@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Plugin\Affiliate;
 
 use Domain\Model\Model;

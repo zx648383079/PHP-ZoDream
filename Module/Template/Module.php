@@ -9,7 +9,7 @@ use Zodream\Infrastructure\Contracts\HttpContext;
 use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ICustomRouteModule {
+final class Module extends BaseModule implements ICustomRouteModule {
 
     public function getMigration() {
         return new CreateTemplateTables();

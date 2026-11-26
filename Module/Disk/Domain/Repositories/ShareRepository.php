@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Repositories;
 
 use Module\Disk\Domain\Model\ShareModel;
@@ -18,7 +19,7 @@ class ShareRepository {
             ->orderBy('created_at', SORT_DESC)->page();
     }
 
-    public static function remove($id) {
+    public static function remove(array|int $id) {
         ShareModel::auth()->whereIn('id', (array)$id)->delete();
     }
 }

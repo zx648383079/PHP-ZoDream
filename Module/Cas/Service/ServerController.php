@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Service;
 
 use Module\Cas\Domain\Model\PGTicketModel;
@@ -9,7 +10,7 @@ use Zodream\Http\Uri;
 
 class ServerController extends Controller {
 
-    public function loginAction($service) {
+    public function loginAction(string $service) {
         $url = new Uri($service);
         $serviceModel = ServiceModel::findByUrl($url);
         if (empty($serviceModel)) {
@@ -34,7 +35,7 @@ class ServerController extends Controller {
         return $this->redirect($url);
     }
 
-    public function logoutAction($service, $url = null) {
+    public function logoutAction(string $service, string|null $url = null) {
         $uri = new Uri();
         $serviceModel = ServiceModel::findByUrl($uri);
         if (empty($serviceModel)) {
@@ -53,7 +54,7 @@ class ServerController extends Controller {
         return $this->redirect(empty($url) ? $uri : $url);
     }
 
-    public function validateAction($service, $ticket) {
+    public function validateAction(string $service, string $ticket) {
         $url = new Uri($service);
         $serviceModel = ServiceModel::findByUrl($url);
         if (empty($serviceModel)) {
@@ -74,7 +75,7 @@ class ServerController extends Controller {
 //        ]);
     }
 
-    public function serviceValidateAction($service, $ticket) {
+    public function serviceValidateAction(string $service, string $ticket) {
         $url = new Uri($service);
         $serviceModel = ServiceModel::findByUrl($url);
         if (empty($serviceModel)) {
@@ -102,7 +103,7 @@ class ServerController extends Controller {
         ], 'xml');
     }
 
-    public function proxyAction($targetService, $pgt) {
+    public function proxyAction(string $targetService, string $pgt) {
         $model = PGTicketModel::getByTicket($pgt);
         if (empty($model)) {
             return;
@@ -131,7 +132,7 @@ class ServerController extends Controller {
         ], 'xml');
     }
 
-    public function proxyValidateAction($service, $ticket, $pgtUrl) {
+    public function proxyValidateAction(string $service, string $ticket, string $pgtUrl) {
         $url = new Uri($service);
         $serviceModel = ServiceModel::findByUrl($url);
         if (empty($serviceModel)) {
@@ -156,7 +157,7 @@ class ServerController extends Controller {
             'service_id' => $serviceModel->id
         ]);
         $iou = PGTicketModel::generateOne(64, 'PGTIOU-');
-        if (!PGTicketModel::call($pgtUrl, $iou)) {
+        if (!PGTicketModel::call(new Uri($pgtUrl), $iou)) {
             $iou = null;
         }
         $attr = $ticket->user->getCASAttributes() || [];
@@ -178,7 +179,7 @@ class ServerController extends Controller {
         ], 'xml');
     }
 
-    public function samlValidateAction($TARGET) {
+    public function samlValidateAction(int $TARGET) {
         return $this->renderResponse([
             'localName' => 'Envelope',
             'NameIdentifier' => [

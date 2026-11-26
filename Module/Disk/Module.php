@@ -6,7 +6,7 @@ use Domain\MenuLoader;
 use Module\Disk\Domain\Migrations\CreateDiskTables;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateDiskTables();

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Note;
 
 use Domain\MenuLoader;
@@ -6,7 +7,7 @@ use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\Note\Domain\Migrations\CreateNoteTables;
 
-class Module extends BaseModule {
+final class Module extends BaseModule {
 
     public function getMigration() {
         return new CreateNoteTables();

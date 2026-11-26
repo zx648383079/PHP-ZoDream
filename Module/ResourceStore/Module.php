@@ -13,7 +13,7 @@ use Zodream\Route\Controller\ICustomRouteModule;
 use Zodream\Route\Controller\Module as BaseModule;
 use Module\SEO\Domain\SiteMap;
 
-class Module extends BaseModule implements ICustomRouteModule {
+final class Module extends BaseModule implements ICustomRouteModule {
 
     public function getMigration() {
         return new CreateResourceTables();

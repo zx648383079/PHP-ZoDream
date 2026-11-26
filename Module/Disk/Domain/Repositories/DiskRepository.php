@@ -12,7 +12,7 @@ use Zodream\Http\Uri;
 
 class DiskRepository {
 
-    private static $driver;
+    private static IDiskAdapter|null $driver;
 
     /**
      * @return IDiskAdapter|BaseDiskAdapter

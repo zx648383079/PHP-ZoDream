@@ -45,7 +45,7 @@ final class AttributeRepository {
         return ProductModel::where('attributes', $attributes)->where('goods_id', $goods)->first();
     }
 
-    public static function formatPostProperties($properties): array {
+    public static function formatPostProperties(string|array $properties): array {
         $data = [];
         if (empty($properties)) {
             return $data;

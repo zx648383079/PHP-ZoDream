@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\AdSense\Domain\Models;
 
 use Module\AdSense\Domain\Entities\AdEntity;

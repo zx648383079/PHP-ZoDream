@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Adapters;
 
 abstract class BaseDiskAdapter {
 
-    protected $configs = [];
+    protected array $configs = [];
 
-    public function __construct($configs = []) {
+    public function __construct(array $configs = []) {
         if (empty($configs)) {
             return;
         }
@@ -32,7 +33,7 @@ abstract class BaseDiskAdapter {
      * @return \Zodream\Disk\Directory
      * @throws \Exception
      */
-    protected function getRealFolder($path) {
+    protected function getRealFolder(string $path) {
         if (empty($path)) {
             throw new \Exception('文件夹错误');
         }

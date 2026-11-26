@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Legwork\Domain\Repositories;
 
 use Domain\Model\SearchModel;
@@ -93,7 +94,7 @@ class OrderRepository {
         ]);
     }
 
-    public static function comment($id, $rank = 10) {
+    public static function comment(int $id, int $rank = 10) {
         /** @var OrderModel $order */
         $order = OrderModel::query()
             ->where('user_id', auth()->id())
@@ -107,12 +108,12 @@ class OrderRepository {
             && $order->status != OrderModel::STATUS_PAID_UN_TAKING) {
             throw new Exception('此订单无法评价');
         }
-        $order->service_score = intval($rank);
+        $order->service_score = $rank;
         OrderLogModel::finish($order);
         return $order;
     }
 
-    public static function cancel($id) {
+    public static function cancel(int $id) {
         /** @var OrderModel $order */
         $order = OrderModel::query()->where('user_id', auth()->id())->where('id', $id)
             ->first();

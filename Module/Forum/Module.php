@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Forum;
 
 use Module\Forum\Domain\Migrations\CreateForumTables;
@@ -8,7 +9,7 @@ use Module\SEO\Domain\ISiteMapModule;
 use Module\SEO\Domain\SiteMap;
 use Zodream\Route\Controller\Module as BaseModule;
 
-class Module extends BaseModule implements ISiteMapModule {
+final class Module extends BaseModule implements ISiteMapModule {
 
     public function getMigration() {
         return new CreateForumTables();

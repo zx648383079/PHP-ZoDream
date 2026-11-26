@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 
@@ -22,7 +23,7 @@ class InvoiceController extends Controller {
         return $this->show();
     }
 
-    public function editAction($id = 0) {
+    public function editAction(int $id = 0) {
         $model = new InvoiceTitleModel();
         return $this->show('edit', compact('model'));
     }

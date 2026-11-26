@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\RPC\Domain;
 
 use Zodream\Helpers\Json;
@@ -10,9 +11,9 @@ use Zodream\Helpers\Json;
  */
 class Server {
 
-    protected $version = '2.0';
+    protected string $version = '2.0';
 
-    protected $errorMessages = [
+    protected array $errorMessages = [
         '-32700' => 'Parse error',
         '-32600' => 'Invalid request',
         '-32601' => 'Method not found',
@@ -22,7 +23,7 @@ class Server {
         '-32000' => 'Extension not found'
     ];
 
-    protected $request = [
+    protected array $request = [
         'jsonrpc' => '2.0',
         'method' => '',
         'params' => [],
@@ -44,7 +45,7 @@ class Server {
         return true;
     }
 
-    public function invoke($request) {
+    public function invoke(array $request) {
         $this->request = $request;
         // TODO
         return $this->jsonSuccess(1);
@@ -77,7 +78,7 @@ class Server {
         }
     }
 
-    public function json($data) {
+    public function json(array $data): array {
         $args = [
             'jsonrpc' => $this->version,
             'id' => isset($data['error']) ? null : $this->request['id']
@@ -90,11 +91,11 @@ class Server {
         return $args;
     }
 
-    public function jsonSuccess($result) {
+    public function jsonSuccess(mixed $result) {
         return $this->json(compact('result'));
     }
 
-    public function jsonFailure($message = '', $code = -32600) {
+    public function jsonFailure(mixed $message = '', int $code = -32600) {
         if (is_numeric($message)) {
             list($code, $message) = [$message, isset($this->errorMessages[$message]) ? $this->errorMessages[$message] : 'internalError'];
         }

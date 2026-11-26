@@ -13,7 +13,7 @@ use Zodream\Html\Page;
 
 class Database extends BaseDiskAdapter implements IDiskAdapter {
 
-    public function catalog($id, $path): Page {
+    public function catalog(string|int $id, string $path): Page {
         return DiskModel::with('file')
             ->auth()->where('parent_id', $id)
             ->where('deleted_at', 0)
@@ -32,7 +32,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
             ->page();
     }
 
-    public function remove($id) {
+    public function remove(string|int $id) {
         $model_list = DiskModel::auth()->where('deleted_at', 0)
             ->whereIn('id', (array)$id)->get();
         foreach ($model_list as $item) {
@@ -40,7 +40,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         }
     }
 
-    public function create(string $name, $parentId = '')
+    public function create(string $name, string|int $parentId = '')
     {
         if (empty($name)) {
             throw new \Exception('请输入文件夹名');
@@ -153,7 +153,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         ];
     }
 
-    public function rename($id, string $name)
+    public function rename(string|int $id, string $name)
     {
         $model = DiskModel::find($id);
         if (empty($model)) {
@@ -180,7 +180,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         // TODO: Implement move() method.
     }
 
-    public function file($id): array
+    public function file(string|int $id): array
     {
         $model = DiskModel::find($id);
         if (empty($model)) {
@@ -201,7 +201,7 @@ class Database extends BaseDiskAdapter implements IDiskAdapter {
         return $data;
     }
 
-    private function formatFile(FileModel $item, $fileId) {
+    private function formatFile(FileModel $item, string|int $fileId) {
         $data = [
             'size' => $item->size,
             'extension' => strtolower($item->extension),

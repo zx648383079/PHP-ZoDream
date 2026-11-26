@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Disk\Domain\Repositories;
 
 use Module\Disk\Domain\Model\DiskModel;
@@ -14,7 +15,7 @@ class TrashRepository {
             ->page();
     }
 
-    public static function reset($id) {
+    public static function reset(array|int $id) {
         $model_list = DiskModel::auth()->whereIn('id', (array)$id)
             ->where('deleted_at', '>', 0)->get();
         foreach ($model_list as $item) {
@@ -22,7 +23,7 @@ class TrashRepository {
         }
     }
 
-    public static function remove($id) {
+    public static function remove(array|int $id) {
         $model_list = DiskModel::auth()->whereIn('id', (array)$id)
             ->where('deleted_at', '>', 0)->get();
         foreach ($model_list as $item) {

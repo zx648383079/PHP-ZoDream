@@ -130,7 +130,7 @@ class WaiterRepository {
             ->orderBy('id', SORT_DESC)->page();
     }
 
-    public static function taking($id) {
+    public static function taking(int $id) {
         $order = OrderModel::where('waiter_id', 0)
             ->where('status', OrderModel::STATUS_PAID_UN_TAKING)
             ->where('id', $id)
@@ -148,7 +148,7 @@ class WaiterRepository {
         throw new Exception('接单失败');
     }
 
-    public static function taken($id) {
+    public static function taken(int $id) {
         $order = OrderModel::where('waiter_id', auth()->id())
             ->where('status', OrderModel::STATUS_TAKING_UN_DO)
             ->where('id', $id)

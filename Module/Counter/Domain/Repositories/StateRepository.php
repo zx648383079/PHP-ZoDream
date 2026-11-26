@@ -18,6 +18,10 @@ class StateRepository {
         if ($start_at === 'today' || $start_at === 'yesterday' || $start_at === 'week' || $start_at === 'month') {
             return static::getTimeRange($start_at);
         }
+        if (is_numeric($start_at) && $start_at < 1000) {
+            $now = time();
+            return [$now - intval($start_at) * 86400, $now];
+        }
         return [is_numeric($start_at) ? $start_at : strtotime($start_at),
             is_numeric($end_at) ? $end_at : strtotime($end_at)];
     }

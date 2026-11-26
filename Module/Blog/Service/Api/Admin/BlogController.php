@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Blog\Service\Api\Admin;
 
 use Module\Blog\Domain\Repositories\ManageRepository;

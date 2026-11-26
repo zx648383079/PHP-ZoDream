@@ -17,7 +17,7 @@ class GoodsController extends Controller {
         ];
     }
 
-    public function indexAction($id = 0,
+    public function indexAction(mixed $id = 0,
                                 int $category = 0,
                                 int $brand = 0,
                                 string $keywords = '',
@@ -58,7 +58,7 @@ class GoodsController extends Controller {
         }
     }
 
-    public function priceAction(int $id, $properties = null, int $amount = 1, int $region = 0) {
+    public function priceAction(int $id, string|array $properties = '', int $amount = 1, int $region = 0) {
         try {
             $properties = AttributeRepository::formatPostProperties($properties);
             return $this->render(

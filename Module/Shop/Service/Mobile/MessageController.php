@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Service\Mobile;
 
 
@@ -9,7 +10,7 @@ class MessageController extends Controller {
         return $this->show(compact('model_list'));
     }
 
-    public function detailAction($id) {
+    public function detailAction(int $id) {
         return $this->show();
     }
 }

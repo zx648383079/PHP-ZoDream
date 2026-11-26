@@ -6,7 +6,7 @@ use Module\CMS\Domain\FuncHelper;
 use Module\CMS\Domain\Repositories\CMSRepository;
 use Module\ModuleController;
 
-class Controller extends ModuleController {
+abstract class Controller extends ModuleController {
 
     public function prepare() {
         CMSRepository::registerView();

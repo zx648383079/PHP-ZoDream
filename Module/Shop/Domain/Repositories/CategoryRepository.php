@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Shop\Domain\Repositories;
 
 use Module\Shop\Domain\Models\CategoryModel;

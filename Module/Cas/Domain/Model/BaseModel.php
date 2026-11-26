@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Module\Cas\Domain\Model;
 
 
@@ -15,7 +16,7 @@ class BaseModel extends Model {
      * @param integer  $maxRetry
      * @return string|false
      */
-    public static function generate($totalLength, $prefix, callable $checkFunc, $maxRetry) {
+    public static function generate(int $totalLength, string $prefix, callable $checkFunc, int $maxRetry): string|false {
         $ticket = false;
         $flag   = false;
         for ($i = 0; $i < $maxRetry; $i++) {
@@ -38,7 +39,7 @@ class BaseModel extends Model {
      * @param string  $prefix
      * @return string
      */
-    public static function generateOne($totalLength, $prefix) {
+    public static function generateOne(int $totalLength, string $prefix): string {
         return $prefix.Str::random($totalLength - strlen($prefix));
     }
 }
