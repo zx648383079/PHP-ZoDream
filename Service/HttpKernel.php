@@ -6,11 +6,17 @@ use Module\SEO\Domain\Middleware\OptionMiddleware;
 use Zodream\Infrastructure\Contracts\Http\Input;
 use Zodream\Service\Http\Kernel;
 use Zodream\Service\Middleware\CSRFMiddleware;
+use Zodream\Infrastructure\Pool\RedisPool;
+use Zodream\Infrastructure\Queue\QueuePool;
+use Zodream\Infrastructure\Sync\Lock;
 
 class HttpKernel extends Kernel {
 
     public function bootstrap(): void {
         parent::bootstrap();
+        $this->app->singletonIf(RedisPool::class);
+        $this->app->singletonIf(QueuePool::class);
+        $this->app->singletonIf(Lock::class);
         /** @var Input $input */
         $input = $this->app->make('request');
         if ($this->isOpenCSRF($input->routePath())) {

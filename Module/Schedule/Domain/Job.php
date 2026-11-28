@@ -45,7 +45,7 @@ class Job {
      *
      * @var CronExpression
      */
-    private $executionTime;
+    private CronExpression|null $executionTime = null;
     /**
      * Temporary directory path for
      * lock files to prevent overlapping.

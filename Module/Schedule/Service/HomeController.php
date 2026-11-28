@@ -5,14 +5,14 @@ namespace Module\Schedule\Service;
 use Module\Schedule\Domain\Scheduler;
 use Module\Schedule\Domain\ScheduleAble;
 use Zodream\Infrastructure\Contracts\HttpContext as HttpContextInterface;
-use Zodream\Infrastructure\Queue\QueueManager;
+use Zodream\Infrastructure\Queue\QueuePool;
 use Zodream\Infrastructure\Queue\Worker;
 use Zodream\Infrastructure\Queue\WorkerOptions;
 use Zodream\Route\ModuleRoute;
 
 class HomeController extends Controller {
     public function indexAction(string $name = 'schedule') {
-        QueueManager::logFailedJob();
+        app(QueuePool::class)->logFailedJob();
         $scheduler = new Scheduler(config('schedule', []));
         $scheduler->call(function () {
             (new Worker())
